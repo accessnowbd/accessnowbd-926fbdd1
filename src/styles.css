@@ -44,6 +44,10 @@
   --color-aqua-deep: var(--aqua-deep);
   --color-gold: var(--gold);
   --color-coral: var(--coral);
+  /* Legacy aliases — keep existing components working */
+  --color-teal: var(--aqua);
+  --color-cyan-deep: var(--aqua-deep);
+  --color-orange: var(--coral);
   --color-success: var(--success);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
