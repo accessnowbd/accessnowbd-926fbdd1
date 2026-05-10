@@ -146,7 +146,35 @@ function AuthPage() {
               {busy && <Loader2 className="w-4 h-4 animate-spin" />}
               {mode === "login" ? "Login" : "Create account"}
             </button>
+
+            {mode === "login" && (
+              <button
+                type="button"
+                onClick={() => { setForgotOpen((v) => !v); setForgotErr(null); setForgotMsg(null); setForgotEmail(form.email); }}
+                className="w-full text-xs text-primary hover:underline mt-1"
+              >
+                Forgot password?
+              </button>
+            )}
           </form>
+
+          {mode === "login" && forgotOpen && (
+            <form onSubmit={sendReset} className="mt-4 p-4 rounded-xl bg-secondary/50 border border-border space-y-3">
+              <p className="text-sm font-semibold">Reset your password</p>
+              <p className="text-xs text-muted-foreground">Enter your email and we'll send you a reset link.</p>
+              <Field label="Email" type="email" value={forgotEmail} onChange={setForgotEmail} required />
+              {forgotErr && <p className="text-sm text-destructive">{forgotErr}</p>}
+              {forgotMsg && <p className="text-sm text-green-600">{forgotMsg}</p>}
+              <button
+                type="submit"
+                disabled={forgotBusy}
+                className="w-full h-10 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                {forgotBusy && <Loader2 className="w-4 h-4 animate-spin" />}
+                Send reset link
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>
