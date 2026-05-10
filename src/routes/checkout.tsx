@@ -13,7 +13,7 @@ export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — AccessNow BD" }] }),
 });
 
-const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
+
 
 const methods = [
   { id: "bkash", name: "bKash", number: "01711-123456", color: "bg-[#E2136E]", logo: "bKash" },
@@ -64,7 +64,7 @@ function CheckoutPage() {
           phone: form.phone,
           payment_method: method,
           transaction_id: form.trxId,
-          items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty })),
+          items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
           total,
         })
         .select("id")
