@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search, ShoppingCart, Sparkles, Shield, Zap, Headphones, ChevronRight, Check, Star } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
+import { products as catalog } from "@/data/products";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -21,16 +22,7 @@ const categories = [
   { name: "Productivity", icon: "⚡", color: "bg-primary-dark" },
 ];
 
-const products = [
-  { name: "Netflix Premium", price: "৳450", period: "1 Month", badge: "Popular", badgeColor: "bg-[var(--color-orange)]", emoji: "🎬", gradient: "from-red-500/20 to-red-700/30" },
-  { name: "ChatGPT Plus", price: "৳1,800", period: "1 Month", badge: "Hot", badgeColor: "bg-[var(--color-teal)] text-black", emoji: "🤖", gradient: "from-emerald-500/20 to-teal-700/30" },
-  { name: "Spotify Premium", price: "৳250", period: "1 Month", badge: "Best Deal", badgeColor: "bg-primary", emoji: "🎵", gradient: "from-green-500/20 to-green-700/30" },
-  { name: "Canva Pro", price: "৳350", period: "1 Month", badge: "New", badgeColor: "bg-[var(--color-warning)] text-black", emoji: "🎨", gradient: "from-blue-400/20 to-purple-600/30" },
-  { name: "YouTube Premium", price: "৳300", period: "1 Month", badge: "Popular", badgeColor: "bg-[var(--color-orange)]", emoji: "▶️", gradient: "from-red-400/20 to-red-600/30" },
-  { name: "LinkedIn Premium", price: "৳1,200", period: "1 Month", badge: "Pro", badgeColor: "bg-[var(--color-cyan-deep)]", emoji: "💼", gradient: "from-blue-500/20 to-blue-800/30" },
-  { name: "Disney+ Hotstar", price: "৳400", period: "1 Month", badge: "Trending", badgeColor: "bg-primary", emoji: "✨", gradient: "from-indigo-500/20 to-purple-700/30" },
-  { name: "Adobe Creative", price: "৳2,500", period: "1 Month", badge: "Premium", badgeColor: "bg-[var(--color-cyan-deep)]", emoji: "🎭", gradient: "from-pink-500/20 to-red-700/30" },
-];
+const products = catalog;
 
 const features = [
   { icon: Zap, title: "Instant Delivery", desc: "Get access within minutes of purchase. No waiting, no hassle." },
