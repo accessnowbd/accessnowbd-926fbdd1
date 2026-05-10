@@ -28,6 +28,30 @@ function AuthPage() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotMsg, setForgotMsg] = useState<string | null>(null);
+  const [forgotErr, setForgotErr] = useState<string | null>(null);
+  const [forgotBusy, setForgotBusy] = useState(false);
+
+  const sendReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotErr(null);
+    setForgotMsg(null);
+    setForgotBusy(true);
+    try {
+      const email = z.string().trim().email().max(255).parse(forgotEmail);
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      setForgotMsg("Check your email for a password reset link.");
+    } catch (e: unknown) {
+      setForgotErr(e instanceof Error ? e.message : "Failed to send reset email");
+    } finally {
+      setForgotBusy(false);
+    }
+  };
 
   useEffect(() => {
     if (!loading && user) navigate({ to: "/orders" });
