@@ -35,6 +35,7 @@ const features = [
 ];
 
 function Index() {
+  const { add } = useCart();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string | null>(null);
   const productsRef = useRef<HTMLDivElement>(null);
