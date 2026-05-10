@@ -56,6 +56,63 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          badge: string | null
+          category: string
+          created_at: string
+          delivery_time: string
+          description: string
+          emoji: string
+          features: Json
+          gradient: string
+          is_active: boolean
+          name: string
+          plans: Json
+          slug: string
+          sort_order: number
+          tagline: string
+          updated_at: string
+          warranty: string
+        }
+        Insert: {
+          badge?: string | null
+          category: string
+          created_at?: string
+          delivery_time?: string
+          description?: string
+          emoji?: string
+          features?: Json
+          gradient?: string
+          is_active?: boolean
+          name: string
+          plans?: Json
+          slug: string
+          sort_order?: number
+          tagline?: string
+          updated_at?: string
+          warranty?: string
+        }
+        Update: {
+          badge?: string | null
+          category?: string
+          created_at?: string
+          delivery_time?: string
+          description?: string
+          emoji?: string
+          features?: Json
+          gradient?: string
+          is_active?: boolean
+          name?: string
+          plans?: Json
+          slug?: string
+          sort_order?: number
+          tagline?: string
+          updated_at?: string
+          warranty?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -80,15 +137,95 @@ export type Database = {
         }
         Relationships: []
       }
+      promotions: {
+        Row: {
+          badge: string | null
+          code: string | null
+          created_at: string
+          description: string
+          discount_percent: number | null
+          ends_at: string | null
+          id: string
+          is_active: boolean
+          product_slug: string | null
+          starts_at: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          badge?: string | null
+          code?: string | null
+          created_at?: string
+          description?: string
+          discount_percent?: number | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          product_slug?: string | null
+          starts_at?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          badge?: string | null
+          code?: string | null
+          created_at?: string
+          description?: string
+          discount_percent?: number | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          product_slug?: string | null
+          starts_at?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promotions_product_slug_fkey"
+            columns: ["product_slug"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -215,6 +352,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
