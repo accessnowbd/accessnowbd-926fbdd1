@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /cart
+Disallow: /orders
+Disallow: /profile
+Disallow: /reset-password
+
+Sitemap: https://accessnowbd.com/sitemap.xml

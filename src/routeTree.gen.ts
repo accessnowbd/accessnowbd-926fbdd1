@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StreamingRouteImport } from './routes/streaming'
+import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -28,6 +29,11 @@ import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 const StreamingRoute = StreamingRouteImport.update({
   id: '/streaming',
   path: '/streaming',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapRoute = SitemapRouteImport.update({
+  id: '/sitemap',
+  path: '/sitemap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/profile'
     | '/reset-password'
+    | '/sitemap'
     | '/streaming'
     | '/orders/$id'
     | '/product/$slug'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/profile'
     | '/reset-password'
+    | '/sitemap'
     | '/streaming'
     | '/orders/$id'
     | '/product/$slug'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/profile'
     | '/reset-password'
+    | '/sitemap'
     | '/streaming'
     | '/orders/$id'
     | '/product/$slug'
@@ -220,6 +232,7 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   ProfileRoute: typeof ProfileRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SitemapRoute: typeof SitemapRoute
   StreamingRoute: typeof StreamingRoute
   ProductSlugRoute: typeof ProductSlugRoute
 }
@@ -231,6 +244,13 @@ declare module '@tanstack/react-router' {
       path: '/streaming'
       fullPath: '/streaming'
       preLoaderRoute: typeof StreamingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap': {
+      id: '/sitemap'
+      path: '/sitemap'
+      fullPath: '/sitemap'
+      preLoaderRoute: typeof SitemapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -358,6 +378,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   ProfileRoute: ProfileRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SitemapRoute: SitemapRoute,
   StreamingRoute: StreamingRoute,
   ProductSlugRoute: ProductSlugRoute,
 }
