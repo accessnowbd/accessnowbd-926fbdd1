@@ -1,0 +1,164 @@
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { ArrowLeft, LogOut, Package, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
+import { CartIcon } from "@/components/CartIcon";
+import { products } from "@/data/products";
+
+export const Route = createFileRoute("/orders")({
+  component: OrdersPage,
+  head: () => ({ meta: [{ title: "My Orders — AccessNow BD" }] }),
+});
+
+type OrderItem = { slug: string; planPeriod: string; qty: number };
+type Order = {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  payment_method: string;
+  transaction_id: string;
+  items: OrderItem[];
+  total: number;
+  status: string;
+  created_at: string;
+};
+
+const statusColors: Record<string, string> = {
+  pending: "bg-amber-100 text-amber-800",
+  processing: "bg-blue-100 text-blue-800",
+  delivered: "bg-emerald-100 text-emerald-800",
+  cancelled: "bg-red-100 text-red-800",
+};
+
+function OrdersPage() {
+  const { user, loading: authLoading, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate({ to: "/auth" });
+      return;
+    }
+    if (user) {
+      supabase
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .then(({ data }) => {
+          setOrders((data as Order[]) || []);
+          setLoading(false);
+        });
+    }
+  }, [user, authLoading, navigate]);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate({ to: "/" });
+  };
+
+  if (authLoading || loading) {
+    return (
+      <div className="min-h-screen grid place-items-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2 font-semibold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
+            <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
+            AccessNow BD
+          </Link>
+          <div className="flex items-center gap-3">
+            <CartIcon />
+            <button onClick={handleSignOut} className="inline-flex items-center gap-1.5 text-xs bg-white/10 hover:bg-white/20 px-3 py-2 rounded-full">
+              <LogOut className="w-3.5 h-3.5" /> Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-[1100px] px-4 md:px-10 py-8">
+        <Link to="/" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to home
+        </Link>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h1 style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 500 }}>My orders</h1>
+            <p className="text-sm text-muted-foreground mt-1">Signed in as <span className="font-semibold text-foreground">{user?.email}</span></p>
+          </div>
+          <span className="text-sm text-muted-foreground">{orders.length} order{orders.length !== 1 ? "s" : ""}</span>
+        </div>
+
+        {orders.length === 0 ? (
+          <div className="mt-10 rounded-2xl border-2 border-dashed border-border bg-white p-12 text-center">
+            <Package className="w-10 h-10 text-muted-foreground mx-auto" />
+            <h2 className="mt-3 font-semibold">No orders yet</h2>
+            <p className="text-sm text-muted-foreground mt-1">Browse our subscriptions and place your first order.</p>
+            <Link to="/" className="inline-block mt-5 h-[42px] leading-[42px] px-6 rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+              Browse subscriptions
+            </Link>
+          </div>
+        ) : (
+          <div className="mt-6 space-y-4">
+            {orders.map((o) => (
+              <article key={o.id} className="bg-white border border-border rounded-2xl p-5">
+                <header className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-3">
+                  <div>
+                    <div className="text-xs text-muted-foreground">Order ID</div>
+                    <div className="font-semibold" style={{ fontFamily: "var(--font-heading)" }}>{o.id.slice(0, 8).toUpperCase()}</div>
+                    <div className="text-xs text-muted-foreground mt-1">{new Date(o.created_at).toLocaleString()}</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[11px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded ${statusColors[o.status] || "bg-secondary text-foreground"}`}>
+                      {o.status}
+                    </span>
+                  </div>
+                </header>
+
+                <div className="mt-3 space-y-2">
+                  {o.items.map((it, i) => {
+                    const p = products.find((x) => x.slug === it.slug);
+                    return (
+                      <div key={i} className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${p?.gradient ?? "from-secondary to-secondary"} grid place-items-center text-lg`}>
+                          {p?.emoji ?? "📦"}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-semibold truncate">{p?.name ?? it.slug}</div>
+                          <div className="text-xs text-muted-foreground">{it.planPeriod} × {it.qty}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <footer className="mt-4 grid sm:grid-cols-3 gap-3 text-xs border-t border-border pt-3">
+                  <div>
+                    <div className="text-muted-foreground">Payment</div>
+                    <div className="font-semibold capitalize">{o.payment_method}</div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground">TrxID</div>
+                    <div className="font-semibold">{o.transaction_id}</div>
+                  </div>
+                  <div className="sm:text-right">
+                    <div className="text-muted-foreground">Total</div>
+                    <div className="font-semibold text-primary text-base" style={{ fontFamily: "var(--font-heading)" }}>৳{Number(o.total).toLocaleString()}</div>
+                  </div>
+                </footer>
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
