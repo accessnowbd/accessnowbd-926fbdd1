@@ -1,7 +1,9 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones } from "lucide-react";
 import { getProduct, products, type Product } from "@/data/products";
 import { useState } from "react";
+import { useCart } from "@/context/CartContext";
+import { CartIcon } from "@/components/CartIcon";
 
 export const Route = createFileRoute("/product/$slug")({
   component: ProductPage,
