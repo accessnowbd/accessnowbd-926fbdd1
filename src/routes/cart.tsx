@@ -3,6 +3,7 @@ import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { products } from "@/data/products";
 import { CartIcon } from "@/components/CartIcon";
+import { AccountIcon } from "@/components/AccountIcon";
 
 export const Route = createFileRoute("/cart")({
   component: CartPage,
@@ -23,7 +24,7 @@ function CartPage() {
             <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
             AccessNow BD
           </Link>
-          <CartIcon />
+          <div className="flex items-center gap-2"><AccountIcon /><CartIcon /></div>
         </div>
       </header>
 

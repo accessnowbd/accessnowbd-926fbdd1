@@ -4,6 +4,7 @@ import { getProduct, products, type Product } from "@/data/products";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { CartIcon } from "@/components/CartIcon";
+import { AccountIcon } from "@/components/AccountIcon";
 
 export const Route = createFileRoute("/product/$slug")({
   component: ProductPage,
@@ -53,7 +54,7 @@ function ProductPage() {
             <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
             AccessNow BD
           </Link>
-          <CartIcon />
+          <div className="flex items-center gap-2"><AccountIcon /><CartIcon /></div>
         </div>
       </header>
 
