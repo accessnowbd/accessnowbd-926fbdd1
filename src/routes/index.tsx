@@ -9,6 +9,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import type { Product } from "@/data/products";
 
 export const Route = createFileRoute("/")({
   component: Index,
