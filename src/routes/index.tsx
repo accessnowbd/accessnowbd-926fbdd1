@@ -3,6 +3,8 @@ import { Search, ShoppingCart, Sparkles, Shield, Zap, Headphones, ChevronRight, 
 import { useMemo, useRef, useState } from "react";
 import heroImg from "@/assets/hero.jpg";
 import { products as catalog } from "@/data/products";
+import { CartIcon } from "@/components/CartIcon";
+import { useCart } from "@/context/CartContext";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -77,9 +79,7 @@ function Index() {
           </nav>
           <div className="flex items-center gap-2">
             <button className="hidden sm:inline-flex h-9 px-4 rounded-full bg-white/15 hover:bg-white/25 text-sm font-semibold transition-colors">Sign in</button>
-            <button className="grid place-items-center w-10 h-10 rounded-full bg-white text-primary hover:scale-105 transition-transform">
-              <ShoppingCart className="w-4 h-4" />
-            </button>
+            <CartIcon />
           </div>
         </div>
       </header>
