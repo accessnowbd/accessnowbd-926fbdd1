@@ -262,6 +262,7 @@ function Index() {
             </Link>
           ))}
         </div>
+        )}
       </section>
 
       {/* Features */}
