@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search, ShoppingCart, Sparkles, Shield, Zap, Headphones, ChevronRight, Check, Star, X } from "lucide-react";
+import { Search, ShoppingCart, Sparkles, Shield, Zap, Headphones, ChevronRight, Check, Star, X, Crown } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import heroImg from "@/assets/hero.jpg";
 import { useProducts } from "@/hooks/useProducts";
@@ -19,12 +19,12 @@ export const Route = createFileRoute("/")({
 });
 
 const categories = [
-  { name: "Streaming", icon: "🎬", color: "bg-primary" },
-  { name: "AI Tools", icon: "🤖", color: "bg-[var(--color-teal)]" },
-  { name: "Music", icon: "🎵", color: "bg-[var(--color-orange)]" },
-  { name: "Design", icon: "🎨", color: "bg-[var(--color-cyan-deep)]" },
-  { name: "Education", icon: "📚", color: "bg-[var(--color-coral)]" },
-  { name: "Productivity", icon: "⚡", color: "bg-primary-dark" },
+  { name: "Streaming", icon: "🎬", tint: "from-violet-500/20 to-fuchsia-400/10" },
+  { name: "AI Tools", icon: "🤖", tint: "from-cyan-400/25 to-teal-300/10" },
+  { name: "Music", icon: "🎵", tint: "from-rose-400/20 to-orange-300/10" },
+  { name: "Design", icon: "🎨", tint: "from-amber-300/25 to-pink-300/10" },
+  { name: "Education", icon: "📚", tint: "from-emerald-400/20 to-cyan-300/10" },
+  { name: "Productivity", icon: "⚡", tint: "from-indigo-400/25 to-violet-300/10" },
 ];
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
@@ -68,42 +68,47 @@ function Index() {
   const isFiltering = query.trim().length > 0 || category !== null;
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Top Nav */}
-      <header className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2 font-semibold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
-            <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
-            AccessNow BD
+    <div className="min-h-screen relative">
+      {/* Sticky glass header */}
+      <header className="sticky top-0 z-40 glass-soft">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-16 flex items-center justify-between">
+          <a href="/" className="flex items-center gap-2.5 font-bold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
+            <span className="grid place-items-center w-9 h-9 rounded-xl bg-aurora text-white shadow-[var(--shadow-glow-violet)]">
+              <Crown className="w-4 h-4" />
+            </span>
+            <span className="tracking-tight">AccessNow <span className="text-aurora">BD</span></span>
           </a>
-          <nav className="hidden md:flex items-center gap-1 text-sm font-semibold">
+          <nav className="hidden md:flex items-center gap-1 text-sm font-medium">
             {["Home", "Categories", "Deals", "How it Works", "Support"].map((l) => (
-              <a key={l} href="#" className="px-4 py-2 rounded-lg hover:bg-white/20 transition-colors">{l}</a>
+              <a key={l} href="#" className="px-4 py-2 rounded-xl hover:bg-white/50 hover:text-primary transition-colors">{l}</a>
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <button className="hidden sm:inline-flex h-9 px-4 rounded-full bg-white/15 hover:bg-white/25 text-sm font-semibold transition-colors">Sign in</button>
-            <div className="flex items-center gap-2"><AccountIcon /><CartIcon /></div>
+            <div className="flex items-center gap-1.5"><AccountIcon /><CartIcon /></div>
           </div>
         </div>
       </header>
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-10 py-12 md:py-20 grid md:grid-cols-2 gap-10 items-center">
+        {/* aurora glow blobs */}
+        <div className="pointer-events-none absolute -top-32 -left-24 w-[480px] h-[480px] rounded-full bg-primary/30 blur-[120px]" />
+        <div className="pointer-events-none absolute -top-20 right-0 w-[420px] h-[420px] rounded-full bg-[var(--color-aqua)]/35 blur-[120px]" />
+
+        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 py-14 md:py-24 grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent text-primary text-xs font-semibold mb-5">
-              <Sparkles className="w-3.5 h-3.5" /> #1 Subscription Marketplace in BD
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass text-xs font-semibold mb-6">
+              <Sparkles className="w-3.5 h-3.5 text-primary" /> #1 Subscription Marketplace in BD
             </span>
-            <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 5vw, 48px)", fontWeight: 500, lineHeight: 1.15 }}>
-              Premium subscriptions, <span className="text-primary">instant access</span>, Bangladeshi prices.
+            <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(32px, 5.5vw, 56px)", fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.025em" }}>
+              Premium subscriptions, <span className="text-aurora">instant access</span>, BD prices.
             </h1>
-            <p className="mt-5 text-base text-[#333333] max-w-lg">
+            <p className="mt-5 text-base text-muted-foreground max-w-lg leading-relaxed">
               Get Netflix, ChatGPT Plus, Spotify, Canva Pro and 50+ more premium digital products at unbeatable prices. Pay with bKash, Nagad, or card.
             </p>
 
-            {/* Search */}
-            <div className="mt-8 flex items-center bg-white rounded-full border border-border h-[52px] pl-5 pr-1.5 shadow-[0_0_3px_0_rgba(0,0,0,0.15)] max-w-xl focus-within:border-primary transition">
+            {/* Glass search */}
+            <div className="mt-8 flex items-center glass rounded-full h-[56px] pl-5 pr-1.5 max-w-xl focus-within:ring-2 focus-within:ring-primary/30 transition">
               <Search className="w-4 h-4 text-muted-foreground" />
               <input
                 value={query}
@@ -112,42 +117,41 @@ function Index() {
                 className="flex-1 px-3 bg-transparent outline-none text-sm placeholder:text-muted-foreground"
               />
               {query && (
-                <button
-                  onClick={() => setQuery("")}
-                  className="grid place-items-center w-8 h-8 rounded-full hover:bg-secondary text-muted-foreground"
-                  aria-label="Clear search"
-                >
+                <button onClick={() => setQuery("")} className="grid place-items-center w-8 h-8 rounded-full hover:bg-white/60 text-muted-foreground" aria-label="Clear">
                   <X className="w-4 h-4" />
                 </button>
               )}
-              <button
-                onClick={scrollToProducts}
-                className="h-10 px-6 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition"
-              >
+              <button onClick={scrollToProducts} className="h-11 px-6 rounded-full bg-aurora text-white text-sm font-semibold hover:opacity-95 transition glow-violet">
                 Search
               </button>
             </div>
 
-            <div className="mt-8 flex items-center gap-6 text-sm text-[#333333]">
-              <div className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" /> Instant delivery</div>
-              <div className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" /> bKash & Nagad</div>
-              <div className="hidden sm:flex items-center gap-2"><Check className="w-4 h-4 text-primary" /> 7-day warranty</div>
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2"><Check className="w-4 h-4 text-[var(--color-aqua-deep)]" /> Instant delivery</div>
+              <div className="flex items-center gap-2"><Check className="w-4 h-4 text-[var(--color-aqua-deep)]" /> bKash & Nagad</div>
+              <div className="flex items-center gap-2"><Check className="w-4 h-4 text-[var(--color-aqua-deep)]" /> 7-day warranty</div>
             </div>
           </div>
 
           <div className="relative">
-            <img src={heroImg} alt="Digital subscriptions" width={1280} height={960} className="w-full h-auto rounded-3xl shadow-[0_5px_40px_0_rgba(135,3,249,0.25)]" />
-            <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl px-5 py-3 shadow-[0_5px_40px_0_rgba(0,0,0,0.16)] flex items-center gap-3">
+            <div className="glass-strong rounded-3xl p-3 rotate-1">
+              <img src={heroImg} alt="Digital subscriptions" width={1280} height={960} className="w-full h-auto rounded-2xl" />
+            </div>
+            <div className="absolute -bottom-5 -left-5 glass-strong rounded-2xl px-5 py-3.5 flex items-center gap-3">
               <div className="flex -space-x-2">
-                {[1,2,3].map((i) => <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-dark border-2 border-white" />)}
+                {[1,2,3].map((i) => <div key={i} className="w-8 h-8 rounded-full bg-aurora border-2 border-white" />)}
               </div>
               <div>
-                <div className="text-sm font-semibold">10,000+ happy users</div>
+                <div className="text-sm font-bold">10,000+ happy users</div>
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  {[1,2,3,4,5].map((i) => <Star key={i} className="w-3 h-3 fill-[var(--color-warning)] text-[var(--color-warning)]" />)}
-                  4.9/5 rating
+                  {[1,2,3,4,5].map((i) => <Star key={i} className="w-3 h-3 fill-[var(--color-gold)] text-[var(--color-gold)]" />)}
+                  <span className="ml-1">4.9/5</span>
                 </div>
               </div>
+            </div>
+            <div className="absolute -top-4 -right-2 glass rounded-2xl px-4 py-2.5 hidden sm:flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[var(--color-success)] animate-pulse" />
+              <span className="text-xs font-semibold">Live orders: 23 today</span>
             </div>
           </div>
         </div>
@@ -157,29 +161,30 @@ function Index() {
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-16">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 500 }}>Browse Categories</h2>
+            <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 28, fontWeight: 800 }}>Browse Categories</h2>
             <p className="text-muted-foreground mt-1">Find the perfect subscription for you</p>
           </div>
           <button
             onClick={() => setCategory(null)}
-            className="hidden md:inline-flex items-center gap-2 px-5 py-3 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition"
+            className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-strong text-sm font-semibold hover:bg-white transition"
           >
             All Categories <ChevronRight className="w-4 h-4" />
           </button>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
           {categories.map((c) => {
             const active = category === c.name;
             return (
               <button
                 key={c.name}
                 onClick={() => pickCategory(c.name)}
-                className={`${c.color} text-white rounded-xl p-6 flex flex-col items-start gap-3 hover:shadow-[0_5px_40px_0_rgba(0,0,0,0.16)] hover:scale-[1.02] transition-all ${
-                  active ? "ring-4 ring-primary/40 scale-[1.02] shadow-[0_5px_40px_0_rgba(0,0,0,0.16)]" : ""
+                className={`relative overflow-hidden glass rounded-2xl p-5 flex flex-col items-start gap-3 hover:-translate-y-1 hover:shadow-[var(--shadow-glass-lg)] transition-all ${
+                  active ? "ring-2 ring-primary -translate-y-1 shadow-[var(--shadow-glass-lg)]" : ""
                 }`}
               >
-                <span className="text-3xl">{c.icon}</span>
-                <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span>
+                <div className={`absolute inset-0 bg-gradient-to-br ${c.tint} opacity-80`} />
+                <span className="relative text-3xl">{c.icon}</span>
+                <span className="relative text-sm font-bold tracking-tight">{c.name}</span>
               </button>
             );
           })}
@@ -188,19 +193,22 @@ function Index() {
 
       {/* Promo Banner */}
       <section className="mx-auto max-w-[1440px] px-4 md:px-10">
-        <div className="rounded-2xl p-8 md:p-12 bg-gradient-to-r from-primary via-primary to-primary-dark text-white relative overflow-hidden">
-          <div className="absolute -right-10 -top-10 w-64 h-64 rounded-full bg-white/10 blur-3xl" />
+        <div className="relative rounded-3xl p-8 md:p-12 bg-aurora text-white overflow-hidden glow-violet">
+          <div className="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-white/15 blur-3xl" />
+          <div className="absolute -left-10 -bottom-16 w-64 h-64 rounded-full bg-[var(--color-gold)]/30 blur-3xl" />
           <div className="relative grid md:grid-cols-2 gap-6 items-center">
             <div>
-              <span className="inline-block px-3 py-1 rounded text-xs font-semibold bg-[var(--color-warning)] text-black mb-4">LIMITED OFFER</span>
-              <h3 style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 500, lineHeight: 1.2 }}>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[var(--color-gold)] text-black mb-4">
+                <Sparkles className="w-3 h-3" /> LIMITED OFFER
+              </span>
+              <h3 style={{ fontFamily: "var(--font-display)", fontSize: 34, fontWeight: 800, lineHeight: 1.15, letterSpacing: "-0.02em" }}>
                 Save 30% on yearly plans
               </h3>
-              <p className="mt-3 text-white/80 max-w-md">Lock in the best rates of the year. Switch to annual billing and stack the savings on every premium subscription.</p>
+              <p className="mt-3 text-white/85 max-w-md">Lock in the best rates of the year. Switch to annual billing and stack the savings on every premium subscription.</p>
             </div>
             <div className="flex md:justify-end gap-3">
-              <button className="h-[42px] px-5 rounded-md bg-white text-primary text-sm font-semibold hover:shadow-[0_0_3px_0_rgba(0,0,0,0.15)] transition">Claim Offer</button>
-              <button className="h-[42px] px-5 rounded-md border border-white/40 text-sm font-semibold hover:bg-white/10 transition">Learn more</button>
+              <button className="h-11 px-6 rounded-full bg-white text-primary text-sm font-bold hover:scale-105 transition">Claim Offer</button>
+              <button className="h-11 px-6 rounded-full border border-white/40 text-sm font-semibold hover:bg-white/10 transition">Learn more</button>
             </div>
           </div>
         </div>
@@ -210,7 +218,7 @@ function Index() {
       <section ref={productsRef} className="mx-auto max-w-[1440px] px-4 md:px-10 py-16 scroll-mt-20">
         <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div>
-            <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 500 }}>
+            <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 28, fontWeight: 800 }}>
               {isFiltering ? "Search Results" : "Trending Subscriptions"}
             </h2>
             <p className="text-muted-foreground mt-1">
@@ -220,23 +228,19 @@ function Index() {
             </p>
           </div>
           {isFiltering && (
-            <button
-              onClick={() => { setQuery(""); setCategory(null); }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border text-sm font-semibold hover:bg-secondary transition"
-            >
+            <button onClick={() => { setQuery(""); setCategory(null); }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm font-semibold hover:bg-white/80 transition">
               <X className="w-4 h-4" /> Clear filters
             </button>
           )}
         </div>
         {filtered.length === 0 ? (
-          <div className="border border-dashed border-border rounded-2xl py-16 text-center">
+          <div className="glass rounded-3xl py-16 text-center">
             <div className="text-5xl mb-3">🔍</div>
-            <h3 className="text-lg font-semibold" style={{ fontFamily: "var(--font-heading)" }}>No products found</h3>
+            <h3 className="text-lg font-bold">No products found</h3>
             <p className="text-sm text-muted-foreground mt-2">Try a different search term or category.</p>
-            <button
-              onClick={() => { setQuery(""); setCategory(null); }}
-              className="mt-5 h-[42px] px-6 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition"
-            >
+            <button onClick={() => { setQuery(""); setCategory(null); }}
+              className="mt-5 h-11 px-6 rounded-full bg-aurora text-white text-sm font-semibold hover:opacity-95 transition glow-violet">
               Reset filters
             </button>
           </div>
@@ -247,17 +251,18 @@ function Index() {
               to="/product/$slug"
               params={{ slug: p.slug }}
               key={p.slug}
-              className="group bg-white rounded-xl overflow-hidden hover:shadow-[0_5px_40px_0_rgba(0,0,0,0.16)] hover:-translate-y-1 transition-all border border-border block"
+              className="group glass rounded-2xl overflow-hidden hover:-translate-y-1.5 hover:shadow-[var(--shadow-glass-lg)] transition-all block"
             >
               <div className={`relative aspect-[4/3] bg-gradient-to-br ${p.gradient} flex items-center justify-center`}>
-                <span className="text-6xl">{p.emoji}</span>
-                <span className={`absolute top-3 left-3 ${badgeColorFor(p.badge)} px-3 py-1 rounded text-xs font-semibold`}>{p.badge ?? "New"}</span>
+                <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]" />
+                <span className="relative text-6xl drop-shadow-md">{p.emoji}</span>
+                <span className={`absolute top-3 left-3 ${badgeColorFor(p.badge)} px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase shadow-sm`}>{p.badge ?? "New"}</span>
               </div>
               <div className="p-4">
-                <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{p.name}</h3>
-                <p className="text-xs text-muted-foreground mt-1">{p.plans[0]?.period ?? ""} subscription</p>
+                <h3 className="text-sm font-bold tracking-tight">{p.name}</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">{p.plans[0]?.period ?? ""} subscription</p>
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="text-lg font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0]?.price ?? "—"}</span>
+                  <span className="text-lg font-extrabold text-aurora">{p.plans[0]?.price ?? "—"}</span>
                   <button
                     onClick={(e) => {
                       e.preventDefault();
@@ -265,7 +270,7 @@ function Index() {
                       if (!plan) return;
                       add({ slug: p.slug, planPeriod: plan.period, qty: 1, price: parsePrice(plan.price), name: p.name, emoji: p.emoji, gradient: p.gradient });
                     }}
-                    className="grid place-items-center w-9 h-9 rounded-full bg-primary text-primary-foreground group-hover:bg-primary/90 transition"
+                    className="grid place-items-center w-10 h-10 rounded-full bg-aurora text-white hover:scale-110 transition glow-violet"
                     aria-label="Add to cart"
                   >
                     <ShoppingCart className="w-4 h-4" />
@@ -279,20 +284,20 @@ function Index() {
       </section>
 
       {/* Features */}
-      <section className="bg-secondary py-16">
+      <section className="py-20 relative">
         <div className="mx-auto max-w-[1440px] px-4 md:px-10">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 500 }}>Why AccessNow BD?</h2>
+            <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 28, fontWeight: 800 }}>Why <span className="text-aurora">AccessNow BD</span>?</h2>
             <p className="text-muted-foreground mt-2">We make premium digital products accessible, affordable, and reliable for everyone in Bangladesh.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {features.map((f) => (
-              <div key={f.title} className="bg-white rounded-xl p-6 hover:shadow-[0_0_3px_0_rgba(0,0,0,0.15)] transition">
-                <div className="w-12 h-12 rounded-full bg-accent grid place-items-center mb-4">
-                  <f.icon className="w-5 h-5 text-primary" />
+              <div key={f.title} className="glass rounded-2xl p-6 hover:-translate-y-1 hover:shadow-[var(--shadow-glass-lg)] transition">
+                <div className="w-12 h-12 rounded-2xl bg-aurora grid place-items-center mb-4 glow-violet">
+                  <f.icon className="w-5 h-5 text-white" />
                 </div>
-                <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{f.title}</h3>
-                <p className="text-sm text-[#333333] mt-2">{f.desc}</p>
+                <h3 className="text-base font-bold tracking-tight">{f.title}</h3>
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -301,28 +306,30 @@ function Index() {
 
       {/* CTA */}
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-20">
-        <div className="rounded-2xl bg-[var(--color-cyan-deep)] text-white p-10 md:p-16 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-transparent" />
+        <div className="relative rounded-3xl glass-strong p-10 md:p-16 text-center overflow-hidden">
+          <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-aurora opacity-20 blur-3xl" />
           <div className="relative">
-            <h2 style={{ fontFamily: "var(--font-display)", fontSize: 34, fontWeight: 500, lineHeight: 1.4 }}>Ready to unlock premium?</h2>
-            <p className="text-white/80 mt-3 max-w-xl mx-auto">Join thousands of Bangladeshis enjoying premium subscriptions at the best prices.</p>
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: 38, fontWeight: 800, lineHeight: 1.15, letterSpacing: "-0.02em" }}>
+              Ready to unlock <span className="text-aurora">premium</span>?
+            </h2>
+            <p className="text-muted-foreground mt-3 max-w-xl mx-auto">Join thousands of Bangladeshis enjoying premium subscriptions at the best prices.</p>
             <div className="mt-7 flex flex-wrap gap-3 justify-center">
-              <button className="h-[48px] px-8 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition">Get Started</button>
-              <button className="h-[48px] px-8 rounded-full border border-white/30 text-sm font-semibold hover:bg-white/10 transition">Browse Catalog</button>
+              <button className="h-12 px-8 rounded-full bg-aurora text-white text-sm font-bold hover:scale-105 transition glow-violet">Get Started</button>
+              <button className="h-12 px-8 rounded-full glass text-sm font-semibold hover:bg-white transition">Browse Catalog</button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-white">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-10 py-10 grid md:grid-cols-4 gap-8">
+      <footer className="glass-soft mt-10">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-10 py-12 grid md:grid-cols-4 gap-8">
           <div>
-            <div className="flex items-center gap-2 font-semibold" style={{ fontFamily: "var(--font-heading)" }}>
-              <span className="grid place-items-center w-9 h-9 rounded-full bg-primary text-white font-bold">A</span>
-              AccessNow BD
+            <div className="flex items-center gap-2.5 font-bold" style={{ fontFamily: "var(--font-heading)" }}>
+              <span className="grid place-items-center w-9 h-9 rounded-xl bg-aurora text-white"><Crown className="w-4 h-4" /></span>
+              AccessNow <span className="text-aurora">BD</span>
             </div>
-            <p className="text-sm text-muted-foreground mt-3">Premium digital subscriptions made simple for Bangladesh.</p>
+            <p className="text-sm text-muted-foreground mt-3 leading-relaxed">Premium digital subscriptions made simple for Bangladesh.</p>
           </div>
           {[
             { title: "Shop", links: ["Streaming", "AI Tools", "Music", "Design"] },
@@ -330,14 +337,14 @@ function Index() {
             { title: "Support", links: ["Help Center", "Refund Policy", "Terms", "Privacy"] },
           ].map((col) => (
             <div key={col.title}>
-              <h4 className="text-sm font-semibold mb-3" style={{ fontFamily: "var(--font-heading)" }}>{col.title}</h4>
-              <ul className="space-y-2 text-sm text-[#767676]">
-                {col.links.map((l) => <li key={l}><a href="#" className="hover:text-primary">{l}</a></li>)}
+              <h4 className="text-sm font-bold mb-3">{col.title}</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {col.links.map((l) => <li key={l}><a href="#" className="hover:text-primary transition">{l}</a></li>)}
               </ul>
             </div>
           ))}
         </div>
-        <div className="border-t border-border py-5 text-center text-xs text-muted-foreground">
+        <div className="border-t border-border/50 py-5 text-center text-xs text-muted-foreground">
           © 2026 AccessNow BD. All rights reserved.
         </div>
       </footer>
