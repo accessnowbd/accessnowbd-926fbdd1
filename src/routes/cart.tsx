@@ -1,7 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { products } from "@/data/products";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 
@@ -9,8 +8,6 @@ export const Route = createFileRoute("/cart")({
   component: CartPage,
   head: () => ({ meta: [{ title: "Your Cart — AccessNow BD" }] }),
 });
-
-const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
 function CartPage() {
   const { items, remove, setQty, total, count } = useCart();
@@ -48,20 +45,17 @@ function CartPage() {
           <div className="mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
             <div className="space-y-3">
               {items.map((it) => {
-                const p = products.find((x) => x.slug === it.slug);
-                const plan = p?.plans.find((pl) => pl.period === it.planPeriod);
-                if (!p || !plan) return null;
-                const lineTotal = parsePrice(plan.price) * it.qty;
+                const lineTotal = it.price * it.qty;
                 return (
                   <div key={`${it.slug}-${it.planPeriod}`} className="bg-white border border-border rounded-xl p-4 flex gap-4">
-                    <div className={`w-20 h-20 shrink-0 rounded-lg bg-gradient-to-br ${p.gradient} grid place-items-center text-3xl`}>
-                      {p.emoji}
+                    <div className={`w-20 h-20 shrink-0 rounded-lg bg-gradient-to-br ${it.gradient} grid place-items-center text-3xl`}>
+                      {it.emoji}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{p.name}</h3>
-                          <p className="text-xs text-muted-foreground mt-0.5">{plan.period} · {plan.price}</p>
+                          <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{it.name}</h3>
+                          <p className="text-xs text-muted-foreground mt-0.5">{it.planPeriod} · ৳{it.price.toLocaleString()}</p>
                         </div>
                         <button onClick={() => remove(it.slug, it.planPeriod)} className="text-muted-foreground hover:text-destructive p-1" aria-label="Remove">
                           <Trash2 className="w-4 h-4" />

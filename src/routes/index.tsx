@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search, ShoppingCart, Sparkles, Shield, Zap, Headphones, ChevronRight, Check, Star, X } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import heroImg from "@/assets/hero.jpg";
-import { products as catalog } from "@/data/products";
+import { useProducts } from "@/hooks/useProducts";
+import { badgeColorFor } from "@/lib/badgeColor";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 import { useCart } from "@/context/CartContext";
@@ -26,7 +27,7 @@ const categories = [
   { name: "Productivity", icon: "⚡", color: "bg-primary-dark" },
 ];
 
-const products = catalog;
+const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
 const features = [
   { icon: Zap, title: "Instant Delivery", desc: "Get access within minutes of purchase. No waiting, no hassle." },
@@ -37,6 +38,7 @@ const features = [
 
 function Index() {
   const { add } = useCart();
+  const { products } = useProducts();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string | null>(null);
   const productsRef = useRef<HTMLDivElement>(null);
@@ -52,7 +54,7 @@ function Index() {
         p.tagline.toLowerCase().includes(q);
       return matchesCat && matchesQuery;
     });
-  }, [query, category]);
+  }, [query, category, products]);
 
   const scrollToProducts = () => {
     productsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -249,15 +251,20 @@ function Index() {
             >
               <div className={`relative aspect-[4/3] bg-gradient-to-br ${p.gradient} flex items-center justify-center`}>
                 <span className="text-6xl">{p.emoji}</span>
-                <span className={`absolute top-3 left-3 ${p.badgeColor} text-white px-3 py-1 rounded text-xs font-semibold`}>{p.badge}</span>
+                <span className={`absolute top-3 left-3 ${badgeColorFor(p.badge)} px-3 py-1 rounded text-xs font-semibold`}>{p.badge ?? "New"}</span>
               </div>
               <div className="p-4">
                 <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{p.name}</h3>
-                <p className="text-xs text-muted-foreground mt-1">{p.plans[0].period} subscription</p>
+                <p className="text-xs text-muted-foreground mt-1">{p.plans[0]?.period ?? ""} subscription</p>
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="text-lg font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0].price}</span>
+                  <span className="text-lg font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0]?.price ?? "—"}</span>
                   <button
-                    onClick={(e) => { e.preventDefault(); add({ slug: p.slug, planPeriod: p.plans[0].period, qty: 1 }); }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const plan = p.plans[0];
+                      if (!plan) return;
+                      add({ slug: p.slug, planPeriod: plan.period, qty: 1, price: parsePrice(plan.price), name: p.name, emoji: p.emoji, gradient: p.gradient });
+                    }}
                     className="grid place-items-center w-9 h-9 rounded-full bg-primary text-primary-foreground group-hover:bg-primary/90 transition"
                     aria-label="Add to cart"
                   >

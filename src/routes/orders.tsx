@@ -4,14 +4,14 @@ import { ArrowLeft, LogOut, Package, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { CartIcon } from "@/components/CartIcon";
-import { products } from "@/data/products";
+
 
 export const Route = createFileRoute("/orders")({
   component: OrdersPage,
   head: () => ({ meta: [{ title: "My Orders — AccessNow BD" }] }),
 });
 
-type OrderItem = { slug: string; planPeriod: string; qty: number };
+type OrderItem = { slug: string; planPeriod: string; qty: number; name?: string; emoji?: string; gradient?: string; price?: number };
 type Order = {
   id: string;
   full_name: string;
@@ -124,20 +124,17 @@ function OrdersPage() {
                 </header>
 
                 <div className="mt-3 space-y-2">
-                  {o.items.map((it, i) => {
-                    const p = products.find((x) => x.slug === it.slug);
-                    return (
-                      <div key={i} className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${p?.gradient ?? "from-secondary to-secondary"} grid place-items-center text-lg`}>
-                          {p?.emoji ?? "📦"}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm font-semibold truncate">{p?.name ?? it.slug}</div>
-                          <div className="text-xs text-muted-foreground">{it.planPeriod} × {it.qty}</div>
-                        </div>
+                  {o.items.map((it, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${it.gradient ?? "from-secondary to-secondary"} grid place-items-center text-lg`}>
+                        {it.emoji ?? "📦"}
                       </div>
-                    );
-                  })}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-semibold truncate">{it.name ?? it.slug}</div>
+                        <div className="text-xs text-muted-foreground">{it.planPeriod} × {it.qty}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <footer className="mt-4 grid sm:grid-cols-3 gap-3 text-xs border-t border-border pt-3">
