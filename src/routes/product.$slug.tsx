@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones } from "lucide-react";
-import { getProduct, products } from "@/data/products";
+import { getProduct, products, type Product } from "@/data/products";
 import { useState } from "react";
 
 export const Route = createFileRoute("/product/$slug")({
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/product/$slug")({
 });
 
 function ProductPage() {
-  const product = Route.useLoaderData();
+  const product = Route.useLoaderData() as Product;
   const [selected, setSelected] = useState(
     product.plans.findIndex((p) => p.popular) >= 0 ? product.plans.findIndex((p) => p.popular) : 0,
   );
