@@ -123,14 +123,14 @@ function ProductPage() {
                     key={p.period}
                     onClick={() => setSelected(idx)}
                     className={`relative text-left p-4 rounded-xl border-2 transition-all ${
-                      active ? "border-primary bg-accent" : "border-border bg-white hover:border-primary/40"
+                      active ? "border-primary glass" : "border-transparent glass-soft hover:border-primary/40"
                     }`}
                   >
                     {p.popular && (
-                      <span className="absolute -top-2 right-3 bg-[var(--color-orange)] text-white text-[10px] font-semibold px-2 py-0.5 rounded">POPULAR</span>
+                      <span className="absolute -top-2 right-3 bg-sunset text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow">POPULAR</span>
                     )}
                     <div className="text-xs text-muted-foreground">{p.period}</div>
-                    <div className="mt-1 font-semibold text-lg text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.price}</div>
+                    <div className="mt-1 font-semibold text-lg text-aurora" style={{ fontFamily: "var(--font-heading)" }}>{p.price}</div>
                     {p.original && <div className="text-xs text-muted-foreground line-through">{p.original}</div>}
                   </button>
                 );
@@ -140,24 +140,24 @@ function ProductPage() {
 
           {/* Buy buttons */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <button onClick={buyNow} className="h-[48px] flex-1 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2">
+            <button onClick={buyNow} className="h-[48px] flex-1 rounded-full bg-aurora text-primary-foreground text-sm font-semibold hover:opacity-90 transition glow-violet inline-flex items-center justify-center gap-2">
               <ShoppingCart className="w-4 h-4" /> Buy Now — {plan?.price ?? ""}
             </button>
-            <button onClick={addToCart} className="h-[48px] px-6 rounded-full border border-border text-sm font-semibold hover:bg-secondary transition">
+            <button onClick={addToCart} className="h-[48px] px-6 rounded-full glass-soft text-sm font-semibold hover:bg-[var(--glass-bg-strong)] transition">
               Add to Cart
             </button>
           </div>
 
           {/* Trust strip */}
           <div className="mt-6 grid grid-cols-2 gap-3">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary">
+            <div className="flex items-center gap-3 p-3 rounded-xl glass-soft">
               <Clock className="w-5 h-5 text-primary" />
               <div>
                 <div className="text-xs text-muted-foreground">Delivery</div>
                 <div className="text-sm font-semibold">{product.deliveryTime}</div>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary">
+            <div className="flex items-center gap-3 p-3 rounded-xl glass-soft">
               <Shield className="w-5 h-5 text-primary" />
               <div>
                 <div className="text-xs text-muted-foreground">Warranty</div>
