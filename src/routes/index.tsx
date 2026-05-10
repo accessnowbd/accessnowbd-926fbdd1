@@ -157,22 +157,27 @@ function Index() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {products.map((p) => (
-            <article key={p.name} className="group bg-white rounded-xl overflow-hidden hover:shadow-[0_5px_40px_0_rgba(0,0,0,0.16)] hover:-translate-y-1 transition-all border border-border">
+            <Link
+              to="/product/$slug"
+              params={{ slug: p.slug }}
+              key={p.slug}
+              className="group bg-white rounded-xl overflow-hidden hover:shadow-[0_5px_40px_0_rgba(0,0,0,0.16)] hover:-translate-y-1 transition-all border border-border block"
+            >
               <div className={`relative aspect-[4/3] bg-gradient-to-br ${p.gradient} flex items-center justify-center`}>
                 <span className="text-6xl">{p.emoji}</span>
                 <span className={`absolute top-3 left-3 ${p.badgeColor} text-white px-3 py-1 rounded text-xs font-semibold`}>{p.badge}</span>
               </div>
               <div className="p-4">
                 <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{p.name}</h3>
-                <p className="text-xs text-muted-foreground mt-1">{p.period} subscription</p>
+                <p className="text-xs text-muted-foreground mt-1">{p.plans[0].period} subscription</p>
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="text-lg font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.price}</span>
-                  <button className="grid place-items-center w-9 h-9 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition">
+                  <span className="text-lg font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0].price}</span>
+                  <span className="grid place-items-center w-9 h-9 rounded-full bg-primary text-primary-foreground group-hover:bg-primary/90 transition">
                     <ShoppingCart className="w-4 h-4" />
-                  </button>
+                  </span>
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </section>
