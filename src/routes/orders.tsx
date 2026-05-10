@@ -49,7 +49,7 @@ function OrdersPage() {
         .select("*")
         .order("created_at", { ascending: false })
         .then(({ data }) => {
-          setOrders((data as Order[]) || []);
+          setOrders(((data as unknown) as Order[]) || []);
           setLoading(false);
         });
     }
