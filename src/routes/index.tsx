@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search, ShoppingCart, Sparkles, Shield, Zap, Headphones, ChevronRight, Check, Star } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
+import { products as catalog } from "@/data/products";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -21,16 +22,7 @@ const categories = [
   { name: "Productivity", icon: "⚡", color: "bg-primary-dark" },
 ];
 
-const products = [
-  { name: "Netflix Premium", price: "৳450", period: "1 Month", badge: "Popular", badgeColor: "bg-[var(--color-orange)]", emoji: "🎬", gradient: "from-red-500/20 to-red-700/30" },
-  { name: "ChatGPT Plus", price: "৳1,800", period: "1 Month", badge: "Hot", badgeColor: "bg-[var(--color-teal)] text-black", emoji: "🤖", gradient: "from-emerald-500/20 to-teal-700/30" },
-  { name: "Spotify Premium", price: "৳250", period: "1 Month", badge: "Best Deal", badgeColor: "bg-primary", emoji: "🎵", gradient: "from-green-500/20 to-green-700/30" },
-  { name: "Canva Pro", price: "৳350", period: "1 Month", badge: "New", badgeColor: "bg-[var(--color-warning)] text-black", emoji: "🎨", gradient: "from-blue-400/20 to-purple-600/30" },
-  { name: "YouTube Premium", price: "৳300", period: "1 Month", badge: "Popular", badgeColor: "bg-[var(--color-orange)]", emoji: "▶️", gradient: "from-red-400/20 to-red-600/30" },
-  { name: "LinkedIn Premium", price: "৳1,200", period: "1 Month", badge: "Pro", badgeColor: "bg-[var(--color-cyan-deep)]", emoji: "💼", gradient: "from-blue-500/20 to-blue-800/30" },
-  { name: "Disney+ Hotstar", price: "৳400", period: "1 Month", badge: "Trending", badgeColor: "bg-primary", emoji: "✨", gradient: "from-indigo-500/20 to-purple-700/30" },
-  { name: "Adobe Creative", price: "৳2,500", period: "1 Month", badge: "Premium", badgeColor: "bg-[var(--color-cyan-deep)]", emoji: "🎭", gradient: "from-pink-500/20 to-red-700/30" },
-];
+const products = catalog;
 
 const features = [
   { icon: Zap, title: "Instant Delivery", desc: "Get access within minutes of purchase. No waiting, no hassle." },
@@ -165,22 +157,27 @@ function Index() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {products.map((p) => (
-            <article key={p.name} className="group bg-white rounded-xl overflow-hidden hover:shadow-[0_5px_40px_0_rgba(0,0,0,0.16)] hover:-translate-y-1 transition-all border border-border">
+            <Link
+              to="/product/$slug"
+              params={{ slug: p.slug }}
+              key={p.slug}
+              className="group bg-white rounded-xl overflow-hidden hover:shadow-[0_5px_40px_0_rgba(0,0,0,0.16)] hover:-translate-y-1 transition-all border border-border block"
+            >
               <div className={`relative aspect-[4/3] bg-gradient-to-br ${p.gradient} flex items-center justify-center`}>
                 <span className="text-6xl">{p.emoji}</span>
                 <span className={`absolute top-3 left-3 ${p.badgeColor} text-white px-3 py-1 rounded text-xs font-semibold`}>{p.badge}</span>
               </div>
               <div className="p-4">
                 <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{p.name}</h3>
-                <p className="text-xs text-muted-foreground mt-1">{p.period} subscription</p>
+                <p className="text-xs text-muted-foreground mt-1">{p.plans[0].period} subscription</p>
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="text-lg font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.price}</span>
-                  <button className="grid place-items-center w-9 h-9 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition">
+                  <span className="text-lg font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0].price}</span>
+                  <span className="grid place-items-center w-9 h-9 rounded-full bg-primary text-primary-foreground group-hover:bg-primary/90 transition">
                     <ShoppingCart className="w-4 h-4" />
-                  </button>
+                  </span>
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </section>
