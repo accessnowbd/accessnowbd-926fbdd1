@@ -109,7 +109,8 @@ function OrdersPage() {
         ) : (
           <div className="mt-6 space-y-4">
             {orders.map((o) => (
-              <article key={o.id} className="bg-white border border-border rounded-2xl p-5">
+              <Link to="/orders/$id" params={{ id: o.id }} key={o.id} className="block bg-white border border-border rounded-2xl p-5 hover:shadow-[var(--shadow-glass)] hover:-translate-y-0.5 transition">
+                <article>
                 <header className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-3">
                   <div>
                     <div className="text-xs text-muted-foreground">Order ID</div>
@@ -151,7 +152,8 @@ function OrdersPage() {
                     <div className="font-semibold text-primary text-base" style={{ fontFamily: "var(--font-heading)" }}>৳{Number(o.total).toLocaleString()}</div>
                   </div>
                 </footer>
-              </article>
+                </article>
+              </Link>
             ))}
           </div>
         )}
