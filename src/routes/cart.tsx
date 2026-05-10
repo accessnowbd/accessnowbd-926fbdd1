@@ -3,6 +3,8 @@ import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
+import { GlassCard } from "@/components/ui-glass/GlassCard";
+import { GlassButton } from "@/components/ui-glass/GlassButton";
 
 export const Route = createFileRoute("/cart")({
   component: CartPage,
@@ -34,21 +36,21 @@ function CartPage() {
         <p className="text-muted-foreground mt-1">{count} {count === 1 ? "item" : "items"}</p>
 
         {items.length === 0 ? (
-          <div className="mt-12 glass-soft rounded-2xl py-20 text-center">
+          <GlassCard tone="soft" className="mt-12 py-20 text-center">
             <ShoppingBag className="w-12 h-12 mx-auto text-primary/70" />
             <h3 className="mt-4 text-lg font-semibold" style={{ fontFamily: "var(--font-heading)" }}>Your cart is empty</h3>
             <p className="text-sm text-muted-foreground mt-2">Add a subscription to get started.</p>
-            <Link to="/" className="inline-block mt-5 h-[42px] leading-[42px] px-6 rounded-full bg-aurora text-primary-foreground text-sm font-semibold hover:opacity-90 transition glow-violet">
+            <GlassButton onClick={() => navigate({ to: "/" })} className="mt-5">
               Browse subscriptions
-            </Link>
-          </div>
+            </GlassButton>
+          </GlassCard>
         ) : (
           <div className="mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
             <div className="space-y-3">
               {items.map((it) => {
                 const lineTotal = it.price * it.qty;
                 return (
-                  <div key={`${it.slug}-${it.planPeriod}`} className="glass-strong rounded-2xl p-4 flex gap-4 transition hover:-translate-y-0.5">
+                  <GlassCard key={`${it.slug}-${it.planPeriod}`} className="!p-4 flex gap-4 transition hover:-translate-y-0.5">
                     <div className={`w-20 h-20 shrink-0 rounded-xl bg-gradient-to-br ${it.gradient} grid place-items-center text-3xl shadow-inner`}>
                       {it.emoji}
                     </div>
@@ -58,26 +60,29 @@ function CartPage() {
                           <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{it.name}</h3>
                           <p className="text-xs text-muted-foreground mt-0.5">{it.planPeriod} · ৳{it.price.toLocaleString()}</p>
                         </div>
-                        <button onClick={() => remove(it.slug, it.planPeriod)} className="text-muted-foreground hover:text-destructive p-1" aria-label="Remove">
+                        <button
+                          onClick={() => remove(it.slug, it.planPeriod)}
+                          className="text-muted-foreground hover:text-destructive p-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          aria-label={`Remove ${it.name}`}
+                        >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                       <div className="mt-3 flex items-center justify-between">
-                        <div className="inline-flex items-center glass-soft rounded-full">
-                          <button onClick={() => setQty(it.slug, it.planPeriod, it.qty - 1)} className="w-8 h-8 grid place-items-center hover:text-primary"><Minus className="w-3.5 h-3.5" /></button>
-                          <span className="w-8 text-center text-sm font-semibold">{it.qty}</span>
-                          <button onClick={() => setQty(it.slug, it.planPeriod, it.qty + 1)} className="w-8 h-8 grid place-items-center hover:text-primary"><Plus className="w-3.5 h-3.5" /></button>
+                        <div className="inline-flex items-center glass-soft rounded-full" role="group" aria-label="Quantity">
+                          <button onClick={() => setQty(it.slug, it.planPeriod, it.qty - 1)} className="w-9 h-9 grid place-items-center hover:text-primary rounded-l-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Decrease quantity"><Minus className="w-3.5 h-3.5" /></button>
+                          <span className="w-8 text-center text-sm font-semibold" aria-live="polite">{it.qty}</span>
+                          <button onClick={() => setQty(it.slug, it.planPeriod, it.qty + 1)} className="w-9 h-9 grid place-items-center hover:text-primary rounded-r-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Increase quantity"><Plus className="w-3.5 h-3.5" /></button>
                         </div>
                         <span className="text-base font-semibold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>৳{lineTotal.toLocaleString()}</span>
                       </div>
                     </div>
-                  </div>
+                  </GlassCard>
                 );
               })}
             </div>
 
-            {/* Summary */}
-            <aside className="glass-strong rounded-2xl p-6 h-fit lg:sticky lg:top-6">
+            <GlassCard className="h-fit lg:sticky lg:top-6">
               <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 18, fontWeight: 600 }}>Order Summary</h3>
               <div className="mt-4 space-y-2 text-sm">
                 <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>৳{total.toLocaleString()}</span></div>
@@ -88,14 +93,11 @@ function CartPage() {
                 <span className="text-sm font-semibold">Total</span>
                 <span className="text-2xl font-semibold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>৳{total.toLocaleString()}</span>
               </div>
-              <button
-                onClick={() => navigate({ to: "/checkout" })}
-                className="mt-5 w-full h-[48px] rounded-full bg-aurora text-primary-foreground text-sm font-semibold hover:opacity-90 transition glow-violet"
-              >
+              <GlassButton onClick={() => navigate({ to: "/checkout" })} fullWidth size="lg" className="mt-5">
                 Proceed to Checkout
-              </button>
-              <p className="text-[11px] text-muted-foreground text-center mt-3">Secure payment with bKash, Nagad & cards</p>
-            </aside>
+              </GlassButton>
+              <p className="text-[11px] text-muted-foreground text-center mt-3">Secure payment with bKash & Nagad</p>
+            </GlassCard>
           </div>
         )}
       </div>

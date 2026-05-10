@@ -1,68 +1,89 @@
 ## লক্ষ্য
 
-Fanflixbd.com–স্টাইলে আমাদের সাইটের জন্য একটি পরিষ্কার **page list / sitemap** তৈরি করা — দুই রূপে:
-
-1. **Machine-readable `public/sitemap.xml`** (SEO + Google indexing-এর জন্য)
-2. **Human-readable `/sitemap` রুট** (visitors-দের জন্য, ক্যাটাগরি ধরে গোছানো)
-
-আমাদের নিজস্ব AccessNow BD branding/copy ব্যবহার করা হবে — fanflixbd-এর কোনো লোগো, copy বা trademarked text কপি করা হবে না।
+বর্তমানের single-page checkout-কে একটি **multi-step guided flow** এ রূপান্তর করা — Aurora Glass theme, button style ও accessible color tokens-এর সাথে সম্পূর্ণ consistent।
 
 ---
 
-## ১. `public/sitemap.xml` (static)
-
-সব public route-এর জন্য `<url>` entry, সাথে `lastmod`, `changefreq`, `priority`। Dynamic product URL গুলো build-এ DB থেকে generate করা সম্ভব না বলে — তার বদলে `/products` কে high priority দেব এবং পরে চাইলে server function দিয়ে dynamic sitemap যোগ করা যাবে।
-
-Included URLs: `/`, `/products`, `/streaming`, `/ai-tools`, `/education`, `/cart`, `/checkout`, `/orders`, `/profile`, `/auth`, `/reset-password`, `/contact`, `/faq`, `/sitemap`।
-
-`robots.txt`–এ `Sitemap:` line যোগ করা হবে।
-
-## ২. `/sitemap` page (`src/routes/sitemap.tsx`)
-
-Aurora Glass theme-এ একটি সুন্দর directory page, fanflix-এর footer/sitemap section-এর কাঠামো অনুসরণে কিন্তু আমাদের নিজস্ব copy দিয়ে। সেকশনগুলো:
+## নতুন ফ্লো (4 steps)
 
 ```
-Main
-  ├─ Home (/)
-  ├─ All Products (/products)
-  └─ Contact (/contact)
-
-Categories
-  ├─ Streaming Services (/streaming)
-  ├─ AI & Productivity Tools (/ai-tools)
-  └─ Education & Courses (/education)
-
-Account
-  ├─ Login / Sign up (/auth)
-  ├─ My Profile (/profile)
-  ├─ My Orders (/orders)
-  ├─ Cart (/cart)
-  ├─ Checkout (/checkout)
-  └─ Reset Password (/reset-password)
-
-Help
-  ├─ FAQ (/faq)
-  ├─ Contact Support (/contact)
-  └─ Sitemap (/sitemap)
-
-Featured Products (top 8 from DB, live)
-  └─ /product/{slug} ...
+[1] Cart Review → [2] Contact Info → [3] Payment → [4] Confirm
+                                                      ↓
+                                                  Success page
 ```
 
-প্রতিটা section glass card-এ, link-এ hover glow, বাংলা + English label।
+`/cart` থাকবে stand-alone cart page (item list edit), আর `/checkout` হবে stepper সহ ৩-ধাপের wizard (Contact → Payment → Review)। শেষে success page।
 
-## ৩. SEO meta
+---
 
-`/sitemap` রুটে নিজস্ব `head()` — title "Sitemap — AccessNow BD", description, og tags।
+## ১. শেয়ার্ড UI primitives (নতুন, theme-consistent)
 
-`__root.tsx`-এ একটি ছোট footer link "Sitemap" যোগ করা হবে যাতে crawler সহজে পায়।
+`src/components/ui-glass/`-এ ছোট reusable component set, যাতে পুরো app এক স্টাইলে চলে:
+
+- **`<GlassCard>`** — `glass-strong rounded-2xl p-6` wrapper, optional `tone="soft"`।
+- **`<GlassField>`** — label + input/textarea, focus ring `--ring`, error state, helper text, accessible `aria-describedby` ও `aria-invalid`।
+- **`<GlassButton>`** — variants: `primary` (bg-aurora + glow-violet), `secondary` (glass-soft), `ghost`, `destructive`। sizes: `sm/md/lg`। `min-h-[44px]` for touch, `:focus-visible` ring থেকে accessible।
+- **`<Stepper>`** — top progress bar with 3 steps, current/completed/upcoming states, keyboard-accessible (`aria-current="step"`)।
+- **`<RadioCard>`** — payment method ও plan-এর জন্য large tappable card, checked state aurora border + glow।
+- **`<SummaryRow>`** — order summary item rows।
+
+এগুলো শুধু existing tokens (`--primary`, `--aurora`, `glass-*`, `glow-*`) ব্যবহার করবে — কোনো hardcoded color নয় (বর্তমান `text-[#333333]` মতো hex গুলো `text-foreground/80` দিয়ে replace হবে)।
+
+## ২. `/cart` রিফ্যাক্টর
+
+- নতুন `<GlassCard>` + `<GlassButton>` দিয়ে rebuild।
+- Empty state CTA, qty stepper, line totals — same look, কিন্তু shared components।
+- "Proceed to Checkout" → `/checkout` (step 1 শুরু)।
+
+## ৩. `/checkout` — Multi-step wizard
+
+`useState` দিয়ে `step: 1 | 2 | 3` track। URL search param-এও sync (`?step=2`) যাতে refresh-এ থাকে এবং browser back কাজ করে।
+
+### Step 1 — Contact details
+- Full name, email (auth হলে prefill), WhatsApp number।
+- Inline validation (email format, BD phone regex)।
+- "Continue to Payment" button — invalid হলে disabled + error helper text।
+
+### Step 2 — Payment method
+- bKash / Nagad `<RadioCard>`।
+- "How to pay" instructions panel।
+- Number copy button।
+- Sender number + TrxID fields with validation (TrxID min length)।
+- Back / Continue buttons।
+
+### Step 3 — Review & Confirm
+- Read-only summary of contact + payment + items।
+- "Edit" link beside each section → jump back to that step।
+- Optional notes textarea।
+- Terms checkbox ("I confirm the TrxID is correct")।
+- **Place Order** button → existing `supabase.from("orders").insert()` logic অপরিবর্তিত।
+
+### Sticky right summary (desktop) / collapsible top summary (mobile)
+সব step জুড়ে দৃশ্যমান, items + total সহ।
+
+### Success state
+আগের সফল order screen একই, কিন্তু `<GlassButton>` ব্যবহার করে।
+
+## ৪. Accessibility & consistency pass
+
+- সব interactive element-এ `:focus-visible` outline (`--ring`)।
+- Color contrast: `text-muted-foreground` শুধু secondary text-এ; primary copy-তে `text-foreground`।
+- `aria-label` ও `aria-current` stepper-এ; form errors `role="alert"`।
+- Min touch target 44×44।
+- Mobile: stepper horizontal scroll-free (icons + short labels), summary collapsible।
 
 ---
 
 ### Technical notes
 
-- `public/sitemap.xml` — static file, build time-এ serve হবে।
-- `public/robots.txt` exist করলে update, না করলে create।
-- `/sitemap` রুটে featured products fetch করতে existing supabase client + `useQuery` ব্যবহার করব (যেমন `products.tsx`-এ আছে)।
-- কোনো DB schema বা business logic পরিবর্তন নেই — pure presentation + static SEO files।
-- Out of scope: dynamic XML sitemap with all product slugs (চাইলে পরে server route হিসেবে যোগ করা যাবে)।
+- কোনো DB schema বা business logic পরিবর্তন নেই — শুধু UI restructure + shared components।
+- Cart context (`useCart`) ও order insert query unchanged।
+- নতুন files:
+  - `src/components/ui-glass/GlassCard.tsx`
+  - `src/components/ui-glass/GlassField.tsx`
+  - `src/components/ui-glass/GlassButton.tsx`
+  - `src/components/ui-glass/Stepper.tsx`
+  - `src/components/ui-glass/RadioCard.tsx`
+- Edit: `src/routes/cart.tsx`, `src/routes/checkout.tsx`।
+- Validation hand-rolled (no extra dep) — simple regex + required checks।
+- Out of scope: address book, multiple saved payment methods, coupon codes, real payment gateway।
