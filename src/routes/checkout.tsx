@@ -3,7 +3,7 @@ import { ArrowLeft, Check, Copy, Lock, Smartphone, Loader2 } from "lucide-react"
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { products } from "@/data/products";
+
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 import { supabase } from "@/integrations/supabase/client";
@@ -240,21 +240,16 @@ function CheckoutPage() {
           <aside className="bg-white border border-border rounded-2xl p-6 h-fit lg:sticky lg:top-6">
             <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>Order summary</h3>
             <div className="mt-4 space-y-3 max-h-[260px] overflow-auto pr-1">
-              {items.map((it) => {
-                const p = products.find((x) => x.slug === it.slug);
-                const plan = p?.plans.find((pl) => pl.period === it.planPeriod);
-                if (!p || !plan) return null;
-                return (
-                  <div key={`${it.slug}-${it.planPeriod}`} className="flex gap-3 items-center">
-                    <div className={`w-12 h-12 shrink-0 rounded-lg bg-gradient-to-br ${p.gradient} grid place-items-center text-xl`}>{p.emoji}</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold truncate">{p.name}</div>
-                      <div className="text-xs text-muted-foreground">{plan.period} × {it.qty}</div>
-                    </div>
-                    <div className="text-sm font-semibold">৳{(parsePrice(plan.price) * it.qty).toLocaleString()}</div>
+              {items.map((it) => (
+                <div key={`${it.slug}-${it.planPeriod}`} className="flex gap-3 items-center">
+                  <div className={`w-12 h-12 shrink-0 rounded-lg bg-gradient-to-br ${it.gradient} grid place-items-center text-xl`}>{it.emoji}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold truncate">{it.name}</div>
+                    <div className="text-xs text-muted-foreground">{it.planPeriod} × {it.qty}</div>
                   </div>
-                );
-              })}
+                  <div className="text-sm font-semibold">৳{(it.price * it.qty).toLocaleString()}</div>
+                </div>
+              ))}
             </div>
             <div className="border-t border-border my-4" />
             <div className="flex justify-between items-baseline">
