@@ -3,6 +3,8 @@ import { Search, ShoppingCart, Sparkles, Shield, Zap, Headphones, ChevronRight, 
 import { useMemo, useRef, useState } from "react";
 import heroImg from "@/assets/hero.jpg";
 import { products as catalog } from "@/data/products";
+import { CartIcon } from "@/components/CartIcon";
+import { useCart } from "@/context/CartContext";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -33,6 +35,7 @@ const features = [
 ];
 
 function Index() {
+  const { add } = useCart();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string | null>(null);
   const productsRef = useRef<HTMLDivElement>(null);
@@ -77,9 +80,7 @@ function Index() {
           </nav>
           <div className="flex items-center gap-2">
             <button className="hidden sm:inline-flex h-9 px-4 rounded-full bg-white/15 hover:bg-white/25 text-sm font-semibold transition-colors">Sign in</button>
-            <button className="grid place-items-center w-10 h-10 rounded-full bg-white text-primary hover:scale-105 transition-transform">
-              <ShoppingCart className="w-4 h-4" />
-            </button>
+            <CartIcon />
           </div>
         </div>
       </header>
@@ -254,9 +255,13 @@ function Index() {
                 <p className="text-xs text-muted-foreground mt-1">{p.plans[0].period} subscription</p>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-lg font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0].price}</span>
-                  <span className="grid place-items-center w-9 h-9 rounded-full bg-primary text-primary-foreground group-hover:bg-primary/90 transition">
+                  <button
+                    onClick={(e) => { e.preventDefault(); add({ slug: p.slug, planPeriod: p.plans[0].period, qty: 1 }); }}
+                    className="grid place-items-center w-9 h-9 rounded-full bg-primary text-primary-foreground group-hover:bg-primary/90 transition"
+                    aria-label="Add to cart"
+                  >
                     <ShoppingCart className="w-4 h-4" />
-                  </span>
+                  </button>
                 </div>
               </div>
             </Link>

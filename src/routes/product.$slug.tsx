@@ -1,7 +1,9 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones } from "lucide-react";
 import { getProduct, products, type Product } from "@/data/products";
 import { useState } from "react";
+import { useCart } from "@/context/CartContext";
+import { CartIcon } from "@/components/CartIcon";
 
 export const Route = createFileRoute("/product/$slug")({
   component: ProductPage,
@@ -32,10 +34,15 @@ export const Route = createFileRoute("/product/$slug")({
 
 function ProductPage() {
   const product = Route.useLoaderData() as Product;
+  const navigate = useNavigate();
+  const { add } = useCart();
   const [selected, setSelected] = useState(
     product.plans.findIndex((p) => p.popular) >= 0 ? product.plans.findIndex((p) => p.popular) : 0,
   );
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
+
+  const addToCart = () => add({ slug: product.slug, planPeriod: product.plans[selected].period, qty: 1 });
+  const buyNow = () => { addToCart(); navigate({ to: "/checkout" }); };
 
   return (
     <div className="min-h-screen bg-background">
@@ -46,9 +53,7 @@ function ProductPage() {
             <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
             AccessNow BD
           </Link>
-          <button className="grid place-items-center w-10 h-10 rounded-full bg-white text-primary">
-            <ShoppingCart className="w-4 h-4" />
-          </button>
+          <CartIcon />
         </div>
       </header>
 
@@ -118,10 +123,10 @@ function ProductPage() {
 
           {/* Buy buttons */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <button className="h-[48px] flex-1 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2">
+            <button onClick={buyNow} className="h-[48px] flex-1 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2">
               <ShoppingCart className="w-4 h-4" /> Buy Now — {product.plans[selected].price}
             </button>
-            <button className="h-[48px] px-6 rounded-full border border-border text-sm font-semibold hover:bg-secondary transition">
+            <button onClick={addToCart} className="h-[48px] px-6 rounded-full border border-border text-sm font-semibold hover:bg-secondary transition">
               Add to Cart
             </button>
           </div>

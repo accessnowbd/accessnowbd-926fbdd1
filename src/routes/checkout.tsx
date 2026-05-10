@@ -1,0 +1,244 @@
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { ArrowLeft, Check, Copy, Lock, Smartphone } from "lucide-react";
+import { useState } from "react";
+import { useCart } from "@/context/CartContext";
+import { products } from "@/data/products";
+import { CartIcon } from "@/components/CartIcon";
+
+export const Route = createFileRoute("/checkout")({
+  component: CheckoutPage,
+  head: () => ({ meta: [{ title: "Checkout — AccessNow BD" }] }),
+});
+
+const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
+
+const methods = [
+  { id: "bkash", name: "bKash", number: "01711-123456", color: "bg-[#E2136E]", logo: "bKash" },
+  { id: "nagad", name: "Nagad", number: "01911-654321", color: "bg-[#EC1C24]", logo: "Nagad" },
+] as const;
+
+function CheckoutPage() {
+  const { items, total, clear } = useCart();
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
+  const [method, setMethod] = useState<"bkash" | "nagad">("bkash");
+  const [copied, setCopied] = useState(false);
+  const [submitted, setSubmitted] = useState<{ orderId: string } | null>(null);
+
+  const selectedMethod = methods.find((m) => m.id === method)!;
+
+  const update = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const copyNumber = async () => {
+    await navigator.clipboard.writeText(selectedMethod.number.replace(/-/g, ""));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const orderId = "AN" + Date.now().toString().slice(-8);
+    // Save order locally (replace with backend later)
+    try {
+      const orders = JSON.parse(localStorage.getItem("accessnow_orders") || "[]");
+      orders.push({ id: orderId, items, total, customer: form, payment: { method, ...selectedMethod }, createdAt: new Date().toISOString() });
+      localStorage.setItem("accessnow_orders", JSON.stringify(orders));
+    } catch {}
+    clear();
+    setSubmitted({ orderId });
+  };
+
+  if (items.length === 0 && !submitted) {
+    return (
+      <div className="min-h-screen grid place-items-center px-4">
+        <div className="text-center">
+          <h1 className="text-2xl font-semibold">Your cart is empty</h1>
+          <Link to="/" className="text-primary underline mt-3 inline-block">Browse subscriptions</Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen bg-background">
+        <header className="bg-primary text-primary-foreground">
+          <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center">
+            <Link to="/" className="flex items-center gap-2 font-semibold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
+              <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
+              AccessNow BD
+            </Link>
+          </div>
+        </header>
+        <div className="mx-auto max-w-xl px-4 py-16 text-center">
+          <div className="w-20 h-20 rounded-full bg-[var(--color-teal)] grid place-items-center mx-auto">
+            <Check className="w-10 h-10 text-black" />
+          </div>
+          <h1 className="mt-6" style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 500 }}>Order placed!</h1>
+          <p className="text-muted-foreground mt-2">Your order ID is <span className="font-semibold text-foreground">{submitted.orderId}</span></p>
+          <p className="text-sm text-[#333333] mt-4">
+            We're verifying your payment. You'll receive your subscription details on <span className="font-semibold">{form.email}</span> within 5-30 minutes.
+          </p>
+          <Link to="/" className="inline-block mt-8 h-[48px] leading-[48px] px-8 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition">
+            Back to home
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2 font-semibold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
+            <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
+            AccessNow BD
+          </Link>
+          <CartIcon />
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-[1100px] px-4 md:px-10 py-8">
+        <button onClick={() => navigate({ to: "/cart" })} className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to cart
+        </button>
+        <h1 style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 500 }}>Checkout</h1>
+
+        <form onSubmit={handleSubmit} className="mt-6 grid lg:grid-cols-[1fr_360px] gap-8">
+          <div className="space-y-6">
+            {/* Contact */}
+            <section className="bg-white border border-border rounded-2xl p-6">
+              <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>1. Contact details</h2>
+              <div className="mt-4 grid sm:grid-cols-2 gap-4">
+                <Field label="Full name" value={form.name} onChange={(v) => update("name", v)} required placeholder="Mohammad Karim" />
+                <Field label="Email" type="email" value={form.email} onChange={(v) => update("email", v)} required placeholder="you@email.com" />
+                <Field label="WhatsApp number" value={form.phone} onChange={(v) => update("phone", v)} required placeholder="01XXXXXXXXX" />
+              </div>
+            </section>
+
+            {/* Payment */}
+            <section className="bg-white border border-border rounded-2xl p-6">
+              <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>2. Choose payment method</h2>
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                {methods.map((m) => {
+                  const active = method === m.id;
+                  return (
+                    <button
+                      type="button"
+                      key={m.id}
+                      onClick={() => setMethod(m.id as "bkash" | "nagad")}
+                      className={`relative p-4 rounded-xl border-2 transition-all flex items-center gap-3 ${active ? "border-primary bg-accent" : "border-border bg-white hover:border-primary/40"}`}
+                    >
+                      <span className={`grid place-items-center w-12 h-12 rounded-lg ${m.color} text-white font-bold text-xs`}>{m.logo}</span>
+                      <div className="text-left">
+                        <div className="text-sm font-semibold">{m.name}</div>
+                        <div className="text-xs text-muted-foreground">Send Money</div>
+                      </div>
+                      {active && <Check className="w-4 h-4 text-primary absolute top-2 right-2" />}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Instructions */}
+              <div className="mt-5 rounded-xl bg-secondary p-4">
+                <div className="flex items-start gap-3">
+                  <Smartphone className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold">How to pay with {selectedMethod.name}</p>
+                    <ol className="text-xs text-[#333333] mt-2 space-y-1.5 list-decimal pl-4">
+                      <li>Open your {selectedMethod.name} app and tap <b>Send Money</b>.</li>
+                      <li>Send <b>৳{total.toLocaleString()}</b> to our number below.</li>
+                      <li>Copy the <b>Transaction ID (TrxID)</b> from your confirmation message.</li>
+                      <li>Paste it in the form below and submit.</li>
+                    </ol>
+                    <div className="mt-3 flex items-center justify-between bg-white rounded-lg border border-border px-4 py-2.5">
+                      <div>
+                        <div className="text-[10px] uppercase text-muted-foreground tracking-wider">{selectedMethod.name} Number</div>
+                        <div className="text-base font-semibold tracking-wide" style={{ fontFamily: "var(--font-heading)" }}>{selectedMethod.number}</div>
+                      </div>
+                      <button type="button" onClick={copyNumber} className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:bg-accent px-3 py-2 rounded-lg">
+                        {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                        {copied ? "Copied" : "Copy"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 grid sm:grid-cols-2 gap-4">
+                <Field label={`${selectedMethod.name} number you sent from`} value={form.senderNumber} onChange={(v) => update("senderNumber", v)} required placeholder="01XXXXXXXXX" />
+                <Field label="Transaction ID (TrxID)" value={form.trxId} onChange={(v) => update("trxId", v.toUpperCase())} required placeholder="e.g. 9A8B7C6D5E" />
+              </div>
+            </section>
+
+            {/* Notes */}
+            <section className="bg-white border border-border rounded-2xl p-6">
+              <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>3. Order notes (optional)</h2>
+              <textarea
+                value={form.notes}
+                onChange={(e) => update("notes", e.target.value)}
+                rows={3}
+                placeholder="Any special requests..."
+                className="mt-3 w-full px-4 py-3 rounded-xl border border-border bg-white text-sm outline-none focus:border-primary"
+              />
+            </section>
+          </div>
+
+          {/* Summary */}
+          <aside className="bg-white border border-border rounded-2xl p-6 h-fit lg:sticky lg:top-6">
+            <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>Order summary</h3>
+            <div className="mt-4 space-y-3 max-h-[260px] overflow-auto pr-1">
+              {items.map((it) => {
+                const p = products.find((x) => x.slug === it.slug);
+                const plan = p?.plans.find((pl) => pl.period === it.planPeriod);
+                if (!p || !plan) return null;
+                return (
+                  <div key={`${it.slug}-${it.planPeriod}`} className="flex gap-3 items-center">
+                    <div className={`w-12 h-12 shrink-0 rounded-lg bg-gradient-to-br ${p.gradient} grid place-items-center text-xl`}>{p.emoji}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-semibold truncate">{p.name}</div>
+                      <div className="text-xs text-muted-foreground">{plan.period} × {it.qty}</div>
+                    </div>
+                    <div className="text-sm font-semibold">৳{(parsePrice(plan.price) * it.qty).toLocaleString()}</div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="border-t border-border my-4" />
+            <div className="flex justify-between items-baseline">
+              <span className="text-sm font-semibold">Total</span>
+              <span className="text-2xl font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>৳{total.toLocaleString()}</span>
+            </div>
+            <button type="submit" className="mt-5 w-full h-[48px] rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2">
+              <Lock className="w-4 h-4" /> Place Order
+            </button>
+            <p className="text-[11px] text-muted-foreground text-center mt-3">Your data is safe. We never share your details.</p>
+          </aside>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function Field({
+  label, value, onChange, type = "text", required, placeholder,
+}: {
+  label: string; value: string; onChange: (v: string) => void; type?: string; required?: boolean; placeholder?: string;
+}) {
+  return (
+    <label className="block">
+      <span className="text-xs font-semibold text-[#333333]">{label}{required && <span className="text-destructive"> *</span>}</span>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+        placeholder={placeholder}
+        className="mt-1.5 w-full h-[42px] px-4 rounded-md border border-border bg-white text-sm outline-none focus:border-primary"
+      />
+    </label>
+  );
+}
