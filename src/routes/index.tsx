@@ -198,8 +198,6 @@ function FloatingPill() {
 
 /* ================= Sections ================= */
 
-import type { Product } from "@/data/products";
-
 function SectionHead({ title, subtitle, viewAllTo }: { title: string; subtitle: string; viewAllTo: "/products" | "/streaming" | "/ai-tools" | "/education" }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
