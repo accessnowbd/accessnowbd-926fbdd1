@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import heroImg from "@/assets/hero.jpg";
 import { products as catalog } from "@/data/products";
 import { CartIcon } from "@/components/CartIcon";
+import { AccountIcon } from "@/components/AccountIcon";
 import { useCart } from "@/context/CartContext";
 
 export const Route = createFileRoute("/")({
@@ -80,7 +81,7 @@ function Index() {
           </nav>
           <div className="flex items-center gap-2">
             <button className="hidden sm:inline-flex h-9 px-4 rounded-full bg-white/15 hover:bg-white/25 text-sm font-semibold transition-colors">Sign in</button>
-            <CartIcon />
+            <div className="flex items-center gap-2"><AccountIcon /><CartIcon /></div>
           </div>
         </div>
       </header>

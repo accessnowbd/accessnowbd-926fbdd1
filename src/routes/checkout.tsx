@@ -1,9 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Check, Copy, Lock, Smartphone } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, Check, Copy, Lock, Smartphone, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { products } from "@/data/products";
 import { CartIcon } from "@/components/CartIcon";
+import { AccountIcon } from "@/components/AccountIcon";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
@@ -19,12 +22,19 @@ const methods = [
 
 function CheckoutPage() {
   const { items, total, clear } = useCart();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
   const [method, setMethod] = useState<"bkash" | "nagad">("bkash");
   const [copied, setCopied] = useState(false);
   const [submitted, setSubmitted] = useState<{ orderId: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) setForm((f) => ({ ...f, email: f.email || user.email || "" }));
+  }, [user]);
 
   const selectedMethod = methods.find((m) => m.id === method)!;
 
@@ -36,18 +46,52 @@ function CheckoutPage() {
     setTimeout(() => setCopied(false), 1500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const orderId = "AN" + Date.now().toString().slice(-8);
-    // Save order locally (replace with backend later)
+    if (!user) {
+      navigate({ to: "/auth" });
+      return;
+    }
+    setErr(null);
+    setBusy(true);
     try {
-      const orders = JSON.parse(localStorage.getItem("accessnow_orders") || "[]");
-      orders.push({ id: orderId, items, total, customer: form, payment: { method, ...selectedMethod }, createdAt: new Date().toISOString() });
-      localStorage.setItem("accessnow_orders", JSON.stringify(orders));
-    } catch {}
-    clear();
-    setSubmitted({ orderId });
+      const { data, error } = await supabase
+        .from("orders")
+        .insert({
+          user_id: user.id,
+          full_name: form.name,
+          email: form.email,
+          phone: form.phone,
+          payment_method: method,
+          transaction_id: form.trxId,
+          items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty })),
+          total,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+      clear();
+      setSubmitted({ orderId: (data.id as string).slice(0, 8).toUpperCase() });
+    } catch (e: unknown) {
+      setErr(e instanceof Error ? e.message : "Failed to place order");
+    } finally {
+      setBusy(false);
+    }
   };
+
+  if (!authLoading && !user && items.length > 0) {
+    return (
+      <div className="min-h-screen grid place-items-center px-4">
+        <div className="text-center max-w-sm">
+          <h1 className="text-2xl font-semibold">Login to checkout</h1>
+          <p className="text-sm text-muted-foreground mt-2">Sign in or create an account to place your order and track it later.</p>
+          <Link to="/auth" className="inline-block mt-5 h-[44px] leading-[44px] px-6 rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+            Login / Sign up
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0 && !submitted) {
     return (
@@ -80,9 +124,14 @@ function CheckoutPage() {
           <p className="text-sm text-[#333333] mt-4">
             We're verifying your payment. You'll receive your subscription details on <span className="font-semibold">{form.email}</span> within 5-30 minutes.
           </p>
-          <Link to="/" className="inline-block mt-8 h-[48px] leading-[48px] px-8 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition">
-            Back to home
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-3 justify-center">
+            <Link to="/orders" className="inline-block h-[48px] leading-[48px] px-8 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition">
+              View my orders
+            </Link>
+            <Link to="/" className="inline-block h-[48px] leading-[48px] px-8 rounded-full border border-border bg-white text-sm font-semibold hover:bg-secondary transition">
+              Back to home
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -96,7 +145,7 @@ function CheckoutPage() {
             <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
             AccessNow BD
           </Link>
-          <CartIcon />
+          <div className="flex items-center gap-3"><AccountIcon /><CartIcon /></div>
         </div>
       </header>
 
@@ -212,8 +261,10 @@ function CheckoutPage() {
               <span className="text-sm font-semibold">Total</span>
               <span className="text-2xl font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>৳{total.toLocaleString()}</span>
             </div>
-            <button type="submit" className="mt-5 w-full h-[48px] rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2">
-              <Lock className="w-4 h-4" /> Place Order
+            {err && <p className="text-xs text-destructive mt-3 text-center">{err}</p>}
+            <button type="submit" disabled={busy} className="mt-5 w-full h-[48px] rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2 disabled:opacity-60">
+              {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
+              {busy ? "Placing order…" : "Place Order"}
             </button>
             <p className="text-[11px] text-muted-foreground text-center mt-3">Your data is safe. We never share your details.</p>
           </aside>
