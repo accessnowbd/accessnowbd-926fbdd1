@@ -152,7 +152,8 @@ function OrdersPage() {
                     <div className="font-semibold text-primary text-base" style={{ fontFamily: "var(--font-heading)" }}>৳{Number(o.total).toLocaleString()}</div>
                   </div>
                 </footer>
-              </article>
+                </article>
+              </Link>
             ))}
           </div>
         )}
