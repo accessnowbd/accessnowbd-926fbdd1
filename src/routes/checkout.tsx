@@ -261,8 +261,10 @@ function CheckoutPage() {
               <span className="text-sm font-semibold">Total</span>
               <span className="text-2xl font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>৳{total.toLocaleString()}</span>
             </div>
-            <button type="submit" className="mt-5 w-full h-[48px] rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2">
-              <Lock className="w-4 h-4" /> Place Order
+            {err && <p className="text-xs text-destructive mt-3 text-center">{err}</p>}
+            <button type="submit" disabled={busy} className="mt-5 w-full h-[48px] rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2 disabled:opacity-60">
+              {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
+              {busy ? "Placing order…" : "Place Order"}
             </button>
             <p className="text-[11px] text-muted-foreground text-center mt-3">Your data is safe. We never share your details.</p>
           </aside>
