@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search, ShoppingCart, Sparkles, Shield, Zap, Headphones, ChevronRight, Check, Star } from "lucide-react";
+import { Search, ShoppingCart, Sparkles, Shield, Zap, Headphones, ChevronRight, Check, Star, X } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
 import heroImg from "@/assets/hero.jpg";
 import { products as catalog } from "@/data/products";
 
@@ -32,6 +33,34 @@ const features = [
 ];
 
 function Index() {
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<string | null>(null);
+  const productsRef = useRef<HTMLDivElement>(null);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return products.filter((p) => {
+      const matchesCat = !category || p.category === category;
+      const matchesQuery =
+        !q ||
+        p.name.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        p.tagline.toLowerCase().includes(q);
+      return matchesCat && matchesQuery;
+    });
+  }, [query, category]);
+
+  const scrollToProducts = () => {
+    productsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const pickCategory = (c: string) => {
+    setCategory((cur) => (cur === c ? null : c));
+    scrollToProducts();
+  };
+
+  const isFiltering = query.trim().length > 0 || category !== null;
+
   return (
     <div className="min-h-screen bg-background">
       {/* Top Nav */}
@@ -70,13 +99,27 @@ function Index() {
             </p>
 
             {/* Search */}
-            <div className="mt-8 flex items-center bg-white rounded-full border border-border h-[52px] pl-5 pr-1.5 shadow-[0_0_3px_0_rgba(0,0,0,0.15)] max-w-xl">
+            <div className="mt-8 flex items-center bg-white rounded-full border border-border h-[52px] pl-5 pr-1.5 shadow-[0_0_3px_0_rgba(0,0,0,0.15)] max-w-xl focus-within:border-primary transition">
               <Search className="w-4 h-4 text-muted-foreground" />
               <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search for Netflix, ChatGPT, Spotify..."
                 className="flex-1 px-3 bg-transparent outline-none text-sm placeholder:text-muted-foreground"
               />
-              <button className="h-10 px-6 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition">
+              {query && (
+                <button
+                  onClick={() => setQuery("")}
+                  className="grid place-items-center w-8 h-8 rounded-full hover:bg-secondary text-muted-foreground"
+                  aria-label="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+              <button
+                onClick={scrollToProducts}
+                className="h-10 px-6 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition"
+              >
                 Search
               </button>
             </div>
