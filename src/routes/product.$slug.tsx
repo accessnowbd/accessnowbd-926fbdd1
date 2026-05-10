@@ -61,12 +61,13 @@ function ProductPage() {
   const buyNow = () => { addToCart(); navigate({ to: "/checkout" }); };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Top Nav */}
-      <header className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
+      <header className="bg-aurora text-primary-foreground relative overflow-hidden">
+        <div className="absolute inset-0 bg-mesh opacity-40 pointer-events-none" />
+        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 font-semibold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
-            <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
+            <span className="grid place-items-center w-9 h-9 rounded-full glass-strong text-primary font-bold">A</span>
             AccessNow BD
           </Link>
           <div className="flex items-center gap-2"><AccountIcon /><CartIcon /></div>
