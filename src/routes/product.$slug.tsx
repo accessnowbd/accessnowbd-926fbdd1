@@ -61,12 +61,13 @@ function ProductPage() {
   const buyNow = () => { addToCart(); navigate({ to: "/checkout" }); };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Top Nav */}
-      <header className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
+      <header className="bg-aurora text-primary-foreground relative overflow-hidden">
+        <div className="absolute inset-0 bg-mesh opacity-40 pointer-events-none" />
+        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 font-semibold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
-            <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
+            <span className="grid place-items-center w-9 h-9 rounded-full glass-strong text-primary font-bold">A</span>
             AccessNow BD
           </Link>
           <div className="flex items-center gap-2"><AccountIcon /><CartIcon /></div>
@@ -89,22 +90,22 @@ function ProductPage() {
       {/* Product Hero */}
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8 grid md:grid-cols-2 gap-10">
         {/* Image */}
-        <div className={`relative aspect-square md:aspect-[4/5] rounded-3xl bg-gradient-to-br ${product.gradient} flex items-center justify-center border border-border overflow-hidden`}>
-          <span className="text-[180px] md:text-[220px]">{product.emoji}</span>
-          <span className={`absolute top-5 left-5 ${badgeColorFor(product.badge)} px-3 py-1 rounded text-xs font-semibold`}>{product.badge ?? "New"}</span>
+        <div className={`relative aspect-square md:aspect-[4/5] rounded-3xl bg-gradient-to-br ${product.gradient} flex items-center justify-center glass-strong overflow-hidden glow-violet`}>
+          <span className="text-[180px] md:text-[220px] drop-shadow-lg">{product.emoji}</span>
+          <span className={`absolute top-5 left-5 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>{product.badge ?? "New"}</span>
         </div>
 
         {/* Info */}
         <div>
-          <span className="inline-block px-3 py-1 rounded bg-accent text-primary text-xs font-semibold">{product.category}</span>
-          <h1 className="mt-4" style={{ fontFamily: "var(--font-display)", fontSize: 34, fontWeight: 500, lineHeight: 1.2 }}>
+          <span className="inline-block px-3 py-1 rounded-full glass-soft text-primary text-xs font-semibold">{product.category}</span>
+          <h1 className="mt-4 text-aurora" style={{ fontFamily: "var(--font-display)", fontSize: 34, fontWeight: 600, lineHeight: 1.2 }}>
             {product.name}
           </h1>
           <p className="mt-3 text-base text-[#333333]">{product.tagline}</p>
 
           <div className="mt-4 flex items-center gap-3 text-sm">
             <div className="flex items-center gap-1">
-              {[1,2,3,4,5].map((i) => <Star key={i} className="w-4 h-4 fill-[var(--color-warning)] text-[var(--color-warning)]" />)}
+              {[1,2,3,4,5].map((i) => <Star key={i} className="w-4 h-4 fill-[var(--color-gold)] text-[var(--color-gold)]" />)}
             </div>
             <span className="text-muted-foreground">4.9 · 2,431 sold</span>
           </div>
@@ -122,14 +123,14 @@ function ProductPage() {
                     key={p.period}
                     onClick={() => setSelected(idx)}
                     className={`relative text-left p-4 rounded-xl border-2 transition-all ${
-                      active ? "border-primary bg-accent" : "border-border bg-white hover:border-primary/40"
+                      active ? "border-primary glass" : "border-transparent glass-soft hover:border-primary/40"
                     }`}
                   >
                     {p.popular && (
-                      <span className="absolute -top-2 right-3 bg-[var(--color-orange)] text-white text-[10px] font-semibold px-2 py-0.5 rounded">POPULAR</span>
+                      <span className="absolute -top-2 right-3 bg-sunset text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow">POPULAR</span>
                     )}
                     <div className="text-xs text-muted-foreground">{p.period}</div>
-                    <div className="mt-1 font-semibold text-lg text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.price}</div>
+                    <div className="mt-1 font-semibold text-lg text-aurora" style={{ fontFamily: "var(--font-heading)" }}>{p.price}</div>
                     {p.original && <div className="text-xs text-muted-foreground line-through">{p.original}</div>}
                   </button>
                 );
@@ -139,24 +140,24 @@ function ProductPage() {
 
           {/* Buy buttons */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <button onClick={buyNow} className="h-[48px] flex-1 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2">
+            <button onClick={buyNow} className="h-[48px] flex-1 rounded-full bg-aurora text-primary-foreground text-sm font-semibold hover:opacity-90 transition glow-violet inline-flex items-center justify-center gap-2">
               <ShoppingCart className="w-4 h-4" /> Buy Now — {plan?.price ?? ""}
             </button>
-            <button onClick={addToCart} className="h-[48px] px-6 rounded-full border border-border text-sm font-semibold hover:bg-secondary transition">
+            <button onClick={addToCart} className="h-[48px] px-6 rounded-full glass-soft text-sm font-semibold hover:bg-[var(--glass-bg-strong)] transition">
               Add to Cart
             </button>
           </div>
 
           {/* Trust strip */}
           <div className="mt-6 grid grid-cols-2 gap-3">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary">
+            <div className="flex items-center gap-3 p-3 rounded-xl glass-soft">
               <Clock className="w-5 h-5 text-primary" />
               <div>
                 <div className="text-xs text-muted-foreground">Delivery</div>
                 <div className="text-sm font-semibold">{product.deliveryTime}</div>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary">
+            <div className="flex items-center gap-3 p-3 rounded-xl glass-soft">
               <Shield className="w-5 h-5 text-primary" />
               <div>
                 <div className="text-xs text-muted-foreground">Warranty</div>
@@ -169,11 +170,11 @@ function ProductPage() {
 
       {/* Features */}
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
-        <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 500 }}>What's included</h2>
+        <h2 className="text-aurora" style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 600 }}>What's included</h2>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           {product.features.map((f) => (
-            <div key={f} className="flex items-start gap-3 p-4 bg-white border border-border rounded-xl">
-              <span className="grid place-items-center w-8 h-8 rounded-full bg-accent text-primary shrink-0">
+            <div key={f} className="flex items-start gap-3 p-4 glass rounded-xl">
+              <span className="grid place-items-center w-8 h-8 rounded-full bg-aurora text-white shrink-0">
                 <Check className="w-4 h-4" />
               </span>
               <span className="text-sm text-[#333333] mt-1">{f}</span>
@@ -183,17 +184,18 @@ function ProductPage() {
       </section>
 
       {/* How it works */}
-      <section className="bg-secondary py-12">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-10">
-          <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 500 }}>How delivery works</h2>
+      <section className="py-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-mesh opacity-60 pointer-events-none" />
+        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10">
+          <h2 className="text-aurora" style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 600 }}>How delivery works</h2>
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               { icon: ShoppingCart, title: "1. Place your order", desc: "Choose your plan and complete payment via bKash, Nagad, or card." },
               { icon: Zap, title: "2. Instant processing", desc: `We deliver your account details within ${product.deliveryTime} on email & WhatsApp.` },
               { icon: Headphones, title: "3. Enjoy & relax", desc: `Use immediately. Covered by our ${product.warranty} guarantee.` },
             ].map((s) => (
-              <div key={s.title} className="bg-white rounded-xl p-6">
-                <div className="w-12 h-12 rounded-full bg-primary text-white grid place-items-center mb-4">
+              <div key={s.title} className="glass-strong rounded-2xl p-6">
+                <div className="w-12 h-12 rounded-full bg-aurora text-white grid place-items-center mb-4 glow-violet">
                   <s.icon className="w-5 h-5" />
                 </div>
                 <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{s.title}</h3>
@@ -206,22 +208,22 @@ function ProductPage() {
 
       {/* Related */}
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
-        <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 500 }}>You might also like</h2>
+        <h2 className="text-aurora" style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 600 }}>You might also like</h2>
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-5">
           {related.map((p) => (
             <Link
               to="/product/$slug"
               params={{ slug: p.slug }}
               key={p.slug}
-              className="group bg-white rounded-xl overflow-hidden hover:shadow-[0_5px_40px_0_rgba(0,0,0,0.16)] hover:-translate-y-1 transition-all border border-border"
+              className="group glass rounded-2xl overflow-hidden hover:-translate-y-1 hover:glow-violet transition-all"
             >
               <div className={`relative aspect-[4/3] bg-gradient-to-br ${p.gradient} flex items-center justify-center`}>
-                <span className="text-6xl">{p.emoji}</span>
+                <span className="text-6xl drop-shadow">{p.emoji}</span>
               </div>
               <div className="p-4">
                 <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{p.name}</h3>
                 <div className="mt-3 flex items-center justify-between">
-                  <span className="text-base font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0]?.price ?? "—"}</span>
+                  <span className="text-base font-semibold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0]?.price ?? "—"}</span>
                   <span className="text-xs text-muted-foreground">{p.plans[0]?.period ?? ""}</span>
                 </div>
               </div>
@@ -230,7 +232,7 @@ function ProductPage() {
         </div>
       </section>
 
-      <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
+      <footer className="border-t border-[var(--glass-border-soft)] py-6 text-center text-xs text-muted-foreground">
         © 2026 AccessNow BD. All rights reserved.
       </footer>
     </div>
