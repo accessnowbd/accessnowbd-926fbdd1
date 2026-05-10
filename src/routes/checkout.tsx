@@ -124,9 +124,14 @@ function CheckoutPage() {
           <p className="text-sm text-[#333333] mt-4">
             We're verifying your payment. You'll receive your subscription details on <span className="font-semibold">{form.email}</span> within 5-30 minutes.
           </p>
-          <Link to="/" className="inline-block mt-8 h-[48px] leading-[48px] px-8 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition">
-            Back to home
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-3 justify-center">
+            <Link to="/orders" className="inline-block h-[48px] leading-[48px] px-8 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition">
+              View my orders
+            </Link>
+            <Link to="/" className="inline-block h-[48px] leading-[48px] px-8 rounded-full border border-border bg-white text-sm font-semibold hover:bg-secondary transition">
+              Back to home
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -140,7 +145,7 @@ function CheckoutPage() {
             <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
             AccessNow BD
           </Link>
-          <CartIcon />
+          <div className="flex items-center gap-3"><AccountIcon /><CartIcon /></div>
         </div>
       </header>
 
