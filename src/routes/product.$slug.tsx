@@ -1,28 +1,17 @@
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones } from "lucide-react";
-import { getProduct, products, type Product } from "@/data/products";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones, Loader2 } from "lucide-react";
+import { useProducts, useProduct } from "@/hooks/useProducts";
+import { badgeColorFor } from "@/lib/badgeColor";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 
+const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
+
 export const Route = createFileRoute("/product/$slug")({
   component: ProductPage,
-  loader: ({ params }) => {
-    const product = getProduct(params.slug);
-    if (!product) throw notFound();
-    return product;
-  },
-  head: ({ loaderData }) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.name} — Buy in Bangladesh | AccessNow BD` },
-          { name: "description", content: loaderData.tagline },
-          { property: "og:title", content: `${loaderData.name} — AccessNow BD` },
-          { property: "og:description", content: loaderData.tagline },
-        ]
-      : [],
-  }),
+  head: () => ({ meta: [{ title: "Subscription details — AccessNow BD" }] }),
   notFoundComponent: () => (
     <div className="min-h-screen grid place-items-center px-4">
       <div className="text-center">
@@ -34,15 +23,41 @@ export const Route = createFileRoute("/product/$slug")({
 });
 
 function ProductPage() {
-  const product = Route.useLoaderData() as Product;
+  const { slug } = Route.useParams();
+  const { product, isLoading } = useProduct(slug);
+  const { products } = useProducts();
   const navigate = useNavigate();
   const { add } = useCart();
-  const [selected, setSelected] = useState(
-    product.plans.findIndex((p) => p.popular) >= 0 ? product.plans.findIndex((p) => p.popular) : 0,
-  );
+  const [selected, setSelected] = useState(0);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen grid place-items-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+  if (!product) {
+    return (
+      <div className="min-h-screen grid place-items-center px-4">
+        <div className="text-center">
+          <h1 className="text-3xl font-semibold mb-2">Product not found</h1>
+          <Link to="/" className="text-primary underline">Back to home</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const popularIdx = product.plans.findIndex((p) => p.popular);
+  const safeSelected = Math.min(selected, Math.max(product.plans.length - 1, 0));
+  const activeIdx = selected === 0 && popularIdx > 0 ? popularIdx : safeSelected;
+  const plan = product.plans[activeIdx];
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
 
-  const addToCart = () => add({ slug: product.slug, planPeriod: product.plans[selected].period, qty: 1 });
+  const addToCart = () => {
+    if (!plan) return;
+    add({ slug: product.slug, planPeriod: plan.period, qty: 1, price: parsePrice(plan.price), name: product.name, emoji: product.emoji, gradient: product.gradient });
+  };
   const buyNow = () => { addToCart(); navigate({ to: "/checkout" }); };
 
   return (
@@ -76,7 +91,7 @@ function ProductPage() {
         {/* Image */}
         <div className={`relative aspect-square md:aspect-[4/5] rounded-3xl bg-gradient-to-br ${product.gradient} flex items-center justify-center border border-border overflow-hidden`}>
           <span className="text-[180px] md:text-[220px]">{product.emoji}</span>
-          <span className={`absolute top-5 left-5 ${product.badgeColor} text-white px-3 py-1 rounded text-xs font-semibold`}>{product.badge}</span>
+          <span className={`absolute top-5 left-5 ${badgeColorFor(product.badge)} px-3 py-1 rounded text-xs font-semibold`}>{product.badge ?? "New"}</span>
         </div>
 
         {/* Info */}
@@ -101,7 +116,7 @@ function ProductPage() {
             <h3 className="text-sm font-semibold mb-3" style={{ fontFamily: "var(--font-heading)" }}>Choose your plan</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {product.plans.map((p, idx) => {
-                const active = selected === idx;
+                const active = activeIdx === idx;
                 return (
                   <button
                     key={p.period}
@@ -125,7 +140,7 @@ function ProductPage() {
           {/* Buy buttons */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <button onClick={buyNow} className="h-[48px] flex-1 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2">
-              <ShoppingCart className="w-4 h-4" /> Buy Now — {product.plans[selected].price}
+              <ShoppingCart className="w-4 h-4" /> Buy Now — {plan?.price ?? ""}
             </button>
             <button onClick={addToCart} className="h-[48px] px-6 rounded-full border border-border text-sm font-semibold hover:bg-secondary transition">
               Add to Cart
@@ -206,8 +221,8 @@ function ProductPage() {
               <div className="p-4">
                 <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{p.name}</h3>
                 <div className="mt-3 flex items-center justify-between">
-                  <span className="text-base font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0].price}</span>
-                  <span className="text-xs text-muted-foreground">{p.plans[0].period}</span>
+                  <span className="text-base font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0]?.price ?? "—"}</span>
+                  <span className="text-xs text-muted-foreground">{p.plans[0]?.period ?? ""}</span>
                 </div>
               </div>
             </Link>
