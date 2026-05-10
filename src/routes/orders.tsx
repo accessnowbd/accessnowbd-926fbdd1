@@ -92,7 +92,11 @@ function OrdersPage() {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h1 style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 500 }}>My orders</h1>
-            <p className="text-sm text-muted-foreground mt-1">Signed in as <span className="font-semibold text-foreground">{user?.email}</span></p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Signed in as <span className="font-semibold text-foreground">{user?.email}</span>
+              {" · "}
+              <Link to="/profile" className="text-primary font-semibold hover:underline">Edit profile</Link>
+            </p>
           </div>
           <span className="text-sm text-muted-foreground">{orders.length} order{orders.length !== 1 ? "s" : ""}</span>
         </div>
