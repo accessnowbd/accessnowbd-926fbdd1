@@ -123,10 +123,10 @@ function ProductPage() {
 
           {/* Buy buttons */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <button className="h-[48px] flex-1 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2">
+            <button onClick={buyNow} className="h-[48px] flex-1 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition inline-flex items-center justify-center gap-2">
               <ShoppingCart className="w-4 h-4" /> Buy Now — {product.plans[selected].price}
             </button>
-            <button className="h-[48px] px-6 rounded-full border border-border text-sm font-semibold hover:bg-secondary transition">
+            <button onClick={addToCart} className="h-[48px] px-6 rounded-full border border-border text-sm font-semibold hover:bg-secondary transition">
               Add to Cart
             </button>
           </div>
