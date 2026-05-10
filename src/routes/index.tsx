@@ -255,9 +255,13 @@ function Index() {
                 <p className="text-xs text-muted-foreground mt-1">{p.plans[0].period} subscription</p>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-lg font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0].price}</span>
-                  <span className="grid place-items-center w-9 h-9 rounded-full bg-primary text-primary-foreground group-hover:bg-primary/90 transition">
+                  <button
+                    onClick={(e) => { e.preventDefault(); add({ slug: p.slug, planPeriod: p.plans[0].period, qty: 1 }); }}
+                    className="grid place-items-center w-9 h-9 rounded-full bg-primary text-primary-foreground group-hover:bg-primary/90 transition"
+                    aria-label="Add to cart"
+                  >
                     <ShoppingCart className="w-4 h-4" />
-                  </span>
+                  </button>
                 </div>
               </div>
             </Link>
