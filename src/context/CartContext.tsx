@@ -1,10 +1,13 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { products } from "@/data/products";
 
 export type CartItem = {
   slug: string;
   planPeriod: string;
   qty: number;
+  price: number;
+  name: string;
+  emoji: string;
+  gradient: string;
 };
 
 type CartCtx = {
@@ -18,9 +21,7 @@ type CartCtx = {
 };
 
 const Ctx = createContext<CartCtx | null>(null);
-const KEY = "accessnow_cart_v1";
-
-const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
+const KEY = "accessnow_cart_v2";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -29,22 +30,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       const raw = localStorage.getItem(KEY);
       if (raw) setItems(JSON.parse(raw));
-    } catch {}
+    } catch {
+      // ignore
+    }
   }, []);
 
   useEffect(() => {
     try {
       localStorage.setItem(KEY, JSON.stringify(items));
-    } catch {}
+    } catch {
+      // ignore
+    }
   }, [items]);
 
   const value = useMemo<CartCtx>(() => {
-    const total = items.reduce((sum, it) => {
-      const product = products.find((p) => p.slug === it.slug);
-      const plan = product?.plans.find((pl) => pl.period === it.planPeriod);
-      return sum + (plan ? parsePrice(plan.price) * it.qty : 0);
-    }, 0);
-
+    const total = items.reduce((sum, it) => sum + it.price * it.qty, 0);
     return {
       items,
       count: items.reduce((s, i) => s + i.qty, 0),
