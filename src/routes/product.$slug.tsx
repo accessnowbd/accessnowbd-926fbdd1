@@ -90,22 +90,22 @@ function ProductPage() {
       {/* Product Hero */}
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8 grid md:grid-cols-2 gap-10">
         {/* Image */}
-        <div className={`relative aspect-square md:aspect-[4/5] rounded-3xl bg-gradient-to-br ${product.gradient} flex items-center justify-center border border-border overflow-hidden`}>
-          <span className="text-[180px] md:text-[220px]">{product.emoji}</span>
-          <span className={`absolute top-5 left-5 ${badgeColorFor(product.badge)} px-3 py-1 rounded text-xs font-semibold`}>{product.badge ?? "New"}</span>
+        <div className={`relative aspect-square md:aspect-[4/5] rounded-3xl bg-gradient-to-br ${product.gradient} flex items-center justify-center glass-strong overflow-hidden glow-violet`}>
+          <span className="text-[180px] md:text-[220px] drop-shadow-lg">{product.emoji}</span>
+          <span className={`absolute top-5 left-5 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>{product.badge ?? "New"}</span>
         </div>
 
         {/* Info */}
         <div>
-          <span className="inline-block px-3 py-1 rounded bg-accent text-primary text-xs font-semibold">{product.category}</span>
-          <h1 className="mt-4" style={{ fontFamily: "var(--font-display)", fontSize: 34, fontWeight: 500, lineHeight: 1.2 }}>
+          <span className="inline-block px-3 py-1 rounded-full glass-soft text-primary text-xs font-semibold">{product.category}</span>
+          <h1 className="mt-4 text-aurora" style={{ fontFamily: "var(--font-display)", fontSize: 34, fontWeight: 600, lineHeight: 1.2 }}>
             {product.name}
           </h1>
           <p className="mt-3 text-base text-[#333333]">{product.tagline}</p>
 
           <div className="mt-4 flex items-center gap-3 text-sm">
             <div className="flex items-center gap-1">
-              {[1,2,3,4,5].map((i) => <Star key={i} className="w-4 h-4 fill-[var(--color-warning)] text-[var(--color-warning)]" />)}
+              {[1,2,3,4,5].map((i) => <Star key={i} className="w-4 h-4 fill-[var(--color-gold)] text-[var(--color-gold)]" />)}
             </div>
             <span className="text-muted-foreground">4.9 · 2,431 sold</span>
           </div>
