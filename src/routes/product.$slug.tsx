@@ -34,10 +34,15 @@ export const Route = createFileRoute("/product/$slug")({
 
 function ProductPage() {
   const product = Route.useLoaderData() as Product;
+  const navigate = useNavigate();
+  const { add } = useCart();
   const [selected, setSelected] = useState(
     product.plans.findIndex((p) => p.popular) >= 0 ? product.plans.findIndex((p) => p.popular) : 0,
   );
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
+
+  const addToCart = () => add({ slug: product.slug, planPeriod: product.plans[selected].period, qty: 1 });
+  const buyNow = () => { addToCart(); navigate({ to: "/checkout" }); };
 
   return (
     <div className="min-h-screen bg-background">
@@ -48,9 +53,7 @@ function ProductPage() {
             <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
             AccessNow BD
           </Link>
-          <button className="grid place-items-center w-10 h-10 rounded-full bg-white text-primary">
-            <ShoppingCart className="w-4 h-4" />
-          </button>
+          <CartIcon />
         </div>
       </header>
 
