@@ -156,17 +156,29 @@ function Index() {
             <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 500 }}>Browse Categories</h2>
             <p className="text-muted-foreground mt-1">Find the perfect subscription for you</p>
           </div>
-          <button className="hidden md:inline-flex items-center gap-2 px-5 py-3 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition">
+          <button
+            onClick={() => setCategory(null)}
+            className="hidden md:inline-flex items-center gap-2 px-5 py-3 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition"
+          >
             All Categories <ChevronRight className="w-4 h-4" />
           </button>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-5">
-          {categories.map((c) => (
-            <button key={c.name} className={`${c.color} text-white rounded-xl p-6 flex flex-col items-start gap-3 hover:shadow-[0_5px_40px_0_rgba(0,0,0,0.16)] hover:scale-[1.02] transition-all`}>
-              <span className="text-3xl">{c.icon}</span>
-              <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span>
-            </button>
-          ))}
+          {categories.map((c) => {
+            const active = category === c.name;
+            return (
+              <button
+                key={c.name}
+                onClick={() => pickCategory(c.name)}
+                className={`${c.color} text-white rounded-xl p-6 flex flex-col items-start gap-3 hover:shadow-[0_5px_40px_0_rgba(0,0,0,0.16)] hover:scale-[1.02] transition-all ${
+                  active ? "ring-4 ring-primary/40 scale-[1.02] shadow-[0_5px_40px_0_rgba(0,0,0,0.16)]" : ""
+                }`}
+              >
+                <span className="text-3xl">{c.icon}</span>
+                <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span>
+              </button>
+            );
+          })}
         </div>
       </section>
 
@@ -191,15 +203,42 @@ function Index() {
       </section>
 
       {/* Products */}
-      <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-16">
-        <div className="flex items-end justify-between mb-8">
+      <section ref={productsRef} className="mx-auto max-w-[1440px] px-4 md:px-10 py-16 scroll-mt-20">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div>
-            <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 500 }}>Trending Subscriptions</h2>
-            <p className="text-muted-foreground mt-1">Most popular choices in Bangladesh this week</p>
+            <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 500 }}>
+              {isFiltering ? "Search Results" : "Trending Subscriptions"}
+            </h2>
+            <p className="text-muted-foreground mt-1">
+              {isFiltering
+                ? `${filtered.length} ${filtered.length === 1 ? "product" : "products"} found${category ? ` in ${category}` : ""}${query ? ` for "${query}"` : ""}`
+                : "Most popular choices in Bangladesh this week"}
+            </p>
           </div>
+          {isFiltering && (
+            <button
+              onClick={() => { setQuery(""); setCategory(null); }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border text-sm font-semibold hover:bg-secondary transition"
+            >
+              <X className="w-4 h-4" /> Clear filters
+            </button>
+          )}
         </div>
+        {filtered.length === 0 ? (
+          <div className="border border-dashed border-border rounded-2xl py-16 text-center">
+            <div className="text-5xl mb-3">🔍</div>
+            <h3 className="text-lg font-semibold" style={{ fontFamily: "var(--font-heading)" }}>No products found</h3>
+            <p className="text-sm text-muted-foreground mt-2">Try a different search term or category.</p>
+            <button
+              onClick={() => { setQuery(""); setCategory(null); }}
+              className="mt-5 h-[42px] px-6 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition"
+            >
+              Reset filters
+            </button>
+          </div>
+        ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {products.map((p) => (
+          {filtered.map((p) => (
             <Link
               to="/product/$slug"
               params={{ slug: p.slug }}
