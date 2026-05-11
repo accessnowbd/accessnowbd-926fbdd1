@@ -283,7 +283,7 @@ function HeroExperience() {
                     style={{ background: `radial-gradient(circle at 50% 30%, ${b.color}33, transparent 70%)` }}
                   />
                   <img
-                    src={brandLogo(b.domain)}
+                    src={brandLogo(b)}
                     alt={b.name}
                     loading="lazy"
                     className="relative h-7 w-7 object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]"
