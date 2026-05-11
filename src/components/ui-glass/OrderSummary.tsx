@@ -110,11 +110,3 @@ export function SummaryRow({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-export function SummaryRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</dt>
-      <dd className="text-sm font-medium text-foreground mt-0.5 break-words">{value || "—"}</dd>
-    </div>
-  );
-}
