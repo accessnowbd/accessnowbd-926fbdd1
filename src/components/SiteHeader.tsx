@@ -160,23 +160,23 @@ export function SiteHeader() {
                       "radial-gradient(circle, rgba(56,128,255,0.55) 0%, rgba(31,199,150,0.3) 50%, transparent 75%)",
                   }}
                 />
-                {/* Inner round badge */}
+                {/* Inner round badge — white bg so logo pops */}
                 <span
-                  className="relative grid place-items-center w-11 h-11 md:w-12 md:h-12 rounded-full overflow-hidden ring-1 ring-white/15 shadow-[0_8px_24px_-6px_rgba(56,128,255,0.55)] group-hover:scale-105 transition-transform duration-500"
+                  className="relative grid place-items-center w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden ring-1 ring-white/30 shadow-[0_8px_24px_-6px_rgba(56,128,255,0.55)] group-hover:scale-105 transition-transform duration-500"
                   style={{
                     background:
-                      "radial-gradient(120% 120% at 30% 20%, #1a1638 0%, #0d0a1f 70%)",
+                      "radial-gradient(120% 120% at 30% 20%, #ffffff 0%, #eaf2ff 70%, #d8e6ff 100%)",
                   }}
                 >
                   {/* Top gloss highlight */}
-                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/20 blur-[3px]" />
+                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/70 blur-[3px]" />
                   {/* Bottom inner shadow */}
-                  <span className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_-6px_12px_-6px_rgba(0,0,0,0.6)]" />
+                  <span className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_-6px_12px_-6px_rgba(0,40,120,0.18)]" />
                   <img
                     src={accessNowLogo}
                     alt="AccessNow BD"
                     draggable={false}
-                    className="relative w-full h-full object-cover scale-110 drop-shadow-[0_2px_6px_rgba(0,229,255,0.45)]"
+                    className="relative w-[125%] h-[125%] object-contain translate-y-[6%] drop-shadow-[0_2px_4px_rgba(30,79,216,0.25)]"
                   />
                   {/* Sweeping shine effect on hover */}
                   <span
@@ -184,7 +184,7 @@ export function SiteHeader() {
                     className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"
                     style={{
                       background:
-                        "linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.35) 50%, transparent 65%)",
+                        "linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.55) 50%, transparent 65%)",
                     }}
                   />
                 </span>
