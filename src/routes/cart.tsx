@@ -78,22 +78,17 @@ function CartPage() {
               })}
             </div>
 
-            <GlassCard className="h-fit lg:sticky lg:top-6">
-              <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 18, fontWeight: 600 }}>Order Summary</h3>
-              <div className="mt-4 space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>৳{total.toLocaleString()}</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Delivery</span><span className="text-aqua-deep font-semibold">FREE</span></div>
-              </div>
-              <div className="border-t border-[var(--glass-border-soft)] my-4" />
-              <div className="flex justify-between items-baseline">
-                <span className="text-sm font-semibold">Total</span>
-                <span className="text-2xl font-semibold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>৳{total.toLocaleString()}</span>
-              </div>
-              <GlassButton onClick={() => navigate({ to: "/checkout" })} fullWidth size="lg" className="mt-5">
-                Proceed to Checkout
-              </GlassButton>
-              <p className="text-[11px] text-muted-foreground text-center mt-3">Secure payment with bKash & Nagad</p>
-            </GlassCard>
+            <OrderSummary
+              items={items}
+              total={total}
+              variant="totals"
+              footer="Secure payment with bKash & Nagad"
+              action={
+                <GlassButton onClick={() => navigate({ to: "/checkout" })} fullWidth size="lg" className="mt-5">
+                  Proceed to Checkout
+                </GlassButton>
+              }
+            />
           </div>
         )}
       </div>
