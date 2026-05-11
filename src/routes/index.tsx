@@ -109,18 +109,18 @@ function pickTopProducts(products: Product[]) {
 }
 
 const HERO_BRANDS = [
-  { name: "Netflix", domain: "netflix.com" },
-  { name: "ChatGPT", domain: "openai.com" },
-  { name: "Spotify", domain: "spotify.com" },
-  { name: "Canva", domain: "canva.com" },
-  { name: "Adobe", domain: "adobe.com" },
-  { name: "Microsoft", domain: "microsoft.com" },
-  { name: "Prime Video", domain: "primevideo.com" },
-  { name: "Grammarly", domain: "grammarly.com" },
-  { name: "NordVPN", domain: "nordvpn.com" },
-  { name: "Coursera", domain: "coursera.org" },
-  { name: "YouTube", domain: "youtube.com" },
-  { name: "Claude", domain: "claude.ai" },
+  { name: "Netflix", slug: "netflix", color: "E50914" },
+  { name: "ChatGPT", slug: "openai", color: "FFFFFF" },
+  { name: "Spotify", slug: "spotify", color: "1DB954" },
+  { name: "Canva", slug: "canva", color: "00C4CC" },
+  { name: "Adobe", slug: "adobe", color: "FF0000" },
+  { name: "Microsoft", slug: "microsoft", color: "FFFFFF" },
+  { name: "Prime Video", slug: "primevideo", color: "00A8E1" },
+  { name: "Grammarly", slug: "grammarly", color: "27AE60" },
+  { name: "NordVPN", slug: "nordvpn", color: "4687FF" },
+  { name: "Coursera", slug: "coursera", color: "0056D2" },
+  { name: "YouTube", slug: "youtube", color: "FF0000" },
+  { name: "Claude", slug: "claude", color: "D97757" },
 ];
 
 function HeroExperience() {
@@ -217,11 +217,19 @@ function HeroExperience() {
                   style={{ animationDelay: `${i * 0.6}s`, animationDuration: "7s" }}
                 >
                   <img
-                    src={`https://logo.clearbit.com/${b.domain}`}
+                    src={`https://cdn.simpleicons.org/${b.slug}/${b.color}`}
                     alt={b.name}
                     loading="lazy"
-                    className="max-h-10 max-w-[80%] object-contain opacity-95 group-hover:scale-110 transition drop-shadow-[0_4px_12px_rgba(0,229,255,0.35)]"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                    className="max-h-10 max-w-[70%] object-contain opacity-95 group-hover:scale-110 transition drop-shadow-[0_4px_12px_rgba(0,229,255,0.4)]"
+                    onError={(e) => {
+                      const el = e.currentTarget as HTMLImageElement;
+                      if (!el.dataset.fallback) {
+                        el.dataset.fallback = "1";
+                        el.src = `https://cdn.simpleicons.org/${b.slug}/FFFFFF`;
+                      } else {
+                        el.style.display = "none";
+                      }
+                    }}
                   />
                 </div>
               ))}
