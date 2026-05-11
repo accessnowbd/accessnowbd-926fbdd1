@@ -131,19 +131,46 @@ export function SupportWidget() {
 
   return (
     <>
-      {/* Floating launcher */}
+      {/* Floating launcher — premium */}
       {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Open support"
-          className="fixed bottom-5 right-5 z-50 group"
-        >
-          <span className="absolute inset-0 rounded-full bg-primary/40 blur-xl animate-pulse-glow" />
-          <span className="relative grid place-items-center h-14 w-14 rounded-full bg-aurora text-white shadow-[0_10px_30px_-6px_var(--color-primary)] hover:scale-105 transition">
-            <MessageCircle className="h-6 w-6" />
-            <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-background animate-pulse" />
-          </span>
-        </button>
+        <div className="fixed bottom-5 right-5 z-50 flex items-center gap-3">
+          {/* Hover label pill */}
+          <div className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#080a1f]/85 backdrop-blur-xl border border-white/15 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] opacity-0 translate-x-2 group-hover/launcher:opacity-100 group-hover/launcher:translate-x-0 transition-all duration-300 pointer-events-none">
+            <Sparkles className="h-3.5 w-3.5 text-aqua" />
+            <span className="text-xs font-bold text-white">২৪/৭ সাপোর্ট</span>
+          </div>
+
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Open support"
+            className="group/launcher relative"
+          >
+            {/* Outer pulsing aurora */}
+            <span className="absolute -inset-3 rounded-full bg-aurora opacity-40 blur-2xl animate-pulse-glow" />
+            {/* Rotating gradient ring */}
+            <span
+              className="absolute -inset-1 rounded-full opacity-80 animate-aurora-pan"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, var(--color-primary), var(--color-aqua), #a78bfa, var(--color-primary))",
+                filter: "blur(2px)",
+              }}
+            />
+            {/* Core button */}
+            <span className="relative grid place-items-center h-16 w-16 rounded-full bg-[#080a1f] text-white shadow-[0_18px_45px_-10px_rgba(0,229,255,0.55)] group-hover/launcher:scale-110 transition-transform duration-300">
+              <span className="absolute inset-[3px] rounded-full bg-aurora" />
+              <Headphones className="relative h-7 w-7 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]" />
+              {/* Online dot */}
+              <span className="absolute top-0.5 right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-400 ring-2 ring-[#080a1f]">
+                <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
+              </span>
+              {/* Notification badge */}
+              <span className="absolute -top-1 -left-1 min-w-[20px] h-5 px-1.5 grid place-items-center rounded-full bg-gradient-to-r from-rose-500 to-orange-500 text-[10px] font-extrabold text-white shadow-lg ring-2 ring-[#080a1f]">
+                1
+              </span>
+            </span>
+          </button>
+        </div>
       )}
 
       {/* Panel */}
