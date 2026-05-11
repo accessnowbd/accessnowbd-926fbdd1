@@ -157,6 +157,7 @@
     transform: translateZ(0);
   }
   body > * { position: relative; z-index: 1; }
+}
 
 @layer utilities {
   .glass {
