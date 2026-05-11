@@ -423,9 +423,9 @@ function ProductRail({ title, items, isLoading }: { title: string; items: Produc
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
       <div className="flex items-end justify-between gap-4">
         <SectionTitle eyebrow="Collection" title={title} subtitle="ক্যাটাগরি অনুযায়ী সাজানো প্রোডাক্ট।" compact />
-        <div className="hidden md:flex items-center gap-2">
-          <button onClick={() => scroll(-1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll left"><ChevronLeft className="h-4 w-4" /></button>
-          <button onClick={() => scroll(1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll right"><ChevronRight className="h-4 w-4" /></button>
+        <div className="flex items-center gap-2 shrink-0">
+          <button onClick={() => scroll(-1)} className="glass grid h-9 w-9 md:h-10 md:w-10 place-items-center rounded-full text-foreground hover:text-primary transition" aria-label="Scroll left"><ChevronLeft className="h-4 w-4" /></button>
+          <button onClick={() => scroll(1)} className="glass grid h-9 w-9 md:h-10 md:w-10 place-items-center rounded-full text-foreground hover:text-primary transition" aria-label="Scroll right"><ChevronRight className="h-4 w-4" /></button>
         </div>
       </div>
       <div ref={ref} className="mt-6 flex gap-4 md:gap-5 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
