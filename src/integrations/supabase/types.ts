@@ -66,6 +66,7 @@ export type Database = {
           emoji: string
           features: Json
           gradient: string
+          image_url: string
           is_active: boolean
           name: string
           plans: Json
@@ -84,6 +85,7 @@ export type Database = {
           emoji?: string
           features?: Json
           gradient?: string
+          image_url?: string
           is_active?: boolean
           name: string
           plans?: Json
@@ -102,6 +104,7 @@ export type Database = {
           emoji?: string
           features?: Json
           gradient?: string
+          image_url?: string
           is_active?: boolean
           name?: string
           plans?: Json
