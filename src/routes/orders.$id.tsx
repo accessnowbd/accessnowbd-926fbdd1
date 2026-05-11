@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 import { downloadReceiptPdf } from "@/lib/receipt";
+import { toast } from "sonner";
 
 const orderSearchSchema = z.object({
   new: fallback(z.union([z.literal(0), z.literal(1)]), 0).default(0),
@@ -73,13 +74,32 @@ function OrderDetailPage() {
 
   // Auto-download receipt the first time a freshly placed order loads.
   const [autoDownloaded, setAutoDownloaded] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    if (!order || downloading) return;
+    setDownloading(true);
+    const tId = toast.loading("Generating receipt PDF…");
+    try {
+      // Yield to the browser so the loading state paints before jsPDF blocks.
+      await new Promise((r) => setTimeout(r, 50));
+      downloadReceiptPdf(order);
+      toast.success("Receipt downloaded", { id: tId });
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate receipt. Please try again.", { id: tId });
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   useEffect(() => {
     if (isNew && order && !autoDownloaded) {
       setAutoDownloaded(true);
-      // Small delay so the success banner paints before the browser save dialog.
-      const t = setTimeout(() => downloadReceiptPdf(order), 600);
+      const t = setTimeout(() => { void handleDownload(); }, 600);
       return () => clearTimeout(t);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNew, order, autoDownloaded]);
 
   const copyId = async () => {
@@ -153,11 +173,12 @@ function OrderDetailPage() {
                   <span className="font-semibold">{order.email}</span> within 5–30 minutes.
                 </p>
                 <button
-                  onClick={() => downloadReceiptPdf(order)}
-                  className="mt-4 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white/20 hover:bg-white/30 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  onClick={handleDownload}
+                  disabled={downloading}
+                  className="mt-4 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white/20 hover:bg-white/30 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  <Download className="w-3.5 h-3.5" />
-                  {autoDownloaded ? "Download receipt again" : "Download receipt"}
+                  {downloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                  {downloading ? "Generating…" : autoDownloaded ? "Download receipt again" : "Download receipt"}
                 </button>
               </div>
             </div>
@@ -187,10 +208,12 @@ function OrderDetailPage() {
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               <button
-                onClick={() => downloadReceiptPdf(order)}
-                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full glass-soft text-sm font-semibold hover:bg-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                onClick={handleDownload}
+                disabled={downloading}
+                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full glass-soft text-sm font-semibold hover:bg-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <Download className="w-3.5 h-3.5" /> Receipt
+                {downloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                {downloading ? "Generating…" : "Receipt"}
               </button>
               <span className={`text-[11px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full border ${statusStyles[order.status] || "bg-secondary text-foreground border-border"}`}>
                 {order.status}
