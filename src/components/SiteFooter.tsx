@@ -96,238 +96,190 @@ const PAYMENTS = ["bKash", "Nagad", "Rocket", "Visa", "Mastercard"];
 
 export function SiteFooter() {
   return (
-    <footer className="relative mt-24 overflow-hidden border-t border-white/10 bg-background/35 backdrop-blur-xl">
-      {/* aurora glow behind footer */}
-      <div className="pointer-events-none absolute inset-x-0 -top-24 h-48 overflow-hidden">
-        <div className="absolute left-1/4 top-0 w-[420px] h-[220px] rounded-full bg-primary/30 blur-[110px]" />
-        <div className="absolute right-1/4 top-0 w-[420px] h-[220px] rounded-full bg-aqua/25 blur-[110px]" />
-        <div className="absolute left-1/2 -translate-x-1/2 top-6 w-[600px] h-[160px] rounded-full bg-violet-500/20 blur-[120px]" />
+    <footer className="relative mt-16 overflow-hidden border-t border-[var(--glass-border-soft)] bg-[linear-gradient(180deg,rgba(7,9,26,0.74),rgba(7,9,26,0.96))]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/55 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 opacity-80">
+        <div className="absolute left-1/2 top-0 h-36 w-[min(760px,85vw)] -translate-x-1/2 rounded-full bg-primary/16 blur-[96px]" />
+        <div className="absolute right-[8%] bottom-0 h-60 w-60 rounded-full bg-aqua/8 blur-[90px]" />
+        <div className="absolute left-[8%] bottom-8 h-60 w-60 rounded-full bg-gold/7 blur-[90px]" />
       </div>
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute bottom-0 right-1/4 w-[420px] h-[420px] rounded-full bg-aqua/10 blur-[120px]" />
-        <div className="absolute bottom-0 left-1/4 w-[420px] h-[420px] rounded-full bg-primary/10 blur-[120px]" />
-      </div>
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/60 to-transparent" />
 
-      <div className="relative z-10 mx-auto max-w-[1440px] px-4 md:px-10 pt-12 pb-8">
-        {/* ===== Brand hero card ===== */}
-        <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent backdrop-blur-xl p-8 md:p-10 overflow-hidden">
-          <div className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 w-[640px] h-[260px] rounded-full bg-primary/20 blur-[120px]" />
-          <div className="relative flex flex-col items-center text-center">
-            {/* === Brand lockup — same construction as header, scaled up === */}
-            <Link to="/" className="group inline-flex items-center gap-3 sm:gap-4">
-              {/* Round badge */}
-              <span className="relative shrink-0">
-                {/* Outer rotating gradient ring */}
-                <span
-                  aria-hidden
-                  className="absolute -inset-[2.5px] rounded-full opacity-90"
-                  style={{
-                    background:
-                      "conic-gradient(from 0deg, #2f6dff, #1fc796, #f59e0b, #2f6dff)",
-                    animation: "aurora-pan 6s linear infinite",
-                    filter: "blur(0.5px)",
-                  }}
-                />
-                {/* Soft outer glow */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -inset-3 rounded-full opacity-60 blur-xl -z-10"
-                  style={{
-                    background:
-                      "radial-gradient(circle, rgba(56,128,255,0.55) 0%, rgba(31,199,150,0.3) 50%, transparent 75%)",
-                  }}
-                />
-                {/* Inner round badge */}
-                <span
-                  className="relative grid place-items-center w-16 h-16 md:w-[72px] md:h-[72px] rounded-full overflow-hidden ring-1 ring-white/40 shadow-[0_10px_28px_-6px_rgba(56,128,255,0.55)] backdrop-blur-xl group-hover:scale-105 transition-transform duration-500"
-                  style={{
-                    background:
-                      "radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.95) 0%, rgba(225,236,255,0.9) 55%, rgba(196,218,255,0.88) 100%)",
-                  }}
+      <div className="relative z-10 mx-auto max-w-[1440px] px-4 pb-7 pt-10 md:px-10 md:pt-12">
+        <div className="grid gap-6 lg:grid-cols-[0.95fr_1.45fr] lg:items-stretch">
+          <section className="relative min-h-[360px] overflow-hidden rounded-[26px] border border-[var(--glass-border)] bg-[linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.025)_48%,rgba(34,211,238,0.035))] p-6 shadow-[var(--shadow-glass)] md:p-8">
+            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-aqua/55 to-transparent" />
+            <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/18 blur-[90px]" />
+            <div className="pointer-events-none absolute -bottom-28 left-10 h-72 w-72 rounded-full bg-aqua/10 blur-[96px]" />
+
+            <div className="relative flex h-full flex-col justify-between gap-8">
+              <div>
+                <Link
+                  to="/"
+                  className="inline-flex max-w-full items-center gap-3 sm:gap-4"
+                  aria-label="AccessNow BD home"
                 >
-                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/80 blur-[3px]" />
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-full opacity-50"
-                    style={{
-                      background:
-                        "radial-gradient(60% 60% at 50% 110%, rgba(31,199,150,0.35) 0%, transparent 70%)",
-                    }}
-                  />
-                  <span className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_-6px_12px_-6px_rgba(30,79,216,0.25)]" />
-                  <img
-                    src={accessNowLogo}
-                    alt="AccessNow BD"
-                    draggable={false}
-                    className="relative w-[145%] h-[145%] object-contain translate-y-[2%] drop-shadow-[0_2px_4px_rgba(30,79,216,0.3)]"
-                  />
-                </span>
-              </span>
+                  <span className="relative grid h-16 w-16 shrink-0 place-items-center rounded-full bg-[var(--gradient-conic)] p-[2px] shadow-[0_16px_42px_-16px_rgba(34,211,238,0.7)] md:h-[72px] md:w-[72px]">
+                    <span className="grid h-full w-full place-items-center overflow-hidden rounded-full bg-[radial-gradient(120%_120%_at_30%_20%,rgba(255,255,255,0.98)_0%,rgba(225,236,255,0.92)_56%,rgba(196,218,255,0.88)_100%)] ring-1 ring-white/35">
+                      <span className="pointer-events-none absolute inset-x-2 top-1 h-3 rounded-full bg-white/70 blur-[4px]" />
+                      <img
+                        src={accessNowLogo}
+                        alt="AccessNow BD"
+                        draggable={false}
+                        className="relative h-[145%] w-[145%] object-contain translate-y-[2%]"
+                      />
+                    </span>
+                  </span>
 
-              {/* Wordmark */}
-              <span className="leading-[1.05] min-w-0 text-left">
-                <span className="flex items-baseline gap-1.5 whitespace-nowrap">
-                  <span
-                    className="text-[24px] sm:text-[28px] md:text-[32px] font-extrabold tracking-tight bg-clip-text text-transparent"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)",
-                      filter: "drop-shadow(0 1px 6px rgba(47,109,255,0.35))",
-                    }}
+                  <span className="min-w-0 leading-[1.05]">
+                    <span className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+                      <span
+                        className="text-[24px] font-extrabold tracking-normal bg-clip-text text-transparent sm:text-[28px] md:text-[32px]"
+                        style={{
+                          backgroundImage:
+                            "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)",
+                        }}
+                      >
+                        Access
+                      </span>
+                      <span
+                        className="text-[24px] font-extrabold tracking-normal bg-clip-text text-transparent sm:text-[28px] md:text-[32px]"
+                        style={{
+                          backgroundImage:
+                            "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)",
+                        }}
+                      >
+                        Now
+                      </span>
+                      <span
+                        className="text-[24px] font-extrabold tracking-normal bg-clip-text text-transparent sm:text-[28px] md:text-[32px]"
+                        style={{
+                          backgroundImage:
+                            "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)",
+                        }}
+                      >
+                        BD
+                      </span>
+                    </span>
+                    <span className="mt-1.5 flex max-w-[230px] items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/70 md:text-[11px]">
+                        Fast
+                      </span>
+                      <span className="h-1 w-1 rounded-full bg-primary shadow-[0_0_6px_rgba(47,109,255,0.8)]" />
+                      <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/70 md:text-[11px]">
+                        Secure
+                      </span>
+                      <span className="h-1 w-1 rounded-full bg-aqua shadow-[0_0_6px_rgba(31,199,150,0.8)]" />
+                      <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/70 md:text-[11px]">
+                        Reliable
+                      </span>
+                    </span>
+                  </span>
+                </Link>
+
+                <p className="mt-6 max-w-xl text-[14px] leading-7 text-white/72">
+                  বাংলাদেশের সবচেয়ে{" "}
+                  <span className="font-bold text-white">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span>{" "}
+                  — ভেরিফাইড সাবস্ক্রিপশন, সফটওয়্যার লাইসেন্স, AI টুলস ও{" "}
+                  <span className="font-bold text-white">২৪/৭ লাইভ সাপোর্টে</span>{" "}
+                  আপনার ডিজিটাল প্রয়োজন এক ক্লিকেই পূরণ।
+                </p>
+              </div>
+
+              <div className="grid gap-2.5">
+                {[
+                  { Icon: PhoneCall, label: "+880 1580-607614", href: "tel:+8801580607614" },
+                  { Icon: Mail, label: "support@accessnowbd.com", href: "mailto:support@accessnowbd.com" },
+                  { Icon: MapPin, label: "Dhaka, Bangladesh", href: "#" },
+                ].map(({ Icon, label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    className="group grid min-h-11 grid-cols-[2rem_1fr] items-center gap-3 rounded-2xl border border-[var(--glass-border-soft)] bg-white/[0.035] px-3 py-2 transition-colors duration-200 hover:border-aqua/35 hover:bg-white/[0.055]"
                   >
-                    Access
-                  </span>
-                  <span
-                    className="text-[24px] sm:text-[28px] md:text-[32px] font-extrabold tracking-tight bg-clip-text text-transparent"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)",
-                      filter: "drop-shadow(0 1px 6px rgba(31,199,150,0.35))",
-                    }}
-                  >
-                    Now
-                  </span>
-                  <span
-                    className="text-[24px] sm:text-[28px] md:text-[32px] font-extrabold tracking-tight bg-clip-text text-transparent"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)",
-                      filter: "drop-shadow(0 1px 6px rgba(245,158,11,0.35))",
-                    }}
-                  >
-                    BD
-                  </span>
-                </span>
-                <span className="flex w-full items-center justify-between mt-1.5">
-                  <span className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] font-bold text-white/70">
-                    Fast
-                  </span>
-                  <span className="w-1 h-1 rounded-full bg-[#2f6dff] shadow-[0_0_6px_rgba(47,109,255,0.8)]" />
-                  <span className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] font-bold text-white/70">
-                    Secure
-                  </span>
-                  <span className="w-1 h-1 rounded-full bg-[#1fc796] shadow-[0_0_6px_rgba(31,199,150,0.8)]" />
-                  <span className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] font-bold text-white/70">
-                    Reliable
-                  </span>
-                </span>
-              </span>
-            </Link>
-
-            <p className="mt-3 text-[10.5px] tracking-[0.32em] text-white/45 font-bold">
-              {"\n"}
-            </p>
-
-            <p className="mt-6 max-w-2xl text-[14px] leading-relaxed text-white/75">
-              বাংলাদেশের সবচেয়ে{" "}
-              <span className="text-white font-bold">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span>{" "}
-              — ভেরিফাইড সাবস্ক্রিপশন, সফটওয়্যার লাইসেন্স, AI টুলস ও{" "}
-              <span className="text-white font-bold">২৪/৭ লাইভ সাপোর্টে</span>{" "}
-              আপনার ডিজিটাল প্রয়োজন এক ক্লিকেই পূরণ।
-            </p>
-
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-              {[
-                { Icon: PhoneCall, label: "+880 1580-607614", href: "tel:+8801580607614", iconBg: "from-primary to-aqua" },
-                { Icon: Mail, label: "support@accessnowbd.com", href: "mailto:support@accessnowbd.com", iconBg: "from-primary to-aqua" },
-                { Icon: MapPin, label: "Dhaka, Bangladesh", href: "#", iconBg: "from-primary to-aqua" },
-              ].map(({ Icon, label, href, iconBg }) => (
-                <a
-                  key={label}
-                  href={href}
-                  className="group inline-flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-aqua/40 transition"
-                >
-                  <span className={`grid place-items-center w-7 h-7 rounded-full bg-gradient-to-br ${iconBg} text-white`}>
-                    <Icon className="w-3.5 h-3.5" />
-                  </span>
-                  <span className="text-[13px] font-semibold text-white/85 group-hover:text-white">
-                    {label}
-                  </span>
-                </a>
-              ))}
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-[var(--gradient-aurora)] text-white shadow-[0_10px_24px_-14px_rgba(34,211,238,0.8)]">
+                      <Icon className="h-3.5 w-3.5" />
+                    </span>
+                    <span className="min-w-0 truncate text-[13px] font-semibold leading-5 text-white/82 group-hover:text-white">
+                      {label}
+                    </span>
+                  </a>
+                ))}
+              </div>
             </div>
+          </section>
 
-            <div className="mt-7 flex items-center gap-3">
+          <section className="grid gap-4 md:grid-cols-3">
+            {COLUMNS.map((col) => (
+              <div
+                key={col.title}
+                className="min-h-[360px] rounded-[24px] border border-[var(--glass-border-soft)] bg-white/[0.035] p-5 shadow-[var(--shadow-glass-sm)] md:p-6"
+              >
+                <div className="mb-5 flex min-h-11 items-center gap-3">
+                  <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_12px_28px_-16px_rgba(34,211,238,0.75)]`}>
+                    <col.Icon className="h-5 w-5" />
+                  </span>
+                  <h4
+                    className="text-[12px] font-extrabold uppercase tracking-[0.22em] text-white/90"
+                    style={{ fontFamily: "var(--font-heading)" }}
+                  >
+                    {col.title}
+                  </h4>
+                </div>
+                <ul className="grid gap-2.5">
+                  {col.links.map((l) => (
+                    <li key={l.to + l.label} className="min-h-9">
+                      <Link
+                        to={l.to}
+                        className="group grid min-h-9 grid-cols-[0.45rem_1fr] items-center gap-3 rounded-xl px-2 text-[13.5px] font-semibold leading-5 text-white/68 transition-colors duration-200 hover:bg-white/[0.045] hover:text-white"
+                      >
+                        <span className={`h-1.5 w-1.5 rounded-full ${col.bullet} opacity-80 transition-opacity duration-200 group-hover:opacity-100`} />
+                        <span className="truncate">{l.label}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </section>
+        </div>
+
+        <div className="mt-6 grid gap-4 rounded-[24px] border border-[var(--glass-border-soft)] bg-white/[0.03] px-4 py-4 md:grid-cols-[1fr_auto] md:items-center md:px-5">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-2.5">
               {SOCIALS.map(({ Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="grid place-items-center w-11 h-11 rounded-full border border-white/10 bg-white/[0.04] text-white/75 hover:text-white hover:border-aqua/40 hover:-translate-y-0.5 transition-all duration-300"
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[var(--glass-border-soft)] bg-white/[0.04] text-white/70 transition-colors duration-200 hover:border-aqua/35 hover:text-white"
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
+
+            <p className="text-[12.5px] leading-6 text-white/55">
+              © 2026 ·{" "}
+              <span className="font-extrabold text-white">AccessNow BD</span> · All Rights Reserved · Designed &amp; Developed by{" "}
+              <a
+                href="https://shahedit.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-aqua transition-colors duration-200 hover:text-white"
+              >
+                Shahed IT
+              </a>
+            </p>
           </div>
-        </div>
 
-        {/* ===== Three column grid ===== */}
-        <div className="mt-7 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {COLUMNS.map((col) => (
-            <div
-              key={col.title}
-              className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent backdrop-blur-xl p-7"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <span className={`grid place-items-center w-11 h-11 rounded-2xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)]`}>
-                  <col.Icon className="w-5 h-5" />
-                </span>
-                <h4
-                  className="text-white font-extrabold text-[13px] uppercase tracking-[0.28em]"
-                  style={{ fontFamily: "var(--font-heading)" }}
-                >
-                  {col.title}
-                </h4>
-              </div>
-              <ul className="space-y-3.5">
-                {col.links.map((l) => (
-                  <li key={l.to + l.label}>
-                    <Link
-                      to={l.to}
-                      className="group inline-flex items-center gap-2.5 text-[14px] text-white/70 hover:text-white transition-colors"
-                    >
-                      <span className={`w-1.5 h-1.5 rounded-full ${col.bullet} opacity-80 group-hover:scale-125 transition-transform`} />
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        {/* ===== Bottom bar ===== */}
-        <div className="mt-8 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-5">
-          <p className="text-[12.5px] text-white/55 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-            <span>© 2026</span>
-            <span className="text-white/30">·</span>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua font-extrabold">
-              AccessNow BD
-            </span>
-            <span className="text-white/30">·</span>
-            <span>All Rights Reserved</span>
-            <span className="text-white/30">·</span>
-            <span>Designed &amp; Developed by</span>
-            <a
-              href="https://shahedit.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-2.5 py-0.5 rounded-full border border-white/15 bg-white/[0.04] text-white font-bold hover:border-aqua/40 hover:text-aqua transition"
-            >
-              Shahed IT
-            </a>
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className="text-[10px] uppercase tracking-[0.28em] text-white/40 mr-1">
+          <div className="flex flex-wrap items-center gap-2 md:justify-end">
+            <span className="mr-1 text-[10px] uppercase tracking-[0.22em] text-white/42">
               We accept
             </span>
             {PAYMENTS.map((p) => (
               <span
                 key={p}
-                className="px-3 py-1 rounded-full border border-white/10 bg-white/[0.04] text-white/80 text-[11px] font-bold hover:border-aqua/40 hover:text-white transition"
+                className="grid h-7 place-items-center rounded-full border border-[var(--glass-border-soft)] bg-white/[0.04] px-3 text-[11px] font-bold text-white/78"
               >
                 {p}
               </span>
