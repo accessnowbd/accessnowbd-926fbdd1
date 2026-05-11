@@ -265,3 +265,102 @@ export function SiteHeader() {
     </>
   );
 }
+
+function MagneticNav() {
+  const location = useLocation();
+  const navRef = useRef<HTMLElement | null>(null);
+  const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const [pill, setPill] = useState<{ left: number; width: number; visible: boolean }>({
+    left: 0,
+    width: 0,
+    visible: false,
+  });
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+
+  const activeIndex = NAV.findIndex((n) =>
+    n.to === "/" ? location.pathname === "/" : location.pathname.startsWith(n.to)
+  );
+
+  // Position pill on the active item / hovered item
+  useLayoutEffect(() => {
+    const targetIdx = hoverIndex ?? activeIndex;
+    const el = targetIdx >= 0 ? itemRefs.current[targetIdx] : null;
+    const nav = navRef.current;
+    if (!el || !nav) {
+      setPill((p) => ({ ...p, visible: false }));
+      return;
+    }
+    const navRect = nav.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    setPill({ left: r.left - navRect.left, width: r.width, visible: true });
+  }, [hoverIndex, activeIndex, location.pathname]);
+
+  // Recompute on resize
+  useEffect(() => {
+    const onResize = () => {
+      const targetIdx = hoverIndex ?? activeIndex;
+      const el = targetIdx >= 0 ? itemRefs.current[targetIdx] : null;
+      const nav = navRef.current;
+      if (!el || !nav) return;
+      const navRect = nav.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      setPill({ left: r.left - navRect.left, width: r.width, visible: true });
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [hoverIndex, activeIndex]);
+
+  // Mouse tracking on the nav container — magnet to nearest item
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const x = e.clientX;
+    let nearest = 0;
+    let nearestDist = Infinity;
+    itemRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const center = r.left + r.width / 2;
+      const dist = Math.abs(center - x);
+      if (dist < nearestDist) {
+        nearestDist = dist;
+        nearest = i;
+      }
+    });
+    if (nearest !== hoverIndex) setHoverIndex(nearest);
+  };
+
+  const handleMouseLeave = () => setHoverIndex(null);
+
+  return (
+    <nav
+      ref={navRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="hidden lg:flex relative items-center gap-1 px-2 h-12 rounded-full glass-soft border border-white/10 text-sm font-semibold backdrop-blur-2xl"
+    >
+      {/* Magnetic sliding pill */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute top-1/2 -translate-y-1/2 h-9 rounded-full bg-gradient-to-r from-primary/30 via-violet-500/20 to-aqua/25 shadow-[0_0_0_1px_rgba(255,255,255,0.12)_inset,0_8px_24px_-10px_rgba(0,229,255,0.55)] transition-[left,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        style={{
+          left: pill.left,
+          width: pill.width,
+          opacity: pill.visible ? 1 : 0,
+        }}
+      />
+      {NAV.map((n, i) => (
+        <Link
+          key={n.to}
+          to={n.to}
+          ref={(el) => {
+            itemRefs.current[i] = el;
+          }}
+          className="relative z-10 px-4 py-2 rounded-full text-white/75 hover:text-white transition-colors"
+        >
+          {n.label}
+        </Link>
+      ))}
+    </nav>
+  );
+}
