@@ -63,6 +63,8 @@ function Index() {
       <SiteHeader />
       <HeroLanding />
 
+      <CategoryShowcase />
+
       <ProductGrid title="⭐ Top Picks for You" subtitle="বাংলাদেশে সবচেয়ে জনপ্রিয় সাবস্ক্রিপশন" items={top} cap={8} viewAllTo="/products" />
 
       {sectioned.map((s) => (
@@ -239,6 +241,78 @@ function HeroLanding() {
   );
 }
 
+
+/* ================= Category Showcase ================= */
+
+const CATEGORIES: { key: string; title: string; sub: string; emoji: string; brands: string[]; accent: string; to: "/products" | "/streaming" | "/ai-tools" | "/education" }[] = [
+  { key: "OTT & Streaming",        title: "OTT & Streaming",   sub: "Netflix · Prime · Hoichoi · Chorki",       emoji: "📺", brands: ["Netflix", "Prime", "YouTube", "Hoichoi"],   accent: "from-rose-500/40 via-fuchsia-500/30 to-violet-600/40",   to: "/streaming" },
+  { key: "Windows",                title: "Windows",           sub: "Windows 10 / 11 Pro লাইসেন্স কী",            emoji: "🪟", brands: ["Win 10", "Win 11", "Pro", "Home"],          accent: "from-sky-500/40 via-cyan-500/30 to-blue-600/40",         to: "/products" },
+  { key: "Microsoft Office",       title: "Microsoft Office",  sub: "Office 2021 Pro · Microsoft 365",            emoji: "📊", brands: ["Office", "365", "Word", "Excel"],           accent: "from-orange-500/40 via-amber-500/30 to-rose-500/40",     to: "/products" },
+  { key: "AI & Education",         title: "AI & Education",    sub: "ChatGPT · Claude · Gemini · Coursera",       emoji: "🤖", brands: ["ChatGPT", "Claude", "Gemini", "Coursera"],  accent: "from-violet-500/40 via-indigo-500/30 to-cyan-500/40",    to: "/ai-tools" },
+  { key: "Editing Tools",          title: "Editing Tools",     sub: "Canva · CapCut · Adobe CC · Freepik",        emoji: "🎨", brands: ["Canva", "CapCut", "Adobe", "Freepik"],      accent: "from-pink-500/40 via-rose-500/30 to-orange-500/40",      to: "/products" },
+  { key: "Software & Productivity",title: "Productivity",      sub: "Truecaller · Zoom Pro · Google One",         emoji: "💼", brands: ["Zoom", "Google One", "Truecaller", "Slack"],accent: "from-emerald-500/40 via-teal-500/30 to-cyan-500/40",     to: "/products" },
+  { key: "VPN & Security",         title: "VPN & Security",    sub: "NordVPN · ExpressVPN · SurfShark",           emoji: "🛡️", brands: ["Nord", "Express", "SurfShark", "Proton"],   accent: "from-lime-500/40 via-emerald-500/30 to-teal-600/40",     to: "/products" },
+  { key: "Giftcards",              title: "Giftcards",         sub: "Apple iTunes · App Store · Google Play",     emoji: "🎁", brands: ["iTunes", "App Store", "Play", "PSN"],       accent: "from-amber-400/40 via-yellow-500/30 to-orange-500/40",   to: "/products" },
+];
+
+function CategoryShowcase() {
+  return (
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-14">
+      <div className="flex flex-wrap items-end justify-between gap-3 mb-7">
+        <div>
+          <span className="inline-flex px-3 py-1 rounded-full glass text-[11px] font-bold mb-2">Browse by Category</span>
+          <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 800 }}>
+            সব ডিজিটাল সার্ভিস <span className="text-aurora-strong">এক জায়গায়</span>
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">৮টি ক্যাটাগরি · ৩৬+ প্রিমিয়াম প্রোডাক্ট · ইনস্ট্যান্ট ডেলিভারি</p>
+        </div>
+        <Link to="/products" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full glass text-xs font-bold hover:bg-white/80 transition">
+          All products <ChevronRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+        {CATEGORIES.map((c) => (
+          <Link
+            key={c.key}
+            to={c.to}
+            className="group relative rounded-3xl p-[1.5px] bg-gradient-to-br from-white/40 via-white/10 to-white/30 hover:from-white/60 hover:via-white/20 hover:to-white/50 transition-all hover:scale-[1.02] hover:-translate-y-0.5"
+          >
+            <div className="relative rounded-3xl overflow-hidden h-full bg-white/60 backdrop-blur-xl border border-white/40">
+              <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${c.accent} opacity-70`} />
+              <div className="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-white/40 blur-3xl" />
+              <div className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:linear-gradient(rgba(0,0,0,0.4)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.4)_1px,transparent_1px)] [background-size:22px_22px]" />
+
+              <div className="relative p-5 md:p-6 flex flex-col gap-4 min-h-[200px]">
+                <div className="flex items-start justify-between">
+                  <div className="grid place-items-center w-14 h-14 rounded-2xl bg-white/70 backdrop-blur-md border border-white/50 text-3xl shadow-sm">
+                    {c.emoji}
+                  </div>
+                  <span className="grid place-items-center w-8 h-8 rounded-full bg-white/70 border border-white/60 text-foreground group-hover:bg-aurora group-hover:text-white group-hover:border-transparent transition">
+                    <ChevronRight className="w-4 h-4" />
+                  </span>
+                </div>
+
+                <div className="mt-auto">
+                  <h3 className="text-base md:text-lg font-extrabold tracking-tight text-foreground">{c.title}</h3>
+                  <p className="text-xs text-foreground/70 mt-1 line-clamp-1">{c.sub}</p>
+
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {c.brands.map((b) => (
+                      <span key={b} className="px-2 py-0.5 rounded-full bg-white/70 border border-white/50 text-[10px] font-semibold text-foreground/80">
+                        {b}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 /* ================= Sections ================= */
 
