@@ -137,7 +137,7 @@ export function SiteFooter() {
                   ))}
                 </div>
                 <a
-                  href="https://wa.me/8801000000000"
+                  href="https://wa.me/8801580607614"
                   className="inline-flex items-center gap-2 px-4 h-10 rounded-full bg-emerald-500/90 hover:bg-emerald-500 text-white text-sm font-semibold transition shadow-[0_12px_30px_-10px_rgba(16,185,129,0.7)] hover:-translate-y-0.5"
                 >
                   <MessageCircle className="w-4 h-4" /> WhatsApp Us
@@ -178,10 +178,10 @@ export function SiteFooter() {
               <ul className="space-y-3 text-sm text-white/75">
                 <ContactRow
                   icon={Mail}
-                  label="accessnowbd01@gmail.com"
-                  href="mailto:accessnowbd01@gmail.com"
+                  label="support@accessnowbd.com"
+                  href="mailto:support@accessnowbd.com"
                 />
-                <ContactRow icon={Phone} label="+880 1000 000000" href="tel:+8801000000000" />
+                <ContactRow icon={Phone} label="+880 1580-607614" href="tel:+8801580607614" />
                 <ContactRow icon={MapPin} label="Dhaka, Bangladesh" />
               </ul>
 

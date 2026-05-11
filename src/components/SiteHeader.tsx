@@ -65,11 +65,11 @@ export function TopUtilityBar() {
             ))}
           </div>
           <a
-            href="tel:+8801000000000"
+            href="tel:+8801580607614"
             className="hidden md:inline-flex items-center gap-1.5 text-white/80 hover:text-white transition"
           >
             <PhoneCall className="w-3 h-3 text-aqua" />
-            +880 1000 000000
+            +880 1580-607614
           </a>
           <span className="inline-flex items-center gap-1.5 font-semibold text-white">
             <span className="relative flex w-1.5 h-1.5">
