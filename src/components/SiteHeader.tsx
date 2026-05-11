@@ -198,12 +198,12 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="hidden md:inline-flex items-center gap-2 h-11 px-4 rounded-full glass-soft border border-white/10 text-sm text-white/80 hover:text-white hover:border-aqua/40 transition group"
+                className="hidden lg:inline-flex items-center gap-2 h-10 px-3.5 rounded-full glass-soft border border-white/10 text-sm text-white/80 hover:text-white hover:border-aqua/40 transition group"
                 aria-label="Search products"
               >
                 <Search className="w-4 h-4 text-aqua" />
-                <span className="text-white/55 font-medium">Search products…</span>
-                <span className="ml-2 hidden xl:inline text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-white/10 text-white/55 border border-white/10">
+                <span className="text-white/55 font-medium">Search…</span>
+                <span className="ml-1 hidden xl:inline text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-white/10 text-white/55 border border-white/10">
                   ⌘K
                 </span>
               </button>
@@ -211,7 +211,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="md:hidden grid place-items-center w-11 h-11 rounded-full glass-soft border border-white/10 text-white"
+                className="lg:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
                 aria-label="Search"
               >
                 <Search className="w-4 h-4 text-aqua" />
