@@ -13,6 +13,7 @@ export type Product = {
   warranty: string;
   features: string[];
   plans: Plan[];
+  imageUrl?: string;
 };
 
 // Map DB row (snake_case) to UI Product (camelCase)
