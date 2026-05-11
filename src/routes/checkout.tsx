@@ -19,6 +19,7 @@ import { OrderSummary, SummaryRow } from "@/components/ui-glass/OrderSummary";
 
 const checkoutSearchSchema = z.object({
   step: fallback(z.union([z.literal(1), z.literal(2), z.literal(3)]), 1).default(1),
+  coupon: fallback(z.string(), "").default(""),
 });
 
 export const Route = createFileRoute("/checkout")({
