@@ -224,7 +224,7 @@ function RecordForm({
       if (f.required && !data[f.name]) return toast.error(`${f.label} is required`);
     }
     setSaving(true);
-    const payload = { kind, data, is_active: record?.is_active ?? true };
+    const payload = { kind, data: data as never, is_active: record?.is_active ?? true };
     const op = record
       ? supabase.from("admin_records").update(payload).eq("id", record.id)
       : supabase.from("admin_records").insert(payload);
@@ -281,7 +281,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
 
   const save = async () => {
     setSaving(true);
-    const payload = { kind, data, is_active: true };
+    const payload = { kind, data: data as never, is_active: true };
     const { data: out, error } = recordId
       ? await supabase.from("admin_records").update(payload).eq("id", recordId).select().single()
       : await supabase.from("admin_records").insert(payload).select().single();
