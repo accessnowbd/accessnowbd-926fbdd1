@@ -23,14 +23,40 @@ export const Route = createFileRoute("/")({
   }),
 });
 
+const HOMEPAGE_SECTIONS: { title: string; subtitle: string; category: string }[] = [
+  { title: "📺 OTT & Streaming Platforms", subtitle: "Netflix, Prime Video, YouTube Premium, Hoichoi, Chorki — সব এক জায়গায়", category: "OTT & Streaming" },
+  { title: "🪟 Windows", subtitle: "অরিজিনাল Windows 10/11 Pro লাইসেন্স কী — লাইফটাইম", category: "Windows" },
+  { title: "📊 Microsoft Office", subtitle: "Office 2016/2019/2021 Pro Plus + Microsoft 365", category: "Microsoft Office" },
+  { title: "🤖 AI & Education Tools", subtitle: "ChatGPT, Claude, Gemini, Spotify, Coursera, Grammarly এবং আরও", category: "AI & Education" },
+  { title: "🎨 Editing Tools", subtitle: "Canva Pro, CapCut Pro, Adobe CC, Freepik, AutoDesk", category: "Editing Tools" },
+  { title: "💼 Software & Productivity", subtitle: "Truecaller, Zoom Pro, Google One — কাজের জরুরি টুলস", category: "Software & Productivity" },
+  { title: "🛡️ VPN & Security", subtitle: "NordVPN, ExpressVPN, SurfShark — secure browsing", category: "VPN & Security" },
+  { title: "🎁 Giftcards", subtitle: "Apple iTunes, App Store gift cards — instant delivery", category: "Giftcards" },
+];
+
 function Index() {
   const { products } = useProducts();
+  const top = useMemo(() => {
+    // Pick top picks across categories — first product of each category, then fill
+    const seen = new Set<string>();
+    const picks: Product[] = [];
+    for (const p of products) {
+      if (!seen.has(p.category) && picks.length < 4) {
+        picks.push(p);
+        seen.add(p.category);
+      }
+    }
+    for (const p of products) {
+      if (picks.length >= 8) break;
+      if (!picks.includes(p)) picks.push(p);
+    }
+    return picks;
+  }, [products]);
 
-  // Stable section selections
-  const top = useMemo(() => products.slice(0, 8), [products]);
-  const streaming = useMemo(() => products.filter((p) => p.category === "Streaming"), [products]);
-  const ai = useMemo(() => products.filter((p) => p.category === "AI Tools" || p.category === "Productivity"), [products]);
-  const education = useMemo(() => products.filter((p) => p.category === "Education" || p.category === "Design"), [products]);
+  const sectioned = useMemo(
+    () => HOMEPAGE_SECTIONS.map((s) => ({ ...s, items: products.filter((p) => p.category === s.category) })),
+    [products]
+  );
 
   return (
     <div className="min-h-screen relative">
@@ -38,9 +64,11 @@ function Index() {
       <HeroLanding />
 
       <ProductGrid title="⭐ Top Picks for You" subtitle="বাংলাদেশে সবচেয়ে জনপ্রিয় সাবস্ক্রিপশন" items={top} cap={8} viewAllTo="/products" />
-      <ProductRail title="🎬 Streaming Services" subtitle="Netflix, Prime, HBO, Disney+, Hoichoi — সব এক জায়গায়" items={streaming} viewAllTo="/streaming" />
-      <ProductRail title="🤖 AI & Productivity Tools" subtitle="ChatGPT, Claude, Gemini, Grammarly এবং আরও" items={ai} viewAllTo="/ai-tools" />
-      <ProductRail title="🎓 Educational Tools" subtitle="Coursera, Canva Pro, CapCut, Adobe — শিখতে ও বানাতে" items={education} viewAllTo="/education" />
+
+      {sectioned.map((s) => (
+        <ProductRail key={s.category} title={s.title} subtitle={s.subtitle} items={s.items} viewAllTo="/products" />
+      ))}
+
       <TrustStrip />
       <HowItWorks />
       <Testimonials />
@@ -240,7 +268,7 @@ function ProductGrid({ title, subtitle, items, cap, viewAllTo }: { title: string
   );
 }
 
-function ProductRail({ title, subtitle, items, viewAllTo }: { title: string; subtitle: string; items: Product[]; viewAllTo: "/streaming" | "/ai-tools" | "/education" }) {
+function ProductRail({ title, subtitle, items, viewAllTo }: { title: string; subtitle: string; items: Product[]; viewAllTo: "/products" | "/streaming" | "/ai-tools" | "/education" }) {
   const ref = useRef<HTMLDivElement>(null);
   if (!items.length) return null;
   const scroll = (dir: 1 | -1) => ref.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
