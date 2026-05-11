@@ -1,16 +1,15 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingCart, Star } from "lucide-react";
+import { ArrowUpRight, Star } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import type { Product } from "@/data/products";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
-// Deterministic pseudo-rating from slug so each card has stable numbers
 function ratingFor(slug: string): { rating: string; reviews: number } {
   let h = 0;
   for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
-  const rating = (4.6 + ((h % 40) / 100)).toFixed(2); // 4.60–4.99
+  const rating = (4.6 + ((h % 40) / 100)).toFixed(2);
   const reviews = 18 + (h % 180);
   return { rating, reviews };
 }
@@ -39,45 +38,54 @@ export function ProductCard({ product }: { product: Product }) {
     <Link
       to="/product/$slug"
       params={{ slug: product.slug }}
-      className="group glass rounded-2xl overflow-hidden hover:-translate-y-1.5 hover:shadow-[var(--shadow-glass-lg)] transition-all flex flex-col"
+      className="group flex flex-col rounded-2xl bg-card border border-foreground/10 overflow-hidden hover:border-foreground/40 hover:shadow-[var(--shadow-glass-lg)] transition-all"
     >
-      <div className={`relative aspect-square bg-gradient-to-br ${product.gradient} flex items-center justify-center`}>
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]" />
-        <span className="relative text-7xl drop-shadow-md">{product.emoji}</span>
+      <div className={`relative aspect-[4/3] bg-gradient-to-br ${product.gradient} flex items-center justify-center overflow-hidden`}>
+        <div className="absolute inset-0 bg-foreground/5" />
+        <span className="relative text-7xl drop-shadow-sm transition-transform duration-500 group-hover:scale-110">{product.emoji}</span>
         {product.badge && (
           <span className={`absolute top-3 left-3 ${badgeColorFor(product.badge)} px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase shadow-sm`}>
             {product.badge}
           </span>
         )}
+        <span className="absolute top-3 right-3 editorial-eyebrow text-background/90">{product.category}</span>
       </div>
-      <div className="p-4 flex flex-col flex-1">
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <Star className="w-3 h-3 fill-[var(--color-gold)] text-[var(--color-gold)]" />
+
+      <div className="p-4 flex flex-col flex-1 border-t border-foreground/10">
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Star className="w-3 h-3 fill-foreground text-foreground" />
           <span className="font-semibold text-foreground">{rating}</span>
-          <span>/ 5.0</span>
           <span className="opacity-60">·</span>
-          <span>({reviews}) reviews</span>
+          <span>{reviews} reviews</span>
         </div>
-        <h3 className="mt-1.5 text-sm font-bold tracking-tight line-clamp-2 min-h-[2.6rem]">{product.name}</h3>
-        <p className="text-[11px] text-muted-foreground mt-0.5">{plan?.period} • {product.category}</p>
-        <div className="mt-3 flex items-end justify-between gap-2">
+
+        <h3
+          className="mt-2 text-base font-bold tracking-tight line-clamp-2 min-h-[2.8rem]"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          {product.name}
+        </h3>
+        <p className="text-[11px] text-muted-foreground mt-1">{plan?.period}</p>
+
+        <div className="mt-4 pt-4 border-t border-foreground/10 flex items-end justify-between gap-2">
           <div>
             {plan?.original && (
               <div className="text-[11px] text-muted-foreground line-through leading-none">{plan.original}</div>
             )}
-            <div className="text-lg font-extrabold text-aurora leading-tight">{plan?.price ?? "—"}</div>
+            <div className="display-serif text-xl text-foreground leading-tight">{plan?.price ?? "—"}</div>
           </div>
           {hasOptions ? (
-            <span className="h-9 px-3 inline-flex items-center rounded-full bg-aurora text-white text-xs font-semibold glow-violet group-hover:scale-105 transition">
-              Choose options
+            <span className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full bg-foreground text-background text-xs font-semibold group-hover:gap-2 transition-all">
+              Choose
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </span>
           ) : (
             <button
               onClick={onAdd}
-              className="grid place-items-center w-10 h-10 rounded-full bg-aurora text-white hover:scale-110 transition glow-violet"
+              className="grid place-items-center w-10 h-10 rounded-full bg-foreground text-background hover:scale-105 transition"
               aria-label="Add to cart"
             >
-              <ShoppingCart className="w-4 h-4" />
+              <ArrowUpRight className="w-4 h-4" />
             </button>
           )}
         </div>
