@@ -14,8 +14,8 @@ export function useProducts() {
       if (error) throw error;
       return (data ?? []).map((r) => rowToProduct(r as never));
     },
-    staleTime: 60_000,
-    refetchOnMount: "always",
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
     retry: 2,
   });
