@@ -256,10 +256,10 @@ function HeroExperience() {
 
         {/* RIGHT — Hero visual stack */}
         <div className="relative grid grid-rows-[1fr_auto] gap-4">
-          <div className="relative glass-strong rounded-[var(--radius-2xl)] p-5 md:p-6 overflow-hidden min-h-[340px]">
-            {/* Floating spotlight orbs */}
-            <div className="pointer-events-none absolute top-6 right-6 h-24 w-24 rounded-full opacity-80" style={{ background: "radial-gradient(circle at 30% 30%, #67e8f9, #2563EB 60%, transparent 70%)", filter: "blur(2px)" }} />
-            <div className="pointer-events-none absolute bottom-6 left-4 h-20 w-20 rounded-full animate-float opacity-70" style={{ background: "radial-gradient(circle at 30% 30%, #a78bfa, #7C3AED 60%, transparent 75%)" }} />
+          <div className="relative glass-strong rounded-[var(--radius-2xl)] p-5 md:p-6 overflow-hidden min-h-[340px] isolate">
+            {/* Soft static ambient glow — behind content, fully clipped */}
+            <div className="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full -z-10 opacity-30" style={{ background: "radial-gradient(circle, rgba(0,229,255,0.55), transparent 70%)", filter: "blur(30px)" }} />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-52 w-52 rounded-full -z-10 opacity-25" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.55), transparent 70%)", filter: "blur(36px)" }} />
 
             <div className="relative">
               <div className="flex items-center justify-between">
