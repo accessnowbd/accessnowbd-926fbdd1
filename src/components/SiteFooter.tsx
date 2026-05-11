@@ -40,7 +40,7 @@ export function SiteFooter() {
 
       <div className="relative mx-auto max-w-[1280px] px-4 md:px-8 space-y-8">
         {/* ===== Brand Hero Card ===== */}
-        <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-background/40 backdrop-blur-2xl px-6 py-10 md:px-12 md:py-12 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7)]">
+        <div className="group/hero relative overflow-hidden rounded-[28px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-[32px] px-6 py-10 md:px-12 md:py-12 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08),inset_0_0_0_1px_rgba(255,255,255,0.02)] before:absolute before:inset-0 before:rounded-[28px] before:bg-[radial-gradient(ellipse_at_top,rgba(124,58,237,0.18),transparent_60%)] before:pointer-events-none">
           {/* corner glows */}
           <div className="pointer-events-none absolute -top-24 -left-16 w-72 h-72 rounded-full bg-primary/25 blur-[100px]" />
           <div className="pointer-events-none absolute -bottom-24 -right-16 w-72 h-72 rounded-full bg-aqua/20 blur-[100px]" />
@@ -238,7 +238,7 @@ function ContactPill({
   tone: Tone;
 }) {
   const inner = (
-    <span className="inline-flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition group">
+    <span className="inline-flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 group">
       <span
         className={`grid place-items-center w-8 h-8 rounded-full bg-gradient-to-br ${TONE_GRADIENT[tone]} text-white`}
       >
@@ -264,8 +264,8 @@ function FooterColumn({
   links: { label: string; to: LinkTo }[];
 }) {
   return (
-    <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-background/40 backdrop-blur-2xl p-6 md:p-7 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.7)] hover:border-white/20 transition">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+    <div className="group/col relative overflow-hidden rounded-[24px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-[32px] p-6 md:p-7 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08),inset_0_0_0_1px_rgba(255,255,255,0.02)] hover:bg-white/[0.05] hover:border-white/15 hover:-translate-y-1 hover:shadow-[0_30px_70px_-25px_rgba(0,0,0,0.9),inset_0_1px_0_0_rgba(255,255,255,0.12)] transition-all duration-500 before:absolute before:inset-0 before:rounded-[24px] before:bg-[radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.06),transparent_50%)] before:pointer-events-none">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
       <div className="flex items-center gap-3 mb-5">
         <span
           className={`grid place-items-center w-11 h-11 rounded-xl bg-gradient-to-br ${TONE_GRADIENT[tone]} text-white`}
