@@ -1,16 +1,15 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star, Sparkles } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import type { Product } from "@/data/products";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
-// Deterministic pseudo-rating from slug so each card has stable numbers
 function ratingFor(slug: string): { rating: string; reviews: number } {
   let h = 0;
   for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
-  const rating = (4.6 + ((h % 40) / 100)).toFixed(2); // 4.60–4.99
+  const rating = (4.6 + ((h % 40) / 100)).toFixed(2);
   const reviews = 18 + (h % 180);
   return { rating, reviews };
 }
@@ -39,42 +38,56 @@ export function ProductCard({ product }: { product: Product }) {
     <Link
       to="/product/$slug"
       params={{ slug: product.slug }}
-      className="group glass rounded-2xl overflow-hidden hover:-translate-y-1.5 hover:shadow-[var(--shadow-glass-lg)] transition-all flex flex-col"
+      className="group gradient-border-card overflow-hidden flex flex-col"
     >
-      <div className={`relative aspect-square bg-gradient-to-br ${product.gradient} flex items-center justify-center`}>
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]" />
-        <span className="relative text-7xl drop-shadow-md">{product.emoji}</span>
+      {/* Hero */}
+      <div className={`relative aspect-[5/4] bg-gradient-to-br ${product.gradient} overflow-hidden`}>
+        {/* Mesh blobs */}
+        <div className="absolute -top-12 -left-10 w-48 h-48 rounded-full bg-white/25 blur-3xl" />
+        <div className="absolute -bottom-16 -right-8 w-56 h-56 rounded-full bg-black/30 blur-3xl" />
+        {/* Grid */}
+        <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.7)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.7)_1px,transparent_1px)] [background-size:32px_32px]" />
+        {/* Glass plate */}
+        <div className="absolute inset-4 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-xl flex items-center justify-center transition-transform duration-500 group-hover:scale-[0.97]">
+          <span className="text-7xl drop-shadow-2xl group-hover:scale-110 transition-transform duration-500">{product.emoji}</span>
+        </div>
+
         {product.badge && (
-          <span className={`absolute top-3 left-3 ${badgeColorFor(product.badge)} px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase shadow-sm`}>
+          <span className={`absolute top-3 left-3 ${badgeColorFor(product.badge)} px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase shadow-lg`}>
             {product.badge}
           </span>
         )}
+        <span className="absolute top-3 right-3 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-[10px] font-bold text-white border border-white/20">
+          <Star className="w-2.5 h-2.5 fill-amber-300 text-amber-300" />
+          {rating}
+        </span>
       </div>
-      <div className="p-4 flex flex-col flex-1">
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <Star className="w-3 h-3 fill-[var(--color-gold)] text-[var(--color-gold)]" />
-          <span className="font-semibold text-foreground">{rating}</span>
-          <span>/ 5.0</span>
-          <span className="opacity-60">·</span>
+
+      {/* Body */}
+      <div className="relative p-4 flex flex-col flex-1 z-10">
+        <div className="flex items-center gap-1.5 text-[11px] text-white/60">
+          <span className="text-white/85 font-semibold">{product.category}</span>
+          <span className="opacity-50">·</span>
           <span>({reviews}) reviews</span>
         </div>
-        <h3 className="mt-1.5 text-sm font-bold tracking-tight line-clamp-2 min-h-[2.6rem]">{product.name}</h3>
-        <p className="text-[11px] text-muted-foreground mt-0.5">{plan?.period} • {product.category}</p>
-        <div className="mt-3 flex items-end justify-between gap-2">
+        <h3 className="mt-1.5 text-sm font-bold tracking-tight line-clamp-2 min-h-[2.6rem] text-white">{product.name}</h3>
+        <p className="text-[11px] text-white/55 mt-0.5">{plan?.period}</p>
+
+        <div className="mt-4 pt-3 border-t border-white/10 flex items-end justify-between gap-2">
           <div>
             {plan?.original && (
-              <div className="text-[11px] text-muted-foreground line-through leading-none">{plan.original}</div>
+              <div className="text-[11px] text-white/40 line-through leading-none">{plan.original}</div>
             )}
-            <div className="text-lg font-extrabold text-aurora leading-tight">{plan?.price ?? "—"}</div>
+            <div className="text-lg font-extrabold text-aurora-strong leading-tight">{plan?.price ?? "—"}</div>
           </div>
           {hasOptions ? (
-            <span className="h-9 px-3 inline-flex items-center rounded-full bg-aurora text-white text-xs font-semibold glow-violet group-hover:scale-105 transition">
-              Choose options
+            <span className="h-9 px-3.5 inline-flex items-center gap-1 rounded-full btn-aurora text-xs">
+              <Sparkles className="w-3 h-3" /> Options
             </span>
           ) : (
             <button
               onClick={onAdd}
-              className="grid place-items-center w-10 h-10 rounded-full bg-aurora text-white hover:scale-110 transition glow-violet"
+              className="grid place-items-center w-10 h-10 rounded-full btn-aurora"
               aria-label="Add to cart"
             >
               <ShoppingCart className="w-4 h-4" />
