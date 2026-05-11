@@ -268,7 +268,7 @@ function ProductGrid({ title, subtitle, items, cap, viewAllTo }: { title: string
   );
 }
 
-function ProductRail({ title, subtitle, items, viewAllTo }: { title: string; subtitle: string; items: Product[]; viewAllTo: "/streaming" | "/ai-tools" | "/education" }) {
+function ProductRail({ title, subtitle, items, viewAllTo }: { title: string; subtitle: string; items: Product[]; viewAllTo: "/products" | "/streaming" | "/ai-tools" | "/education" }) {
   const ref = useRef<HTMLDivElement>(null);
   if (!items.length) return null;
   const scroll = (dir: 1 | -1) => ref.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
