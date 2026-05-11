@@ -460,7 +460,7 @@ export function SiteFooter() {
               .
             </p>
             <p className="text-[10.5px] text-white/35 mt-1">
-              অ্যাক্সেসনাউ বিডি — আপনার ডিজিটাল সঙ্গী।
+              ​
             </p>
           </div>
 
