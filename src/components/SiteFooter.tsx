@@ -196,22 +196,46 @@ export function SiteFooter() {
             </div>
           </div>
 
-          {/* Bottom bar */}
-          <div className="border-t border-white/10">
-            <div className="mx-auto max-w-[1440px] px-4 md:px-10 py-5 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60">
-              <div className="flex items-center gap-1.5">
-                © {new Date().getFullYear()}{" "}
-                <span className="text-white/90 font-semibold">AccessNow BD</span> · Crafted with{" "}
-                <Heart className="w-3 h-3 text-coral fill-coral" /> in Bangladesh
+          {/* Bottom bar — premium */}
+          <div className="relative mt-2">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+            <div className="absolute inset-x-0 top-0 h-px blur-sm bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+            <div className="mx-auto max-w-[1440px] px-4 md:px-10 py-6 flex flex-col md:flex-row items-center justify-between gap-5 text-xs">
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1.5 text-white/70">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="text-white/50">©</span>
+                  <span className="text-white/90 font-semibold tracking-wide">2026</span>
+                </span>
+                <span className="text-white/30">·</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-primary-glow to-[var(--color-aqua)] font-extrabold tracking-wide">
+                  AccessNow BD
+                </span>
+                <span className="text-white/30">·</span>
+                <span className="text-white/60">All Rights Reserved</span>
+                <span className="text-white/30">·</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="text-white/60">Designed &amp; Developed by</span>
+                  <a
+                    href="https://shahedit.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative inline-flex items-center gap-1 px-2.5 py-1 rounded-full glass-soft border border-white/15 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_-4px_var(--color-primary)]"
+                  >
+                    <Sparkles className="w-3 h-3 text-primary-glow group-hover:rotate-12 transition-transform" />
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-glow via-white to-[var(--color-aqua)] font-extrabold tracking-wide">
+                      Shahed IT
+                    </span>
+                  </a>
+                </span>
               </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[10px] uppercase tracking-[0.18em] text-white/45 mr-1">
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <span className="text-[10px] uppercase tracking-[0.22em] text-white/45 mr-1">
                   We accept
                 </span>
                 {["bKash", "Nagad", "Rocket", "Visa", "Mastercard"].map((p) => (
                   <span
                     key={p}
-                    className="px-2.5 py-1 rounded-md glass-soft border border-white/10 text-white/90 text-[10px] font-bold tracking-wide"
+                    className="px-2.5 py-1 rounded-md glass-soft border border-white/10 text-white/90 text-[10px] font-bold tracking-wide hover:border-primary/40 hover:text-white transition-colors"
                   >
                     {p}
                   </span>
