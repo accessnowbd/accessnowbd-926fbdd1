@@ -165,6 +165,9 @@
     -webkit-backdrop-filter: blur(20px) saturate(160%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass);
+    isolation: isolate;
+    contain: paint;
+    transform: translateZ(0);
   }
   .glass-strong {
     background: var(--glass-bg-strong);
@@ -172,13 +175,16 @@
     -webkit-backdrop-filter: blur(28px) saturate(180%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass-lg);
+    isolation: isolate;
+    contain: paint;
+    transform: translateZ(0);
   }
   .glass-soft {
+    /* Nested inside .glass-strong — drop backdrop-filter to avoid scroll tile artifacts */
     background: var(--glass-bg-soft);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
     border: 1px solid var(--glass-border-soft);
     box-shadow: var(--shadow-glass-sm);
+    transform: translateZ(0);
   }
 
   /* SIGNATURE: Dark Glassmorphism Card */
