@@ -14,6 +14,8 @@ import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { GlassField } from "@/components/ui-glass/GlassField";
 import { Stepper } from "@/components/ui-glass/Stepper";
 import { RadioCard } from "@/components/ui-glass/RadioCard";
+import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
+import { OrderSummary, SummaryRow } from "@/components/ui-glass/OrderSummary";
 
 const checkoutSearchSchema = z.object({
   step: fallback(z.union([z.literal(1), z.literal(2), z.literal(3)]), 1).default(1),
