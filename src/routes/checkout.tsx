@@ -53,6 +53,12 @@ function CheckoutPage() {
   const { step, coupon } = Route.useSearch();
   const setStep = (n: 1 | 2 | 3) =>
     navigate({ to: "/checkout", search: { step: n, coupon }, replace: false });
+
+  // Scroll to top whenever the active step changes (incl. browser back/forward).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
   const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
   const [method, setMethod] = useState<MethodId>("bkash");
   const [agree, setAgree] = useState(false);
