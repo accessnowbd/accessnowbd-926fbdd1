@@ -185,10 +185,20 @@ function HeroExperience() {
 
             <h1
               className="mt-5 max-w-2xl text-white"
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 3.6vw, 48px)", lineHeight: 1.08, fontWeight: 900, letterSpacing: "-0.02em", textShadow: "0 2px 24px rgba(0,0,0,0.5)" }}
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 3.6vw, 48px)", lineHeight: 1.08, fontWeight: 900, letterSpacing: "-0.02em" }}
             >
-              <span className="block bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent drop-shadow-[0_4px_18px_rgba(0,229,255,0.55)]">Premium Software</span>
-              <span className="block mt-1 text-aqua" style={{ textShadow: "0 0 22px rgba(0,229,255,0.5)" }}>এক ক্লিকেই, আপনার হাতে।</span>
+              <span
+                className="block text-white"
+                style={{ textShadow: "0 2px 18px rgba(0,0,0,0.55), 0 0 24px rgba(0,229,255,0.35)" }}
+              >
+                Premium Software
+              </span>
+              <span
+                className="block mt-1 text-aqua"
+                style={{ textShadow: "0 0 22px rgba(0,229,255,0.55), 0 2px 14px rgba(0,0,0,0.5)" }}
+              >
+                এক ক্লিকেই, আপনার হাতে।
+              </span>
             </h1>
 
             <p className="mt-3 max-w-lg text-sm md:text-[15px] text-white/75 leading-relaxed">
@@ -246,10 +256,10 @@ function HeroExperience() {
 
         {/* RIGHT — Hero visual stack */}
         <div className="relative grid grid-rows-[1fr_auto] gap-4">
-          <div className="relative glass-strong rounded-[var(--radius-2xl)] p-5 md:p-6 overflow-hidden min-h-[340px]">
-            {/* Floating spotlight orbs */}
-            <div className="pointer-events-none absolute top-6 right-6 h-24 w-24 rounded-full opacity-80" style={{ background: "radial-gradient(circle at 30% 30%, #67e8f9, #2563EB 60%, transparent 70%)", filter: "blur(2px)" }} />
-            <div className="pointer-events-none absolute bottom-6 left-4 h-20 w-20 rounded-full animate-float opacity-70" style={{ background: "radial-gradient(circle at 30% 30%, #a78bfa, #7C3AED 60%, transparent 75%)" }} />
+          <div className="relative glass-strong rounded-[var(--radius-2xl)] p-5 md:p-6 overflow-hidden min-h-[340px] isolate">
+            {/* Soft static ambient glow — behind content, fully clipped */}
+            <div className="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full -z-10 opacity-30" style={{ background: "radial-gradient(circle, rgba(0,229,255,0.55), transparent 70%)", filter: "blur(30px)" }} />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 h-52 w-52 rounded-full -z-10 opacity-25" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.55), transparent 70%)", filter: "blur(36px)" }} />
 
             <div className="relative">
               <div className="flex items-center justify-between">
@@ -268,8 +278,7 @@ function HeroExperience() {
               {HERO_BRANDS.slice(0, 6).map((b, i) => (
                 <div
                   key={b.name}
-                  className="group relative glass-soft rounded-xl aspect-[5/4] flex flex-col items-center justify-center gap-1.5 p-2 hover:-translate-y-1 hover:shadow-[var(--shadow-glow-aqua)] transition animate-float overflow-hidden"
-                  style={{ animationDelay: `${i * 0.6}s`, animationDuration: "7s" }}
+                  className="group relative glass-soft rounded-xl aspect-[5/4] flex flex-col items-center justify-center gap-1.5 p-2 border border-white/10 hover:border-aqua/40 hover:shadow-[var(--shadow-glow-aqua)] transition-[border-color,box-shadow,background-color] duration-300 overflow-hidden"
                 >
                   <span
                     className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition"
@@ -286,8 +295,16 @@ function HeroExperience() {
               ))}
             </div>
 
-            {/* Marquee strip */}
-            <div className="relative mt-4 overflow-hidden rounded-xl glass-soft py-2">
+            {/* Marquee strip with fade edges */}
+            <div
+              className="relative mt-4 overflow-hidden rounded-xl glass-soft py-2"
+              style={{
+                maskImage:
+                  "linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%)",
+              }}
+            >
               <div className="flex gap-8 whitespace-nowrap animate-marquee">
                 {[...HERO_BRANDS, ...HERO_BRANDS].map((b, i) => (
                   <span key={i} className="inline-flex items-center gap-1.5 text-xs font-bold text-white/85">
