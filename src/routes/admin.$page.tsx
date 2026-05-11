@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useParams, Navigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Construction, ArrowLeft, Plus, Trash2, Pencil, Loader2, X, Check, Save } from "lucide-react";
+import { Construction, ArrowLeft, Plus, Trash2, Pencil, Loader2, X, Check, Save, GripVertical } from "lucide-react";
 import { findAdminPage, ADMIN_MENU } from "@/lib/admin-menu";
 import { getFeatureConfig, type AdminField } from "@/lib/admin-fields";
 import { supabase } from "@/integrations/supabase/client";
@@ -116,10 +116,46 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
     load();
   };
 
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
+
+  const persistOrder = async (next: Record[]) => {
+    const changed = next
+      .map((r, i) => ({ r, i }))
+      .filter(({ r, i }) => r.sort_order !== i);
+    if (!changed.length) return;
+    const results = await Promise.all(
+      changed.map(({ r, i }) =>
+        supabase.from("admin_records").update({ sort_order: i }).eq("id", r.id)
+      )
+    );
+    const err = results.find((x) => x.error)?.error;
+    if (err) {
+      toast.error(err.message);
+      load();
+    } else {
+      toast.success("Order saved");
+    }
+  };
+
+  const onDrop = (targetId: string) => {
+    if (!dragId || dragId === targetId) { setDragId(null); setOverId(null); return; }
+    const from = rows.findIndex((r) => r.id === dragId);
+    const to = rows.findIndex((r) => r.id === targetId);
+    if (from < 0 || to < 0) return;
+    const next = rows.slice();
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    const renumbered = next.map((r, i) => ({ ...r, sort_order: i }));
+    setRows(renumbered);
+    setDragId(null); setOverId(null);
+    persistOrder(renumbered);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="text-sm text-slate-500">{rows.length} {rows.length === 1 ? "entry" : "entries"}</div>
+        <div className="text-sm text-slate-500">{rows.length} {rows.length === 1 ? "entry" : "entries"} · drag <GripVertical className="w-3 h-3 inline" /> to reorder</div>
         <button
           onClick={() => { setEditing(null); setShowForm(true); }}
           className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-semibold shadow"
@@ -137,6 +173,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
               <tr>
+                <th className="w-8"></th>
                 <th className="text-left px-4 py-3">{primary?.label ?? "Item"}</th>
                 {secondary.map((f) => <th key={f.name} className="text-left px-4 py-3">{f.label}</th>)}
                 <th className="text-left px-4 py-3">Status</th>
@@ -145,7 +182,19 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {rows.map((r) => (
-                <tr key={r.id} className="hover:bg-slate-50/60">
+                <tr
+                  key={r.id}
+                  draggable
+                  onDragStart={(e) => { setDragId(r.id); e.dataTransfer.effectAllowed = "move"; }}
+                  onDragOver={(e) => { e.preventDefault(); if (overId !== r.id) setOverId(r.id); }}
+                  onDragLeave={() => { if (overId === r.id) setOverId(null); }}
+                  onDrop={(e) => { e.preventDefault(); onDrop(r.id); }}
+                  onDragEnd={() => { setDragId(null); setOverId(null); }}
+                  className={`hover:bg-slate-50/60 ${dragId === r.id ? "opacity-40" : ""} ${overId === r.id && dragId !== r.id ? "bg-violet-50/60 outline outline-1 outline-violet-300" : ""}`}
+                >
+                  <td className="px-2 py-3 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500">
+                    <GripVertical className="w-4 h-4" />
+                  </td>
                   <td className="px-4 py-3 font-semibold text-slate-900">{String(r.data?.[primary?.name ?? ""] ?? "—")}</td>
                   {secondary.map((f) => (
                     <td key={f.name} className="px-4 py-3 text-slate-600 truncate max-w-[200px]">
