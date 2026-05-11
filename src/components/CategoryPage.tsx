@@ -44,24 +44,24 @@ export function CategoryPage({
     <div className="min-h-screen">
       <SiteHeader />
       {/* Cinematic header band */}
-      <section className="relative bg-[#07071a] text-white overflow-hidden">
+      <section className="relative glass-strong overflow-hidden">
         <div className="pointer-events-none absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-primary/35 blur-[140px]" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 w-[420px] h-[420px] rounded-full bg-[var(--color-aqua)]/35 blur-[140px]" />
         <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 py-12 md:py-16">
-          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, letterSpacing: "-0.02em" }}>
+          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, letterSpacing: 0 }}>
             {title}
           </h1>
-          <p className="mt-3 text-white/75 max-w-2xl">{subtitle}</p>
+          <p className="mt-3 text-muted-foreground max-w-2xl">{subtitle}</p>
           <div className="mt-6 flex items-center bg-white/10 border border-white/15 rounded-full h-12 pl-5 pr-1.5 max-w-xl backdrop-blur-md">
-            <Search className="w-4 h-4 text-white/60" />
+            <Search className="w-4 h-4 text-muted-foreground" />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search subscriptions..."
-              className="flex-1 px-3 bg-transparent outline-none text-sm placeholder:text-white/50 text-white"
+              className="flex-1 px-3 bg-transparent outline-none text-sm placeholder:text-muted-foreground text-foreground"
             />
             {q && (
-              <button onClick={() => setQ("")} className="grid place-items-center w-8 h-8 rounded-full hover:bg-white/10 text-white/70" aria-label="Clear">
+              <button onClick={() => setQ("")} className="grid place-items-center w-8 h-8 rounded-full hover:bg-secondary text-muted-foreground" aria-label="Clear">
                 <X className="w-4 h-4" />
               </button>
             )}
@@ -74,7 +74,7 @@ export function CategoryPage({
           <div className="flex flex-wrap gap-2 mb-6">
             <button
               onClick={() => setCat(null)}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition ${cat === null ? "bg-aurora text-white glow-violet" : "glass hover:bg-white/80"}`}
+              className={`px-4 py-2 rounded-full text-xs font-bold transition ${cat === null ? "bg-primary text-primary-foreground shadow-[var(--shadow-glow-violet)]" : "glass hover:bg-card/80"}`}
             >
               All ({products.filter((p) => !filter || filter(p.category)).length})
             </button>
@@ -85,7 +85,7 @@ export function CategoryPage({
                 <button
                   key={c}
                   onClick={() => setCat(active ? null : c)}
-                  className={`px-4 py-2 rounded-full text-xs font-bold transition ${active ? "bg-aurora text-white glow-violet" : "glass hover:bg-white/80"}`}
+                  className={`px-4 py-2 rounded-full text-xs font-bold transition ${active ? "bg-primary text-primary-foreground shadow-[var(--shadow-glow-violet)]" : "glass hover:bg-card/80"}`}
                 >
                   {c} ({count})
                 </button>

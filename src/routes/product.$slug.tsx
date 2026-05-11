@@ -92,7 +92,7 @@ function ProductPage() {
         {/* Image */}
         <div className={`relative aspect-square md:aspect-[4/5] rounded-3xl bg-gradient-to-br ${product.gradient} flex items-center justify-center glass-strong overflow-hidden glow-violet`}>
           <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-white/20 blur-3xl" />
-          <div className="absolute -bottom-24 -right-16 w-96 h-96 rounded-full bg-black/30 blur-3xl" />
+          <div className="absolute -bottom-24 -right-16 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
           {product.imageUrl ? (
             <img
               src={product.imageUrl}
@@ -116,7 +116,7 @@ function ProductPage() {
           <h1 className="mt-4 text-aurora" style={{ fontFamily: "var(--font-display)", fontSize: 34, fontWeight: 600, lineHeight: 1.2 }}>
             {product.name}
           </h1>
-          <p className="mt-3 text-base text-[#333333]">{product.tagline}</p>
+          <p className="mt-3 text-base text-foreground">{product.tagline}</p>
 
           <div className="mt-4 flex items-center gap-3 text-sm">
             <div className="flex items-center gap-1">
@@ -125,7 +125,7 @@ function ProductPage() {
             <span className="text-muted-foreground">4.9 · 2,431 sold</span>
           </div>
 
-          <p className="mt-6 text-sm text-[#333333] leading-relaxed">{product.description}</p>
+          <p className="mt-6 text-sm text-foreground leading-relaxed">{product.description}</p>
 
           {/* Plan selector */}
           <div className="mt-7">
@@ -142,7 +142,7 @@ function ProductPage() {
                     }`}
                   >
                     {p.popular && (
-                      <span className="absolute -top-2 right-3 bg-sunset text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow">POPULAR</span>
+                      <span className="absolute -top-2 right-3 bg-primary text-primary-foreground text-[10px] font-semibold px-2 py-0.5 rounded-full shadow">POPULAR</span>
                     )}
                     <div className="text-xs text-muted-foreground">{p.period}</div>
                     <div className="mt-1 font-semibold text-lg text-aurora" style={{ fontFamily: "var(--font-heading)" }}>{p.price}</div>
@@ -189,10 +189,10 @@ function ProductPage() {
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           {product.features.map((f) => (
             <div key={f} className="flex items-start gap-3 p-4 glass rounded-xl">
-              <span className="grid place-items-center w-8 h-8 rounded-full bg-aurora text-white shrink-0">
+              <span className="grid place-items-center w-8 h-8 rounded-full bg-primary text-primary-foreground shrink-0">
                 <Check className="w-4 h-4" />
               </span>
-              <span className="text-sm text-[#333333] mt-1">{f}</span>
+              <span className="text-sm text-foreground mt-1">{f}</span>
             </div>
           ))}
         </div>
@@ -210,11 +210,11 @@ function ProductPage() {
               { icon: Headphones, title: "3. Enjoy & relax", desc: `Use immediately. Covered by our ${product.warranty} guarantee.` },
             ].map((s) => (
               <div key={s.title} className="glass-strong rounded-2xl p-6">
-                <div className="w-12 h-12 rounded-full bg-aurora text-white grid place-items-center mb-4 glow-violet">
+                <div className="w-12 h-12 rounded-full bg-primary text-primary-foreground grid place-items-center mb-4 glow-violet">
                   <s.icon className="w-5 h-5" />
                 </div>
                 <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{s.title}</h3>
-                <p className="text-sm text-[#333333] mt-2">{s.desc}</p>
+                <p className="text-sm text-foreground mt-2">{s.desc}</p>
               </div>
             ))}
           </div>
