@@ -63,15 +63,35 @@ export function downloadReceiptPdf(order: ReceiptOrder) {
   doc.setTextColor(80, 80, 90);
 
   const billLines = [order.full_name, order.email, order.phone];
-  const payLines = [
-    `Method: ${order.payment_method.toUpperCase()}`,
-    `Transaction ID:`,
-    order.transaction_id,
-  ];
   billLines.forEach((line, i) => doc.text(line, margin, y + 18 + i * 14));
-  payLines.forEach((line, i) =>
-    doc.text(line, margin + colW, y + 18 + i * 14),
-  );
+
+  // Payment column — labeled rows for clarity
+  const payX = margin + colW;
+  const labelColor: [number, number, number] = [130, 130, 140];
+  const valueColor: [number, number, number] = [30, 30, 40];
+  const methodLabel = (order.payment_method || "").toUpperCase();
+  const refLabel =
+    /stripe|card|visa|master/i.test(order.payment_method)
+      ? "Reference ID"
+      : "Transaction ID";
+
+  const payRows: Array<[string, string]> = [
+    ["Method", methodLabel || "—"],
+    [refLabel, order.transaction_id || "—"],
+  ];
+  payRows.forEach(([label, value], i) => {
+    const rowY = y + 18 + i * 28;
+    doc.setTextColor(...labelColor);
+    doc.setFontSize(9);
+    doc.text(label.toUpperCase(), payX, rowY);
+    doc.setTextColor(...valueColor);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    // Wrap long IDs so they don't overflow the column.
+    const wrapped = doc.splitTextToSize(value, colW - 8);
+    doc.text(wrapped, payX, rowY + 12);
+    doc.setFont("helvetica", "normal");
+  });
 
   y += 90;
 
