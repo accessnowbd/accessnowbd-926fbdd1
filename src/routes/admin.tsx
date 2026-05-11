@@ -51,7 +51,7 @@ function AdminBootSplash() {
         </div>
 
         <div className="text-center">
-          <div className="text-white text-base font-bold tracking-tight">RxB Admin</div>
+          <div className="text-white text-base font-bold tracking-tight">AccessNow BD</div>
           <div className="mt-1 text-[12px] text-white/55">Preparing your workspace…</div>
         </div>
 
