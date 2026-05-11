@@ -61,7 +61,9 @@ function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const { step } = Route.useSearch();
+  const setStep = (n: 1 | 2 | 3) =>
+    navigate({ to: "/checkout", search: { step: n }, replace: false });
   const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
   const [method, setMethod] = useState<MethodId>("bkash");
   const [agree, setAgree] = useState(false);
