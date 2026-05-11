@@ -87,12 +87,12 @@ function CheckoutPage() {
     if (submitted) return;
     if ((step === 2 || step === 3) && !step1Valid) {
       setTouched((t) => ({ ...t, name: true, email: true, phone: true }));
-      navigate({ to: "/checkout", search: { step: 1 }, replace: true });
+      navigate({ to: "/checkout", search: { step: 1, coupon }, replace: true });
       return;
     }
     if (step === 3 && !step2Valid) {
       setTouched((t) => ({ ...t, senderNumber: true, trxId: true }));
-      navigate({ to: "/checkout", search: { step: 2 }, replace: true });
+      navigate({ to: "/checkout", search: { step: 2, coupon }, replace: true });
     }
   }, [step, step1Valid, step2Valid, submitted, navigate]);
 
