@@ -125,7 +125,7 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body { background-color: #050b18; color-scheme: dark; }
+  html, body { background-color: #07091a; color-scheme: dark; }
   body {
     color: var(--color-foreground);
     font-family: var(--font-body);
@@ -143,9 +143,10 @@
     pointer-events: none;
     z-index: 0;
     background:
-      radial-gradient(60% 50% at 15% 20%, rgba(37, 99, 235, 0.28), transparent 70%),
-      radial-gradient(50% 45% at 85% 15%, rgba(0, 229, 255, 0.18), transparent 70%),
-      radial-gradient(55% 50% at 70% 90%, rgba(124, 58, 237, 0.26), transparent 70%);
+      radial-gradient(60% 50% at 12% 18%, rgba(67, 56, 202, 0.32), transparent 70%),
+      radial-gradient(50% 45% at 88% 14%, rgba(34, 211, 238, 0.14), transparent 70%),
+      radial-gradient(55% 50% at 72% 92%, rgba(245, 194, 107, 0.12), transparent 70%),
+      radial-gradient(45% 40% at 30% 80%, rgba(109, 40, 217, 0.22), transparent 70%);
     transform: translateZ(0);
     will-change: transform;
   }
@@ -155,7 +156,9 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background: radial-gradient(ellipse at 50% 0%, transparent 40%, rgba(5, 11, 24, 0.55) 100%);
+    background:
+      radial-gradient(ellipse at 50% 0%, transparent 38%, rgba(7, 9, 26, 0.6) 100%),
+      linear-gradient(180deg, rgba(7,9,26,0) 60%, rgba(7,9,26,0.4) 100%);
     transform: translateZ(0);
   }
   body > * { position: relative; z-index: 1; }
