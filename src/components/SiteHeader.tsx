@@ -122,7 +122,7 @@ export function SiteHeader() {
 
         <div
           className={[
-            "relative border-b border-white/10 transition-all duration-300",
+            "relative border-b border-white/10 transition-[background-color,box-shadow,backdrop-filter] duration-300 will-change-[background-color]",
             scrolled
               ? "bg-background/65 backdrop-blur-2xl shadow-[0_18px_50px_-24px_rgba(0,0,0,0.7)]"
               : "bg-background/35 backdrop-blur-xl",
