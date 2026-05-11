@@ -116,9 +116,35 @@ function OrderDetailPage() {
       </header>
 
       <div className="mx-auto max-w-[1100px] px-4 md:px-10 py-8">
-        <Link to="/orders" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to my orders
-        </Link>
+        {isNew ? (
+          <Link to="/orders" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
+            <ArrowLeft className="w-3.5 h-3.5" /> View all orders
+          </Link>
+        ) : (
+          <Link to="/orders" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to my orders
+          </Link>
+        )}
+
+        {isNew && (
+          <div className="mb-5 rounded-3xl p-6 md:p-7 bg-aurora text-primary-foreground glow-aqua relative overflow-hidden">
+            <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/15 blur-2xl pointer-events-none" />
+            <div className="flex items-start gap-4 relative">
+              <div className="w-12 h-12 rounded-2xl bg-white/20 grid place-items-center shrink-0">
+                <PartyPopper className="w-6 h-6" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-xl md:text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
+                  Order placed successfully!
+                </h2>
+                <p className="text-sm text-white/85 mt-1">
+                  We're verifying your payment now. You'll receive your subscription details on{" "}
+                  <span className="font-semibold">{order.email}</span> within 5–30 minutes.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Order header */}
         <div className="glass-strong rounded-3xl p-6 md:p-8">
@@ -141,9 +167,17 @@ function OrderDetailPage() {
                 Placed on {new Date(order.created_at).toLocaleString()}
               </div>
             </div>
-            <span className={`text-[11px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full border ${statusStyles[order.status] || "bg-secondary text-foreground border-border"}`}>
-              {order.status}
-            </span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => downloadReceiptPdf(order)}
+                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full glass-soft text-sm font-semibold hover:bg-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Download className="w-3.5 h-3.5" /> Receipt
+              </button>
+              <span className={`text-[11px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full border ${statusStyles[order.status] || "bg-secondary text-foreground border-border"}`}>
+                {order.status}
+              </span>
+            </div>
           </div>
 
           {/* Status tracker */}
