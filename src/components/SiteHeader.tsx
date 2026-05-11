@@ -22,6 +22,7 @@ import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate, useLocation } from "@tanstack/react-router";
+import { GlobalSearch, useGlobalSearch } from "@/components/GlobalSearch";
 
 const NAV: Array<{
   label: string;
@@ -94,6 +95,7 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
 
   const handleLogout = async () => {
     await signOut();
@@ -193,8 +195,9 @@ export function SiteHeader() {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-              <Link
-                to="/products"
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
                 className="hidden md:inline-flex items-center gap-2 h-11 px-4 rounded-full glass-soft border border-white/10 text-sm text-white/80 hover:text-white hover:border-aqua/40 transition group"
                 aria-label="Search products"
               >
@@ -203,7 +206,17 @@ export function SiteHeader() {
                 <span className="ml-2 hidden xl:inline text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-white/10 text-white/55 border border-white/10">
                   ⌘K
                 </span>
-              </Link>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                className="md:hidden grid place-items-center w-11 h-11 rounded-full glass-soft border border-white/10 text-white"
+                aria-label="Search"
+              >
+                <Search className="w-4 h-4 text-aqua" />
+              </button>
+
 
               <AccountIcon />
               <CartIcon />
@@ -301,6 +314,7 @@ export function SiteHeader() {
           </div>
         )}
       </header>
+      <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
     </>
   );
 }
