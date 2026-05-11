@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import {
-  Crown,
+  
   Facebook,
   Instagram,
   Youtube,
@@ -13,6 +13,7 @@ import {
   Info,
   FileText,
 } from "lucide-react";
+import footerLogo from "@/assets/accessnow-bd-footer-logo.png";
 
 type LinkTo =
   | "/"
@@ -108,22 +109,15 @@ export function SiteFooter() {
         <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent backdrop-blur-xl p-8 md:p-10 overflow-hidden">
           <div className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 w-[640px] h-[260px] rounded-full bg-primary/20 blur-[120px]" />
           <div className="relative flex flex-col items-center text-center">
-            <div className="flex items-center gap-4">
-              <span className="grid place-items-center w-14 h-14 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua shadow-[0_12px_40px_-10px_rgba(124,58,237,0.7)]">
-                <Crown className="w-6 h-6 text-white" />
-              </span>
-              <div className="text-left">
-                <h3
-                  className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-primary via-violet-300 to-aqua bg-clip-text text-transparent"
-                  style={{ fontFamily: "var(--font-heading)" }}
-                >
-                  AccessNow BD
-                </h3>
-                <p className="text-[10.5px] tracking-[0.32em] text-white/45 font-bold mt-0.5">
-                  ACCESSNOWBD.COM
-                </p>
-              </div>
-            </div>
+            <img
+              src={footerLogo}
+              alt="AccessNow BD — Fast, Secure, Reliable"
+              className="h-20 md:h-24 w-auto select-none drop-shadow-[0_10px_30px_rgba(124,58,237,0.45)]"
+              draggable={false}
+            />
+            <p className="mt-2 text-[10.5px] tracking-[0.32em] text-white/45 font-bold">
+              ACCESSNOWBD.COM
+            </p>
 
             <p className="mt-6 max-w-2xl text-[14px] leading-relaxed text-white/75">
               বাংলাদেশের সবচেয়ে{" "}
