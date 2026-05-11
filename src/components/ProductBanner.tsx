@@ -110,9 +110,11 @@ export function ProductBanner({
   }, [seed, spheres, product.slug]);
 
   const [imgFailed, setImgFailed] = useState(false);
-  const [logoFailed, setLogoFailed] = useState(false);
+  const [logoIdx, setLogoIdx] = useState(0);
   const primary = product.imageUrl;
-  const fallbackLogo = guessLogoUrl(product.name);
+  const logos = useMemo(() => logoSources(product.name), [product.name]);
+  const currentLogo = logos[logoIdx];
+  const allLogosFailed = logoIdx >= logos.length;
 
   const aspectClass =
     ratio === "4/3" ? "aspect-[4/3]" :
