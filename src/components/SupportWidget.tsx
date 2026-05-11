@@ -8,6 +8,11 @@ import {
   Loader2,
   User2,
   Phone,
+  Headphones,
+  Zap,
+  ShieldCheck,
+  Clock,
+  ChevronRight,
 } from "lucide-react";
 
 type Msg = { role: "user" | "assistant"; content: string };
