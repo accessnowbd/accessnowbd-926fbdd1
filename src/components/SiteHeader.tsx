@@ -130,7 +130,7 @@ export function SiteHeader() {
           {/* top hairline */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/60 to-transparent" />
 
-          <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-[68px] flex items-center justify-between gap-6">
+          <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-10 h-[64px] md:h-[68px] flex items-center justify-between gap-2 md:gap-5 flex-nowrap">
             {/* Brand */}
             <Link
               to="/"
