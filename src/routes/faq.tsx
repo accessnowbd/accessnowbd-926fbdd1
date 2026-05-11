@@ -75,7 +75,7 @@ function FaqPage() {
           <h2 className="text-2xl md:text-3xl font-extrabold">আরও প্রশ্ন আছে?</h2>
           <p className="mt-2 text-white/85">WhatsApp-এ মেসেজ দিন, আমরা সবসময় হাজির।</p>
           <div className="mt-5 flex flex-wrap gap-3 justify-center">
-            <a href="https://wa.me/8801000000000" className="h-11 px-6 inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white text-sm font-bold hover:scale-105 transition">
+            <a href="https://wa.me/8801580607614" className="h-11 px-6 inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white text-sm font-bold hover:scale-105 transition">
               <MessageCircle className="w-4 h-4" /> Chat on WhatsApp
             </a>
             <Link to="/contact" className="h-11 px-6 inline-flex items-center rounded-full bg-white text-primary text-sm font-bold hover:scale-105 transition">
