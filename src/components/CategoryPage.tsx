@@ -52,7 +52,7 @@ export function CategoryPage({
             {title}
           </h1>
           <p className="mt-3 text-muted-foreground max-w-2xl">{subtitle}</p>
-          <div className="mt-6 flex items-center bg-white/10 border border-white/15 rounded-full h-12 pl-5 pr-1.5 max-w-xl backdrop-blur-md">
+          <div className="mt-6 flex items-center bg-[#101a30]/80 border border-white/15 rounded-full h-12 pl-5 pr-1.5 max-w-xl">
             <Search className="w-4 h-4 text-muted-foreground" />
             <input
               value={q}

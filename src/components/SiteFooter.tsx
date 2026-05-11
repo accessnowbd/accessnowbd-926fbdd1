@@ -62,7 +62,7 @@ export function SiteFooter() {
       </div>
 
       {/* Main footer body */}
-      <div className="relative border-t border-white/10 bg-background/40 backdrop-blur-2xl">
+      <div className="relative border-t border-white/10 bg-[#0a1325]/90">
         <div className="mx-auto max-w-[1440px] px-4 md:px-10 pt-12 pb-10 grid grid-cols-2 md:grid-cols-12 gap-10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-5">

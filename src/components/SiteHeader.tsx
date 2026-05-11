@@ -15,7 +15,7 @@ const NAV: Array<{ label: string; to: "/" | "/products" | "/streaming" | "/ai-to
 
 export function TopUtilityBar() {
   return (
-    <div className="relative border-b border-border bg-background/50 text-xs backdrop-blur-2xl">
+    <div className="relative border-b border-border bg-[#0a1325]/95 text-xs">
       <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-9 flex items-center justify-between">
         <div className="flex items-center gap-2 text-muted-foreground">
           <Zap className="w-3 h-3 text-primary" />
@@ -42,7 +42,7 @@ export function SiteHeader() {
   return (
     <>
       <TopUtilityBar />
-      <header className="sticky top-0 z-40 border-b border-border bg-background/55 backdrop-blur-2xl">
+      <header className="sticky top-0 z-40 border-b border-border bg-[#0a1325]/95">
         <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-16 flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-2.5 font-bold text-lg shrink-0" style={{ fontFamily: "var(--font-heading)" }}>
             <span className="relative grid place-items-center w-10 h-10 rounded-2xl bg-primary text-primary-foreground shadow-[var(--shadow-glow-violet)]">
@@ -77,7 +77,7 @@ export function SiteHeader() {
           </div>
         </div>
         {open && (
-          <div className="lg:hidden border-t border-border bg-background/85 backdrop-blur-2xl">
+          <div className="lg:hidden border-t border-border bg-[#0a1325]/97">
             <nav className="mx-auto max-w-[1440px] px-4 py-3 grid grid-cols-2 gap-2">
               {NAV.map((n) => (
                 <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="px-3 py-2.5 rounded-xl glass-soft text-sm font-semibold text-foreground hover:shadow-[var(--shadow-glass)]">
