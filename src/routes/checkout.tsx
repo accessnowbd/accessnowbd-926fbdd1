@@ -124,7 +124,7 @@ function CheckoutPage() {
           payment_method: method,
           transaction_id: form.trxId,
           items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
-          total,
+          total: grandTotal,
         })
         .select("id")
         .single();
