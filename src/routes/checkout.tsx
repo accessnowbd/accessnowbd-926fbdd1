@@ -243,7 +243,7 @@ function CheckoutPage() {
                   />
                 </div>
                 <div className="mt-6 flex justify-end">
-                  <GlassButton onClick={goNext} size="lg">Continue to Payment</GlassButton>
+                  <GlassButton onClick={goNext} size="lg" disabled={!step1Valid}>Continue to Payment</GlassButton>
                 </div>
               </GlassCard>
             )}
@@ -315,7 +315,7 @@ function CheckoutPage() {
 
                 <div className="mt-6 flex justify-between gap-3">
                   <GlassButton variant="secondary" size="lg" onClick={goBack}>Back</GlassButton>
-                  <GlassButton size="lg" onClick={goNext}>Review Order</GlassButton>
+                  <GlassButton size="lg" onClick={goNext} disabled={!step2Valid}>Review Order</GlassButton>
                 </div>
               </GlassCard>
             )}
