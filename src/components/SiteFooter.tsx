@@ -9,9 +9,10 @@ import {
   Mail,
   MapPin,
   Phone,
-  Package,
-  Info,
-  FileText,
+  ChevronRight,
+  Zap,
+  ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 
 type LinkTo =
@@ -28,76 +29,158 @@ type LinkTo =
   | "/cart"
   | "/checkout";
 
+const COLUMNS: { title: string; links: { label: string; to: LinkTo }[] }[] = [
+  {
+    title: "Products",
+    links: [
+      { label: "All Products", to: "/products" },
+      { label: "Streaming", to: "/streaming" },
+      { label: "AI Tools", to: "/ai-tools" },
+      { label: "Education", to: "/education" },
+      { label: "My Cart", to: "/cart" },
+    ],
+  },
+  {
+    title: "Information",
+    links: [
+      { label: "FAQ", to: "/faq" },
+      { label: "Contact Us", to: "/contact" },
+      { label: "My Account", to: "/profile" },
+      { label: "My Orders", to: "/orders" },
+      { label: "Sign In", to: "/auth" },
+    ],
+  },
+  {
+    title: "Policies",
+    links: [
+      { label: "Privacy Policy", to: "/faq" },
+      { label: "Terms & Conditions", to: "/faq" },
+      { label: "Refund & Return", to: "/faq" },
+      { label: "Order & Cancellation", to: "/faq" },
+      { label: "Delivery Info", to: "/faq" },
+    ],
+  },
+];
+
 export function SiteFooter() {
   return (
-    <footer className="relative mt-24 pb-10">
+    <footer className="relative mt-24">
       {/* Aurora ambient glow — matches header */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-[10%] w-[520px] h-[520px] rounded-full bg-primary/20 blur-[140px]" />
-        <div className="absolute top-32 right-[8%] w-[460px] h-[460px] rounded-full bg-aqua/15 blur-[140px]" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[760px] h-[280px] rounded-full bg-violet-500/20 blur-[140px]" />
+        <div className="absolute top-10 left-[8%] w-[520px] h-[520px] rounded-full bg-primary/20 blur-[140px]" />
+        <div className="absolute top-32 right-[6%] w-[460px] h-[460px] rounded-full bg-aqua/15 blur-[140px]" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[820px] h-[280px] rounded-full bg-violet-500/15 blur-[140px]" />
       </div>
 
-      <div className="relative mx-auto max-w-[1280px] px-4 md:px-8 space-y-8">
-        {/* ===== Brand Hero Card ===== */}
-        <div className="group/hero relative overflow-hidden rounded-[28px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-[32px] px-6 py-10 md:px-12 md:py-12 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08),inset_0_0_0_1px_rgba(255,255,255,0.02)] before:absolute before:inset-0 before:rounded-[28px] before:bg-[radial-gradient(ellipse_at_top,rgba(124,58,237,0.18),transparent_60%)] before:pointer-events-none">
-          {/* corner glows */}
-          <div className="pointer-events-none absolute -top-24 -left-16 w-72 h-72 rounded-full bg-primary/25 blur-[100px]" />
-          <div className="pointer-events-none absolute -bottom-24 -right-16 w-72 h-72 rounded-full bg-aqua/20 blur-[100px]" />
-          {/* hairlines */}
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/50 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      {/* Top hairline like header */}
+      <div className="relative">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      </div>
 
-          <div className="relative flex flex-col items-center text-center">
-            {/* Logo + Brand */}
-            <Link to="/" className="inline-flex items-center gap-4 group">
-              <span className="relative grid place-items-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-white shadow-[0_14px_36px_-10px_rgba(0,229,255,0.6)]">
-                <Crown className="w-7 h-7" />
-                <span className="absolute -inset-0.5 rounded-2xl bg-conic opacity-40 blur-md -z-10 animate-aurora-pan" />
+      <div className="relative mx-auto max-w-[1280px] px-4 md:px-8 pt-16 pb-8">
+        {/* ===== Top: Brand + Newsletter row ===== */}
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] items-start">
+          {/* Brand block */}
+          <div>
+            <Link to="/" className="inline-flex items-center gap-3 group">
+              <span className="relative grid place-items-center w-12 h-12 rounded-xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-white shadow-[0_14px_36px_-10px_rgba(0,229,255,0.6)]">
+                <Crown className="w-6 h-6" />
+                <span className="absolute -inset-0.5 rounded-xl bg-conic opacity-40 blur-md -z-10 animate-aurora-pan" />
               </span>
-              <span className="leading-tight text-left">
+              <span className="leading-tight">
                 <span
-                  className="block text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-primary via-violet-400 to-aqua bg-clip-text text-transparent"
+                  className="block text-2xl font-extrabold bg-gradient-to-r from-primary via-violet-400 to-aqua bg-clip-text text-transparent"
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
                   AccessNow BD
                 </span>
-                <span className="mt-1 flex items-center gap-2 text-[10px] font-bold tracking-[0.3em] uppercase text-white/55">
-                  <span className="h-px w-6 bg-white/30" />
+                <span className="text-[10px] font-bold tracking-[0.28em] uppercase text-white/55">
                   ACCESSNOWBD.COM
-                  <span className="h-px w-6 bg-white/30" />
                 </span>
               </span>
             </Link>
 
-            {/* Description */}
-            <p className="mt-6 max-w-2xl text-sm md:text-[15px] leading-relaxed text-white/75">
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-white/65">
               বাংলাদেশের সবচেয়ে{" "}
-              <span className="font-bold text-aqua">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span> —
-              ভেরিফাইড সাবস্ক্রিপশন, সফটওয়্যার লাইসেন্স, AI টুলস ও{" "}
-              <span className="font-bold text-violet-300">২৪/৭ লাইভ সাপোর্টে</span> আপনার
-              ডিজিটাল প্রয়োজন এক ক্লিকেই পূরণ।
+              <span className="font-semibold text-aqua">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span> —
+              ভেরিফাইড সাবস্ক্রিপশন, সফটওয়্যার লাইসেন্স ও{" "}
+              <span className="font-semibold text-violet-300">২৪/৭ লাইভ সাপোর্ট</span>।
             </p>
 
-            {/* Contact pills */}
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-              <ContactPill
-                icon={Phone}
-                label="+880 1580-607614"
-                href="tel:+8801580607614"
-                tone="violet"
-              />
-              <ContactPill
-                icon={Mail}
-                label="support@accessnowbd.com"
-                href="mailto:support@accessnowbd.com"
-                tone="aqua"
-              />
-              <ContactPill icon={MapPin} label="Dhaka, Bangladesh" tone="emerald" />
+            {/* Trust strip */}
+            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs">
+              <span className="inline-flex items-center gap-1.5 text-white/70">
+                <Zap className="w-3.5 h-3.5 text-aqua" /> Fast Delivery
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-white/70">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> 100% Verified
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-white/70">
+                <Sparkles className="w-3.5 h-3.5 text-violet-300" /> 24/7 Support
+              </span>
             </div>
 
+            {/* Contact line */}
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+              <a
+                href="tel:+8801580607614"
+                className="group inline-flex items-center gap-2 text-white/75 hover:text-white transition"
+              >
+                <span className="grid place-items-center w-7 h-7 rounded-md bg-white/[0.04] border border-white/10 group-hover:border-aqua/40 group-hover:bg-aqua/10 transition">
+                  <Phone className="w-3.5 h-3.5 text-aqua" />
+                </span>
+                +880 1580-607614
+              </a>
+              <a
+                href="mailto:support@accessnowbd.com"
+                className="group inline-flex items-center gap-2 text-white/75 hover:text-white transition"
+              >
+                <span className="grid place-items-center w-7 h-7 rounded-md bg-white/[0.04] border border-white/10 group-hover:border-violet-400/40 group-hover:bg-violet-500/10 transition">
+                  <Mail className="w-3.5 h-3.5 text-violet-300" />
+                </span>
+                support@accessnowbd.com
+              </a>
+              <span className="inline-flex items-center gap-2 text-white/65">
+                <span className="grid place-items-center w-7 h-7 rounded-md bg-white/[0.04] border border-white/10">
+                  <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+                </span>
+                Dhaka, Bangladesh
+              </span>
+            </div>
+          </div>
+
+          {/* Newsletter / CTA */}
+          <div className="relative rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/40 to-transparent" />
+            <h4
+              className="text-base font-bold text-white"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              নিউজলেটারে যুক্ত হোন
+            </h4>
+            <p className="mt-1.5 text-xs text-white/60">
+              নতুন প্রোডাক্ট, অফার ও ডিসকাউন্ট সরাসরি আপনার ইনবক্সে।
+            </p>
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="mt-4 flex items-center gap-2 rounded-xl border border-white/10 bg-background/40 backdrop-blur-md p-1.5 focus-within:border-aqua/50 transition"
+            >
+              <input
+                type="email"
+                required
+                placeholder="your@email.com"
+                className="flex-1 bg-transparent outline-none text-sm text-white placeholder:text-white/35 px-3 py-2"
+              />
+              <button
+                type="submit"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold text-white bg-gradient-to-r from-primary via-violet-500 to-aqua hover:shadow-[0_10px_28px_-8px_rgba(124,58,237,0.7)] transition"
+              >
+                Subscribe <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </form>
+
             {/* Socials */}
-            <div className="mt-7 flex items-center justify-center gap-3">
+            <div className="mt-5 flex items-center gap-2.5">
               {[
                 { Icon: Facebook, href: "#", label: "Facebook" },
                 { Icon: MessageCircle, href: "https://wa.me/8801580607614", label: "WhatsApp" },
@@ -109,77 +192,68 @@ export function SiteFooter() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="grid place-items-center w-11 h-11 rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white hover:border-aqua/60 hover:bg-aqua/10 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-10px_rgba(0,229,255,0.6)] transition"
+                  className="grid place-items-center w-8 h-8 rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white hover:border-aqua/50 hover:bg-aqua/10 transition"
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-3.5 h-3.5" />
                 </a>
               ))}
             </div>
           </div>
         </div>
 
-        {/* ===== Three Column Cards ===== */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <FooterColumn
-            icon={Package}
-            tone="violet"
-            title="PRODUCTS"
-            links={[
-              { label: "All Products", to: "/products" },
-              { label: "Streaming", to: "/streaming" },
-              { label: "AI Tools", to: "/ai-tools" },
-              { label: "Education", to: "/education" },
-              { label: "My Cart", to: "/cart" },
-              { label: "Checkout", to: "/checkout" },
-            ]}
-          />
-          <FooterColumn
-            icon={Info}
-            tone="aqua"
-            title="INFORMATION"
-            links={[
-              { label: "FAQ", to: "/faq" },
-              { label: "Contact Us", to: "/contact" },
-              { label: "My Account", to: "/profile" },
-              { label: "My Orders", to: "/orders" },
-              { label: "Sign In", to: "/auth" },
-            ]}
-          />
-          <FooterColumn
-            icon={FileText}
-            tone="emerald"
-            title="POLICIES"
-            links={[
-              { label: "Privacy Policy", to: "/faq" },
-              { label: "Terms & Conditions", to: "/faq" },
-              { label: "Refund & Return Policy", to: "/faq" },
-              { label: "Order & Cancellation", to: "/faq" },
-              { label: "Delivery Info", to: "/faq" },
-              { label: "Refund Request", to: "/contact" },
-            ]}
-          />
+        {/* divider */}
+        <div className="my-10 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+        {/* ===== Link columns (clean, no card boxes) ===== */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
+          {COLUMNS.map((col) => (
+            <div key={col.title}>
+              <h5
+                className="text-[11px] font-extrabold tracking-[0.25em] uppercase text-white/90 mb-4 flex items-center gap-2"
+                style={{ fontFamily: "var(--font-heading)" }}
+              >
+                <span className="h-px w-5 bg-gradient-to-r from-aqua to-transparent" />
+                {col.title}
+              </h5>
+              <ul className="space-y-2.5">
+                {col.links.map((l) => (
+                  <li key={l.to + l.label}>
+                    <Link
+                      to={l.to}
+                      className="group inline-flex items-center gap-1.5 text-sm text-white/65 hover:text-white transition"
+                    >
+                      <ChevronRight className="w-3 h-3 text-white/25 group-hover:text-aqua group-hover:translate-x-0.5 transition" />
+                      <span className="group-hover:underline underline-offset-4 decoration-aqua/50">
+                        {l.label}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* ===== Bottom Bar ===== */}
-        <div className="relative pt-6">
+        <div className="relative mt-12 pt-6">
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1.5 text-white/65">
-              <span className="text-white/45">©</span>
-              <span className="text-white/90 font-semibold">2026</span>
-              <span className="text-white/30">·</span>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1.5 text-white/60">
+              <span className="text-white/40">©</span>
+              <span className="text-white/85 font-semibold">2026</span>
+              <span className="text-white/25">·</span>
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua font-extrabold tracking-wide">
                 AccessNow BD
               </span>
-              <span className="text-white/30">·</span>
-              <span className="text-white/55">All Rights Reserved</span>
-              <span className="text-white/30">·</span>
-              <span className="text-white/55">Designed &amp; Developed by</span>
+              <span className="text-white/25">·</span>
+              <span className="text-white/50">All Rights Reserved</span>
+              <span className="text-white/25">·</span>
+              <span className="text-white/50">Designed &amp; Developed by</span>
               <a
                 href="https://shahedit.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-2.5 py-1 rounded-full bg-white/10 border border-white/20 hover:border-primary/60 hover:bg-white/15 hover:shadow-[0_0_18px_-4px_var(--color-primary)] transition"
+                className="px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/15 hover:border-primary/60 hover:bg-white/10 hover:shadow-[0_0_18px_-4px_var(--color-primary)] transition"
               >
                 <span className="text-white font-extrabold tracking-wide">Shahed IT</span>
               </a>
@@ -191,7 +265,7 @@ export function SiteFooter() {
               {["bKash", "Nagad", "Rocket", "Visa", "Mastercard"].map((p) => (
                 <span
                   key={p}
-                  className="px-2.5 py-1 rounded-md border border-white/10 bg-white/5 text-white/85 text-[10px] font-bold tracking-wide hover:border-aqua/40 hover:text-white transition"
+                  className="px-2.5 py-1 rounded-md border border-white/10 bg-white/[0.04] text-white/80 text-[10px] font-bold tracking-wide hover:border-aqua/40 hover:text-white transition"
                 >
                   {p}
                 </span>
@@ -201,101 +275,5 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
-  );
-}
-
-/* ============== Sub-components ============== */
-
-type Tone = "violet" | "aqua" | "emerald";
-
-const TONE_GRADIENT: Record<Tone, string> = {
-  violet: "from-violet-500 to-fuchsia-500 shadow-[0_10px_24px_-8px_rgba(168,85,247,0.6)]",
-  aqua: "from-cyan-400 to-blue-500 shadow-[0_10px_24px_-8px_rgba(0,229,255,0.55)]",
-  emerald: "from-emerald-400 to-teal-500 shadow-[0_10px_24px_-8px_rgba(16,185,129,0.55)]",
-};
-
-const TONE_DOT: Record<Tone, string> = {
-  violet: "bg-violet-400/70",
-  aqua: "bg-aqua/80",
-  emerald: "bg-emerald-400/80",
-};
-
-const TONE_HOVER: Record<Tone, string> = {
-  violet: "group-hover:text-violet-200",
-  aqua: "group-hover:text-aqua",
-  emerald: "group-hover:text-emerald-200",
-};
-
-function ContactPill({
-  icon: Icon,
-  label,
-  href,
-  tone,
-}: {
-  icon: typeof Mail;
-  label: string;
-  href?: string;
-  tone: Tone;
-}) {
-  const inner = (
-    <span className="inline-flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 group">
-      <span
-        className={`grid place-items-center w-8 h-8 rounded-full bg-gradient-to-br ${TONE_GRADIENT[tone]} text-white`}
-      >
-        <Icon className="w-4 h-4" />
-      </span>
-      <span className="text-sm font-semibold text-white/90 group-hover:text-white">
-        {label}
-      </span>
-    </span>
-  );
-  return href ? <a href={href}>{inner}</a> : inner;
-}
-
-function FooterColumn({
-  icon: Icon,
-  tone,
-  title,
-  links,
-}: {
-  icon: typeof Package;
-  tone: Tone;
-  title: string;
-  links: { label: string; to: LinkTo }[];
-}) {
-  return (
-    <div className="group/col relative overflow-hidden rounded-[24px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-[32px] p-6 md:p-7 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08),inset_0_0_0_1px_rgba(255,255,255,0.02)] hover:bg-white/[0.05] hover:border-white/15 hover:-translate-y-1 hover:shadow-[0_30px_70px_-25px_rgba(0,0,0,0.9),inset_0_1px_0_0_rgba(255,255,255,0.12)] transition-all duration-500 before:absolute before:inset-0 before:rounded-[24px] before:bg-[radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.06),transparent_50%)] before:pointer-events-none">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-      <div className="flex items-center gap-3 mb-5">
-        <span
-          className={`grid place-items-center w-11 h-11 rounded-xl bg-gradient-to-br ${TONE_GRADIENT[tone]} text-white`}
-        >
-          <Icon className="w-5 h-5" />
-        </span>
-        <h4
-          className="text-sm font-extrabold tracking-[0.22em] uppercase text-white"
-          style={{ fontFamily: "var(--font-heading)" }}
-        >
-          {title}
-        </h4>
-      </div>
-      <ul className="space-y-3">
-        {links.map((l) => (
-          <li key={l.to + l.label}>
-            <Link
-              to={l.to}
-              className="group inline-flex items-center gap-2.5 text-sm text-white/70 hover:text-white transition"
-            >
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${TONE_DOT[tone]} transition group-hover:scale-125`}
-              />
-              <span className={`transition-transform group-hover:translate-x-0.5 ${TONE_HOVER[tone]}`}>
-                {l.label}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
