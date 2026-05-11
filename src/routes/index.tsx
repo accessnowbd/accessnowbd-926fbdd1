@@ -101,9 +101,6 @@ function Index() {
             <ProductRail key={section.category} title={section.category} items={section.items} />
           ))
         )}
-        <BundleShowcase />
-        <ProcessSection />
-        <FinalCTA />
       </main>
       <SiteFooter />
     </div>
@@ -442,71 +439,6 @@ function ProductRail({ title, items, isLoading }: { title: string; items: Produc
                 <ProductCard product={product} />
               </div>
             ))}
-      </div>
-    </section>
-  );
-}
-
-function BundleShowcase() {
-  return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
-      <div className="glass-strong rounded-[var(--radius-2xl)] p-6 md:p-10">
-        <SectionTitle eyebrow="Smart bundles" title="যাদের একসাথে অনেক সার্ভিস লাগে" subtitle="Creator, student ও entertainment workflow অনুযায়ী সাজানো bundle ideas।" />
-        <div className="mt-7 grid md:grid-cols-3 gap-4">
-          {FEATURE_BUNDLES.map((bundle) => (
-            <div key={bundle.title} className="glass-soft rounded-3xl p-6">
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="text-lg font-extrabold text-foreground">{bundle.title}</h3>
-                <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">{bundle.price}</span>
-              </div>
-              <div className="mt-5 space-y-3">
-                {bundle.items.map((item) => (
-                  <div key={item} className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                    <CheckCircle2 className="h-4 w-4 text-success" /> {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ProcessSection() {
-  return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
-      <SectionTitle eyebrow="Order flow" title="অর্ডার থেকে ডেলিভারি—সবকিছু পরিষ্কার" subtitle="পুরো অভিজ্ঞতাটি দ্রুত কেনাকাটার জন্য নতুনভাবে সাজানো হয়েছে।" />
-      <div className="mt-7 grid md:grid-cols-3 gap-4">
-        {[
-          ["01", "প্রোডাক্ট বেছে নিন", "ক্যাটাগরি বা সার্চ থেকে প্রয়োজনীয় সফটওয়্যার সার্ভিস সিলেক্ট করুন।"],
-          ["02", "পেমেন্ট করুন", "bKash, Nagad, Rocket বা কার্ডের মাধ্যমে অর্ডার কনফার্ম করুন।"],
-          ["03", "অ্যাক্সেস পান", "ইমেইল/WhatsApp-এ ডেলিভারি ও সেটআপ সাপোর্ট পেয়ে যান।"],
-        ].map(([step, title, text]) => (
-          <div key={step} className="glass rounded-3xl p-6">
-            <div className="text-5xl font-black text-aurora opacity-70">{step}</div>
-            <h3 className="mt-4 text-lg font-extrabold text-foreground">{title}</h3>
-            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{text}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function FinalCTA() {
-  return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12 pb-16">
-      <div className="glass-strong rounded-[var(--radius-2xl)] p-8 md:p-12 text-center">
-        <div className="mx-auto grid h-16 w-16 place-items-center rounded-3xl bg-aurora text-primary-foreground shadow-[var(--shadow-glow-violet)]">
-          <Star className="h-7 w-7" />
-        </div>
-        <h2 className="mt-6 text-3xl md:text-5xl font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)" }}>আজই আপনার ডিজিটাল stack upgrade করুন</h2>
-        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">একই জায়গা থেকে entertainment, productivity, education, AI ও security tools কিনুন—নতুন white glass experience-এ।</p>
-        <Link to="/products" className="btn-aurora mt-7 inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-8 text-sm font-bold">
-          Shop now <ArrowRight className="h-4 w-4" />
-        </Link>
       </div>
     </section>
   );
