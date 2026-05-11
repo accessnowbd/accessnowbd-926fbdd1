@@ -194,7 +194,7 @@ export function SiteHeader() {
             <MagneticNav />
 
             {/* Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
