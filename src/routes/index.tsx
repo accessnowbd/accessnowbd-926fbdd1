@@ -109,19 +109,22 @@ function pickTopProducts(products: Product[]) {
 }
 
 const HERO_BRANDS = [
-  { name: "Netflix", slug: "netflix", color: "E50914" },
-  { name: "ChatGPT", slug: "openai", color: "FFFFFF" },
-  { name: "Spotify", slug: "spotify", color: "1DB954" },
-  { name: "Canva", slug: "canva", color: "00C4CC" },
-  { name: "Adobe", slug: "adobe", color: "FF0000" },
-  { name: "Microsoft", slug: "microsoft", color: "FFFFFF" },
-  { name: "Prime Video", slug: "primevideo", color: "00A8E1" },
-  { name: "Grammarly", slug: "grammarly", color: "27AE60" },
-  { name: "NordVPN", slug: "nordvpn", color: "4687FF" },
-  { name: "Coursera", slug: "coursera", color: "0056D2" },
-  { name: "YouTube", slug: "youtube", color: "FF0000" },
-  { name: "Claude", slug: "claude", color: "D97757" },
+  { name: "Netflix", domain: "netflix.com", color: "#E50914" },
+  { name: "ChatGPT", domain: "openai.com", color: "#10A37F" },
+  { name: "Spotify", domain: "spotify.com", color: "#1DB954" },
+  { name: "Canva", domain: "canva.com", color: "#00C4CC" },
+  { name: "Adobe", domain: "adobe.com", color: "#FF0000" },
+  { name: "Microsoft", domain: "microsoft.com", color: "#00A4EF" },
+  { name: "Prime Video", domain: "primevideo.com", color: "#00A8E1" },
+  { name: "Grammarly", domain: "grammarly.com", color: "#27AE60" },
+  { name: "NordVPN", domain: "nordvpn.com", color: "#4687FF" },
+  { name: "Coursera", domain: "coursera.org", color: "#0056D2" },
+  { name: "YouTube", domain: "youtube.com", color: "#FF0000" },
+  { name: "Claude", domain: "claude.ai", color: "#D97757" },
 ];
+
+const brandLogo = (domain: string) =>
+  `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 
 function HeroExperience() {
   return (
