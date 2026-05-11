@@ -278,8 +278,7 @@ function HeroExperience() {
               {HERO_BRANDS.slice(0, 6).map((b, i) => (
                 <div
                   key={b.name}
-                  className="group relative glass-soft rounded-xl aspect-[5/4] flex flex-col items-center justify-center gap-1.5 p-2 hover:-translate-y-1 hover:shadow-[var(--shadow-glow-aqua)] transition animate-float overflow-hidden"
-                  style={{ animationDelay: `${i * 0.6}s`, animationDuration: "7s" }}
+                  className="group relative glass-soft rounded-xl aspect-[5/4] flex flex-col items-center justify-center gap-1.5 p-2 border border-white/10 hover:border-aqua/40 hover:shadow-[var(--shadow-glow-aqua)] transition-[border-color,box-shadow,background-color] duration-300 overflow-hidden"
                 >
                   <span
                     className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition"
