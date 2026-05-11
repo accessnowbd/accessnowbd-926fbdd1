@@ -149,23 +149,8 @@ export function SiteHeader() {
               </span>
             </Link>
 
-            {/* Nav — pill glass */}
-            <nav className="hidden lg:flex items-center gap-1 px-2 h-12 rounded-full glass-soft border border-white/10 text-sm font-semibold backdrop-blur-2xl">
-              {NAV.map((n) => (
-                <Link
-                  key={n.to}
-                  to={n.to}
-                  className="relative px-4 py-2 rounded-full text-white/75 hover:text-white transition-colors"
-                  activeProps={{
-                    className:
-                      "text-white bg-gradient-to-r from-primary/30 via-violet-500/20 to-aqua/25 shadow-[0_0_0_1px_rgba(255,255,255,0.12)_inset,0_8px_24px_-10px_rgba(0,229,255,0.55)]",
-                  }}
-                  activeOptions={{ exact: n.to === "/" }}
-                >
-                  {n.label}
-                </Link>
-              ))}
-            </nav>
+            {/* Nav — pill glass with magnetic sliding indicator */}
+            <MagneticNav />
 
             {/* Actions */}
             <div className="flex items-center gap-2">
