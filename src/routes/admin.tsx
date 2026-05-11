@@ -9,17 +9,39 @@ export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — AccessNow BD" }, { name: "robots", content: "noindex,nofollow" }] }),
 });
 
+const ADMIN_CACHE_KEY = "anbd:isAdmin";
+
+function readAdminCache(userId: string | undefined): boolean | null {
+  if (!userId || typeof sessionStorage === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(ADMIN_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { uid: string; isAdmin: boolean };
+    return parsed.uid === userId ? parsed.isAdmin : null;
+  } catch { return null; }
+}
+
+function writeAdminCache(userId: string, isAdmin: boolean) {
+  try { sessionStorage.setItem(ADMIN_CACHE_KEY, JSON.stringify({ uid: userId, isAdmin })); } catch {}
+}
+
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const cached = readAdminCache(user?.id);
+  const [checking, setChecking] = useState(cached === null);
+  const [isAdmin, setIsAdmin] = useState(cached ?? false);
 
   useEffect(() => {
     if (loading) return;
     if (!user) {
       navigate({ to: "/auth" });
       return;
+    }
+    const cachedNow = readAdminCache(user.id);
+    if (cachedNow !== null) {
+      setIsAdmin(cachedNow);
+      setChecking(false);
     }
     let cancelled = false;
     (async () => {
@@ -30,7 +52,9 @@ function AdminLayout() {
         .eq("role", "admin")
         .maybeSingle();
       if (cancelled) return;
-      setIsAdmin(!!data && !error);
+      const ok = !!data && !error;
+      writeAdminCache(user.id, ok);
+      setIsAdmin(ok);
       setChecking(false);
     })();
     return () => { cancelled = true; };
