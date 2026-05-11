@@ -154,12 +154,11 @@ function HeroExperience() {
             </div>
 
             <h1
-              className="mt-6 max-w-3xl text-foreground"
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 4.6vw, 64px)", lineHeight: 1.02, fontWeight: 900, letterSpacing: "-0.02em" }}
+              className="mt-6 max-w-3xl text-white"
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 4.6vw, 64px)", lineHeight: 1.05, fontWeight: 900, letterSpacing: "-0.02em", textShadow: "0 2px 24px rgba(0,0,0,0.45)" }}
             >
-              <span className="text-aurora animate-aurora-pan inline-block">Premium Software</span>
-              <br />
-              এক ক্লিকেই, আপনার হাতে।
+              <span className="block text-white drop-shadow-[0_4px_18px_rgba(0,229,255,0.55)]">Premium Software</span>
+              <span className="block mt-1 text-aqua" style={{ textShadow: "0 0 22px rgba(0,229,255,0.5)" }}>এক ক্লিকেই, আপনার হাতে।</span>
             </h1>
 
             {/* Premium visual chip row — floating brand pills */}
@@ -167,10 +166,13 @@ function HeroExperience() {
               {HERO_BRANDS.slice(0, 6).map((b, i) => (
                 <div
                   key={b.name}
-                  className="group flex items-center gap-2 rounded-full glass-soft pl-1.5 pr-3.5 py-1.5 text-xs font-bold text-foreground hover:shadow-[var(--shadow-glow-aqua)] hover:-translate-y-0.5 transition animate-float"
+                  className="group flex items-center gap-2 rounded-full glass-soft pl-1 pr-3.5 py-1 text-xs font-bold text-white hover:shadow-[var(--shadow-glow-aqua)] hover:-translate-y-0.5 transition animate-float"
                   style={{ animationDelay: `${i * 0.5}s`, animationDuration: "8s" }}
                 >
-                  <span className="grid h-7 w-7 place-items-center rounded-full bg-white/95 shadow-[0_4px_12px_rgba(0,0,0,0.25)]">
+                  <span
+                    className="grid h-7 w-7 place-items-center rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.35)] ring-1 ring-white/40"
+                    style={{ background: `#${b.color === "FFFFFF" ? "111827" : "ffffff"}` }}
+                  >
                     <img
                       src={`https://cdn.simpleicons.org/${b.slug}/${b.color}`}
                       alt={b.name}
@@ -227,7 +229,7 @@ function HeroExperience() {
                     <span className="grid h-8 w-8 place-items-center rounded-xl bg-aurora text-white shadow-[var(--shadow-glow-aqua)]">
                       <I className="h-4 w-4" />
                     </span>
-                    <div className="text-xl md:text-2xl font-extrabold text-aurora">{value as string}</div>
+                    <div className="text-xl md:text-2xl font-extrabold text-white drop-shadow-[0_2px_10px_rgba(0,229,255,0.5)]">{value as string}</div>
                   </div>
                   <div className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{label as string}</div>
                 </div>
