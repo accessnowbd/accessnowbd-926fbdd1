@@ -217,11 +217,19 @@ function HeroExperience() {
                   style={{ animationDelay: `${i * 0.6}s`, animationDuration: "7s" }}
                 >
                   <img
-                    src={`https://logo.clearbit.com/${b.domain}`}
+                    src={`https://cdn.simpleicons.org/${b.slug}/${b.color}`}
                     alt={b.name}
                     loading="lazy"
-                    className="max-h-10 max-w-[80%] object-contain opacity-95 group-hover:scale-110 transition drop-shadow-[0_4px_12px_rgba(0,229,255,0.35)]"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                    className="max-h-10 max-w-[70%] object-contain opacity-95 group-hover:scale-110 transition drop-shadow-[0_4px_12px_rgba(0,229,255,0.4)]"
+                    onError={(e) => {
+                      const el = e.currentTarget as HTMLImageElement;
+                      if (!el.dataset.fallback) {
+                        el.dataset.fallback = "1";
+                        el.src = `https://cdn.simpleicons.org/${b.slug}/FFFFFF`;
+                      } else {
+                        el.style.display = "none";
+                      }
+                    }}
                   />
                 </div>
               ))}
