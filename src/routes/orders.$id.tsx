@@ -208,10 +208,12 @@ function OrderDetailPage() {
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               <button
-                onClick={() => downloadReceiptPdf(order)}
-                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full glass-soft text-sm font-semibold hover:bg-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                onClick={handleDownload}
+                disabled={downloading}
+                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full glass-soft text-sm font-semibold hover:bg-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <Download className="w-3.5 h-3.5" /> Receipt
+                {downloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                {downloading ? "Generating…" : "Receipt"}
               </button>
               <span className={`text-[11px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full border ${statusStyles[order.status] || "bg-secondary text-foreground border-border"}`}>
                 {order.status}
