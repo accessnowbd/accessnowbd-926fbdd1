@@ -297,6 +297,8 @@ function HeroExperience() {
                     src={brandLogo(b)}
                     alt={b.name}
                     loading="lazy"
+                    width={28}
+                    height={28}
                     className="relative h-7 w-7 object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]"
                   />
                   <span className="relative text-[10px] font-bold text-white/85 truncate max-w-full">{b.name}</span>
