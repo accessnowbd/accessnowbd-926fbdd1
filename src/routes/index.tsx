@@ -66,7 +66,7 @@ function Index() {
       <ProductGrid title="⭐ Top Picks for You" subtitle="বাংলাদেশে সবচেয়ে জনপ্রিয় সাবস্ক্রিপশন" items={top} cap={8} viewAllTo="/products" />
 
       {sectioned.map((s) => (
-        <ProductRail key={s.category} title={s.title} subtitle={s.subtitle} items={s.items} category={s.category} />
+        <ProductRail key={s.category} title={s.title} subtitle={s.subtitle} items={s.items} viewAllTo="/products" />
       ))}
 
       <TrustStrip />
