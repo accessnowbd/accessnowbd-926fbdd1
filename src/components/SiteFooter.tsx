@@ -4,249 +4,15 @@ import {
   Facebook,
   Instagram,
   Youtube,
-  Twitter,
   MessageCircle,
+  Send,
   Mail,
   MapPin,
   Phone,
-  ShieldCheck,
-  Sparkles,
-  Zap,
-  ArrowRight,
-  Heart,
-  Clock,
+  Package,
+  Info,
+  FileText,
 } from "lucide-react";
-
-export function SiteFooter() {
-  return (
-    <footer className="relative mt-24">
-      {/* Aurora ambient glow */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-32 left-[15%] w-[560px] h-[560px] rounded-full bg-primary/25 blur-[150px] animate-blob" />
-        <div className="absolute top-20 right-[10%] w-[480px] h-[480px] rounded-full bg-aqua/20 blur-[140px] animate-blob" style={{ animationDelay: "4s" }} />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] rounded-full bg-violet-500/20 blur-[140px]" />
-      </div>
-
-      {/* CTA — floating glass card */}
-      <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 -translate-y-12">
-        <div className="relative gradient-border-card overflow-hidden p-7 md:p-9">
-          <div className="absolute -top-20 -right-10 w-72 h-72 rounded-full bg-aqua/30 blur-[80px] pointer-events-none" />
-          <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-violet-500/30 blur-[80px] pointer-events-none" />
-
-          <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="flex items-start md:items-center gap-4">
-              <span className="grid place-items-center w-14 h-14 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-white shadow-[0_14px_36px_-10px_rgba(0,229,255,0.6)] shrink-0">
-                <Sparkles className="w-6 h-6" />
-              </span>
-              <div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-[0.18em] uppercase text-aqua mb-2">
-                  <Zap className="w-3 h-3" /> Newsletter
-                </div>
-                <div className="text-lg md:text-xl font-bold text-white" style={{ fontFamily: "var(--font-heading)" }}>
-                  Get exclusive deals & early access
-                </div>
-                <div className="text-xs md:text-sm text-white/65 mt-1 max-w-md">
-                  Weekly drops on premium subscriptions, AI tools & more — no spam, ever.
-                </div>
-              </div>
-            </div>
-            <form
-              className="flex items-center gap-2 w-full md:w-auto"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <div className="relative flex-1 md:w-80">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
-                <input
-                  type="email"
-                  required
-                  placeholder="your@email.com"
-                  className="w-full h-12 rounded-full pl-11 pr-4 text-sm bg-white/5 border border-white/15 text-white placeholder:text-white/45 outline-none focus:border-aqua/60 focus:bg-white/10 transition"
-                />
-              </div>
-              <button
-                type="submit"
-                className="h-12 px-6 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-white text-sm font-bold inline-flex items-center gap-1.5 hover:scale-[1.04] transition shadow-[0_14px_30px_-10px_rgba(124,58,237,0.7)]"
-              >
-                Subscribe <ArrowRight className="w-4 h-4" />
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      {/* Main body */}
-      <div className="relative">
-        {/* top hairline */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/50 to-transparent" />
-
-        <div className="relative glass border-y border-white/10 backdrop-blur-2xl">
-          <div className="mx-auto max-w-[1440px] px-4 md:px-10 pt-14 pb-10 grid grid-cols-2 md:grid-cols-12 gap-10">
-            {/* Brand */}
-            <div className="col-span-2 md:col-span-5">
-              <Link to="/" className="inline-flex items-center gap-3 group">
-                <span className="relative grid place-items-center w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-white shadow-[0_12px_30px_-8px_rgba(0,229,255,0.55)]">
-                  <Crown className="w-5 h-5" />
-                  <span className="absolute -inset-0.5 rounded-2xl bg-conic opacity-50 blur-md -z-10 animate-aurora-pan" />
-                </span>
-                <span className="leading-tight">
-                  <span className="block text-[10px] font-semibold tracking-[0.22em] uppercase text-white/55">
-                    Premium Access
-                  </span>
-                  <span
-                    className="block text-xl font-bold text-white"
-                    style={{ fontFamily: "var(--font-heading)" }}
-                  >
-                    AccessNow <span className="text-aurora">BD</span>
-                  </span>
-                </span>
-              </Link>
-
-              <p className="text-sm text-white/70 mt-5 max-w-md leading-relaxed">
-                Bangladesh's premium digital marketplace for subscriptions, software licenses,
-                AI tools, education and entertainment access — delivered instantly with verified support.
-              </p>
-
-              {/* Trust badges */}
-              <div className="mt-5 flex flex-wrap gap-2">
-                {[
-                  { icon: ShieldCheck, label: "Verified Seller", color: "text-emerald-300" },
-                  { icon: Zap, label: "Instant Delivery", color: "text-aqua" },
-                  { icon: Clock, label: "24/7 Support", color: "text-violet-300" },
-                ].map(({ icon: Icon, label, color }) => (
-                  <span
-                    key={label}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full glass-soft border border-white/10 text-xs font-semibold text-white/85"
-                  >
-                    <Icon className={`w-3.5 h-3.5 ${color}`} /> {label}
-                  </span>
-                ))}
-              </div>
-
-              {/* Socials + WhatsApp */}
-              <div className="mt-6 flex items-center gap-3 flex-wrap">
-                <div className="flex gap-2">
-                  {[Facebook, Instagram, Youtube, Twitter].map((Icon, i) => (
-                    <a
-                      key={i}
-                      href="#"
-                      aria-label="social"
-                      className="grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white/75 hover:text-white hover:border-aqua/60 hover:bg-aqua/10 hover:-translate-y-0.5 transition"
-                    >
-                      <Icon className="w-4 h-4" />
-                    </a>
-                  ))}
-                </div>
-                <a
-                  href="https://wa.me/8801580607614"
-                  className="inline-flex items-center gap-2 px-4 h-10 rounded-full bg-emerald-500/90 hover:bg-emerald-500 text-white text-sm font-semibold transition shadow-[0_12px_30px_-10px_rgba(16,185,129,0.7)] hover:-translate-y-0.5"
-                >
-                  <MessageCircle className="w-4 h-4" /> WhatsApp Us
-                </a>
-              </div>
-            </div>
-
-            {/* Links */}
-            <FooterCol
-              className="md:col-span-2"
-              title="Shop"
-              links={[
-                { label: "All Products", to: "/products" },
-                { label: "Streaming", to: "/streaming" },
-                { label: "AI Tools", to: "/ai-tools" },
-                { label: "Education", to: "/education" },
-              ]}
-            />
-            <FooterCol
-              className="md:col-span-2"
-              title="Help"
-              links={[
-                { label: "FAQ", to: "/faq" },
-                { label: "Contact", to: "/contact" },
-                { label: "My Orders", to: "/orders" },
-                { label: "Profile", to: "/profile" },
-              ]}
-            />
-
-            {/* Contact */}
-            <div className="col-span-2 md:col-span-3">
-              <h4
-                className="text-sm font-bold text-white mb-4 tracking-[0.16em] uppercase"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                <span className="text-aurora">Get</span> in touch
-              </h4>
-              <ul className="space-y-3 text-sm text-white/75">
-                <ContactRow
-                  icon={Mail}
-                  label="support@accessnowbd.com"
-                  href="mailto:support@accessnowbd.com"
-                />
-                <ContactRow icon={Phone} label="+880 1580-607614" href="tel:+8801580607614" />
-                <ContactRow icon={MapPin} label="Dhaka, Bangladesh" />
-              </ul>
-
-              <div className="mt-5 p-3.5 rounded-2xl glass-soft border border-white/10">
-                <div className="text-[10px] font-bold tracking-[0.18em] uppercase text-aqua mb-1">
-                  Support Hours
-                </div>
-                <div className="text-sm font-semibold text-white">
-                  Daily · 11:00 AM – 11:00 PM
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom bar — premium */}
-          <div className="relative mt-2">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-            <div className="absolute inset-x-0 top-0 h-px blur-sm bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-            <div className="mx-auto max-w-[1440px] px-4 md:px-10 py-6 flex flex-col md:flex-row items-center justify-between gap-5 text-xs">
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1.5 text-white/70">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="text-white/50">©</span>
-                  <span className="text-white/90 font-semibold tracking-wide">2026</span>
-                </span>
-                <span className="text-white/30">·</span>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-primary-glow to-[var(--color-aqua)] font-extrabold tracking-wide">
-                  AccessNow BD
-                </span>
-                <span className="text-white/30">·</span>
-                <span className="text-white/60">All Rights Reserved</span>
-                <span className="text-white/30">·</span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="text-white/60">Designed &amp; Developed by</span>
-                  <a
-                    href="https://shahedit.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/25 hover:bg-white/15 hover:border-primary/60 transition-all duration-300 hover:shadow-[0_0_20px_-4px_var(--color-primary)]"
-                  >
-                    <span className="text-white font-extrabold tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
-                      Shahed IT
-                    </span>
-                  </a>
-                </span>
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                <span className="text-[10px] uppercase tracking-[0.22em] text-white/45 mr-1">
-                  We accept
-                </span>
-                {["bKash", "Nagad", "Rocket", "Visa", "Mastercard"].map((p) => (
-                  <span
-                    key={p}
-                    className="px-2.5 py-1 rounded-md glass-soft border border-white/10 text-white/90 text-[10px] font-bold tracking-wide hover:border-primary/40 hover:text-white transition-colors"
-                  >
-                    {p}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
 
 type LinkTo =
   | "/"
@@ -262,32 +28,268 @@ type LinkTo =
   | "/cart"
   | "/checkout";
 
-function FooterCol({
+export function SiteFooter() {
+  return (
+    <footer className="relative mt-24 pb-10">
+      {/* Aurora ambient glow — matches header */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-10 left-[10%] w-[520px] h-[520px] rounded-full bg-primary/20 blur-[140px]" />
+        <div className="absolute top-32 right-[8%] w-[460px] h-[460px] rounded-full bg-aqua/15 blur-[140px]" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[760px] h-[280px] rounded-full bg-violet-500/20 blur-[140px]" />
+      </div>
+
+      <div className="relative mx-auto max-w-[1280px] px-4 md:px-8 space-y-8">
+        {/* ===== Brand Hero Card ===== */}
+        <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-background/40 backdrop-blur-2xl px-6 py-10 md:px-12 md:py-12 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7)]">
+          {/* corner glows */}
+          <div className="pointer-events-none absolute -top-24 -left-16 w-72 h-72 rounded-full bg-primary/25 blur-[100px]" />
+          <div className="pointer-events-none absolute -bottom-24 -right-16 w-72 h-72 rounded-full bg-aqua/20 blur-[100px]" />
+          {/* hairlines */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/50 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+
+          <div className="relative flex flex-col items-center text-center">
+            {/* Logo + Brand */}
+            <Link to="/" className="inline-flex items-center gap-4 group">
+              <span className="relative grid place-items-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-white shadow-[0_14px_36px_-10px_rgba(0,229,255,0.6)]">
+                <Crown className="w-7 h-7" />
+                <span className="absolute -inset-0.5 rounded-2xl bg-conic opacity-40 blur-md -z-10 animate-aurora-pan" />
+              </span>
+              <span className="leading-tight text-left">
+                <span
+                  className="block text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-primary via-violet-400 to-aqua bg-clip-text text-transparent"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  AccessNow BD
+                </span>
+                <span className="mt-1 flex items-center gap-2 text-[10px] font-bold tracking-[0.3em] uppercase text-white/55">
+                  <span className="h-px w-6 bg-white/30" />
+                  ACCESSNOWBD.COM
+                  <span className="h-px w-6 bg-white/30" />
+                </span>
+              </span>
+            </Link>
+
+            {/* Description */}
+            <p className="mt-6 max-w-2xl text-sm md:text-[15px] leading-relaxed text-white/75">
+              বাংলাদেশের সবচেয়ে{" "}
+              <span className="font-bold text-aqua">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span> —
+              ভেরিফাইড সাবস্ক্রিপশন, সফটওয়্যার লাইসেন্স, AI টুলস ও{" "}
+              <span className="font-bold text-violet-300">২৪/৭ লাইভ সাপোর্টে</span> আপনার
+              ডিজিটাল প্রয়োজন এক ক্লিকেই পূরণ।
+            </p>
+
+            {/* Contact pills */}
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+              <ContactPill
+                icon={Phone}
+                label="+880 1580-607614"
+                href="tel:+8801580607614"
+                tone="violet"
+              />
+              <ContactPill
+                icon={Mail}
+                label="support@accessnowbd.com"
+                href="mailto:support@accessnowbd.com"
+                tone="aqua"
+              />
+              <ContactPill icon={MapPin} label="Dhaka, Bangladesh" tone="emerald" />
+            </div>
+
+            {/* Socials */}
+            <div className="mt-7 flex items-center justify-center gap-3">
+              {[
+                { Icon: Facebook, href: "#", label: "Facebook" },
+                { Icon: MessageCircle, href: "https://wa.me/8801580607614", label: "WhatsApp" },
+                { Icon: Instagram, href: "#", label: "Instagram" },
+                { Icon: Youtube, href: "#", label: "YouTube" },
+                { Icon: Send, href: "#", label: "Telegram" },
+              ].map(({ Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="grid place-items-center w-11 h-11 rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white hover:border-aqua/60 hover:bg-aqua/10 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-10px_rgba(0,229,255,0.6)] transition"
+                >
+                  <Icon className="w-4 h-4" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ===== Three Column Cards ===== */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <FooterColumn
+            icon={Package}
+            tone="violet"
+            title="PRODUCTS"
+            links={[
+              { label: "All Products", to: "/products" },
+              { label: "Streaming", to: "/streaming" },
+              { label: "AI Tools", to: "/ai-tools" },
+              { label: "Education", to: "/education" },
+              { label: "My Cart", to: "/cart" },
+              { label: "Checkout", to: "/checkout" },
+            ]}
+          />
+          <FooterColumn
+            icon={Info}
+            tone="aqua"
+            title="INFORMATION"
+            links={[
+              { label: "FAQ", to: "/faq" },
+              { label: "Contact Us", to: "/contact" },
+              { label: "My Account", to: "/profile" },
+              { label: "My Orders", to: "/orders" },
+              { label: "Sign In", to: "/auth" },
+            ]}
+          />
+          <FooterColumn
+            icon={FileText}
+            tone="emerald"
+            title="POLICIES"
+            links={[
+              { label: "Privacy Policy", to: "/faq" },
+              { label: "Terms & Conditions", to: "/faq" },
+              { label: "Refund & Return Policy", to: "/faq" },
+              { label: "Order & Cancellation", to: "/faq" },
+              { label: "Delivery Info", to: "/faq" },
+              { label: "Refund Request", to: "/contact" },
+            ]}
+          />
+        </div>
+
+        {/* ===== Bottom Bar ===== */}
+        <div className="relative pt-6">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1.5 text-white/65">
+              <span className="text-white/45">©</span>
+              <span className="text-white/90 font-semibold">2026</span>
+              <span className="text-white/30">·</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua font-extrabold tracking-wide">
+                AccessNow BD
+              </span>
+              <span className="text-white/30">·</span>
+              <span className="text-white/55">All Rights Reserved</span>
+              <span className="text-white/30">·</span>
+              <span className="text-white/55">Designed &amp; Developed by</span>
+              <a
+                href="https://shahedit.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded-full bg-white/10 border border-white/20 hover:border-primary/60 hover:bg-white/15 hover:shadow-[0_0_18px_-4px_var(--color-primary)] transition"
+              >
+                <span className="text-white font-extrabold tracking-wide">Shahed IT</span>
+              </a>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <span className="text-[10px] uppercase tracking-[0.22em] text-white/40 mr-1">
+                We accept
+              </span>
+              {["bKash", "Nagad", "Rocket", "Visa", "Mastercard"].map((p) => (
+                <span
+                  key={p}
+                  className="px-2.5 py-1 rounded-md border border-white/10 bg-white/5 text-white/85 text-[10px] font-bold tracking-wide hover:border-aqua/40 hover:text-white transition"
+                >
+                  {p}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ============== Sub-components ============== */
+
+type Tone = "violet" | "aqua" | "emerald";
+
+const TONE_GRADIENT: Record<Tone, string> = {
+  violet: "from-violet-500 to-fuchsia-500 shadow-[0_10px_24px_-8px_rgba(168,85,247,0.6)]",
+  aqua: "from-cyan-400 to-blue-500 shadow-[0_10px_24px_-8px_rgba(0,229,255,0.55)]",
+  emerald: "from-emerald-400 to-teal-500 shadow-[0_10px_24px_-8px_rgba(16,185,129,0.55)]",
+};
+
+const TONE_DOT: Record<Tone, string> = {
+  violet: "bg-violet-400/70",
+  aqua: "bg-aqua/80",
+  emerald: "bg-emerald-400/80",
+};
+
+const TONE_HOVER: Record<Tone, string> = {
+  violet: "group-hover:text-violet-200",
+  aqua: "group-hover:text-aqua",
+  emerald: "group-hover:text-emerald-200",
+};
+
+function ContactPill({
+  icon: Icon,
+  label,
+  href,
+  tone,
+}: {
+  icon: typeof Mail;
+  label: string;
+  href?: string;
+  tone: Tone;
+}) {
+  const inner = (
+    <span className="inline-flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition group">
+      <span
+        className={`grid place-items-center w-8 h-8 rounded-full bg-gradient-to-br ${TONE_GRADIENT[tone]} text-white`}
+      >
+        <Icon className="w-4 h-4" />
+      </span>
+      <span className="text-sm font-semibold text-white/90 group-hover:text-white">
+        {label}
+      </span>
+    </span>
+  );
+  return href ? <a href={href}>{inner}</a> : inner;
+}
+
+function FooterColumn({
+  icon: Icon,
+  tone,
   title,
   links,
-  className = "",
 }: {
+  icon: typeof Package;
+  tone: Tone;
   title: string;
   links: { label: string; to: LinkTo }[];
-  className?: string;
 }) {
   return (
-    <div className={className}>
-      <h4
-        className="text-sm font-bold text-white mb-4 tracking-[0.16em] uppercase"
-        style={{ fontFamily: "var(--font-heading)" }}
-      >
-        {title}
-      </h4>
-      <ul className="space-y-2.5 text-sm">
+    <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-background/40 backdrop-blur-2xl p-6 md:p-7 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.7)] hover:border-white/20 transition">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+      <div className="flex items-center gap-3 mb-5">
+        <span
+          className={`grid place-items-center w-11 h-11 rounded-xl bg-gradient-to-br ${TONE_GRADIENT[tone]} text-white`}
+        >
+          <Icon className="w-5 h-5" />
+        </span>
+        <h4
+          className="text-sm font-extrabold tracking-[0.22em] uppercase text-white"
+          style={{ fontFamily: "var(--font-heading)" }}
+        >
+          {title}
+        </h4>
+      </div>
+      <ul className="space-y-3">
         {links.map((l) => (
           <li key={l.to + l.label}>
             <Link
               to={l.to}
-              className="group inline-flex items-center gap-2 text-white/70 hover:text-white transition"
+              className="group inline-flex items-center gap-2.5 text-sm text-white/70 hover:text-white transition"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-aqua/0 group-hover:bg-aqua transition shadow-[0_0_8px_rgba(0,229,255,0.6)]" />
-              <span className="group-hover:translate-x-0.5 transition-transform">
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${TONE_DOT[tone]} transition group-hover:scale-125`}
+              />
+              <span className={`transition-transform group-hover:translate-x-0.5 ${TONE_HOVER[tone]}`}>
                 {l.label}
               </span>
             </Link>
@@ -296,24 +298,4 @@ function FooterCol({
       </ul>
     </div>
   );
-}
-
-function ContactRow({
-  icon: Icon,
-  label,
-  href,
-}: {
-  icon: typeof Mail;
-  label: string;
-  href?: string;
-}) {
-  const content = (
-    <span className="inline-flex items-center gap-2.5 hover:text-white transition group">
-      <span className="grid place-items-center w-9 h-9 rounded-xl glass-soft border border-white/10 text-aqua group-hover:border-aqua/50 group-hover:bg-aqua/10 transition">
-        <Icon className="w-4 h-4" />
-      </span>
-      <span className="font-medium">{label}</span>
-    </span>
-  );
-  return <li>{href ? <a href={href}>{content}</a> : content}</li>;
 }
