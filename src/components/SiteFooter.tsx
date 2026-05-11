@@ -235,7 +235,7 @@ export function SiteFooter() {
       {/* top hairline */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/60 to-transparent" />
 
-      <FooterUtilityBar />
+      
 
 
       {/* ===== Body ===== */}
