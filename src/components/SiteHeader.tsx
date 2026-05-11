@@ -452,7 +452,7 @@ function MagneticNav() {
       ref={navRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="hidden lg:flex relative items-center gap-1 px-2 h-12 rounded-full glass-soft border border-white/10 text-sm font-semibold backdrop-blur-2xl"
+      className="hidden lg:flex relative items-center gap-0.5 xl:gap-1 px-1.5 xl:px-2 h-12 rounded-full glass-soft border border-white/10 text-[13px] xl:text-sm font-semibold backdrop-blur-2xl shrink min-w-0"
     >
       {/* Magnetic sliding pill */}
       <span
@@ -471,7 +471,7 @@ function MagneticNav() {
           ref={(el) => {
             itemRefs.current[i] = el;
           }}
-          className="relative z-10 px-4 py-2 rounded-full text-white/75 hover:text-white transition-colors"
+          className="relative z-10 px-2.5 xl:px-4 py-2 rounded-full text-white/75 hover:text-white transition-colors whitespace-nowrap"
         >
           {n.label}
         </Link>
