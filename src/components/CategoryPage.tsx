@@ -48,7 +48,7 @@ export function CategoryPage({
         <div className="pointer-events-none absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-primary/35 blur-[140px]" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 w-[420px] h-[420px] rounded-full bg-[var(--color-aqua)]/35 blur-[140px]" />
         <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 py-12 md:py-16">
-          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, letterSpacing: "-0.02em" }}>
+          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, letterSpacing: 0 }}>
             {title}
           </h1>
           <p className="mt-3 text-muted-foreground max-w-2xl">{subtitle}</p>
