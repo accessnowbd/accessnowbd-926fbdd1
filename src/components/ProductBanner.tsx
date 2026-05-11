@@ -77,6 +77,13 @@ function guessLogoUrl(name: string): string {
 /** Multiple logo CDN sources for reliable fallback */
 function logoSources(name: string): string[] {
   const domain = guessLogoUrl(name);
+  if (domain === "openai.com") {
+    return [
+      "/images/chatgpt-logo.webp",
+      `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
+      `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+    ];
+  }
   return [
     `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
     `https://icons.duckduckgo.com/ip3/${domain}.ico`,
