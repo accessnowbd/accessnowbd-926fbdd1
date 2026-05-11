@@ -279,7 +279,7 @@ function CheckoutPage() {
                       <p className="text-sm font-semibold">How to pay with {selectedMethod.name}</p>
                       <ol className="text-xs text-foreground/80 mt-2 space-y-1.5 list-decimal pl-4">
                         <li>Open your {selectedMethod.name} app and tap <b>Send Money</b>.</li>
-                        <li>Send <b>৳{total.toLocaleString()}</b> to our number below.</li>
+                        <li>Send <b>৳{grandTotal.toLocaleString()}</b> to our number below.</li>
                         <li>Copy the <b>Transaction ID (TrxID)</b> from your confirmation message.</li>
                         <li>Paste it in the form below and continue.</li>
                       </ol>
