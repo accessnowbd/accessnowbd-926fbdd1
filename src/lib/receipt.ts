@@ -15,7 +15,17 @@ export type ReceiptOrder = {
     planPeriod: string;
     qty: number;
     price?: number;
+    /** Original (pre-discount) unit price; used to render per-item discount. */
+    originalPrice?: number;
   }>;
+  /** Optional explicit shipping cost in BDT. Defaults to 0 (FREE). */
+  shipping?: number;
+  /** Optional explicit tax amount in BDT. Defaults to 0. */
+  tax?: number;
+  /** Optional coupon discount in BDT (applied on top of item-level discounts). */
+  couponDiscount?: number;
+  /** Optional coupon code label. */
+  couponCode?: string;
 };
 
 export function downloadReceiptPdf(order: ReceiptOrder) {
