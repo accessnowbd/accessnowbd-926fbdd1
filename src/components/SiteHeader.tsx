@@ -138,35 +138,33 @@ export function SiteHeader() {
               className="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              {/* Brand logo — transparent emblem on dark aurora pill */}
-              <span className="relative shrink-0">
+              {/* Brand logo — pure transparent emblem with aurora halo */}
+              <span className="relative shrink-0 grid place-items-center">
+                {/* Soft aurora halo behind logo */}
                 <span
-                  className="absolute -inset-1.5 rounded-[18px] opacity-70 blur-md -z-10"
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 -m-2 rounded-full opacity-70 blur-xl -z-10"
                   style={{
                     background:
-                      "conic-gradient(from 0deg, rgba(56,128,255,0.85), rgba(34,197,160,0.85), rgba(245,158,11,0.55), rgba(56,128,255,0.85))",
-                    animation: "aurora-pan 6s linear infinite",
+                      "radial-gradient(50% 50% at 50% 50%, rgba(56,128,255,0.55) 0%, rgba(31,199,150,0.35) 45%, rgba(245,158,11,0.0) 75%)",
                   }}
                 />
+                {/* Slow rotating conic accent ring */}
                 <span
-                  className="relative grid place-items-center w-11 h-11 md:w-12 md:h-12 rounded-2xl ring-1 ring-white/15 shadow-[0_12px_32px_-8px_rgba(56,128,255,0.55)] overflow-hidden group-hover:scale-105 group-hover:rotate-[-4deg] transition-transform duration-500"
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 -m-1.5 rounded-full opacity-40 blur-[6px] -z-10"
                   style={{
                     background:
-                      "radial-gradient(120% 120% at 30% 20%, rgba(56,128,255,0.28) 0%, rgba(13,10,31,0.95) 55%, rgba(13,10,31,1) 100%)",
+                      "conic-gradient(from 0deg, rgba(56,128,255,0.7), rgba(31,199,150,0.7), rgba(245,158,11,0.5), rgba(56,128,255,0.7))",
+                    animation: "aurora-pan 8s linear infinite",
                   }}
-                >
-                  {/* Inner top shine */}
-                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/15 blur-[3px]" />
-                  <img
-                    src={accessNowLogo}
-                    alt="AccessNow BD"
-                    className="relative w-9 h-9 md:w-10 md:h-10 object-contain drop-shadow-[0_2px_8px_rgba(0,229,255,0.45)]"
-                    draggable={false}
-                  />
-                </span>
-                <span className="absolute -bottom-0.5 -right-0.5 grid place-items-center h-3.5 w-3.5 rounded-full bg-emerald-400 ring-2 ring-[#0d0a1f] shadow-[0_0_10px_rgba(16,185,129,0.7)]">
-                  <ShieldCheck className="w-2 h-2 text-emerald-900" strokeWidth={3} />
-                </span>
+                />
+                <img
+                  src={accessNowLogo}
+                  alt="AccessNow BD"
+                  draggable={false}
+                  className="relative w-12 h-12 md:w-14 md:h-14 object-contain drop-shadow-[0_4px_14px_rgba(56,128,255,0.55)] group-hover:scale-105 group-hover:-rotate-[4deg] transition-transform duration-500"
+                />
               </span>
 
               {/* Wordmark — matches the official logo (Access · Now · BD + tagline) */}
