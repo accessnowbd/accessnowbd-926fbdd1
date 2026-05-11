@@ -5,6 +5,8 @@ import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
+import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
+import { OrderSummary } from "@/components/ui-glass/OrderSummary";
 
 export const Route = createFileRoute("/cart")({
   component: CartPage,
@@ -17,16 +19,10 @@ function CartPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="bg-aurora text-primary-foreground relative overflow-hidden">
-        <div className="absolute inset-0 bg-mesh opacity-40 pointer-events-none" />
-        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 font-semibold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
-            <span className="grid place-items-center w-9 h-9 rounded-full glass-strong text-primary font-bold">A</span>
-            AccessNow BD
-          </Link>
-          <div className="flex items-center gap-2"><AccountIcon /><CartIcon /></div>
-        </div>
-      </header>
+      <AuroraHeader>
+        <AccountIcon />
+        <CartIcon />
+      </AuroraHeader>
 
       <div className="mx-auto max-w-[1100px] px-4 md:px-10 py-8">
         <Link to="/" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
@@ -82,22 +78,17 @@ function CartPage() {
               })}
             </div>
 
-            <GlassCard className="h-fit lg:sticky lg:top-6">
-              <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 18, fontWeight: 600 }}>Order Summary</h3>
-              <div className="mt-4 space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>৳{total.toLocaleString()}</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Delivery</span><span className="text-aqua-deep font-semibold">FREE</span></div>
-              </div>
-              <div className="border-t border-[var(--glass-border-soft)] my-4" />
-              <div className="flex justify-between items-baseline">
-                <span className="text-sm font-semibold">Total</span>
-                <span className="text-2xl font-semibold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>৳{total.toLocaleString()}</span>
-              </div>
-              <GlassButton onClick={() => navigate({ to: "/checkout" })} fullWidth size="lg" className="mt-5">
-                Proceed to Checkout
-              </GlassButton>
-              <p className="text-[11px] text-muted-foreground text-center mt-3">Secure payment with bKash & Nagad</p>
-            </GlassCard>
+            <OrderSummary
+              items={items}
+              total={total}
+              variant="totals"
+              footer="Secure payment with bKash & Nagad"
+              action={
+                <GlassButton onClick={() => navigate({ to: "/checkout" })} fullWidth size="lg" className="mt-5">
+                  Proceed to Checkout
+                </GlassButton>
+              }
+            />
           </div>
         )}
       </div>
