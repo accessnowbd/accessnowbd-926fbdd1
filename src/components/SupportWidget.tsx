@@ -208,18 +208,47 @@ export function SupportWidget() {
             aria-label="Open support"
             className="relative group"
           >
-            <span className="absolute -inset-3 rounded-full bg-gradient-to-br from-violet-500 via-primary to-aqua opacity-50 blur-2xl animate-pulse-glow" />
-            <span className="relative grid place-items-center h-16 w-16 rounded-full bg-gradient-to-br from-violet-500 via-primary to-aqua text-white shadow-[0_18px_45px_-10px_rgba(124,58,237,0.7)] group-hover:scale-110 transition-transform duration-300 ring-2 ring-white/20">
-              <Headphones className="h-7 w-7 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]" />
-              <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-400 ring-2 ring-[#0d0a1f]">
-                <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
-              </span>
-            </span>
-            {/* Unread dot */}
-            <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 grid place-items-center rounded-full bg-rose-500 text-white text-[10px] font-extrabold ring-2 ring-[#0d0a1f] shadow-lg">
-              1
+            {/* Soft ambient glow */}
+            <span className="absolute -inset-4 rounded-full bg-gradient-to-br from-violet-500/40 via-primary/40 to-aqua/40 opacity-60 blur-2xl group-hover:opacity-90 transition-opacity duration-500" />
+
+            {/* Rotating conic ring */}
+            <span
+              className="absolute -inset-[3px] rounded-full opacity-90"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, rgba(124,58,237,0.95), rgba(0,229,255,0.95), rgba(168,85,247,0.95), rgba(0,229,255,0.95), rgba(124,58,237,0.95))",
+                animation: "aurora-pan 6s linear infinite",
+                filter: "blur(2px)",
+              }}
+            />
+
+            {/* Main orb */}
+            <span className="relative grid place-items-center h-16 w-16 rounded-full bg-gradient-to-br from-[#1a1240] via-[#2a1a5e] to-[#0d1b3d] text-white shadow-[0_22px_50px_-12px_rgba(124,58,237,0.65)] ring-1 ring-white/20 group-hover:scale-[1.06] transition-transform duration-300 overflow-hidden">
+              {/* Inner shine */}
+              <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/20 blur-[3px]" />
+              {/* Bottom glow */}
+              <span className="absolute -bottom-4 inset-x-3 h-6 rounded-full bg-aqua/40 blur-xl" />
+
+              {/* Gradient-stroked sparkles icon */}
+              <Sparkles
+                className="h-7 w-7 relative drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]"
+                strokeWidth={2.2}
+                style={{
+                  stroke: "url(#supportIconGrad)",
+                }}
+              />
+              <svg width="0" height="0" className="absolute">
+                <defs>
+                  <linearGradient id="supportIconGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="55%" stopColor="#bdf6ff" />
+                    <stop offset="100%" stopColor="#a78bfa" />
+                  </linearGradient>
+                </defs>
+              </svg>
             </span>
           </button>
+
         </div>
       )}
 
