@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import accessNowLogo from "@/assets/accessnow-bd-logo.png";
+import accessNowLogo from "@/assets/accessnow-bd-mark.png";
 import {
   Crown,
   Facebook,
