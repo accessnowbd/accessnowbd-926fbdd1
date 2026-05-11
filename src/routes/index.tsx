@@ -166,10 +166,13 @@ function HeroExperience() {
               {HERO_BRANDS.slice(0, 6).map((b, i) => (
                 <div
                   key={b.name}
-                  className="group flex items-center gap-2 rounded-full glass-soft pl-1.5 pr-3.5 py-1.5 text-xs font-bold text-foreground hover:shadow-[var(--shadow-glow-aqua)] hover:-translate-y-0.5 transition animate-float"
+                  className="group flex items-center gap-2 rounded-full glass-soft pl-1 pr-3.5 py-1 text-xs font-bold text-white hover:shadow-[var(--shadow-glow-aqua)] hover:-translate-y-0.5 transition animate-float"
                   style={{ animationDelay: `${i * 0.5}s`, animationDuration: "8s" }}
                 >
-                  <span className="grid h-7 w-7 place-items-center rounded-full bg-white/95 shadow-[0_4px_12px_rgba(0,0,0,0.25)]">
+                  <span
+                    className="grid h-7 w-7 place-items-center rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.35)] ring-1 ring-white/40"
+                    style={{ background: `#${b.color === "FFFFFF" ? "111827" : "ffffff"}` }}
+                  >
                     <img
                       src={`https://cdn.simpleicons.org/${b.slug}/${b.color}`}
                       alt={b.name}
