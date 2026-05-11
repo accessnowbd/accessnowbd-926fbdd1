@@ -121,31 +121,102 @@ export function downloadReceiptPdf(order: ReceiptOrder) {
   doc.line(margin, y, pageW - margin, y);
   y += 14;
 
-  // Items rows
+  // Items rows — show original price strikethrough when discounted
   doc.setFont("helvetica", "normal");
   doc.setTextColor(40, 40, 50);
+  let itemsSubtotal = 0;
+  let itemDiscountTotal = 0;
   order.items.forEach((it) => {
-    const lineTotal = (it.price ?? 0) * it.qty;
+    const unit = it.price ?? 0;
+    const original = it.originalPrice ?? unit;
+    const lineTotal = unit * it.qty;
+    const lineOriginal = original * it.qty;
+    itemsSubtotal += lineOriginal;
+    itemDiscountTotal += Math.max(0, lineOriginal - lineTotal);
+
     doc.text(String(it.name ?? it.slug).slice(0, 40), margin, y);
     doc.text(String(it.planPeriod), margin + 240, y);
     doc.text(String(it.qty), pageW - margin - 110, y, { align: "right" });
-    doc.text(`BDT ${lineTotal.toLocaleString()}`, pageW - margin, y, {
-      align: "right",
-    });
+    if (original > unit) {
+      // Strikethrough original
+      doc.setTextColor(150, 150, 160);
+      const origStr = `BDT ${lineOriginal.toLocaleString()}`;
+      doc.text(origStr, pageW - margin - 70, y, { align: "right" });
+      const w = doc.getTextWidth(origStr);
+      doc.setDrawColor(150, 150, 160);
+      doc.line(pageW - margin - 70 - w, y - 3, pageW - margin - 70, y - 3);
+      // Discounted
+      doc.setTextColor(40, 40, 50);
+      doc.text(`BDT ${lineTotal.toLocaleString()}`, pageW - margin, y, { align: "right" });
+    } else {
+      doc.text(`BDT ${lineTotal.toLocaleString()}`, pageW - margin, y, { align: "right" });
+    }
     y += 18;
   });
 
   y += 6;
   doc.line(margin, y, pageW - margin, y);
-  y += 24;
+  y += 18;
+
+  // Totals breakdown — right-aligned mini table
+  const shipping = order.shipping ?? 0;
+  const tax = order.tax ?? 0;
+  const couponDiscount = order.couponDiscount ?? 0;
+  const expectedTotal = Math.max(
+    0,
+    itemsSubtotal - itemDiscountTotal - couponDiscount + shipping + tax,
+  );
+  // If caller's total disagrees with the breakdown, treat the difference as
+  // an additional adjustment so the figures always reconcile.
+  const adjustment = Number(order.total) - expectedTotal;
+
+  const labelX = pageW - margin - 180;
+  const valueX = pageW - margin;
+  const drawRow = (label: string, value: string, opts?: { muted?: boolean; accent?: boolean }) => {
+    if (opts?.muted) doc.setTextColor(110, 110, 120);
+    else if (opts?.accent) doc.setTextColor(13, 148, 136);
+    else doc.setTextColor(40, 40, 50);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text(label, labelX, y);
+    doc.text(value, valueX, y, { align: "right" });
+    y += 16;
+  };
+
+  drawRow("Subtotal", `BDT ${itemsSubtotal.toLocaleString()}`, { muted: true });
+  if (itemDiscountTotal > 0) {
+    drawRow("Item discounts", `− BDT ${itemDiscountTotal.toLocaleString()}`, { accent: true });
+  }
+  if (couponDiscount > 0) {
+    const label = order.couponCode ? `Coupon (${order.couponCode})` : "Coupon discount";
+    drawRow(label, `− BDT ${couponDiscount.toLocaleString()}`, { accent: true });
+  }
+  drawRow("Shipping", shipping > 0 ? `BDT ${shipping.toLocaleString()}` : "FREE", {
+    accent: shipping === 0,
+    muted: shipping > 0,
+  });
+  drawRow("Tax", tax > 0 ? `BDT ${tax.toLocaleString()}` : "BDT 0", { muted: true });
+  if (Math.abs(adjustment) >= 1) {
+    drawRow(
+      adjustment > 0 ? "Adjustment" : "Additional discount",
+      `${adjustment > 0 ? "" : "− "}BDT ${Math.abs(Math.round(adjustment)).toLocaleString()}`,
+      { muted: true },
+    );
+  }
+
+  y += 6;
+  doc.setDrawColor(220, 220, 230);
+  doc.line(labelX, y, pageW - margin, y);
+  y += 20;
 
   // Total
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
-  doc.text("Total Paid", pageW - margin - 160, y);
+  doc.setTextColor(20, 20, 30);
+  doc.text("Total Paid", labelX, y);
   doc.setFontSize(16);
   doc.setTextColor(99, 102, 241);
-  doc.text(`BDT ${Number(order.total).toLocaleString()}`, pageW - margin, y, {
+  doc.text(`BDT ${Number(order.total).toLocaleString()}`, valueX, y, {
     align: "right",
   });
 
