@@ -131,8 +131,7 @@
     line-height: 1.55;
     background-color: #050b18;
     background-image: var(--gradient-mesh);
-    background-attachment: fixed;
-    background-size: 220% 220%;
+    background-size: 100% 100%;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     position: relative;
@@ -140,15 +139,14 @@
   body::before {
     content: "";
     position: fixed;
-    inset: -10%;
+    inset: 0;
     pointer-events: none;
     z-index: 0;
     background:
-      radial-gradient(60% 50% at 15% 20%, rgba(37, 99, 235, 0.35), transparent 70%),
-      radial-gradient(50% 45% at 85% 15%, rgba(0, 229, 255, 0.22), transparent 70%),
-      radial-gradient(55% 50% at 70% 90%, rgba(124, 58, 237, 0.32), transparent 70%);
-    filter: blur(80px) saturate(140%);
-    opacity: 0.9;
+      radial-gradient(60% 50% at 15% 20%, rgba(37, 99, 235, 0.28), transparent 70%),
+      radial-gradient(50% 45% at 85% 15%, rgba(0, 229, 255, 0.18), transparent 70%),
+      radial-gradient(55% 50% at 70% 90%, rgba(124, 58, 237, 0.26), transparent 70%);
+    opacity: 0.95;
   }
   body::after {
     content: "";
@@ -163,24 +161,20 @@
 }
 
 @layer utilities {
+  /* NOTE: backdrop-filter removed for performance. Glass effect is achieved
+     with translucent backgrounds + subtle borders + shadows instead. */
   .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    background: rgba(20, 28, 50, 0.55);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass);
   }
   .glass-strong {
-    background: var(--glass-bg-strong);
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    background: rgba(24, 34, 60, 0.7);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass-lg);
   }
   .glass-soft {
-    background: var(--glass-bg-soft);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    background: rgba(18, 26, 46, 0.45);
     border: 1px solid var(--glass-border-soft);
     box-shadow: var(--shadow-glass-sm);
   }
