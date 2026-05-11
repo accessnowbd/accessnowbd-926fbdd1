@@ -295,8 +295,16 @@ function HeroExperience() {
               ))}
             </div>
 
-            {/* Marquee strip */}
-            <div className="relative mt-4 overflow-hidden rounded-xl glass-soft py-2">
+            {/* Marquee strip with fade edges */}
+            <div
+              className="relative mt-4 overflow-hidden rounded-xl glass-soft py-2"
+              style={{
+                maskImage:
+                  "linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%)",
+              }}
+            >
               <div className="flex gap-8 whitespace-nowrap animate-marquee">
                 {[...HERO_BRANDS, ...HERO_BRANDS].map((b, i) => (
                   <span key={i} className="inline-flex items-center gap-1.5 text-xs font-bold text-white/85">
