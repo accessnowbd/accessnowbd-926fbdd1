@@ -139,23 +139,68 @@ function HeroExperience() {
           <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-conic opacity-30 blur-2xl" style={{ animation: "spinSlow 30s linear infinite" }} />
 
           <div className="relative">
-            <div className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-2 text-xs font-bold text-aurora-strong neon-border">
-              <Sparkles className="h-4 w-4 text-aqua" /> #১ Premium Digital Marketplace · Bangladesh
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-2 text-xs font-bold text-aurora-strong neon-border">
+                <Sparkles className="h-4 w-4 text-aqua" /> #১ Premium Marketplace · BD
+              </div>
+              <div className="inline-flex items-center gap-1.5 rounded-full glass-soft px-3 py-2 text-xs font-bold text-foreground">
+                <span className="flex">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-3.5 w-3.5 fill-[var(--gold)] text-[var(--gold)]" />
+                  ))}
+                </span>
+                <span>৪.৯ · ১২K+ রিভিউ</span>
+              </div>
             </div>
 
             <h1
-              className="mt-7 max-w-4xl text-foreground"
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(40px, 6.6vw, 92px)", lineHeight: 0.95, fontWeight: 900, letterSpacing: "-0.02em" }}
+              className="mt-6 max-w-3xl text-foreground"
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 4.6vw, 64px)", lineHeight: 1.02, fontWeight: 900, letterSpacing: "-0.02em" }}
             >
-              এক জায়গায়{" "}
-              <span className="text-aurora animate-aurora-pan inline-block">সব Premium</span>{" "}
-              Software ও Subscription।
+              <span className="text-aurora animate-aurora-pan inline-block">Premium Software</span>
+              <br />
+              এক ক্লিকেই, আপনার হাতে।
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base md:text-lg text-muted-foreground leading-relaxed">
-              Netflix, ChatGPT, Canva, Adobe, Microsoft 365, VPN ও আরও ৩৬+ verified service —
-              <span className="text-foreground font-semibold"> ১০ মিনিটে delivery</span>, lifetime support এবং সেরা দামে।
-            </p>
+            {/* Premium visual chip row — floating brand pills */}
+            <div className="mt-7 flex flex-wrap items-center gap-2.5">
+              {HERO_BRANDS.slice(0, 6).map((b, i) => (
+                <div
+                  key={b.name}
+                  className="group flex items-center gap-2 rounded-full glass-soft pl-1.5 pr-3.5 py-1.5 text-xs font-bold text-foreground hover:shadow-[var(--shadow-glow-aqua)] hover:-translate-y-0.5 transition animate-float"
+                  style={{ animationDelay: `${i * 0.5}s`, animationDuration: "8s" }}
+                >
+                  <span className="grid h-7 w-7 place-items-center rounded-full bg-white/95 shadow-[0_4px_12px_rgba(0,0,0,0.25)]">
+                    <img
+                      src={`https://cdn.simpleicons.org/${b.slug}/${b.color}`}
+                      alt={b.name}
+                      loading="lazy"
+                      className="h-4 w-4 object-contain"
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                    />
+                  </span>
+                  {b.name}
+                </div>
+              ))}
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-aurora text-white pl-3 pr-3.5 py-2 text-xs font-extrabold shadow-[var(--shadow-glow-violet)]">
+                +৩০ আরও
+              </div>
+            </div>
+
+            {/* Trust ribbon */}
+            <div className="mt-6 inline-flex items-center gap-3 rounded-2xl glass-soft px-4 py-3 text-xs font-semibold text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5 text-foreground">
+                <ShieldCheck className="h-4 w-4 text-aqua" /> 100% Verified
+              </span>
+              <span className="h-3 w-px bg-border" />
+              <span className="inline-flex items-center gap-1.5 text-foreground">
+                <CheckCircle2 className="h-4 w-4 text-success" /> Warranty
+              </span>
+              <span className="h-3 w-px bg-border" />
+              <span className="inline-flex items-center gap-1.5 text-foreground">
+                <Zap className="h-4 w-4 text-[var(--gold)]" /> Instant
+              </span>
+            </div>
           </div>
 
           <div className="relative mt-8 flex flex-col sm:flex-row gap-3">
@@ -165,15 +210,15 @@ function HeroExperience() {
               <span className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-white/30 blur-md animate-shine" />
             </Link>
             <Link to="/contact" className="glass inline-flex h-[56px] items-center justify-center gap-2 rounded-full px-8 text-sm font-extrabold text-foreground hover:shadow-[var(--shadow-glow-aqua)] transition">
-              <Headphones className="h-4 w-4 text-aqua" /> কাস্টম অর্ডার দিন
+              <Headphones className="h-4 w-4 text-aqua" /> কাস্টম অর্ডার
             </Link>
           </div>
 
-          <div className="relative mt-10 grid grid-cols-3 gap-3">
+          <div className="relative mt-8 grid grid-cols-3 gap-3">
             {[
-              ["৩৬+", "Verified Products", Sparkles],
-              ["১০ মিনিট", "Average Delivery", Clock3],
-              ["২৪/৭", "Live Support", Headphones],
+              ["৩৬+", "Products", Sparkles],
+              ["১০মিনিট", "Delivery", Clock3],
+              ["২৪/৭", "Support", Headphones],
             ].map(([value, label, Icon]) => {
               const I = Icon as typeof Sparkles;
               return (
