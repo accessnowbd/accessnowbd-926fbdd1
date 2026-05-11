@@ -397,7 +397,13 @@ function CheckoutPage() {
             )}
           </div>
 
-          <OrderSummary items={items} total={total} variant="lineitems" />
+          <OrderSummary
+            items={items}
+            total={total}
+            discount={applied.discount}
+            couponCode={applied.valid ? applied.code : undefined}
+            variant="lineitems"
+          />
         </div>
       </div>
     </div>
