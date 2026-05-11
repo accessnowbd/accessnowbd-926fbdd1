@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useParams, Navigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Construction, ArrowLeft, Plus, Trash2, Pencil, Loader2, X, Check, Save, GripVertical } from "lucide-react";
+import { Construction, ArrowLeft, Plus, Trash2, Pencil, Loader2, X, Check, Save, GripVertical, Upload } from "lucide-react";
 import { findAdminPage, ADMIN_MENU } from "@/lib/admin-menu";
 import { getFeatureConfig, type AdminField } from "@/lib/admin-fields";
 import { supabase } from "@/integrations/supabase/client";
@@ -425,12 +425,7 @@ function FieldInput({ field, value, onChange }: { field: AdminField; value: unkn
         </div>
       );
     case "image":
-      return (
-        <div>{label}
-          <input type="url" value={String(v)} onChange={(e) => onChange(e.target.value)} placeholder="https://…" className={base} />
-          {v && <img src={String(v)} alt="" className="mt-2 h-20 rounded-lg border border-slate-200 object-cover" />}
-        </div>
-      );
+      return <ImageField field={field} value={v} label={label} base={base} onChange={onChange} />;
     default:
       return (
         <div>{label}
@@ -438,4 +433,40 @@ function FieldInput({ field, value, onChange }: { field: AdminField; value: unkn
         </div>
       );
   }
+}
+
+function ImageField({
+  field, value, label, base, onChange,
+}: {
+  field: AdminField; value: unknown; label: React.ReactNode; base: string; onChange: (v: unknown) => void;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const onPick = async (file: File | null) => {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) return toast.error("Max 5MB");
+    setUploading(true);
+    const ext = file.name.split(".").pop() || "png";
+    const path = `${field.name}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const { error } = await supabase.storage.from("admin-uploads").upload(path, file, {
+      cacheControl: "3600", upsert: false, contentType: file.type,
+    });
+    if (error) { setUploading(false); return toast.error(error.message); }
+    const { data } = supabase.storage.from("admin-uploads").getPublicUrl(path);
+    onChange(data.publicUrl);
+    setUploading(false);
+    toast.success("Uploaded");
+  };
+  return (
+    <div>{label}
+      <div className="flex gap-2">
+        <input type="url" value={String(value ?? "")} onChange={(e) => onChange(e.target.value)} placeholder="https://… or upload" className={base} />
+        <label className={`shrink-0 inline-flex items-center gap-1.5 h-10 px-3 rounded-lg border border-slate-200 text-sm font-semibold text-slate-700 cursor-pointer hover:bg-slate-50 ${uploading ? "opacity-60 pointer-events-none" : ""}`}>
+          {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+          Upload
+          <input type="file" accept="image/*" className="hidden" onChange={(e) => onPick(e.target.files?.[0] ?? null)} />
+        </label>
+      </div>
+      {!!value && <img src={String(value)} alt="" className="mt-2 h-20 rounded-lg border border-slate-200 object-cover" />}
+    </div>
+  );
 }
