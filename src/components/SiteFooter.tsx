@@ -216,7 +216,7 @@ export function SiteFooter() {
             </Link>
 
             <p className="mt-3 text-[10.5px] tracking-[0.32em] text-white/45 font-bold">
-              ACCESSNOWBD.COM
+              {"\n"}
             </p>
 
             <p className="mt-6 max-w-2xl text-[14px] leading-relaxed text-white/75">
