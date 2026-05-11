@@ -238,10 +238,10 @@ export function SupportWidget() {
               {/* Bottom glow */}
               <span className="absolute -bottom-4 inset-x-3 h-6 rounded-full bg-aqua/40 blur-xl" />
 
-              {/* Gradient-stroked sparkles icon */}
-              <Sparkles
-                className="h-7 w-7 relative drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]"
-                strokeWidth={2.2}
+              {/* Gradient-stroked help icon */}
+              <HelpCircle
+                className="h-8 w-8 relative drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]"
+                strokeWidth={2.4}
                 style={{
                   stroke: "url(#supportIconGrad)",
                 }}
