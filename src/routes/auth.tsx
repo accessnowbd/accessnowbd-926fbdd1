@@ -230,6 +230,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                     onClick={() => {
                       setMode(m);
                       setErr(null);
+                      navigate({ to: m === "login" ? "/login" : "/register" });
                     }}
                     className={`relative z-10 h-9 rounded-full text-[12.5px] font-extrabold transition ${
                       mode === m ? "text-white" : "text-white/55 hover:text-white/80"
