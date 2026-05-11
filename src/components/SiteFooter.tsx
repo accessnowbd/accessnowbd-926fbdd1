@@ -38,8 +38,8 @@ const COLUMNS: {
   {
     title: "Products",
     Icon: Package,
-    iconBg: "from-fuchsia-500 to-violet-600",
-    bullet: "bg-fuchsia-400",
+    iconBg: "from-primary to-aqua",
+    bullet: "bg-aqua",
     links: [
       { label: "All Products", to: "/products" },
       { label: "Streaming", to: "/streaming" },
@@ -52,8 +52,8 @@ const COLUMNS: {
   {
     title: "Information",
     Icon: Info,
-    iconBg: "from-sky-400 to-blue-600",
-    bullet: "bg-sky-400",
+    iconBg: "from-primary to-aqua",
+    bullet: "bg-aqua",
     links: [
       { label: "FAQ", to: "/faq" },
       { label: "Contact Us", to: "/contact" },
@@ -65,8 +65,8 @@ const COLUMNS: {
   {
     title: "Policies",
     Icon: FileText,
-    iconBg: "from-emerald-400 to-teal-600",
-    bullet: "bg-emerald-400",
+    iconBg: "from-primary to-aqua",
+    bullet: "bg-aqua",
     links: [
       { label: "Privacy Policy", to: "/faq" },
       { label: "Terms & Conditions", to: "/faq" },
@@ -135,9 +135,9 @@ export function SiteFooter() {
 
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
               {[
-                { Icon: PhoneCall, label: "+880 1580-607614", href: "tel:+8801580607614", iconBg: "from-fuchsia-500 to-violet-600" },
-                { Icon: Mail, label: "support@accessnowbd.com", href: "mailto:support@accessnowbd.com", iconBg: "from-sky-400 to-blue-600" },
-                { Icon: MapPin, label: "Dhaka, Bangladesh", href: "#", iconBg: "from-emerald-400 to-teal-600" },
+                { Icon: PhoneCall, label: "+880 1580-607614", href: "tel:+8801580607614", iconBg: "from-primary to-aqua" },
+                { Icon: Mail, label: "support@accessnowbd.com", href: "mailto:support@accessnowbd.com", iconBg: "from-primary to-aqua" },
+                { Icon: MapPin, label: "Dhaka, Bangladesh", href: "#", iconBg: "from-primary to-aqua" },
               ].map(({ Icon, label, href, iconBg }) => (
                 <a
                   key={label}
