@@ -225,9 +225,7 @@
 
   .gradient-border-soft {
     position: relative;
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    background: rgba(20, 28, 50, 0.5);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-glass-sm);
   }
