@@ -276,7 +276,6 @@ function CategoryShowcase() {
           <Link
             key={c.key}
             to={c.to}
-            search={c.to === "/products" ? { category: c.key } : undefined}
             className="group relative rounded-3xl p-[1.5px] bg-gradient-to-br from-white/40 via-white/10 to-white/30 hover:from-white/60 hover:via-white/20 hover:to-white/50 transition-all hover:scale-[1.02] hover:-translate-y-0.5"
           >
             <div className="relative rounded-3xl overflow-hidden h-full bg-white/60 backdrop-blur-xl border border-white/40">
