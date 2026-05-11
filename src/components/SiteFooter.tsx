@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import {
-  Crown,
+  
   Facebook,
   Instagram,
   Youtube,
