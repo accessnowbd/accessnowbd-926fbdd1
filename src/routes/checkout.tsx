@@ -94,7 +94,10 @@ function CheckoutPage() {
       setTouched((t) => ({ ...t, senderNumber: true, trxId: true }));
       navigate({ to: "/checkout", search: { step: 2, coupon }, replace: true });
     }
-  }, [step, step1Valid, step2Valid, submitted, navigate]);
+  }, [step, step1Valid, step2Valid, submitted, navigate, coupon]);
+
+  const applied = useMemo(() => applyCoupon(coupon, total), [coupon, total]);
+  const grandTotal = Math.max(0, total - applied.discount);
 
   const copyNumber = async () => {
     await navigator.clipboard.writeText(selectedMethod.number.replace(/-/g, ""));
