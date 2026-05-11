@@ -314,6 +314,7 @@ export function SiteHeader() {
           </div>
         )}
       </header>
+      <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
     </>
   );
 }
