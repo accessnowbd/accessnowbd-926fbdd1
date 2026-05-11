@@ -236,20 +236,18 @@ export function SiteHeader() {
                     BD
                   </span>
                 </span>
-                <span className="hidden sm:flex items-center gap-1.5 mt-1">
-                  <span className="h-px w-3 bg-gradient-to-r from-transparent to-[#2f6dff]/70" />
-                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.28em] font-bold text-white/65">
+                <span className="hidden sm:flex w-full items-center justify-between mt-1">
+                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.22em] font-bold text-white/70">
                     Fast
                   </span>
                   <span className="w-1 h-1 rounded-full bg-[#2f6dff] shadow-[0_0_6px_rgba(47,109,255,0.8)]" />
-                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.28em] font-bold text-white/65">
+                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.22em] font-bold text-white/70">
                     Secure
                   </span>
                   <span className="w-1 h-1 rounded-full bg-[#1fc796] shadow-[0_0_6px_rgba(31,199,150,0.8)]" />
-                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.28em] font-bold text-white/65">
+                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.22em] font-bold text-white/70">
                     Reliable
                   </span>
-                  <span className="h-px w-3 bg-gradient-to-l from-transparent to-[#f59e0b]/70" />
                 </span>
               </span>
             </Link>
