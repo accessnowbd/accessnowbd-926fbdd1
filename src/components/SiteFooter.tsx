@@ -9,10 +9,13 @@ import {
   Mail,
   MapPin,
   Phone,
-  ChevronRight,
+  ArrowUpRight,
   Zap,
   ShieldCheck,
   Sparkles,
+  Clock,
+  Terminal,
+  ArrowUp,
 } from "lucide-react";
 
 type LinkTo =
@@ -29,9 +32,10 @@ type LinkTo =
   | "/cart"
   | "/checkout";
 
-const COLUMNS: { title: string; links: { label: string; to: LinkTo }[] }[] = [
+const COLUMNS: { num: string; title: string; links: { label: string; to: LinkTo }[] }[] = [
   {
-    title: "Products",
+    num: "01",
+    title: "Explore",
     links: [
       { label: "All Products", to: "/products" },
       { label: "Streaming", to: "/streaming" },
@@ -41,7 +45,8 @@ const COLUMNS: { title: string; links: { label: string; to: LinkTo }[] }[] = [
     ],
   },
   {
-    title: "Information",
+    num: "02",
+    title: "Account",
     links: [
       { label: "FAQ", to: "/faq" },
       { label: "Contact Us", to: "/contact" },
@@ -51,7 +56,8 @@ const COLUMNS: { title: string; links: { label: string; to: LinkTo }[] }[] = [
     ],
   },
   {
-    title: "Policies",
+    num: "03",
+    title: "Legal",
     links: [
       { label: "Privacy Policy", to: "/faq" },
       { label: "Terms & Conditions", to: "/faq" },
@@ -62,26 +68,52 @@ const COLUMNS: { title: string; links: { label: string; to: LinkTo }[] }[] = [
   },
 ];
 
+const TICKER = [
+  { icon: Zap, label: "INSTANT DELIVERY" },
+  { icon: ShieldCheck, label: "100% VERIFIED" },
+  { icon: Sparkles, label: "24/7 LIVE SUPPORT" },
+  { icon: Crown, label: "5000+ HAPPY CUSTOMERS" },
+  { icon: Clock, label: "~2 MIN RESPONSE" },
+];
+
+const SOCIALS = [
+  { Icon: Facebook, href: "#", label: "Facebook" },
+  { Icon: MessageCircle, href: "https://wa.me/8801580607614", label: "WhatsApp" },
+  { Icon: Instagram, href: "#", label: "Instagram" },
+  { Icon: Youtube, href: "#", label: "YouTube" },
+  { Icon: Send, href: "#", label: "Telegram" },
+];
+
 export function SiteFooter() {
   return (
-    <footer className="relative mt-24">
-      {/* Aurora ambient glow — matches header */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <footer className="relative mt-24 overflow-hidden">
+      {/* Aurora ambient glow */}
+      <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-10 left-[8%] w-[520px] h-[520px] rounded-full bg-primary/20 blur-[140px]" />
         <div className="absolute top-32 right-[6%] w-[460px] h-[460px] rounded-full bg-aqua/15 blur-[140px]" />
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[820px] h-[280px] rounded-full bg-violet-500/15 blur-[140px]" />
       </div>
 
-      {/* Top hairline like header */}
-      <div className="relative">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      {/* ===== 1. Marquee ticker strip ===== */}
+      <div className="relative border-y border-white/10 bg-gradient-to-r from-primary/10 via-violet-500/10 to-aqua/10 backdrop-blur-md overflow-hidden">
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#070922] to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#070922] to-transparent z-10 pointer-events-none" />
+        <div className="flex gap-12 py-3 animate-marquee whitespace-nowrap">
+          {[...TICKER, ...TICKER, ...TICKER].map(({ icon: Icon, label }, i) => (
+            <span key={i} className="inline-flex items-center gap-2.5 text-[11px] font-extrabold tracking-[0.25em] text-white/80">
+              <Icon className="w-3.5 h-3.5 text-aqua" />
+              {label}
+              <span className="ml-12 w-1.5 h-1.5 rounded-full bg-white/30" />
+            </span>
+          ))}
+        </div>
       </div>
 
-      <div className="relative mx-auto max-w-[1280px] px-4 md:px-8 pt-16 pb-8">
-        {/* ===== Top: Brand + Newsletter row ===== */}
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] items-start">
-          {/* Brand block */}
-          <div>
+      <div className="relative mx-auto max-w-[1280px] px-4 md:px-8 pt-16 pb-6">
+        {/* ===== 2. Main grid: brand statement (left) + numbered columns (right) ===== */}
+        <div className="grid gap-12 lg:grid-cols-[1.15fr_1.4fr]">
+          {/* === LEFT: Brand block === */}
+          <div className="space-y-7">
             <Link to="/" className="inline-flex items-center gap-3 group">
               <span className="relative grid place-items-center w-12 h-12 rounded-xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-white shadow-[0_14px_36px_-10px_rgba(0,229,255,0.6)]">
                 <Crown className="w-6 h-6" />
@@ -100,173 +132,98 @@ export function SiteFooter() {
               </span>
             </Link>
 
-            <p className="mt-5 max-w-md text-sm leading-relaxed text-white/65">
-              বাংলাদেশের সবচেয়ে{" "}
-              <span className="font-semibold text-aqua">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span> —
-              ভেরিফাইড সাবস্ক্রিপশন, সফটওয়্যার লাইসেন্স ও{" "}
-              <span className="font-semibold text-violet-300">২৪/৭ লাইভ সাপোর্ট</span>।
-            </p>
-
-            {/* Trust strip */}
-            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs">
-              <span className="inline-flex items-center gap-1.5 text-white/70">
-                <Zap className="w-3.5 h-3.5 text-aqua" /> Fast Delivery
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-white/70">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> 100% Verified
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-white/70">
-                <Sparkles className="w-3.5 h-3.5 text-violet-300" /> 24/7 Support
-              </span>
-            </div>
-
-            {/* Contact line */}
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
-              <a
-                href="tel:+8801580607614"
-                className="group inline-flex items-center gap-2 text-white/75 hover:text-white transition"
-              >
-                <span className="grid place-items-center w-7 h-7 rounded-md bg-white/[0.04] border border-white/10 group-hover:border-aqua/40 group-hover:bg-aqua/10 transition">
-                  <Phone className="w-3.5 h-3.5 text-aqua" />
-                </span>
-                +880 1580-607614
-              </a>
-              <a
-                href="mailto:support@accessnowbd.com"
-                className="group inline-flex items-center gap-2 text-white/75 hover:text-white transition"
-              >
-                <span className="grid place-items-center w-7 h-7 rounded-md bg-white/[0.04] border border-white/10 group-hover:border-violet-400/40 group-hover:bg-violet-500/10 transition">
-                  <Mail className="w-3.5 h-3.5 text-violet-300" />
-                </span>
-                support@accessnowbd.com
-              </a>
-              <span className="inline-flex items-center gap-2 text-white/65">
-                <span className="grid place-items-center w-7 h-7 rounded-md bg-white/[0.04] border border-white/10">
-                  <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-                </span>
-                Dhaka, Bangladesh
-              </span>
-            </div>
-          </div>
-
-          {/* Newsletter / CTA */}
-          <div className="relative rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-6 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/40 to-transparent" />
-            <h4
-              className="text-base font-bold text-white"
+            {/* Manifesto / large statement */}
+            <p
+              className="text-[22px] md:text-[26px] leading-[1.25] font-bold text-white/90 max-w-md"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              নিউজলেটারে যুক্ত হোন
-            </h4>
-            <p className="mt-1.5 text-xs text-white/60">
-              নতুন প্রোডাক্ট, অফার ও ডিসকাউন্ট সরাসরি আপনার ইনবক্সে।
+              <span className="text-white/40">Digital subscriptions,</span>{" "}
+              <span className="bg-gradient-to-r from-primary via-violet-300 to-aqua bg-clip-text text-transparent">
+                delivered in minutes
+              </span>{" "}
+              <span className="text-white/40">— not days.</span>
             </p>
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="mt-4 flex items-center gap-2 rounded-xl border border-white/10 bg-background/40 backdrop-blur-md p-1.5 focus-within:border-aqua/50 transition"
-            >
-              <input
-                type="email"
-                required
-                placeholder="your@email.com"
-                className="flex-1 bg-transparent outline-none text-sm text-white placeholder:text-white/35 px-3 py-2"
-              />
-              <button
-                type="submit"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold text-white bg-gradient-to-r from-primary via-violet-500 to-aqua hover:shadow-[0_10px_28px_-8px_rgba(124,58,237,0.7)] transition"
-              >
-                Subscribe <ChevronRight className="w-3.5 h-3.5" />
-              </button>
-            </form>
 
-            {/* Socials */}
-            <div className="mt-5 flex items-center gap-2.5">
+            {/* Live status card */}
+            <div className="relative max-w-md rounded-2xl border border-emerald-400/20 bg-emerald-500/[0.05] backdrop-blur-md p-4 overflow-hidden">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent" />
+              <div className="flex items-center gap-3">
+                <span className="relative grid place-items-center w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-400/30">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400">
+                    <span className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  </span>
+                </span>
+                <div className="flex-1 leading-tight">
+                  <div className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-emerald-300/90">
+                    Live · Right Now
+                  </div>
+                  <div className="text-[13px] font-bold text-white mt-0.5">
+                    আমরা এখন অনলাইনে — চ্যাট করুন
+                  </div>
+                </div>
+                <a
+                  href="https://wa.me/8801580607614"
+                  className="grid place-items-center w-9 h-9 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 hover:bg-emerald-500/30 hover:text-white transition"
+                  aria-label="WhatsApp"
+                >
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            {/* Contact rail */}
+            <div className="space-y-2.5">
               {[
-                { Icon: Facebook, href: "#", label: "Facebook" },
-                { Icon: MessageCircle, href: "https://wa.me/8801580607614", label: "WhatsApp" },
-                { Icon: Instagram, href: "#", label: "Instagram" },
-                { Icon: Youtube, href: "#", label: "YouTube" },
-                { Icon: Send, href: "#", label: "Telegram" },
-              ].map(({ Icon, href, label }) => (
+                { Icon: Phone, label: "+880 1580-607614", href: "tel:+8801580607614", tint: "text-aqua" },
+                { Icon: Mail, label: "support@accessnowbd.com", href: "mailto:support@accessnowbd.com", tint: "text-violet-300" },
+                { Icon: MapPin, label: "Dhaka, Bangladesh", href: "#", tint: "text-emerald-400" },
+              ].map(({ Icon, label, href, tint }) => (
                 <a
                   key={label}
                   href={href}
-                  aria-label={label}
-                  className="grid place-items-center w-8 h-8 rounded-lg border border-white/10 bg-white/[0.03] text-white/70 hover:text-white hover:border-aqua/50 hover:bg-aqua/10 transition"
+                  className="group flex items-center gap-3 text-sm text-white/70 hover:text-white transition"
                 >
-                  <Icon className="w-3.5 h-3.5" />
+                  <span className="grid place-items-center w-8 h-8 rounded-lg bg-white/[0.03] border border-white/10 group-hover:border-white/30 group-hover:bg-white/[0.06] transition">
+                    <Icon className={`w-3.5 h-3.5 ${tint}`} />
+                  </span>
+                  <span className="font-mono tracking-tight">{label}</span>
+                  <span className="ml-auto opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all text-white/40">
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </span>
                 </a>
               ))}
             </div>
           </div>
-        </div>
 
-        {/* divider */}
-        <div className="my-10 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-        {/* ===== Link columns — Glassmorphism cards ===== */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
-          {COLUMNS.map((col, idx) => {
-            const accents = [
-              { from: "rgba(124,58,237,0.9)", via: "rgba(0,229,255,0.6)", to: "rgba(124,58,237,0.0)", glow: "rgba(124,58,237,0.35)", dot: "bg-primary" },
-              { from: "rgba(0,229,255,0.9)", via: "rgba(167,139,250,0.6)", to: "rgba(0,229,255,0.0)", glow: "rgba(0,229,255,0.32)", dot: "bg-aqua" },
-              { from: "rgba(167,139,250,0.9)", via: "rgba(0,229,255,0.6)", to: "rgba(167,139,250,0.0)", glow: "rgba(167,139,250,0.32)", dot: "bg-violet-400" },
-            ][idx % 3];
-            return (
-              <div
-                key={col.title}
-                className="group/card relative rounded-2xl p-[1.5px] transition-all duration-500 hover:-translate-y-1"
-                style={{
-                  backgroundImage: `linear-gradient(135deg, ${accents.from} 0%, ${accents.via} 45%, ${accents.to} 100%)`,
-                }}
-              >
-                {/* Animated conic glow on hover */}
-                <div
-                  className="pointer-events-none absolute -inset-[1px] rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 blur-md"
-                  style={{
-                    background: `conic-gradient(from 0deg, ${accents.from}, ${accents.via}, ${accents.to}, ${accents.from})`,
-                  }}
-                />
-
-                <div
-                  className="relative rounded-[14px] bg-[#0a0a14]/85 backdrop-blur-2xl p-6 overflow-hidden h-full"
-                  style={{
-                    boxShadow:
-                      "inset 0 1px 0 0 rgba(255,255,255,0.08), inset 0 0 0 1px rgba(255,255,255,0.02), 0 24px 60px -30px rgba(0,0,0,0.85)",
-                  }}
-                >
-                  {/* Soft radial glow inside */}
-                  <div
-                    className="pointer-events-none absolute -top-16 -right-16 w-44 h-44 rounded-full blur-3xl opacity-50 group-hover/card:opacity-100 transition-opacity duration-500"
-                    style={{ background: accents.glow }}
-                  />
-                  {/* Subtle grid texture */}
-                  <div
-                    className="pointer-events-none absolute inset-0 opacity-[0.04]"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-                      backgroundSize: "22px 22px",
-                    }}
-                  />
-
-                  <h5
-                    className="relative text-[11px] font-extrabold tracking-[0.28em] uppercase text-white mb-4 flex items-center gap-2"
-                    style={{ fontFamily: "var(--font-heading)" }}
-                  >
-                    <span className={`w-1.5 h-1.5 rounded-full ${accents.dot} shadow-[0_0_12px_currentColor]`} />
-                    {col.title}
-                    <span className="flex-1 h-px bg-gradient-to-r from-white/15 to-transparent" />
-                  </h5>
-                  <ul className="relative space-y-2.5">
+          {/* === RIGHT: Numbered columns + newsletter === */}
+          <div className="space-y-8">
+            {/* Numbered link columns */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {COLUMNS.map((col) => (
+                <div key={col.num} className="relative">
+                  <div className="flex items-baseline gap-2 mb-4 pb-3 border-b border-white/10">
+                    <span
+                      className="text-[11px] font-mono font-bold text-white/30 tracking-wider"
+                      style={{ fontFamily: "var(--font-mono, monospace)" }}
+                    >
+                      / {col.num}
+                    </span>
+                    <h5
+                      className="text-[11px] font-extrabold tracking-[0.28em] uppercase text-white"
+                      style={{ fontFamily: "var(--font-heading)" }}
+                    >
+                      {col.title}
+                    </h5>
+                  </div>
+                  <ul className="space-y-2.5">
                     {col.links.map((l) => (
                       <li key={l.to + l.label}>
                         <Link
                           to={l.to}
-                          className="group/link inline-flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition"
+                          className="group/link inline-flex items-center gap-2 text-sm text-white/65 hover:text-white transition"
                         >
-                          <ChevronRight className="w-3 h-3 text-white/30 group-hover/link:text-aqua group-hover/link:translate-x-0.5 transition" />
-                          <span className="group-hover/link:underline underline-offset-4 decoration-aqua/50">
+                          <span className="w-0 group-hover/link:w-4 h-px bg-gradient-to-r from-primary to-aqua transition-all duration-300" />
+                          <span className="group-hover/link:translate-x-0.5 transition-transform duration-300">
                             {l.label}
                           </span>
                         </Link>
@@ -274,47 +231,144 @@ export function SiteFooter() {
                     ))}
                   </ul>
                 </div>
+              ))}
+            </div>
+
+            {/* Terminal-style newsletter */}
+            <div className="relative rounded-2xl border border-white/10 bg-[#05060e]/80 backdrop-blur-xl overflow-hidden">
+              {/* Window chrome */}
+              <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10 bg-white/[0.03]">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-400/70" />
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-400/70" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/70" />
+                <span className="ml-2 inline-flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+                  <Terminal className="w-3 h-3" />
+                  newsletter ~ subscribe
+                </span>
               </div>
-            );
-          })}
+
+              <div className="p-5">
+                <div className="font-mono text-[12px] text-white/55 mb-3 leading-relaxed">
+                  <span className="text-emerald-400">$</span> subscribe --offers --early-access
+                  <br />
+                  <span className="text-aqua">→</span> নতুন প্রোডাক্ট, কুপন ও অফার সরাসরি ইনবক্সে।
+                </div>
+                <form
+                  onSubmit={(e) => e.preventDefault()}
+                  className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-1.5 focus-within:border-aqua/50 focus-within:ring-2 focus-within:ring-aqua/20 transition"
+                >
+                  <span className="pl-2 text-aqua font-mono text-sm">›</span>
+                  <input
+                    type="email"
+                    required
+                    placeholder="your@email.com"
+                    className="flex-1 bg-transparent outline-none text-sm text-white placeholder:text-white/30 px-2 py-2 font-mono"
+                  />
+                  <button
+                    type="submit"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-extrabold text-white bg-gradient-to-r from-primary via-violet-500 to-aqua hover:shadow-[0_10px_28px_-8px_rgba(124,58,237,0.7)] transition"
+                  >
+                    Subscribe <ArrowUpRight className="w-3.5 h-3.5" />
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* ===== Bottom Bar ===== */}
-        <div className="relative mt-12 pt-6">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1.5 text-white/60">
-              <span className="text-white/40">©</span>
-              <span className="text-white/85 font-semibold">2026</span>
-              <span className="text-white/25">·</span>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua font-extrabold tracking-wide">
+        {/* ===== 3. Huge animated wordmark ===== */}
+        <div className="relative mt-16 mb-6 select-none">
+          <div className="absolute inset-x-0 -top-4 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+          <div
+            aria-hidden
+            className="relative text-center font-extrabold leading-[0.85] tracking-tighter"
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontSize: "clamp(60px, 14vw, 200px)",
+              backgroundImage:
+                "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 60%, transparent 100%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+              WebkitTextStroke: "1px rgba(255,255,255,0.08)",
+            }}
+          >
+            ACCESSNOW
+            <span
+              className="block bg-clip-text text-transparent animate-aurora-pan"
+              style={{
+                backgroundImage:
+                  "linear-gradient(110deg, rgba(124,58,237,0.6), rgba(0,229,255,0.7), rgba(167,139,250,0.6), rgba(0,229,255,0.7))",
+                backgroundSize: "300% 100%",
+                WebkitTextStroke: "0",
+              }}
+            >
+              BD ✦
+            </span>
+          </div>
+        </div>
+
+        {/* ===== 4. Bottom utility bar ===== */}
+        <div className="relative pt-6 border-t border-white/10">
+          <div className="grid gap-5 md:grid-cols-[1fr_auto_1fr] items-center">
+            {/* Left: copy */}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs text-white/55">
+              <span className="text-white/30">©</span>
+              <span className="text-white/80 font-semibold">2026</span>
+              <span className="text-white/20">·</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua font-extrabold">
                 AccessNow BD
               </span>
-              <span className="text-white/25">·</span>
-              <span className="text-white/50">All Rights Reserved</span>
-              <span className="text-white/25">·</span>
-              <span className="text-white/50">Designed &amp; Developed by</span>
+              <span className="text-white/20">·</span>
+              <span>Crafted by</span>
               <a
                 href="https://shahedit.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/15 hover:border-primary/60 hover:bg-white/10 hover:shadow-[0_0_18px_-4px_var(--color-primary)] transition"
+                className="px-2 py-0.5 rounded-md bg-white/[0.06] border border-white/15 hover:border-primary/60 hover:bg-white/10 hover:shadow-[0_0_18px_-4px_var(--color-primary)] transition text-white font-extrabold"
               >
-                <span className="text-white font-extrabold tracking-wide">Shahed IT</span>
+                Shahed IT
               </a>
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <span className="text-[10px] uppercase tracking-[0.22em] text-white/40 mr-1">
+
+            {/* Center: socials orbit */}
+            <div className="flex items-center justify-center gap-2">
+              {SOCIALS.map(({ Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="group relative grid place-items-center w-9 h-9 rounded-full border border-white/10 bg-white/[0.03] text-white/70 hover:text-white hover:border-aqua/50 hover:bg-aqua/10 hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br from-primary/20 via-violet-500/20 to-aqua/20 blur-md -z-10" />
+                </a>
+              ))}
+            </div>
+
+            {/* Right: payment + back to top */}
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <span className="text-[10px] uppercase tracking-[0.22em] text-white/35 mr-1">
                 We accept
               </span>
-              {["bKash", "Nagad", "Rocket", "Visa", "Mastercard"].map((p) => (
+              {["bKash", "Nagad", "Rocket", "Visa"].map((p) => (
                 <span
                   key={p}
-                  className="px-2.5 py-1 rounded-md border border-white/10 bg-white/[0.04] text-white/80 text-[10px] font-bold tracking-wide hover:border-aqua/40 hover:text-white transition"
+                  className="px-2 py-1 rounded-md border border-white/10 bg-white/[0.04] text-white/75 text-[10px] font-bold tracking-wide hover:border-aqua/40 hover:text-white transition"
                 >
                   {p}
                 </span>
               ))}
+              <button
+                onClick={() =>
+                  typeof window !== "undefined" &&
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }
+                aria-label="Back to top"
+                className="ml-2 grid place-items-center w-9 h-9 rounded-full bg-gradient-to-br from-primary via-violet-500 to-aqua text-white shadow-[0_10px_28px_-10px_rgba(124,58,237,0.7)] hover:scale-110 transition"
+              >
+                <ArrowUp className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>
