@@ -389,11 +389,11 @@ function TrustPanel() {
 
 function ProductSkeleton() {
   return (
-    <div className="rounded-3xl glass-soft border border-white/10 p-4 h-[320px] animate-pulse">
-      <div className="h-32 rounded-2xl bg-white/5" />
-      <div className="mt-4 h-4 w-3/4 rounded bg-white/10" />
-      <div className="mt-2 h-3 w-1/2 rounded bg-white/5" />
-      <div className="mt-6 h-9 rounded-full bg-white/5" />
+    <div className="rounded-3xl border border-white/[0.06] bg-white/[0.015] p-4 h-[320px]">
+      <div className="h-32 rounded-2xl bg-white/[0.03]" />
+      <div className="mt-4 h-4 w-3/4 rounded bg-white/[0.04]" />
+      <div className="mt-2 h-3 w-1/2 rounded bg-white/[0.03]" />
+      <div className="mt-6 h-9 rounded-full bg-white/[0.03]" />
     </div>
   );
 }
@@ -420,7 +420,7 @@ function ProductRail({ title, items, isLoading }: { title: string; items: Produc
   const showSkeleton = isLoading || items.length === 0;
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
-      <div className="sticky top-[72px] z-30 -mx-4 md:-mx-10 px-4 md:px-10 py-3 backdrop-blur-xl bg-background/70 border-y border-white/5 flex items-end justify-between gap-4">
+      <div className="flex items-end justify-between gap-4">
         <SectionTitle eyebrow="Collection" title={title} subtitle="ক্যাটাগরি অনুযায়ী সাজানো প্রোডাক্ট।" compact />
         <div className="hidden md:flex items-center gap-2">
           <button onClick={() => scroll(-1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll left"><ChevronLeft className="h-4 w-4" /></button>
