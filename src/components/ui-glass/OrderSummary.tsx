@@ -4,12 +4,18 @@ import { GlassCard } from "./GlassCard";
 interface OrderSummaryProps {
   items: CartItem[];
   total: number;
+  /** Optional discount in BDT to subtract from total. */
+  discount?: number;
+  /** Optional coupon code label, displayed alongside the discount line. */
+  couponCode?: string;
   /** Shown under the total line. Defaults to a privacy note. */
   footer?: string;
   /** Show as a tall scrollable mini-summary (checkout) vs simple subtotal/delivery (cart). */
   variant?: "lineitems" | "totals";
   /** Optional CTA / extra slot rendered above footer text (e.g. Proceed button). */
   action?: React.ReactNode;
+  /** Optional slot rendered between the totals block and the action (e.g. coupon input). */
+  extra?: React.ReactNode;
   className?: string;
 }
 
