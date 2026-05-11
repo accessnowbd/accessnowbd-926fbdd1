@@ -30,6 +30,7 @@ type DbProduct = {
   warranty: string;
   features: unknown;
   plans: unknown;
+  image_url?: string | null;
 };
 
 export function rowToProduct(r: DbProduct): Product {
@@ -46,5 +47,6 @@ export function rowToProduct(r: DbProduct): Product {
     warranty: r.warranty,
     features: Array.isArray(r.features) ? (r.features as string[]) : [],
     plans: Array.isArray(r.plans) ? (r.plans as Plan[]) : [],
+    imageUrl: r.image_url || undefined,
   };
 }
