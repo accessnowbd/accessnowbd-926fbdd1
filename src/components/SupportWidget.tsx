@@ -8,7 +8,12 @@ import {
   User2,
   Headphones,
   ChevronRight,
+  Phone,
+  ShieldCheck,
 } from "lucide-react";
+
+const ADMIN_PHONE = "+8801580607614";
+const ADMIN_TEL = "tel:+8801580607614";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -135,9 +140,7 @@ export function SupportWidget() {
           aria-label="Open support"
           className="fixed bottom-5 right-5 z-50 group"
         >
-          {/* Outer pulsing aurora */}
           <span className="absolute -inset-3 rounded-full bg-gradient-to-br from-violet-500 via-primary to-aqua opacity-40 blur-2xl animate-pulse-glow" />
-          {/* Core button */}
           <span className="relative grid place-items-center h-16 w-16 rounded-full bg-gradient-to-br from-violet-500 via-primary to-aqua text-white shadow-[0_18px_45px_-10px_rgba(124,58,237,0.7)] group-hover:scale-110 transition-transform duration-300 ring-2 ring-white/15">
             <Headphones className="h-7 w-7 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]" />
             <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-400 ring-2 ring-[#0d0a1f]">
@@ -147,55 +150,109 @@ export function SupportWidget() {
         </button>
       )}
 
-      {/* === Compact Pill Menu (matches screenshot) === */}
+      {/* === Professional Support Center Card === */}
       {open && tab === "menu" && (
-        <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 animate-scale-in origin-bottom-right">
-          {/* AI Support pill */}
-          <button
-            onClick={() => setTab("ai")}
-            className="group relative flex items-center gap-3 pl-2.5 pr-5 py-2.5 rounded-2xl bg-[#0d0a1f]/95 backdrop-blur-xl border border-white/10 shadow-[0_18px_50px_-15px_rgba(124,58,237,0.55)] hover:border-violet-400/60 hover:-translate-y-0.5 hover:shadow-[0_22px_60px_-15px_rgba(124,58,237,0.75)] transition-all duration-300 min-w-[230px]"
-          >
-            <span className="relative grid place-items-center h-11 w-11 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-purple-600 text-white shadow-[0_10px_24px_-8px_rgba(168,85,247,0.7)]">
-              <Bot className="h-5 w-5" />
-              <span className="absolute -inset-0.5 rounded-xl bg-violet-500/40 blur-md -z-10" />
-            </span>
-            <span className="text-left leading-tight">
-              <span className="block text-sm font-extrabold text-white">AI Support</span>
-              <span className="block text-[11px] text-white/65 mt-0.5">তাৎক্ষণিক উত্তর পান</span>
-            </span>
-          </button>
+        <div className="fixed bottom-5 right-5 z-50 w-[min(340px,calc(100vw-1.5rem))] animate-scale-in origin-bottom-right">
+          <div className="relative rounded-3xl overflow-hidden border border-white/12 bg-[#070922]/95 backdrop-blur-2xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.85)]">
+            {/* ambient glow */}
+            <div className="pointer-events-none absolute -top-20 -left-16 h-44 w-44 rounded-full bg-primary/40 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -right-16 h-44 w-44 rounded-full bg-aqua/30 blur-3xl" />
 
-          {/* WhatsApp pill */}
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex items-center gap-3 pl-2.5 pr-5 py-2.5 rounded-2xl bg-[#0d0a1f]/95 backdrop-blur-xl border border-white/10 shadow-[0_18px_50px_-15px_rgba(16,185,129,0.55)] hover:border-emerald-400/60 hover:-translate-y-0.5 hover:shadow-[0_22px_60px_-15px_rgba(16,185,129,0.75)] transition-all duration-300 min-w-[230px]"
-          >
-            <span className="relative grid place-items-center h-11 w-11 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-white shadow-[0_10px_24px_-8px_rgba(16,185,129,0.7)]">
-              <MessageCircle className="h-5 w-5" />
-              <span className="absolute -inset-0.5 rounded-xl bg-emerald-500/40 blur-md -z-10" />
-              <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-300 ring-2 ring-[#0d0a1f] animate-pulse" />
-            </span>
-            <span className="text-left leading-tight">
-              <span className="block text-sm font-extrabold text-white">WhatsApp</span>
-              <span className="block text-[11px] text-white/65 mt-0.5">সরাসরি কথা বলুন</span>
-            </span>
-          </a>
+            {/* Header */}
+            <div className="relative px-5 pt-5 pb-4 border-b border-white/10 flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="grid place-items-center h-11 w-11 rounded-2xl bg-gradient-to-br from-violet-500 via-primary to-aqua text-white shadow-lg ring-1 ring-white/15">
+                    <Headphones className="h-5 w-5" />
+                  </div>
+                  <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-[#070922]">
+                    <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
+                  </span>
+                </div>
+                <div className="leading-tight">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-white/55">Support Center</span>
+                    <ShieldCheck className="h-3 w-3 text-emerald-400" />
+                  </div>
+                  <div className="mt-0.5 text-[15px] font-extrabold text-white">কীভাবে সাহায্য করব?</div>
+                  <div className="mt-0.5 flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-[10px] font-semibold text-emerald-300/95">২৪/৭ অনলাইন</span>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close support"
+                className="grid place-items-center h-8 w-8 rounded-full text-white/65 hover:text-white hover:bg-white/10 transition"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
 
-          {/* Hint */}
-          <span className="text-[11px] font-medium text-white/55 mt-1">
-            কোনটি পছন্দ করবেন?
-          </span>
+            {/* Options */}
+            <div className="relative p-3 space-y-2">
+              {/* AI Support */}
+              <button
+                onClick={() => setTab("ai")}
+                className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl border border-white/8 bg-white/[0.03] hover:bg-white/[0.06] hover:border-violet-400/50 transition-all duration-300"
+              >
+                <span className="relative grid place-items-center h-11 w-11 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-purple-600 text-white shadow-[0_10px_24px_-8px_rgba(168,85,247,0.7)] shrink-0">
+                  <Bot className="h-5 w-5" />
+                </span>
+                <span className="flex-1 text-left leading-tight">
+                  <span className="flex items-center gap-1.5">
+                    <span className="text-[13px] font-extrabold text-white">AI Support</span>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-400/30">FAST</span>
+                  </span>
+                  <span className="block text-[11px] text-white/55 mt-0.5">তাৎক্ষণিক উত্তর — Bengali</span>
+                </span>
+                <ChevronRight className="h-4 w-4 text-white/40 group-hover:text-white/80 group-hover:translate-x-0.5 transition" />
+              </button>
 
-          {/* Close button */}
-          <button
-            onClick={() => setOpen(false)}
-            aria-label="Close support"
-            className="grid place-items-center h-12 w-12 rounded-full bg-[#0d0a1f]/95 backdrop-blur-xl border border-white/15 text-white/80 hover:text-white hover:border-white/30 hover:bg-white/5 shadow-[0_15px_40px_-12px_rgba(0,0,0,0.7)] transition"
-          >
-            <X className="h-5 w-5" />
-          </button>
+              {/* WhatsApp */}
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl border border-white/8 bg-white/[0.03] hover:bg-white/[0.06] hover:border-emerald-400/50 transition-all duration-300"
+              >
+                <span className="relative grid place-items-center h-11 w-11 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-white shadow-[0_10px_24px_-8px_rgba(16,185,129,0.7)] shrink-0">
+                  <MessageCircle className="h-5 w-5" />
+                  <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-300 ring-2 ring-[#070922] animate-pulse" />
+                </span>
+                <span className="flex-1 text-left leading-tight">
+                  <span className="block text-[13px] font-extrabold text-white">WhatsApp</span>
+                  <span className="block text-[11px] text-white/55 mt-0.5">সরাসরি চ্যাট — দ্রুত রেসপন্স</span>
+                </span>
+                <ChevronRight className="h-4 w-4 text-white/40 group-hover:text-white/80 group-hover:translate-x-0.5 transition" />
+              </a>
+
+              {/* Admin Call */}
+              <a
+                href={ADMIN_TEL}
+                className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl border border-white/8 bg-white/[0.03] hover:bg-white/[0.06] hover:border-aqua/50 transition-all duration-300"
+              >
+                <span className="relative grid place-items-center h-11 w-11 rounded-xl bg-gradient-to-br from-sky-500 via-cyan-500 to-aqua text-white shadow-[0_10px_24px_-8px_rgba(34,211,238,0.7)] shrink-0">
+                  <Phone className="h-5 w-5" />
+                </span>
+                <span className="flex-1 text-left leading-tight">
+                  <span className="flex items-center gap-1.5">
+                    <span className="text-[13px] font-extrabold text-white">Admin · কল করুন</span>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-aqua/20 text-aqua border border-aqua/30">VERIFIED</span>
+                  </span>
+                  <span className="block text-[11px] text-white/55 mt-0.5 font-mono tracking-tight">{ADMIN_PHONE}</span>
+                </span>
+                <ChevronRight className="h-4 w-4 text-white/40 group-hover:text-white/80 group-hover:translate-x-0.5 transition" />
+              </a>
+            </div>
+
+            {/* Footer trust strip */}
+            <div className="relative px-5 py-3 border-t border-white/10 bg-white/[0.02] flex items-center justify-between">
+              <span className="text-[10px] font-semibold text-white/50">গড় রেসপন্স টাইম</span>
+              <span className="text-[10px] font-extrabold text-emerald-300">~ ২ মিনিট</span>
+            </div>
+          </div>
         </div>
       )}
 
