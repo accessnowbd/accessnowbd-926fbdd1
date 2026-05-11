@@ -95,6 +95,7 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
 
   const handleLogout = async () => {
     await signOut();
