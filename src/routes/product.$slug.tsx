@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
+import { ProductBanner } from "@/components/ProductBanner";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
@@ -90,23 +91,8 @@ function ProductPage() {
       {/* Product Hero */}
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8 grid md:grid-cols-2 gap-10">
         {/* Image */}
-        <div className={`relative aspect-square md:aspect-[4/5] rounded-3xl bg-gradient-to-br ${product.gradient} flex items-center justify-center glass-strong overflow-hidden glow-violet`}>
-          <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-white/20 blur-3xl" />
-          <div className="absolute -bottom-24 -right-16 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
-          {product.imageUrl ? (
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="relative z-10 max-h-[55%] max-w-[70%] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
-              onError={(e) => {
-                const t = e.currentTarget;
-                t.style.display = "none";
-                const fb = t.nextElementSibling as HTMLElement | null;
-                if (fb) fb.style.display = "inline";
-              }}
-            />
-          ) : null}
-          <span style={{ display: product.imageUrl ? "none" : "inline" }} className="relative z-10 text-[180px] md:text-[220px] drop-shadow-lg">{product.emoji}</span>
+        <div className="relative">
+          <ProductBanner product={product} ratio="1/1" spheres={6} className="rounded-3xl shadow-[var(--shadow-glass-lg)]" />
           <span className={`absolute top-5 left-5 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>{product.badge ?? "New"}</span>
         </div>
 
@@ -232,13 +218,7 @@ function ProductPage() {
               key={p.slug}
               className="group glass rounded-2xl overflow-hidden hover:-translate-y-1 hover:glow-violet transition-all"
             >
-              <div className={`relative aspect-[4/3] bg-gradient-to-br ${p.gradient} flex items-center justify-center overflow-hidden`}>
-                {p.imageUrl ? (
-                  <img src={p.imageUrl} alt={p.name} className="max-h-[60%] max-w-[70%] object-contain drop-shadow-lg" loading="lazy" />
-                ) : (
-                  <span className="text-6xl drop-shadow">{p.emoji}</span>
-                )}
-              </div>
+              <ProductBanner product={p} ratio="4/3" spheres={4} className="rounded-none" />
               <div className="p-4">
                 <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{p.name}</h3>
                 <div className="mt-3 flex items-center justify-between">
