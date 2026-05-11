@@ -41,30 +41,8 @@ export function ProductCard({ product }: { product: Product }) {
       params={{ slug: product.slug }}
       className="group gradient-border-card overflow-hidden flex flex-col h-full"
     >
-      <div className={`relative aspect-[5/4] bg-gradient-to-br ${product.gradient} overflow-hidden`}>
-        <div className="absolute inset-0 bg-mesh opacity-40" />
-        <div className="absolute inset-4 rounded-2xl bg-card/40 border border-[var(--glass-border)] backdrop-blur-xl flex items-center justify-center transition-transform duration-500 group-hover:scale-[0.97] overflow-hidden">
-          {product.imageUrl ? (
-            <>
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                loading="lazy"
-                className="relative z-10 max-h-[62%] max-w-[72%] object-contain drop-shadow-[0_12px_30px_rgba(40,45,80,0.22)] group-hover:scale-110 transition-transform duration-500"
-                onError={(e) => {
-                  const t = e.currentTarget;
-                  t.style.display = "none";
-                  const fb = t.nextElementSibling as HTMLElement | null;
-                  if (fb) fb.style.display = "block";
-                }}
-              />
-              <span style={{ display: "none" }} className="text-7xl drop-shadow-2xl">{product.emoji}</span>
-            </>
-          ) : (
-            <span className="text-7xl drop-shadow-2xl group-hover:scale-110 transition-transform duration-500">{product.emoji}</span>
-          )}
-        </div>
-
+      <div className="relative">
+        <ProductBanner product={product} ratio="5/4" />
         {product.badge && (
           <span className={`absolute top-3 left-3 ${badgeColorFor(product.badge)} px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase shadow-lg z-20`}>
             {product.badge}
