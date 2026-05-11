@@ -277,37 +277,6 @@ export function SiteFooter() {
         </div>
 
         {/* ===== 3. Huge animated wordmark ===== */}
-        <div className="relative mt-16 mb-6 select-none">
-          <div className="absolute inset-x-0 -top-4 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-          <div
-            aria-hidden
-            className="relative text-center font-extrabold leading-[0.85] tracking-tighter"
-            style={{
-              fontFamily: "var(--font-heading)",
-              fontSize: "clamp(60px, 14vw, 200px)",
-              backgroundImage:
-                "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 60%, transparent 100%)",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              color: "transparent",
-              WebkitTextStroke: "1px rgba(255,255,255,0.08)",
-            }}
-          >
-            ACCESSNOW
-            <span
-              className="block bg-clip-text text-transparent animate-aurora-pan"
-              style={{
-                backgroundImage:
-                  "linear-gradient(110deg, rgba(124,58,237,0.6), rgba(0,229,255,0.7), rgba(167,139,250,0.6), rgba(0,229,255,0.7))",
-                backgroundSize: "300% 100%",
-                WebkitTextStroke: "0",
-              }}
-            >
-              BD
-            </span>
-          </div>
-        </div>
-
         {/* ===== 4. Bottom utility bar ===== */}
         <div className="relative pt-6 border-t border-white/10">
           <div className="grid gap-5 md:grid-cols-[1fr_auto_1fr] items-center">
