@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Sparkles, Zap, Shield, Headphones, Plus, Minus, MessageCircle, ArrowUpRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles, Zap, Shield, Headphones, Star, Plus, Minus, MessageCircle } from "lucide-react";
 import heroPayment from "@/assets/hero-payment.jpg";
 import heroDelivery from "@/assets/hero-delivery.jpg";
 import heroWarranty from "@/assets/hero-warranty.jpg";
@@ -26,6 +26,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { products } = useProducts();
 
+  // Stable section selections
   const top = useMemo(() => products.slice(0, 8), [products]);
   const streaming = useMemo(() => products.filter((p) => p.category === "Streaming"), [products]);
   const ai = useMemo(() => products.filter((p) => p.category === "AI Tools" || p.category === "Productivity"), [products]);
@@ -34,12 +35,12 @@ function Index() {
   return (
     <div className="min-h-screen relative">
       <SiteHeader />
-      <HeroLanding featured={top.slice(0, 4)} />
+      <HeroLanding />
 
-      <ProductGrid title="Top Picks" subtitle="বাংলাদেশে সবচেয়ে জনপ্রিয় সাবস্ক্রিপশন" items={top} cap={8} viewAllTo="/products" eyebrow="Editor's selection" />
-      <ProductRail title="Streaming" subtitle="Netflix, Prime, HBO, Disney+, Hoichoi — সব এক জায়গায়" items={streaming} viewAllTo="/streaming" eyebrow="Vol. 01" />
-      <ProductRail title="AI & Productivity" subtitle="ChatGPT, Claude, Gemini, Grammarly এবং আরও" items={ai} viewAllTo="/ai-tools" eyebrow="Vol. 02" />
-      <ProductRail title="Education & Design" subtitle="Coursera, Canva Pro, CapCut, Adobe — শিখতে ও বানাতে" items={education} viewAllTo="/education" eyebrow="Vol. 03" />
+      <ProductGrid title="⭐ Top Picks for You" subtitle="বাংলাদেশে সবচেয়ে জনপ্রিয় সাবস্ক্রিপশন" items={top} cap={8} viewAllTo="/products" />
+      <ProductRail title="🎬 Streaming Services" subtitle="Netflix, Prime, HBO, Disney+, Hoichoi — সব এক জায়গায়" items={streaming} viewAllTo="/streaming" />
+      <ProductRail title="🤖 AI & Productivity Tools" subtitle="ChatGPT, Claude, Gemini, Grammarly এবং আরও" items={ai} viewAllTo="/ai-tools" />
+      <ProductRail title="🎓 Educational Tools" subtitle="Coursera, Canva Pro, CapCut, Adobe — শিখতে ও বানাতে" items={education} viewAllTo="/education" />
       <TrustStrip />
       <HowItWorks />
       <Testimonials />
@@ -50,150 +51,149 @@ function Index() {
   );
 }
 
-/* ================= Editorial Hero — Paper & Ink ================= */
+/* ================= Premium Hero Landing ================= */
 
-const HERO_TILES = [
-  { eyebrow: "Issue 04", title: "Instant", img: heroPayment },
-  { eyebrow: "Delivery", title: "10 min", img: heroDelivery },
-  { eyebrow: "Warranty", title: "30 days", img: heroWarranty },
-  { eyebrow: "Bundle", title: "Student", img: heroEducation },
+const HERO_HIGHLIGHTS = [
+  { eyebrow: "নতুন ফিচার", title: "AccessNow BD", sub: "সাবস্ক্রিপশন পেমেন্ট এখন আরও সহজ", img: heroPayment, accent: "from-violet-600/40 via-fuchsia-600/30 to-rose-500/30" },
+  { eyebrow: "Instant Delivery", title: "১০ মিনিটে", sub: "ডেলিভারি — যেকোনো সময়", img: heroDelivery, accent: "from-cyan-500/40 via-violet-500/30 to-emerald-500/30" },
+  { eyebrow: "Full Warranty", title: "৩০ দিনের", sub: "ওয়ারেন্টি — ভেরিফাইড অ্যাকাউন্ট", img: heroWarranty, accent: "from-emerald-500/40 via-violet-500/25 to-amber-400/30" },
+  { eyebrow: "Education Bundle", title: "এক্সট্রা ছাড়", sub: "স্টুডেন্ট বান্ডেল অফার চলছে", img: heroEducation, accent: "from-amber-500/35 via-rose-500/25 to-violet-600/30" },
 ] as const;
 
 const BRAND_CHIPS = ["Netflix", "ChatGPT Plus", "Spotify", "Canva Pro", "Prime Video", "Coursera", "Grammarly", "Disney+", "YouTube Premium", "Adobe CC", "Hoichoi", "Claude"];
 
-function HeroLanding({ featured }: { featured: Product[] }) {
+const ACTIVITY = [
+  { name: "Rakib H.", action: "কিনেছেন", item: "Netflix Premium", ago: "২ মিনিট আগে" },
+  { name: "Tahsin K.", action: "অর্ডার করেছেন", item: "ChatGPT Plus", ago: "৫ মিনিট আগে" },
+  { name: "Maliha R.", action: "নিয়েছেন", item: "Canva Pro", ago: "৮ মিনিট আগে" },
+  { name: "Sajid I.", action: "কিনেছেন", item: "Spotify Family", ago: "১২ মিনিট আগে" },
+  { name: "Nabila A.", action: "নিয়েছেন", item: "Coursera Plus", ago: "১৮ মিনিট আগে" },
+];
+
+function HeroLanding() {
   const [idx, setIdx] = useState(0);
+  const [activityIdx, setActivityIdx] = useState(0);
+  const total = HERO_HIGHLIGHTS.length;
+
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % HERO_TILES.length), 5000);
+    const t = setInterval(() => setIdx((i) => (i + 1) % total), 5000);
+    return () => clearInterval(t);
+  }, [total]);
+
+  useEffect(() => {
+    const t = setInterval(() => setActivityIdx((i) => (i + 1) % ACTIVITY.length), 3500);
     return () => clearInterval(t);
   }, []);
-  const slide = HERO_TILES[idx];
+
+  const slide = HERO_HIGHLIGHTS[idx];
+  const activity = ACTIVITY[activityIdx];
 
   return (
-    <section className="relative overflow-hidden">
-      <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 pt-10 md:pt-14 pb-14">
-        {/* Top editorial masthead */}
-        <div className="flex items-center justify-between gap-4 pb-5 border-b border-foreground/15">
-          <div className="editorial-eyebrow text-foreground/60">№ 04 · Spring Edition · 2026</div>
-          <div className="hidden sm:flex items-center gap-2 editorial-eyebrow text-foreground/60">
-            <span className="relative flex w-1.5 h-1.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-foreground opacity-60 animate-ping" />
-              <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-foreground" />
-            </span>
-            Open · 11 AM – 11 PM
-          </div>
-        </div>
+    <section className="relative bg-[#07071a] text-white overflow-hidden">
+      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${slide.accent} transition-all duration-[1200ms]`} />
+      <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(circle_at_20%_30%,rgba(168,85,247,0.4),transparent_45%),radial-gradient(circle_at_80%_70%,rgba(34,211,238,0.35),transparent_50%),radial-gradient(circle_at_50%_100%,rgba(236,72,153,0.3),transparent_55%)]" />
+      <div className="pointer-events-none absolute inset-0 [background:linear-gradient(to_bottom,transparent,#07071a_92%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(rgba(255,255,255,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.5)_1px,transparent_1px)] [background-size:48px_48px]" />
 
-        {/* Display headline */}
-        <div className="grid lg:grid-cols-[1.4fr_1fr] gap-10 lg:gap-16 items-end pt-10 md:pt-14">
+      <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 pt-12 md:pt-20 pb-8">
+        <div className="grid lg:grid-cols-[1.15fr_1fr] gap-10 lg:gap-14 items-center">
           <div>
-            <h1
-              className="display-serif text-foreground"
-              style={{ fontSize: "clamp(48px, 9.5vw, 132px)" }}
-            >
-              <span className="block">Premium</span>
-              <span className="block italic font-medium" style={{ fontFamily: "var(--font-display)" }}>
-                subscriptions,
-              </span>
-              <span className="block">delivered.</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-[11px] font-semibold backdrop-blur-md">
+              <span className="relative flex w-2 h-2"><span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" /><span className="relative inline-flex w-2 h-2 rounded-full bg-emerald-400" /></span>
+              <span>Live · {slide.eyebrow}</span>
+            </div>
+
+            <h1 className="mt-5" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 6vw, 68px)", fontWeight: 800, lineHeight: 1.02, letterSpacing: "-0.03em" }}>
+              <span className="block text-white/95">প্রিমিয়াম সাবস্ক্রিপশন,</span>
+              <span key={idx} className="block text-aurora-strong animate-[fadeInUp_0.6s_ease-out]">{slide.title}</span>
+              <span className="block text-white/80" style={{ fontSize: "0.55em", fontWeight: 500, marginTop: "0.5em", letterSpacing: "-0.01em" }}>{slide.sub}</span>
             </h1>
-            <p className="mt-8 max-w-xl text-base md:text-lg text-foreground/70 leading-relaxed">
-              Netflix, ChatGPT Plus, Spotify, Canva Pro সহ ২০+ ভেরিফাইড
-              সাবস্ক্রিপশন — bKash, Nagad বা কার্ডে। ১০ মিনিটে ডেলিভারি,
-              ৩০ দিনের ওয়ারেন্টি।
+
+            <p className="mt-6 text-base md:text-lg text-white/70 max-w-xl leading-relaxed">
+              Netflix, ChatGPT Plus, Spotify, Canva Pro সহ ২০+ ভেরিফাইড সাবস্ক্রিপশন — bKash, Nagad বা কার্ডে। ১০ মিনিটে ডেলিভারি, ৩০ দিনের ওয়ারেন্টি।
             </p>
+
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/products"
-                className="group inline-flex items-center gap-2 h-12 pl-6 pr-4 rounded-full bg-foreground text-background text-sm font-semibold hover:bg-foreground/90 transition"
-              >
-                Browse the catalog
-                <span className="grid place-items-center w-7 h-7 rounded-full bg-background text-foreground group-hover:rotate-45 transition">
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </span>
+              <Link to="/products" className="group inline-flex items-center gap-2 rounded-full bg-aurora text-white text-sm font-bold glow-violet hover:scale-[1.03] transition-all" style={{ height: 52, paddingLeft: 28, paddingRight: 24 }}>
+                <Zap className="w-4 h-4" /> Get Instant Access
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition" />
               </Link>
-              <a
-                href="https://wa.me/8801000000000"
-                className="inline-flex items-center gap-2 h-12 px-6 rounded-full glass-soft text-foreground text-sm font-semibold hover:bg-foreground/5 transition"
-              >
-                <MessageCircle className="w-4 h-4" /> WhatsApp order
+              <a href="https://wa.me/8801000000000" className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-white text-sm font-semibold hover:bg-white/15 transition" style={{ height: 52, paddingLeft: 28, paddingRight: 28 }}>
+                <MessageCircle className="w-4 h-4 text-[#25D366]" /> WhatsApp Order
               </a>
             </div>
+
+            <div className="mt-7 inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md max-w-full overflow-hidden">
+              <div className="grid place-items-center w-8 h-8 rounded-full bg-aurora text-[10px] font-bold shrink-0">{activity.name.split(" ").map((s) => s[0]).join("")}</div>
+              <div key={activityIdx} className="text-xs text-white/85 animate-[fadeInUp_0.4s_ease-out] truncate">
+                <b className="text-white">{activity.name}</b> {activity.action}{" "}
+                <b className="text-aurora-strong">{activity.item}</b> · <span className="text-white/55">{activity.ago}</span>
+              </div>
+            </div>
           </div>
 
-          {/* Editorial side column */}
-          <aside className="relative">
-            <div className="grid grid-cols-2 gap-3">
-              {HERO_TILES.map((t, i) => (
-                <button
-                  key={t.eyebrow}
-                  onClick={() => setIdx(i)}
-                  className={`relative aspect-[4/5] rounded-xl overflow-hidden border transition ${
-                    i === idx ? "border-foreground" : "border-foreground/15 hover:border-foreground/40"
-                  }`}
-                >
-                  <img src={t.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/10 to-transparent" />
-                  <div className="absolute bottom-3 left-3 right-3 text-left text-background">
-                    <div className="editorial-eyebrow opacity-80">{t.eyebrow}</div>
-                    <div className="display-serif text-2xl mt-0.5">{t.title}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-4 grid grid-cols-3 gap-3">
-              <Stat value="10k+" label="Customers" />
-              <Stat value="4.9" label="Rating / 5" />
-              <Stat value="20+" label="Brands" />
-            </div>
-
-            <div className="mt-4 glass-soft rounded-xl p-4 flex items-start gap-3">
-              <span className="grid place-items-center w-8 h-8 rounded-full bg-foreground text-background shrink-0">
-                <Shield className="w-3.5 h-3.5" />
-              </span>
-              <div className="text-xs leading-relaxed text-foreground/75">
-                <b className="text-foreground">৩০ দিনের ওয়ারেন্টি</b> · যেকোনো সমস্যায়
-                replacement বা refund — শুধু WhatsApp-এ মেসেজ।
+          <div className="grid grid-cols-6 grid-rows-6 gap-3 md:gap-4 h-[460px] md:h-[540px]">
+            <div className="col-span-6 row-span-3 relative rounded-3xl overflow-hidden border border-white/10 group">
+              <img src={slide.img} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3">
+                <div>
+                  <div className="text-[10px] uppercase tracking-widest text-white/70 font-bold">Featured</div>
+                  <div className="text-base md:text-lg font-bold mt-1">{slide.eyebrow}</div>
+                </div>
+                <div className="flex gap-1.5">
+                  {HERO_HIGHLIGHTS.map((_, i) => (
+                    <button key={i} onClick={() => setIdx(i)} aria-label={`Slide ${i + 1}`}
+                      className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-white" : "w-1.5 bg-white/40 hover:bg-white/60"}`} />
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="absolute -top-4 -right-2 hidden lg:flex flex-col items-center gap-1 text-foreground/40">
-              <span className="editorial-eyebrow">№</span>
-              <span className="display-serif text-3xl">{String(idx + 1).padStart(2, "0")}</span>
+            <div className="col-span-3 row-span-2 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md p-4 md:p-5 flex flex-col justify-between">
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="w-3.5 h-3.5 fill-[var(--color-gold)] text-[var(--color-gold)]" />)}
+              </div>
+              <div>
+                <div style={{ fontFamily: "var(--font-display)" }} className="text-2xl md:text-3xl font-extrabold text-aurora-strong">৪.৯/৫</div>
+                <div className="text-[11px] text-white/60 mt-0.5">10,000+ রিভিউ</div>
+              </div>
             </div>
-          </aside>
+
+            <div className="col-span-3 row-span-2 rounded-3xl bg-aurora p-4 md:p-5 flex flex-col justify-between glow-violet relative overflow-hidden">
+              <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/15 blur-2xl" />
+              <div className="relative grid place-items-center w-9 h-9 rounded-full bg-white/20"><Zap className="w-4 h-4" /></div>
+              <div className="relative">
+                <div style={{ fontFamily: "var(--font-display)" }} className="text-2xl md:text-3xl font-extrabold">১০ মিনিট</div>
+                <div className="text-[11px] text-white/85 mt-0.5">গড় ডেলিভারি টাইম</div>
+              </div>
+            </div>
+
+            <div className="col-span-6 row-span-1 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md px-4 md:px-5 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="grid place-items-center w-8 h-8 rounded-xl bg-white/10 shrink-0"><Shield className="w-4 h-4 text-emerald-300" /></div>
+                <div className="min-w-0">
+                  <div className="text-xs font-bold truncate">৩০ দিনের ফুল ওয়ারেন্টি</div>
+                  <div className="text-[10px] text-white/55 truncate">Replacement বা টাকা ফেরত</div>
+                </div>
+              </div>
+              <div className="flex -space-x-2 shrink-0">
+                {[1, 2, 3, 4].map((i) => <div key={i} className="w-7 h-7 rounded-full bg-aurora border-2 border-[#07071a]" />)}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Featured rail — newspaper style */}
-        {featured.length > 0 && (
-          <div className="mt-16 pt-8 border-t border-foreground/15">
-            <div className="flex items-end justify-between mb-5">
-              <div>
-                <div className="editorial-eyebrow text-foreground/60">In this issue</div>
-                <h3 className="display-serif text-2xl md:text-3xl mt-1">Featured drops</h3>
-              </div>
-              <Link to="/products" className="text-xs font-semibold border-b border-foreground/40 hover:border-foreground transition pb-0.5">
-                See all →
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-              {featured.map((p) => <ProductCard key={p.slug} product={p} />)}
-            </div>
-          </div>
-        )}
-
-        {/* Brand marquee */}
-        <div className="mt-14">
+        <div className="mt-12 md:mt-16 relative">
           <div className="flex items-center gap-3 mb-3">
-            <div className="h-px flex-1 bg-foreground/15" />
-            <span className="editorial-eyebrow text-foreground/55">Trusted brands</span>
-            <div className="h-px flex-1 bg-foreground/15" />
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            <span className="text-[10px] uppercase tracking-[0.25em] text-white/45 font-semibold">Trusted brands</span>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           </div>
-          <div className="relative overflow-hidden marquee-mask">
-            <div className="flex gap-3 animate-[marquee_40s_linear_infinite] w-max">
+          <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            <div className="flex gap-3 animate-[marquee_38s_linear_infinite] w-max">
               {[...BRAND_CHIPS, ...BRAND_CHIPS].map((b, i) => (
-                <span key={i} className="px-4 py-2 rounded-full border border-foreground/15 text-xs font-semibold text-foreground/75 whitespace-nowrap">
+                <span key={i} className="px-4 py-2 rounded-full bg-white/[0.06] border border-white/10 text-xs font-semibold text-white/80 whitespace-nowrap backdrop-blur-sm">
                   {b}
                 </span>
               ))}
@@ -203,53 +203,36 @@ function HeroLanding({ featured }: { featured: Product[] }) {
       </div>
 
       <style>{`
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .text-aurora-strong { background-image: linear-gradient(135deg, #c4b5fd 0%, #67e8f9 60%, #f0abfc 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
       `}</style>
     </section>
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="rounded-xl border border-foreground/15 px-3 py-3">
-      <div className="display-serif text-2xl">{value}</div>
-      <div className="editorial-eyebrow text-foreground/55 mt-1">{label}</div>
-    </div>
-  );
-}
 
 /* ================= Sections ================= */
 
-function SectionHead({
-  title,
-  subtitle,
-  viewAllTo,
-  eyebrow,
-}: {
-  title: string;
-  subtitle: string;
-  viewAllTo: "/products" | "/streaming" | "/ai-tools" | "/education";
-  eyebrow?: string;
-}) {
+function SectionHead({ title, subtitle, viewAllTo }: { title: string; subtitle: string; viewAllTo: "/products" | "/streaming" | "/ai-tools" | "/education" }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-3 mb-7 pb-4 border-b border-foreground/15">
+    <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
       <div>
-        {eyebrow && <div className="editorial-eyebrow text-foreground/55 mb-2">{eyebrow}</div>}
-        <h2 className="display-serif" style={{ fontSize: "clamp(28px, 4vw, 44px)" }}>{title}</h2>
-        <p className="text-sm text-muted-foreground mt-2 max-w-xl">{subtitle}</p>
+        <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 800 }}>{title}</h2>
+        <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
       </div>
-      <Link to={viewAllTo} className="inline-flex items-center gap-1.5 text-xs font-semibold border-b border-foreground/40 hover:border-foreground pb-0.5 transition">
-        See all <ChevronRight className="w-3.5 h-3.5" />
+      <Link to={viewAllTo} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full glass text-xs font-bold hover:bg-white/80 transition">
+        View all <ChevronRight className="w-3.5 h-3.5" />
       </Link>
     </div>
   );
 }
 
-function ProductGrid({ title, subtitle, items, cap, viewAllTo, eyebrow }: { title: string; subtitle: string; items: Product[]; cap: number; viewAllTo: "/products" | "/streaming" | "/ai-tools" | "/education"; eyebrow?: string }) {
+function ProductGrid({ title, subtitle, items, cap, viewAllTo }: { title: string; subtitle: string; items: Product[]; cap: number; viewAllTo: "/products" | "/streaming" | "/ai-tools" | "/education" }) {
   if (!items.length) return null;
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-14">
-      <SectionHead title={title} subtitle={subtitle} viewAllTo={viewAllTo} eyebrow={eyebrow} />
+      <SectionHead title={title} subtitle={subtitle} viewAllTo={viewAllTo} />
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
         {items.slice(0, cap).map((p) => <ProductCard key={p.slug} product={p} />)}
       </div>
@@ -257,23 +240,22 @@ function ProductGrid({ title, subtitle, items, cap, viewAllTo, eyebrow }: { titl
   );
 }
 
-function ProductRail({ title, subtitle, items, viewAllTo, eyebrow }: { title: string; subtitle: string; items: Product[]; viewAllTo: "/streaming" | "/ai-tools" | "/education"; eyebrow?: string }) {
+function ProductRail({ title, subtitle, items, viewAllTo }: { title: string; subtitle: string; items: Product[]; viewAllTo: "/streaming" | "/ai-tools" | "/education" }) {
   const ref = useRef<HTMLDivElement>(null);
   if (!items.length) return null;
   const scroll = (dir: 1 | -1) => ref.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
-      <div className="flex flex-wrap items-end justify-between gap-3 mb-6 pb-4 border-b border-foreground/15">
+      <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
         <div>
-          {eyebrow && <div className="editorial-eyebrow text-foreground/55 mb-2">{eyebrow}</div>}
-          <h2 className="display-serif" style={{ fontSize: "clamp(28px, 4vw, 44px)" }}>{title}</h2>
-          <p className="text-sm text-muted-foreground mt-2 max-w-xl">{subtitle}</p>
+          <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 800 }}>{title}</h2>
+          <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => scroll(-1)} className="hidden md:grid place-items-center w-10 h-10 rounded-full border border-foreground/20 hover:bg-foreground hover:text-background transition" aria-label="Scroll left"><ChevronLeft className="w-4 h-4" /></button>
-          <button onClick={() => scroll(1)} className="hidden md:grid place-items-center w-10 h-10 rounded-full border border-foreground/20 hover:bg-foreground hover:text-background transition" aria-label="Scroll right"><ChevronRight className="w-4 h-4" /></button>
-          <Link to={viewAllTo} className="inline-flex items-center gap-1.5 text-xs font-semibold border-b border-foreground/40 hover:border-foreground pb-0.5 transition">
-            See all <ChevronRight className="w-3.5 h-3.5" />
+          <button onClick={() => scroll(-1)} className="hidden md:grid place-items-center w-9 h-9 rounded-full glass hover:bg-white/80 transition" aria-label="Scroll left"><ChevronLeft className="w-4 h-4" /></button>
+          <button onClick={() => scroll(1)} className="hidden md:grid place-items-center w-9 h-9 rounded-full glass hover:bg-white/80 transition" aria-label="Scroll right"><ChevronRight className="w-4 h-4" /></button>
+          <Link to={viewAllTo} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full glass text-xs font-bold hover:bg-white/80 transition">
+            View all <ChevronRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       </div>
@@ -296,16 +278,16 @@ function TrustStrip() {
     { icon: Headphones, t: "২৪/৭ সাপোর্ট", s: "WhatsApp + email" },
   ];
   return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-foreground/15 border border-foreground/15 rounded-2xl overflow-hidden">
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {items.map((it) => (
-          <div key={it.t} className="bg-background p-6 flex items-start gap-4">
-            <div className="grid place-items-center w-11 h-11 shrink-0 rounded-full border border-foreground/20">
-              <it.icon className="w-4 h-4" />
+          <div key={it.t} className="glass rounded-2xl p-5 flex items-start gap-3">
+            <div className="grid place-items-center w-11 h-11 shrink-0 rounded-2xl bg-aurora text-white glow-violet">
+              <it.icon className="w-5 h-5" />
             </div>
             <div>
               <div className="text-sm font-bold tracking-tight">{it.t}</div>
-              <div className="text-xs text-muted-foreground mt-1">{it.s}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">{it.s}</div>
             </div>
           </div>
         ))}
@@ -318,26 +300,24 @@ function HowItWorks() {
   const steps = [
     { n: "01", t: "প্রোডাক্ট সিলেক্ট করুন", d: "ক্যাটেগরি থেকে আপনার পছন্দের সাবস্ক্রিপশন বেছে নিন।" },
     { n: "02", t: "পেমেন্ট সম্পন্ন করুন", d: "bKash, Nagad, Rocket অথবা কার্ড দিয়ে সহজেই পে করুন।" },
-    { n: "03", t: "১০ মিনিটে ডেলিভারি", d: "অ্যাকাউন্টের ডিটেইল ইমেইল ও WhatsApp-এ পেয়ে যাবেন।" },
+    { n: "03", t: "মাত্র ১০ মিনিটে ডেলিভারি", d: "অ্যাকাউন্টের ডিটেইল ইমেইল ও WhatsApp-এ পেয়ে যাবেন।" },
   ];
   return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-16">
-      <div className="max-w-2xl mb-10">
-        <div className="editorial-eyebrow text-foreground/55 mb-2">The process</div>
-        <h2 className="display-serif" style={{ fontSize: "clamp(28px, 4vw, 48px)" }}>
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-14">
+      <div className="text-center max-w-2xl mx-auto mb-10">
+        <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 800 }}>
           কিভাবে কাজ করে?
         </h2>
-        <p className="text-muted-foreground mt-3">তিনটি সহজ ধাপে আপনার প্রিমিয়াম সাবস্ক্রিপশন।</p>
+        <p className="text-muted-foreground mt-2">তিনটি সহজ ধাপে আপনার প্রিমিয়াম সাবস্ক্রিপশন।</p>
       </div>
-      <div className="grid md:grid-cols-3 gap-6">
-        {steps.map((s, i) => (
-          <div key={s.n} className="relative pt-6 border-t border-foreground/20">
-            <div className="flex items-baseline justify-between">
-              <div className="display-serif text-5xl">{s.n}</div>
-              {i < steps.length - 1 && <ChevronRight className="w-4 h-4 text-foreground/30 hidden md:block" />}
+      <div className="grid md:grid-cols-3 gap-5">
+        {steps.map((s) => (
+          <div key={s.n} className="glass-strong rounded-2xl p-6 relative overflow-hidden">
+            <div className="text-7xl font-black text-aurora opacity-20 absolute -top-2 right-4 select-none">{s.n}</div>
+            <div className="relative">
+              <h3 className="text-base font-bold tracking-tight">{s.t}</h3>
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{s.d}</p>
             </div>
-            <h3 className="mt-5 text-lg font-bold tracking-tight">{s.t}</h3>
-            <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{s.d}</p>
           </div>
         ))}
       </div>
@@ -353,23 +333,26 @@ function Testimonials() {
     { name: "Sajid I.", city: "Khulna", text: "WhatsApp-এ রাত ১১টায়ও রিপ্লাই পেলাম। সাপোর্ট টিম ফাস্ট।" },
   ];
   return (
-    <section className="bg-foreground text-background relative overflow-hidden">
-      <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 py-20">
-        <div className="max-w-2xl mb-12">
-          <div className="editorial-eyebrow text-background/60 mb-2">Letters</div>
-          <h2 className="display-serif" style={{ fontSize: "clamp(32px, 5vw, 64px)" }}>
-            10,000+ <span className="italic font-medium">satisfied</span> readers.
+    <section className="bg-[#07071a] text-white relative overflow-hidden">
+      <div className="pointer-events-none absolute -top-24 left-1/3 w-[420px] h-[420px] rounded-full bg-primary/30 blur-[140px]" />
+      <div className="pointer-events-none absolute -bottom-24 right-0 w-[420px] h-[420px] rounded-full bg-[var(--color-aqua)]/30 blur-[140px]" />
+      <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 py-16">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 800 }}>
+            ১০,০০০+ <span className="text-aurora-strong">সন্তুষ্ট গ্রাহক</span>
           </h2>
-          <p className="text-background/70 mt-3">তাদের অভিজ্ঞতা — আপনার আত্মবিশ্বাস।</p>
+          <p className="text-white/70 mt-2">তাদের অভিজ্ঞতা — আপনার আত্মবিশ্বাস।</p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-background/15 border border-background/15">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {reviews.map((r, i) => (
-            <div key={i} className="bg-foreground p-6">
-              <div className="display-serif text-4xl text-background/40 leading-none">"</div>
-              <p className="text-sm text-background/85 leading-relaxed mt-2">{r.text}</p>
-              <div className="mt-6 pt-4 border-t border-background/20 text-xs">
-                <div className="font-bold text-background">{r.name}</div>
-                <div className="text-background/55 mt-0.5">{r.city}</div>
+            <div key={i} className="rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-md">
+              <div className="flex items-center gap-1 mb-3">
+                {[1,2,3,4,5].map((j) => <Star key={j} className="w-3.5 h-3.5 fill-[var(--color-gold)] text-[var(--color-gold)]" />)}
+              </div>
+              <p className="text-sm text-white/85 leading-relaxed">"{r.text}"</p>
+              <div className="mt-4 text-xs">
+                <div className="font-bold">{r.name}</div>
+                <div className="text-white/55">{r.city}</div>
               </div>
             </div>
           ))}
@@ -393,38 +376,36 @@ const FAQS = [
 function FaqSection() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-20">
-      <div className="grid md:grid-cols-3 gap-10 items-start">
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-16">
+      <div className="grid md:grid-cols-3 gap-8 items-start">
         <div className="md:col-span-1">
-          <div className="editorial-eyebrow text-foreground/55 mb-2">FAQ</div>
-          <h2 className="display-serif" style={{ fontSize: "clamp(32px, 4vw, 56px)" }}>
-            প্রশ্ন আছে?
-            <br />
-            <span className="italic font-medium">উত্তর এখানে।</span>
+          <span className="inline-flex px-3 py-1 rounded-full glass text-xs font-bold mb-3">FAQ</span>
+          <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(24px, 3vw, 34px)", fontWeight: 800, lineHeight: 1.15 }}>
+            প্রশ্ন আছে? <br /><span className="text-aurora">উত্তর এখানে।</span>
           </h2>
-          <p className="text-sm text-muted-foreground mt-4 leading-relaxed max-w-sm">
+          <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
             যদি আপনার প্রশ্নের উত্তর এখানে না পান, সরাসরি WhatsApp-এ মেসেজ করুন — আমরা সবসময় হাজির।
           </p>
-          <Link to="/faq" className="mt-6 inline-flex items-center gap-2 h-11 px-5 rounded-full bg-foreground text-background text-xs font-semibold hover:bg-foreground/90 transition">
+          <Link to="/faq" className="mt-5 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-aurora text-white text-xs font-bold glow-violet">
             সব প্রশ্ন দেখুন <ChevronRight className="w-3.5 h-3.5" />
           </Link>
         </div>
-        <div className="md:col-span-2 border-t border-foreground/15">
+        <div className="md:col-span-2 space-y-3">
           {FAQS.map((f, i) => {
             const isOpen = open === i;
             return (
               <button
                 key={i}
                 onClick={() => setOpen(isOpen ? null : i)}
-                className="w-full text-left py-5 border-b border-foreground/15 group"
+                className={`w-full text-left glass-strong rounded-2xl px-5 py-4 transition ${isOpen ? "ring-2 ring-primary/30" : ""}`}
               >
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-base md:text-lg font-bold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>{f.q}</span>
-                  <span className="grid place-items-center w-8 h-8 rounded-full border border-foreground/20 shrink-0 group-hover:bg-foreground group-hover:text-background transition">
+                  <span className="text-sm md:text-base font-bold tracking-tight">{f.q}</span>
+                  <span className="grid place-items-center w-7 h-7 rounded-full bg-aurora text-white shrink-0">
                     {isOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                   </span>
                 </div>
-                {isOpen && <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-2xl">{f.a}</p>}
+                {isOpen && <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.a}</p>}
               </button>
             );
           })}
@@ -436,29 +417,21 @@ function FaqSection() {
 
 function NewsletterCTA() {
   return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-10 pb-20">
-      <div className="relative rounded-3xl border border-foreground/15 bg-background p-8 md:p-14 overflow-hidden">
-        <div className="absolute top-0 right-0 display-serif text-[18rem] leading-none text-foreground/[0.04] select-none pointer-events-none -mt-12 -mr-6">
-          ✦
-        </div>
-        <div className="relative grid md:grid-cols-2 gap-10 items-center">
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 pb-16">
+      <div className="relative rounded-3xl bg-aurora text-white p-8 md:p-14 overflow-hidden glow-violet">
+        <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-white/15 blur-3xl" />
+        <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-[var(--color-gold)]/30 blur-3xl" />
+        <div className="relative grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <div className="editorial-eyebrow text-foreground/55 mb-3">Subscribe</div>
-            <h2 className="display-serif" style={{ fontSize: "clamp(28px, 4vw, 48px)" }}>
-              নতুন অফারের <span className="italic font-medium">আপডেট</span> পেতে চান?
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 800, lineHeight: 1.15 }}>
+              নতুন অফারের আপডেট পেতে চান?
             </h2>
-            <p className="mt-4 text-muted-foreground max-w-md">
-              নতুন প্রোডাক্ট ও ডিসকাউন্ট এলেই WhatsApp / ইমেইলে সবার আগে জানিয়ে দেব।
-            </p>
+            <p className="mt-3 text-white/85 max-w-md">নতুন প্রোডাক্ট ও ডিসকাউন্ট এলেই WhatsApp / ইমেইলে সবার আগে জানিয়ে দেব।</p>
           </div>
-          <form className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:border sm:border-foreground/20 sm:rounded-full sm:p-1.5" onSubmit={(e) => e.preventDefault()}>
-            <input
-              type="email"
-              required
-              placeholder="your@email.com"
-              className="flex-1 h-11 px-5 rounded-full bg-transparent text-foreground placeholder:text-muted-foreground outline-none border border-foreground/20 sm:border-0"
-            />
-            <button className="h-11 px-7 rounded-full bg-foreground text-background text-sm font-semibold hover:bg-foreground/90 transition">
+          <form className="flex flex-col sm:flex-row gap-3" onSubmit={(e) => e.preventDefault()}>
+            <input type="email" required placeholder="your@email.com"
+              className="flex-1 h-12 px-5 rounded-full bg-white/95 text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-white" />
+            <button className="h-12 px-7 rounded-full bg-[#0b0b1a] text-white text-sm font-bold hover:scale-105 transition">
               Subscribe
             </button>
           </form>
