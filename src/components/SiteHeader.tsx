@@ -207,9 +207,16 @@ export function SiteHeader() {
               ) : (
                 <Link
                   to="/auth"
-                  className="hidden sm:inline-flex items-center gap-1.5 h-11 px-5 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition"
+                  className="hidden sm:inline-flex group relative items-center gap-1.5 h-9 pl-3 pr-3.5 rounded-full text-[12px] font-extrabold tracking-tight text-white overflow-hidden ring-1 ring-white/15 hover:ring-white/30 shadow-[0_8px_22px_-8px_rgba(124,58,237,0.65)] hover:shadow-[0_12px_28px_-8px_rgba(124,58,237,0.85)] transition-all duration-300 hover:-translate-y-0.5"
                 >
-                  <LogIn className="w-4 h-4" /> Login / Sign Up
+                  <span className="absolute inset-0 bg-gradient-to-r from-primary via-violet-500 to-aqua" />
+                  <span className="absolute inset-0 bg-gradient-to-r from-aqua via-violet-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <span className="absolute -inset-x-1 -top-1 h-px bg-white/40" />
+                  <span className="absolute -inset-y-2 -left-6 w-6 rotate-12 bg-white/30 blur-sm translate-x-0 group-hover:translate-x-[180px] transition-transform duration-700 ease-out" />
+                  <span className="relative grid place-items-center h-5 w-5 rounded-full bg-white/15 ring-1 ring-white/25">
+                    <LogIn className="w-3 h-3" />
+                  </span>
+                  <span className="relative">Login</span>
                 </Link>
               )}
 
