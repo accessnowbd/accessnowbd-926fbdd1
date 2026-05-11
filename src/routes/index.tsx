@@ -23,41 +23,6 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const SLIDES = [
-  {
-    img: heroPayment,
-    eyebrow: "নতুন ফিচার",
-    title: <>এখন <span className="text-aurora-strong">AccessNow&nbsp;BD</span><br/>সাবস্ক্রিপশন পেমেন্ট আরও সহজ</>,
-    sub: "bKash, Nagad, Rocket অথবা যেকোনো কার্ড — মাত্র ৩০ সেকেন্ডে অর্ডার সম্পন্ন।",
-    ctaLabel: "এখনই কিনুন",
-    accent: "from-violet-600/40 via-fuchsia-600/30 to-rose-500/30",
-  },
-  {
-    img: heroDelivery,
-    eyebrow: "Instant Delivery",
-    title: <>মাত্র <span className="text-aurora-strong">১০ মিনিটে</span><br/>ডেলিভারি — যেকোনো সময়</>,
-    sub: "অফিস আওয়ার ১১টা–১১টা। অর্ডার করার সাথে সাথে ইমেইল ও WhatsApp-এ ডিটেইল পেয়ে যাবেন।",
-    ctaLabel: "প্রোডাক্ট দেখুন",
-    accent: "from-cyan-500/40 via-violet-500/30 to-emerald-500/30",
-  },
-  {
-    img: heroWarranty,
-    eyebrow: "Full Warranty",
-    title: <><span className="text-aurora-strong">৩০ দিনের</span> ওয়ারেন্টি<br/>সম্পূর্ণ ভেরিফাইড অ্যাকাউন্ট</>,
-    sub: "অ্যাকাউন্টে যেকোনো সমস্যা হলে রিপ্লেসমেন্ট অথবা টাকা ফেরত — কোনো প্রশ্ন ছাড়াই।",
-    ctaLabel: "আরও জানুন",
-    accent: "from-emerald-500/40 via-violet-500/25 to-amber-400/30",
-  },
-  {
-    img: heroEducation,
-    eyebrow: "Education Bundle",
-    title: <>স্টুডেন্টদের জন্য<br/><span className="text-aurora-strong">এডুকেশন বান্ডেল</span> অফার</>,
-    sub: "Coursera, Grammarly, ChatGPT, Canva — একসাথে নিলে এক্সট্রা ডিসকাউন্ট।",
-    ctaLabel: "বান্ডেল দেখুন",
-    accent: "from-amber-500/35 via-rose-500/25 to-violet-600/30",
-  },
-] as const;
-
 function Index() {
   const { products } = useProducts();
 
