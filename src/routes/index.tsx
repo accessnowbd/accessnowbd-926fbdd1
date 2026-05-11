@@ -108,83 +108,157 @@ function pickTopProducts(products: Product[]) {
   return picked.length ? picked : products.slice(0, 8);
 }
 
+const HERO_BRANDS = [
+  { name: "Netflix", domain: "netflix.com" },
+  { name: "ChatGPT", domain: "openai.com" },
+  { name: "Spotify", domain: "spotify.com" },
+  { name: "Canva", domain: "canva.com" },
+  { name: "Adobe", domain: "adobe.com" },
+  { name: "Microsoft", domain: "microsoft.com" },
+  { name: "Prime Video", domain: "primevideo.com" },
+  { name: "Grammarly", domain: "grammarly.com" },
+  { name: "NordVPN", domain: "nordvpn.com" },
+  { name: "Coursera", domain: "coursera.org" },
+  { name: "YouTube", domain: "youtube.com" },
+  { name: "Claude", domain: "claude.ai" },
+];
+
 function HeroExperience() {
   return (
-    <section className="relative px-4 md:px-10 pt-10 pb-14 md:pt-14 md:pb-20">
-      <div className="absolute inset-0 bg-mesh opacity-80 pointer-events-none" />
-      <div className="relative mx-auto max-w-[1440px] grid lg:grid-cols-[1.05fr_0.95fr] gap-6 lg:gap-8 items-stretch">
-        <div className="glass-strong rounded-[var(--radius-2xl)] p-6 md:p-10 lg:p-12 min-h-[560px] flex flex-col justify-between overflow-hidden">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-2 text-xs font-bold text-primary">
-              <Sparkles className="h-4 w-4" /> বাংলাদেশের ডিজিটাল প্রোডাক্ট মার্কেটপ্লেস
+    <section className="relative px-4 md:px-10 pt-10 pb-16 md:pt-16 md:pb-24 overflow-hidden">
+      {/* Animated background layers */}
+      <div className="absolute inset-0 bg-mesh opacity-90 pointer-events-none animate-aurora-pan" />
+      <div className="pointer-events-none absolute -top-40 -left-32 h-[520px] w-[520px] rounded-full bg-violet-grad opacity-40 blur-3xl animate-blob" />
+      <div className="pointer-events-none absolute -bottom-40 -right-24 h-[560px] w-[560px] rounded-full bg-cyan-grad opacity-35 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
+      <div className="pointer-events-none absolute top-1/3 left-1/2 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-aurora opacity-25 blur-3xl animate-pulse-glow" />
+
+      <div className="relative mx-auto max-w-[1440px] grid lg:grid-cols-[1.1fr_0.9fr] gap-6 lg:gap-10 items-stretch">
+        {/* LEFT — Headline panel */}
+        <div className="relative glass-strong rounded-[var(--radius-2xl)] p-7 md:p-12 lg:p-14 min-h-[600px] flex flex-col justify-between overflow-hidden noise-overlay">
+          {/* gradient ring corner */}
+          <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-conic opacity-30 blur-2xl" style={{ animation: "spinSlow 30s linear infinite" }} />
+
+          <div className="relative">
+            <div className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-2 text-xs font-bold text-aurora-strong neon-border">
+              <Sparkles className="h-4 w-4 text-aqua" /> #১ Premium Digital Marketplace · Bangladesh
             </div>
-            <h1 className="mt-6 max-w-4xl text-foreground" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(42px, 7vw, 88px)", lineHeight: 0.95, fontWeight: 800 }}>
-              Software, subscription, tools — সবকিছু এক নতুন glass store-এ।
+
+            <h1
+              className="mt-7 max-w-4xl text-foreground"
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(40px, 6.6vw, 92px)", lineHeight: 0.95, fontWeight: 900, letterSpacing: "-0.02em" }}
+            >
+              এক জায়গায়{" "}
+              <span className="text-aurora animate-aurora-pan inline-block">সব Premium</span>{" "}
+              Software ও Subscription।
             </h1>
+
             <p className="mt-6 max-w-2xl text-base md:text-lg text-muted-foreground leading-relaxed">
-              OTT, AI, Windows, Office, Editing, VPN, Education ও Gift Card—যে সার্ভিসই লাগুক, AccessNow BD থেকে দ্রুত ও নিরাপদে অর্ডার করুন।
+              Netflix, ChatGPT, Canva, Adobe, Microsoft 365, VPN ও আরও ৩৬+ verified service —
+              <span className="text-foreground font-semibold"> ১০ মিনিটে delivery</span>, lifetime support এবং সেরা দামে।
             </p>
           </div>
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <Link to="/products" className="btn-aurora inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-7 text-sm font-bold">
-              সব প্রোডাক্ট দেখুন <ArrowRight className="h-4 w-4" />
+          <div className="relative mt-8 flex flex-col sm:flex-row gap-3">
+            <Link to="/products" className="btn-aurora group relative overflow-hidden inline-flex h-[56px] items-center justify-center gap-2 rounded-full px-8 text-sm font-extrabold">
+              <span className="relative z-10">সব প্রোডাক্ট দেখুন</span>
+              <ArrowRight className="relative z-10 h-4 w-4 transition group-hover:translate-x-1" />
+              <span className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-white/30 blur-md animate-shine" />
             </Link>
-            <Link to="/contact" className="glass inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-7 text-sm font-bold text-foreground hover:shadow-[var(--shadow-glass-lg)] transition">
-              কাস্টম অর্ডার দিন
+            <Link to="/contact" className="glass inline-flex h-[56px] items-center justify-center gap-2 rounded-full px-8 text-sm font-extrabold text-foreground hover:shadow-[var(--shadow-glow-aqua)] transition">
+              <Headphones className="h-4 w-4 text-aqua" /> কাস্টম অর্ডার দিন
             </Link>
           </div>
 
-          <div className="mt-10 grid grid-cols-3 gap-3">
+          <div className="relative mt-10 grid grid-cols-3 gap-3">
             {[
-              ["৩৬+", "প্রোডাক্ট"],
-              ["১০মিনিট", "ডেলিভারি"],
-              ["২৪/৭", "সাপোর্ট"],
-            ].map(([value, label]) => (
-              <div key={label} className="glass-soft rounded-2xl p-4">
-                <div className="text-2xl md:text-3xl font-extrabold text-aurora">{value}</div>
-                <div className="mt-1 text-xs font-semibold text-muted-foreground">{label}</div>
-              </div>
-            ))}
+              ["৩৬+", "Verified Products", Sparkles],
+              ["১০ মিনিট", "Average Delivery", Clock3],
+              ["২৪/৭", "Live Support", Headphones],
+            ].map(([value, label, Icon]) => {
+              const I = Icon as typeof Sparkles;
+              return (
+                <div key={label as string} className="gradient-border-soft p-4 hover:-translate-y-0.5 transition">
+                  <div className="flex items-center gap-2">
+                    <span className="grid h-8 w-8 place-items-center rounded-xl bg-aurora text-white shadow-[var(--shadow-glow-aqua)]">
+                      <I className="h-4 w-4" />
+                    </span>
+                    <div className="text-xl md:text-2xl font-extrabold text-aurora">{value as string}</div>
+                  </div>
+                  <div className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{label as string}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        <div className="grid grid-rows-[1fr_auto] gap-5">
-          <div className="glass-strong rounded-[var(--radius-2xl)] p-5 md:p-6 overflow-hidden">
-            <div className="grid grid-cols-2 gap-4 h-full">
-              {CATEGORY_DECK.slice(0, 4).map((category, index) => (
-                <Link key={category.title} to={category.to} className={`group glass-soft rounded-3xl p-5 min-h-[210px] flex flex-col justify-between hover:-translate-y-1 transition ${index === 0 ? "col-span-2 md:col-span-1" : ""}`}>
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-[var(--shadow-glow-violet)]">
-                      <category.icon className="h-5 w-5" />
-                    </span>
-                    <span className="rounded-full bg-secondary px-3 py-1 text-xs font-extrabold text-secondary-foreground">{category.count}</span>
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-extrabold text-foreground">{category.title}</h2>
-                    <p className="mt-1 text-xs text-muted-foreground">{category.label}</p>
-                    <div className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-primary">
-                      Explore <ChevronRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-                    </div>
-                  </div>
-                </Link>
+        {/* RIGHT — Hero visual stack */}
+        <div className="relative grid grid-rows-[1fr_auto] gap-5">
+          <div className="relative glass-strong rounded-[var(--radius-2xl)] p-6 md:p-8 overflow-hidden min-h-[420px]">
+            {/* Floating spotlight orbs */}
+            <div className="pointer-events-none absolute top-8 right-8 h-32 w-32 rounded-full" style={{ background: "radial-gradient(circle at 30% 30%, #67e8f9, #2563EB 60%, transparent 70%)", filter: "blur(2px)" }} />
+            <div className="pointer-events-none absolute bottom-10 left-6 h-24 w-24 rounded-full animate-float" style={{ background: "radial-gradient(circle at 30% 30%, #a78bfa, #7C3AED 60%, transparent 75%)" }} />
+
+            <div className="relative">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold uppercase tracking-[0.22em] text-aqua">Trusted Brands</span>
+                <span className="rounded-full glass-soft px-3 py-1 text-[11px] font-bold text-foreground">Live</span>
+              </div>
+              <h3 className="mt-3 text-2xl md:text-[28px] font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
+                আমাদের <span className="text-neon">Verified Partner</span> ব্র্যান্ডসমূহ
+              </h3>
+            </div>
+
+            {/* Brand logo grid */}
+            <div className="relative mt-5 grid grid-cols-3 gap-3">
+              {HERO_BRANDS.slice(0, 6).map((b, i) => (
+                <div
+                  key={b.name}
+                  className="group glass-soft rounded-2xl aspect-square flex items-center justify-center p-3 hover:-translate-y-1 hover:shadow-[var(--shadow-glow-aqua)] transition animate-float"
+                  style={{ animationDelay: `${i * 0.6}s`, animationDuration: "7s" }}
+                >
+                  <img
+                    src={`https://logo.clearbit.com/${b.domain}`}
+                    alt={b.name}
+                    loading="lazy"
+                    className="max-h-10 max-w-[80%] object-contain opacity-95 group-hover:scale-110 transition drop-shadow-[0_4px_12px_rgba(0,229,255,0.35)]"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                  />
+                </div>
               ))}
+            </div>
+
+            {/* Marquee strip */}
+            <div className="relative mt-5 overflow-hidden rounded-2xl glass-soft py-3">
+              <div className="flex gap-10 whitespace-nowrap animate-marquee">
+                {[...HERO_BRANDS, ...HERO_BRANDS].map((b, i) => (
+                  <span key={i} className="inline-flex items-center gap-2 text-sm font-bold text-foreground/90">
+                    <span className="h-1.5 w-1.5 rounded-full bg-aqua shadow-[0_0_8px_var(--aqua)]" />
+                    {b.name}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="glass rounded-[var(--radius-2xl)] p-5 md:p-6">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">Live activity</p>
-                <div className="mt-2 space-y-2">
-                  {ACTIVITY.map((item) => (
-                    <div key={item} className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                      <span className="h-2 w-2 rounded-full bg-success" /> {item}
+          {/* Live activity card */}
+          <div className="relative glass rounded-[var(--radius-2xl)] p-5 md:p-6 overflow-hidden">
+            <div className="pointer-events-none absolute -top-10 -right-10 h-36 w-36 rounded-full bg-aurora opacity-25 blur-2xl" />
+            <div className="relative flex items-center justify-between gap-4">
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-aqua">Live Activity</p>
+                <div className="mt-3 space-y-2">
+                  {ACTIVITY.slice(0, 3).map((item) => (
+                    <div key={item} className="flex items-center gap-2 text-sm font-semibold text-foreground truncate">
+                      <span className="relative flex h-2 w-2">
+                        <span className="absolute inline-flex h-full w-full rounded-full bg-success opacity-75 animate-ping" />
+                        <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
+                      </span>
+                      <span className="truncate">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="hidden sm:grid h-20 w-20 place-items-center rounded-full bg-aurora text-primary-foreground shadow-[var(--shadow-glow-violet)]">
+              <div className="hidden sm:grid h-20 w-20 place-items-center rounded-2xl bg-aurora text-primary-foreground shadow-[var(--shadow-glow-violet)] animate-pulse-glow">
                 <Zap className="h-8 w-8" />
               </div>
             </div>
