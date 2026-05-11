@@ -12,9 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StreamingRouteImport } from './routes/streaming'
 import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EducationRouteImport } from './routes/education'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -48,6 +51,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -61,6 +69,16 @@ const ProductsRoute = ProductsRouteImport.update({
 const OrdersRoute = OrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -159,9 +177,12 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/education': typeof EducationRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
   '/orders': typeof OrdersRouteWithChildren
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
@@ -183,9 +204,12 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/education': typeof EducationRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
   '/orders': typeof OrdersRouteWithChildren
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
@@ -209,9 +233,12 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/education': typeof EducationRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
   '/orders': typeof OrdersRouteWithChildren
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
@@ -236,9 +263,12 @@ export interface FileRouteTypes {
     | '/contact'
     | '/education'
     | '/faq'
+    | '/forgot-password'
+    | '/login'
     | '/orders'
     | '/products'
     | '/profile'
+    | '/register'
     | '/reset-password'
     | '/sitemap'
     | '/streaming'
@@ -260,9 +290,12 @@ export interface FileRouteTypes {
     | '/contact'
     | '/education'
     | '/faq'
+    | '/forgot-password'
+    | '/login'
     | '/orders'
     | '/products'
     | '/profile'
+    | '/register'
     | '/reset-password'
     | '/sitemap'
     | '/streaming'
@@ -285,9 +318,12 @@ export interface FileRouteTypes {
     | '/contact'
     | '/education'
     | '/faq'
+    | '/forgot-password'
+    | '/login'
     | '/orders'
     | '/products'
     | '/profile'
+    | '/register'
     | '/reset-password'
     | '/sitemap'
     | '/streaming'
@@ -311,9 +347,12 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   EducationRoute: typeof EducationRoute
   FaqRoute: typeof FaqRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LoginRoute: typeof LoginRoute
   OrdersRoute: typeof OrdersRouteWithChildren
   ProductsRoute: typeof ProductsRoute
   ProfileRoute: typeof ProfileRoute
+  RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapRoute: typeof SitemapRoute
   StreamingRoute: typeof StreamingRoute
@@ -343,6 +382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -362,6 +408,20 @@ declare module '@tanstack/react-router' {
       path: '/orders'
       fullPath: '/orders'
       preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -527,9 +587,12 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   EducationRoute: EducationRoute,
   FaqRoute: FaqRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  LoginRoute: LoginRoute,
   OrdersRoute: OrdersRouteWithChildren,
   ProductsRoute: ProductsRoute,
   ProfileRoute: ProfileRoute,
+  RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapRoute: SitemapRoute,
   StreamingRoute: StreamingRoute,
