@@ -219,10 +219,9 @@ export function SiteFooter() {
                     href="https://shahedit.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative inline-flex items-center gap-1 px-2.5 py-1 rounded-full glass-soft border border-white/15 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_-4px_var(--color-primary)]"
+                    className="group relative inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/25 hover:bg-white/15 hover:border-primary/60 transition-all duration-300 hover:shadow-[0_0_20px_-4px_var(--color-primary)]"
                   >
-                    
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-glow via-white to-[var(--color-aqua)] font-extrabold tracking-wide">
+                    <span className="text-white font-extrabold tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                       Shahed IT
                     </span>
                   </a>
