@@ -81,6 +81,20 @@ function CheckoutPage() {
   const step1Valid = !errors.name && !errors.email && !errors.phone;
   const step2Valid = !errors.senderNumber && !errors.trxId;
 
+  // Guard direct deep links: if user lands on step 2/3 without prior steps valid, bounce back.
+  useEffect(() => {
+    if (submitted) return;
+    if ((step === 2 || step === 3) && !step1Valid) {
+      setTouched((t) => ({ ...t, name: true, email: true, phone: true }));
+      navigate({ to: "/checkout", search: { step: 1 }, replace: true });
+      return;
+    }
+    if (step === 3 && !step2Valid) {
+      setTouched((t) => ({ ...t, senderNumber: true, trxId: true }));
+      navigate({ to: "/checkout", search: { step: 2 }, replace: true });
+    }
+  }, [step, step1Valid, step2Valid, submitted, navigate]);
+
   const copyNumber = async () => {
     await navigator.clipboard.writeText(selectedMethod.number.replace(/-/g, ""));
     setCopied(true);
