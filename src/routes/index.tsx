@@ -120,13 +120,13 @@ function pickTopProducts(products: Product[]) {
   return picked.length ? picked : products.slice(0, 8);
 }
 
-const HERO_BRANDS = [
+const HERO_BRANDS: { name: string; domain: string; color: string; logo?: string }[] = [
   { name: "Netflix", domain: "netflix.com", color: "#E50914" },
   { name: "ChatGPT", domain: "openai.com", color: "#10A37F" },
   { name: "Spotify", domain: "spotify.com", color: "#1DB954" },
   { name: "Canva", domain: "canva.com", color: "#00C4CC" },
   { name: "Adobe", domain: "adobe.com", color: "#FF0000" },
-  { name: "Microsoft", domain: "microsoft.com", color: "#00A4EF" },
+  { name: "Office 365", domain: "office.com", color: "#EA3E23", logo: "/images/office-365.png" },
   { name: "Prime Video", domain: "primevideo.com", color: "#00A8E1" },
   { name: "Grammarly", domain: "grammarly.com", color: "#27AE60" },
   { name: "NordVPN", domain: "nordvpn.com", color: "#4687FF" },
@@ -135,8 +135,9 @@ const HERO_BRANDS = [
   { name: "Claude", domain: "claude.ai", color: "#D97757" },
 ];
 
-const brandLogo = (domain: string) =>
-  `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+const brandLogo = (b: { domain: string; logo?: string }) =>
+  b.logo ?? `https://www.google.com/s2/favicons?domain=${b.domain}&sz=128`;
+
 
 function HeroExperience() {
   return (
@@ -282,7 +283,7 @@ function HeroExperience() {
                     style={{ background: `radial-gradient(circle at 50% 30%, ${b.color}33, transparent 70%)` }}
                   />
                   <img
-                    src={brandLogo(b.domain)}
+                    src={brandLogo(b)}
                     alt={b.name}
                     loading="lazy"
                     className="relative h-7 w-7 object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]"
