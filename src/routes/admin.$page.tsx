@@ -425,12 +425,7 @@ function FieldInput({ field, value, onChange }: { field: AdminField; value: unkn
         </div>
       );
     case "image":
-      return (
-        <div>{label}
-          <input type="url" value={String(v)} onChange={(e) => onChange(e.target.value)} placeholder="https://…" className={base} />
-          {v && <img src={String(v)} alt="" className="mt-2 h-20 rounded-lg border border-slate-200 object-cover" />}
-        </div>
-      );
+      return <ImageField field={field} value={v} label={label} base={base} onChange={onChange} />;
     default:
       return (
         <div>{label}
