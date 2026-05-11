@@ -63,7 +63,7 @@ function CheckoutPage() {
   const [method, setMethod] = useState<MethodId>("bkash");
   const [agree, setAgree] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [submitted, setSubmitted] = useState<{ orderId: string } | null>(null);
+  
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
