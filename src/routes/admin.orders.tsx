@@ -201,16 +201,22 @@ function OrderDetail({ order, onClose, onStatusChange }: { order: Order; onClose
   const downloadReceipt = async () => {
     setDownloading(true);
     try {
-      await generateReceiptPDF({
-        orderId: order.id,
-        createdAt: order.created_at,
-        fullName: order.full_name,
+      downloadReceiptPdf({
+        id: order.id,
+        full_name: order.full_name,
         email: order.email,
         phone: order.phone,
-        items: order.items,
+        payment_method: order.payment_method,
+        transaction_id: order.transaction_id,
         total: Number(order.total),
-        paymentMethod: order.payment_method,
-        transactionId: order.transaction_id,
+        created_at: order.created_at,
+        items: (order.items ?? []).map((it) => ({
+          name: it.name,
+          slug: (it as unknown as { slug?: string }).slug ?? "",
+          planPeriod: it.plan ?? "",
+          qty: it.qty ?? 1,
+          price: it.price,
+        })),
       });
       toast.success("Receipt downloaded");
     } catch (e) {
