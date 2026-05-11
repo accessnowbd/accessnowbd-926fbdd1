@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ShoppingCart, Star, Sparkles } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { badgeColorFor } from "@/lib/badgeColor";
+import { ProductBanner } from "@/components/ProductBanner";
 import type { Product } from "@/data/products";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
