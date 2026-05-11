@@ -197,6 +197,7 @@ export function SiteHeader() {
                     }}
                   />
                 </span>
+              </span>
 
               {/* Wordmark — matches the official logo (Access · Now · BD + tagline) */}
               <span className="leading-[1.05] min-w-0">
