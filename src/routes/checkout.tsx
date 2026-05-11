@@ -188,7 +188,7 @@ function CheckoutPage() {
       if (step2Valid) setStep(3);
     }
   };
-  const goBack = () => setStep((s) => (s > 1 ? ((s - 1) as 1 | 2) : s));
+  const goBack = () => { if (step > 1) setStep((step - 1) as 1 | 2); };
 
   return (
     <div className="min-h-screen">
