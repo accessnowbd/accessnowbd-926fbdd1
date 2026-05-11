@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import accessNowLogo from "@/assets/accessnow-bd-logo.png";
 import {
   Crown,
   Facebook,
@@ -137,41 +138,66 @@ export function SiteHeader() {
               className="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              {/* Logo orb with rotating conic ring + crown */}
+              {/* Brand logo image with soft aurora glow */}
               <span className="relative shrink-0">
-                {/* Outer rotating conic glow */}
                 <span
-                  className="absolute -inset-1.5 rounded-[18px] opacity-70 blur-md -z-10"
+                  className="absolute -inset-1.5 rounded-[18px] opacity-60 blur-md -z-10"
                   style={{
                     background:
-                      "conic-gradient(from 0deg, rgba(124,58,237,0.9), rgba(0,229,255,0.9), rgba(168,85,247,0.9), rgba(0,229,255,0.9), rgba(124,58,237,0.9))",
+                      "conic-gradient(from 0deg, rgba(56,128,255,0.85), rgba(34,197,160,0.85), rgba(245,158,11,0.7), rgba(56,128,255,0.85))",
                     animation: "aurora-pan 6s linear infinite",
                   }}
                 />
-                <span className="relative grid place-items-center w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-primary-foreground shadow-[0_12px_32px_-8px_rgba(0,229,255,0.7)] ring-1 ring-white/20 group-hover:scale-105 group-hover:rotate-[-4deg] transition-transform duration-500">
-                  <Crown className="w-4 h-4 md:w-5 md:h-5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]" />
-                  {/* Inner shine */}
-                  <span className="absolute inset-x-1 top-1 h-3 rounded-full bg-white/25 blur-[2px]" />
+                <span className="relative grid place-items-center w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-white shadow-[0_12px_32px_-8px_rgba(56,128,255,0.55)] ring-1 ring-white/20 overflow-hidden group-hover:scale-105 group-hover:rotate-[-4deg] transition-transform duration-500">
+                  <img
+                    src={accessNowLogo}
+                    alt="AccessNow BD"
+                    className="w-9 h-9 md:w-10 md:h-10 object-contain"
+                    draggable={false}
+                  />
                 </span>
-                {/* Verified dot */}
                 <span className="absolute -bottom-0.5 -right-0.5 grid place-items-center h-3.5 w-3.5 rounded-full bg-emerald-400 ring-2 ring-[#0d0a1f] shadow-[0_0_10px_rgba(16,185,129,0.7)]">
                   <ShieldCheck className="w-2 h-2 text-emerald-900" strokeWidth={3} />
                 </span>
               </span>
 
-              {/* Wordmark — compact on mobile */}
+              {/* Wordmark — matches logo color story (blue / green / amber) */}
               <span className="leading-[1.05] min-w-0">
-                {/* Brand name */}
                 <span className="flex items-baseline gap-1 whitespace-nowrap">
-                  <span className="text-[16px] sm:text-[18px] md:text-[19px] font-extrabold tracking-tight text-white">
-                    AccessNow
+                  <span
+                    className="text-[16px] sm:text-[18px] md:text-[20px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(180deg, #5aa8ff 0%, #1e4fd8 100%)",
+                    }}
+                  >
+                    Access
                   </span>
                   <span
-                    className="text-[16px] sm:text-[18px] md:text-[19px] font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua animate-aurora-pan"
-                    style={{ backgroundSize: "200% 100%" }}
+                    className="text-[16px] sm:text-[18px] md:text-[20px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(180deg, #4ad6a8 0%, #16a37a 100%)",
+                    }}
+                  >
+                    Now
+                  </span>
+                  <span
+                    className="text-[16px] sm:text-[18px] md:text-[20px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(180deg, #fcd34d 0%, #d97706 100%)",
+                    }}
                   >
                     BD
                   </span>
+                </span>
+                <span className="hidden sm:flex items-center gap-1.5 mt-0.5">
+                  <span className="h-px w-3 bg-gradient-to-r from-transparent to-white/30" />
+                  <span className="text-[8.5px] md:text-[9px] uppercase tracking-[0.32em] font-bold text-white/45">
+                    Fast · Secure · Reliable
+                  </span>
+                  <span className="h-px w-3 bg-gradient-to-l from-transparent to-white/30" />
                 </span>
               </span>
             </Link>
