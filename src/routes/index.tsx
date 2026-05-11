@@ -65,43 +65,15 @@ const ACTIVITY = [
 ];
 
 function Index() {
-  const { products, isLoading } = useProducts();
+  const { products } = useProducts();
   const top = useMemo(() => pickTopProducts(products), [products]);
   const byCategory = useMemo(() => {
-    const order = [
-      "OTT & Streaming",
-      "AI & Education",
-      "Microsoft Office",
-      "Editing Tools",
-      "VPN & Security",
-      "Software & Productivity",
-      "Windows",
-      "Giftcards",
-    ];
-    const seen = new Set<string>();
-    const groups: { category: string; items: Product[] }[] = [];
-    // First the curated order
-    for (const category of order) {
-      const items = products.filter((p) => p.category === category).slice(0, 8);
-      if (items.length) {
-        groups.push({ category, items });
-        seen.add(category);
-      }
-    }
-    // Then any other category that exists in DB but wasn't listed
-    for (const p of products) {
-      if (!seen.has(p.category)) {
-        const items = products.filter((x) => x.category === p.category).slice(0, 8);
-        if (items.length) {
-          groups.push({ category: p.category, items });
-          seen.add(p.category);
-        }
-      }
-    }
-    return groups;
+    const groups = ["OTT & Streaming", "AI & Education", "Microsoft Office", "Editing Tools"].map((category) => ({
+      category,
+      items: products.filter((p) => p.category === category).slice(0, 8),
+    }));
+    return groups.filter((g) => g.items.length > 0);
   }, [products]);
-
-  const showSkeleton = isLoading && products.length === 0;
 
   return (
     <div className="min-h-screen overflow-hidden">
@@ -110,35 +82,16 @@ function Index() {
         <HeroExperience />
         <CategoryExperience />
         <TrustPanel />
-        {showSkeleton ? (
-          <ProductSkeletonGrid />
-        ) : (
-          <>
-            <FeaturedProducts items={top} />
-            {byCategory.map((section) => (
-              <ProductRail key={section.category} title={section.category} items={section.items} />
-            ))}
-          </>
-        )}
+        <FeaturedProducts items={top} />
+        {byCategory.map((section) => (
+          <ProductRail key={section.category} title={section.category} items={section.items} />
+        ))}
         <BundleShowcase />
         <ProcessSection />
         <FinalCTA />
       </main>
       <SiteFooter />
     </div>
-  );
-}
-
-function ProductSkeletonGrid() {
-  return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
-      <SectionTitle eyebrow="Popular picks" title="আজকের জনপ্রিয় ডিজিটাল সার্ভিস" subtitle="লোড হচ্ছে…" />
-      <div className="mt-7 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="glass-soft rounded-3xl aspect-[5/6] animate-pulse" />
-        ))}
-      </div>
-    </section>
   );
 }
 
