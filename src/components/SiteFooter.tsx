@@ -26,6 +26,9 @@ type LinkTo =
   | "/orders"
   | "/profile"
   | "/auth"
+  | "/login"
+  | "/register"
+  | "/forgot-password"
   | "/cart"
   | "/checkout";
 
@@ -60,7 +63,9 @@ const COLUMNS: {
       { label: "Contact Us", to: "/contact" },
       { label: "My Account", to: "/profile" },
       { label: "My Orders", to: "/orders" },
-      { label: "Sign In", to: "/auth" },
+      { label: "Sign In", to: "/login" },
+      { label: "Create Account", to: "/register" },
+      { label: "Forgot Password", to: "/forgot-password" },
     ],
   },
   {
