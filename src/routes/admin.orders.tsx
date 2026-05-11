@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { Loader2, Eye, Search, X, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { generateReceiptPDF } from "@/lib/receipt";
+import { downloadReceiptPdf } from "@/lib/receipt";
 
 export const Route = createFileRoute("/admin/orders")({
   component: AdminOrders,

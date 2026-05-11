@@ -28,6 +28,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 
 const StreamingRoute = StreamingRouteImport.update({
   id: '/streaming',
@@ -124,6 +125,11 @@ const AdminProductsRoute = AdminProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminOrdersRoute = AdminOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
+  '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -161,6 +168,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
+  '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -183,6 +191,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
+  '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -206,6 +215,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sitemap'
     | '/streaming'
+    | '/admin/orders'
     | '/admin/products'
     | '/orders/$id'
     | '/product/$slug'
@@ -226,6 +236,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sitemap'
     | '/streaming'
+    | '/admin/orders'
     | '/admin/products'
     | '/orders/$id'
     | '/product/$slug'
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sitemap'
     | '/streaming'
+    | '/admin/orders'
     | '/admin/products'
     | '/orders/$id'
     | '/product/$slug'
@@ -407,15 +419,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/orders': {
+      id: '/admin/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AdminOrdersRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
