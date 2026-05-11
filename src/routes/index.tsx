@@ -1,20 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import {
   ArrowRight,
+  Bot,
+  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
-  Zap,
-  ShieldCheck,
+  Clock3,
+  GraduationCap,
   Headphones,
-  CheckCircle2,
-  Lock,
-  RefreshCw,
-  Flame,
+  MonitorSmartphone,
+  Palette,
+  PlayCircle,
+  ShieldCheck,
+  Sparkles,
   Star,
-  Home as HomeIcon,
-  Store,
+  Zap,
 } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
@@ -26,101 +27,72 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "RxB Premium Store — Your Trusted Online Store" },
-      { name: "description", content: "Premium digital subscriptions, software licenses, AI tools, OTT, VPN and more — instant delivery across Bangladesh." },
-      { property: "og:title", content: "RxB Premium Store — Your Trusted Online Store" },
-      { property: "og:description", content: "Premium digital subscriptions, software licenses, AI tools, OTT, VPN and more — instant delivery across Bangladesh." },
+      { title: "AccessNow BD — Digital Products & Software" },
+      { name: "description", content: "Buy verified digital products, subscriptions, software licenses, AI tools, OTT, VPN and education services in Bangladesh with fast delivery." },
+      { property: "og:title", content: "AccessNow BD — Digital Products & Software" },
+      { property: "og:description", content: "White glassmorphism digital marketplace for premium software, subscriptions and services." },
     ],
   }),
 });
 
-const CATEGORY_PILLS = [
-  { label: "Home", icon: "🏠", anchor: "#top" },
-  { label: "Shop", icon: "🛒", anchor: "#shop" },
-  { label: "Top Picks", icon: "⭐", anchor: "#top-picks" },
-  { label: "OTT & Streaming Platforms", icon: null, key: "OTT & Streaming" },
-  { label: "Windows", icon: null, key: "Windows" },
-  { label: "Microsoft Office", icon: null, key: "Microsoft Office" },
-  { label: "AI & Education Tools", icon: null, key: "AI & Education" },
-  { label: "Editing Tools", icon: null, key: "Editing Tools" },
-  { label: "Software & Productivity", icon: null, key: "Software & Productivity" },
-  { label: "VPN & Security", icon: null, key: "VPN & Security" },
-  { label: "Giftcards", icon: null, key: "Giftcards" },
+const CATEGORY_DECK = [
+  { title: "OTT & Streaming", label: "Netflix · Prime · Hoichoi", icon: PlayCircle, to: "/streaming" as const, count: "১২+" },
+  { title: "AI Tools", label: "ChatGPT · Claude · Gemini", icon: Bot, to: "/ai-tools" as const, count: "৮+" },
+  { title: "Office & Windows", label: "Windows · Office · 365", icon: MonitorSmartphone, to: "/products" as const, count: "১০+" },
+  { title: "Design & Editing", label: "Canva · Adobe · CapCut", icon: Palette, to: "/products" as const, count: "৯+" },
+  { title: "Education", label: "Coursera · Grammarly", icon: GraduationCap, to: "/education" as const, count: "৬+" },
+  { title: "VPN & Security", label: "NordVPN · Surfshark", icon: ShieldCheck, to: "/products" as const, count: "৫+" },
 ];
 
-const HERO_SLIDES = [
-  {
-    bg: "linear-gradient(135deg, #0c4a6e 0%, #1e3a8a 100%)",
-    image: "https://images.unsplash.com/photo-1633419461186-7d40a38105ec?w=1600&q=80",
-    title: "Windows 11 Pro License",
-    subtitle: "Genuine activation key — instant delivery",
-  },
-  {
-    bg: "linear-gradient(135deg, #831843 0%, #be123c 100%)",
-    image: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=1600&q=80",
-    title: "Premium OTT Subscriptions",
-    subtitle: "Netflix · Prime · Hoichoi · Chorki",
-  },
-  {
-    bg: "linear-gradient(135deg, #14532d 0%, #15803d 100%)",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1600&q=80",
-    title: "AI & Productivity Tools",
-    subtitle: "ChatGPT · Claude · Gemini · Grammarly",
-  },
+const TRUST_ITEMS = [
+  { icon: Clock3, title: "১০ মিনিটে ডেলিভারি", text: "পেমেন্ট কনফার্ম হলেই দ্রুত প্রসেসিং" },
+  { icon: ShieldCheck, title: "ভেরিফাইড সার্ভিস", text: "অরিজিনাল লাইসেন্স ও প্রিমিয়াম অ্যাক্সেস" },
+  { icon: Headphones, title: "লাইভ সাপোর্ট", text: "অর্ডার থেকে সেটআপ পর্যন্ত সহায়তা" },
+  { icon: CheckCircle2, title: "ওয়ারেন্টি কাভার", text: "সমস্যা হলে রিপ্লেসমেন্ট সাপোর্ট" },
+];
+
+const FEATURE_BUNDLES = [
+  { title: "Creator Stack", items: ["Canva Pro", "CapCut Pro", "Adobe CC", "Freepik"], price: "৳৪৯৯+" },
+  { title: "Student Stack", items: ["ChatGPT", "Grammarly", "Coursera", "Google One"], price: "৳৩৯৯+" },
+  { title: "Entertainment Stack", items: ["Netflix", "Prime Video", "Spotify", "YouTube"], price: "৳২৯৯+" },
+];
+
+const ACTIVITY = [
+  "Tahsin K. · ChatGPT Plus অর্ডার করেছেন",
+  "Maliha R. · Canva Pro অ্যাক্টিভ করেছেন",
+  "Rakib H. · Netflix Premium নিয়েছেন",
+  "Sajid I. · Windows 11 Pro কিনেছেন",
 ];
 
 function Index() {
   const { products } = useProducts();
-
   const top = useMemo(() => pickTopProducts(products), [products]);
   const byCategory = useMemo(() => {
-    const order = ["OTT & Streaming", "Windows", "Microsoft Office", "AI & Education", "Editing Tools", "Software & Productivity"];
-    return order
-      .map((cat) => ({ category: cat, items: products.filter((p) => p.category === cat) }))
-      .filter((g) => g.items.length > 0);
-  }, [products]);
-
-  const flashSale = useMemo(() => {
-    return products
-      .filter((p) => p.plans[0]?.original)
-      .map((p) => {
-        const cur = Number((p.plans[0]?.price || "").replace(/[^\d]/g, "")) || 0;
-        const orig = Number((p.plans[0]?.original || "").replace(/[^\d]/g, "")) || 0;
-        const save = orig - cur;
-        const pct = orig > 0 ? Math.round((save / orig) * 100) : 0;
-        return { product: p, save, pct };
-      })
-      .sort((a, b) => b.pct - a.pct)
-      .slice(0, 5);
+    const groups = ["OTT & Streaming", "AI & Education", "Microsoft Office", "Editing Tools"].map((category) => ({
+      category,
+      items: products.filter((p) => p.category === category).slice(0, 8),
+    }));
+    return groups.filter((g) => g.items.length > 0);
   }, [products]);
 
   return (
-    <div id="top" className="min-h-screen bg-white">
+    <div className="min-h-screen overflow-hidden">
       <SiteHeader />
       <main>
-        <Hero />
-        <CategoryBar />
-        <FeaturedSection id="top-picks" eyebrow="BEST DEALS" title="Top Picks for You" emoji="⭐" items={top} viewAll="/products" />
+        <HeroExperience />
+        <CategoryExperience />
+        <TrustPanel />
+        <FeaturedProducts items={top} />
         {byCategory.map((section) => (
-          <CategorySection
-            key={section.category}
-            id={`shop-${slugify(section.category)}`}
-            title={section.category.toUpperCase()}
-            items={section.items}
-          />
+          <ProductRail key={section.category} title={section.category} items={section.items} />
         ))}
-        <FlashSaleSection deals={flashSale} />
-        <WhyChooseBar />
-        <WhyRxBSection />
-        <FaqSection />
+        <BundleShowcase />
+        <ProcessSection />
+        <FinalCTA />
       </main>
       <SiteFooter />
     </div>
   );
-}
-
-function slugify(s: string) {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
 function pickTopProducts(products: Product[]) {
@@ -131,292 +103,214 @@ function pickTopProducts(products: Product[]) {
       picked.push(product);
       seen.add(product.category);
     }
-    if (picked.length >= 10) break;
+    if (picked.length >= 8) break;
   }
-  return picked;
+  return picked.length ? picked : products.slice(0, 8);
 }
 
-/* ───────── Hero carousel ───────── */
-function Hero() {
-  const [idx, setIdx] = useState(0);
-  const [paused, setPaused] = useState(false);
-  useEffect(() => {
-    if (paused) return;
-    const t = setInterval(() => setIdx((i) => (i + 1) % HERO_SLIDES.length), 5500);
-    return () => clearInterval(t);
-  }, [paused]);
-  const prev = () => setIdx((i) => (i - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-  const next = () => setIdx((i) => (i + 1) % HERO_SLIDES.length);
-  const slide = HERO_SLIDES[idx];
-
+function HeroExperience() {
   return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-8 pt-6 pb-2">
-      <div
-        className="relative rounded-2xl overflow-hidden h-[260px] sm:h-[340px] md:h-[420px]"
-        style={{ background: slide.bg }}
-      >
-        <img
-          src={slide.image}
-          alt={slide.title}
-          className="absolute inset-0 w-full h-full object-cover opacity-90 transition-opacity duration-700"
-          key={idx}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/15 to-transparent" />
-
-        <div className="relative h-full flex flex-col justify-end p-6 md:p-12 max-w-2xl">
-          <h2 className="text-white font-black tracking-tight text-2xl sm:text-3xl md:text-5xl leading-[1.05] drop-shadow-lg">
-            {slide.title}
-          </h2>
-          <p className="mt-3 text-white/90 text-sm md:text-base font-medium drop-shadow">{slide.subtitle}</p>
-        </div>
-
-        {/* Prev arrow */}
-        <button
-          onClick={prev}
-          aria-label="Previous slide"
-          className="absolute left-4 top-1/2 -translate-y-1/2 grid place-items-center w-11 h-11 rounded-full bg-white/95 hover:bg-white shadow-md text-foreground transition"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-
-        {/* Next arrow */}
-        <button
-          onClick={next}
-          aria-label="Next slide"
-          className="absolute right-4 top-1/2 -translate-y-1/2 grid place-items-center w-11 h-11 rounded-full bg-white/95 hover:bg-white shadow-md text-foreground transition"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
-
-        {/* Dots */}
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2">
-          {HERO_SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIdx(i)}
-              className={`h-2 rounded-full transition-all ${i === idx ? "w-7 bg-white" : "w-2 bg-white/55"}`}
-              aria-label={`Go to slide ${i + 1}`}
-            />
-          ))}
-        </div>
-
-        {/* Pause / Play */}
-        <button
-          onClick={() => setPaused((v) => !v)}
-          aria-label={paused ? "Play" : "Pause"}
-          className="absolute bottom-4 right-4 grid place-items-center w-9 h-9 rounded-full bg-white/95 hover:bg-white shadow-md text-foreground transition text-xs font-bold"
-        >
-          {paused ? "▶" : "❚❚"}
-        </button>
-      </div>
-    </section>
-  );
-}
-
-/* ───────── Horizontal category pills ───────── */
-function CategoryBar() {
-  const [active, setActive] = useState("Home");
-  return (
-    <section id="shop" className="mx-auto max-w-[1440px] px-4 md:px-8 py-5">
-      <div className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {CATEGORY_PILLS.map((p) => (
-          <a
-            key={p.label}
-            href={p.anchor || `#shop-${slugify(p.key || p.label)}`}
-            onClick={() => setActive(p.label)}
-            className="cat-pill shrink-0 inline-flex items-center gap-1.5 h-10 px-4 text-[13px] whitespace-nowrap"
-            data-active={active === p.label}
-          >
-            {p.icon && <span>{p.icon}</span>}
-            {p.label}
-          </a>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* ───────── Featured (Top Picks) ───────── */
-function FeaturedSection({
-  id, eyebrow, title, emoji, items, viewAll,
-}: { id?: string; eyebrow: string; title: string; emoji?: string; items: Product[]; viewAll?: string }) {
-  if (!items.length) return null;
-  return (
-    <section id={id} className="mx-auto max-w-[1440px] px-4 md:px-8 py-7">
-      <div className="flex items-end justify-between mb-5">
-        <div>
-          <div className="inline-block px-2.5 py-1 rounded-md bg-tint-pink text-[10px] font-extrabold tracking-[0.18em] text-[#e11d48] mb-2">
-            {eyebrow}
-          </div>
-          <h2 className="text-[26px] md:text-[32px] font-black tracking-tight text-foreground">
-            {emoji && <span className="mr-2">{emoji}</span>}{title}
-          </h2>
-        </div>
-        {viewAll && (
-          <Link to={viewAll as "/products"} className="inline-flex items-center gap-1 text-sm font-bold text-primary hover:text-primary-dark">
-            View All <ChevronRight className="w-4 h-4" />
-          </Link>
-        )}
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {items.slice(0, 5).map((p) => <ProductCard key={p.slug} product={p} />)}
-      </div>
-      {items.length > 5 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
-          {items.slice(5, 10).map((p) => <ProductCard key={p.slug} product={p} />)}
-        </div>
-      )}
-    </section>
-  );
-}
-
-/* ───────── Generic category section ───────── */
-function CategorySection({ id, title, items }: { id?: string; title: string; items: Product[] }) {
-  if (!items.length) return null;
-  return (
-    <section id={id} className="mx-auto max-w-[1440px] px-4 md:px-8 py-6">
-      <div className="flex items-end justify-between mb-4">
-        <h2 className="text-[18px] md:text-[20px] font-black tracking-wide text-foreground uppercase">{title}</h2>
-        <Link to="/products" className="inline-flex items-center gap-1 text-sm font-bold text-primary hover:text-primary-dark">
-          View All <ChevronRight className="w-4 h-4" />
-        </Link>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {items.slice(0, 5).map((p) => <ProductCard key={p.slug} product={p} />)}
-      </div>
-    </section>
-  );
-}
-
-/* ───────── Flash sale with countdown ───────── */
-function FlashSaleSection({ deals }: { deals: Array<{ product: Product; save: number; pct: number }> }) {
-  const [time, setTime] = useState(() => secondsUntilEndOfWeek());
-  useEffect(() => {
-    const t = setInterval(() => setTime(secondsUntilEndOfWeek()), 1000);
-    return () => clearInterval(t);
-  }, []);
-  if (!deals.length) return null;
-  const days = Math.floor(time / 86400);
-  const hrs = Math.floor((time % 86400) / 3600);
-  const min = Math.floor((time % 3600) / 60);
-  const sec = time % 60;
-
-  return (
-    <section className="bg-tint-pink mt-10">
-      <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-10">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+    <section className="relative px-4 md:px-10 pt-10 pb-14 md:pt-14 md:pb-20">
+      <div className="absolute inset-0 bg-mesh opacity-80 pointer-events-none" />
+      <div className="relative mx-auto max-w-[1440px] grid lg:grid-cols-[1.05fr_0.95fr] gap-6 lg:gap-8 items-stretch">
+        <div className="glass-strong rounded-[var(--radius-2xl)] p-6 md:p-10 lg:p-12 min-h-[560px] flex flex-col justify-between overflow-hidden">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#fee2e2] text-[10px] font-extrabold tracking-wider text-[#dc2626]">
-                <Flame className="w-3 h-3" /> FLASH SALE
-              </span>
-              <span className="inline-block px-2.5 py-1 rounded-md bg-[#cffafe] text-[10px] font-extrabold tracking-wider text-[#0e7490]">
-                LIMITED TIME
-              </span>
+            <div className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-2 text-xs font-bold text-primary">
+              <Sparkles className="h-4 w-4" /> বাংলাদেশের ডিজিটাল প্রোডাক্ট মার্কেটপ্লেস
             </div>
-            <h2 className="text-[26px] md:text-[32px] font-black tracking-tight text-foreground">
-              🔥 Biggest Discounts Today
-            </h2>
-            <p className="mt-1.5 text-sm text-muted-foreground">Top deals sorted by highest savings — grab them before time runs out!</p>
+            <h1 className="mt-6 max-w-4xl text-foreground" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(42px, 7vw, 88px)", lineHeight: 0.95, fontWeight: 800 }}>
+              Software, subscription, tools — সবকিছু এক নতুন glass store-এ।
+            </h1>
+            <p className="mt-6 max-w-2xl text-base md:text-lg text-muted-foreground leading-relaxed">
+              OTT, AI, Windows, Office, Editing, VPN, Education ও Gift Card—যে সার্ভিসই লাগুক, AccessNow BD থেকে দ্রুত ও নিরাপদে অর্ডার করুন।
+            </p>
           </div>
 
-          <div className="flex flex-col items-end">
-            <div className="text-[11px] font-semibold text-muted-foreground mb-1.5">Sale ends in:</div>
-            <div className="flex items-center gap-1.5">
-              {[
-                { v: days, l: "Days" },
-                { v: hrs, l: "Hrs" },
-                { v: min, l: "Min" },
-                { v: sec, l: "Sec" },
-              ].map((u) => (
-                <div key={u.l} className="grid place-items-center w-12 py-1.5 rounded-lg bg-white shadow-sm border border-border">
-                  <div className="text-base font-black text-foreground tabular-nums">{String(u.v).padStart(2, "0")}</div>
-                  <div className="text-[9px] font-semibold text-muted-foreground -mt-0.5">{u.l}</div>
-                </div>
+          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <Link to="/products" className="btn-aurora inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-7 text-sm font-bold">
+              সব প্রোডাক্ট দেখুন <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link to="/contact" className="glass inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-7 text-sm font-bold text-foreground hover:shadow-[var(--shadow-glass-lg)] transition">
+              কাস্টম অর্ডার দিন
+            </Link>
+          </div>
+
+          <div className="mt-10 grid grid-cols-3 gap-3">
+            {[
+              ["৩৬+", "প্রোডাক্ট"],
+              ["১০মিনিট", "ডেলিভারি"],
+              ["২৪/৭", "সাপোর্ট"],
+            ].map(([value, label]) => (
+              <div key={label} className="glass-soft rounded-2xl p-4">
+                <div className="text-2xl md:text-3xl font-extrabold text-aurora">{value}</div>
+                <div className="mt-1 text-xs font-semibold text-muted-foreground">{label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-rows-[1fr_auto] gap-5">
+          <div className="glass-strong rounded-[var(--radius-2xl)] p-5 md:p-6 overflow-hidden">
+            <div className="grid grid-cols-2 gap-4 h-full">
+              {CATEGORY_DECK.slice(0, 4).map((category, index) => (
+                <Link key={category.title} to={category.to} className={`group glass-soft rounded-3xl p-5 min-h-[210px] flex flex-col justify-between hover:-translate-y-1 transition ${index === 0 ? "col-span-2 md:col-span-1" : ""}`}>
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-[var(--shadow-glow-violet)]">
+                      <category.icon className="h-5 w-5" />
+                    </span>
+                    <span className="rounded-full bg-secondary px-3 py-1 text-xs font-extrabold text-secondary-foreground">{category.count}</span>
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-extrabold text-foreground">{category.title}</h2>
+                    <p className="mt-1 text-xs text-muted-foreground">{category.label}</p>
+                    <div className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-primary">
+                      Explore <ChevronRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                    </div>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {deals.map(({ product, save, pct }) => (
-            <Link
-              key={product.slug}
-              to="/product/$slug"
-              params={{ slug: product.slug }}
-              className="product-card flex flex-col group"
-            >
-              <div className="relative">
-                <div className="aspect-square overflow-hidden">
-                  {product.imageUrl ? (
-                    <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full grid place-items-center text-6xl bg-gradient-to-br from-pink-100 to-rose-100">{product.emoji}</div>
-                  )}
+          <div className="glass rounded-[var(--radius-2xl)] p-5 md:p-6">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">Live activity</p>
+                <div className="mt-2 space-y-2">
+                  {ACTIVITY.map((item) => (
+                    <div key={item} className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                      <span className="h-2 w-2 rounded-full bg-success" /> {item}
+                    </div>
+                  ))}
                 </div>
-                <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-[#dc2626] text-white text-[10px] font-extrabold shadow">
-                  -{pct}%
-                </span>
               </div>
-              <div className="p-3.5">
-                <h3 className="text-[13px] font-bold leading-snug line-clamp-2 min-h-[2.4rem] text-foreground">
-                  {product.name}
-                </h3>
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-[15px] font-extrabold text-primary">{product.plans[0].price}</span>
-                  <span className="text-[12px] text-muted-foreground line-through">{product.plans[0].original}</span>
-                </div>
-                <div className="mt-1 text-[11px] font-semibold text-success">Save ৳{save}</div>
+              <div className="hidden sm:grid h-20 w-20 place-items-center rounded-full bg-aurora text-primary-foreground shadow-[var(--shadow-glow-violet)]">
+                <Zap className="h-8 w-8" />
               </div>
-            </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CategoryExperience() {
+  return (
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
+      <SectionTitle eyebrow="Browse category" title="আপনার প্রয়োজন অনুযায়ী সার্ভিস বেছে নিন" subtitle="পুরো ওয়েবসাইট এখন software-service marketplace structure-এ সাজানো।" />
+      <div className="mt-7 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {CATEGORY_DECK.map((category) => (
+          <Link key={category.title} to={category.to} className="group glass-strong rounded-3xl p-6 flex items-center gap-4 hover:-translate-y-1 transition">
+            <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-secondary text-primary">
+              <category.icon className="h-6 w-6" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-base font-extrabold text-foreground">{category.title}</span>
+              <span className="mt-1 block text-sm text-muted-foreground truncate">{category.label}</span>
+            </span>
+            <ChevronRight className="h-5 w-5 text-primary transition group-hover:translate-x-1" />
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function TrustPanel() {
+  return (
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {TRUST_ITEMS.map((item) => (
+          <div key={item.title} className="glass rounded-3xl p-6">
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary text-primary-foreground">
+              <item.icon className="h-5 w-5" />
+            </span>
+            <h3 className="mt-5 text-base font-extrabold text-foreground">{item.title}</h3>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FeaturedProducts({ items }: { items: Product[] }) {
+  if (!items.length) return null;
+  return (
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
+      <SectionTitle eyebrow="Popular picks" title="আজকের জনপ্রিয় ডিজিটাল সার্ভিস" subtitle="সবচেয়ে বেশি অর্ডার হওয়া software ও subscription একসাথে।" action="All products" to="/products" />
+      <div className="mt-7 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+        {items.map((product) => <ProductCard key={product.slug} product={product} />)}
+      </div>
+    </section>
+  );
+}
+
+function ProductRail({ title, items }: { title: string; items: Product[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const scroll = (dir: 1 | -1) => ref.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
+  return (
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
+      <div className="flex items-end justify-between gap-4">
+        <SectionTitle eyebrow="Collection" title={title} subtitle="ক্যাটাগরি অনুযায়ী সাজানো প্রোডাক্ট।" compact />
+        <div className="hidden md:flex items-center gap-2">
+          <button onClick={() => scroll(-1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll left"><ChevronLeft className="h-4 w-4" /></button>
+          <button onClick={() => scroll(1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll right"><ChevronRight className="h-4 w-4" /></button>
+        </div>
+      </div>
+      <div ref={ref} className="mt-6 flex gap-4 md:gap-5 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {items.map((product) => (
+          <div key={product.slug} className="snap-start shrink-0 w-[68%] sm:w-[44%] md:w-[30%] lg:w-[23%]">
+            <ProductCard product={product} />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function BundleShowcase() {
+  return (
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
+      <div className="glass-strong rounded-[var(--radius-2xl)] p-6 md:p-10">
+        <SectionTitle eyebrow="Smart bundles" title="যাদের একসাথে অনেক সার্ভিস লাগে" subtitle="Creator, student ও entertainment workflow অনুযায়ী সাজানো bundle ideas।" />
+        <div className="mt-7 grid md:grid-cols-3 gap-4">
+          {FEATURE_BUNDLES.map((bundle) => (
+            <div key={bundle.title} className="glass-soft rounded-3xl p-6">
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="text-lg font-extrabold text-foreground">{bundle.title}</h3>
+                <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">{bundle.price}</span>
+              </div>
+              <div className="mt-5 space-y-3">
+                {bundle.items.map((item) => (
+                  <div key={item} className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                    <CheckCircle2 className="h-4 w-4 text-success" /> {item}
+                  </div>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
-
-        <div className="mt-8 grid place-items-center">
-          <Link to="/products" className="btn-teal inline-flex items-center gap-2 h-12 px-7 text-sm">
-            View All Deals <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
       </div>
     </section>
   );
 }
 
-function secondsUntilEndOfWeek() {
-  const now = new Date();
-  const end = new Date(now);
-  end.setDate(now.getDate() + ((7 - now.getDay()) % 7 || 7));
-  end.setHours(23, 59, 59, 999);
-  return Math.max(0, Math.floor((end.getTime() - now.getTime()) / 1000));
-}
-
-/* ───────── Why choose us — icon row ───────── */
-function WhyChooseBar() {
-  const items = [
-    { icon: Zap, label: "Instant Delivery", color: "bg-[#fff7ed] text-[#f59e0b]" },
-    { icon: ShieldCheck, label: "100% Genuine", color: "bg-[#ecfdf5] text-[#10b981]" },
-    { icon: Headphones, label: "24/7 Support", color: "bg-[#eff6ff] text-[#3b82f6]" },
-    { icon: CheckCircle2, label: "Trusted 12K+", color: "bg-[#f5f3ff] text-[#8b5cf6]" },
-    { icon: Lock, label: "Secure Payment", color: "bg-[#eef2ff] text-[#6366f1]" },
-    { icon: RefreshCw, label: "Replacement", color: "bg-[#fef2f2] text-[#ef4444]" },
-  ];
+function ProcessSection() {
   return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-8 py-12">
-      <div className="text-center mb-7">
-        <div className="inline-block px-2.5 py-1 rounded-md bg-[#f5f3ff] text-[10px] font-extrabold tracking-[0.18em] text-[#8b5cf6] mb-3">
-          ✨ WHY CHOOSE US
-        </div>
-        <h2 className="text-[26px] md:text-[32px] font-black tracking-tight text-foreground">
-          Built for trust. <span className="text-primary">Designed for speed.</span>
-        </h2>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        {items.map((it) => (
-          <div key={it.label} className="product-card flex flex-col items-center justify-center py-5 px-3 text-center">
-            <div className={`grid place-items-center w-11 h-11 rounded-xl ${it.color} mb-2.5`}>
-              <it.icon className="w-5 h-5" />
-            </div>
-            <div className="text-[12px] font-bold text-foreground">{it.label}</div>
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
+      <SectionTitle eyebrow="Order flow" title="অর্ডার থেকে ডেলিভারি—সবকিছু পরিষ্কার" subtitle="পুরো অভিজ্ঞতাটি দ্রুত কেনাকাটার জন্য নতুনভাবে সাজানো হয়েছে।" />
+      <div className="mt-7 grid md:grid-cols-3 gap-4">
+        {[
+          ["01", "প্রোডাক্ট বেছে নিন", "ক্যাটাগরি বা সার্চ থেকে প্রয়োজনীয় সফটওয়্যার সার্ভিস সিলেক্ট করুন।"],
+          ["02", "পেমেন্ট করুন", "bKash, Nagad, Rocket বা কার্ডের মাধ্যমে অর্ডার কনফার্ম করুন।"],
+          ["03", "অ্যাক্সেস পান", "ইমেইল/WhatsApp-এ ডেলিভারি ও সেটআপ সাপোর্ট পেয়ে যান।"],
+        ].map(([step, title, text]) => (
+          <div key={step} className="glass rounded-3xl p-6">
+            <div className="text-5xl font-black text-aurora opacity-70">{step}</div>
+            <h3 className="mt-4 text-lg font-extrabold text-foreground">{title}</h3>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{text}</p>
           </div>
         ))}
       </div>
@@ -424,105 +318,36 @@ function WhyChooseBar() {
   );
 }
 
-/* ───────── কেন RxB Premium Store? ───────── */
-function WhyRxBSection() {
-  const items = [
-    { icon: Zap, color: "bg-[#fef3c7] text-[#d97706]", title: "তাৎক্ষণিক ডেলিভারি", text: "অর্ডারের ৫–৩০ মিনিটে ডেলিভারি" },
-    { icon: ShieldCheck, color: "bg-[#dcfce7] text-[#16a34a]", title: "১০০% অরিজিনাল", text: "সম্পূর্ণ অফিসিয়াল সাবস্ক্রিপশন" },
-    { icon: RefreshCw, color: "bg-[#cffafe] text-[#0891b2]", title: "রিপ্লেসমেন্ট গ্যারান্টি", text: "সমস্যা হলে ফ্রি রিপ্লেস" },
-    { icon: Lock, color: "bg-[#fce7f3] text-[#db2777]", title: "সিকিউর পেমেন্ট", text: "bKash · Nagad · Rocket নিরাপদ" },
-    { icon: Headphones, color: "bg-[#fee2e2] text-[#dc2626]", title: "২৪/৭ সাপোর্ট", text: "WhatsApp · Messenger · কল" },
-    { icon: CheckCircle2, color: "bg-[#dbeafe] text-[#2563eb]", title: "১২,০০০+ গ্রাহক", text: "বাংলাদেশের বিশ্বস্ত স্টোর" },
-  ];
+function FinalCTA() {
   return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-8 py-10">
-      <div className="text-center mb-8">
-        <h2 className="text-[26px] md:text-[32px] font-black tracking-tight text-foreground">
-          কেন <span className="text-primary">RxB Premium Store</span>?
-        </h2>
-        <p className="mt-2 text-sm text-muted-foreground">আপনার ভরসার জায়গা — যেখানে কোয়ালিটি ও বিশ্বাস সবার আগে</p>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        {items.map((it) => (
-          <div key={it.title} className="product-card flex flex-col items-center text-center py-6 px-3">
-            <div className={`grid place-items-center w-12 h-12 rounded-2xl ${it.color} mb-3`}>
-              <it.icon className="w-5 h-5" />
-            </div>
-            <div className="text-[13px] font-extrabold text-foreground">{it.title}</div>
-            <div className="mt-1 text-[11px] text-muted-foreground leading-snug">{it.text}</div>
-          </div>
-        ))}
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12 pb-16">
+      <div className="glass-strong rounded-[var(--radius-2xl)] p-8 md:p-12 text-center">
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-3xl bg-aurora text-primary-foreground shadow-[var(--shadow-glow-violet)]">
+          <Star className="h-7 w-7" />
+        </div>
+        <h2 className="mt-6 text-3xl md:text-5xl font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)" }}>আজই আপনার ডিজিটাল stack upgrade করুন</h2>
+        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">একই জায়গা থেকে entertainment, productivity, education, AI ও security tools কিনুন—নতুন white glass experience-এ।</p>
+        <Link to="/products" className="btn-aurora mt-7 inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-8 text-sm font-bold">
+          Shop now <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
     </section>
   );
 }
 
-/* ───────── FAQ ───────── */
-const FAQS = [
-  {
-    q: "অর্ডার করার কতক্ষণ পর ডেলিভারি পাব?",
-    a: "অফিস আওয়ারে (সকাল ৯টা – রাত ১১টা) সাধারণত ৫–৩০ মিনিটের মধ্যেই আপনার ইমেইল ও WhatsApp-এ অ্যাকাউন্টের সম্পূর্ণ তথ্য পেয়ে যাবেন। অফ-আওয়ারের অর্ডার করলে পরদিন সকালে সবার আগে ডেলিভারি দেওয়া হয়।",
-  },
-  {
-    q: "প্রোডাক্টগুলো কি ১০০% অরিজিনাল ও অফিসিয়াল?",
-    a: "জি, আমরা শুধুমাত্র অফিসিয়াল চ্যানেল থেকে নেওয়া অরিজিনাল সাবস্ক্রিপশন ও লাইসেন্স কী সরবরাহ করি — কোনো ক্র্যাক বা পাইরেটেড সফটওয়্যার নয়।",
-  },
-  {
-    q: "পেমেন্ট কীভাবে করব? নিরাপদ তো?",
-    a: "bKash, Nagad, Rocket, ব্যাংক ট্রান্সফার ও কার্ডের মাধ্যমে নিরাপদে পেমেন্ট করতে পারবেন। সম্পূর্ণ এন্ড-টু-এন্ড সিকিউর।",
-  },
-  {
-    q: "অ্যাকাউন্টে কোনো সমস্যা হলে কী করব?",
-    a: "ওয়ারেন্টি সময়ের মধ্যে যেকোনো সমস্যায় আমরা ফ্রি রিপ্লেসমেন্ট দেই। শুধু WhatsApp বা Live Support-এ যোগাযোগ করুন।",
-  },
-  {
-    q: "অর্ডারের আগে কথা বলার সুযোগ আছে?",
-    a: "অবশ্যই! WhatsApp, Messenger বা সরাসরি কল করে যেকোনো প্রশ্ন করতে পারেন — আমরা ২৪/৭ আপনার পাশে আছি।",
-  },
-  {
-    q: "RxB Premium Store-কে কেন বিশ্বাস করব?",
-    a: "১২,০০০+ সন্তুষ্ট গ্রাহক, প্রমাণিত ট্র্যাক রেকর্ড, রিপ্লেসমেন্ট গ্যারান্টি ও স্বচ্ছ সার্ভিস — এটাই আমাদের পরিচয়।",
-  },
-];
-
-function FaqSection() {
-  const [open, setOpen] = useState<number | null>(0);
+function SectionTitle({ eyebrow, title, subtitle, action, to, compact = false }: { eyebrow: string; title: string; subtitle: string; action?: string; to?: "/products"; compact?: boolean }) {
   return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-8 py-12 pb-20">
-      <div className="text-center mb-7">
-        <div className="inline-block px-3 py-1 rounded-md bg-[#eff6ff] text-[11px] font-bold text-[#2563eb] mb-3">
-          ❓ FAQ
-        </div>
-        <h2 className="text-[26px] md:text-[32px] font-black tracking-tight text-foreground">
-          সাধারণ <span className="text-primary">প্রশ্ন</span> ও উত্তর
-        </h2>
-        <p className="mt-2 text-sm text-muted-foreground">অর্ডারের আগে যা জানা দরকার — সংক্ষেপে</p>
+    <div className={`flex flex-wrap items-end justify-between gap-3 ${compact ? "" : ""}`}>
+      <div>
+        <span className="inline-flex rounded-full glass-soft px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-primary">{eyebrow}</span>
+        <h2 className="mt-3 text-2xl md:text-4xl font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)", lineHeight: 1.08 }}>{title}</h2>
+        <p className="mt-2 max-w-2xl text-sm md:text-base text-muted-foreground">{subtitle}</p>
       </div>
-
-      <div className="max-w-3xl mx-auto space-y-3">
-        {FAQS.map((f, i) => {
-          const isOpen = open === i;
-          return (
-            <div
-              key={i}
-              className={`product-card transition ${isOpen ? "border-primary/40 ring-1 ring-primary/30" : ""}`}
-            >
-              <button
-                onClick={() => setOpen(isOpen ? null : i)}
-                className="w-full px-5 py-4 flex items-center justify-between gap-4 text-left"
-              >
-                <span className="text-[14px] font-bold text-foreground">{f.q}</span>
-                <ChevronDown className={`w-5 h-5 text-muted-foreground shrink-0 transition-transform ${isOpen ? "rotate-180 text-primary" : ""}`} />
-              </button>
-              {isOpen && (
-                <div className="px-5 pb-5 text-[13px] text-muted-foreground leading-relaxed">
-                  {f.a}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </section>
+      {action && to && (
+        <Link to={to} className="glass inline-flex h-11 items-center gap-2 rounded-full px-5 text-sm font-bold text-foreground">
+          {action} <ChevronRight className="h-4 w-4" />
+        </Link>
+      )}
+    </div>
   );
 }

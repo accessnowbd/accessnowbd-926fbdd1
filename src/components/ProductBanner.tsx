@@ -1,5 +1,22 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Product } from "@/data/products";
+
+/** Deterministic hash from slug → stable per-product visuals */
+function hash(seed: string) {
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+const SPHERE_GRADIENTS = [
+  "radial-gradient(circle at 30% 30%, #67e8f9 0%, #2563EB 55%, #071120 100%)",
+  "radial-gradient(circle at 30% 30%, #a78bfa 0%, #7C3AED 50%, #1e1b4b 100%)",
+  "radial-gradient(circle at 30% 30%, #00E5FF 0%, #0891b2 55%, #082f49 100%)",
+  "radial-gradient(circle at 30% 30%, #818cf8 0%, #4f46e5 55%, #1e1b4b 100%)",
+];
 
 /** Brand-domain guesser → clearbit logo (no API key, public CDN) */
 function guessLogoUrl(name: string): string {
@@ -14,28 +31,19 @@ function guessLogoUrl(name: string): string {
     disney: "disneyplus.com",
     hoichoi: "hoichoi.tv",
     chorki: "chorki.com",
-    "sony liv": "sonyliv.com",
-    sonyliv: "sonyliv.com",
-    crunchyroll: "crunchyroll.com",
     "chatgpt plus": "openai.com",
     chatgpt: "openai.com",
     openai: "openai.com",
     claude: "claude.ai",
     gemini: "gemini.google.com",
-    perplexity: "perplexity.ai",
-    quillbot: "quillbot.com",
-    grammarly: "grammarly.com",
-    duolingo: "duolingo.com",
-    vidiq: "vidiq.com",
-    coursera: "coursera.org",
     "google one": "one.google.com",
-    "google drive": "drive.google.com",
+    coursera: "coursera.org",
+    grammarly: "grammarly.com",
     "canva pro": "canva.com",
     canva: "canva.com",
     capcut: "capcut.com",
     adobe: "adobe.com",
     "adobe cc": "adobe.com",
-    "adobe creative": "adobe.com",
     freepik: "freepik.com",
     autodesk: "autodesk.com",
     truecaller: "truecaller.com",
@@ -46,13 +54,14 @@ function guessLogoUrl(name: string): string {
     surfshark: "surfshark.com",
     proton: "proton.me",
     windows: "microsoft.com",
-    "windows 10": "microsoft.com",
-    "windows 11": "microsoft.com",
     "microsoft office": "microsoft.com",
     office: "microsoft.com",
     "microsoft 365": "microsoft.com",
     apple: "apple.com",
     itunes: "apple.com",
+    "app store": "apple.com",
+    "google play": "play.google.com",
+    psn: "playstation.com",
   };
   const k = name.trim().toLowerCase();
   let domain = map[k];
@@ -65,104 +74,111 @@ function guessLogoUrl(name: string): string {
   return `https://logo.clearbit.com/${domain}`;
 }
 
-const RXB_TINTS = [
-  "linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%)", // blue
-  "linear-gradient(135deg, #831843 0%, #be185d 50%, #db2777 100%)", // pink
-  "linear-gradient(135deg, #052e16 0%, #14532d 50%, #166534 100%)", // green
-  "linear-gradient(135deg, #422006 0%, #7c2d12 50%, #c2410c 100%)", // orange
-  "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)", // indigo
-  "linear-gradient(135deg, #450a0a 0%, #7f1d1d 50%, #b91c1c 100%)", // red
-];
-
-function tintFor(slug: string) {
-  let h = 0;
-  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
-  return RXB_TINTS[h % RXB_TINTS.length];
-}
-
 export function ProductBanner({
   product,
   className = "",
-  ratio = "1/1",
+  ratio = "5/4",
+  spheres = 5,
 }: {
   product: Product;
   className?: string;
   ratio?: "5/4" | "4/3" | "1/1" | "16/9";
   spheres?: number;
 }) {
+  const seed = hash(product.slug);
+  const blobs = useMemo(() => {
+    return Array.from({ length: spheres }).map((_, i) => {
+      const r = (seed >> (i * 3)) ^ (i * 9301 + 49297);
+      const size = 18 + ((r >> 1) % 28); // % of width
+      const top = ((r >> 5) % 100);
+      const left = ((r >> 11) % 100);
+      const grad = SPHERE_GRADIENTS[(r >> 17) % SPHERE_GRADIENTS.length];
+      const blur = i % 2 === 0 ? 0 : 4 + ((r >> 21) % 8);
+      return { size, top, left, grad, blur, key: `${product.slug}-${i}` };
+    });
+  }, [seed, spheres, product.slug]);
+
   const [imgFailed, setImgFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
   const primary = product.imageUrl;
   const fallbackLogo = guessLogoUrl(product.name);
-  const tint = tintFor(product.slug);
 
   const aspectClass =
     ratio === "4/3" ? "aspect-[4/3]" :
-    ratio === "5/4" ? "aspect-[5/4]" :
+    ratio === "1/1" ? "aspect-square" :
     ratio === "16/9" ? "aspect-[16/9]" :
-    "aspect-square";
+    "aspect-[5/4]";
 
-  // If product has its own banner image, just show it full-bleed (matches screenshots)
-  if (primary && !imgFailed) {
-    return (
-      <div className={`relative overflow-hidden ${aspectClass} ${className}`} style={{ background: tint }}>
-        <img
-          src={primary}
-          alt={product.name}
-          loading="lazy"
-          className="absolute inset-0 w-full h-full object-cover"
-          onError={() => setImgFailed(true)}
-        />
-        {/* 24/7 service ribbon (top-right, matches screenshot crown-style badge area) */}
-        <span className="absolute top-2 right-2 z-10 grid place-items-center w-9 h-9 rounded-full bg-white/95 text-[8px] font-extrabold text-foreground shadow-md text-center leading-tight">
-          24<span className="text-[6px]">/7</span>
-        </span>
-      </div>
-    );
-  }
-
-  // Fallback: tinted gradient with brand logo
   return (
-    <div className={`relative overflow-hidden ${aspectClass} ${className}`} style={{ background: tint }}>
-      {/* RXB watermark top-left */}
-      <div className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-md bg-black/30 backdrop-blur-sm text-white text-[8px] font-black tracking-wider">
-        RXB <span className="text-primary">PREMIUM STORE</span>
-      </div>
-      <span className="absolute top-2 right-2 z-10 grid place-items-center w-9 h-9 rounded-full bg-white/95 text-[8px] font-extrabold text-foreground shadow-md text-center leading-tight">
-        24<span className="text-[6px]">/7</span>
-      </span>
-
-      {/* Center brand: rounded square tile with logo */}
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="relative w-[55%] aspect-square rounded-[28%] bg-white grid place-items-center shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
-          {/* Crown */}
-          <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-3xl drop-shadow-md select-none">👑</span>
-          {!logoFailed ? (
-            <img
-              src={fallbackLogo}
-              alt={product.name}
-              loading="lazy"
-              className="w-[60%] h-[60%] object-contain"
-              onError={() => setLogoFailed(true)}
-            />
-          ) : (
-            <span className="text-5xl">{product.emoji}</span>
-          )}
-        </div>
+    <div
+      className={`relative overflow-hidden rounded-2xl ${aspectClass} ${className}`}
+      style={{
+        background: "linear-gradient(135deg, #071120 0%, #0f1d3a 50%, #1a1144 100%)",
+      }}
+    >
+      {/* Neon bokeh */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute top-[8%] right-[12%] w-3 h-3 rounded-full bg-cyan-300/80 blur-[2px]" />
+        <div className="absolute top-[20%] left-[10%] w-2 h-2 rounded-full bg-violet-300/70 blur-[1px]" />
+        <div className="absolute bottom-[18%] right-[28%] w-4 h-4 rounded-full bg-blue-300/60 blur-[2px]" />
+        <div className="absolute bottom-[8%] left-[35%] w-2.5 h-2.5 rounded-full bg-cyan-200/70 blur-[1px]" />
       </div>
 
-      {/* Product name script overlay */}
-      <div className="absolute top-[15%] left-1/2 -translate-x-1/2 text-center text-white pointer-events-none">
-        <div className="font-black text-[15px] tracking-wider uppercase drop-shadow-lg leading-none">{product.name.split(" ")[0]}</div>
-        <div className="italic text-[13px] font-semibold opacity-90 drop-shadow-md" style={{ fontFamily: "'Brush Script MT', cursive" }}>
-          {product.name.split(" ").slice(1).join(" ") || "Premium"}
-        </div>
-      </div>
+      {/* Decorative spheres around the glass plate */}
+      {blobs.map((b) => (
+        <div
+          key={b.key}
+          className="absolute rounded-full"
+          style={{
+            width: `${b.size}%`,
+            aspectRatio: "1 / 1",
+            top: `${b.top}%`,
+            left: `${b.left}%`,
+            transform: "translate(-50%, -50%)",
+            background: b.grad,
+            filter: b.blur ? `blur(${b.blur}px)` : undefined,
+            boxShadow: "0 18px 40px -12px rgba(0, 229, 255, 0.45)",
+          }}
+        />
+      ))}
 
-      {/* Bottom contact strip */}
-      <div className="absolute bottom-0 inset-x-0 px-2 py-1 flex items-center justify-between text-white/80 text-[7px] font-semibold">
-        <span>📞 01321109245</span>
-        <span>rxbpremiumstorebd.com</span>
+      {/* Frosted glass plate (the product banner surface) */}
+      <div
+        className="absolute inset-[10%] rounded-[22px] flex items-center justify-center overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))",
+          backdropFilter: "blur(18px) saturate(160%)",
+          WebkitBackdropFilter: "blur(18px) saturate(160%)",
+          border: "1px solid rgba(255,255,255,0.18)",
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 32px -12px rgba(0,0,0,0.5)",
+        }}
+      >
+        {/* Product image / logo */}
+        {primary && !imgFailed ? (
+          <img
+            src={primary}
+            alt={product.name}
+            loading="lazy"
+            className="relative z-10 max-h-[75%] max-w-[80%] object-contain drop-shadow-[0_10px_24px_rgba(0,229,255,0.35)]"
+            onError={() => setImgFailed(true)}
+          />
+        ) : !logoFailed ? (
+          <img
+            src={fallbackLogo}
+            alt={product.name}
+            loading="lazy"
+            className="relative z-10 max-h-[70%] max-w-[75%] object-contain drop-shadow-[0_10px_24px_rgba(0,229,255,0.35)]"
+            onError={() => setLogoFailed(true)}
+          />
+        ) : (
+          <span className="relative z-10 text-7xl drop-shadow-[0_8px_18px_rgba(0,229,255,0.4)]">
+            {product.emoji}
+          </span>
+        )}
+
+        {/* Subtle highlight sweep */}
+        <div className="pointer-events-none absolute -top-1/2 -left-1/3 h-[200%] w-[40%] rotate-12 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       </div>
     </div>
   );
