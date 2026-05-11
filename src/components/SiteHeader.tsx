@@ -243,14 +243,35 @@ export function SiteHeader() {
                 </Link>
               ))}
             </nav>
-            <div className="px-4 pb-4">
-              <Link
-                to="/products"
-                onClick={() => setOpen(false)}
-                className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
-              >
-                <Sparkles className="w-4 h-4" /> Shop Premium Deals
-              </Link>
+            <div className="px-4 pb-4 grid gap-2">
+              {user ? (
+                <>
+                  <Link
+                    to="/orders"
+                    onClick={() => setOpen(false)}
+                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
+                  >
+                    <UserCircle2 className="w-4 h-4" /> My Account
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      setOpen(false);
+                      await handleLogout();
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full glass-soft border border-white/10 text-white text-sm font-semibold hover:border-rose-400/40 transition"
+                  >
+                    <LogOut className="w-4 h-4" /> Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setOpen(false)}
+                  className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
+                >
+                  <LogIn className="w-4 h-4" /> Login / Sign Up
+                </Link>
+              )}
             </div>
           </div>
         )}
