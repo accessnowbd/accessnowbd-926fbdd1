@@ -65,14 +65,25 @@ const ACTIVITY = [
 ];
 
 function Index() {
-  const { products } = useProducts();
+  const { products, isLoading } = useProducts();
   const top = useMemo(() => pickTopProducts(products), [products]);
   const byCategory = useMemo(() => {
-    const groups = ["OTT & Streaming", "AI & Education", "Microsoft Office", "Editing Tools"].map((category) => ({
-      category,
-      items: products.filter((p) => p.category === category).slice(0, 8),
-    }));
-    return groups.filter((g) => g.items.length > 0);
+    const desired = [
+      "OTT & Streaming",
+      "AI & Education",
+      "Microsoft Office",
+      "Editing Tools",
+      "Software & Productivity",
+      "VPN & Security",
+      "Windows",
+      "Giftcards",
+    ];
+    return desired
+      .map((category) => ({
+        category,
+        items: products.filter((p) => p.category === category).slice(0, 8),
+      }))
+      .filter((g) => g.items.length > 0);
   }, [products]);
 
   return (
@@ -81,11 +92,15 @@ function Index() {
       <main>
         <HeroExperience />
         <CategoryExperience />
-        
-        <FeaturedProducts items={top} />
-        {byCategory.map((section) => (
-          <ProductRail key={section.category} title={section.category} items={section.items} />
-        ))}
+
+        <FeaturedProducts items={top} isLoading={isLoading} />
+        {isLoading && byCategory.length === 0 ? (
+          <ProductRail title="Loading collections" items={[]} isLoading />
+        ) : (
+          byCategory.map((section) => (
+            <ProductRail key={section.category} title={section.category} items={section.items} />
+          ))
+        )}
         <BundleShowcase />
         <ProcessSection />
         <FinalCTA />
@@ -344,21 +359,37 @@ function TrustPanel() {
   );
 }
 
-function FeaturedProducts({ items }: { items: Product[] }) {
-  if (!items.length) return null;
+function ProductSkeleton() {
+  return (
+    <div className="rounded-3xl glass-soft border border-white/10 p-4 h-[320px] animate-pulse">
+      <div className="h-32 rounded-2xl bg-white/5" />
+      <div className="mt-4 h-4 w-3/4 rounded bg-white/10" />
+      <div className="mt-2 h-3 w-1/2 rounded bg-white/5" />
+      <div className="mt-6 h-9 rounded-full bg-white/5" />
+    </div>
+  );
+}
+
+function FeaturedProducts({ items, isLoading }: { items: Product[]; isLoading?: boolean }) {
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
       <SectionTitle eyebrow="Popular picks" title="আজকের জনপ্রিয় ডিজিটাল সার্ভিস" subtitle="সবচেয়ে বেশি অর্ডার হওয়া software ও subscription একসাথে।" action="All products" to="/products" />
       <div className="mt-7 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-        {items.map((product) => <ProductCard key={product.slug} product={product} />)}
+        {items.length
+          ? items.map((product) => <ProductCard key={product.slug} product={product} />)
+          : Array.from({ length: 8 }).map((_, i) => <ProductSkeleton key={i} />)}
       </div>
+      {!isLoading && !items.length && (
+        <p className="mt-4 text-center text-sm text-white/60">প্রোডাক্ট লোড হচ্ছে… একটু পরে রিফ্রেশ করুন।</p>
+      )}
     </section>
   );
 }
 
-function ProductRail({ title, items }: { title: string; items: Product[] }) {
+function ProductRail({ title, items, isLoading }: { title: string; items: Product[]; isLoading?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const scroll = (dir: 1 | -1) => ref.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
+  const showSkeleton = isLoading || items.length === 0;
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
       <div className="flex items-end justify-between gap-4">
@@ -369,11 +400,17 @@ function ProductRail({ title, items }: { title: string; items: Product[] }) {
         </div>
       </div>
       <div ref={ref} className="mt-6 flex gap-4 md:gap-5 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {items.map((product) => (
-          <div key={product.slug} className="snap-start shrink-0 w-[68%] sm:w-[44%] md:w-[30%] lg:w-[23%]">
-            <ProductCard product={product} />
-          </div>
-        ))}
+        {showSkeleton
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="snap-start shrink-0 w-[68%] sm:w-[44%] md:w-[30%] lg:w-[23%]">
+                <ProductSkeleton />
+              </div>
+            ))
+          : items.map((product) => (
+              <div key={product.slug} className="snap-start shrink-0 w-[68%] sm:w-[44%] md:w-[30%] lg:w-[23%]">
+                <ProductCard product={product} />
+              </div>
+            ))}
       </div>
     </section>
   );
