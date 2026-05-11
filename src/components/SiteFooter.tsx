@@ -303,7 +303,7 @@ export function SiteFooter() {
                 WebkitTextStroke: "0",
               }}
             >
-              BD ✦
+              BD
             </span>
           </div>
         </div>
