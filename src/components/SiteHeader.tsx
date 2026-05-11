@@ -13,10 +13,15 @@ import {
   Sparkles,
   PhoneCall,
   ChevronRight,
+  LogIn,
+  UserCircle2,
+  LogOut,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "@tanstack/react-router";
 
 const NAV: Array<{
   label: string;
@@ -87,7 +92,13 @@ export function TopUtilityBar() {
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    await signOut();
+    navigate({ to: "/" });
+  };
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -173,12 +184,34 @@ export function SiteHeader() {
               <AccountIcon />
               <CartIcon />
 
-              <Link
-                to="/products"
-                className="hidden sm:inline-flex items-center gap-1.5 h-11 px-5 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition"
-              >
-                <Sparkles className="w-4 h-4" /> Shop Now
-              </Link>
+              {user ? (
+                <div className="hidden sm:flex items-center gap-1.5">
+                  <Link
+                    to="/orders"
+                    className="inline-flex items-center gap-2 h-11 px-4 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition"
+                  >
+                    <UserCircle2 className="w-4 h-4" />
+                    <span className="max-w-[120px] truncate">
+                      {user.email?.split("@")[0] ?? "Account"}
+                    </span>
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="grid place-items-center w-11 h-11 rounded-full glass-soft border border-white/10 text-white/80 hover:text-white hover:border-rose-400/40 transition"
+                    aria-label="Sign out"
+                    title="Sign out"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/auth"
+                  className="hidden sm:inline-flex items-center gap-1.5 h-11 px-5 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition"
+                >
+                  <LogIn className="w-4 h-4" /> Login / Sign Up
+                </Link>
+              )}
 
               <button
                 onClick={() => setOpen((o) => !o)}
@@ -210,14 +243,35 @@ export function SiteHeader() {
                 </Link>
               ))}
             </nav>
-            <div className="px-4 pb-4">
-              <Link
-                to="/products"
-                onClick={() => setOpen(false)}
-                className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
-              >
-                <Sparkles className="w-4 h-4" /> Shop Premium Deals
-              </Link>
+            <div className="px-4 pb-4 grid gap-2">
+              {user ? (
+                <>
+                  <Link
+                    to="/orders"
+                    onClick={() => setOpen(false)}
+                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
+                  >
+                    <UserCircle2 className="w-4 h-4" /> My Account
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      setOpen(false);
+                      await handleLogout();
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full glass-soft border border-white/10 text-white text-sm font-semibold hover:border-rose-400/40 transition"
+                  >
+                    <LogOut className="w-4 h-4" /> Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setOpen(false)}
+                  className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
+                >
+                  <LogIn className="w-4 h-4" /> Login / Sign Up
+                </Link>
+              )}
             </div>
           </div>
         )}
