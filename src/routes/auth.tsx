@@ -23,9 +23,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 
 export const Route = createFileRoute("/auth")({
-  component: AuthPage,
+  component: () => <AuthPage initialMode="login" />,
   head: () => ({ meta: [{ title: "Login or Sign up — AccessNow BD" }] }),
 });
+
+export function AuthPageEntry({ initialMode, openForgot }: { initialMode: "login" | "signup"; openForgot?: boolean }) {
+  return <AuthPage initialMode={initialMode} openForgot={openForgot} />;
+}
 
 const signupSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(80),
@@ -56,17 +60,17 @@ function passwordScore(pw: string) {
   return { score: s, ...map[s] };
 }
 
-function AuthPage() {
+function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?: "login" | "signup"; openForgot?: boolean } = {}) {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [mode, setMode] = useState<"login" | "signup">(initialMode);
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [showPw, setShowPw] = useState(false);
   const [remember, setRemember] = useState(true);
   const [agree, setAgree] = useState(true);
-  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(openForgot);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotMsg, setForgotMsg] = useState<string | null>(null);
   const [forgotErr, setForgotErr] = useState<string | null>(null);
