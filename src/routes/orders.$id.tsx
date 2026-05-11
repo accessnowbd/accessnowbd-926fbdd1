@@ -173,11 +173,12 @@ function OrderDetailPage() {
                   <span className="font-semibold">{order.email}</span> within 5–30 minutes.
                 </p>
                 <button
-                  onClick={() => downloadReceiptPdf(order)}
-                  className="mt-4 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white/20 hover:bg-white/30 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  onClick={handleDownload}
+                  disabled={downloading}
+                  className="mt-4 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white/20 hover:bg-white/30 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  <Download className="w-3.5 h-3.5" />
-                  {autoDownloaded ? "Download receipt again" : "Download receipt"}
+                  {downloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                  {downloading ? "Generating…" : autoDownloaded ? "Download receipt again" : "Download receipt"}
                 </button>
               </div>
             </div>
