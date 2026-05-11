@@ -229,7 +229,7 @@ function HeroExperience() {
                     <span className="grid h-8 w-8 place-items-center rounded-xl bg-aurora text-white shadow-[var(--shadow-glow-aqua)]">
                       <I className="h-4 w-4" />
                     </span>
-                    <div className="text-xl md:text-2xl font-extrabold text-aurora">{value as string}</div>
+                    <div className="text-xl md:text-2xl font-extrabold text-white drop-shadow-[0_2px_10px_rgba(0,229,255,0.5)]">{value as string}</div>
                   </div>
                   <div className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{label as string}</div>
                 </div>
