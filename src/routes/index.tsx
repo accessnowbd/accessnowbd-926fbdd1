@@ -240,25 +240,26 @@ function HeroExperience() {
             </div>
           </div>
 
-          {/* Live activity card */}
+          {/* Special offer / promo card */}
           <div className="relative glass rounded-[var(--radius-2xl)] p-5 md:p-6 overflow-hidden">
-            <div className="pointer-events-none absolute -top-10 -right-10 h-36 w-36 rounded-full bg-aurora opacity-25 blur-2xl" />
+            <div className="pointer-events-none absolute -top-10 -right-10 h-36 w-36 rounded-full bg-aurora opacity-30 blur-2xl" />
+            <div className="pointer-events-none absolute -bottom-12 -left-12 h-32 w-32 rounded-full bg-violet-grad opacity-25 blur-2xl" />
             <div className="relative flex items-center justify-between gap-4">
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-aqua">Live Activity</p>
-                <div className="mt-3 space-y-2">
-                  {ACTIVITY.slice(0, 3).map((item) => (
-                    <div key={item} className="flex items-center gap-2 text-sm font-semibold text-foreground truncate">
-                      <span className="relative flex h-2 w-2">
-                        <span className="absolute inline-flex h-full w-full rounded-full bg-success opacity-75 animate-ping" />
-                        <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
-                      </span>
-                      <span className="truncate">{item}</span>
-                    </div>
-                  ))}
+                <div className="inline-flex items-center gap-2 rounded-full glass-soft px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-aqua">
+                  <Sparkles className="h-3.5 w-3.5" /> Limited Offer
                 </div>
+                <h4 className="mt-3 text-xl md:text-2xl font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)", lineHeight: 1.15 }}>
+                  প্রথম অর্ডারে <span className="text-aurora">২০% ছাড়</span>
+                </h4>
+                <p className="mt-1.5 text-xs md:text-sm text-muted-foreground">
+                  Coupon: <span className="font-mono font-bold text-foreground">WELCOME20</span> · সকল প্রোডাক্টে প্রযোজ্য
+                </p>
+                <Link to="/products" className="mt-3 inline-flex items-center gap-1.5 text-xs font-extrabold text-aqua hover:gap-2.5 transition-all">
+                  এখনই কিনুন <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
               </div>
-              <div className="hidden sm:grid h-20 w-20 place-items-center rounded-2xl bg-aurora text-primary-foreground shadow-[var(--shadow-glow-violet)] animate-pulse-glow">
+              <div className="hidden sm:grid h-20 w-20 place-items-center rounded-2xl bg-aurora text-primary-foreground shadow-[var(--shadow-glow-violet)] animate-pulse-glow shrink-0">
                 <Zap className="h-8 w-8" />
               </div>
             </div>
