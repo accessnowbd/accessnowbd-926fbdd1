@@ -396,6 +396,8 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
   const [recordId, setRecordId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [errors, setErrors] = useState<{ [k: string]: string }>({});
+  const [touched, setTouched] = useState<{ [k: string]: boolean }>({});
 
   useEffect(() => {
     (async () => {
@@ -409,7 +411,24 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
     })();
   }, [kind]);
 
+  const setField = (name: string, value: unknown) => {
+    setData((d) => ({ ...d, [name]: value }));
+    const f = fields.find((x) => x.name === name);
+    if (f) setErrors((e) => ({ ...e, [name]: validateField(f, value) ?? "" }));
+  };
+
   const save = async () => {
+    const next: { [k: string]: string } = {};
+    for (const f of fields) {
+      const err = validateField(f, data[f.name]);
+      if (err) next[f.name] = err;
+    }
+    if (Object.keys(next).length) {
+      setErrors(next);
+      setTouched(Object.fromEntries(fields.map((f) => [f.name, true])));
+      toast.error("Please fix the highlighted fields");
+      return;
+    }
     setSaving(true);
     const payload = { kind, data: data as never, is_active: true };
     const { data: out, error } = recordId
@@ -435,7 +454,13 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
       <div className="grid sm:grid-cols-2 gap-4">
         {fields.map((f) => (
           <div key={f.name} className={f.type === "textarea" ? "sm:col-span-2" : ""}>
-            <FieldInput field={f} value={data[f.name]} onChange={(v) => setData({ ...data, [f.name]: v })} />
+            <FieldInput
+              field={f}
+              value={data[f.name]}
+              error={touched[f.name] ? errors[f.name] : ""}
+              onBlur={() => setTouched((t) => ({ ...t, [f.name]: true }))}
+              onChange={(v) => setField(f.name, v)}
+            />
           </div>
         ))}
       </div>
