@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Check, Copy, Lock, Smartphone, Loader2, Pencil } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { z } from "zod";
+import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 
@@ -13,8 +15,13 @@ import { GlassField } from "@/components/ui-glass/GlassField";
 import { Stepper } from "@/components/ui-glass/Stepper";
 import { RadioCard } from "@/components/ui-glass/RadioCard";
 
+const checkoutSearchSchema = z.object({
+  step: fallback(z.union([z.literal(1), z.literal(2), z.literal(3)]), 1).default(1),
+});
+
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
+  validateSearch: zodValidator(checkoutSearchSchema),
   head: () => ({ meta: [{ title: "Checkout — AccessNow BD" }] }),
 });
 
@@ -54,7 +61,9 @@ function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const { step } = Route.useSearch();
+  const setStep = (n: 1 | 2 | 3) =>
+    navigate({ to: "/checkout", search: { step: n }, replace: false });
   const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
   const [method, setMethod] = useState<MethodId>("bkash");
   const [agree, setAgree] = useState(false);
@@ -179,7 +188,7 @@ function CheckoutPage() {
       if (step2Valid) setStep(3);
     }
   };
-  const goBack = () => setStep((s) => (s > 1 ? ((s - 1) as 1 | 2) : s));
+  const goBack = () => { if (step > 1) setStep((step - 1) as 1 | 2); };
 
   return (
     <div className="min-h-screen">
