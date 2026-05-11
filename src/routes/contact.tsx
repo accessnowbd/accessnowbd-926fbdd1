@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { z } from "zod";
 import { MessageCircle, Mail, Clock, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -16,8 +18,43 @@ export const Route = createFileRoute("/contact")({
   }),
 });
 
+const contactSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100, "Max 100 characters"),
+  email: z.string().trim().email("Enter a valid email").max(255, "Max 255 characters"),
+  subject: z.string().trim().max(150, "Max 150 characters").optional(),
+  message: z.string().trim().min(1, "Message is required").max(1000, "Max 1000 characters"),
+});
+
+type ContactForm = { name: string; email: string; subject: string; message: string };
+type FieldKey = keyof ContactForm;
+
 function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [form, setForm] = useState<ContactForm>({ name: "", email: "", subject: "", message: "" });
+  const [touched, setTouched] = useState<Record<FieldKey, boolean>>({ name: false, email: false, subject: false, message: false });
+
+  const errors = useMemo(() => {
+    const result = contactSchema.safeParse(form);
+    if (result.success) return {} as Partial<Record<FieldKey, string>>;
+    const out: Partial<Record<FieldKey, string>> = {};
+    for (const issue of result.error.issues) {
+      const k = issue.path[0] as FieldKey;
+      if (!out[k]) out[k] = issue.message;
+    }
+    return out;
+  }, [form]);
+
+  const valid = Object.keys(errors).length === 0;
+  const update = (k: FieldKey, v: string) => setForm((f) => ({ ...f, [k]: v }));
+  const blur = (k: FieldKey) => setTouched((t) => ({ ...t, [k]: true }));
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setTouched({ name: true, email: true, subject: true, message: true });
+    if (!valid) return;
+    setSent(true);
+  };
+
   return (
     <div className="min-h-screen">
       <SiteHeader />
@@ -44,35 +81,39 @@ function ContactPage() {
             action={<span className="font-bold">Dhaka, Bangladesh</span>} />
         </div>
 
-        <form
-          onSubmit={(e) => { e.preventDefault(); setSent(true); }}
-          className="glass-strong rounded-3xl p-6 md:p-8 space-y-4"
-        >
+        <form onSubmit={onSubmit} noValidate className="glass-strong rounded-3xl p-6 md:p-8 space-y-4">
           {sent ? (
             <div className="text-center py-10">
               <CheckCircle2 className="w-12 h-12 text-[var(--color-success)] mx-auto" />
               <h3 className="mt-3 text-lg font-bold">মেসেজ পাঠানো হয়েছে!</h3>
               <p className="text-sm text-muted-foreground mt-1">আমরা শীঘ্রই উত্তর দেব।</p>
-              <button onClick={() => setSent(false)} className="mt-5 h-10 px-5 rounded-full bg-aurora text-white text-sm font-bold">
+              <button type="button" onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); setTouched({ name: false, email: false, subject: false, message: false }); }} className="mt-5 h-10 px-5 rounded-full bg-aurora text-white text-sm font-bold">
                 Send another
               </button>
             </div>
           ) : (
             <>
               <h2 className="text-lg font-extrabold">Send us a message</h2>
-              <Field label="আপনার নাম">
-                <input required className="w-full h-11 px-4 rounded-xl bg-white border border-border outline-none focus:ring-2 focus:ring-primary/30" />
-              </Field>
-              <Field label="ইমেইল">
-                <input required type="email" className="w-full h-11 px-4 rounded-xl bg-white border border-border outline-none focus:ring-2 focus:ring-primary/30" />
-              </Field>
-              <Field label="বিষয়">
-                <input className="w-full h-11 px-4 rounded-xl bg-white border border-border outline-none focus:ring-2 focus:ring-primary/30" />
-              </Field>
-              <Field label="মেসেজ">
-                <textarea required rows={5} className="w-full px-4 py-3 rounded-xl bg-white border border-border outline-none focus:ring-2 focus:ring-primary/30 resize-none" />
-              </Field>
-              <button className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-full bg-aurora text-white font-bold glow-violet hover:scale-[1.01] transition">
+
+              <ValidatedField label="আপনার নাম" name="name" value={form.name}
+                onChange={(v) => update("name", v)} onBlur={() => blur("name")}
+                error={touched.name ? errors.name : undefined} required maxLength={100} />
+              <ValidatedField label="ইমেইল" name="email" type="email" value={form.email}
+                onChange={(v) => update("email", v)} onBlur={() => blur("email")}
+                error={touched.email ? errors.email : undefined} required maxLength={255} />
+              <ValidatedField label="বিষয়" name="subject" value={form.subject}
+                onChange={(v) => update("subject", v)} onBlur={() => blur("subject")}
+                error={touched.subject ? errors.subject : undefined} maxLength={150} />
+              <ValidatedField label="মেসেজ" name="message" multiline value={form.message}
+                onChange={(v) => update("message", v)} onBlur={() => blur("message")}
+                error={touched.message ? errors.message : undefined} required maxLength={1000} />
+
+              <button
+                type="submit"
+                disabled={!valid}
+                aria-disabled={!valid}
+                className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-full bg-aurora text-white font-bold glow-violet hover:scale-[1.01] transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
                 <Send className="w-4 h-4" /> Send Message
               </button>
             </>
@@ -97,11 +138,55 @@ function InfoCard({ icon: Icon, title, desc, action }: { icon: React.ComponentTy
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+interface ValidatedFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (v: string) => void;
+  onBlur: () => void;
+  error?: string;
+  required?: boolean;
+  type?: string;
+  multiline?: boolean;
+  maxLength?: number;
+}
+
+function ValidatedField({ label, name, value, onChange, onBlur, error, required, type = "text", multiline, maxLength }: ValidatedFieldProps) {
+  const errId = `${name}-error`;
+  const baseCls = cn(
+    "w-full px-4 rounded-xl bg-white border outline-none focus:ring-2 focus:ring-primary/30",
+    error ? "border-destructive ring-2 ring-destructive/40" : "border-border",
+    multiline ? "py-3 resize-none" : "h-11",
+  );
   return (
     <label className="block">
-      <span className="text-xs font-semibold text-muted-foreground">{label}</span>
-      <div className="mt-1.5">{children}</div>
+      <span className="text-xs font-semibold text-muted-foreground">
+        {label}{required && <span className="text-destructive"> *</span>}
+      </span>
+      <div className="mt-1.5">
+        {multiline ? (
+          <textarea
+            name={name} rows={5} value={value}
+            onChange={(e) => onChange(e.target.value)} onBlur={onBlur}
+            required={required} maxLength={maxLength}
+            aria-invalid={!!error} aria-describedby={error ? errId : undefined}
+            className={baseCls}
+          />
+        ) : (
+          <input
+            name={name} type={type} value={value}
+            onChange={(e) => onChange(e.target.value)} onBlur={onBlur}
+            required={required} maxLength={maxLength}
+            aria-invalid={!!error} aria-describedby={error ? errId : undefined}
+            className={baseCls}
+          />
+        )}
+      </div>
+      {error && (
+        <span id={errId} role="alert" className="block mt-1.5 text-xs text-destructive">
+          {error}
+        </span>
+      )}
     </label>
   );
 }
