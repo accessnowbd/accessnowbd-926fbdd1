@@ -188,22 +188,21 @@
     transform: translateZ(0);
   }
 
-  /* SIGNATURE: Dark Glassmorphism Card */
+  /* SIGNATURE: Dark Glassmorphism Card — premium, no jitter */
   .gradient-border-card {
     position: relative;
-    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-    backdrop-filter: blur(24px) saturate(170%);
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02));
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-glass);
     isolation: isolate;
-    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+    will-change: box-shadow;
+    transition: box-shadow 0.35s ease, border-color 0.35s ease;
   }
   .gradient-border-card::before {
     content: "";
     position: absolute;
     inset: 0;
-    padding: 1.5px;
+    padding: 1px;
     border-radius: inherit;
     background: var(--gradient-conic);
     -webkit-mask:
@@ -211,7 +210,7 @@
       linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
             mask-composite: exclude;
-    opacity: 0.4;
+    opacity: 0.35;
     pointer-events: none;
     transition: opacity 0.35s ease;
   }
@@ -221,16 +220,15 @@
     inset: 0;
     border-radius: inherit;
     background:
-      radial-gradient(120% 70% at 50% -10%, rgba(0, 229, 255, 0.15), transparent 55%),
-      radial-gradient(80% 60% at 50% 110%, rgba(124, 58, 237, 0.18), transparent 60%);
+      radial-gradient(120% 70% at 50% -10%, rgba(0, 229, 255, 0.10), transparent 55%),
+      radial-gradient(80% 60% at 50% 110%, rgba(124, 58, 237, 0.12), transparent 60%);
     pointer-events: none;
     z-index: -1;
   }
   .gradient-border-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-glass-lg), 0 0 30px -4px rgba(0, 229, 255, 0.35);
+    box-shadow: var(--shadow-glass-lg), 0 0 24px -6px rgba(0, 229, 255, 0.30);
   }
-  .gradient-border-card:hover::before { opacity: 1; }
+  .gradient-border-card:hover::before { opacity: 0.7; }
 
   .gradient-border-soft {
     position: relative;

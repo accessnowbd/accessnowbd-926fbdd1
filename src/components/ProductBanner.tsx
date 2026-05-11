@@ -147,14 +147,13 @@ export function ProductBanner({
         style={{ background: "radial-gradient(circle, rgba(0,229,255,0.45), transparent 70%)" }}
       />
 
-      {/* Frosted glass plate (the product banner surface) */}
+      {/* Frosted glass plate — solid layer, no backdrop-filter (perf) */}
       <div
         className="absolute inset-[10%] rounded-[22px] flex items-center justify-center overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))",
-          backdropFilter: "blur(18px) saturate(160%)",
-          WebkitBackdropFilter: "blur(18px) saturate(160%)",
-          border: "1px solid rgba(255,255,255,0.18)",
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03))",
+          border: "1px solid rgba(255,255,255,0.16)",
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 32px -12px rgba(0,0,0,0.5)",
         }}
