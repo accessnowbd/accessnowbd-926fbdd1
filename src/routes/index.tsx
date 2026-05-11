@@ -63,6 +63,8 @@ function Index() {
       <SiteHeader />
       <HeroLanding />
 
+      <CategoryShowcase />
+
       <ProductGrid title="⭐ Top Picks for You" subtitle="বাংলাদেশে সবচেয়ে জনপ্রিয় সাবস্ক্রিপশন" items={top} cap={8} viewAllTo="/products" />
 
       {sectioned.map((s) => (
