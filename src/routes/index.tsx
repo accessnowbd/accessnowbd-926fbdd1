@@ -81,7 +81,7 @@ function Index() {
       <main>
         <HeroExperience />
         <CategoryExperience />
-        <TrustPanel />
+        
         <FeaturedProducts items={top} />
         {byCategory.map((section) => (
           <ProductRail key={section.category} title={section.category} items={section.items} />
