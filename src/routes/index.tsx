@@ -149,11 +149,11 @@ function HeroExperience() {
       }}
     >
       {/* Subtle deep aurora layers — tuned to match header/footer navy */}
-      <div className="pointer-events-none absolute -top-40 -left-32 h-[460px] w-[460px] rounded-full opacity-25 blur-3xl animate-blob"
+      <div className="pointer-events-none absolute -top-40 -left-32 h-[460px] w-[460px] rounded-full opacity-25 blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(124, 58, 237, 0.55), transparent 65%)" }} />
-      <div className="pointer-events-none absolute -bottom-40 -right-24 h-[500px] w-[500px] rounded-full opacity-20 blur-3xl animate-blob"
-        style={{ animationDelay: "-6s", background: "radial-gradient(circle, rgba(0, 229, 255, 0.45), transparent 65%)" }} />
-      <div className="pointer-events-none absolute top-1/3 left-1/2 h-[260px] w-[260px] -translate-x-1/2 rounded-full opacity-15 blur-3xl animate-pulse-glow"
+      <div className="pointer-events-none absolute -bottom-40 -right-24 h-[500px] w-[500px] rounded-full opacity-20 blur-3xl"
+        style={{ background: "radial-gradient(circle, rgba(0, 229, 255, 0.45), transparent 65%)" }} />
+      <div className="pointer-events-none absolute top-1/3 left-1/2 h-[260px] w-[260px] -translate-x-1/2 rounded-full opacity-15 blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(99, 102, 241, 0.5), transparent 70%)" }} />
       {/* Top hairline glow to blend with header */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
