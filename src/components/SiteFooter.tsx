@@ -208,61 +208,72 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
           {COLUMNS.map((col, idx) => {
             const accents = [
-              { ring: "from-primary/60", glow: "rgba(124,58,237,0.35)", dot: "bg-primary" },
-              { ring: "from-aqua/60", glow: "rgba(0,229,255,0.32)", dot: "bg-aqua" },
-              { ring: "from-violet-400/60", glow: "rgba(167,139,250,0.32)", dot: "bg-violet-400" },
+              { from: "rgba(124,58,237,0.9)", via: "rgba(0,229,255,0.6)", to: "rgba(124,58,237,0.0)", glow: "rgba(124,58,237,0.35)", dot: "bg-primary" },
+              { from: "rgba(0,229,255,0.9)", via: "rgba(167,139,250,0.6)", to: "rgba(0,229,255,0.0)", glow: "rgba(0,229,255,0.32)", dot: "bg-aqua" },
+              { from: "rgba(167,139,250,0.9)", via: "rgba(0,229,255,0.6)", to: "rgba(167,139,250,0.0)", glow: "rgba(167,139,250,0.32)", dot: "bg-violet-400" },
             ][idx % 3];
             return (
               <div
                 key={col.title}
-                className="group/card relative rounded-2xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-2xl p-6 overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:bg-white/[0.06] hover:border-white/[0.14]"
+                className="group/card relative rounded-2xl p-[1.5px] transition-all duration-500 hover:-translate-y-1"
                 style={{
-                  boxShadow:
-                    "0 24px 60px -30px rgba(0,0,0,0.85), inset 0 1px 0 0 rgba(255,255,255,0.08), inset 0 0 0 1px rgba(255,255,255,0.02)",
+                  backgroundImage: `linear-gradient(135deg, ${accents.from} 0%, ${accents.via} 45%, ${accents.to} 100%)`,
                 }}
               >
-                {/* Top hairline accent */}
+                {/* Animated conic glow on hover */}
                 <div
-                  className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent ${accents.ring} to-transparent`}
-                />
-                {/* Soft radial glow inside */}
-                <div
-                  className="pointer-events-none absolute -top-16 -right-16 w-44 h-44 rounded-full blur-3xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"
-                  style={{ background: accents.glow }}
-                />
-                {/* Subtle grid texture */}
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-[0.04]"
+                  className="pointer-events-none absolute -inset-[1px] rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 blur-md"
                   style={{
-                    backgroundImage:
-                      "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-                    backgroundSize: "22px 22px",
+                    background: `conic-gradient(from 0deg, ${accents.from}, ${accents.via}, ${accents.to}, ${accents.from})`,
                   }}
                 />
 
-                <h5
-                  className="relative text-[11px] font-extrabold tracking-[0.28em] uppercase text-white mb-4 flex items-center gap-2"
-                  style={{ fontFamily: "var(--font-heading)" }}
+                <div
+                  className="relative rounded-[14px] bg-[#0a0a14]/85 backdrop-blur-2xl p-6 overflow-hidden h-full"
+                  style={{
+                    boxShadow:
+                      "inset 0 1px 0 0 rgba(255,255,255,0.08), inset 0 0 0 1px rgba(255,255,255,0.02), 0 24px 60px -30px rgba(0,0,0,0.85)",
+                  }}
                 >
-                  <span className={`w-1.5 h-1.5 rounded-full ${accents.dot} shadow-[0_0_12px_currentColor]`} />
-                  {col.title}
-                  <span className="flex-1 h-px bg-gradient-to-r from-white/15 to-transparent" />
-                </h5>
-                <ul className="relative space-y-2.5">
-                  {col.links.map((l) => (
-                    <li key={l.to + l.label}>
-                      <Link
-                        to={l.to}
-                        className="group/link inline-flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition"
-                      >
-                        <ChevronRight className="w-3 h-3 text-white/30 group-hover/link:text-aqua group-hover/link:translate-x-0.5 transition" />
-                        <span className="group-hover/link:underline underline-offset-4 decoration-aqua/50">
-                          {l.label}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                  {/* Soft radial glow inside */}
+                  <div
+                    className="pointer-events-none absolute -top-16 -right-16 w-44 h-44 rounded-full blur-3xl opacity-50 group-hover/card:opacity-100 transition-opacity duration-500"
+                    style={{ background: accents.glow }}
+                  />
+                  {/* Subtle grid texture */}
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-[0.04]"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                      backgroundSize: "22px 22px",
+                    }}
+                  />
+
+                  <h5
+                    className="relative text-[11px] font-extrabold tracking-[0.28em] uppercase text-white mb-4 flex items-center gap-2"
+                    style={{ fontFamily: "var(--font-heading)" }}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${accents.dot} shadow-[0_0_12px_currentColor]`} />
+                    {col.title}
+                    <span className="flex-1 h-px bg-gradient-to-r from-white/15 to-transparent" />
+                  </h5>
+                  <ul className="relative space-y-2.5">
+                    {col.links.map((l) => (
+                      <li key={l.to + l.label}>
+                        <Link
+                          to={l.to}
+                          className="group/link inline-flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition"
+                        >
+                          <ChevronRight className="w-3 h-3 text-white/30 group-hover/link:text-aqua group-hover/link:translate-x-0.5 transition" />
+                          <span className="group-hover/link:underline underline-offset-4 decoration-aqua/50">
+                            {l.label}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             );
           })}
