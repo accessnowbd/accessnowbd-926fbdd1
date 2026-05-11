@@ -249,7 +249,7 @@ function HeroExperience() {
             ].map(([value, label, Icon]) => {
               const I = Icon as typeof Sparkles;
               return (
-                <div key={label as string} className="gradient-border-soft p-3 hover:-translate-y-0.5 transition">
+                <div key={label as string} className="gradient-border-soft p-3 transition-[box-shadow,border-color] duration-300">
                   <div className="flex items-center gap-2">
                     <span className="grid h-7 w-7 place-items-center rounded-lg bg-aurora text-white shadow-[var(--shadow-glow-aqua)]">
                       <I className="h-3.5 w-3.5" />
