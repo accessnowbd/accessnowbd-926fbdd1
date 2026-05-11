@@ -154,12 +154,11 @@ function HeroExperience() {
             </div>
 
             <h1
-              className="mt-6 max-w-3xl text-foreground"
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 4.6vw, 64px)", lineHeight: 1.02, fontWeight: 900, letterSpacing: "-0.02em" }}
+              className="mt-6 max-w-3xl text-white"
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 4.6vw, 64px)", lineHeight: 1.05, fontWeight: 900, letterSpacing: "-0.02em", textShadow: "0 2px 24px rgba(0,0,0,0.45)" }}
             >
-              <span className="text-aurora animate-aurora-pan inline-block">Premium Software</span>
-              <br />
-              এক ক্লিকেই, আপনার হাতে।
+              <span className="block text-white drop-shadow-[0_4px_18px_rgba(0,229,255,0.55)]">Premium Software</span>
+              <span className="block mt-1 text-aqua" style={{ textShadow: "0 0 22px rgba(0,229,255,0.5)" }}>এক ক্লিকেই, আপনার হাতে।</span>
             </h1>
 
             {/* Premium visual chip row — floating brand pills */}
