@@ -185,10 +185,20 @@ function HeroExperience() {
 
             <h1
               className="mt-5 max-w-2xl text-white"
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 3.6vw, 48px)", lineHeight: 1.08, fontWeight: 900, letterSpacing: "-0.02em", textShadow: "0 2px 24px rgba(0,0,0,0.5)" }}
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 3.6vw, 48px)", lineHeight: 1.08, fontWeight: 900, letterSpacing: "-0.02em" }}
             >
-              <span className="block bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent drop-shadow-[0_4px_18px_rgba(0,229,255,0.55)]">Premium Software</span>
-              <span className="block mt-1 text-aqua" style={{ textShadow: "0 0 22px rgba(0,229,255,0.5)" }}>এক ক্লিকেই, আপনার হাতে।</span>
+              <span
+                className="block text-white"
+                style={{ textShadow: "0 2px 18px rgba(0,0,0,0.55), 0 0 24px rgba(0,229,255,0.35)" }}
+              >
+                Premium Software
+              </span>
+              <span
+                className="block mt-1 text-aqua"
+                style={{ textShadow: "0 0 22px rgba(0,229,255,0.55), 0 2px 14px rgba(0,0,0,0.5)" }}
+              >
+                এক ক্লিকেই, আপনার হাতে।
+              </span>
             </h1>
 
             <p className="mt-3 max-w-lg text-sm md:text-[15px] text-white/75 leading-relaxed">
