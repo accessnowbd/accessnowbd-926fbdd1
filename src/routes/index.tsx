@@ -127,10 +127,10 @@ function HeroExperience() {
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <Link to="/products" className="btn-aurora inline-flex h-13 items-center justify-center gap-2 rounded-full px-7 text-sm font-bold">
+            <Link to="/products" className="btn-aurora inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-7 text-sm font-bold">
               সব প্রোডাক্ট দেখুন <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link to="/contact" className="glass inline-flex h-13 items-center justify-center gap-2 rounded-full px-7 text-sm font-bold text-foreground hover:glass-strong transition">
+            <Link to="/contact" className="glass inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-7 text-sm font-bold text-foreground hover:shadow-[var(--shadow-glass-lg)] transition">
               কাস্টম অর্ডার দিন
             </Link>
           </div>
@@ -327,7 +327,7 @@ function FinalCTA() {
         </div>
         <h2 className="mt-6 text-3xl md:text-5xl font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)" }}>আজই আপনার ডিজিটাল stack upgrade করুন</h2>
         <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">একই জায়গা থেকে entertainment, productivity, education, AI ও security tools কিনুন—নতুন white glass experience-এ।</p>
-        <Link to="/products" className="btn-aurora mt-7 inline-flex h-13 items-center justify-center gap-2 rounded-full px-8 text-sm font-bold">
+        <Link to="/products" className="btn-aurora mt-7 inline-flex h-[52px] items-center justify-center gap-2 rounded-full px-8 text-sm font-bold">
           Shop now <ArrowRight className="h-4 w-4" />
         </Link>
       </div>

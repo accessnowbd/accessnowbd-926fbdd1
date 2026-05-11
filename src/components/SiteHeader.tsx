@@ -80,7 +80,7 @@ export function SiteHeader() {
           <div className="lg:hidden border-t border-border bg-background/85 backdrop-blur-2xl">
             <nav className="mx-auto max-w-[1440px] px-4 py-3 grid grid-cols-2 gap-2">
               {NAV.map((n) => (
-                <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="px-3 py-2.5 rounded-xl glass-soft text-sm font-semibold text-foreground hover:glass">
+                <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="px-3 py-2.5 rounded-xl glass-soft text-sm font-semibold text-foreground hover:shadow-[var(--shadow-glass)]">
                   {n.label}
                 </Link>
               ))}

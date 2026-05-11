@@ -42,7 +42,7 @@ export function ProductCard({ product }: { product: Product }) {
     >
       <div className={`relative aspect-[5/4] bg-gradient-to-br ${product.gradient} overflow-hidden`}>
         <div className="absolute inset-0 bg-mesh opacity-40" />
-        <div className="absolute inset-4 rounded-2xl bg-card/40 border border-glass-border backdrop-blur-xl flex items-center justify-center transition-transform duration-500 group-hover:scale-[0.97] overflow-hidden">
+        <div className="absolute inset-4 rounded-2xl bg-card/40 border border-[var(--glass-border)] backdrop-blur-xl flex items-center justify-center transition-transform duration-500 group-hover:scale-[0.97] overflow-hidden">
           {product.imageUrl ? (
             <>
               <img
