@@ -64,6 +64,17 @@ const ACTIVITY = [
   "Sajid I. · Windows 11 Pro কিনেছেন",
 ];
 
+const RAIL_PLACEHOLDER_TITLES: string[] = [
+  "OTT & Streaming",
+  "AI & Education",
+  "Microsoft Office",
+  "Editing Tools",
+  "Software & Productivity",
+  "VPN & Security",
+  "Windows",
+  "Giftcards",
+];
+
 function Index() {
   const { products, isLoading } = useProducts();
   const top = useMemo(() => pickTopProducts(products), [products]);
@@ -94,13 +105,13 @@ function Index() {
         <CategoryExperience />
 
         <FeaturedProducts items={top} isLoading={isLoading} />
-        {isLoading && byCategory.length === 0 ? (
-          <ProductRail title="Loading collections" items={[]} isLoading />
-        ) : (
-          byCategory.map((section) => (
-            <ProductRail key={section.category} title={section.category} items={section.items} />
-          ))
-        )}
+        {isLoading && byCategory.length === 0
+          ? RAIL_PLACEHOLDER_TITLES.map((title) => (
+              <ProductRail key={title} title={title} items={[]} isLoading />
+            ))
+          : byCategory.map((section) => (
+              <ProductRail key={section.category} title={section.category} items={section.items} />
+            ))}
       </main>
       <SiteFooter />
     </div>
@@ -238,7 +249,7 @@ function HeroExperience() {
             ].map(([value, label, Icon]) => {
               const I = Icon as typeof Sparkles;
               return (
-                <div key={label as string} className="gradient-border-soft p-3 hover:-translate-y-0.5 transition">
+                <div key={label as string} className="gradient-border-soft p-3 transition-[box-shadow,border-color] duration-300">
                   <div className="flex items-center gap-2">
                     <span className="grid h-7 w-7 place-items-center rounded-lg bg-aurora text-white shadow-[var(--shadow-glow-aqua)]">
                       <I className="h-3.5 w-3.5" />
@@ -286,6 +297,8 @@ function HeroExperience() {
                     src={brandLogo(b)}
                     alt={b.name}
                     loading="lazy"
+                    width={28}
+                    height={28}
                     className="relative h-7 w-7 object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]"
                   />
                   <span className="relative text-[10px] font-bold text-white/85 truncate max-w-full">{b.name}</span>
@@ -353,7 +366,7 @@ function CategoryExperience() {
           <Link
             key={category.title}
             to={category.to}
-            className="group relative glass-strong rounded-2xl p-3.5 flex flex-col items-center text-center gap-2 transition-[border-color,box-shadow,transform] duration-300 ease-out hover:border-primary/40 hover:shadow-[0_10px_30px_-12px_var(--color-primary)] hover:-translate-y-0.5"
+            className="group relative glass-strong rounded-2xl p-3.5 flex flex-col items-center text-center gap-2 transition-[border-color,box-shadow] duration-300 ease-out hover:border-primary/40 hover:shadow-[0_10px_30px_-12px_var(--color-primary)]"
           >
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary text-primary transition-transform duration-300 ease-out group-hover:scale-110">
               <category.icon className="h-5 w-5" />
