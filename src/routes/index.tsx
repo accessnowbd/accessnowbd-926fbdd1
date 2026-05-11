@@ -133,9 +133,11 @@ const HERO_BRANDS: { name: string; domain: string; color: string; logo?: string 
   { name: "Coursera", domain: "coursera.org", color: "#0056D2" },
   { name: "YouTube", domain: "youtube.com", color: "#FF0000" },
   { name: "Claude", domain: "claude.ai", color: "#D97757" },
+];
 
 const brandLogo = (b: { domain: string; logo?: string }) =>
   b.logo ?? `https://www.google.com/s2/favicons?domain=${b.domain}&sz=128`;
+
 
 function HeroExperience() {
   return (
