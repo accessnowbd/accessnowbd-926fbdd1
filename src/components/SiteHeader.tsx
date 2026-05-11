@@ -130,11 +130,11 @@ export function SiteHeader() {
           {/* top hairline */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/60 to-transparent" />
 
-          <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-[68px] flex items-center justify-between gap-6">
+          <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-10 h-[64px] md:h-[68px] flex items-center justify-between gap-2 md:gap-5 flex-nowrap">
             {/* Brand */}
             <Link
               to="/"
-              className="flex items-center gap-3 shrink-0 group"
+              className="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0"
               style={{ fontFamily: "var(--font-heading)" }}
             >
               {/* Logo orb with rotating conic ring + crown */}
@@ -148,8 +148,8 @@ export function SiteHeader() {
                     animation: "aurora-pan 6s linear infinite",
                   }}
                 />
-                <span className="relative grid place-items-center w-11 h-11 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-primary-foreground shadow-[0_12px_32px_-8px_rgba(0,229,255,0.7)] ring-1 ring-white/20 group-hover:scale-105 group-hover:rotate-[-4deg] transition-transform duration-500">
-                  <Crown className="w-5 h-5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]" />
+                <span className="relative grid place-items-center w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-primary-foreground shadow-[0_12px_32px_-8px_rgba(0,229,255,0.7)] ring-1 ring-white/20 group-hover:scale-105 group-hover:rotate-[-4deg] transition-transform duration-500">
+                  <Crown className="w-4 h-4 md:w-5 md:h-5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]" />
                   {/* Inner shine */}
                   <span className="absolute inset-x-1 top-1 h-3 rounded-full bg-white/25 blur-[2px]" />
                 </span>
@@ -159,10 +159,10 @@ export function SiteHeader() {
                 </span>
               </span>
 
-              {/* Wordmark */}
-              <span className="leading-[1.05]">
-                {/* Tiny premium tag */}
-                <span className="flex items-center gap-1.5">
+              {/* Wordmark — compact on mobile */}
+              <span className="leading-[1.05] min-w-0">
+                {/* Tiny premium tag — only on lg+ to keep header tight */}
+                <span className="hidden lg:flex items-center gap-1.5">
                   <span className="inline-flex items-center gap-1 px-1.5 py-[1px] rounded-full bg-gradient-to-r from-amber-400/25 via-amber-300/15 to-transparent border border-amber-300/35 backdrop-blur-sm">
                     <Sparkles className="w-2.5 h-2.5 text-amber-300" />
                     <span className="text-[9px] font-extrabold tracking-[0.22em] uppercase bg-gradient-to-r from-amber-200 to-amber-400 bg-clip-text text-transparent">
@@ -175,17 +175,17 @@ export function SiteHeader() {
                 </span>
 
                 {/* Brand name */}
-                <span className="mt-1 flex items-baseline gap-1">
-                  <span className="text-[19px] font-extrabold tracking-tight text-white">
+                <span className="lg:mt-1 flex items-baseline gap-1 whitespace-nowrap">
+                  <span className="text-[16px] sm:text-[18px] md:text-[19px] font-extrabold tracking-tight text-white">
                     AccessNow
                   </span>
                   <span
-                    className="text-[19px] font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua animate-aurora-pan"
+                    className="text-[16px] sm:text-[18px] md:text-[19px] font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua animate-aurora-pan"
                     style={{ backgroundSize: "200% 100%" }}
                   >
                     BD
                   </span>
-                  <span className="ml-0.5 text-aqua text-[14px] leading-none">✦</span>
+                  <span className="ml-0.5 text-aqua text-[12px] md:text-[14px] leading-none">✦</span>
                 </span>
               </span>
             </Link>
@@ -194,16 +194,16 @@ export function SiteHeader() {
             <MagneticNav />
 
             {/* Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="hidden md:inline-flex items-center gap-2 h-11 px-4 rounded-full glass-soft border border-white/10 text-sm text-white/80 hover:text-white hover:border-aqua/40 transition group"
+                className="hidden lg:inline-flex items-center gap-2 h-10 px-3.5 rounded-full glass-soft border border-white/10 text-sm text-white/80 hover:text-white hover:border-aqua/40 transition group"
                 aria-label="Search products"
               >
                 <Search className="w-4 h-4 text-aqua" />
-                <span className="text-white/55 font-medium">Search products…</span>
-                <span className="ml-2 hidden xl:inline text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-white/10 text-white/55 border border-white/10">
+                <span className="text-white/55 font-medium">Search…</span>
+                <span className="ml-1 hidden xl:inline text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-white/10 text-white/55 border border-white/10">
                   ⌘K
                 </span>
               </button>
@@ -211,7 +211,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="md:hidden grid place-items-center w-11 h-11 rounded-full glass-soft border border-white/10 text-white"
+                className="lg:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
                 aria-label="Search"
               >
                 <Search className="w-4 h-4 text-aqua" />
@@ -253,7 +253,7 @@ export function SiteHeader() {
 
               <button
                 onClick={() => setOpen((o) => !o)}
-                className="lg:hidden grid place-items-center w-11 h-11 rounded-full glass-soft border border-white/10 text-white"
+                className="lg:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
                 aria-label="Menu"
               >
                 {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
