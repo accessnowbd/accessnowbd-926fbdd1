@@ -71,7 +71,18 @@ function guessLogoUrl(name: string): string {
     }
   }
   if (!domain) domain = `${k.replace(/\s+/g, "").replace(/[^a-z0-9]/g, "")}.com`;
-  return `https://logo.clearbit.com/${domain}`;
+  return domain;
+}
+
+/** Multiple logo CDN sources for reliable fallback */
+function logoSources(name: string): string[] {
+  const domain = guessLogoUrl(name);
+  return [
+    `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
+    `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+    `https://logo.clearbit.com/${domain}`,
+    `https://icon.horse/icon/${domain}`,
+  ];
 }
 
 export function ProductBanner({
