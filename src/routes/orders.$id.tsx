@@ -44,6 +44,7 @@ const statusSteps = ["pending", "processing", "delivered"];
 
 function OrderDetailPage() {
   const { id } = Route.useParams();
+  const { new: isNew } = Route.useSearch();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
