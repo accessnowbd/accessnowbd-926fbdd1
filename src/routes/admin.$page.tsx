@@ -236,10 +236,10 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {rows.map((r) => (
+              {visibleRows.map((r) => (
                 <tr
                   key={r.id}
-                  draggable
+                  draggable={!filtering}
                   onDragStart={(e) => { setDragId(r.id); e.dataTransfer.effectAllowed = "move"; }}
                   onDragOver={(e) => { e.preventDefault(); if (overId !== r.id) setOverId(r.id); }}
                   onDragLeave={() => { if (overId === r.id) setOverId(null); }}
