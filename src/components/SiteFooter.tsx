@@ -9,15 +9,10 @@ import {
   Mail,
   MapPin,
   PhoneCall,
-  ArrowUp,
-  ArrowRight,
-  ShieldCheck,
-  Lock,
-  Zap,
-  Sparkles,
-  Twitter,
+  Package,
+  Info,
+  FileText,
 } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 type LinkTo =
   | "/"
@@ -33,35 +28,32 @@ type LinkTo =
   | "/cart"
   | "/checkout";
 
-const FOOTER_NAV: { label: string; to: LinkTo }[] = [
-  { label: "Home", to: "/" },
-  { label: "All Products", to: "/products" },
-  { label: "Streaming", to: "/streaming" },
-  { label: "AI Tools", to: "/ai-tools" },
-  { label: "Education", to: "/education" },
-  { label: "FAQ", to: "/faq" },
-  { label: "Contact", to: "/contact" },
-];
-
 const COLUMNS: {
   title: string;
-  hover: string;
+  Icon: typeof Package;
+  iconBg: string;
+  bullet: string;
   links: { label: string; to: LinkTo }[];
 }[] = [
   {
-    title: "Explore",
-    hover: "hover:text-aqua",
+    title: "Products",
+    Icon: Package,
+    iconBg: "from-fuchsia-500 to-violet-600",
+    bullet: "bg-fuchsia-400",
     links: [
       { label: "All Products", to: "/products" },
       { label: "Streaming", to: "/streaming" },
       { label: "AI Tools", to: "/ai-tools" },
       { label: "Education", to: "/education" },
       { label: "My Cart", to: "/cart" },
+      { label: "Checkout", to: "/checkout" },
     ],
   },
   {
-    title: "Account",
-    hover: "hover:text-primary",
+    title: "Information",
+    Icon: Info,
+    iconBg: "from-sky-400 to-blue-600",
+    bullet: "bg-sky-400",
     links: [
       { label: "FAQ", to: "/faq" },
       { label: "Contact Us", to: "/contact" },
@@ -71,14 +63,17 @@ const COLUMNS: {
     ],
   },
   {
-    title: "Legal",
-    hover: "hover:text-white",
+    title: "Policies",
+    Icon: FileText,
+    iconBg: "from-emerald-400 to-teal-600",
+    bullet: "bg-emerald-400",
     links: [
       { label: "Privacy Policy", to: "/faq" },
       { label: "Terms & Conditions", to: "/faq" },
-      { label: "Refund & Return", to: "/faq" },
+      { label: "Refund & Return Policy", to: "/faq" },
       { label: "Order & Cancellation", to: "/faq" },
       { label: "Delivery Info", to: "/faq" },
+      { label: "Refund Request", to: "/contact" },
     ],
   },
 ];
@@ -93,135 +88,10 @@ const SOCIALS = [
 
 const PAYMENTS = ["bKash", "Nagad", "Rocket", "Visa", "Mastercard"];
 
-function FooterUtilityBar() {
-  return (
-    <div className="relative z-10 border-b border-white/10 bg-background/40 backdrop-blur-2xl text-xs">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/60 to-transparent" />
-      <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-9 flex items-center justify-between">
-        <div className="flex items-center gap-4 text-white/75">
-          <span className="inline-flex items-center gap-1.5 font-semibold">
-            <Zap className="w-3 h-3 text-aqua" />
-            Fast • Secure • Reliable
-          </span>
-          <span className="hidden md:inline-flex items-center gap-1.5 text-white/60">
-            <ShieldCheck className="w-3 h-3 text-emerald-400" />
-            100% Verified Service
-          </span>
-          <span className="hidden lg:inline-flex items-center gap-1.5 text-white/60">
-            <Sparkles className="w-3 h-3 text-violet-300" />
-            Instant Delivery
-          </span>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-2.5 text-white/65">
-            {[Facebook, Instagram, Youtube, Twitter].map((Icon, i) => (
-              <a
-                key={i}
-                href="#"
-                className="hover:text-aqua transition"
-                aria-label="social"
-              >
-                <Icon className="w-3 h-3" />
-              </a>
-            ))}
-          </div>
-          <a
-            href="tel:+8801580607614"
-            className="hidden md:inline-flex items-center gap-1.5 text-white/80 hover:text-white transition"
-          >
-            <PhoneCall className="w-3 h-3 text-aqua" />
-            +880 1580-607614
-          </a>
-          <span className="inline-flex items-center gap-1.5 font-semibold text-white">
-            <span className="relative flex w-1.5 h-1.5">
-              <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
-              <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            </span>
-            Online · 11 AM – 11 PM
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function MagneticFooterNav() {
-  const navRef = useRef<HTMLElement | null>(null);
-  const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-  const [pill, setPill] = useState<{ left: number; width: number; visible: boolean }>({
-    left: 0,
-    width: 0,
-    visible: false,
-  });
-  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-
-  useLayoutEffect(() => {
-    const el = hoverIndex != null ? itemRefs.current[hoverIndex] : null;
-    const nav = navRef.current;
-    if (!el || !nav) {
-      setPill((p) => ({ ...p, visible: false }));
-      return;
-    }
-    const navRect = nav.getBoundingClientRect();
-    const r = el.getBoundingClientRect();
-    setPill({ left: r.left - navRect.left, width: r.width, visible: true });
-  }, [hoverIndex]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const nav = navRef.current;
-    if (!nav) return;
-    const x = e.clientX;
-    let nearest = 0;
-    let nearestDist = Infinity;
-    itemRefs.current.forEach((el, i) => {
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      const center = r.left + r.width / 2;
-      const dist = Math.abs(center - x);
-      if (dist < nearestDist) {
-        nearestDist = dist;
-        nearest = i;
-      }
-    });
-    if (nearest !== hoverIndex) setHoverIndex(nearest);
-  };
-
-  return (
-    <nav
-      ref={navRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => setHoverIndex(null)}
-      className="hidden lg:flex relative items-center gap-1 px-2 h-12 rounded-full glass-soft border border-white/10 text-sm font-semibold backdrop-blur-2xl"
-    >
-      <span
-        aria-hidden
-        className="pointer-events-none absolute top-1/2 -translate-y-1/2 h-9 rounded-full bg-gradient-to-r from-primary/30 via-violet-500/20 to-aqua/25 shadow-[0_0_0_1px_rgba(255,255,255,0.12)_inset,0_8px_24px_-10px_rgba(0,229,255,0.55)] transition-[left,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
-        style={{
-          left: pill.left,
-          width: pill.width,
-          opacity: pill.visible ? 1 : 0,
-        }}
-      />
-      {FOOTER_NAV.map((n, i) => (
-        <Link
-          key={n.to + n.label}
-          to={n.to}
-          ref={(el) => {
-            itemRefs.current[i] = el;
-          }}
-          className="relative z-10 px-4 py-2 rounded-full text-white/75 hover:text-white transition-colors"
-        >
-          {n.label}
-        </Link>
-      ))}
-    </nav>
-  );
-}
-
 export function SiteFooter() {
   return (
     <footer className="relative mt-24 overflow-hidden border-t border-white/10 bg-background/35 backdrop-blur-xl">
-      {/* aurora glow behind footer — same as header */}
+      {/* aurora glow behind footer */}
       <div className="pointer-events-none absolute inset-x-0 -top-24 h-48 overflow-hidden">
         <div className="absolute left-1/4 top-0 w-[420px] h-[220px] rounded-full bg-primary/30 blur-[110px]" />
         <div className="absolute right-1/4 top-0 w-[420px] h-[220px] rounded-full bg-aqua/25 blur-[110px]" />
@@ -231,118 +101,66 @@ export function SiteFooter() {
         <div className="absolute bottom-0 right-1/4 w-[420px] h-[420px] rounded-full bg-aqua/10 blur-[120px]" />
         <div className="absolute bottom-0 left-1/4 w-[420px] h-[420px] rounded-full bg-primary/10 blur-[120px]" />
       </div>
-
-      {/* top hairline */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/60 to-transparent" />
 
-      
-
-
-      {/* ===== Body ===== */}
-      <div className="relative z-10 mx-auto max-w-[1440px] px-4 md:px-10 pt-16 pb-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-16 mb-16">
-          {/* Brand & mission */}
-          <div className="lg:col-span-4 space-y-8">
-            <p className="text-[13.5px] leading-relaxed text-white/55 max-w-sm">
-              Premium digital subscription marketplace. Get instant access to
-              global services with local convenience.
-              <span className="block mt-2 text-white/45">
-                প্রিমিয়াম ডিজিটাল সাবস্ক্রিপশন এখন আরও সহজ এবং সাশ্রয়ী।
+      <div className="relative z-10 mx-auto max-w-[1440px] px-4 md:px-10 pt-12 pb-8">
+        {/* ===== Brand hero card ===== */}
+        <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent backdrop-blur-xl p-8 md:p-10 overflow-hidden">
+          <div className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 w-[640px] h-[260px] rounded-full bg-primary/20 blur-[120px]" />
+          <div className="relative flex flex-col items-center text-center">
+            <div className="flex items-center gap-4">
+              <span className="grid place-items-center w-14 h-14 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua shadow-[0_12px_40px_-10px_rgba(124,58,237,0.7)]">
+                <Crown className="w-6 h-6 text-white" />
               </span>
+              <div className="text-left">
+                <h3
+                  className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-primary via-violet-300 to-aqua bg-clip-text text-transparent"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  AccessNow BD
+                </h3>
+                <p className="text-[10.5px] tracking-[0.32em] text-white/45 font-bold mt-0.5">
+                  ACCESSNOWBD.COM
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-6 max-w-2xl text-[14px] leading-relaxed text-white/75">
+              বাংলাদেশের সবচেয়ে{" "}
+              <span className="text-white font-bold">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span>{" "}
+              — ভেরিফাইড সাবস্ক্রিপশন, সফটওয়্যার লাইসেন্স, AI টুলস ও{" "}
+              <span className="text-white font-bold">২৪/৭ লাইভ সাপোর্টে</span>{" "}
+              আপনার ডিজিটাল প্রয়োজন এক ক্লিকেই পূরণ।
             </p>
 
-            <div className="space-y-3">
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
               {[
-                { Icon: PhoneCall, label: "+880 1580-607614", href: "tel:+8801580607614", tint: "text-aqua" },
-                { Icon: Mail, label: "support@accessnowbd.com", href: "mailto:support@accessnowbd.com", tint: "text-primary" },
-                { Icon: MapPin, label: "Dhaka, Bangladesh", href: "#", tint: "text-emerald-400" },
-              ].map(({ Icon, label, href, tint }) => (
+                { Icon: PhoneCall, label: "+880 1580-607614", href: "tel:+8801580607614", iconBg: "from-fuchsia-500 to-violet-600" },
+                { Icon: Mail, label: "support@accessnowbd.com", href: "mailto:support@accessnowbd.com", iconBg: "from-sky-400 to-blue-600" },
+                { Icon: MapPin, label: "Dhaka, Bangladesh", href: "#", iconBg: "from-emerald-400 to-teal-600" },
+              ].map(({ Icon, label, href, iconBg }) => (
                 <a
                   key={label}
                   href={href}
-                  className="group flex items-center gap-3 text-[13.5px] text-white/75 hover:text-white transition"
+                  className="group inline-flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-aqua/40 transition"
                 >
-                  <span className="grid place-items-center w-9 h-9 rounded-full glass-soft border border-white/10 group-hover:border-aqua/40 transition">
-                    <Icon className={`w-3.5 h-3.5 ${tint}`} />
+                  <span className={`grid place-items-center w-7 h-7 rounded-full bg-gradient-to-br ${iconBg} text-white`}>
+                    <Icon className="w-3.5 h-3.5" />
                   </span>
-                  <span className="font-medium">{label}</span>
+                  <span className="text-[13px] font-semibold text-white/85 group-hover:text-white">
+                    {label}
+                  </span>
                 </a>
               ))}
             </div>
 
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-soft border border-white/10">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
-              <span className="text-[10.5px] font-extrabold text-emerald-300 uppercase tracking-[0.22em]">
-                Servers Live · 11 AM – 11 PM
-              </span>
-            </div>
-          </div>
-
-          {/* Columns */}
-          <div className="lg:col-span-5 grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
-            {COLUMNS.map((col) => (
-              <div key={col.title} className="space-y-5">
-                <h4
-                  className="text-white font-bold text-[11px] uppercase tracking-[0.22em]"
-                  style={{ fontFamily: "var(--font-heading)" }}
-                >
-                  {col.title}
-                </h4>
-                <ul className="space-y-3.5">
-                  {col.links.map((l) => (
-                    <li key={l.to + l.label}>
-                      <Link
-                        to={l.to}
-                        className={`text-zinc-400 ${col.hover} text-[13.5px] transition-colors duration-300`}
-                      >
-                        {l.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          {/* Newsletter & social */}
-          <div className="lg:col-span-3 space-y-6">
-            <div className="p-5 rounded-2xl glass-soft border border-white/10 space-y-4">
-              <h4
-                className="text-white font-bold text-[11px] uppercase tracking-[0.22em]"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                Newsletter
-              </h4>
-              <p className="text-white/55 text-xs leading-relaxed">
-                নতুন প্রোডাক্ট, কুপন ও অফার সরাসরি ইনবক্সে। No spam ever.
-              </p>
-              <form onSubmit={(e) => e.preventDefault()} className="relative">
-                <input
-                  type="email"
-                  required
-                  placeholder="email@example.com"
-                  className="w-full bg-black/40 border border-white/10 rounded-full py-3 pl-4 pr-12 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-primary/60 focus:border-primary/40 transition-all"
-                />
-                <button
-                  type="submit"
-                  aria-label="Subscribe"
-                  className="absolute right-1.5 top-1.5 grid place-items-center w-9 h-9 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-105 transition"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </form>
-            </div>
-
-            <div className="flex items-center gap-2.5">
+            <div className="mt-7 flex items-center gap-3">
               {SOCIALS.map(({ Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white/70 hover:text-white hover:border-aqua/40 hover:-translate-y-0.5 transition-all duration-300"
+                  className="grid place-items-center w-11 h-11 rounded-full border border-white/10 bg-white/[0.04] text-white/75 hover:text-white hover:border-aqua/40 hover:-translate-y-0.5 transition-all duration-300"
                 >
                   <Icon className="w-4 h-4" />
                 </a>
@@ -351,74 +169,76 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Trust + payment strip */}
-        <div className="py-7 border-y border-white/10 flex flex-wrap items-center justify-between gap-6">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span className="text-[10px] uppercase tracking-[0.22em] text-white/35 mr-2">
+        {/* ===== Three column grid ===== */}
+        <div className="mt-7 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {COLUMNS.map((col) => (
+            <div
+              key={col.title}
+              className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent backdrop-blur-xl p-7"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <span className={`grid place-items-center w-11 h-11 rounded-2xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)]`}>
+                  <col.Icon className="w-5 h-5" />
+                </span>
+                <h4
+                  className="text-white font-extrabold text-[13px] uppercase tracking-[0.28em]"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  {col.title}
+                </h4>
+              </div>
+              <ul className="space-y-3.5">
+                {col.links.map((l) => (
+                  <li key={l.to + l.label}>
+                    <Link
+                      to={l.to}
+                      className="group inline-flex items-center gap-2.5 text-[14px] text-white/70 hover:text-white transition-colors"
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${col.bullet} opacity-80 group-hover:scale-125 transition-transform`} />
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* ===== Bottom bar ===== */}
+        <div className="mt-8 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-5">
+          <p className="text-[12.5px] text-white/55 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+            <span>© 2026</span>
+            <span className="text-white/30">·</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua font-extrabold">
+              AccessNow BD
+            </span>
+            <span className="text-white/30">·</span>
+            <span>All Rights Reserved</span>
+            <span className="text-white/30">·</span>
+            <span>Designed &amp; Developed by</span>
+            <a
+              href="https://shahedit.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2.5 py-0.5 rounded-full border border-white/15 bg-white/[0.04] text-white font-bold hover:border-aqua/40 hover:text-aqua transition"
+            >
+              Shahed IT
+            </a>
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <span className="text-[10px] uppercase tracking-[0.28em] text-white/40 mr-1">
               We accept
             </span>
             {PAYMENTS.map((p) => (
               <span
                 key={p}
-                className="px-3 py-1.5 rounded-full glass-soft border border-white/10 text-white/75 text-[10.5px] font-bold tracking-wide hover:border-aqua/40 hover:text-white transition"
+                className="px-3 py-1 rounded-full border border-white/10 bg-white/[0.04] text-white/80 text-[11px] font-bold hover:border-aqua/40 hover:text-white transition"
               >
                 {p}
               </span>
             ))}
           </div>
-
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 glass-soft border border-white/10 rounded-full px-3 py-1.5">
-              <Lock className="w-3 h-3 text-emerald-400" />
-              <span className="text-[10px] font-extrabold text-white tracking-[0.18em]">
-                SSL SECURED
-              </span>
-            </div>
-            <div className="flex items-center gap-2 glass-soft border border-white/10 rounded-full px-3 py-1.5">
-              <ShieldCheck className="w-3 h-3 text-aqua" />
-              <span className="text-[10px] font-extrabold text-white tracking-[0.18em]">
-                ENCRYPTED
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-5">
-          <div className="text-center md:text-left">
-            <p className="text-xs text-white/55">
-              © 2026{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua font-extrabold">
-                AccessNow BD
-              </span>
-              . Crafted by{" "}
-              <a
-                href="https://shahedit.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white font-bold hover:text-aqua transition"
-              >
-                Shahed IT
-              </a>
-              .
-            </p>
-            <p className="text-[10.5px] text-white/35 mt-1">
-              ​
-            </p>
-          </div>
-
-          <button
-            onClick={() =>
-              typeof window !== "undefined" &&
-              window.scrollTo({ top: 0, behavior: "smooth" })
-            }
-            className="group inline-flex items-center gap-2 h-10 px-4 rounded-full glass-soft border border-white/10 hover:border-aqua/40 transition-all"
-          >
-            <span className="text-xs text-white/70 group-hover:text-white transition-colors">
-              Back to top
-            </span>
-            <ArrowUp className="w-3.5 h-3.5 text-white/55 group-hover:text-aqua group-hover:-translate-y-0.5 transition-all" />
-          </button>
         </div>
       </div>
     </footer>
