@@ -375,6 +375,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                         setForgotErr(null);
                         setForgotMsg(null);
                         setForgotEmail(form.email);
+                        navigate({ to: "/forgot-password" });
                       }}
                       className="text-[11.5px] font-extrabold text-aqua hover:text-white transition"
                     >
@@ -469,8 +470,8 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                   {mode === "login" ? (
                     <>
                       এখনও account নেই?{" "}
-                      <button
-                        type="button"
+                      <Link
+                        to="/register"
                         onClick={() => {
                           setMode("signup");
                           setErr(null);
@@ -478,13 +479,13 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                         className="font-extrabold text-aqua hover:text-white transition"
                       >
                         ফ্রি রেজিস্টার করুন →
-                      </button>
+                      </Link>
                     </>
                   ) : (
                     <>
                       আগে থেকে account আছে?{" "}
-                      <button
-                        type="button"
+                      <Link
+                        to="/login"
                         onClick={() => {
                           setMode("login");
                           setErr(null);
@@ -492,7 +493,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                         className="font-extrabold text-aqua hover:text-white transition"
                       >
                         Sign in →
-                      </button>
+                      </Link>
                     </>
                   )}
                 </p>
