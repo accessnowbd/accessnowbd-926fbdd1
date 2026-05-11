@@ -1,13 +1,21 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Loader2, Copy, Check, Crown } from "lucide-react";
+import { z } from "zod";
+import { fallback, zodValidator } from "@tanstack/zod-adapter";
+import { ArrowLeft, Loader2, Copy, Check, Crown, Download, PartyPopper } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
+import { downloadReceiptPdf } from "@/lib/receipt";
+
+const orderSearchSchema = z.object({
+  new: fallback(z.union([z.literal(0), z.literal(1)]), 0).default(0),
+});
 
 export const Route = createFileRoute("/orders/$id")({
   component: OrderDetailPage,
+  validateSearch: zodValidator(orderSearchSchema),
   head: () => ({ meta: [{ title: "Order Details — AccessNow BD" }] }),
 });
 
