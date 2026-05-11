@@ -16,13 +16,11 @@ import {
   Zap,
   HelpCircle,
   ArrowLeft,
-  Mail,
   CheckCircle2,
 } from "lucide-react";
 
 const ADMIN_PHONE = "+8801580607614";
 const ADMIN_TEL = "tel:+8801580607614";
-const ADMIN_EMAIL = "mailto:accessnowbd01@gmail.com";
 
 type Msg = { role: "user" | "assistant"; content: string };
 type Tab = "home" | "ai" | "faq";
