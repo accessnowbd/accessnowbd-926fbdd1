@@ -161,21 +161,8 @@ export function SiteHeader() {
 
               {/* Wordmark — compact on mobile */}
               <span className="leading-[1.05] min-w-0">
-                {/* Tiny premium tag — only on lg+ to keep header tight */}
-                <span className="hidden lg:flex items-center gap-1.5">
-                  <span className="inline-flex items-center gap-1 px-1.5 py-[1px] rounded-full bg-gradient-to-r from-amber-400/25 via-amber-300/15 to-transparent border border-amber-300/35 backdrop-blur-sm">
-                    <Sparkles className="w-2.5 h-2.5 text-amber-300" />
-                    <span className="text-[9px] font-extrabold tracking-[0.22em] uppercase bg-gradient-to-r from-amber-200 to-amber-400 bg-clip-text text-transparent">
-                      Premium
-                    </span>
-                  </span>
-                  <span className="text-[9px] font-extrabold tracking-[0.22em] uppercase text-white/40">
-                    · Verified
-                  </span>
-                </span>
-
                 {/* Brand name */}
-                <span className="lg:mt-1 flex items-baseline gap-1 whitespace-nowrap">
+                <span className="flex items-baseline gap-1 whitespace-nowrap">
                   <span className="text-[16px] sm:text-[18px] md:text-[19px] font-extrabold tracking-tight text-white">
                     AccessNow
                   </span>
@@ -185,7 +172,6 @@ export function SiteHeader() {
                   >
                     BD
                   </span>
-                  <span className="ml-0.5 text-aqua text-[12px] md:text-[14px] leading-none">✦</span>
                 </span>
               </span>
             </Link>
