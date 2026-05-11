@@ -322,8 +322,8 @@ function RecordForm({
 }) {
   const [data, setData] = useState<Record_>(record?.data ?? {});
   const [saving, setSaving] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [errors, setErrors] = useState<{ [k: string]: string }>({});
+  const [touched, setTouched] = useState<{ [k: string]: boolean }>({});
 
   const setField = (name: string, value: unknown) => {
     setData((d) => ({ ...d, [name]: value }));
@@ -335,7 +335,7 @@ function RecordForm({
   };
 
   const save = async () => {
-    const next: Record<string, string> = {};
+    const next: { [k: string]: string } = {};
     for (const f of fields) {
       const err = validateField(f, data[f.name]);
       if (err) next[f.name] = err;
