@@ -160,32 +160,32 @@ export function SiteHeader() {
                       "radial-gradient(circle, rgba(56,128,255,0.55) 0%, rgba(31,199,150,0.3) 50%, transparent 75%)",
                   }}
                 />
-                {/* Inner round badge — matches header dark aurora */}
+                {/* Inner round badge — frosted light bg so dark logo strokes stay readable */}
                 <span
-                  className="relative grid place-items-center w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden ring-1 ring-white/15 shadow-[0_8px_24px_-6px_rgba(56,128,255,0.55)] group-hover:scale-105 transition-transform duration-500"
+                  className="relative grid place-items-center w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden ring-1 ring-white/40 shadow-[0_8px_24px_-6px_rgba(56,128,255,0.55)] backdrop-blur-xl group-hover:scale-105 transition-transform duration-500"
                   style={{
                     background:
-                      "radial-gradient(120% 120% at 30% 20%, #1c1745 0%, #100b2c 60%, #0a0720 100%)",
+                      "radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.95) 0%, rgba(225,236,255,0.9) 55%, rgba(196,218,255,0.88) 100%)",
                   }}
                 >
                   {/* Top gloss highlight */}
-                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/20 blur-[3px]" />
-                  {/* Inner aurora wash */}
+                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/80 blur-[3px]" />
+                  {/* Subtle aurora wash from bottom */}
                   <span
                     aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-full opacity-60"
+                    className="pointer-events-none absolute inset-0 rounded-full opacity-50"
                     style={{
                       background:
-                        "radial-gradient(60% 60% at 50% 110%, rgba(56,128,255,0.45) 0%, transparent 70%)",
+                        "radial-gradient(60% 60% at 50% 110%, rgba(31,199,150,0.35) 0%, transparent 70%)",
                     }}
                   />
                   {/* Bottom inner shadow */}
-                  <span className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_-6px_12px_-6px_rgba(0,0,0,0.55)]" />
+                  <span className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_-6px_12px_-6px_rgba(30,79,216,0.25)]" />
                   <img
                     src={accessNowLogo}
                     alt="AccessNow BD"
                     draggable={false}
-                    className="relative w-[125%] h-[125%] object-contain translate-y-[6%] drop-shadow-[0_2px_8px_rgba(56,128,255,0.55)]"
+                    className="relative w-[125%] h-[125%] object-contain translate-y-[6%] drop-shadow-[0_2px_4px_rgba(30,79,216,0.3)]"
                   />
                   {/* Sweeping shine effect on hover */}
                   <span
@@ -193,11 +193,10 @@ export function SiteHeader() {
                     className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"
                     style={{
                       background:
-                        "linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.35) 50%, transparent 65%)",
+                        "linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.7) 50%, transparent 65%)",
                     }}
                   />
                 </span>
-              </span>
 
               {/* Wordmark — matches the official logo (Access · Now · BD + tagline) */}
               <span className="leading-[1.05] min-w-0">
