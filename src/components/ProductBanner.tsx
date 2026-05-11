@@ -12,10 +12,10 @@ function hash(seed: string) {
 }
 
 const SPHERE_GRADIENTS = [
-  "radial-gradient(circle at 30% 30%, #c084fc 0%, #6366f1 55%, #1e1b4b 100%)",
-  "radial-gradient(circle at 30% 30%, #f0abfc 0%, #a855f7 50%, #4c1d95 100%)",
-  "radial-gradient(circle at 30% 30%, #93c5fd 0%, #6366f1 55%, #1e3a8a 100%)",
-  "radial-gradient(circle at 30% 30%, #f9a8d4 0%, #c026d3 55%, #581c87 100%)",
+  "radial-gradient(circle at 30% 30%, #67e8f9 0%, #2563EB 55%, #071120 100%)",
+  "radial-gradient(circle at 30% 30%, #a78bfa 0%, #7C3AED 50%, #1e1b4b 100%)",
+  "radial-gradient(circle at 30% 30%, #00E5FF 0%, #0891b2 55%, #082f49 100%)",
+  "radial-gradient(circle at 30% 30%, #818cf8 0%, #4f46e5 55%, #1e1b4b 100%)",
 ];
 
 /** Brand-domain guesser → clearbit logo (no API key, public CDN) */
@@ -113,15 +113,15 @@ export function ProductBanner({
     <div
       className={`relative overflow-hidden rounded-2xl ${aspectClass} ${className}`}
       style={{
-        background: "linear-gradient(135deg, #e6ecf5 0%, #d8e1ee 50%, #e9e1f2 100%)",
+        background: "linear-gradient(135deg, #071120 0%, #0f1d3a 50%, #1a1144 100%)",
       }}
     >
-      {/* Soft bokeh */}
-      <div className="pointer-events-none absolute inset-0 opacity-70">
-        <div className="absolute top-[8%] right-[12%] w-3 h-3 rounded-full bg-white/70 blur-[1px]" />
-        <div className="absolute top-[20%] left-[10%] w-2 h-2 rounded-full bg-white/60 blur-[1px]" />
-        <div className="absolute bottom-[18%] right-[28%] w-4 h-4 rounded-full bg-white/55 blur-[2px]" />
-        <div className="absolute bottom-[8%] left-[35%] w-2.5 h-2.5 rounded-full bg-white/65 blur-[1px]" />
+      {/* Neon bokeh */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute top-[8%] right-[12%] w-3 h-3 rounded-full bg-cyan-300/80 blur-[2px]" />
+        <div className="absolute top-[20%] left-[10%] w-2 h-2 rounded-full bg-violet-300/70 blur-[1px]" />
+        <div className="absolute bottom-[18%] right-[28%] w-4 h-4 rounded-full bg-blue-300/60 blur-[2px]" />
+        <div className="absolute bottom-[8%] left-[35%] w-2.5 h-2.5 rounded-full bg-cyan-200/70 blur-[1px]" />
       </div>
 
       {/* Decorative spheres around the glass plate */}
@@ -137,7 +137,7 @@ export function ProductBanner({
             transform: "translate(-50%, -50%)",
             background: b.grad,
             filter: b.blur ? `blur(${b.blur}px)` : undefined,
-            boxShadow: "0 18px 40px -12px rgba(76, 29, 149, 0.35)",
+            boxShadow: "0 18px 40px -12px rgba(0, 229, 255, 0.45)",
           }}
         />
       ))}
@@ -146,12 +146,12 @@ export function ProductBanner({
       <div
         className="absolute inset-[10%] rounded-[22px] flex items-center justify-center overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, rgba(255,255,255,0.42), rgba(255,255,255,0.22))",
+          background: "linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))",
           backdropFilter: "blur(18px) saturate(160%)",
           WebkitBackdropFilter: "blur(18px) saturate(160%)",
-          border: "1px solid rgba(255,255,255,0.85)",
+          border: "1px solid rgba(255,255,255,0.18)",
           boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.9), 0 12px 32px -12px rgba(60,60,120,0.25)",
+            "inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 32px -12px rgba(0,0,0,0.5)",
         }}
       >
         {/* Product image / logo */}
@@ -160,7 +160,7 @@ export function ProductBanner({
             src={primary}
             alt={product.name}
             loading="lazy"
-            className="relative z-10 max-h-[75%] max-w-[80%] object-contain drop-shadow-[0_10px_24px_rgba(40,30,90,0.28)]"
+            className="relative z-10 max-h-[75%] max-w-[80%] object-contain drop-shadow-[0_10px_24px_rgba(0,229,255,0.35)]"
             onError={() => setImgFailed(true)}
           />
         ) : !logoFailed ? (
@@ -168,17 +168,17 @@ export function ProductBanner({
             src={fallbackLogo}
             alt={product.name}
             loading="lazy"
-            className="relative z-10 max-h-[70%] max-w-[75%] object-contain drop-shadow-[0_10px_24px_rgba(40,30,90,0.28)]"
+            className="relative z-10 max-h-[70%] max-w-[75%] object-contain drop-shadow-[0_10px_24px_rgba(0,229,255,0.35)]"
             onError={() => setLogoFailed(true)}
           />
         ) : (
-          <span className="relative z-10 text-7xl drop-shadow-[0_8px_18px_rgba(40,30,90,0.3)]">
+          <span className="relative z-10 text-7xl drop-shadow-[0_8px_18px_rgba(0,229,255,0.4)]">
             {product.emoji}
           </span>
         )}
 
         {/* Subtle highlight sweep */}
-        <div className="pointer-events-none absolute -top-1/2 -left-1/3 h-[200%] w-[40%] rotate-12 bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+        <div className="pointer-events-none absolute -top-1/2 -left-1/3 h-[200%] w-[40%] rotate-12 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       </div>
     </div>
   );
