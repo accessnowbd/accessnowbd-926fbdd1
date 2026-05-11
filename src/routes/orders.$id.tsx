@@ -74,13 +74,32 @@ function OrderDetailPage() {
 
   // Auto-download receipt the first time a freshly placed order loads.
   const [autoDownloaded, setAutoDownloaded] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    if (!order || downloading) return;
+    setDownloading(true);
+    const tId = toast.loading("Generating receipt PDF…");
+    try {
+      // Yield to the browser so the loading state paints before jsPDF blocks.
+      await new Promise((r) => setTimeout(r, 50));
+      downloadReceiptPdf(order);
+      toast.success("Receipt downloaded", { id: tId });
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate receipt. Please try again.", { id: tId });
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   useEffect(() => {
     if (isNew && order && !autoDownloaded) {
       setAutoDownloaded(true);
-      // Small delay so the success banner paints before the browser save dialog.
-      const t = setTimeout(() => downloadReceiptPdf(order), 600);
+      const t = setTimeout(() => { void handleDownload(); }, 600);
       return () => clearTimeout(t);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNew, order, autoDownloaded]);
 
   const copyId = async () => {
