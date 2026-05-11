@@ -75,14 +75,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "AccessNow BD | Trusted Digital Services in Bangladesh" },
+      { name: "description", content: "AccessNow BD provides digital products, premium subscriptions, hosting, software, and IT services with fast support and secure access across Bangladesh." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "AccessNow BD | Trusted Digital Services in Bangladesh" },
+      { property: "og:description", content: "AccessNow BD provides digital products, premium subscriptions, hosting, software, and IT services with fast support and secure access across Bangladesh." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "AccessNow BD | Trusted Digital Services in Bangladesh" },
+      { name: "twitter:description", content: "AccessNow BD provides digital products, premium subscriptions, hosting, software, and IT services with fast support and secure access across Bangladesh." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2f6fecb7-74d2-4d83-bc33-a69e2c1020fa/id-preview-3b7793d1--4e9c9e20-27d9-4789-abed-a88ebc4d1cc3.lovable.app-1778524395020.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2f6fecb7-74d2-4d83-bc33-a69e2c1020fa/id-preview-3b7793d1--4e9c9e20-27d9-4789-abed-a88ebc4d1cc3.lovable.app-1778524395020.png" },
     ],
     links: [
       {
