@@ -13,7 +13,7 @@ import {
   Info,
   FileText,
 } from "lucide-react";
-import footerLogo from "@/assets/accessnow-bd-footer-logo.png";
+import accessNowLogo from "@/assets/accessnow-bd-mark.png";
 
 type LinkTo =
   | "/"
@@ -109,13 +109,108 @@ export function SiteFooter() {
         <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent backdrop-blur-xl p-8 md:p-10 overflow-hidden">
           <div className="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 w-[640px] h-[260px] rounded-full bg-primary/20 blur-[120px]" />
           <div className="relative flex flex-col items-center text-center">
-            <img
-              src={footerLogo}
-              alt="AccessNow BD — Fast, Secure, Reliable"
-              className="h-20 md:h-24 w-auto select-none drop-shadow-[0_10px_30px_rgba(124,58,237,0.45)]"
-              draggable={false}
-            />
-            <p className="mt-2 text-[10.5px] tracking-[0.32em] text-white/45 font-bold">
+            {/* === Brand lockup — same construction as header, scaled up === */}
+            <Link to="/" className="group inline-flex items-center gap-3 sm:gap-4">
+              {/* Round badge */}
+              <span className="relative shrink-0">
+                {/* Outer rotating gradient ring */}
+                <span
+                  aria-hidden
+                  className="absolute -inset-[2.5px] rounded-full opacity-90"
+                  style={{
+                    background:
+                      "conic-gradient(from 0deg, #2f6dff, #1fc796, #f59e0b, #2f6dff)",
+                    animation: "aurora-pan 6s linear infinite",
+                    filter: "blur(0.5px)",
+                  }}
+                />
+                {/* Soft outer glow */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-3 rounded-full opacity-60 blur-xl -z-10"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(56,128,255,0.55) 0%, rgba(31,199,150,0.3) 50%, transparent 75%)",
+                  }}
+                />
+                {/* Inner round badge */}
+                <span
+                  className="relative grid place-items-center w-16 h-16 md:w-[72px] md:h-[72px] rounded-full overflow-hidden ring-1 ring-white/40 shadow-[0_10px_28px_-6px_rgba(56,128,255,0.55)] backdrop-blur-xl group-hover:scale-105 transition-transform duration-500"
+                  style={{
+                    background:
+                      "radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.95) 0%, rgba(225,236,255,0.9) 55%, rgba(196,218,255,0.88) 100%)",
+                  }}
+                >
+                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/80 blur-[3px]" />
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 rounded-full opacity-50"
+                    style={{
+                      background:
+                        "radial-gradient(60% 60% at 50% 110%, rgba(31,199,150,0.35) 0%, transparent 70%)",
+                    }}
+                  />
+                  <span className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_-6px_12px_-6px_rgba(30,79,216,0.25)]" />
+                  <img
+                    src={accessNowLogo}
+                    alt="AccessNow BD"
+                    draggable={false}
+                    className="relative w-[145%] h-[145%] object-contain translate-y-[2%] drop-shadow-[0_2px_4px_rgba(30,79,216,0.3)]"
+                  />
+                </span>
+              </span>
+
+              {/* Wordmark */}
+              <span className="leading-[1.05] min-w-0 text-left">
+                <span className="flex items-baseline gap-1.5 whitespace-nowrap">
+                  <span
+                    className="text-[24px] sm:text-[28px] md:text-[32px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)",
+                      filter: "drop-shadow(0 1px 6px rgba(47,109,255,0.35))",
+                    }}
+                  >
+                    Access
+                  </span>
+                  <span
+                    className="text-[24px] sm:text-[28px] md:text-[32px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)",
+                      filter: "drop-shadow(0 1px 6px rgba(31,199,150,0.35))",
+                    }}
+                  >
+                    Now
+                  </span>
+                  <span
+                    className="text-[24px] sm:text-[28px] md:text-[32px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)",
+                      filter: "drop-shadow(0 1px 6px rgba(245,158,11,0.35))",
+                    }}
+                  >
+                    BD
+                  </span>
+                </span>
+                <span className="flex w-full items-center justify-between mt-1.5">
+                  <span className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] font-bold text-white/70">
+                    Fast
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-[#2f6dff] shadow-[0_0_6px_rgba(47,109,255,0.8)]" />
+                  <span className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] font-bold text-white/70">
+                    Secure
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-[#1fc796] shadow-[0_0_6px_rgba(31,199,150,0.8)]" />
+                  <span className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] font-bold text-white/70">
+                    Reliable
+                  </span>
+                </span>
+              </span>
+            </Link>
+
+            <p className="mt-3 text-[10.5px] tracking-[0.32em] text-white/45 font-bold">
               ACCESSNOWBD.COM
             </p>
 
