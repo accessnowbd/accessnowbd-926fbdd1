@@ -148,8 +148,8 @@ export function SiteHeader() {
                     animation: "aurora-pan 6s linear infinite",
                   }}
                 />
-                <span className="relative grid place-items-center w-11 h-11 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-primary-foreground shadow-[0_12px_32px_-8px_rgba(0,229,255,0.7)] ring-1 ring-white/20 group-hover:scale-105 group-hover:rotate-[-4deg] transition-transform duration-500">
-                  <Crown className="w-5 h-5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]" />
+                <span className="relative grid place-items-center w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-primary-foreground shadow-[0_12px_32px_-8px_rgba(0,229,255,0.7)] ring-1 ring-white/20 group-hover:scale-105 group-hover:rotate-[-4deg] transition-transform duration-500">
+                  <Crown className="w-4 h-4 md:w-5 md:h-5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]" />
                   {/* Inner shine */}
                   <span className="absolute inset-x-1 top-1 h-3 rounded-full bg-white/25 blur-[2px]" />
                 </span>
