@@ -31,7 +31,7 @@ type ProductRow = {
   created_at: string;
 };
 
-const statusMeta: Record<string, { label: string; cls: string; icon: JSX.Element }> = {
+const statusMeta: Record<string, { label: string; cls: string; icon: React.ReactNode }> = {
   pending:    { label: "Pending",    cls: "bg-amber-500/15 text-amber-300 border-amber-400/30",     icon: <Clock className="w-3 h-3" /> },
   processing: { label: "Processing", cls: "bg-sky-500/15 text-sky-300 border-sky-400/30",            icon: <Loader2 className="w-3 h-3" /> },
   completed:  { label: "Completed",  cls: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30", icon: <CheckCircle2 className="w-3 h-3" /> },
