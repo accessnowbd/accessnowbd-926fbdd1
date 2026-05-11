@@ -134,7 +134,7 @@ export function SiteHeader() {
             {/* Brand */}
             <Link
               to="/"
-              className="flex items-center gap-3 shrink-0 group"
+              className="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0"
               style={{ fontFamily: "var(--font-heading)" }}
             >
               {/* Logo orb with rotating conic ring + crown */}
