@@ -94,13 +94,13 @@ function Index() {
         <CategoryExperience />
 
         <FeaturedProducts items={top} isLoading={isLoading} />
-        {isLoading && byCategory.length === 0 ? (
-          <ProductRail title="Loading collections" items={[]} isLoading />
-        ) : (
-          byCategory.map((section) => (
-            <ProductRail key={section.category} title={section.category} items={section.items} />
-          ))
-        )}
+        {isLoading && byCategory.length === 0
+          ? RAIL_PLACEHOLDER_TITLES.map((title) => (
+              <ProductRail key={title} title={title} items={[]} isLoading />
+            ))
+          : byCategory.map((section) => (
+              <ProductRail key={section.category} title={section.category} items={section.items} />
+            ))}
       </main>
       <SiteFooter />
     </div>
