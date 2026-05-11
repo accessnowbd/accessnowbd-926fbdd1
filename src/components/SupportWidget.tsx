@@ -171,7 +171,7 @@ export function SupportWidget() {
   }
 
   const PANEL =
-    "fixed bottom-5 right-5 z-50 w-[min(400px,calc(100vw-1.5rem))] animate-scale-in origin-bottom-right";
+    "fixed bottom-5 right-5 z-50 w-[min(400px,calc(100vw-1.5rem))] origin-bottom-right";
   const SHELL =
     "relative rounded-[28px] overflow-hidden border border-white/[0.12] bg-[#070922]/95 backdrop-blur-2xl shadow-[0_50px_120px_-20px_rgba(0,0,0,0.9)]";
 
@@ -195,7 +195,7 @@ export function SupportWidget() {
                   setOpen(true);
                 }
               }}
-              className="hidden sm:flex animate-fade-in cursor-pointer items-center gap-2 mr-1 px-3.5 py-2 rounded-2xl rounded-br-sm bg-white/95 text-[#0d0a1f] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.5)] hover:scale-[1.03] transition"
+              className="hidden sm:flex cursor-pointer items-center gap-2 mr-1 px-3.5 py-2 rounded-2xl rounded-br-sm bg-white/95 text-[#0d0a1f] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.5)] transition-colors duration-200"
             >
               <span className="text-[12.5px] font-bold whitespace-nowrap">👋 কোনো সাহায্য লাগবে?</span>
               <button
@@ -220,19 +220,18 @@ export function SupportWidget() {
             {/* Soft ambient glow */}
             <span className="absolute -inset-4 rounded-full bg-gradient-to-br from-violet-500/40 via-primary/40 to-aqua/40 opacity-60 blur-2xl group-hover:opacity-90 transition-opacity duration-500" />
 
-            {/* Rotating conic ring */}
+            {/* Static conic ring */}
             <span
               className="absolute -inset-[3px] rounded-full opacity-90"
               style={{
                 background:
                   "conic-gradient(from 0deg, rgba(124,58,237,0.95), rgba(0,229,255,0.95), rgba(168,85,247,0.95), rgba(0,229,255,0.95), rgba(124,58,237,0.95))",
-                animation: "aurora-pan 6s linear infinite",
                 filter: "blur(2px)",
               }}
             />
 
             {/* Main orb */}
-            <span className="relative grid place-items-center h-16 w-16 rounded-full bg-gradient-to-br from-[#1a1240] via-[#2a1a5e] to-[#0d1b3d] text-white shadow-[0_22px_50px_-12px_rgba(124,58,237,0.65)] ring-1 ring-white/20 group-hover:scale-[1.06] transition-transform duration-300 overflow-hidden">
+            <span className="relative grid place-items-center h-16 w-16 rounded-full bg-gradient-to-br from-[#1a1240] via-[#2a1a5e] to-[#0d1b3d] text-white shadow-[0_22px_50px_-12px_rgba(124,58,237,0.65)] ring-1 ring-white/20 overflow-hidden">
               {/* Inner shine */}
               <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/20 blur-[3px]" />
               {/* Bottom glow */}
