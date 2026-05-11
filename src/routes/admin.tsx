@@ -249,7 +249,7 @@ function AdminShell({ user, signOut, navigate }: any) {
 
 function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collapsed: boolean; dark: boolean; pathname: string }) {
   const hasActive = group.items.some((i: AdminMenuItem) => pathname === i.to);
-  const [open, setOpen] = useState(hasActive || group.id === "product");
+  const [open, setOpen] = useState<boolean>(hasActive || group.id === "product");
 
   if (collapsed) {
     // collapsed: just stack icons
