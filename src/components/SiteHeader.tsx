@@ -128,8 +128,12 @@ export function SiteHeader() {
               : "bg-background/35 backdrop-blur-xl",
           ].join(" ")}
         >
-          {/* top hairline */}
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/60 to-transparent" />
+          {/* premium top divider */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] overflow-hidden">
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(124,58,237,0.55)_18%,rgba(0,229,255,0.85)_50%,rgba(124,58,237,0.55)_82%,transparent_100%)]" />
+            <div className="absolute inset-x-0 top-0 h-px bg-white/30" />
+            <div className="absolute inset-x-1/4 -top-1 h-3 blur-md bg-[linear-gradient(90deg,transparent,rgba(0,229,255,0.55),rgba(124,58,237,0.55),transparent)] opacity-70" />
+          </div>
 
           <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-10 h-[64px] md:h-[68px] flex items-center justify-between gap-2 md:gap-5 flex-nowrap">
             {/* Brand */}
