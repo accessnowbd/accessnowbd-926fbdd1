@@ -278,17 +278,6 @@ export function SiteFooter() {
           </Link>
 
           <MagneticFooterNav />
-
-          <button
-            onClick={() =>
-              typeof window !== "undefined" &&
-              window.scrollTo({ top: 0, behavior: "smooth" })
-            }
-            className="hidden sm:inline-flex items-center gap-1.5 h-9 px-4 rounded-full text-white text-sm font-semibold tracking-tight bg-gradient-to-r from-primary/30 via-violet-500/20 to-aqua/25 shadow-[0_0_0_1px_rgba(255,255,255,0.12)_inset,0_8px_24px_-10px_rgba(0,229,255,0.55)] hover:from-primary/40 hover:via-violet-500/30 hover:to-aqua/35 hover:-translate-y-0.5 transition-all duration-300"
-          >
-            <ArrowUp className="w-3.5 h-3.5" />
-            Back to top
-          </button>
         </div>
         {/* mobile nav — pill grid like header mobile menu */}
         <nav className="lg:hidden mx-auto max-w-[1440px] px-4 pb-4 grid grid-cols-2 gap-2.5">
