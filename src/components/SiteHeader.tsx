@@ -135,16 +135,55 @@ export function SiteHeader() {
               className="flex items-center gap-3 shrink-0 group"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              <span className="relative grid place-items-center w-11 h-11 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-primary-foreground shadow-[0_10px_30px_-8px_rgba(0,229,255,0.6)]">
-                <Crown className="w-5 h-5" />
-                <span className="absolute -inset-1 rounded-2xl bg-conic opacity-50 blur-md -z-10 animate-aurora-pan" />
-              </span>
-              <span className="leading-tight">
-                <span className="block text-[11px] font-semibold tracking-[0.22em] uppercase text-white/55">
-                  Premium Access
+              {/* Logo orb with rotating conic ring + crown */}
+              <span className="relative shrink-0">
+                {/* Outer rotating conic glow */}
+                <span
+                  className="absolute -inset-1.5 rounded-[18px] opacity-70 blur-md -z-10"
+                  style={{
+                    background:
+                      "conic-gradient(from 0deg, rgba(124,58,237,0.9), rgba(0,229,255,0.9), rgba(168,85,247,0.9), rgba(0,229,255,0.9), rgba(124,58,237,0.9))",
+                    animation: "aurora-pan 6s linear infinite",
+                  }}
+                />
+                <span className="relative grid place-items-center w-11 h-11 rounded-2xl bg-gradient-to-br from-primary via-violet-500 to-aqua text-primary-foreground shadow-[0_12px_32px_-8px_rgba(0,229,255,0.7)] ring-1 ring-white/20 group-hover:scale-105 group-hover:rotate-[-4deg] transition-transform duration-500">
+                  <Crown className="w-5 h-5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]" />
+                  {/* Inner shine */}
+                  <span className="absolute inset-x-1 top-1 h-3 rounded-full bg-white/25 blur-[2px]" />
                 </span>
-                <span className="block text-lg font-bold tracking-tight text-white">
-                  AccessNow <span className="text-aurora">BD</span>
+                {/* Verified dot */}
+                <span className="absolute -bottom-0.5 -right-0.5 grid place-items-center h-3.5 w-3.5 rounded-full bg-emerald-400 ring-2 ring-[#0d0a1f] shadow-[0_0_10px_rgba(16,185,129,0.7)]">
+                  <ShieldCheck className="w-2 h-2 text-emerald-900" strokeWidth={3} />
+                </span>
+              </span>
+
+              {/* Wordmark */}
+              <span className="leading-[1.05]">
+                {/* Tiny premium tag */}
+                <span className="flex items-center gap-1.5">
+                  <span className="inline-flex items-center gap-1 px-1.5 py-[1px] rounded-full bg-gradient-to-r from-amber-400/25 via-amber-300/15 to-transparent border border-amber-300/35 backdrop-blur-sm">
+                    <Sparkles className="w-2.5 h-2.5 text-amber-300" />
+                    <span className="text-[9px] font-extrabold tracking-[0.22em] uppercase bg-gradient-to-r from-amber-200 to-amber-400 bg-clip-text text-transparent">
+                      Premium
+                    </span>
+                  </span>
+                  <span className="text-[9px] font-extrabold tracking-[0.22em] uppercase text-white/40">
+                    · Verified
+                  </span>
+                </span>
+
+                {/* Brand name */}
+                <span className="mt-1 flex items-baseline gap-1">
+                  <span className="text-[19px] font-extrabold tracking-tight text-white">
+                    AccessNow
+                  </span>
+                  <span
+                    className="text-[19px] font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-400 to-aqua animate-aurora-pan"
+                    style={{ backgroundSize: "200% 100%" }}
+                  >
+                    BD
+                  </span>
+                  <span className="ml-0.5 text-aqua text-[14px] leading-none">✦</span>
                 </span>
               </span>
             </Link>
