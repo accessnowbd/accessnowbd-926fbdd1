@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useParams, Navigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Construction, ArrowLeft, Plus, Trash2, Pencil, Loader2, X, Check, Save } from "lucide-react";
+import { Construction, ArrowLeft, Plus, Trash2, Pencil, Loader2, X, Check, Save, GripVertical } from "lucide-react";
 import { findAdminPage, ADMIN_MENU } from "@/lib/admin-menu";
 import { getFeatureConfig, type AdminField } from "@/lib/admin-fields";
 import { supabase } from "@/integrations/supabase/client";
