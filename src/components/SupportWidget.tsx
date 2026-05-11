@@ -179,8 +179,8 @@ export function SupportWidget() {
     <>
       {/* === Floating launcher === */}
       {!open && (
-        <div className="fixed bottom-5 right-5 z-50 flex items-end gap-2.5">
-          {/* Teaser bubble */}
+        <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-2">
+          {/* Teaser bubble — sits ABOVE the button */}
           {showTeaser && (
             <div
               role="button"
@@ -195,9 +195,9 @@ export function SupportWidget() {
                   setOpen(true);
                 }
               }}
-              className="hidden sm:flex animate-fade-in cursor-pointer items-center gap-2 mb-2 px-3.5 py-2 rounded-2xl rounded-br-sm bg-white/95 text-[#0d0a1f] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.5)] hover:scale-[1.03] transition"
+              className="hidden sm:flex animate-fade-in cursor-pointer items-center gap-2 mr-1 px-3.5 py-2 rounded-2xl rounded-br-sm bg-white/95 text-[#0d0a1f] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.5)] hover:scale-[1.03] transition"
             >
-              <span className="text-[12.5px] font-bold">👋 কোনো সাহায্য লাগবে?</span>
+              <span className="text-[12.5px] font-bold whitespace-nowrap">👋 কোনো সাহায্য লাগবে?</span>
               <button
                 type="button"
                 onClick={(e) => {
