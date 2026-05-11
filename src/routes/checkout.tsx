@@ -378,39 +378,10 @@ function CheckoutPage() {
             )}
           </div>
 
-          {/* Summary */}
-          <GlassCard className="h-fit lg:sticky lg:top-6">
-            <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>Order summary</h3>
-            <div className="mt-4 space-y-3 max-h-[260px] overflow-auto pr-1">
-              {items.map((it) => (
-                <div key={`${it.slug}-${it.planPeriod}`} className="flex gap-3 items-center">
-                  <div className={`w-12 h-12 shrink-0 rounded-lg bg-gradient-to-br ${it.gradient} grid place-items-center text-xl`}>{it.emoji}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold truncate">{it.name}</div>
-                    <div className="text-xs text-muted-foreground">{it.planPeriod} × {it.qty}</div>
-                  </div>
-                  <div className="text-sm font-semibold">৳{(it.price * it.qty).toLocaleString()}</div>
-                </div>
-              ))}
-            </div>
-            <div className="border-t border-[var(--glass-border-soft)] my-4" />
-            <div className="flex justify-between items-baseline">
-              <span className="text-sm font-semibold">Total</span>
-              <span className="text-2xl font-semibold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>৳{total.toLocaleString()}</span>
-            </div>
-            <p className="text-[11px] text-muted-foreground text-center mt-3">Your data is safe. We never share your details.</p>
-          </GlassCard>
+          <OrderSummary items={items} total={total} variant="lineitems" />
         </div>
       </div>
     </div>
   );
 }
 
-function ReviewRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</dt>
-      <dd className="text-sm font-medium text-foreground mt-0.5 break-words">{value || "—"}</dd>
-    </div>
-  );
-}
