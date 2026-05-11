@@ -260,7 +260,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="hidden lg:inline-flex items-center gap-2 h-10 px-3.5 rounded-full glass-soft border border-white/10 text-sm text-white/80 hover:text-white hover:border-aqua/40 transition group"
+                className="hidden xl:inline-flex items-center gap-2 h-10 px-3.5 rounded-full glass-soft border border-white/10 text-sm text-white/80 hover:text-white hover:border-aqua/40 transition group shrink-0"
                 aria-label="Search products"
               >
                 <Search className="w-4 h-4 text-aqua" />
@@ -273,7 +273,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="lg:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
+                className="xl:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
                 aria-label="Search"
               >
                 <Search className="w-4 h-4 text-aqua" />
@@ -452,7 +452,7 @@ function MagneticNav() {
       ref={navRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="hidden lg:flex relative items-center gap-1 px-2 h-12 rounded-full glass-soft border border-white/10 text-sm font-semibold backdrop-blur-2xl"
+      className="hidden lg:flex relative items-center gap-0.5 xl:gap-1 px-1.5 xl:px-2 h-12 rounded-full glass-soft border border-white/10 text-[13px] xl:text-sm font-semibold backdrop-blur-2xl shrink min-w-0"
     >
       {/* Magnetic sliding pill */}
       <span
@@ -471,7 +471,7 @@ function MagneticNav() {
           ref={(el) => {
             itemRefs.current[i] = el;
           }}
-          className="relative z-10 px-4 py-2 rounded-full text-white/75 hover:text-white transition-colors"
+          className="relative z-10 px-2.5 xl:px-4 py-2 rounded-full text-white/75 hover:text-white transition-colors whitespace-nowrap"
         >
           {n.label}
         </Link>
