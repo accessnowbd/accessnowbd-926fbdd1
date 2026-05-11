@@ -348,21 +348,20 @@ function CategoryExperience() {
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
       <SectionTitle eyebrow="Browse category" title="আপনার প্রয়োজন অনুযায়ী সার্ভিস বেছে নিন" subtitle="পুরো ওয়েবসাইট এখন software-service marketplace structure-এ সাজানো।" />
-      <div className="mt-7 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="mt-7 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {CATEGORY_DECK.map((category) => (
           <Link
             key={category.title}
             to={category.to}
-            className="group glass-strong rounded-3xl p-6 flex items-center gap-4 transition-[border-color,box-shadow,background-color] duration-300 ease-out hover:border-primary/40 hover:shadow-[0_10px_40px_-12px_var(--color-primary)]"
+            className="group relative glass-strong rounded-2xl p-3.5 flex flex-col items-center text-center gap-2 transition-[border-color,box-shadow,transform] duration-300 ease-out hover:border-primary/40 hover:shadow-[0_10px_30px_-12px_var(--color-primary)] hover:-translate-y-0.5"
           >
-            <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-secondary text-primary transition-transform duration-300 ease-out group-hover:scale-105">
-              <category.icon className="h-6 w-6" />
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-secondary text-primary transition-transform duration-300 ease-out group-hover:scale-110">
+              <category.icon className="h-5 w-5" />
             </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-base font-extrabold text-foreground">{category.title}</span>
-              <span className="mt-1 block text-sm text-muted-foreground truncate">{category.label}</span>
+            <span className="min-w-0 w-full">
+              <span className="block text-[13px] font-extrabold text-foreground leading-tight truncate">{category.title}</span>
+              <span className="mt-0.5 block text-[10.5px] text-muted-foreground truncate">{category.label}</span>
             </span>
-            <ChevronRight className="h-5 w-5 text-primary transition-transform duration-300 ease-out group-hover:translate-x-1" />
           </Link>
         ))}
       </div>
