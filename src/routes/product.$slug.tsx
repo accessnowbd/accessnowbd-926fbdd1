@@ -232,8 +232,12 @@ function ProductPage() {
               key={p.slug}
               className="group glass rounded-2xl overflow-hidden hover:-translate-y-1 hover:glow-violet transition-all"
             >
-              <div className={`relative aspect-[4/3] bg-gradient-to-br ${p.gradient} flex items-center justify-center`}>
-                <span className="text-6xl drop-shadow">{p.emoji}</span>
+              <div className={`relative aspect-[4/3] bg-gradient-to-br ${p.gradient} flex items-center justify-center overflow-hidden`}>
+                {p.imageUrl ? (
+                  <img src={p.imageUrl} alt={p.name} className="max-h-[60%] max-w-[70%] object-contain drop-shadow-lg" loading="lazy" />
+                ) : (
+                  <span className="text-6xl drop-shadow">{p.emoji}</span>
+                )}
               </div>
               <div className="p-4">
                 <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{p.name}</h3>
