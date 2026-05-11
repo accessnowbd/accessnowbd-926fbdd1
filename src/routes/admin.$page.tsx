@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useParams, Navigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Construction, ArrowLeft, Plus, Trash2, Pencil, Loader2, X, Check, Save, GripVertical, Upload } from "lucide-react";
+import { Construction, ArrowLeft, Plus, Trash2, Pencil, Loader2, X, Check, Save, GripVertical, Upload, Search } from "lucide-react";
 import { findAdminPage, ADMIN_MENU } from "@/lib/admin-menu";
 import { getFeatureConfig, type AdminField } from "@/lib/admin-fields";
 import { supabase } from "@/integrations/supabase/client";
@@ -152,10 +152,33 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
     persistOrder(renumbered);
   };
 
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
+
+  const searchableNames = useMemo(
+    () => [primary, ...secondary].filter(Boolean).map((f) => f!.name),
+    [primary, secondary]
+  );
+
+  const visibleRows = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return rows.filter((r) => {
+      if (statusFilter === "active" && !r.is_active) return false;
+      if (statusFilter === "inactive" && r.is_active) return false;
+      if (!q) return true;
+      return searchableNames.some((n) => String(r.data?.[n] ?? "").toLowerCase().includes(q));
+    });
+  }, [rows, query, statusFilter, searchableNames]);
+
+  const filtering = query.trim() !== "" || statusFilter !== "all";
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-slate-500">{rows.length} {rows.length === 1 ? "entry" : "entries"} · drag <GripVertical className="w-3 h-3 inline" /> to reorder</div>
+      <div className="flex flex-wrap items-center gap-3 justify-between">
+        <div className="text-sm text-slate-500">
+          {filtering ? `${visibleRows.length} of ${rows.length}` : `${rows.length}`} {rows.length === 1 ? "entry" : "entries"}
+          {!filtering && <> · drag <GripVertical className="w-3 h-3 inline" /> to reorder</>}
+        </div>
         <button
           onClick={() => { setEditing(null); setShowForm(true); }}
           className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-semibold shadow"
@@ -164,11 +187,43 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
         </button>
       </div>
 
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={`Search ${[primary, ...secondary].filter(Boolean).map((f) => f!.label.toLowerCase()).join(", ")}…`}
+            className="w-full h-10 pl-9 pr-9 rounded-full border border-slate-200 text-sm bg-white outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100"
+          />
+          {query && (
+            <button onClick={() => setQuery("")} className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 grid place-items-center rounded-full text-slate-400 hover:bg-slate-100" aria-label="Clear">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+        <div className="inline-flex h-10 rounded-full border border-slate-200 bg-white p-0.5 text-xs font-semibold">
+          {(["all", "active", "inactive"] as const).map((s) => (
+            <button
+              key={s}
+              onClick={() => setStatusFilter(s)}
+              className={`px-3 rounded-full capitalize transition ${
+                statusFilter === s ? "bg-slate-900 text-white" : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
         {loading ? (
           <div className="p-10 text-center text-slate-500"><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Loading…</div>
-        ) : rows.length === 0 ? (
-          <div className="p-10 text-center text-slate-500">No entries yet. Click "Add new" to create the first one.</div>
+        ) : visibleRows.length === 0 ? (
+          <div className="p-10 text-center text-slate-500">
+            {rows.length === 0 ? `No entries yet. Click "Add new" to create the first one.` : "No matches for your search."}
+          </div>
         ) : (
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
@@ -181,10 +236,10 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {rows.map((r) => (
+              {visibleRows.map((r) => (
                 <tr
                   key={r.id}
-                  draggable
+                  draggable={!filtering}
                   onDragStart={(e) => { setDragId(r.id); e.dataTransfer.effectAllowed = "move"; }}
                   onDragOver={(e) => { e.preventDefault(); if (overId !== r.id) setOverId(r.id); }}
                   onDragLeave={() => { if (overId === r.id) setOverId(null); }}
