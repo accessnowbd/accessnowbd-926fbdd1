@@ -1,5 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, Tag, X, Check } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { z } from "zod";
+import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { useCart } from "@/context/CartContext";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
@@ -7,15 +10,29 @@ import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary } from "@/components/ui-glass/OrderSummary";
+import { applyCoupon } from "@/lib/coupons";
+
+const cartSearchSchema = z.object({
+  coupon: fallback(z.string(), "").default(""),
+});
 
 export const Route = createFileRoute("/cart")({
   component: CartPage,
+  validateSearch: zodValidator(cartSearchSchema),
   head: () => ({ meta: [{ title: "Your Cart — AccessNow BD" }] }),
 });
 
 function CartPage() {
   const { items, remove, setQty, total, count } = useCart();
   const navigate = useNavigate();
+  const { coupon } = Route.useSearch();
+
+  const applied = useMemo(() => applyCoupon(coupon, total), [coupon, total]);
+  const [input, setInput] = useState(coupon);
+  useEffect(() => { setInput(coupon); }, [coupon]);
+
+  const setCouponParam = (val: string) =>
+    navigate({ to: "/cart", search: { coupon: val }, replace: true });
 
   return (
     <div className="min-h-screen">
@@ -82,9 +99,60 @@ function CartPage() {
               items={items}
               total={total}
               variant="totals"
+              discount={applied.discount}
+              couponCode={applied.valid ? applied.code : undefined}
               footer="Secure payment with bKash & Nagad"
+              extra={
+                <form
+                  className="mt-4"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setCouponParam(input.trim().toUpperCase());
+                  }}
+                >
+                  <label htmlFor="coupon" className="text-xs font-medium text-muted-foreground inline-flex items-center gap-1.5">
+                    <Tag className="w-3.5 h-3.5" /> Coupon code
+                  </label>
+                  <div className="mt-1.5 flex gap-2">
+                    <input
+                      id="coupon"
+                      value={input}
+                      onChange={(e) => setInput(e.target.value.toUpperCase())}
+                      placeholder="SAVE10"
+                      className="flex-1 glass-soft rounded-lg px-3 py-2 text-sm font-medium tracking-wider uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      aria-invalid={coupon ? !applied.valid : undefined}
+                      aria-describedby="coupon-status"
+                    />
+                    {applied.valid ? (
+                      <GlassButton type="button" variant="ghost" size="sm" onClick={() => setCouponParam("")} aria-label="Remove coupon">
+                        <X className="w-3.5 h-3.5" /> Remove
+                      </GlassButton>
+                    ) : (
+                      <GlassButton type="submit" variant="secondary" size="sm" disabled={!input.trim()}>
+                        Apply
+                      </GlassButton>
+                    )}
+                  </div>
+                  <p id="coupon-status" className="text-[11px] mt-1.5 min-h-[14px]" role={coupon && !applied.valid ? "alert" : undefined}>
+                    {applied.valid ? (
+                      <span className="text-aqua-deep inline-flex items-center gap-1">
+                        <Check className="w-3 h-3" /> {applied.label} applied
+                      </span>
+                    ) : coupon ? (
+                      <span className="text-destructive">Invalid coupon code</span>
+                    ) : (
+                      <span className="text-muted-foreground">Try SAVE10, SAVE100, or WELCOME50</span>
+                    )}
+                  </p>
+                </form>
+              }
               action={
-                <GlassButton onClick={() => navigate({ to: "/checkout" })} fullWidth size="lg" className="mt-5">
+                <GlassButton
+                  onClick={() => navigate({ to: "/checkout", search: { step: 1, coupon: applied.valid ? applied.code : "" } })}
+                  fullWidth
+                  size="lg"
+                  className="mt-5"
+                >
                   Proceed to Checkout
                 </GlassButton>
               }

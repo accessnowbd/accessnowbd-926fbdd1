@@ -16,9 +16,11 @@ import { Stepper } from "@/components/ui-glass/Stepper";
 import { RadioCard } from "@/components/ui-glass/RadioCard";
 import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary, SummaryRow } from "@/components/ui-glass/OrderSummary";
+import { applyCoupon } from "@/lib/coupons";
 
 const checkoutSearchSchema = z.object({
   step: fallback(z.union([z.literal(1), z.literal(2), z.literal(3)]), 1).default(1),
+  coupon: fallback(z.string(), "").default(""),
 });
 
 export const Route = createFileRoute("/checkout")({
@@ -48,9 +50,9 @@ function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  const { step } = Route.useSearch();
+  const { step, coupon } = Route.useSearch();
   const setStep = (n: 1 | 2 | 3) =>
-    navigate({ to: "/checkout", search: { step: n }, replace: false });
+    navigate({ to: "/checkout", search: { step: n, coupon }, replace: false });
   const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
   const [method, setMethod] = useState<MethodId>("bkash");
   const [agree, setAgree] = useState(false);
@@ -86,14 +88,17 @@ function CheckoutPage() {
     if (submitted) return;
     if ((step === 2 || step === 3) && !step1Valid) {
       setTouched((t) => ({ ...t, name: true, email: true, phone: true }));
-      navigate({ to: "/checkout", search: { step: 1 }, replace: true });
+      navigate({ to: "/checkout", search: { step: 1, coupon }, replace: true });
       return;
     }
     if (step === 3 && !step2Valid) {
       setTouched((t) => ({ ...t, senderNumber: true, trxId: true }));
-      navigate({ to: "/checkout", search: { step: 2 }, replace: true });
+      navigate({ to: "/checkout", search: { step: 2, coupon }, replace: true });
     }
-  }, [step, step1Valid, step2Valid, submitted, navigate]);
+  }, [step, step1Valid, step2Valid, submitted, navigate, coupon]);
+
+  const applied = useMemo(() => applyCoupon(coupon, total), [coupon, total]);
+  const grandTotal = Math.max(0, total - applied.discount);
 
   const copyNumber = async () => {
     await navigator.clipboard.writeText(selectedMethod.number.replace(/-/g, ""));
@@ -119,7 +124,7 @@ function CheckoutPage() {
           payment_method: method,
           transaction_id: form.trxId,
           items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
-          total,
+          total: grandTotal,
         })
         .select("id")
         .single();
@@ -274,7 +279,7 @@ function CheckoutPage() {
                       <p className="text-sm font-semibold">How to pay with {selectedMethod.name}</p>
                       <ol className="text-xs text-foreground/80 mt-2 space-y-1.5 list-decimal pl-4">
                         <li>Open your {selectedMethod.name} app and tap <b>Send Money</b>.</li>
-                        <li>Send <b>৳{total.toLocaleString()}</b> to our number below.</li>
+                        <li>Send <b>৳{grandTotal.toLocaleString()}</b> to our number below.</li>
                         <li>Copy the <b>Transaction ID (TrxID)</b> from your confirmation message.</li>
                         <li>Paste it in the form below and continue.</li>
                       </ol>
@@ -374,7 +379,7 @@ function CheckoutPage() {
                       className="mt-1 w-4 h-4 rounded accent-primary focus-visible:ring-2 focus-visible:ring-ring"
                     />
                     <span className="text-sm text-foreground/90">
-                      I confirm the TrxID above is correct and I've sent <b>৳{total.toLocaleString()}</b> via {selectedMethod.name}.
+                      I confirm the TrxID above is correct and I've sent <b>৳{grandTotal.toLocaleString()}</b> via {selectedMethod.name}.
                     </span>
                   </label>
                 </GlassCard>
@@ -392,7 +397,13 @@ function CheckoutPage() {
             )}
           </div>
 
-          <OrderSummary items={items} total={total} variant="lineitems" />
+          <OrderSummary
+            items={items}
+            total={total}
+            discount={applied.discount}
+            couponCode={applied.valid ? applied.code : undefined}
+            variant="lineitems"
+          />
         </div>
       </div>
     </div>

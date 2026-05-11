@@ -4,23 +4,33 @@ import { GlassCard } from "./GlassCard";
 interface OrderSummaryProps {
   items: CartItem[];
   total: number;
+  /** Optional discount in BDT to subtract from total. */
+  discount?: number;
+  /** Optional coupon code label, displayed alongside the discount line. */
+  couponCode?: string;
   /** Shown under the total line. Defaults to a privacy note. */
   footer?: string;
   /** Show as a tall scrollable mini-summary (checkout) vs simple subtotal/delivery (cart). */
   variant?: "lineitems" | "totals";
   /** Optional CTA / extra slot rendered above footer text (e.g. Proceed button). */
   action?: React.ReactNode;
+  /** Optional slot rendered between the totals block and the action (e.g. coupon input). */
+  extra?: React.ReactNode;
   className?: string;
 }
 
 export function OrderSummary({
   items,
   total,
+  discount = 0,
+  couponCode,
   footer = "Your data is safe. We never share your details.",
   variant = "lineitems",
   action,
+  extra,
   className,
 }: OrderSummaryProps) {
+  const grandTotal = Math.max(0, total - discount);
   return (
     <GlassCard className={`h-fit lg:sticky lg:top-6 ${className ?? ""}`}>
       <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>
@@ -61,6 +71,17 @@ export function OrderSummary({
         </div>
       )}
 
+      {discount > 0 && (
+        <div className="mt-2 flex justify-between text-sm">
+          <span className="text-aqua-deep font-medium">
+            Coupon{couponCode ? ` (${couponCode})` : ""}
+          </span>
+          <span className="text-aqua-deep font-semibold">−৳{discount.toLocaleString()}</span>
+        </div>
+      )}
+
+      {extra}
+
       <div className="border-t border-[var(--glass-border-soft)] my-4" />
       <div className="flex justify-between items-baseline">
         <span className="text-sm font-semibold">Total</span>
@@ -68,7 +89,7 @@ export function OrderSummary({
           className="text-2xl font-semibold text-aurora"
           style={{ fontFamily: "var(--font-heading)" }}
         >
-          ৳{total.toLocaleString()}
+          ৳{grandTotal.toLocaleString()}
         </span>
       </div>
 
