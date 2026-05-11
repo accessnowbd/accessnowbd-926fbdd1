@@ -128,28 +128,30 @@ const brandLogo = (domain: string) =>
 
 function HeroExperience() {
   return (
-    <section className="relative px-4 md:px-10 pt-10 pb-16 md:pt-16 md:pb-24 overflow-hidden">
+    <section className="relative px-4 md:px-10 pt-8 pb-12 md:pt-12 md:pb-16 overflow-hidden">
       {/* Animated background layers */}
       <div className="absolute inset-0 bg-mesh opacity-90 pointer-events-none animate-aurora-pan" />
-      <div className="pointer-events-none absolute -top-40 -left-32 h-[520px] w-[520px] rounded-full bg-violet-grad opacity-40 blur-3xl animate-blob" />
-      <div className="pointer-events-none absolute -bottom-40 -right-24 h-[560px] w-[560px] rounded-full bg-cyan-grad opacity-35 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
-      <div className="pointer-events-none absolute top-1/3 left-1/2 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-aurora opacity-25 blur-3xl animate-pulse-glow" />
+      <div className="pointer-events-none absolute -top-40 -left-32 h-[460px] w-[460px] rounded-full bg-violet-grad opacity-40 blur-3xl animate-blob" />
+      <div className="pointer-events-none absolute -bottom-40 -right-24 h-[500px] w-[500px] rounded-full bg-cyan-grad opacity-35 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
+      <div className="pointer-events-none absolute top-1/3 left-1/2 h-[260px] w-[260px] -translate-x-1/2 rounded-full bg-aurora opacity-25 blur-3xl animate-pulse-glow" />
 
-      <div className="relative mx-auto max-w-[1440px] grid lg:grid-cols-[1.1fr_0.9fr] gap-6 lg:gap-10 items-stretch">
+      <div className="relative mx-auto max-w-[1280px] grid lg:grid-cols-[1.15fr_0.85fr] gap-5 lg:gap-7 items-stretch">
         {/* LEFT — Headline panel */}
-        <div className="relative glass-strong rounded-[var(--radius-2xl)] p-7 md:p-12 lg:p-14 min-h-[600px] flex flex-col justify-between overflow-hidden noise-overlay">
+        <div className="relative glass-strong rounded-[var(--radius-2xl)] p-6 md:p-8 lg:p-10 min-h-[460px] flex flex-col justify-between overflow-hidden noise-overlay">
           {/* gradient ring corner */}
-          <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-conic opacity-30 blur-2xl" style={{ animation: "spinSlow 30s linear infinite" }} />
+          <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-conic opacity-30 blur-2xl" style={{ animation: "spinSlow 30s linear infinite" }} />
+          {/* premium accent line */}
+          <div className="pointer-events-none absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-[var(--aqua)]/60 to-transparent" />
 
           <div className="relative">
             <div className="flex flex-wrap items-center gap-2">
-              <div className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-2 text-xs font-bold text-aurora-strong neon-border">
-                <Sparkles className="h-4 w-4 text-aqua" /> #১ Premium Marketplace · BD
+              <div className="inline-flex items-center gap-2 rounded-full glass-soft px-3 py-1.5 text-[11px] font-bold text-aurora-strong neon-border">
+                <Sparkles className="h-3.5 w-3.5 text-aqua" /> #১ Premium Marketplace · BD
               </div>
-              <div className="inline-flex items-center gap-1.5 rounded-full glass-soft px-3 py-2 text-xs font-bold text-foreground">
+              <div className="inline-flex items-center gap-1.5 rounded-full glass-soft px-3 py-1.5 text-[11px] font-bold text-white">
                 <span className="flex">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 fill-[var(--gold)] text-[var(--gold)]" />
+                    <Star key={i} className="h-3 w-3 fill-[var(--gold)] text-[var(--gold)]" />
                   ))}
                 </span>
                 <span>৪.৯ · ১২K+ রিভিউ</span>
@@ -157,69 +159,45 @@ function HeroExperience() {
             </div>
 
             <h1
-              className="mt-6 max-w-3xl text-white"
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 4.6vw, 64px)", lineHeight: 1.05, fontWeight: 900, letterSpacing: "-0.02em", textShadow: "0 2px 24px rgba(0,0,0,0.45)" }}
+              className="mt-5 max-w-2xl text-white"
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 3.6vw, 48px)", lineHeight: 1.08, fontWeight: 900, letterSpacing: "-0.02em", textShadow: "0 2px 24px rgba(0,0,0,0.5)" }}
             >
-              <span className="block text-white drop-shadow-[0_4px_18px_rgba(0,229,255,0.55)]">Premium Software</span>
+              <span className="block bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent drop-shadow-[0_4px_18px_rgba(0,229,255,0.55)]">Premium Software</span>
               <span className="block mt-1 text-aqua" style={{ textShadow: "0 0 22px rgba(0,229,255,0.5)" }}>এক ক্লিকেই, আপনার হাতে।</span>
             </h1>
 
-            {/* Premium visual chip row — floating brand pills */}
-            <div className="mt-7 flex flex-wrap items-center gap-2.5">
-              {HERO_BRANDS.slice(0, 6).map((b, i) => (
-                <div
-                  key={b.name}
-                  className="group flex items-center gap-2 rounded-full glass-soft pl-1 pr-3.5 py-1 text-xs font-bold text-white hover:shadow-[var(--shadow-glow-aqua)] hover:-translate-y-0.5 transition animate-float"
-                  style={{ animationDelay: `${i * 0.5}s`, animationDuration: "8s" }}
-                >
-                  <span
-                    className="grid h-7 w-7 place-items-center rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.35)] ring-1 ring-white/40"
-                    style={{ background: `#${b.color === "FFFFFF" ? "111827" : "ffffff"}` }}
-                  >
-                    <img
-                      src={`https://cdn.simpleicons.org/${b.slug}/${b.color}`}
-                      alt={b.name}
-                      loading="lazy"
-                      className="h-4 w-4 object-contain"
-                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                    />
-                  </span>
-                  {b.name}
-                </div>
-              ))}
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-aurora text-white pl-3 pr-3.5 py-2 text-xs font-extrabold shadow-[var(--shadow-glow-violet)]">
-                +৩০ আরও
-              </div>
-            </div>
+            <p className="mt-3 max-w-lg text-sm md:text-[15px] text-white/75 leading-relaxed">
+              ভেরিফাইড লাইসেন্স · ১০ মিনিটে ডেলিভারি · ২৪/৭ লাইভ সাপোর্ট
+            </p>
 
             {/* Trust ribbon */}
-            <div className="mt-6 inline-flex items-center gap-3 rounded-2xl glass-soft px-4 py-3 text-xs font-semibold text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5 text-foreground">
+            <div className="mt-5 inline-flex items-center gap-3 rounded-2xl glass-soft px-4 py-2.5 text-xs font-semibold">
+              <span className="inline-flex items-center gap-1.5 text-white">
                 <ShieldCheck className="h-4 w-4 text-aqua" /> 100% Verified
               </span>
-              <span className="h-3 w-px bg-border" />
-              <span className="inline-flex items-center gap-1.5 text-foreground">
+              <span className="h-3 w-px bg-white/20" />
+              <span className="inline-flex items-center gap-1.5 text-white">
                 <CheckCircle2 className="h-4 w-4 text-success" /> Warranty
               </span>
-              <span className="h-3 w-px bg-border" />
-              <span className="inline-flex items-center gap-1.5 text-foreground">
+              <span className="h-3 w-px bg-white/20" />
+              <span className="inline-flex items-center gap-1.5 text-white">
                 <Zap className="h-4 w-4 text-[var(--gold)]" /> Instant
               </span>
             </div>
           </div>
 
-          <div className="relative mt-8 flex flex-col sm:flex-row gap-3">
-            <Link to="/products" className="btn-aurora group relative overflow-hidden inline-flex h-[56px] items-center justify-center gap-2 rounded-full px-8 text-sm font-extrabold">
+          <div className="relative mt-7 flex flex-col sm:flex-row gap-3">
+            <Link to="/products" className="btn-aurora group relative overflow-hidden inline-flex h-[50px] items-center justify-center gap-2 rounded-full px-7 text-sm font-extrabold">
               <span className="relative z-10">সব প্রোডাক্ট দেখুন</span>
               <ArrowRight className="relative z-10 h-4 w-4 transition group-hover:translate-x-1" />
               <span className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-white/30 blur-md animate-shine" />
             </Link>
-            <Link to="/contact" className="glass inline-flex h-[56px] items-center justify-center gap-2 rounded-full px-8 text-sm font-extrabold text-foreground hover:shadow-[var(--shadow-glow-aqua)] transition">
+            <Link to="/contact" className="glass inline-flex h-[50px] items-center justify-center gap-2 rounded-full px-7 text-sm font-extrabold text-white hover:shadow-[var(--shadow-glow-aqua)] transition">
               <Headphones className="h-4 w-4 text-aqua" /> কাস্টম অর্ডার
             </Link>
           </div>
 
-          <div className="relative mt-8 grid grid-cols-3 gap-3">
+          <div className="relative mt-7 grid grid-cols-3 gap-2.5">
             {[
               ["৩৬+", "Products", Sparkles],
               ["১০মিনিট", "Delivery", Clock3],
@@ -227,14 +205,14 @@ function HeroExperience() {
             ].map(([value, label, Icon]) => {
               const I = Icon as typeof Sparkles;
               return (
-                <div key={label as string} className="gradient-border-soft p-4 hover:-translate-y-0.5 transition">
+                <div key={label as string} className="gradient-border-soft p-3 hover:-translate-y-0.5 transition">
                   <div className="flex items-center gap-2">
-                    <span className="grid h-8 w-8 place-items-center rounded-xl bg-aurora text-white shadow-[var(--shadow-glow-aqua)]">
-                      <I className="h-4 w-4" />
+                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-aurora text-white shadow-[var(--shadow-glow-aqua)]">
+                      <I className="h-3.5 w-3.5" />
                     </span>
-                    <div className="text-xl md:text-2xl font-extrabold text-white drop-shadow-[0_2px_10px_rgba(0,229,255,0.5)]">{value as string}</div>
+                    <div className="text-base md:text-lg font-extrabold text-white drop-shadow-[0_2px_10px_rgba(0,229,255,0.5)]">{value as string}</div>
                   </div>
-                  <div className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{label as string}</div>
+                  <div className="mt-1.5 text-[10px] font-semibold uppercase tracking-wider text-white/60">{label as string}</div>
                 </div>
               );
             })}
@@ -242,54 +220,52 @@ function HeroExperience() {
         </div>
 
         {/* RIGHT — Hero visual stack */}
-        <div className="relative grid grid-rows-[1fr_auto] gap-5">
-          <div className="relative glass-strong rounded-[var(--radius-2xl)] p-6 md:p-8 overflow-hidden min-h-[420px]">
+        <div className="relative grid grid-rows-[1fr_auto] gap-4">
+          <div className="relative glass-strong rounded-[var(--radius-2xl)] p-5 md:p-6 overflow-hidden min-h-[340px]">
             {/* Floating spotlight orbs */}
-            <div className="pointer-events-none absolute top-8 right-8 h-32 w-32 rounded-full" style={{ background: "radial-gradient(circle at 30% 30%, #67e8f9, #2563EB 60%, transparent 70%)", filter: "blur(2px)" }} />
-            <div className="pointer-events-none absolute bottom-10 left-6 h-24 w-24 rounded-full animate-float" style={{ background: "radial-gradient(circle at 30% 30%, #a78bfa, #7C3AED 60%, transparent 75%)" }} />
+            <div className="pointer-events-none absolute top-6 right-6 h-24 w-24 rounded-full opacity-80" style={{ background: "radial-gradient(circle at 30% 30%, #67e8f9, #2563EB 60%, transparent 70%)", filter: "blur(2px)" }} />
+            <div className="pointer-events-none absolute bottom-6 left-4 h-20 w-20 rounded-full animate-float opacity-70" style={{ background: "radial-gradient(circle at 30% 30%, #a78bfa, #7C3AED 60%, transparent 75%)" }} />
 
             <div className="relative">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold uppercase tracking-[0.22em] text-aqua">Trusted Brands</span>
-                <span className="rounded-full glass-soft px-3 py-1 text-[11px] font-bold text-foreground">Live</span>
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-aqua">Trusted Brands</span>
+                <span className="rounded-full glass-soft px-2.5 py-0.5 text-[10px] font-bold text-white inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-success shadow-[0_0_8px_var(--success)] animate-pulse" /> Live
+                </span>
               </div>
-              <h3 className="mt-3 text-2xl md:text-[28px] font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
-                আমাদের <span className="text-neon">Verified Partner</span> ব্র্যান্ডসমূহ
+              <h3 className="mt-2 text-xl md:text-[22px] font-extrabold text-white" style={{ fontFamily: "var(--font-display)", lineHeight: 1.15, textShadow: "0 2px 18px rgba(0,0,0,0.4)" }}>
+                <span className="text-neon">Verified Partner</span> ব্র্যান্ডসমূহ
               </h3>
             </div>
 
-            {/* Brand logo grid */}
-            <div className="relative mt-5 grid grid-cols-3 gap-3">
+            {/* Brand logo grid — premium tiles */}
+            <div className="relative mt-4 grid grid-cols-3 gap-2.5">
               {HERO_BRANDS.slice(0, 6).map((b, i) => (
                 <div
                   key={b.name}
-                  className="group glass-soft rounded-2xl aspect-square flex items-center justify-center p-3 hover:-translate-y-1 hover:shadow-[var(--shadow-glow-aqua)] transition animate-float"
+                  className="group relative glass-soft rounded-xl aspect-[5/4] flex flex-col items-center justify-center gap-1.5 p-2 hover:-translate-y-1 hover:shadow-[var(--shadow-glow-aqua)] transition animate-float overflow-hidden"
                   style={{ animationDelay: `${i * 0.6}s`, animationDuration: "7s" }}
                 >
+                  <span
+                    className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition"
+                    style={{ background: `radial-gradient(circle at 50% 30%, ${b.color}33, transparent 70%)` }}
+                  />
                   <img
-                    src={`https://cdn.simpleicons.org/${b.slug}/${b.color}`}
+                    src={brandLogo(b.domain)}
                     alt={b.name}
                     loading="lazy"
-                    className="max-h-10 max-w-[70%] object-contain opacity-95 group-hover:scale-110 transition drop-shadow-[0_4px_12px_rgba(0,229,255,0.4)]"
-                    onError={(e) => {
-                      const el = e.currentTarget as HTMLImageElement;
-                      if (!el.dataset.fallback) {
-                        el.dataset.fallback = "1";
-                        el.src = `https://cdn.simpleicons.org/${b.slug}/FFFFFF`;
-                      } else {
-                        el.style.display = "none";
-                      }
-                    }}
+                    className="relative h-7 w-7 object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]"
                   />
+                  <span className="relative text-[10px] font-bold text-white/85 truncate max-w-full">{b.name}</span>
                 </div>
               ))}
             </div>
 
             {/* Marquee strip */}
-            <div className="relative mt-5 overflow-hidden rounded-2xl glass-soft py-3">
-              <div className="flex gap-10 whitespace-nowrap animate-marquee">
+            <div className="relative mt-4 overflow-hidden rounded-xl glass-soft py-2">
+              <div className="flex gap-8 whitespace-nowrap animate-marquee">
                 {[...HERO_BRANDS, ...HERO_BRANDS].map((b, i) => (
-                  <span key={i} className="inline-flex items-center gap-2 text-sm font-bold text-foreground/90">
+                  <span key={i} className="inline-flex items-center gap-1.5 text-xs font-bold text-white/85">
                     <span className="h-1.5 w-1.5 rounded-full bg-aqua shadow-[0_0_8px_var(--aqua)]" />
                     {b.name}
                   </span>
@@ -299,26 +275,26 @@ function HeroExperience() {
           </div>
 
           {/* Special offer / promo card */}
-          <div className="relative glass rounded-[var(--radius-2xl)] p-5 md:p-6 overflow-hidden">
-            <div className="pointer-events-none absolute -top-10 -right-10 h-36 w-36 rounded-full bg-aurora opacity-30 blur-2xl" />
-            <div className="pointer-events-none absolute -bottom-12 -left-12 h-32 w-32 rounded-full bg-violet-grad opacity-25 blur-2xl" />
+          <div className="relative glass rounded-[var(--radius-2xl)] p-4 md:p-5 overflow-hidden">
+            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-aurora opacity-30 blur-2xl" />
+            <div className="pointer-events-none absolute -bottom-12 -left-12 h-28 w-28 rounded-full bg-violet-grad opacity-25 blur-2xl" />
             <div className="relative flex items-center justify-between gap-4">
               <div className="min-w-0 flex-1">
-                <div className="inline-flex items-center gap-2 rounded-full glass-soft px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-aqua">
-                  <Sparkles className="h-3.5 w-3.5" /> Limited Offer
+                <div className="inline-flex items-center gap-2 rounded-full glass-soft px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-aqua">
+                  <Sparkles className="h-3 w-3" /> Limited Offer
                 </div>
-                <h4 className="mt-3 text-xl md:text-2xl font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)", lineHeight: 1.15 }}>
+                <h4 className="mt-2 text-lg md:text-xl font-extrabold text-white" style={{ fontFamily: "var(--font-display)", lineHeight: 1.15 }}>
                   প্রথম অর্ডারে <span className="text-aurora">২০% ছাড়</span>
                 </h4>
-                <p className="mt-1.5 text-xs md:text-sm text-muted-foreground">
-                  Coupon: <span className="font-mono font-bold text-foreground">WELCOME20</span> · সকল প্রোডাক্টে প্রযোজ্য
+                <p className="mt-1 text-[11px] md:text-xs text-white/70">
+                  Coupon: <span className="font-mono font-bold text-white">WELCOME20</span> · সকল প্রোডাক্টে প্রযোজ্য
                 </p>
-                <Link to="/products" className="mt-3 inline-flex items-center gap-1.5 text-xs font-extrabold text-aqua hover:gap-2.5 transition-all">
-                  এখনই কিনুন <ArrowRight className="h-3.5 w-3.5" />
+                <Link to="/products" className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-extrabold text-aqua hover:gap-2.5 transition-all">
+                  এখনই কিনুন <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
-              <div className="hidden sm:grid h-20 w-20 place-items-center rounded-2xl bg-aurora text-primary-foreground shadow-[var(--shadow-glow-violet)] animate-pulse-glow shrink-0">
-                <Zap className="h-8 w-8" />
+              <div className="hidden sm:grid h-16 w-16 place-items-center rounded-2xl bg-aurora text-primary-foreground shadow-[var(--shadow-glow-violet)] animate-pulse-glow shrink-0">
+                <Zap className="h-7 w-7" />
               </div>
             </div>
           </div>
