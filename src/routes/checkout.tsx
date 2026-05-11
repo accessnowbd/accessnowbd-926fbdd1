@@ -243,7 +243,7 @@ function CheckoutPage() {
                   />
                 </div>
                 <div className="mt-6 flex justify-end">
-                  <GlassButton onClick={goNext} size="lg">Continue to Payment</GlassButton>
+                  <GlassButton onClick={goNext} size="lg" disabled={!step1Valid}>Continue to Payment</GlassButton>
                 </div>
               </GlassCard>
             )}
