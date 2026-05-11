@@ -20,7 +20,43 @@ export type AdminField = {
   required?: boolean;
   options?: { value: string; label: string }[];
   primary?: boolean; // shown as the row title in list view
+  min?: number;        // numeric min (number) / min length (text/textarea)
+  max?: number;        // numeric max (number) / max length (text/textarea)
+  maxLength?: number;  // explicit max length for text fields
+  pattern?: string;    // regex source for text fields
+  patternMessage?: string;
 };
+
+export function validateField(field: AdminField, value: unknown): string | null {
+  const isEmpty = value == null || value === "" || (typeof value === "number" && Number.isNaN(value));
+  if (field.required && isEmpty) return `${field.label} is required`;
+  if (isEmpty) return null;
+
+  if (field.type === "url" || field.type === "image") {
+    try { new URL(String(value)); } catch { return `${field.label} must be a valid URL (https://…)`; }
+  }
+  if (field.type === "number") {
+    const n = Number(value);
+    if (Number.isNaN(n)) return `${field.label} must be a number`;
+    if (field.min != null && n < field.min) return `${field.label} must be ≥ ${field.min}`;
+    if (field.max != null && n > field.max) return `${field.label} must be ≤ ${field.max}`;
+  }
+  if (field.type === "text" || field.type === "textarea") {
+    const s = String(value);
+    const max = field.maxLength ?? field.max;
+    if (field.min != null && s.length < field.min) return `${field.label} must be at least ${field.min} characters`;
+    if (max != null && s.length > max) return `${field.label} must be at most ${max} characters`;
+    if (field.pattern) {
+      try {
+        if (!new RegExp(field.pattern).test(s)) return field.patternMessage ?? `${field.label} has an invalid format`;
+      } catch { /* ignore bad regex */ }
+    }
+  }
+  if (field.type === "color") {
+    if (!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(String(value))) return `${field.label} must be a hex color (e.g. #1f2937)`;
+  }
+  return null;
+}
 
 export type AdminFeatureConfig = {
   kind: string;            // value stored in admin_records.kind
