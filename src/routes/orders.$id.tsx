@@ -71,6 +71,17 @@ function OrderDetailPage() {
     }
   }, [id, user, authLoading, navigate]);
 
+  // Auto-download receipt the first time a freshly placed order loads.
+  const [autoDownloaded, setAutoDownloaded] = useState(false);
+  useEffect(() => {
+    if (isNew && order && !autoDownloaded) {
+      setAutoDownloaded(true);
+      // Small delay so the success banner paints before the browser save dialog.
+      const t = setTimeout(() => downloadReceiptPdf(order), 600);
+      return () => clearTimeout(t);
+    }
+  }, [isNew, order, autoDownloaded]);
+
   const copyId = async () => {
     if (!order) return;
     await navigator.clipboard.writeText(order.id);
