@@ -41,8 +41,11 @@ const NAV: Array<{
 export function TopUtilityBar() {
   return (
     <div className="relative z-40 border-b border-white/10 bg-background/40 backdrop-blur-2xl text-xs">
-      {/* aurora hairline */}
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+      {/* premium aurora hairline */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(124,58,237,0.5)_20%,rgba(0,229,255,0.85)_50%,rgba(124,58,237,0.5)_80%,transparent)]" />
+        <div className="absolute inset-x-1/3 -bottom-1 h-2 blur-md bg-aqua/40" />
+      </div>
       <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-9 flex items-center justify-between">
         <div className="flex items-center gap-4 text-white/75">
           <span className="inline-flex items-center gap-1.5 font-semibold">
