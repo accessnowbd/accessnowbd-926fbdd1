@@ -1,12 +1,16 @@
-import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Loader2, ShieldAlert, LayoutDashboard, Package, Tag, ShoppingBag, Users, LogOut } from "lucide-react";
+import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Loader2, ShieldAlert, LogOut, Search, Bell, Plus, Moon, Sun, Globe,
+  PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink,
+} from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
-  head: () => ({ meta: [{ title: "Admin — AccessNow BD" }, { name: "robots", content: "noindex,nofollow" }] }),
+  head: () => ({ meta: [{ title: "RxB Admin — AccessNow BD" }, { name: "robots", content: "noindex,nofollow" }] }),
 });
 
 const ADMIN_CACHE_KEY = "anbd:isAdmin";
@@ -20,7 +24,6 @@ function readAdminCache(userId: string | undefined): boolean | null {
     return parsed.uid === userId ? parsed.isAdmin : null;
   } catch { return null; }
 }
-
 function writeAdminCache(userId: string, isAdmin: boolean) {
   try { sessionStorage.setItem(ADMIN_CACHE_KEY, JSON.stringify({ uid: userId, isAdmin })); } catch {}
 }
@@ -34,23 +37,13 @@ function AdminLayout() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) {
-      navigate({ to: "/auth" });
-      return;
-    }
-    const cachedNow = readAdminCache(user.id);
-    if (cachedNow !== null) {
-      setIsAdmin(cachedNow);
-      setChecking(false);
-    }
+    if (!user) { navigate({ to: "/auth" }); return; }
+    const c = readAdminCache(user.id);
+    if (c !== null) { setIsAdmin(c); setChecking(false); }
     let cancelled = false;
     (async () => {
       const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .eq("role", "admin")
-        .maybeSingle();
+        .from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
       if (cancelled) return;
       const ok = !!data && !error;
       writeAdminCache(user.id, ok);
@@ -62,8 +55,8 @@ function AdminLayout() {
 
   if (loading || checking) {
     return (
-      <div className="min-h-screen grid place-items-center bg-background">
-        <div className="inline-flex items-center gap-2 text-muted-foreground">
+      <div className="min-h-screen grid place-items-center bg-[#f6f7fb]">
+        <div className="inline-flex items-center gap-2 text-slate-500">
           <Loader2 className="w-4 h-4 animate-spin" /> Verifying admin access…
         </div>
       </div>
@@ -72,20 +65,20 @@ function AdminLayout() {
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen grid place-items-center bg-background px-4">
-        <div className="max-w-md w-full bg-white border border-border rounded-2xl p-8 text-center shadow-sm">
-          <div className="mx-auto w-12 h-12 rounded-full bg-destructive/10 text-destructive grid place-items-center mb-4">
+      <div className="min-h-screen grid place-items-center bg-[#f6f7fb] px-4">
+        <div className="max-w-md w-full bg-white border border-slate-200 rounded-2xl p-8 text-center shadow-sm">
+          <div className="mx-auto w-12 h-12 rounded-full bg-rose-50 text-rose-600 grid place-items-center mb-4">
             <ShieldAlert className="w-6 h-6" />
           </div>
-          <h1 className="text-xl font-semibold" style={{ fontFamily: "var(--font-display)" }}>Access denied</h1>
-          <p className="text-sm text-muted-foreground mt-2">
-            Your account ({user?.email}) does not have admin permissions. Please contact an administrator if you believe this is an error.
+          <h1 className="text-xl font-semibold text-slate-900">Access denied</h1>
+          <p className="text-sm text-slate-500 mt-2">
+            Your account ({user?.email}) does not have admin permissions.
           </p>
           <div className="mt-5 flex gap-2 justify-center">
-            <Link to="/" className="h-10 px-4 inline-flex items-center rounded-full border border-border text-sm font-semibold">Home</Link>
+            <Link to="/" className="h-10 px-4 inline-flex items-center rounded-full border border-slate-200 text-sm font-semibold text-slate-700">Home</Link>
             <button
               onClick={async () => { await signOut(); navigate({ to: "/auth" }); }}
-              className="h-10 px-4 inline-flex items-center gap-1 rounded-full bg-primary text-primary-foreground text-sm font-semibold"
+              className="h-10 px-4 inline-flex items-center gap-1 rounded-full bg-slate-900 text-white text-sm font-semibold"
             >
               <LogOut className="w-4 h-4" /> Sign out
             </button>
@@ -95,54 +88,222 @@ function AdminLayout() {
     );
   }
 
+  return <AdminShell user={user} signOut={signOut} navigate={navigate} />;
+}
+
+function AdminShell({ user, signOut, navigate }: any) {
+  const [collapsed, setCollapsed] = useState(false);
+  const [dark, setDark] = useState(false);
+  const [search, setSearch] = useState("");
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  const filteredMenu = useMemo(() => {
+    if (!search.trim()) return ADMIN_MENU;
+    const q = search.toLowerCase();
+    return ADMIN_MENU.map((g) => ({
+      ...g,
+      items: g.items.filter((i) => i.label.toLowerCase().includes(q)),
+    })).filter((g) => g.items.length > 0);
+  }, [search]);
+
+  // Find current page for header breadcrumb
+  const currentPage = useMemo(() => {
+    for (const g of ADMIN_MENU) {
+      const item = g.items.find((i) => i.to === pathname);
+      if (item) return { group: g, item };
+    }
+    return null;
+  }, [pathname]);
+
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
-          <Link to="/admin" className="flex items-center gap-2 font-semibold" style={{ fontFamily: "var(--font-heading)" }}>
-            <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
-            Admin Panel
+    <div className={`min-h-screen flex ${dark ? "bg-slate-900" : "bg-[#f6f7fb]"}`}>
+      {/* SIDEBAR */}
+      <aside
+        className={`${collapsed ? "w-[72px]" : "w-[280px]"} shrink-0 transition-all duration-200 border-r ${dark ? "bg-slate-950 border-slate-800" : "bg-white border-slate-200"} flex flex-col h-screen sticky top-0`}
+      >
+        {/* Brand */}
+        <div className={`h-16 flex items-center justify-between px-4 border-b ${dark ? "border-slate-800" : "border-slate-200"}`}>
+          <Link to="/admin" className="flex items-center gap-2 min-w-0">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-slate-900 to-slate-700 grid place-items-center text-white font-bold text-sm shrink-0">
+              Rx
+            </div>
+            {!collapsed && (
+              <div className={`font-extrabold text-[15px] tracking-tight truncate ${dark ? "text-white" : "text-slate-900"}`}>
+                RxB Admin
+              </div>
+            )}
           </Link>
-          <div className="flex items-center gap-3 text-xs">
-            <span className="opacity-80 hidden sm:inline">{user?.email}</span>
-            <Link to="/" className="px-3 h-8 inline-flex items-center rounded-full bg-white/10 hover:bg-white/20">View site</Link>
+          <button
+            onClick={() => setCollapsed((v) => !v)}
+            className={`p-1.5 rounded-lg ${dark ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"}`}
+            aria-label="Collapse sidebar"
+          >
+            {collapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+          </button>
+        </div>
+
+        {/* Search */}
+        {!collapsed && (
+          <div className="p-3">
+            <div className={`flex items-center gap-2 h-10 px-3 rounded-xl border ${dark ? "bg-slate-900 border-slate-800" : "bg-slate-50 border-slate-200"}`}>
+              <Search className="w-4 h-4 text-slate-400" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search menu..."
+                className={`bg-transparent flex-1 outline-none text-sm ${dark ? "text-white placeholder:text-slate-500" : "text-slate-900 placeholder:text-slate-400"}`}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Menu */}
+        <nav className="flex-1 overflow-y-auto px-2 pb-4 admin-scroll">
+          {filteredMenu.map((group) => (
+            <SidebarGroup key={group.id} group={group} collapsed={collapsed} dark={dark} pathname={pathname} />
+          ))}
+        </nav>
+
+        {/* User */}
+        <div className={`border-t ${dark ? "border-slate-800" : "border-slate-200"} p-3 space-y-2`}>
+          <div className={`flex items-center gap-2 ${collapsed ? "justify-center" : ""}`}>
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 text-white grid place-items-center text-xs font-bold shrink-0">
+              {(user?.email ?? "A").slice(0, 1).toUpperCase()}
+            </div>
+            {!collapsed && (
+              <div className="min-w-0 flex-1">
+                <div className={`text-sm font-semibold truncate ${dark ? "text-white" : "text-slate-900"}`}>Admin</div>
+                <div className={`text-[11px] truncate ${dark ? "text-slate-400" : "text-slate-500"}`}>{user?.email}</div>
+              </div>
+            )}
+          </div>
+          {!collapsed && (
             <button
               onClick={async () => { await signOut(); navigate({ to: "/auth" }); }}
-              className="px-3 h-8 inline-flex items-center gap-1 rounded-full bg-white/10 hover:bg-white/20"
+              className={`w-full h-9 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 ${dark ? "bg-slate-800 hover:bg-slate-700 text-rose-300" : "bg-rose-50 hover:bg-rose-100 text-rose-600"}`}
             >
-              <LogOut className="w-3.5 h-3.5" /> Sign out
+              <LogOut className="w-3.5 h-3.5" /> Logout
             </button>
-          </div>
+          )}
         </div>
-      </header>
+      </aside>
 
-      <div className="mx-auto max-w-[1440px] px-4 md:px-10 py-6 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-6">
-        <aside className="bg-white border border-border rounded-2xl p-3 h-fit md:sticky md:top-6">
-          <nav className="space-y-1 text-sm">
-            <NavItem to="/admin" icon={<LayoutDashboard className="w-4 h-4" />} label="Dashboard" exact />
-            <NavItem to="/admin/products" icon={<Package className="w-4 h-4" />} label="Products" />
-            <NavItem to="/admin/promotions" icon={<Tag className="w-4 h-4" />} label="Promotions" />
-            <NavItem to="/admin/orders" icon={<ShoppingBag className="w-4 h-4" />} label="Orders" />
-            <NavItem to="/admin/users" icon={<Users className="w-4 h-4" />} label="Users" />
-          </nav>
-        </aside>
-        <main className="min-w-0">
-          <Outlet />
+      {/* MAIN */}
+      <div className="flex-1 min-w-0 flex flex-col">
+        {/* Top bar */}
+        <header className={`h-16 sticky top-0 z-20 backdrop-blur border-b ${dark ? "bg-slate-900/80 border-slate-800" : "bg-white/80 border-slate-200"}`}>
+          <div className="h-full px-4 md:px-6 flex items-center gap-3">
+            {/* Breadcrumb */}
+            <div className={`hidden md:flex items-center gap-2 text-sm ${dark ? "text-slate-300" : "text-slate-600"}`}>
+              <span className={`px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 ${dark ? "bg-slate-800" : "bg-slate-100"}`}>
+                {currentPage?.group.icon ?? ADMIN_MENU[0].icon}
+                <span className="font-medium">{currentPage?.group.title ?? "Product Management"}</span>
+              </span>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <span className={`font-semibold ${dark ? "text-white" : "text-slate-900"}`}>
+                {currentPage?.item.label ?? "Dashboard"}
+              </span>
+            </div>
+
+            <div className="flex-1" />
+
+            {/* Actions */}
+            <button className={`h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 border ${dark ? "border-slate-700 text-slate-200 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}>
+              <Globe className="w-3.5 h-3.5" /> বাং
+            </button>
+            <button onClick={() => setDark((v) => !v)} className={`h-9 w-9 rounded-lg grid place-items-center border ${dark ? "border-slate-700 text-amber-300 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}>
+              {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+            <div className={`hidden md:flex items-center gap-2 h-9 px-3 rounded-lg border ${dark ? "border-slate-700 bg-slate-800/50" : "border-slate-200 bg-slate-50"}`}>
+              <Search className="w-3.5 h-3.5 text-slate-400" />
+              <input placeholder="Search" className={`bg-transparent outline-none text-xs w-32 ${dark ? "text-white placeholder:text-slate-500" : "placeholder:text-slate-400"}`} />
+              <kbd className={`text-[10px] px-1.5 py-0.5 rounded border ${dark ? "border-slate-700 text-slate-400" : "border-slate-300 text-slate-500"}`}>⌘K</kbd>
+            </div>
+            <button className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90">
+              <Plus className="w-3.5 h-3.5" /> Create <ChevronDown className="w-3 h-3" />
+            </button>
+            <button className={`relative h-9 w-9 rounded-lg grid place-items-center border ${dark ? "border-slate-700 text-slate-200 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}>
+              <Bell className="w-4 h-4" />
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold grid place-items-center">22</span>
+            </button>
+            <Link to="/" className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-slate-900 text-white hover:bg-slate-800">
+              <ExternalLink className="w-3.5 h-3.5" /> View store
+            </Link>
+          </div>
+        </header>
+
+        <main className={`flex-1 p-4 md:p-6 ${dark ? "text-slate-100" : "text-slate-900"}`}>
+          <div className="mx-auto max-w-[1400px]">
+            <Outlet />
+          </div>
         </main>
       </div>
+
+      <style>{`
+        .admin-scroll::-webkit-scrollbar { width: 6px; }
+        .admin-scroll::-webkit-scrollbar-thumb { background: rgba(100,116,139,.25); border-radius: 999px; }
+      `}</style>
     </div>
   );
 }
 
-function NavItem({ to, icon, label, exact }: { to: string; icon: React.ReactNode; label: string; exact?: boolean }) {
+function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collapsed: boolean; dark: boolean; pathname: string }) {
+  const hasActive = group.items.some((i: AdminMenuItem) => pathname === i.to);
+  const [open, setOpen] = useState(hasActive || group.id === "product");
+
+  if (collapsed) {
+    // collapsed: just stack icons
+    return (
+      <div className="py-2">
+        {group.items.map((item: AdminMenuItem) => (
+          <SidebarItem key={item.to} item={item} collapsed dark={dark} active={pathname === item.to} />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-3">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider ${dark ? "text-slate-400 hover:bg-slate-800" : "text-slate-500 hover:bg-slate-50"}`}
+      >
+        <span className="inline-flex items-center gap-2">
+          <span className="text-violet-500">{group.icon}</span>
+          {group.title}
+        </span>
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "" : "-rotate-90"}`} />
+      </button>
+      {open && (
+        <div className="space-y-1 mt-1">
+          {group.items.map((item: AdminMenuItem) => (
+            <SidebarItem key={item.to} item={item} dark={dark} active={pathname === item.to} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SidebarItem({ item, collapsed, dark, active }: { item: AdminMenuItem; collapsed?: boolean; dark: boolean; active: boolean }) {
   return (
     <Link
-      to={to}
-      activeOptions={{ exact }}
-      activeProps={{ className: "bg-primary/10 text-primary" }}
-      className="flex items-center gap-2 px-3 h-9 rounded-lg hover:bg-secondary text-foreground/80"
+      to={item.to}
+      activeOptions={{ exact: item.exact }}
+      title={collapsed ? item.label : undefined}
+      className={[
+        "group flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm transition-colors relative",
+        collapsed ? "justify-center" : "",
+        active
+          ? (dark ? "bg-slate-800 text-white" : "bg-violet-50 text-violet-700")
+          : (dark ? "text-slate-300 hover:bg-slate-800/70" : "text-slate-700 hover:bg-slate-50"),
+      ].join(" ")}
     >
-      {icon} {label}
+      <span className={`shrink-0 w-8 h-8 rounded-full bg-gradient-to-br ${item.grad} grid place-items-center text-white shadow-sm`}>
+        {item.icon}
+      </span>
+      {!collapsed && <span className="font-medium truncate flex-1">{item.label}</span>}
+      {!collapsed && active && <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />}
     </Link>
   );
 }
