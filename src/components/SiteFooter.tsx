@@ -238,7 +238,7 @@ function ContactPill({
   tone: Tone;
 }) {
   const inner = (
-    <span className="inline-flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition group">
+    <span className="inline-flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300 group">
       <span
         className={`grid place-items-center w-8 h-8 rounded-full bg-gradient-to-br ${TONE_GRADIENT[tone]} text-white`}
       >
