@@ -318,9 +318,9 @@ function CheckoutPage() {
                     </button>
                   </div>
                   <dl className="mt-3 grid sm:grid-cols-2 gap-3 text-sm">
-                    <ReviewRow label="Name" value={form.name} />
-                    <ReviewRow label="Email" value={form.email} />
-                    <ReviewRow label="WhatsApp" value={form.phone} />
+                    <SummaryRow label="Name" value={form.name} />
+                    <SummaryRow label="Email" value={form.email} />
+                    <SummaryRow label="WhatsApp" value={form.phone} />
                   </dl>
                 </GlassCard>
 
@@ -332,9 +332,9 @@ function CheckoutPage() {
                     </button>
                   </div>
                   <dl className="mt-3 grid sm:grid-cols-2 gap-3 text-sm">
-                    <ReviewRow label="Method" value={selectedMethod.name} />
-                    <ReviewRow label="Sent from" value={form.senderNumber} />
-                    <ReviewRow label="TrxID" value={form.trxId} />
+                    <SummaryRow label="Method" value={selectedMethod.name} />
+                    <SummaryRow label="Sent from" value={form.senderNumber} />
+                    <SummaryRow label="TrxID" value={form.trxId} />
                   </dl>
                 </GlassCard>
 
