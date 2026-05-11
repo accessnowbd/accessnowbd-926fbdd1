@@ -92,7 +92,13 @@ export function TopUtilityBar() {
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    await signOut();
+    navigate({ to: "/" });
+  };
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
