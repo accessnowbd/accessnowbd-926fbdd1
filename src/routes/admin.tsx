@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  Loader2, ShieldAlert, LogOut, Search, Bell, Plus, Moon, Sun, Globe,
+  ShieldAlert, LogOut, Search, Bell, Plus, Moon, Sun, Globe, Sparkles,
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -16,30 +16,73 @@ export const Route = createFileRoute("/admin")({
 const ADMIN_CACHE_KEY = "anbd:isAdmin";
 
 function readAdminCache(userId: string | undefined): boolean | null {
-  if (!userId || typeof sessionStorage === "undefined") return null;
+  if (!userId) return null;
   try {
-    const raw = sessionStorage.getItem(ADMIN_CACHE_KEY);
+    const store = typeof localStorage !== "undefined" ? localStorage : null;
+    if (!store) return null;
+    const raw = store.getItem(ADMIN_CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as { uid: string; isAdmin: boolean };
     return parsed.uid === userId ? parsed.isAdmin : null;
   } catch { return null; }
 }
 function writeAdminCache(userId: string, isAdmin: boolean) {
-  try { sessionStorage.setItem(ADMIN_CACHE_KEY, JSON.stringify({ uid: userId, isAdmin })); } catch {}
+  try { localStorage.setItem(ADMIN_CACHE_KEY, JSON.stringify({ uid: userId, isAdmin })); } catch {}
+}
+
+/** Modern animated loader — only shown on the very first verification ever. */
+function AdminBootSplash() {
+  return (
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#0b1020] via-[#0f1535] to-[#1a0f3d] grid place-items-center">
+      {/* aurora blobs */}
+      <div className="pointer-events-none absolute -top-24 -left-24 w-[480px] h-[480px] rounded-full bg-violet-500/30 blur-[120px] animate-pulse" />
+      <div className="pointer-events-none absolute -bottom-24 -right-24 w-[520px] h-[520px] rounded-full bg-cyan-400/25 blur-[120px] animate-pulse" style={{ animationDelay: "0.6s" }} />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "22px 22px" }} />
+
+      <div className="relative z-10 flex flex-col items-center gap-5">
+        {/* orbit logo */}
+        <div className="relative w-24 h-24">
+          <span className="absolute inset-0 rounded-full border border-white/10" />
+          <span className="absolute inset-0 rounded-full border-t-2 border-violet-400 animate-spin" style={{ animationDuration: "1.4s" }} />
+          <span className="absolute inset-2 rounded-full border-b-2 border-cyan-300 animate-spin" style={{ animationDuration: "2.2s", animationDirection: "reverse" }} />
+          <span className="absolute inset-4 rounded-2xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-cyan-400 grid place-items-center shadow-[0_0_40px_-5px_rgba(139,92,246,0.7)]">
+            <Sparkles className="w-7 h-7 text-white" />
+          </span>
+        </div>
+
+        <div className="text-center">
+          <div className="text-white text-base font-bold tracking-tight">RxB Admin</div>
+          <div className="mt-1 text-[12px] text-white/55">Preparing your workspace…</div>
+        </div>
+
+        {/* progress bar */}
+        <div className="w-56 h-1 rounded-full bg-white/10 overflow-hidden">
+          <div className="h-full w-1/3 rounded-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300 animate-[adminslide_1.2s_ease-in-out_infinite]" />
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes adminslide {
+          0%   { transform: translateX(-120%); }
+          50%  { transform: translateX(80%); }
+          100% { transform: translateX(260%); }
+        }
+      `}</style>
+    </div>
+  );
 }
 
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const cached = readAdminCache(user?.id);
-  const [checking, setChecking] = useState(cached === null);
-  const [isAdmin, setIsAdmin] = useState(cached ?? false);
+  // Optimistic: if cache says admin, render shell instantly. Verify silently in background.
+  const [isAdmin, setIsAdmin] = useState<boolean>(cached ?? false);
+  const [verified, setVerified] = useState<boolean>(cached !== null);
 
   useEffect(() => {
     if (loading) return;
     if (!user) { navigate({ to: "/auth" }); return; }
-    const c = readAdminCache(user.id);
-    if (c !== null) { setIsAdmin(c); setChecking(false); }
     let cancelled = false;
     (async () => {
       const { data, error } = await supabase
@@ -48,22 +91,17 @@ function AdminLayout() {
       const ok = !!data && !error;
       writeAdminCache(user.id, ok);
       setIsAdmin(ok);
-      setChecking(false);
+      setVerified(true);
     })();
     return () => { cancelled = true; };
   }, [user, loading, navigate]);
 
-  if (loading || checking) {
-    return (
-      <div className="min-h-screen grid place-items-center bg-[#f6f7fb]">
-        <div className="inline-flex items-center gap-2 text-slate-500">
-          <Loader2 className="w-4 h-4 animate-spin" /> Verifying admin access…
-        </div>
-      </div>
-    );
+  // Only block on first-ever visit (no cache and not yet verified).
+  if ((loading || !verified) && cached === null) {
+    return <AdminBootSplash />;
   }
 
-  if (!isAdmin) {
+  if (verified && !isAdmin) {
     return (
       <div className="min-h-screen grid place-items-center bg-[#f6f7fb] px-4">
         <div className="max-w-md w-full bg-white border border-slate-200 rounded-2xl p-8 text-center shadow-sm">
