@@ -1,5 +1,6 @@
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
+import { SupportWidget } from "@/components/SupportWidget";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -118,6 +119,7 @@ function RootComponent() {
       <AuthProvider>
         <CartProvider>
           <Outlet />
+          <SupportWidget />
         </CartProvider>
       </AuthProvider>
     </QueryClientProvider>
