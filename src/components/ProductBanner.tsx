@@ -126,34 +126,19 @@ export function ProductBanner({
     <div
       className={`relative overflow-hidden rounded-2xl ${aspectClass} ${className}`}
       style={{
-        background: "linear-gradient(135deg, #071120 0%, #0f1d3a 50%, #1a1144 100%)",
+        background:
+          "radial-gradient(ellipse 80% 70% at 30% 20%, rgba(37,99,235,0.35), transparent 70%), linear-gradient(135deg, #071120 0%, #0f1d3a 55%, #1a1144 100%)",
       }}
     >
-      {/* Neon bokeh */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-[8%] right-[12%] w-3 h-3 rounded-full bg-cyan-300/80 blur-[2px]" />
-        <div className="absolute top-[20%] left-[10%] w-2 h-2 rounded-full bg-violet-300/70 blur-[1px]" />
-        <div className="absolute bottom-[18%] right-[28%] w-4 h-4 rounded-full bg-blue-300/60 blur-[2px]" />
-        <div className="absolute bottom-[8%] left-[35%] w-2.5 h-2.5 rounded-full bg-cyan-200/70 blur-[1px]" />
-      </div>
-
-      {/* Decorative spheres around the glass plate */}
-      {blobs.map((b) => (
-        <div
-          key={b.key}
-          className="absolute rounded-full"
-          style={{
-            width: `${b.size}%`,
-            aspectRatio: "1 / 1",
-            top: `${b.top}%`,
-            left: `${b.left}%`,
-            transform: "translate(-50%, -50%)",
-            background: b.grad,
-            filter: b.blur ? `blur(${b.blur}px)` : undefined,
-            boxShadow: "0 18px 40px -12px rgba(0, 229, 255, 0.45)",
-          }}
-        />
-      ))}
+      {/* Soft static glow — no animation, no jitter */}
+      <div
+        className="pointer-events-none absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-40"
+        style={{ background: "radial-gradient(circle, rgba(124,58,237,0.55), transparent 70%)" }}
+      />
+      <div
+        className="pointer-events-none absolute -bottom-12 -left-10 w-44 h-44 rounded-full opacity-35"
+        style={{ background: "radial-gradient(circle, rgba(0,229,255,0.45), transparent 70%)" }}
+      />
 
       {/* Frosted glass plate (the product banner surface) */}
       <div
