@@ -22,11 +22,15 @@ interface OrderSummaryProps {
 export function OrderSummary({
   items,
   total,
+  discount = 0,
+  couponCode,
   footer = "Your data is safe. We never share your details.",
   variant = "lineitems",
   action,
+  extra,
   className,
 }: OrderSummaryProps) {
+  const grandTotal = Math.max(0, total - discount);
   return (
     <GlassCard className={`h-fit lg:sticky lg:top-6 ${className ?? ""}`}>
       <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>
@@ -67,6 +71,17 @@ export function OrderSummary({
         </div>
       )}
 
+      {discount > 0 && (
+        <div className="mt-2 flex justify-between text-sm">
+          <span className="text-aqua-deep font-medium">
+            Coupon{couponCode ? ` (${couponCode})` : ""}
+          </span>
+          <span className="text-aqua-deep font-semibold">−৳{discount.toLocaleString()}</span>
+        </div>
+      )}
+
+      {extra}
+
       <div className="border-t border-[var(--glass-border-soft)] my-4" />
       <div className="flex justify-between items-baseline">
         <span className="text-sm font-semibold">Total</span>
@@ -74,7 +89,7 @@ export function OrderSummary({
           className="text-2xl font-semibold text-aurora"
           style={{ fontFamily: "var(--font-heading)" }}
         >
-          ৳{total.toLocaleString()}
+          ৳{grandTotal.toLocaleString()}
         </span>
       </div>
 
@@ -87,6 +102,14 @@ export function OrderSummary({
   );
 }
 
+export function SummaryRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</dt>
+      <dd className="text-sm font-medium text-foreground mt-0.5 break-words">{value || "—"}</dd>
+    </div>
+  );
+}
 export function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div>
