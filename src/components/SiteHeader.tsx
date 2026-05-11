@@ -13,10 +13,15 @@ import {
   Sparkles,
   PhoneCall,
   ChevronRight,
+  LogIn,
+  UserCircle2,
+  LogOut,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "@tanstack/react-router";
 
 const NAV: Array<{
   label: string;
