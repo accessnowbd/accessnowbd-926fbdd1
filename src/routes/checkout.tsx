@@ -379,7 +379,7 @@ function CheckoutPage() {
                       className="mt-1 w-4 h-4 rounded accent-primary focus-visible:ring-2 focus-visible:ring-ring"
                     />
                     <span className="text-sm text-foreground/90">
-                      I confirm the TrxID above is correct and I've sent <b>৳{total.toLocaleString()}</b> via {selectedMethod.name}.
+                      I confirm the TrxID above is correct and I've sent <b>৳{grandTotal.toLocaleString()}</b> via {selectedMethod.name}.
                     </span>
                   </label>
                 </GlassCard>
