@@ -71,7 +71,18 @@ function guessLogoUrl(name: string): string {
     }
   }
   if (!domain) domain = `${k.replace(/\s+/g, "").replace(/[^a-z0-9]/g, "")}.com`;
-  return `https://logo.clearbit.com/${domain}`;
+  return domain;
+}
+
+/** Multiple logo CDN sources for reliable fallback */
+function logoSources(name: string): string[] {
+  const domain = guessLogoUrl(name);
+  return [
+    `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
+    `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+    `https://logo.clearbit.com/${domain}`,
+    `https://icon.horse/icon/${domain}`,
+  ];
 }
 
 export function ProductBanner({
@@ -99,9 +110,11 @@ export function ProductBanner({
   }, [seed, spheres, product.slug]);
 
   const [imgFailed, setImgFailed] = useState(false);
-  const [logoFailed, setLogoFailed] = useState(false);
+  const [logoIdx, setLogoIdx] = useState(0);
   const primary = product.imageUrl;
-  const fallbackLogo = guessLogoUrl(product.name);
+  const logos = useMemo(() => logoSources(product.name), [product.name]);
+  const currentLogo = logos[logoIdx];
+  const allLogosFailed = logoIdx >= logos.length;
 
   const aspectClass =
     ratio === "4/3" ? "aspect-[4/3]" :
@@ -163,13 +176,14 @@ export function ProductBanner({
             className="relative z-10 max-h-[75%] max-w-[80%] object-contain drop-shadow-[0_10px_24px_rgba(0,229,255,0.35)]"
             onError={() => setImgFailed(true)}
           />
-        ) : !logoFailed ? (
+        ) : !allLogosFailed ? (
           <img
-            src={fallbackLogo}
+            key={currentLogo}
+            src={currentLogo}
             alt={product.name}
             loading="lazy"
             className="relative z-10 max-h-[70%] max-w-[75%] object-contain drop-shadow-[0_10px_24px_rgba(0,229,255,0.35)]"
-            onError={() => setLogoFailed(true)}
+            onError={() => setLogoIdx((i) => i + 1)}
           />
         ) : (
           <span className="relative z-10 text-7xl drop-shadow-[0_8px_18px_rgba(0,229,255,0.4)]">
