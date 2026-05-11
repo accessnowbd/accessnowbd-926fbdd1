@@ -176,13 +176,14 @@ export function ProductBanner({
             className="relative z-10 max-h-[75%] max-w-[80%] object-contain drop-shadow-[0_10px_24px_rgba(0,229,255,0.35)]"
             onError={() => setImgFailed(true)}
           />
-        ) : !logoFailed ? (
+        ) : !allLogosFailed ? (
           <img
-            src={fallbackLogo}
+            key={currentLogo}
+            src={currentLogo}
             alt={product.name}
             loading="lazy"
             className="relative z-10 max-h-[70%] max-w-[75%] object-contain drop-shadow-[0_10px_24px_rgba(0,229,255,0.35)]"
-            onError={() => setLogoFailed(true)}
+            onError={() => setLogoIdx((i) => i + 1)}
           />
         ) : (
           <span className="relative z-10 text-7xl drop-shadow-[0_8px_18px_rgba(0,229,255,0.4)]">
