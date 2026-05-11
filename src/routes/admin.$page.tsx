@@ -451,69 +451,94 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
 
 /* ============================== FIELD INPUT ============================== */
 
-function FieldInput({ field, value, onChange }: { field: AdminField; value: unknown; onChange: (v: unknown) => void }) {
-  const base = "w-full h-10 px-3 rounded-lg border border-slate-200 text-sm text-slate-900 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 bg-white";
+function FieldInput({
+  field, value, onChange, error, onBlur,
+}: {
+  field: AdminField; value: unknown; onChange: (v: unknown) => void;
+  error?: string; onBlur?: () => void;
+}) {
+  const hasError = !!error;
+  const baseCls = `w-full h-10 px-3 rounded-lg border text-sm text-slate-900 outline-none bg-white ${
+    hasError
+      ? "border-rose-300 focus:border-rose-400 focus:ring-2 focus:ring-rose-100"
+      : "border-slate-200 focus:border-violet-400 focus:ring-2 focus:ring-violet-100"
+  }`;
   const label = (
     <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
       {field.label}{field.required && <span className="text-rose-500"> *</span>}
     </label>
   );
   const v = value ?? "";
+
+  const errMsg = hasError ? <p className="mt-1 text-[11px] font-medium text-rose-600">{error}</p> : null;
+
+  let inner: React.ReactNode;
   switch (field.type) {
     case "textarea":
-      return (
+      inner = (
         <div>{label}
-          <textarea value={String(v)} onChange={(e) => onChange(e.target.value)} placeholder={field.placeholder} rows={4} className={base + " h-auto py-2 resize-y"} />
+          <textarea value={String(v)} onBlur={onBlur} onChange={(e) => onChange(e.target.value)} placeholder={field.placeholder} rows={4} maxLength={field.maxLength ?? field.max} className={baseCls + " h-auto py-2 resize-y"} />
         </div>
-      );
+      ); break;
     case "boolean":
-      return (
+      inner = (
         <div className="flex items-center justify-between gap-3 h-10 px-3 rounded-lg border border-slate-200 bg-white">
           <span className="text-sm font-medium text-slate-700">{field.label}</span>
-          <button type="button" onClick={() => onChange(!value)} className={`w-11 h-6 rounded-full relative transition ${value ? "bg-violet-600" : "bg-slate-300"}`}>
+          <button type="button" onClick={() => { onChange(!value); onBlur?.(); }} className={`w-11 h-6 rounded-full relative transition ${value ? "bg-violet-600" : "bg-slate-300"}`}>
             <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition ${value ? "left-5" : "left-0.5"}`} />
           </button>
         </div>
-      );
+      ); break;
     case "select":
-      return (
+      inner = (
         <div>{label}
-          <select value={String(v)} onChange={(e) => onChange(e.target.value)} className={base}>
+          <select value={String(v)} onBlur={onBlur} onChange={(e) => onChange(e.target.value)} className={baseCls}>
             <option value="">—</option>
             {field.options?.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
-      );
+      ); break;
     case "number":
-      return (
+      inner = (
         <div>{label}
-          <input type="number" value={v === "" ? "" : Number(v)} onChange={(e) => onChange(e.target.value === "" ? null : Number(e.target.value))} placeholder={field.placeholder} className={base} />
+          <input type="number" min={field.min} max={field.max} value={v === "" ? "" : Number(v)} onBlur={onBlur} onChange={(e) => onChange(e.target.value === "" ? null : Number(e.target.value))} placeholder={field.placeholder} className={baseCls} />
         </div>
-      );
+      ); break;
     case "color":
-      return (
+      inner = (
         <div>{label}
           <div className="flex gap-2">
-            <input type="color" value={String(v) || "#000000"} onChange={(e) => onChange(e.target.value)} className="h-10 w-14 rounded-lg border border-slate-200" />
-            <input type="text" value={String(v)} onChange={(e) => onChange(e.target.value)} className={base} />
+            <input type="color" value={/^#[0-9a-f]{3,6}$/i.test(String(v)) ? String(v) : "#000000"} onChange={(e) => onChange(e.target.value)} className="h-10 w-14 rounded-lg border border-slate-200" />
+            <input type="text" value={String(v)} onBlur={onBlur} onChange={(e) => onChange(e.target.value)} placeholder="#1f2937" className={baseCls} />
           </div>
         </div>
-      );
+      ); break;
     case "date":
-      return (
+      inner = (
         <div>{label}
-          <input type="datetime-local" value={String(v)} onChange={(e) => onChange(e.target.value)} className={base} />
+          <input type="datetime-local" value={String(v)} onBlur={onBlur} onChange={(e) => onChange(e.target.value)} className={baseCls} />
         </div>
-      );
+      ); break;
     case "image":
-      return <ImageField field={field} value={v} label={label} base={base} onChange={onChange} />;
+      inner = <ImageField field={field} value={v} label={label} base={baseCls} onChange={onChange} onBlur={onBlur} />;
+      break;
     default:
-      return (
+      inner = (
         <div>{label}
-          <input type={field.type === "url" ? "url" : "text"} value={String(v)} onChange={(e) => onChange(e.target.value)} placeholder={field.placeholder} className={base} />
+          <input
+            type={field.type === "url" ? "url" : "text"}
+            value={String(v)}
+            onBlur={onBlur}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={field.placeholder}
+            maxLength={field.maxLength ?? field.max}
+            pattern={field.pattern}
+            className={baseCls}
+          />
         </div>
       );
   }
+  return <div>{inner}{errMsg}</div>;
 }
 
 function ImageField({
