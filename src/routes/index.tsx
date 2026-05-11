@@ -64,6 +64,17 @@ const ACTIVITY = [
   "Sajid I. · Windows 11 Pro কিনেছেন",
 ];
 
+const RAIL_PLACEHOLDER_TITLES: string[] = [
+  "OTT & Streaming",
+  "AI & Education",
+  "Microsoft Office",
+  "Editing Tools",
+  "Software & Productivity",
+  "VPN & Security",
+  "Windows",
+  "Giftcards",
+];
+
 function Index() {
   const { products, isLoading } = useProducts();
   const top = useMemo(() => pickTopProducts(products), [products]);
