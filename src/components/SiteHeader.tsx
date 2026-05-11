@@ -138,33 +138,56 @@ export function SiteHeader() {
               className="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              {/* Brand logo — pure transparent emblem with aurora halo */}
-              <span className="relative shrink-0 grid place-items-center">
-                {/* Soft aurora halo behind logo */}
+              {/* Brand logo — clean round premium badge */}
+              <span className="relative shrink-0">
+                {/* Outer rotating gradient ring */}
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 -m-2 rounded-full opacity-70 blur-xl -z-10"
+                  className="absolute -inset-[2px] rounded-full opacity-90"
                   style={{
                     background:
-                      "radial-gradient(50% 50% at 50% 50%, rgba(56,128,255,0.55) 0%, rgba(31,199,150,0.35) 45%, rgba(245,158,11,0.0) 75%)",
+                      "conic-gradient(from 0deg, #2f6dff, #1fc796, #f59e0b, #2f6dff)",
+                    animation: "aurora-pan 6s linear infinite",
+                    filter: "blur(0.5px)",
                   }}
                 />
-                {/* Slow rotating conic accent ring */}
+                {/* Soft outer glow */}
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 -m-1.5 rounded-full opacity-40 blur-[6px] -z-10"
+                  className="pointer-events-none absolute -inset-2 rounded-full opacity-60 blur-lg -z-10"
                   style={{
                     background:
-                      "conic-gradient(from 0deg, rgba(56,128,255,0.7), rgba(31,199,150,0.7), rgba(245,158,11,0.5), rgba(56,128,255,0.7))",
-                    animation: "aurora-pan 8s linear infinite",
+                      "radial-gradient(circle, rgba(56,128,255,0.55) 0%, rgba(31,199,150,0.3) 50%, transparent 75%)",
                   }}
                 />
-                <img
-                  src={accessNowLogo}
-                  alt="AccessNow BD"
-                  draggable={false}
-                  className="relative w-12 h-12 md:w-14 md:h-14 object-contain drop-shadow-[0_4px_14px_rgba(56,128,255,0.55)] group-hover:scale-105 group-hover:-rotate-[4deg] transition-transform duration-500"
-                />
+                {/* Inner round badge */}
+                <span
+                  className="relative grid place-items-center w-11 h-11 md:w-12 md:h-12 rounded-full overflow-hidden ring-1 ring-white/15 shadow-[0_8px_24px_-6px_rgba(56,128,255,0.55)] group-hover:scale-105 transition-transform duration-500"
+                  style={{
+                    background:
+                      "radial-gradient(120% 120% at 30% 20%, #1a1638 0%, #0d0a1f 70%)",
+                  }}
+                >
+                  {/* Top gloss highlight */}
+                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/20 blur-[3px]" />
+                  {/* Bottom inner shadow */}
+                  <span className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_-6px_12px_-6px_rgba(0,0,0,0.6)]" />
+                  <img
+                    src={accessNowLogo}
+                    alt="AccessNow BD"
+                    draggable={false}
+                    className="relative w-8 h-8 md:w-9 md:h-9 object-contain drop-shadow-[0_2px_6px_rgba(0,229,255,0.45)]"
+                  />
+                  {/* Sweeping shine effect on hover */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"
+                    style={{
+                      background:
+                        "linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.35) 50%, transparent 65%)",
+                    }}
+                  />
+                </span>
               </span>
 
               {/* Wordmark — matches the official logo (Access · Now · BD + tagline) */}
