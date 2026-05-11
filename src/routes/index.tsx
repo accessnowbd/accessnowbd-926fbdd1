@@ -70,8 +70,8 @@ function Index() {
   return (
     <div className="min-h-screen relative">
       <SiteHeader />
-      <HeroSlider />
-      <FloatingPill />
+      <HeroLanding />
+
       <ProductGrid title="⭐ Top Picks for You" subtitle="বাংলাদেশে সবচেয়ে জনপ্রিয় সাবস্ক্রিপশন" items={top} cap={8} viewAllTo="/products" />
       <ProductRail title="🎬 Streaming Services" subtitle="Netflix, Prime, HBO, Disney+, Hoichoi — সব এক জায়গায়" items={streaming} viewAllTo="/streaming" />
       <ProductRail title="🤖 AI & Productivity Tools" subtitle="ChatGPT, Claude, Gemini, Grammarly এবং আরও" items={ai} viewAllTo="/ai-tools" />
