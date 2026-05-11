@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import accessNowLogo from "@/assets/accessnow-bd-logo.png";
+import accessNowLogo from "@/assets/accessnow-bd-mark.png";
 import {
   Crown,
   Facebook,
@@ -138,21 +138,29 @@ export function SiteHeader() {
               className="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              {/* Brand logo image with soft aurora glow */}
+              {/* Brand logo — transparent emblem on dark aurora pill */}
               <span className="relative shrink-0">
                 <span
-                  className="absolute -inset-1.5 rounded-[18px] opacity-60 blur-md -z-10"
+                  className="absolute -inset-1.5 rounded-[18px] opacity-70 blur-md -z-10"
                   style={{
                     background:
-                      "conic-gradient(from 0deg, rgba(56,128,255,0.85), rgba(34,197,160,0.85), rgba(245,158,11,0.7), rgba(56,128,255,0.85))",
+                      "conic-gradient(from 0deg, rgba(56,128,255,0.85), rgba(34,197,160,0.85), rgba(245,158,11,0.55), rgba(56,128,255,0.85))",
                     animation: "aurora-pan 6s linear infinite",
                   }}
                 />
-                <span className="relative grid place-items-center w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-white shadow-[0_12px_32px_-8px_rgba(56,128,255,0.55)] ring-1 ring-white/20 overflow-hidden group-hover:scale-105 group-hover:rotate-[-4deg] transition-transform duration-500">
+                <span
+                  className="relative grid place-items-center w-11 h-11 md:w-12 md:h-12 rounded-2xl ring-1 ring-white/15 shadow-[0_12px_32px_-8px_rgba(56,128,255,0.55)] overflow-hidden group-hover:scale-105 group-hover:rotate-[-4deg] transition-transform duration-500"
+                  style={{
+                    background:
+                      "radial-gradient(120% 120% at 30% 20%, rgba(56,128,255,0.28) 0%, rgba(13,10,31,0.95) 55%, rgba(13,10,31,1) 100%)",
+                  }}
+                >
+                  {/* Inner top shine */}
+                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/15 blur-[3px]" />
                   <img
                     src={accessNowLogo}
                     alt="AccessNow BD"
-                    className="w-9 h-9 md:w-10 md:h-10 object-contain"
+                    className="relative w-9 h-9 md:w-10 md:h-10 object-contain drop-shadow-[0_2px_8px_rgba(0,229,255,0.45)]"
                     draggable={false}
                   />
                 </span>
@@ -161,43 +169,57 @@ export function SiteHeader() {
                 </span>
               </span>
 
-              {/* Wordmark — matches logo color story (blue / green / amber) */}
+              {/* Wordmark — matches the official logo (Access · Now · BD + tagline) */}
               <span className="leading-[1.05] min-w-0">
-                <span className="flex items-baseline gap-1 whitespace-nowrap">
+                <span className="flex items-baseline gap-1.5 whitespace-nowrap">
                   <span
-                    className="text-[16px] sm:text-[18px] md:text-[20px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="text-[17px] sm:text-[19px] md:text-[22px] font-extrabold tracking-tight bg-clip-text text-transparent"
                     style={{
                       backgroundImage:
-                        "linear-gradient(180deg, #5aa8ff 0%, #1e4fd8 100%)",
+                        "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)",
+                      filter:
+                        "drop-shadow(0 1px 6px rgba(47,109,255,0.35))",
                     }}
                   >
                     Access
                   </span>
                   <span
-                    className="text-[16px] sm:text-[18px] md:text-[20px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="text-[17px] sm:text-[19px] md:text-[22px] font-extrabold tracking-tight bg-clip-text text-transparent"
                     style={{
                       backgroundImage:
-                        "linear-gradient(180deg, #4ad6a8 0%, #16a37a 100%)",
+                        "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)",
+                      filter:
+                        "drop-shadow(0 1px 6px rgba(31,199,150,0.35))",
                     }}
                   >
                     Now
                   </span>
                   <span
-                    className="text-[16px] sm:text-[18px] md:text-[20px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="text-[17px] sm:text-[19px] md:text-[22px] font-extrabold tracking-tight bg-clip-text text-transparent"
                     style={{
                       backgroundImage:
-                        "linear-gradient(180deg, #fcd34d 0%, #d97706 100%)",
+                        "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)",
+                      filter:
+                        "drop-shadow(0 1px 6px rgba(245,158,11,0.35))",
                     }}
                   >
                     BD
                   </span>
                 </span>
-                <span className="hidden sm:flex items-center gap-1.5 mt-0.5">
-                  <span className="h-px w-3 bg-gradient-to-r from-transparent to-white/30" />
-                  <span className="text-[8.5px] md:text-[9px] uppercase tracking-[0.32em] font-bold text-white/45">
-                    Fast · Secure · Reliable
+                <span className="hidden sm:flex items-center gap-1.5 mt-1">
+                  <span className="h-px w-3 bg-gradient-to-r from-transparent to-[#2f6dff]/70" />
+                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.28em] font-bold text-white/65">
+                    Fast
                   </span>
-                  <span className="h-px w-3 bg-gradient-to-l from-transparent to-white/30" />
+                  <span className="w-1 h-1 rounded-full bg-[#2f6dff] shadow-[0_0_6px_rgba(47,109,255,0.8)]" />
+                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.28em] font-bold text-white/65">
+                    Secure
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-[#1fc796] shadow-[0_0_6px_rgba(31,199,150,0.8)]" />
+                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.28em] font-bold text-white/65">
+                    Reliable
+                  </span>
+                  <span className="h-px w-3 bg-gradient-to-l from-transparent to-[#f59e0b]/70" />
                 </span>
               </span>
             </Link>
