@@ -90,7 +90,7 @@ function SitemapPage() {
           {sections.map((section) => (
             <section
               key={section.title}
-              className="rounded-2xl border border-border/50 bg-card/70 p-6 shadow-lg"
+              className="rounded-2xl border border-border/50 bg-card/40 p-6 backdrop-blur-xl shadow-lg"
             >
               <h2 className="mb-4 text-xl font-semibold text-foreground">
                 {section.title}{" "}
@@ -122,7 +122,7 @@ function SitemapPage() {
           ))}
 
           {products && products.length > 0 && (
-            <section className="rounded-2xl border border-border/50 bg-card/70 p-6 shadow-lg sm:col-span-2">
+            <section className="rounded-2xl border border-border/50 bg-card/40 p-6 backdrop-blur-xl shadow-lg sm:col-span-2">
               <h2 className="mb-4 text-xl font-semibold text-foreground">
                 Featured Products{" "}
                 <span className="text-sm font-normal text-muted-foreground">

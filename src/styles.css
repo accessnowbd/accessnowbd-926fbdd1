@@ -131,7 +131,8 @@
     line-height: 1.55;
     background-color: #050b18;
     background-image: var(--gradient-mesh);
-    background-size: 100% 100%;
+    background-attachment: fixed;
+    background-size: 220% 220%;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     position: relative;
@@ -139,14 +140,15 @@
   body::before {
     content: "";
     position: fixed;
-    inset: 0;
+    inset: -10%;
     pointer-events: none;
     z-index: 0;
     background:
-      radial-gradient(60% 50% at 15% 20%, rgba(37, 99, 235, 0.28), transparent 70%),
-      radial-gradient(50% 45% at 85% 15%, rgba(0, 229, 255, 0.18), transparent 70%),
-      radial-gradient(55% 50% at 70% 90%, rgba(124, 58, 237, 0.26), transparent 70%);
-    opacity: 0.95;
+      radial-gradient(60% 50% at 15% 20%, rgba(37, 99, 235, 0.35), transparent 70%),
+      radial-gradient(50% 45% at 85% 15%, rgba(0, 229, 255, 0.22), transparent 70%),
+      radial-gradient(55% 50% at 70% 90%, rgba(124, 58, 237, 0.32), transparent 70%);
+    filter: blur(80px) saturate(140%);
+    opacity: 0.9;
   }
   body::after {
     content: "";
@@ -161,20 +163,24 @@
 }
 
 @layer utilities {
-  /* NOTE: backdrop-filter removed for performance. Glass effect is achieved
-     with translucent backgrounds + subtle borders + shadows instead. */
   .glass {
-    background: rgba(20, 28, 50, 0.55);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass);
   }
   .glass-strong {
-    background: rgba(24, 34, 60, 0.7);
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass-lg);
   }
   .glass-soft {
-    background: rgba(18, 26, 46, 0.45);
+    background: var(--glass-bg-soft);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
     border: 1px solid var(--glass-border-soft);
     box-shadow: var(--shadow-glass-sm);
   }
@@ -182,11 +188,11 @@
   /* SIGNATURE: Dark Glassmorphism Card */
   .gradient-border-card {
     position: relative;
-    background: linear-gradient(180deg, rgba(30,40,70,0.55), rgba(20,28,50,0.4));
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    backdrop-filter: blur(24px) saturate(170%);
+    -webkit-backdrop-filter: blur(24px) saturate(170%);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-glass);
-    isolation: isolate;
-    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
     isolation: isolate;
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
   }
@@ -225,7 +231,9 @@
 
   .gradient-border-soft {
     position: relative;
-    background: rgba(20, 28, 50, 0.5);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-glass-sm);
   }

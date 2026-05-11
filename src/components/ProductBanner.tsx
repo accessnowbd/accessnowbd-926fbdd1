@@ -159,7 +159,9 @@ export function ProductBanner({
       <div
         className="absolute inset-[10%] rounded-[22px] flex items-center justify-center overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, rgba(40,55,95,0.55), rgba(20,28,55,0.4))",
+          background: "linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))",
+          backdropFilter: "blur(18px) saturate(160%)",
+          WebkitBackdropFilter: "blur(18px) saturate(160%)",
           border: "1px solid rgba(255,255,255,0.18)",
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 32px -12px rgba(0,0,0,0.5)",
