@@ -22,6 +22,7 @@ import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate, useLocation } from "@tanstack/react-router";
+import { GlobalSearch, useGlobalSearch } from "@/components/GlobalSearch";
 
 const NAV: Array<{
   label: string;
