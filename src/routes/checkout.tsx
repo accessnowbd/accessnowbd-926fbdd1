@@ -135,8 +135,10 @@ function CheckoutPage() {
         .select("id")
         .single();
       if (error) throw error;
+      const newId = data.id as string;
       clear();
-      setSubmitted({ orderId: (data.id as string).slice(0, 8).toUpperCase() });
+      navigate({ to: "/orders/$id", params: { id: newId }, search: { new: 1 } });
+      return;
     } catch (e: unknown) {
       setErr(e instanceof Error ? e.message : "Failed to place order");
     } finally {
