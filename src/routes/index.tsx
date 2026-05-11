@@ -101,9 +101,6 @@ function Index() {
             <ProductRail key={section.category} title={section.category} items={section.items} />
           ))
         )}
-        <BundleShowcase />
-        <ProcessSection />
-        <FinalCTA />
       </main>
       <SiteFooter />
     </div>
