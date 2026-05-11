@@ -542,9 +542,10 @@ function FieldInput({
 }
 
 function ImageField({
-  field, value, label, base, onChange,
+  field, value, label, base, onChange, onBlur,
 }: {
-  field: AdminField; value: unknown; label: React.ReactNode; base: string; onChange: (v: unknown) => void;
+  field: AdminField; value: unknown; label: React.ReactNode; base: string;
+  onChange: (v: unknown) => void; onBlur?: () => void;
 }) {
   const [uploading, setUploading] = useState(false);
   const onPick = async (file: File | null) => {
@@ -559,13 +560,14 @@ function ImageField({
     if (error) { setUploading(false); return toast.error(error.message); }
     const { data } = supabase.storage.from("admin-uploads").getPublicUrl(path);
     onChange(data.publicUrl);
+    onBlur?.();
     setUploading(false);
     toast.success("Uploaded");
   };
   return (
     <div>{label}
       <div className="flex gap-2">
-        <input type="url" value={String(value ?? "")} onChange={(e) => onChange(e.target.value)} placeholder="https://… or upload" className={base} />
+        <input type="url" value={String(value ?? "")} onBlur={onBlur} onChange={(e) => onChange(e.target.value)} placeholder="https://… or upload" className={base} />
         <label className={`shrink-0 inline-flex items-center gap-1.5 h-10 px-3 rounded-lg border border-slate-200 text-sm font-semibold text-slate-700 cursor-pointer hover:bg-slate-50 ${uploading ? "opacity-60 pointer-events-none" : ""}`}>
           {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
           Upload
