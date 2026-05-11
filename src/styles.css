@@ -182,11 +182,11 @@
   /* SIGNATURE: Dark Glassmorphism Card */
   .gradient-border-card {
     position: relative;
-    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-    backdrop-filter: blur(24px) saturate(170%);
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
+    background: linear-gradient(180deg, rgba(30,40,70,0.55), rgba(20,28,50,0.4));
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-glass);
+    isolation: isolate;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
     isolation: isolate;
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
   }
