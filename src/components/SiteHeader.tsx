@@ -176,7 +176,7 @@ export function SiteHeader() {
                     src={accessNowLogo}
                     alt="AccessNow BD"
                     draggable={false}
-                    className="relative w-8 h-8 md:w-9 md:h-9 object-contain drop-shadow-[0_2px_6px_rgba(0,229,255,0.45)]"
+                    className="relative w-full h-full object-cover scale-110 drop-shadow-[0_2px_6px_rgba(0,229,255,0.45)]"
                   />
                   {/* Sweeping shine effect on hover */}
                   <span
