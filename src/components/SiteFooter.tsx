@@ -221,7 +221,7 @@ export function SiteFooter() {
                     rel="noopener noreferrer"
                     className="group relative inline-flex items-center gap-1 px-2.5 py-1 rounded-full glass-soft border border-white/15 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_-4px_var(--color-primary)]"
                   >
-                    <Sparkles className="w-3 h-3 text-primary-glow group-hover:rotate-12 transition-transform" />
+                    
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-glow via-white to-[var(--color-aqua)] font-extrabold tracking-wide">
                       Shahed IT
                     </span>
