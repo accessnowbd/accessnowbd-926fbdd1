@@ -14,6 +14,10 @@ export function useProducts() {
       if (error) throw error;
       return (data ?? []).map((r) => rowToProduct(r as never));
     },
+    staleTime: 60_000,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: false,
+    retry: 2,
   });
   return { products: q.data ?? [], isLoading: q.isLoading, error: q.error };
 }
