@@ -304,13 +304,20 @@ export function SiteHeader() {
                   </button>
                 </div>
               ) : (
-                <Link
-                  to="/auth"
-                  className="hidden sm:inline-flex items-center gap-1.5 h-9 px-4 rounded-full text-white text-sm font-semibold tracking-tight bg-gradient-to-r from-primary/30 via-violet-500/20 to-aqua/25 shadow-[0_0_0_1px_rgba(255,255,255,0.12)_inset,0_8px_24px_-10px_rgba(0,229,255,0.55)] hover:from-primary/40 hover:via-violet-500/30 hover:to-aqua/35 hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  <UserCircle2 className="w-3.5 h-3.5" />
-                  Login / Register
-                </Link>
+                <div className="hidden sm:inline-flex items-center gap-1.5">
+                  <Link
+                    to="/login"
+                    className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full text-white text-[13px] font-semibold bg-white/[0.06] border border-white/10 hover:bg-white/[0.1] hover:border-white/20 transition"
+                  >
+                    <LogIn className="w-3.5 h-3.5" /> Sign In
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full text-white text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-aqua shadow-[0_8px_24px_-10px_rgba(0,229,255,0.55)] hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" /> Register
+                  </Link>
+                </div>
               )}
 
               <button
@@ -364,13 +371,22 @@ export function SiteHeader() {
                   </button>
                 </>
               ) : (
-                <Link
-                  to="/auth"
-                  onClick={() => setOpen(false)}
-                  className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
-                >
-                  <LogIn className="w-4 h-4" /> Login / Sign Up
-                </Link>
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setOpen(false)}
+                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
+                  >
+                    <LogIn className="w-4 h-4" /> Sign In
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setOpen(false)}
+                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full glass-soft border border-white/15 text-white text-sm font-semibold hover:border-aqua/40 transition"
+                  >
+                    <Sparkles className="w-4 h-4" /> Create Account
+                  </Link>
+                </>
               )}
             </div>
           </div>
