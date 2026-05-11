@@ -322,10 +322,29 @@ function RecordForm({
 }) {
   const [data, setData] = useState<Record_>(record?.data ?? {});
   const [saving, setSaving] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const setField = (name: string, value: unknown) => {
+    setData((d) => ({ ...d, [name]: value }));
+    const f = fields.find((x) => x.name === name);
+    if (f) {
+      const err = validateField(f, value);
+      setErrors((e) => ({ ...e, [name]: err ?? "" }));
+    }
+  };
 
   const save = async () => {
+    const next: Record<string, string> = {};
     for (const f of fields) {
-      if (f.required && !data[f.name]) return toast.error(`${f.label} is required`);
+      const err = validateField(f, data[f.name]);
+      if (err) next[f.name] = err;
+    }
+    if (Object.keys(next).length) {
+      setErrors(next);
+      setTouched(Object.fromEntries(fields.map((f) => [f.name, true])));
+      toast.error("Please fix the highlighted fields");
+      return;
     }
     setSaving(true);
     const payload = { kind, data: data as never, is_active: record?.is_active ?? true };
@@ -348,7 +367,14 @@ function RecordForm({
         </div>
         <div className="px-6 py-5 space-y-4 overflow-y-auto">
           {fields.map((f) => (
-            <FieldInput key={f.name} field={f} value={data[f.name]} onChange={(v) => setData({ ...data, [f.name]: v })} />
+            <FieldInput
+              key={f.name}
+              field={f}
+              value={data[f.name]}
+              error={touched[f.name] ? errors[f.name] : ""}
+              onBlur={() => setTouched((t) => ({ ...t, [f.name]: true }))}
+              onChange={(v) => setField(f.name, v)}
+            />
           ))}
         </div>
         <div className="px-6 py-4 border-t border-slate-200 flex justify-end gap-2">
