@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Sparkles, Zap, Shield, Headphones, Star, Plus, Minus, Pause, Play, MessageCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles, Zap, Shield, Headphones, Star, Plus, Minus, MessageCircle } from "lucide-react";
 import heroPayment from "@/assets/hero-payment.jpg";
 import heroDelivery from "@/assets/hero-delivery.jpg";
 import heroWarranty from "@/assets/hero-warranty.jpg";
