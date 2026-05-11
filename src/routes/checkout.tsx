@@ -159,35 +159,13 @@ function CheckoutPage() {
     );
   }
 
-  if (items.length === 0 && !submitted) {
+  if (items.length === 0) {
     return (
       <div className="min-h-screen grid place-items-center px-4">
         <GlassCard className="text-center">
           <h1 className="text-2xl font-semibold">Your cart is empty</h1>
           <Link to="/" className="text-primary underline mt-3 inline-block">Browse subscriptions</Link>
         </GlassCard>
-      </div>
-    );
-  }
-
-  if (submitted) {
-    return (
-      <div className="min-h-screen">
-        <AuroraHeader />
-        <div className="mx-auto max-w-xl px-4 py-16 text-center">
-          <div className="w-20 h-20 rounded-full bg-aurora grid place-items-center mx-auto glow-aqua">
-            <Check className="w-10 h-10 text-primary-foreground" />
-          </div>
-          <h1 className="mt-6 text-aurora" style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 600 }}>Order placed!</h1>
-          <p className="text-muted-foreground mt-2">Your order ID is <span className="font-semibold text-foreground">{submitted.orderId}</span></p>
-          <p className="text-sm text-foreground/80 mt-4">
-            We're verifying your payment. You'll receive your subscription details on <span className="font-semibold">{form.email}</span> within 5–30 minutes.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3 justify-center">
-            <GlassButton size="lg" onClick={() => navigate({ to: "/orders" })}>View my orders</GlassButton>
-            <GlassButton size="lg" variant="secondary" onClick={() => navigate({ to: "/" })}>Back to home</GlassButton>
-          </div>
-        </div>
       </div>
     );
   }
