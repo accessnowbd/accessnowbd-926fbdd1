@@ -28,6 +28,7 @@ function CartPage() {
   const { items, remove, setQty, total, count } = useCart();
   const navigate = useNavigate();
   const { coupon } = Route.useSearch();
+  const { data: shopConfig } = useShopConfig();
 
   const applied = useMemo(() => applyCoupon(coupon, total), [coupon, total]);
   const [input, setInput] = useState(coupon);
