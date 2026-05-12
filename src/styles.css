@@ -684,6 +684,88 @@
     color: oklch(0.22 0.04 285) !important;
   }
 
+  /* === Mobile header nav — match desktop white-glass look === */
+  /* Mobile horizontal scroll pill nav (lg:hidden, sits below sticky header) */
+  html.theme-white header.sticky > div > .lg\:hidden {
+    background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(250,248,255,0.72)) !important;
+    border-top: 1px solid rgba(124, 58, 237, 0.14) !important;
+    box-shadow: 0 8px 22px -16px rgba(124, 58, 237, 0.25) !important;
+  }
+  /* Each scroll-pill link in mobile nav */
+  html.theme-white header.sticky nav .glass-soft,
+  html.theme-white header nav a.glass-soft,
+  html.theme-white header nav button.glass-soft {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(124, 58, 237, 0.18) !important;
+    color: oklch(0.30 0.04 285) !important;
+    box-shadow: 0 2px 10px -4px rgba(124, 58, 237, 0.18) !important;
+  }
+  html.theme-white header nav a.glass-soft:hover,
+  html.theme-white header nav button.glass-soft:hover {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: rgba(124, 58, 237, 0.30) !important;
+    color: oklch(0.22 0.04 285) !important;
+  }
+  /* Active pill on mobile (uses !important Tailwind overrides via activeProps) */
+  html.theme-white header nav a.\!text-primary,
+  html.theme-white header nav a[class*="!text-primary"] {
+    background: linear-gradient(135deg, rgba(196, 181, 253, 0.55), rgba(186, 230, 253, 0.45)) !important;
+    border: 1px solid rgba(124, 58, 237, 0.45) !important;
+    color: oklch(0.42 0.22 295) !important;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.6) inset,
+      0 4px 18px -6px rgba(124, 58, 237, 0.45) !important;
+  }
+
+  /* Mobile menu drawer (open menu) — frosted white panel */
+  html.theme-white header > .lg\:hidden.relative {
+    background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,248,255,0.92)) !important;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.18) !important;
+    box-shadow: 0 18px 40px -20px rgba(124, 58, 237, 0.30) !important;
+  }
+  /* Drawer link tiles → soft white glass with violet rim */
+  html.theme-white header > .lg\:hidden.relative nav a {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(124, 58, 237, 0.18) !important;
+    color: oklch(0.22 0.04 285) !important;
+    box-shadow: 0 2px 10px -4px rgba(124, 58, 237, 0.18) !important;
+  }
+  html.theme-white header > .lg\:hidden.relative nav a:hover {
+    background: rgba(255, 255, 255, 0.98) !important;
+    border-color: rgba(124, 58, 237, 0.35) !important;
+  }
+  /* Sign Out / secondary action button in drawer */
+  html.theme-white header > .lg\:hidden.relative button.glass-soft {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(124, 58, 237, 0.18) !important;
+    color: oklch(0.22 0.04 285) !important;
+  }
+  /* Sign In / Register split pill in drawer */
+  html.theme-white header > .lg\:hidden.relative .bg-white\/\[0\.05\] {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(124, 58, 237, 0.22) !important;
+    box-shadow: 0 8px 24px -12px rgba(124, 58, 237, 0.30) !important;
+  }
+  /* ChevronRight & icons inside drawer */
+  html.theme-white header > .lg\:hidden.relative svg {
+    color: oklch(0.42 0.20 295) !important;
+  }
+  html.theme-white header > .lg\:hidden.relative [class*="bg-gradient"] svg {
+    color: #ffffff !important;
+  }
+
+  /* Mobile-only: re-enable a subtle frost on header glass elements (mobile blur is otherwise disabled site-wide) */
+  @media (max-width: 1023px), (pointer: coarse) {
+    html.theme-white header,
+    html.theme-white header.sticky > div,
+    html.theme-white header > .lg\:hidden.relative,
+    html.theme-white header nav .glass-soft,
+    html.theme-white header nav a.glass-soft {
+      backdrop-filter: blur(10px) saturate(160%) !important;
+      -webkit-backdrop-filter: blur(10px) saturate(160%) !important;
+    }
+  }
+
   /* Generic nav pill borders & dividers anywhere */
   html.theme-white nav [class*="border-white\\/"] {
     border-color: rgba(124, 58, 237, 0.18) !important;
