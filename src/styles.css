@@ -136,66 +136,66 @@
     position: relative;
     overflow-x: hidden;
   }
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background:
-      radial-gradient(60% 50% at 12% 18%, rgba(124, 58, 237, 0.45), transparent 70%),
-      radial-gradient(50% 45% at 88% 14%, rgba(6, 182, 212, 0.28), transparent 70%),
-      radial-gradient(55% 50% at 72% 92%, rgba(236, 72, 153, 0.22), transparent 70%),
-      radial-gradient(45% 40% at 30% 80%, rgba(99, 102, 241, 0.32), transparent 70%);
-    transform: translateZ(0);
-    will-change: transform;
-  }
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
+  /* Single static background layer — baked into body (no fixed pseudo-elements
+     to avoid scroll-time repaints). Grid pattern only on large screens. */
+  body {
+    background-color: #06051a;
     background-image:
-      linear-gradient(rgba(140, 180, 255, 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(140, 180, 255, 0.045) 1px, transparent 1px),
-      radial-gradient(ellipse at 50% 0%, transparent 38%, rgba(6, 5, 26, 0.65) 100%),
-      linear-gradient(180deg, rgba(6,5,26,0) 60%, rgba(6,5,26,0.5) 100%);
-    background-size: 56px 56px, 56px 56px, auto, auto;
-    mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 40%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 40%, transparent 100%);
-    transform: translateZ(0);
+      radial-gradient(60% 50% at 12% 18%, rgba(124, 58, 237, 0.38), transparent 70%),
+      radial-gradient(50% 45% at 88% 14%, rgba(6, 182, 212, 0.22), transparent 70%),
+      radial-gradient(55% 50% at 72% 92%, rgba(236, 72, 153, 0.18), transparent 70%),
+      radial-gradient(45% 40% at 30% 80%, rgba(99, 102, 241, 0.26), transparent 70%);
+    background-attachment: scroll;
+  }
+  @media (min-width: 1024px) {
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(140, 180, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140, 180, 255, 0.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 40%, transparent 100%);
+    }
   }
   body > * { position: relative; z-index: 1; }
 }
 
 @layer utilities {
+  /* Glass — desktop gets backdrop blur; mobile/tablet falls back to a slightly
+     more opaque bg to keep the look without the GPU cost. */
   .glass {
     background: var(--glass-bg);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass);
-    isolation: isolate;
-    contain: paint;
-    transform: translateZ(0);
+    background-color: rgba(20, 22, 45, 0.55);
   }
   .glass-strong {
     background: var(--glass-bg-strong);
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass-lg);
-    isolation: isolate;
-    contain: paint;
-    transform: translateZ(0);
+    background-color: rgba(24, 26, 52, 0.65);
   }
   .glass-soft {
-    /* Nested inside .glass-strong — drop backdrop-filter to avoid scroll tile artifacts */
     background: var(--glass-bg-soft);
     border: 1px solid var(--glass-border-soft);
     box-shadow: var(--shadow-glass-sm);
-    transform: translateZ(0);
+  }
+  @media (min-width: 1024px) and (pointer: fine) {
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+    }
+    .glass-strong {
+      background: var(--glass-bg-strong);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+    }
   }
 
   /* SIGNATURE: Dark Glassmorphism Card — premium, no jitter */
@@ -214,7 +214,7 @@
     inset: 0;
     padding: 1px;
     border-radius: inherit;
-    background: var(--gradient-conic);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.55), rgba(6, 182, 212, 0.45) 50%, rgba(236, 72, 153, 0.45));
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
@@ -242,11 +242,16 @@
 
   .gradient-border-soft {
     position: relative;
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    background: rgba(20, 22, 45, 0.5);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-glass-sm);
+  }
+  @media (min-width: 1024px) and (pointer: fine) {
+    .gradient-border-soft {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px) saturate(140%);
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
+    }
   }
   .gradient-border-soft::before {
     content: "";
@@ -399,33 +404,45 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-      180deg,
-      oklch(0.65 0.22 295) 0%,
-      oklch(0.62 0.2 270) 50%,
-      oklch(0.72 0.18 210) 100%
-    );
+    background: oklch(0.55 0.18 285);
     border-radius: 999px;
     border: 2px solid transparent;
     background-clip: padding-box;
-    box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
-      0 0 8px rgba(0, 229, 255, 0.35);
-    transition: background 0.3s ease;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(
-      180deg,
-      oklch(0.72 0.24 295) 0%,
-      oklch(0.7 0.22 260) 50%,
-      oklch(0.8 0.2 200) 100%
-    );
+    background: oklch(0.65 0.22 285);
     background-clip: padding-box;
-    box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.3),
-      0 0 14px rgba(124, 58, 237, 0.55);
   }
   ::-webkit-scrollbar-corner {
     background: transparent;
+  }
+}
+
+/* ===== Performance guards ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Disable continuous decorative animations on small/touch devices to save battery + GPU */
+@media (max-width: 1023px), (pointer: coarse) {
+  .animate-blob,
+  .animate-aurora-pan,
+  .animate-orbit,
+  .animate-float,
+  .animate-pulse-glow,
+  .animate-shine {
+    animation: none !important;
+  }
+}
+
+/* Tame Tailwind's backdrop-blur utilities on small/touch devices to prevent scroll lag */
+@media (max-width: 1023px), (pointer: coarse) {
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }
