@@ -215,6 +215,7 @@ export type Database = {
           gradient: string
           image_url: string
           is_active: boolean
+          meta: Json
           name: string
           plans: Json
           short_description: string
@@ -238,6 +239,7 @@ export type Database = {
           gradient?: string
           image_url?: string
           is_active?: boolean
+          meta?: Json
           name: string
           plans?: Json
           short_description?: string
@@ -261,6 +263,7 @@ export type Database = {
           gradient?: string
           image_url?: string
           is_active?: boolean
+          meta?: Json
           name?: string
           plans?: Json
           short_description?: string
