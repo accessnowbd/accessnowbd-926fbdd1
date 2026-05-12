@@ -270,7 +270,7 @@ function HeroExperience() {
                 </span>
               </div>
               <h3 className="mt-2 text-xl md:text-[22px] font-extrabold text-white" style={{ fontFamily: "var(--font-display)", lineHeight: 1.15, textShadow: "0 2px 18px rgba(0,0,0,0.4)" }}>
-                <span className="text-neon">Verified Partner</span> ব্র্যান্ডসমূহ
+                <span className="text-neon">বিশ্বস্ত</span> ব্র্যান্ড সমূহ
               </h3>
             </div>
 
