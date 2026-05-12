@@ -131,17 +131,43 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
             <X className="w-5 h-5" strokeWidth={2} />
           </Link>
 
-          {/* Brand logo + name */}
-          <Link to="/" className="flex items-center justify-center gap-2.5 mb-7">
-            <img src={accessNowLogo} alt="AccessNow BD" className="h-8 w-auto object-contain" draggable={false} />
-            <div className="flex items-baseline gap-1 leading-none">
-              <span className="font-extrabold tracking-tight text-slate-900 text-[15px]">Access</span>
-              <span className="font-extrabold tracking-tight text-[#2f6dff] text-[15px]">Now</span>
-              <span className="font-extrabold tracking-tight text-[#f59e0b] text-[15px]">BD</span>
-              <span className="ml-1 text-[10px] font-semibold text-slate-500 hidden sm:inline">
-                Your Trusted Online Store
+          {/* Brand logo + wordmark */}
+          <Link to="/" className="flex items-center justify-center gap-3 mb-7 group">
+            <img
+              src={accessNowLogo}
+              alt="AccessNow BD"
+              draggable={false}
+              className="h-11 w-11 object-contain drop-shadow-[0_4px_10px_rgba(47,109,255,0.35)] group-hover:scale-105 transition-transform"
+            />
+            <span className="leading-[1.05]">
+              <span className="flex items-baseline gap-1.5 whitespace-nowrap">
+                <span
+                  className="font-extrabold tracking-tight bg-clip-text text-transparent text-[20px]"
+                  style={{ backgroundImage: "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)" }}
+                >
+                  Access
+                </span>
+                <span
+                  className="font-extrabold tracking-tight bg-clip-text text-transparent text-[20px]"
+                  style={{ backgroundImage: "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)" }}
+                >
+                  Now
+                </span>
+                <span
+                  className="font-extrabold tracking-tight bg-clip-text text-transparent text-[20px]"
+                  style={{ backgroundImage: "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)" }}
+                >
+                  BD
+                </span>
               </span>
-            </div>
+              <span className="mt-1 flex items-center gap-1.5">
+                <span className="text-[9px] uppercase tracking-[0.22em] font-bold text-slate-500">Fast</span>
+                <span className="w-1 h-1 rounded-full bg-[#2f6dff]" />
+                <span className="text-[9px] uppercase tracking-[0.22em] font-bold text-slate-500">Secure</span>
+                <span className="w-1 h-1 rounded-full bg-[#1fc796]" />
+                <span className="text-[9px] uppercase tracking-[0.22em] font-bold text-slate-500">Reliable</span>
+              </span>
+            </span>
           </Link>
 
           {/* Heading */}
