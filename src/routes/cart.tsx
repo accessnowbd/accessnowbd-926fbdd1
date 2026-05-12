@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, Tag, X, Check } from "lucide-react";
+import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, Tag, X, Check, MessageCircle } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
@@ -11,6 +11,8 @@ import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary } from "@/components/ui-glass/OrderSummary";
 import { applyCoupon } from "@/lib/coupons";
+import { waOrderUrl } from "@/lib/whatsapp";
+import { useShopConfig } from "@/hooks/useShopConfig";
 
 const cartSearchSchema = z.object({
   coupon: fallback(z.string(), "").default(""),
