@@ -1,10 +1,26 @@
 // AccessNow BD — AI support chat (streaming via Lovable AI Gateway)
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
+  /^https:\/\/accessnowbd\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/,
+  /^https:\/\/accessnowbd\.com$/,
+  /^https:\/\/(www\.)?accessnowbd\.com$/,
+  /^http:\/\/localhost(:\d+)?$/,
+];
+function corsFor(req: Request) {
+  const origin = req.headers.get("origin") ?? "";
+  const allow = ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin));
+  return {
+    "Access-Control-Allow-Origin": allow ? origin : "null",
+    "Vary": "Origin",
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  } as Record<string, string>;
+}
+
+const MAX_MESSAGES = 20;
+const MAX_CONTENT_LEN = 4000;
 
 const SYSTEM_PROMPT = `তুমি AccessNow BD-এর প্রিমিয়াম সাপোর্ট অ্যাসিস্ট্যান্ট। বাংলায় (প্রয়োজনে English mix) বন্ধুসুলভ, সংক্ষিপ্ত, সঠিক উত্তর দাও।
 
