@@ -811,25 +811,46 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
                   placeholder="Or paste image URL…"
                   className="h-9 px-3 rounded-md border border-slate-200 text-xs outline-none focus:border-violet-400"
                 />
-                <div className="border-t border-dashed border-slate-200 pt-3">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-violet-600 flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" /> AI image (optional prompt)
-                  </label>
-                  <input
-                    value={imagePrompt}
-                    onChange={(e) => setImagePrompt(e.target.value)}
-                    placeholder="leave blank for auto"
-                    className="mt-1.5 w-full h-9 px-3 rounded-md border border-slate-200 text-xs outline-none focus:border-violet-400"
-                  />
-                  <button
-                    onClick={generateImage}
-                    disabled={aiBusy}
-                    className="mt-2 w-full inline-flex items-center justify-center gap-1.5 h-10 rounded-full text-white text-xs font-bold disabled:opacity-50"
-                    style={{ background: "linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)" }}
-                  >
-                    {ai === "image-gen" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />}
-                    Generate with AI
-                  </button>
+                <div className="relative mt-1 rounded-2xl p-[1px] overflow-hidden" style={{ background: "linear-gradient(135deg, rgba(236,72,153,0.55), rgba(139,92,246,0.55), rgba(59,130,246,0.55))" }}>
+                  <div className="relative rounded-2xl p-3.5 bg-white/70 backdrop-blur-xl">
+                    {/* aurora blobs inside the card */}
+                    <div className="pointer-events-none absolute -top-10 -left-8 w-32 h-32 rounded-full bg-fuchsia-300/40 blur-2xl" />
+                    <div className="pointer-events-none absolute -bottom-10 -right-8 w-36 h-36 rounded-full bg-violet-300/40 blur-2xl" />
+                    <div className="pointer-events-none absolute top-6 right-10 w-20 h-20 rounded-full bg-sky-300/30 blur-2xl" />
+
+                    <div className="relative">
+                      <label className="text-[10px] font-extrabold uppercase tracking-[0.18em] inline-flex items-center gap-1.5 bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg,#ec4899,#8b5cf6,#3b82f6)" }}>
+                        <Sparkles className="w-3 h-3 text-fuchsia-500" />
+                        AI Image · Gemini
+                        <span className="ml-1 text-[8px] font-bold text-violet-700 bg-violet-100/80 px-1.5 py-0.5 rounded-full not-italic tracking-normal">PREMIUM</span>
+                      </label>
+                      <div className="mt-2 relative">
+                        <input
+                          value={imagePrompt}
+                          onChange={(e) => setImagePrompt(e.target.value)}
+                          placeholder="leave blank for auto · describe the look you want…"
+                          className="w-full h-10 pl-9 pr-3 rounded-xl border border-white/60 bg-white/80 backdrop-blur text-xs outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200/60 placeholder:text-slate-400 text-slate-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]"
+                        />
+                        <Wand2 className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-violet-500" />
+                      </div>
+                      <button
+                        onClick={generateImage}
+                        disabled={aiBusy}
+                        className="group relative mt-2.5 w-full inline-flex items-center justify-center gap-2 h-11 rounded-xl text-white text-xs font-extrabold uppercase tracking-wider disabled:opacity-50 overflow-hidden shadow-[0_10px_30px_-10px_rgba(139,92,246,0.7)] hover:shadow-[0_14px_36px_-10px_rgba(139,92,246,0.85)] transition-shadow"
+                        style={{ background: "linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%)" }}
+                      >
+                        <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "linear-gradient(135deg, #f472b6 0%, #a78bfa 50%, #60a5fa 100%)" }} />
+                        <span className="relative inline-flex items-center gap-2">
+                          {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                          {ai === "image-gen" ? "Generating…" : "Generate with AI"}
+                        </span>
+                      </button>
+                      <div className="mt-2 flex items-center justify-center gap-1.5 text-[10px] text-slate-500 font-semibold">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        Powered by your Gemini API key · square HD output
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </SectionCard>
