@@ -79,6 +79,18 @@ export function SupportWidget() {
     }
   }, [messages, loading]);
 
+  useEffect(() => {
+    if (!open && !chooser) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        setChooser(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, chooser]);
+
   async function streamReply(history: Msg[]) {
     setLoading(true);
     let acc = "";
