@@ -17,7 +17,7 @@ function ratingFor(slug: string): { rating: string; reviews: number } {
   return { rating, reviews };
 }
 
-export function ProductCard({ product }: { product: Product }) {
+function ProductCardImpl({ product }: { product: Product }) {
   const { add } = useCart();
   const queryClient = useQueryClient();
   const cardRef = useRef<HTMLAnchorElement | null>(null);
