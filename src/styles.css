@@ -547,6 +547,92 @@
     color: oklch(0.45 0.22 295);
   }
 
+  /* === Header chips & inline-styled pills → white glassmorphism === */
+  html.theme-white .relative.z-40.overflow-hidden.bg-background span[style*="linear-gradient"],
+  html.theme-white .relative.z-40.overflow-hidden.bg-background a[style*="linear-gradient"] {
+    background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(245,243,255,0.7)) !important;
+    border-color: rgba(124, 58, 237, 0.22) !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.7),
+      0 4px 14px -6px rgba(124, 58, 237, 0.25) !important;
+    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+  }
+  html.theme-white .relative.z-40.overflow-hidden.bg-background .bg-clip-text.text-transparent {
+    background-image: linear-gradient(135deg, #7C3AED 0%, #DB2777 50%, #0EA5E9 100%) !important;
+    color: transparent !important;
+  }
+  html.theme-white .relative.z-40.overflow-hidden.bg-background .bg-white\/15,
+  html.theme-white .relative.z-40.overflow-hidden.bg-background [class*="bg-white\\/1"] {
+    background-color: rgba(124, 58, 237, 0.22) !important;
+  }
+  html.theme-white .relative.z-40.overflow-hidden.bg-background .text-emerald-200,
+  html.theme-white .relative.z-40.overflow-hidden.bg-background .text-emerald-300 {
+    color: oklch(0.45 0.18 158) !important;
+  }
+  html.theme-white .relative.z-40.overflow-hidden.bg-background a:hover {
+    background-color: rgba(124, 58, 237, 0.10) !important;
+  }
+
+  /* Sticky main header chrome */
+  html.theme-white header.sticky [class*="bg-background\\/"] {
+    background-color: rgba(255, 255, 255, 0.72) !important;
+  }
+  html.theme-white header .bg-background\/85 {
+    background-color: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(124, 58, 237, 0.18) !important;
+  }
+  html.theme-white header [class*="border-white\\/"],
+  html.theme-white header.sticky [class*="border-white\\/"] {
+    border-color: rgba(124, 58, 237, 0.18) !important;
+  }
+  /* Magnetic nav sliding pill */
+  html.theme-white header.sticky nav span[style*="color-mix"] {
+    background: linear-gradient(135deg, rgba(196, 181, 253, 0.55), rgba(186, 230, 253, 0.45)) !important;
+    border: 1px solid rgba(124, 58, 237, 0.45) !important;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.6) inset,
+      0 0 22px -4px rgba(124, 58, 237, 0.45),
+      0 8px 26px -12px rgba(124, 58, 237, 0.5) !important;
+  }
+  /* Header icons → violet, except on gradient buttons */
+  html.theme-white header svg,
+  html.theme-white header.sticky svg {
+    color: oklch(0.40 0.18 295);
+  }
+  html.theme-white header [class*="bg-gradient"] svg,
+  html.theme-white header.sticky [class*="bg-gradient"] svg,
+  html.theme-white header .bg-aurora svg {
+    color: #ffffff !important;
+  }
+  html.theme-white header .text-white\/70,
+  html.theme-white header .text-white\/75,
+  html.theme-white header .text-white\/80,
+  html.theme-white header .text-white\/85 {
+    color: oklch(0.40 0.04 285) !important;
+  }
+  /* Sign In / Register split pill container */
+  html.theme-white header .bg-white\/\[0\.05\] {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(124, 58, 237, 0.18) !important;
+    box-shadow: 0 8px 24px -12px rgba(124, 58, 237, 0.3) !important;
+  }
+  html.theme-white header .bg-white\/10 {
+    background-color: rgba(124, 58, 237, 0.10) !important;
+    color: oklch(0.40 0.18 295) !important;
+    border-color: rgba(124, 58, 237, 0.22) !important;
+  }
+
+  /* Generic nav pill borders & dividers anywhere */
+  html.theme-white nav [class*="border-white\\/"] {
+    border-color: rgba(124, 58, 237, 0.18) !important;
+  }
+  html.theme-white nav [class*="bg-white\\/"] {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+  }
+
   /* ===== Site-wide catch: any text-white/NN arbitrary opacity → readable dark ===== */
   html.theme-white [class*="text-white\\/"] {
     color: oklch(0.32 0.04 285) !important;
