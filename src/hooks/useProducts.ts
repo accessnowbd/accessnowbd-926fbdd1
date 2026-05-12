@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { rowToProduct, type Product } from "@/data/products";
+import type { Product } from "@/data/products";
 
 // Tunables: SWR strategy for product data.
 // - staleTime: how long data is considered fresh (no background refetch).
@@ -8,18 +8,22 @@ import { rowToProduct, type Product } from "@/data/products";
 const PRODUCT_STALE_MS = 10 * 60_000; // 10 minutes
 const PRODUCT_GC_MS = 60 * 60_000;    // 1 hour
 
+async function fetchProducts(): Promise<Product[]> {
+  const response = await fetch("/api/public/products");
+  if (!response.ok) throw new Error("Products could not be loaded");
+  return response.json();
+}
+
+async function fetchProduct(slug: string): Promise<Product | null> {
+  const response = await fetch(`/api/public/products?slug=${encodeURIComponent(slug)}`);
+  if (!response.ok) throw new Error("Product could not be loaded");
+  return response.json();
+}
+
 export function useProducts() {
   const q = useQuery({
     queryKey: ["products"],
-    queryFn: async (): Promise<Product[]> => {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("is_active", true)
-        .order("sort_order", { ascending: true });
-      if (error) throw error;
-      return (data ?? []).map((r) => rowToProduct(r as never));
-    },
+    queryFn: fetchProducts,
     staleTime: PRODUCT_STALE_MS,
     gcTime: PRODUCT_GC_MS,
     refetchOnMount: false,
@@ -35,16 +39,7 @@ export function useProduct(slug: string | undefined) {
   const q = useQuery({
     queryKey: ["product", slug],
     enabled: !!slug,
-    queryFn: async (): Promise<Product | null> => {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("slug", slug!)
-        .eq("is_active", true)
-        .maybeSingle();
-      if (error) throw error;
-      return data ? rowToProduct(data as never) : null;
-    },
+    queryFn: () => fetchProduct(slug!),
     // Seed from the products list cache (and from any prior single-product
     // prefetch via the same queryKey) so the detail page paints instantly.
     initialData: () =>

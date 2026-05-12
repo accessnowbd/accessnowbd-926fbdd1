@@ -5,8 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCart } from "@/context/CartContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { ProductBanner } from "@/components/ProductBanner";
-import { supabase } from "@/integrations/supabase/client";
-import { rowToProduct, type Product } from "@/data/products";
+import type { Product } from "@/data/products";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
@@ -41,14 +40,9 @@ export function ProductCard({ product }: { product: Product }) {
       queryClient.prefetchQuery({
         queryKey: ["product", slug],
         queryFn: async (): Promise<Product | null> => {
-          const { data, error } = await supabase
-            .from("products")
-            .select("*")
-            .eq("slug", slug)
-            .eq("is_active", true)
-            .maybeSingle();
-          if (error) throw error;
-          return data ? rowToProduct(data as never) : null;
+          const response = await fetch(`/api/public/products?slug=${encodeURIComponent(slug)}`);
+          if (!response.ok) throw new Error("Product could not be loaded");
+          return response.json();
         },
         staleTime: 5 * 60_000,
       });
