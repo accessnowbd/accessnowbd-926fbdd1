@@ -174,10 +174,47 @@ export function SupportWidget() {
     <>
       {/* === Floating launcher === */}
       {!open && (
-        <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-2">
+        <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+          {/* Chooser popup */}
+          {chooser && (
+            <div className="flex flex-col items-stretch gap-2.5 w-[230px] animate-fade-in">
+              <button
+                onClick={() => { setChooser(false); setOpen(true); setTab("ai"); }}
+                className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0b0f29]/95 backdrop-blur-xl px-3.5 py-3 text-left shadow-[0_20px_50px_-15px_rgba(0,0,0,0.7)] hover:border-violet-400/50 transition"
+              >
+                <span className="grid place-items-center h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-purple-600 text-white shadow-[0_10px_24px_-6px_rgba(168,85,247,0.7)] shrink-0">
+                  <Bot className="h-5 w-5" />
+                </span>
+                <div className="leading-tight">
+                  <div className="text-[13px] font-extrabold text-white">AI Support</div>
+                  <div className="text-[11px] text-white/60 mt-0.5">তাৎক্ষণিক উত্তর পান</div>
+                </div>
+              </button>
+
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setChooser(false)}
+                className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0b0f29]/95 backdrop-blur-xl px-3.5 py-3 text-left shadow-[0_20px_50px_-15px_rgba(0,0,0,0.7)] hover:border-emerald-400/50 transition"
+              >
+                <span className="relative grid place-items-center h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-white shadow-[0_10px_24px_-6px_rgba(16,185,129,0.7)] shrink-0">
+                  <MessageCircle className="h-5 w-5" />
+                  <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-300 ring-2 ring-[#0b0f29] animate-pulse" />
+                </span>
+                <div className="leading-tight">
+                  <div className="text-[13px] font-extrabold text-white">WhatsApp</div>
+                  <div className="text-[11px] text-white/60 mt-0.5">সরাসরি কথা বলুন</div>
+                </div>
+              </a>
+
+              <div className="text-center text-[11px] text-white/55 mt-1">কোনটি পছন্দ করবেন?</div>
+            </div>
+          )}
+
           <button
-            onClick={() => setOpen(true)}
-            aria-label="Open support"
+            onClick={() => (chooser ? setChooser(false) : setChooser(true))}
+            aria-label={chooser ? "Close support menu" : "Open support"}
             className="relative group"
           >
             {/* Soft ambient glow */}
@@ -195,28 +232,29 @@ export function SupportWidget() {
 
             {/* Main orb */}
             <span className="relative grid place-items-center h-16 w-16 rounded-full bg-gradient-to-br from-[#1a1240] via-[#2a1a5e] to-[#0d1b3d] text-white shadow-[0_22px_50px_-12px_rgba(124,58,237,0.65)] ring-1 ring-white/20 overflow-hidden">
-              {/* Inner shine */}
               <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/20 blur-[3px]" />
-              {/* Bottom glow */}
               <span className="absolute -bottom-4 inset-x-3 h-6 rounded-full bg-aqua/40 blur-xl" />
 
-              {/* Gradient-stroked support icon */}
-              <MessageCircleMore
-                className="h-8 w-8 relative drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]"
-                strokeWidth={2.4}
-                style={{
-                  stroke: "url(#supportIconGrad)",
-                }}
-              />
-              <svg width="0" height="0" className="absolute">
-                <defs>
-                  <linearGradient id="supportIconGrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#ffffff" />
-                    <stop offset="55%" stopColor="#bdf6ff" />
-                    <stop offset="100%" stopColor="#a78bfa" />
-                  </linearGradient>
-                </defs>
-              </svg>
+              {chooser ? (
+                <X className="h-7 w-7 relative text-white drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]" strokeWidth={2.6} />
+              ) : (
+                <>
+                  <MessageCircleMore
+                    className="h-8 w-8 relative drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]"
+                    strokeWidth={2.4}
+                    style={{ stroke: "url(#supportIconGrad)" }}
+                  />
+                  <svg width="0" height="0" className="absolute">
+                    <defs>
+                      <linearGradient id="supportIconGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="#ffffff" />
+                        <stop offset="55%" stopColor="#bdf6ff" />
+                        <stop offset="100%" stopColor="#a78bfa" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </>
+              )}
             </span>
           </button>
 
