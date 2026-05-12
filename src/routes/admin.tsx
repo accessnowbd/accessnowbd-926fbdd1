@@ -75,10 +75,10 @@ function AdminBootSplash() {
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const cached = readAdminCache(user?.id);
-  // Optimistic: if cache says admin, render shell instantly. Verify silently in background.
-  const [isAdmin, setIsAdmin] = useState<boolean>(cached ?? false);
-  const [verified, setVerified] = useState<boolean>(cached !== null);
+  // Read cache eagerly (any uid). If it says admin, render shell instantly while auth resolves.
+  const cached = useMemo(() => readAdminCacheAny(), []);
+  const [isAdmin, setIsAdmin] = useState<boolean>(cached?.isAdmin === true);
+  const [verified, setVerified] = useState<boolean>(false);
 
   useEffect(() => {
     if (loading) return;
@@ -96,10 +96,11 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate]);
 
-  // Only block on first-ever visit (no cache and not yet verified).
-  if ((loading || !verified) && cached === null) {
+  // Only block when we have NO optimistic admin signal at all.
+  if (!isAdmin && (loading || !verified)) {
     return <AdminBootSplash />;
   }
+
 
   if (verified && !isAdmin) {
     return (
