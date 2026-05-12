@@ -373,9 +373,9 @@ export function SiteHeader() {
                   activeOptions={{ exact: n.to === "/" }}
                   activeProps={{
                     className:
-                      "bg-gradient-to-r from-primary/30 via-violet-500/20 to-aqua/25 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.12)_inset]",
+                      "!text-primary !border-[color:color-mix(in_oklab,var(--primary)_45%,transparent)] !bg-[linear-gradient(135deg,color-mix(in_oklab,var(--primary)_22%,transparent),color-mix(in_oklab,var(--primary)_10%,transparent))] shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_0_22px_-4px_var(--primary),0_8px_26px_-12px_rgba(124,58,237,0.7)]",
                   }}
-                  className="shrink-0 inline-flex items-center h-9 px-3.5 rounded-full text-[12.5px] font-semibold text-white/75 hover:text-white glass-soft border border-white/10 transition-colors"
+                  className="shrink-0 inline-flex items-center h-9 px-3.5 rounded-full text-[12.5px] font-semibold text-white/75 hover:text-white glass-soft border border-white/10 transition-all"
                 >
                   {n.label}
                 </Link>
@@ -528,32 +528,43 @@ function MagneticNav() {
         fontSize: "clamp(11.5px, 0.95vw, 14px)",
       }}
     >
-      {/* Magnetic sliding pill */}
+      {/* Magnetic sliding pill — premium purple glow (matches Dashboard active) */}
       <span
         aria-hidden
-        className="pointer-events-none absolute top-1/2 -translate-y-1/2 h-9 rounded-full bg-gradient-to-r from-primary/30 via-violet-500/20 to-aqua/25 shadow-[0_0_0_1px_rgba(255,255,255,0.12)_inset,0_8px_24px_-10px_rgba(0,229,255,0.55)] transition-[left,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="pointer-events-none absolute top-1/2 -translate-y-1/2 h-9 rounded-full transition-[left,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{
           left: pill.left,
           width: pill.width,
           opacity: pill.visible ? 1 : 0,
+          background:
+            "linear-gradient(135deg, color-mix(in oklab, var(--primary) 22%, transparent), color-mix(in oklab, var(--primary) 10%, transparent))",
+          border: "1px solid color-mix(in oklab, var(--primary) 45%, transparent)",
+          boxShadow:
+            "0 0 0 1px rgba(255,255,255,0.06) inset, 0 0 22px -4px var(--primary), 0 8px 26px -12px rgba(124,58,237,0.7)",
         }}
       />
-      {NAV.map((n, i) => (
-        <Link
-          key={n.to}
-          to={n.to}
-          ref={(el) => {
-            itemRefs.current[i] = el;
-          }}
-          className="relative z-10 py-2 rounded-full text-white/75 hover:text-white transition-colors whitespace-nowrap"
-          style={{
-            paddingLeft: "clamp(8px, 0.9vw, 16px)",
-            paddingRight: "clamp(8px, 0.9vw, 16px)",
-          }}
-        >
-          {n.label}
-        </Link>
-      ))}
+      {NAV.map((n, i) => {
+        const isActive = i === activeIndex;
+        return (
+          <Link
+            key={n.to}
+            to={n.to}
+            ref={(el) => {
+              itemRefs.current[i] = el;
+            }}
+            className={`relative z-10 py-2 rounded-full transition-colors whitespace-nowrap ${
+              isActive ? "text-primary" : "text-white/75 hover:text-white"
+            }`}
+            style={{
+              paddingLeft: "clamp(8px, 0.9vw, 16px)",
+              paddingRight: "clamp(8px, 0.9vw, 16px)",
+              textShadow: isActive ? "0 0 18px color-mix(in oklab, var(--primary) 70%, transparent)" : undefined,
+            }}
+          >
+            {n.label}
+          </Link>
+        );
+      })}
     </nav>
   );
 }
