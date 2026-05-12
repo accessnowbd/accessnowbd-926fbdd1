@@ -47,20 +47,30 @@ export function CategoryPage({
         <div className="pointer-events-none absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-primary/35 blur-[140px]" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 w-[420px] h-[420px] rounded-full bg-[var(--color-aqua)]/35 blur-[140px]" />
         <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 py-12 md:py-16">
-          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, letterSpacing: 0 }}>
-            {title}
-          </h1>
-          <p className="mt-3 text-muted-foreground max-w-2xl">{subtitle}</p>
-          <div className="mt-6 flex items-center bg-white/10 border border-white/15 rounded-full h-12 pl-5 pr-1.5 max-w-xl backdrop-blur-md">
-            <Search className="w-4 h-4 text-muted-foreground" />
+          <div className="inline-block">
+            <h1
+              className="text-aurora drop-shadow-[0_2px_18px_rgba(124,92,255,0.35)]"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(28px, 4vw, 44px)",
+                fontWeight: 800,
+                letterSpacing: 0,
+              }}
+            >
+              {title}
+            </h1>
+          </div>
+          <p className="mt-3 text-slate-700 max-w-2xl font-medium drop-shadow-[0_1px_0_rgba(255,255,255,0.6)]">{subtitle}</p>
+          <div className="mt-6 flex items-center bg-white border border-slate-200 rounded-full h-12 pl-5 pr-1.5 max-w-xl shadow-[0_8px_24px_-12px_rgba(15,23,42,0.18)]">
+            <Search className="w-4 h-4 text-slate-500" />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search subscriptions..."
-              className="flex-1 px-3 bg-transparent outline-none text-sm placeholder:text-muted-foreground text-foreground"
+              className="flex-1 px-3 bg-transparent outline-none text-sm placeholder:text-slate-400 text-slate-900"
             />
             {q && (
-              <button onClick={() => setQ("")} className="grid place-items-center w-8 h-8 rounded-full hover:bg-secondary text-muted-foreground" aria-label="Clear">
+              <button onClick={() => setQ("")} className="grid place-items-center w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500" aria-label="Clear">
                 <X className="w-4 h-4" />
               </button>
             )}
