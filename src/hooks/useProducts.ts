@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/data/products";
 
 // Tunables: SWR strategy for product data.
