@@ -58,6 +58,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/orders", label: "Orders", icon: ic(ShoppingBag), grad: "from-orange-500 to-amber-500" },
       { to: "/admin/users", label: "Customers", icon: ic(Users), grad: "from-cyan-500 to-teal-500" },
       { to: "/admin/wallet", label: "ওয়ালেট", icon: ic(Wallet), grad: "from-amber-400 to-orange-500" },
+      { to: "/admin/shop-config", label: "Shop & WhatsApp", icon: ic(MessageCircle), grad: "from-green-500 to-emerald-600" },
       { to: "/admin/payments", label: "Payments", icon: ic(CreditCard), grad: "from-emerald-500 to-green-600" },
       { to: "/admin/account-delivery", label: "Account Delivery", icon: ic(Truck), grad: "from-amber-500 to-yellow-500" },
       { to: "/admin/inventory", label: "Inventory", icon: ic(Boxes), grad: "from-amber-500 to-orange-500" },
