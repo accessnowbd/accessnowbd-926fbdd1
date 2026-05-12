@@ -157,7 +157,7 @@ function DashboardPage() {
           <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 scrollbar-thin">
             {NAV.map((group) => (
               <div key={group.title}>
-                <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
+                <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-foreground/60">
                   {group.title}
                 </div>
                 <div className="space-y-1">
