@@ -22,53 +22,15 @@ function ratingFor(slug: string): { rating: string; reviews: number } {
 function ProductCardImpl({ product }: { product: Product }) {
   const { add } = useCart();
   const { data: shopConfig } = useShopConfig();
-  const queryClient = useQueryClient();
   const cardRef = useRef<HTMLAnchorElement | null>(null);
-  const prefetchedRef = useRef(false);
 
   const plan = product.plans[0];
   const hasOptions = product.plans.length > 1;
   const { rating, reviews } = ratingFor(product.slug);
-
-  // Prefetch product detail when card scrolls into view
-  useEffect(() => {
-    const el = cardRef.current;
-    if (!el || prefetchedRef.current) return;
-    if (typeof IntersectionObserver === "undefined") return;
-
-    const slug = product.slug;
-    const doPrefetch = () => {
-      if (prefetchedRef.current) return;
-      prefetchedRef.current = true;
-      queryClient.prefetchQuery({
-        queryKey: ["product", slug],
-        queryFn: async (): Promise<Product | null> => {
-          const response = await fetch(`/api/public/products?slug=${encodeURIComponent(slug)}`);
-          if (!response.ok) throw new Error("Product could not be loaded");
-          return response.json();
-        },
-        staleTime: 5 * 60_000,
-      });
-    };
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            // Defer to idle so scroll stays smooth
-            const w = window as unknown as { requestIdleCallback?: (cb: () => void) => void };
-            if (w.requestIdleCallback) w.requestIdleCallback(doPrefetch);
-            else setTimeout(doPrefetch, 200);
-            io.disconnect();
-            break;
-          }
-        }
-      },
-      { rootMargin: "400px 0px", threshold: 0.01 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [product.slug, queryClient]);
+  // Note: per-product prefetch removed. The full product list already contains
+  // every field the detail page needs, and `useProduct` seeds itself from that
+  // cache via `initialData`, so individual `?slug=X` fetches are redundant and
+  // were causing dozens of duplicate API calls on the homepage.
 
   const onAdd = (e: React.MouseEvent) => {
     e.preventDefault();
