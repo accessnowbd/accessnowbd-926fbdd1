@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tan
 import { useEffect, useMemo, useState } from "react";
 import {
   ShieldAlert, LogOut, Search, Bell, Plus, Moon, Sun, Globe, Sparkles,
-  PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink,
+  PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
