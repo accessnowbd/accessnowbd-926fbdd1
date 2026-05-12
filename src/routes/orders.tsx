@@ -25,10 +25,10 @@ type Order = {
 };
 
 const statusColors: Record<string, string> = {
-  pending: "bg-amber-100 text-amber-800",
-  processing: "bg-blue-100 text-blue-800",
-  delivered: "bg-emerald-100 text-emerald-800",
-  cancelled: "bg-red-100 text-red-800",
+  pending: "bg-amber-500/15 text-amber-300 border border-amber-400/30",
+  processing: "bg-sky-500/15 text-sky-300 border border-sky-400/30",
+  delivered: "bg-emerald-500/15 text-emerald-300 border border-emerald-400/30",
+  cancelled: "bg-rose-500/15 text-rose-300 border border-rose-400/30",
 };
 
 function OrdersPage() {
