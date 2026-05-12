@@ -327,20 +327,12 @@ export function SiteHeader() {
                   </Link>
                 </div>
               ) : (
-                <div className="inline-flex items-center p-1 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)]">
-                  <Link
-                    to="/login"
-                    className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-full text-white text-[12px] sm:text-[13px] font-semibold hover:bg-white/[0.08] transition"
-                  >
-                    <LogIn className="w-3.5 h-3.5" /> <span className="hidden xs:inline">Sign In</span><span className="xs:hidden">In</span>
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-3 sm:px-4 rounded-full text-white text-[12px] sm:text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-aqua shadow-[0_8px_24px_-10px_rgba(0,229,255,0.55)] hover:brightness-110 transition"
-                  >
-                    Register
-                  </Link>
-                </div>
+                <Link
+                  to="/login"
+                  className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-3.5 sm:px-4 rounded-full text-white text-[12px] sm:text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-aqua shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)] hover:brightness-110 transition"
+                >
+                  <LogIn className="w-3.5 h-3.5" /> Login
+                </Link>
               )}
 
               <button
