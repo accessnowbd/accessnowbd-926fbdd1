@@ -125,13 +125,15 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <CartProvider>
-          {!isAdmin && <SiteHeader />}
-          <Outlet />
-          {!isAdmin && <SupportWidget />}
-        </CartProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <CartProvider>
+            {!isAdmin && <SiteHeader />}
+            <Outlet />
+            {!isAdmin && <SupportWidget />}
+          </CartProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
