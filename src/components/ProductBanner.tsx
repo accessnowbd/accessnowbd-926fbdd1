@@ -134,32 +134,15 @@ export function ProductBanner({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl ${aspectClass} ${className}`}
-      style={{
-        background:
-          "radial-gradient(ellipse 80% 70% at 30% 20%, rgba(37,99,235,0.35), transparent 70%), linear-gradient(135deg, #071120 0%, #0f1d3a 55%, #1a1144 100%)",
-      }}
+      className={`product-banner relative overflow-hidden rounded-2xl ${aspectClass} ${className}`}
     >
       {/* Soft static glow — no animation, no jitter */}
-      <div
-        className="pointer-events-none absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-40"
-        style={{ background: "radial-gradient(circle, rgba(124,58,237,0.55), transparent 70%)" }}
-      />
-      <div
-        className="pointer-events-none absolute -bottom-12 -left-10 w-44 h-44 rounded-full opacity-35"
-        style={{ background: "radial-gradient(circle, rgba(0,229,255,0.45), transparent 70%)" }}
-      />
+      <div className="product-banner__glow product-banner__glow--tr pointer-events-none absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-40" />
+      <div className="product-banner__glow product-banner__glow--bl pointer-events-none absolute -bottom-12 -left-10 w-44 h-44 rounded-full opacity-35" />
 
       {/* Frosted glass plate — solid layer, no backdrop-filter (perf) */}
       <div
-        className="absolute inset-[10%] rounded-[22px] flex items-center justify-center overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03))",
-          border: "1px solid rgba(255,255,255,0.16)",
-          boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 32px -12px rgba(0,0,0,0.5)",
-        }}
+        className="product-banner__plate absolute inset-[10%] rounded-[22px] flex items-center justify-center overflow-hidden"
       >
         {/* Product image / logo */}
         {primary && !imgFailed ? (
