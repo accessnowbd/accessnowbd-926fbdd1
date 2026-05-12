@@ -434,7 +434,7 @@ function ProductRail({ title, items, isLoading }: { title: string; items: Produc
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
       <div className="flex items-end justify-between gap-4">
-        <SectionTitle eyebrow="Collection" title={title} subtitle="Premium products organized by category." compact />
+        <SectionTitle eyebrow="Collection" title={title} compact />
         <div className="hidden md:flex items-center gap-2">
           <button onClick={() => scroll(-1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll left"><ChevronLeft className="h-4 w-4" /></button>
           <button onClick={() => scroll(1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll right"><ChevronRight className="h-4 w-4" /></button>
@@ -457,13 +457,13 @@ function ProductRail({ title, items, isLoading }: { title: string; items: Produc
   );
 }
 
-function SectionTitle({ eyebrow, title, subtitle, action, to, compact = false }: { eyebrow: string; title: string; subtitle: string; action?: string; to?: "/products"; compact?: boolean }) {
+function SectionTitle({ eyebrow, title, subtitle, action, to, compact = false }: { eyebrow: string; title: string; subtitle?: string; action?: string; to?: "/products"; compact?: boolean }) {
   return (
     <div className={`flex flex-wrap items-end justify-between gap-3 ${compact ? "" : ""}`}>
       <div>
         <span className="inline-flex rounded-full glass-soft px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-primary">{eyebrow}</span>
         <h2 className="mt-3 text-2xl md:text-4xl font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)", lineHeight: 1.08 }}>{title}</h2>
-        <p className="mt-2 max-w-2xl text-sm md:text-base text-muted-foreground">{subtitle}</p>
+        {subtitle && <p className="mt-2 max-w-2xl text-sm md:text-base text-muted-foreground">{subtitle}</p>}
       </div>
       {action && to && (
         <Link to={to} className="glass inline-flex h-11 items-center gap-2 rounded-full px-5 text-sm font-bold text-foreground">
