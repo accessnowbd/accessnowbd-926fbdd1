@@ -447,8 +447,8 @@
 
   html.theme-white .bg-card { background-color: rgba(255, 255, 255, 0.85) !important; }
   html.theme-white .bg-popover { background-color: #ffffff !important; }
-  html.theme-white .bg-background { background-color: #fdf2f8 !important; }
-  html.theme-white .bg-muted { background-color: rgba(245, 233, 247, 0.8) !important; }
+  html.theme-white .bg-background { background-color: #f4f1fb !important; }
+  html.theme-white .bg-muted { background-color: rgba(238, 242, 255, 0.85) !important; }
 
   html.theme-white .text-aurora,
   html.theme-white .text-aurora-strong,
