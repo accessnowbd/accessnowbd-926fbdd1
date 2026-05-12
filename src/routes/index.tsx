@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
-import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import type { Product } from "@/data/products";
 
@@ -99,7 +98,7 @@ function Index() {
 
   return (
     <div className="min-h-screen overflow-hidden">
-      <SiteHeader />
+
       <main>
         <HeroExperience />
         <CategoryExperience />

@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { Search, X } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
-import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export function CategoryPage({
@@ -42,7 +41,7 @@ export function CategoryPage({
 
   return (
     <div className="min-h-screen">
-      <SiteHeader />
+
       {/* Cinematic header band */}
       <section className="relative glass-strong overflow-hidden">
         <div className="pointer-events-none absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-primary/35 blur-[140px]" />
