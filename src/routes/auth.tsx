@@ -4,7 +4,7 @@ import { Loader2, Eye, EyeOff, X, CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
-import accessNowLogo from "@/assets/accessnow-bd-mark.png";
+import accessNowLogo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/auth")({
   component: () => <AuthPage initialMode="login" />,
