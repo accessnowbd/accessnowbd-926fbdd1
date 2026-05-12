@@ -4,8 +4,6 @@ import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
-import { CartIcon } from "@/components/CartIcon";
-import { AccountIcon } from "@/components/AccountIcon";
 import { ProductBanner } from "@/components/ProductBanner";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
@@ -67,16 +65,6 @@ function ProductPage() {
         }
       `}</style>
       {/* Top Nav */}
-      <header className="bg-aurora text-primary-foreground relative overflow-hidden">
-        <div className="absolute inset-0 bg-mesh opacity-40 pointer-events-none" />
-        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 font-semibold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
-            <span className="grid place-items-center w-9 h-9 rounded-full glass-strong text-primary font-bold">A</span>
-            AccessNow BD
-          </Link>
-          <div className="flex items-center gap-2"><AccountIcon /><CartIcon /></div>
-        </div>
-      </header>
 
       {/* Breadcrumb */}
       <div className="mx-auto max-w-[1440px] px-4 md:px-10 pt-6">
@@ -257,19 +245,6 @@ function ProductSkeleton() {
       <style>{`@keyframes shimmer { 100% { transform: translateX(100%); } }`}</style>
 
       {/* Top nav placeholder */}
-      <header className="bg-aurora text-primary-foreground relative overflow-hidden">
-        <div className="absolute inset-0 bg-mesh opacity-40 pointer-events-none" />
-        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-full bg-white/30" />
-            <div className="h-4 w-32 rounded bg-white/30" />
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-full bg-white/30" />
-            <div className="w-9 h-9 rounded-full bg-white/30" />
-          </div>
-        </div>
-      </header>
 
       {/* Breadcrumb */}
       <div className="mx-auto max-w-[1440px] px-4 md:px-10 pt-6">
