@@ -148,10 +148,7 @@ export type Database = {
       }
       orders: {
         Row: {
-          admin_note: string | null
           created_at: string
-          delivered_at: string | null
-          delivered_credentials: Json | null
           email: string
           full_name: string
           id: string
@@ -161,14 +158,10 @@ export type Database = {
           status: string
           total: number
           transaction_id: string
-          updated_at: string
           user_id: string
         }
         Insert: {
-          admin_note?: string | null
           created_at?: string
-          delivered_at?: string | null
-          delivered_credentials?: Json | null
           email: string
           full_name: string
           id?: string
@@ -178,14 +171,10 @@ export type Database = {
           status?: string
           total: number
           transaction_id: string
-          updated_at?: string
           user_id: string
         }
         Update: {
-          admin_note?: string | null
           created_at?: string
-          delivered_at?: string | null
-          delivered_credentials?: Json | null
           email?: string
           full_name?: string
           id?: string
@@ -195,7 +184,6 @@ export type Database = {
           status?: string
           total?: number
           transaction_id?: string
-          updated_at?: string
           user_id?: string
         }
         Relationships: []

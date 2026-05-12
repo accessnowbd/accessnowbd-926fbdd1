@@ -294,7 +294,7 @@ export function SiteHeader() {
                 <div className="flex items-center gap-1.5">
                   <Link
                     to="/dashboard"
-                    className="inline-flex items-center gap-1.5 sm:gap-2 h-10 sm:h-11 px-3 sm:px-0 rounded-full bg-gradient-to-r from-primary via-sky-500 to-aqua text-primary-foreground font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition whitespace-nowrap"
+                    className="inline-flex items-center gap-1.5 sm:gap-2 h-10 sm:h-11 px-3 sm:px-0 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition whitespace-nowrap"
                     style={{
                       paddingLeft: "clamp(10px, 1vw, 18px)",
                       paddingRight: "clamp(10px, 1vw, 18px)",
@@ -308,7 +308,7 @@ export function SiteHeader() {
               ) : (
                 <Link
                   to="/login"
-                  className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-3.5 sm:px-4 rounded-full text-white text-[12px] sm:text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-sky-500 to-aqua shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)] hover:brightness-110 transition"
+                  className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-3.5 sm:px-4 rounded-full text-white text-[12px] sm:text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-aqua shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)] hover:brightness-110 transition"
                 >
                   <LogIn className="w-3.5 h-3.5" /> Login
                 </Link>
@@ -372,7 +372,7 @@ export function SiteHeader() {
                   <Link
                     to="/orders"
                     onClick={() => setOpen(false)}
-                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-sky-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
+                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
                   >
                     <UserCircle2 className="w-4 h-4" /> My Account
                   </Link>
@@ -398,7 +398,7 @@ export function SiteHeader() {
                   <Link
                     to="/register"
                     onClick={() => setOpen(false)}
-                    className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-full bg-gradient-to-r from-primary via-sky-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
+                    className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
                   >
                     Register
                   </Link>
@@ -484,7 +484,7 @@ function MagneticNav() {
       ref={navRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="hidden lg:flex relative items-center h-12 rounded-full font-semibold shrink min-w-0 whitespace-nowrap bg-white/95 backdrop-blur-xl border border-slate-200/70 shadow-[0_6px_20px_-10px_rgba(15,23,42,0.18)]"
+      className="hidden lg:flex relative items-center h-12 rounded-full glass-soft border border-white/10 font-semibold backdrop-blur-2xl shrink min-w-0 whitespace-nowrap"
       style={{
         gap: "clamp(0px, 0.25vw, 4px)",
         paddingLeft: "clamp(4px, 0.6vw, 10px)",
@@ -492,7 +492,7 @@ function MagneticNav() {
         fontSize: "clamp(11.5px, 0.95vw, 14px)",
       }}
     >
-      {/* Magnetic sliding pill — soft lavender */}
+      {/* Magnetic sliding pill — premium purple glow (matches Dashboard active) */}
       <span
         aria-hidden
         className="pointer-events-none absolute top-1/2 -translate-y-1/2 h-9 rounded-full transition-[left,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
@@ -501,10 +501,10 @@ function MagneticNav() {
           width: pill.width,
           opacity: pill.visible ? 1 : 0,
           background:
-            "linear-gradient(135deg, rgba(167,139,250,0.18), rgba(139,92,246,0.10))",
-          border: "1px solid rgba(139,92,246,0.35)",
+            "linear-gradient(135deg, color-mix(in oklab, var(--primary) 22%, transparent), color-mix(in oklab, var(--primary) 10%, transparent))",
+          border: "1px solid color-mix(in oklab, var(--primary) 45%, transparent)",
           boxShadow:
-            "0 1px 0 rgba(255,255,255,0.8) inset, 0 4px 14px -6px rgba(139,92,246,0.35)",
+            "0 0 0 1px rgba(255,255,255,0.06) inset, 0 0 22px -4px var(--primary), 0 8px 26px -12px rgba(124,58,237,0.7)",
         }}
       />
       {NAV.map((n, i) => {
@@ -517,11 +517,12 @@ function MagneticNav() {
               itemRefs.current[i] = el;
             }}
             className={`relative z-10 py-2 rounded-full transition-colors whitespace-nowrap ${
-              isActive ? "text-violet-700" : "text-slate-700 hover:text-slate-900"
+              isActive ? "text-primary" : "text-white/75 hover:text-white"
             }`}
             style={{
               paddingLeft: "clamp(8px, 0.9vw, 16px)",
               paddingRight: "clamp(8px, 0.9vw, 16px)",
+              textShadow: isActive ? "0 0 18px color-mix(in oklab, var(--primary) 70%, transparent)" : undefined,
             }}
           >
             {n.label}
