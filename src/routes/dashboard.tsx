@@ -126,16 +126,22 @@ function DashboardPage() {
   const [userMenu, setUserMenu] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) { navigate({ to: "/auth" }); return; }
-    if (!user) return;
+    if (authLoading) return;
+    if (!user) { navigate({ to: "/auth" }); return; }
+    let cancelled = false;
+    setLoading(true);
     Promise.all([
       supabase.from("orders").select("*").order("created_at", { ascending: false }),
       supabase.from("profiles").select("display_name, phone").eq("id", user.id).maybeSingle(),
-    ]).then(([o, p]) => {
-      setOrders(((o.data as unknown) as Order[]) || []);
-      setProfile((p.data as { display_name?: string | null; phone?: string | null } | null) || null);
-      setLoading(false);
-    });
+    ])
+      .then(([o, p]) => {
+        if (cancelled) return;
+        setOrders(((o.data as unknown) as Order[]) || []);
+        setProfile((p.data as { display_name?: string | null; phone?: string | null } | null) || null);
+      })
+      .catch((err) => { console.error("Dashboard load failed:", err); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, [user, authLoading, navigate]);
 
   const stats = useMemo(() => {
