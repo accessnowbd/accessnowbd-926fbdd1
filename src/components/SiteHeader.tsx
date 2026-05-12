@@ -263,7 +263,7 @@ export function SiteHeader() {
                     BD
                   </span>
                 </span>
-                <span className="hidden sm:flex w-full items-center justify-between mt-1">
+                <span className="flex w-full items-center justify-between mt-1">
                   <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.22em] font-bold text-white/70">
                     Fast
                   </span>
