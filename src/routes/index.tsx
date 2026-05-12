@@ -20,6 +20,7 @@ import {
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
+import { LazyMount } from "@/components/LazyMount";
 import type { Product } from "@/data/products";
 
 export const Route = createFileRoute("/")({
