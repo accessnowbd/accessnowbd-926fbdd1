@@ -11,7 +11,7 @@ import accessNowLogo from "@/assets/accessnow-bd-mark.png";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
-  head: () => ({ meta: [{ title: "RxB Admin — AccessNow BD" }, { name: "robots", content: "noindex,nofollow" }] }),
+  head: () => ({ meta: [{ title: "Admin — AccessNow BD" }, { name: "robots", content: "noindex,nofollow" }] }),
 });
 
 const ADMIN_CACHE_KEY = "anbd:isAdmin";
