@@ -230,14 +230,22 @@ export function SupportWidget() {
               setChooser((v) => !v);
             }}
             aria-label={open || chooser ? "Close support" : "Open support"}
-            className="relative group"
+            className="relative group hover:scale-110 active:scale-95 transition-transform duration-300"
           >
-            {/* Soft ambient glow */}
-            <span className="absolute -inset-4 rounded-full bg-gradient-to-br from-violet-500/40 via-primary/40 to-aqua/40 opacity-60 blur-2xl group-hover:opacity-90 transition-opacity duration-500" />
+            {/* Ripple ping waves (only when idle) */}
+            {!open && !chooser && (
+              <>
+                <span className="absolute inset-0 rounded-full bg-violet-500/40 animate-ping" />
+                <span className="absolute inset-0 rounded-full bg-aqua/30 animate-ping [animation-delay:0.6s]" />
+              </>
+            )}
 
-            {/* Static conic ring */}
+            {/* Soft ambient glow */}
+            <span className="absolute -inset-4 rounded-full bg-gradient-to-br from-violet-500/40 via-primary/40 to-aqua/40 opacity-60 blur-2xl group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
+
+            {/* Spinning conic ring */}
             <span
-              className="absolute -inset-[3px] rounded-full opacity-90"
+              className="absolute -inset-[3px] rounded-full opacity-90 animate-[spin_6s_linear_infinite]"
               style={{
                 background:
                   "conic-gradient(from 0deg, rgba(124,58,237,0.95), rgba(0,229,255,0.95), rgba(168,85,247,0.95), rgba(0,229,255,0.95), rgba(124,58,237,0.95))",
