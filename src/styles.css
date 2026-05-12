@@ -310,14 +310,33 @@
     box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.1), 0 0 20px -4px rgba(168, 85, 247, 0.3);
   }
 
-  /* Text contrast tweaks for light bg */
-  html.theme-white .text-white { color: oklch(0.22 0.04 285) !important; }
-  html.theme-white .text-white\/90 { color: oklch(0.28 0.04 285) !important; }
-  html.theme-white .text-white\/80 { color: oklch(0.34 0.04 285) !important; }
-  html.theme-white .text-white\/70 { color: oklch(0.42 0.04 285) !important; }
-  html.theme-white .text-white\/60 { color: oklch(0.5 0.04 285) !important; }
-  html.theme-white .text-white\/50 { color: oklch(0.55 0.04 285) !important; }
+  /* Text contrast tweaks for light bg — catches every text-white opacity variant */
+  html.theme-white [class*="text-white"] { color: oklch(0.22 0.04 285) !important; }
+  html.theme-white .text-white\/90 { color: oklch(0.26 0.04 285) !important; }
+  html.theme-white .text-white\/85,
+  html.theme-white .text-white\/80 { color: oklch(0.30 0.04 285) !important; }
+  html.theme-white .text-white\/75,
+  html.theme-white .text-white\/70 { color: oklch(0.36 0.05 280) !important; }
+  html.theme-white .text-white\/65,
+  html.theme-white .text-white\/60 { color: oklch(0.42 0.06 280) !important; }
+  html.theme-white .text-white\/55,
+  html.theme-white .text-white\/50 { color: oklch(0.48 0.06 280) !important; }
+  html.theme-white .text-white\/40 { color: oklch(0.54 0.06 280) !important; }
   html.theme-white .text-foreground { color: oklch(0.22 0.04 285) !important; }
+
+  /* Drop dark text-shadows that were designed for dark theme — they smudge text on white */
+  html.theme-white h1,
+  html.theme-white h2,
+  html.theme-white h3,
+  html.theme-white h4,
+  html.theme-white p,
+  html.theme-white span,
+  html.theme-white a,
+  html.theme-white div { text-shadow: none !important; }
+
+  /* Convert white dividers/borders to violet so they show on white */
+  html.theme-white [class*="bg-white\/"] { background-color: rgba(79, 70, 229, 0.18) !important; }
+  html.theme-white [class*="border-white\/"] { border-color: rgba(79, 70, 229, 0.22) !important; }
 
   /* Scrollbar in white theme */
   html.theme-white {
