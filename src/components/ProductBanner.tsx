@@ -113,10 +113,10 @@ export function ProductBanner({
           decoding="async"
           // @ts-expect-error - valid HTML attr, React types lag
           fetchpriority={priority ? "high" : "low"}
-          width={480}
-          height={480}
+          width={1024}
+          height={1024}
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
-          className="relative z-10 max-h-[78%] max-w-[78%] object-contain"
+          className="relative z-10 w-full h-full object-contain"
           onError={() => setImgFailed(true)}
         />
       ) : !allLogosFailed ? (
