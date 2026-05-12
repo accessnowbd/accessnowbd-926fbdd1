@@ -40,42 +40,7 @@ const NAV: Array<{
 
 export function TopUtilityBar() {
   return (
-    <div className="relative z-40 overflow-hidden">
-      {/* base layer: deep aurora gradient */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(90deg, #0a0f25 0%, #14163a 28%, #1a1148 50%, #14163a 72%, #0a0f25 100%)",
-        }}
-      />
-      {/* animated shimmer wash */}
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-60"
-        style={{
-          background:
-            "linear-gradient(115deg, transparent 30%, rgba(124,58,237,0.18) 45%, rgba(0,229,255,0.22) 55%, transparent 70%)",
-          backgroundSize: "220% 100%",
-          animation: "topbar-shimmer 9s linear infinite",
-        }}
-      />
-      {/* fine dot grid texture */}
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.08] mix-blend-screen"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(255,255,255,0.7) 1px, transparent 1px)",
-          backgroundSize: "14px 14px",
-        }}
-      />
-      {/* bottom premium hairline — ultra thin */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(124,58,237,0.45)_28%,rgba(0,229,255,0.75)_50%,rgba(124,58,237,0.45)_72%,transparent_100%)]" />
-        <div className="absolute inset-x-[35%] -bottom-[2px] h-[3px] blur-[3px] bg-[linear-gradient(90deg,transparent,rgba(0,229,255,0.55),transparent)]" />
-      </div>
-
+    <div className="relative z-40 overflow-hidden bg-background">
       <div
         className="relative mx-auto max-w-[1440px] px-3 sm:px-5 md:px-10 flex items-center justify-between gap-3 text-white"
         style={{
@@ -156,12 +121,6 @@ export function TopUtilityBar() {
         </div>
       </div>
 
-      <style>{`
-        @keyframes topbar-shimmer {
-          0%   { background-position: 0% 0%; }
-          100% { background-position: 220% 0%; }
-        }
-      `}</style>
     </div>
   );
 }
@@ -188,28 +147,14 @@ export function SiteHeader() {
     <>
       <TopUtilityBar />
       <header className="sticky top-0 z-40">
-        {/* aurora glow behind header */}
-        <div className="pointer-events-none absolute inset-x-0 -top-24 h-48 overflow-hidden">
-          <div className="absolute left-1/4 top-0 w-[420px] h-[220px] rounded-full bg-primary/30 blur-[110px]" />
-          <div className="absolute right-1/4 top-0 w-[420px] h-[220px] rounded-full bg-aqua/25 blur-[110px]" />
-          <div className="absolute left-1/2 -translate-x-1/2 top-6 w-[600px] h-[160px] rounded-full bg-violet-500/20 blur-[120px]" />
-        </div>
-
         <div
           className={[
-            "relative border-b border-white/10 transition-[background-color,box-shadow,backdrop-filter] duration-300 will-change-[background-color]",
+            "relative transition-[background-color,box-shadow,backdrop-filter] duration-300 will-change-[background-color]",
             scrolled
               ? "bg-background/65 backdrop-blur-2xl shadow-[0_18px_50px_-24px_rgba(0,0,0,0.7)]"
               : "bg-background/35 backdrop-blur-xl",
           ].join(" ")}
         >
-          {/* premium top divider */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] overflow-hidden">
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(124,58,237,0.55)_18%,rgba(0,229,255,0.85)_50%,rgba(124,58,237,0.55)_82%,transparent_100%)]" />
-            <div className="absolute inset-x-0 top-0 h-px bg-white/30" />
-            <div className="absolute inset-x-1/4 -top-1 h-3 blur-md bg-[linear-gradient(90deg,transparent,rgba(0,229,255,0.55),rgba(124,58,237,0.55),transparent)] opacity-70" />
-          </div>
-
           <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-10 h-[64px] md:h-[68px] flex items-center justify-between gap-2 md:gap-5 flex-nowrap">
             {/* Brand */}
             <Link
