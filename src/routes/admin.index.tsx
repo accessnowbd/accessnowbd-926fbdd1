@@ -5,6 +5,8 @@ import {
   CheckCircle2, ChevronRight, TrendingUp, TrendingDown, Sparkles,
   PackageSearch, TicketPercent, Megaphone, LifeBuoy, Bot, FileText,
   Activity, Zap, ArrowUpRight, Clock, Star,
+  Eye, Ear, Accessibility, Bug, AlertTriangle, Bell, Smartphone, Monitor, Tablet,
+  Globe, MessageSquare, UserCheck, ShieldCheck,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
