@@ -68,10 +68,21 @@ function CheckoutPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
   const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
-  const [method, setMethod] = useState<MethodId>("bkash");
+  const { data: dynamicMethods } = usePaymentMethods();
+  const methods: PayMethod[] = useMemo(() => {
+    const list = (dynamicMethods ?? []).map((m) => ({
+      id: (m.id || m.name || "").toLowerCase().replace(/\s+/g, "-") || m.name,
+      name: m.name,
+      number: m.number,
+      color: m.color || COLOR_BY_NAME[m.name?.toLowerCase()] || "bg-slate-700",
+      instructions: m.instructions,
+    }));
+    return list.length > 0 ? list : FALLBACK_METHODS;
+  }, [dynamicMethods]);
+  const [method, setMethod] = useState<string>("bkash");
   const [agree, setAgree] = useState(false);
   const [copied, setCopied] = useState(false);
-  
+
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -80,7 +91,14 @@ function CheckoutPage() {
     if (user) setForm((f) => ({ ...f, email: f.email || user.email || "" }));
   }, [user]);
 
-  const selectedMethod = methods.find((m) => m.id === method)!;
+  // Ensure selected method exists in current list
+  useEffect(() => {
+    if (methods.length && !methods.find((m) => m.id === method)) {
+      setMethod(methods[0].id);
+    }
+  }, [methods, method]);
+
+  const selectedMethod = methods.find((m) => m.id === method) ?? methods[0];
   const update = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
   const blur = (k: string) => setTouched((t) => ({ ...t, [k]: true }));
 
