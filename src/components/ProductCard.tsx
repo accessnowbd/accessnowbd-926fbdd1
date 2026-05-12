@@ -54,16 +54,28 @@ function ProductCardImpl({ product }: { product: Product }) {
       className="group product-card-v2 overflow-hidden flex flex-col h-full rounded-2xl border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-shadow hover:shadow-[var(--shadow-glass)]"
     >
       <div className="relative">
-        <ProductBanner product={product} ratio="5/4" />
-        {product.badge && (
-          <span className={`absolute top-3 left-3 ${badgeColorFor(product.badge)} px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase shadow-lg z-20`}>
-            {product.badge}
-          </span>
-        )}
-        <span className="absolute top-3 right-3 inline-flex items-center gap-1 px-2 py-1 rounded-full glass text-[10px] font-bold text-foreground z-20">
-          <Star className="w-2.5 h-2.5 fill-[var(--color-gold)] text-[var(--color-gold)]" />
-          {rating}
-        </span>
+        <ProductBanner product={product} ratio="1/1" />
+        {/* Discount + badge row, bottom-left of image — like reference */}
+        <div className="absolute left-3 bottom-3 flex items-center gap-1.5 z-20">
+          {plan?.original && plan?.price && (() => {
+            const op = parsePrice(plan.original);
+            const np = parsePrice(plan.price);
+            if (op > 0 && np > 0 && np < op) {
+              const pct = Math.round(((op - np) / op) * 100);
+              return (
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold text-white bg-gradient-to-r from-rose-500 to-red-500 shadow-md">
+                  -{pct}%
+                </span>
+              );
+            }
+            return null;
+          })()}
+          {product.badge && (
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide uppercase shadow-md ${badgeColorFor(product.badge)}`}>
+              {product.badge}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="relative p-4 flex flex-col flex-1 z-10 gap-2.5">
