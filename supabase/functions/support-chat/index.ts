@@ -1,10 +1,26 @@
 // AccessNow BD — AI support chat (streaming via Lovable AI Gateway)
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
+  /^https:\/\/accessnowbd\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/,
+  /^https:\/\/accessnowbd\.com$/,
+  /^https:\/\/(www\.)?accessnowbd\.com$/,
+  /^http:\/\/localhost(:\d+)?$/,
+];
+function corsFor(req: Request) {
+  const origin = req.headers.get("origin") ?? "";
+  const allow = ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin));
+  return {
+    "Access-Control-Allow-Origin": allow ? origin : "null",
+    "Vary": "Origin",
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  } as Record<string, string>;
+}
+
+const MAX_MESSAGES = 20;
+const MAX_CONTENT_LEN = 4000;
 
 const SYSTEM_PROMPT = `তুমি AccessNow BD-এর প্রিমিয়াম সাপোর্ট অ্যাসিস্ট্যান্ট। বাংলায় (প্রয়োজনে English mix) বন্ধুসুলভ, সংক্ষিপ্ত, সঠিক উত্তর দাও।
 
@@ -36,6 +52,7 @@ const SYSTEM_PROMPT = `তুমি AccessNow BD-এর প্রিমিয়
 - অজানা প্রশ্নে honest থেকো, সরাসরি WhatsApp suggest করো`;
 
 Deno.serve(async (req) => {
+  const corsHeaders = corsFor(req);
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -43,11 +60,24 @@ Deno.serve(async (req) => {
   try {
     const { messages } = await req.json();
 
-    if (!Array.isArray(messages)) {
+    if (!Array.isArray(messages) || messages.length === 0 || messages.length > MAX_MESSAGES) {
       return new Response(
-        JSON.stringify({ error: "messages array required" }),
+        JSON.stringify({ error: `messages must be an array of 1..${MAX_MESSAGES} items` }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
+    }
+
+    // Validate each message shape and length
+    for (const m of messages) {
+      if (!m || typeof m !== "object") return new Response(JSON.stringify({ error: "invalid message" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      const role = (m as any).role;
+      const content = (m as any).content;
+      if (role !== "user" && role !== "assistant" && role !== "system") {
+        return new Response(JSON.stringify({ error: "invalid role" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      if (typeof content !== "string" || content.length === 0 || content.length > MAX_CONTENT_LEN) {
+        return new Response(JSON.stringify({ error: `content must be a string of 1..${MAX_CONTENT_LEN} chars` }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");

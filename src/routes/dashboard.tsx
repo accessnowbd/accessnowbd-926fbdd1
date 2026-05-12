@@ -87,7 +87,7 @@ function DashboardPage() {
     };
 
     const tOrders = performance.now();
-    const ordersP = supabase.from("orders").select("*").order("created_at", { ascending: false })
+    const ordersP = supabase.from("orders").select("*").eq("user_id", user.id).order("created_at", { ascending: false })
       .then((r) => { mark("orders fetch", tOrders); return r; });
 
     const tProfile = performance.now();

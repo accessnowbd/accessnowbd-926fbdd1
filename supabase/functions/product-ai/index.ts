@@ -6,12 +6,24 @@
 //  - "image" → AI-generated product image (returns data URL)
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
+  /^https:\/\/accessnowbd\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/,
+  /^https:\/\/(www\.)?accessnowbd\.com$/,
+  /^http:\/\/localhost(:\d+)?$/,
+];
+function corsFor(req: Request) {
+  const origin = req.headers.get("origin") ?? "";
+  const allow = ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin));
+  return {
+    "Access-Control-Allow-Origin": allow ? origin : "null",
+    "Vary": "Origin",
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  } as Record<string, string>;
+}
 
 type Mode = "short" | "rich" | "all" | "image";
 
@@ -27,13 +39,14 @@ type Body = {
   imagePrompt?: string;
 };
 
-const json = (body: unknown, status = 200) =>
+const json = (body: unknown, status = 200, corsHeaders: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 
 serve(async (req) => {
+  const corsHeaders = corsFor(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
@@ -61,22 +74,22 @@ serve(async (req) => {
         }),
       });
 
-      if (r.status === 429) return json({ error: "Gemini rate limit, please retry shortly." }, 429);
+      if (r.status === 429) return json({ error: "Gemini rate limit, please retry shortly." }, 429, corsHeaders);
       if (!r.ok) {
         const t = await r.text();
         console.error("gemini image error", r.status, t);
-        return json({ error: `Gemini API error (${r.status}): ${t.slice(0, 200)}` }, 500);
+        return json({ error: `Gemini API error (${r.status}): ${t.slice(0, 200)}` }, 500, corsHeaders);
       }
       const data = await r.json();
       const parts = data?.candidates?.[0]?.content?.parts ?? [];
       const inline = parts.find((p: any) => p?.inlineData?.data)?.inlineData;
       if (!inline?.data) {
         console.error("no image in gemini response", JSON.stringify(data).slice(0, 400));
-        return json({ error: "No image returned from Gemini" }, 500);
+        return json({ error: "No image returned from Gemini" }, 500, corsHeaders);
       }
       const mime = inline.mimeType || "image/png";
       const dataUrl = `data:${mime};base64,${inline.data}`;
-      return json({ image: dataUrl });
+      return json({ image: dataUrl }, 200, corsHeaders);
     }
 
     // ===== TEXT GENERATION (still via Lovable AI Gateway) =====
@@ -181,19 +194,19 @@ serve(async (req) => {
       }),
     });
 
-    if (r.status === 429) return json({ error: "Rate limit, please retry shortly." }, 429);
-    if (r.status === 402) return json({ error: "AI credits exhausted." }, 402);
+    if (r.status === 429) return json({ error: "Rate limit, please retry shortly." }, 429, corsHeaders);
+    if (r.status === 402) return json({ error: "AI credits exhausted." }, 402, corsHeaders);
     if (!r.ok) {
       const t = await r.text();
       console.error("AI error", r.status, t);
-      return json({ error: "AI gateway error" }, 500);
+      return json({ error: "AI gateway error" }, 500, corsHeaders);
     }
     const data = await r.json();
     const args =
       data?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments ?? "{}";
-    return json(JSON.parse(args));
+    return json(JSON.parse(args), 200, corsHeaders);
   } catch (e) {
     console.error("product-ai error", e);
-    return json({ error: e instanceof Error ? e.message : "Unknown error" }, 500);
+    return json({ error: e instanceof Error ? e.message : "Unknown error" }, 500, corsHeaders);
   }
 });

@@ -76,19 +76,24 @@ function AdminBootSplash() {
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  // Security: never trust the localStorage cache as an authorization signal.
+  // Always start with isAdmin=false and only flip to true after the server-side
+  // RPC verification resolves. Cache is only used to avoid sign-out flicker
+  // (skip the splash if we previously verified this same user).
   const cached = useMemo(() => readAdminCacheAny(), []);
-  // Optimistic: assume admin if we have a session OR cached signal.
-  // Verification runs in the background and only blocks render when it
-  // explicitly resolves to "not admin".
-  const [isAdmin, setIsAdmin] = useState<boolean>(cached?.isAdmin !== false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);
 
   useEffect(() => {
     if (loading) return;
-    if (!user) { navigate({ to: "/auth" }); return; }
+    if (!user) {
+      // Clear stale cache on sign-out to prevent stale escalation hints.
+      try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch {}
+      navigate({ to: "/auth" });
+      return;
+    }
     let cancelled = false;
     (async () => {
-      // Use security-definer RPC — single-row, indexed, fastest path.
       const { data, error } = await supabase.rpc("has_role", {
         _user_id: user.id,
         _role: "admin",
@@ -102,15 +107,13 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate]);
 
-  // Never show a boot splash — render the shell immediately. Auth hydration
-  // and admin verification happen silently in the background; access denial
-  // is handled below once verification completes.
-  if (loading && !cached && !user) {
-    return null;
+  // Show splash until server verification completes — never render admin
+  // shell optimistically.
+  if (loading || !verified) {
+    return cached ? <AdminBootSplash /> : <AdminBootSplash />;
   }
 
-  // Verified denial → access denied page.
-  if (verified && !isAdmin) {
+  if (!isAdmin) {
     return (
       <div className="min-h-screen grid place-items-center bg-[#f6f7fb] px-4">
         <div className="max-w-md w-full bg-white border border-slate-200 rounded-2xl p-8 text-center shadow-sm">
@@ -124,7 +127,11 @@ function AdminLayout() {
           <div className="mt-5 flex gap-2 justify-center">
             <Link to="/" className="h-10 px-4 inline-flex items-center rounded-full border border-slate-200 text-sm font-semibold text-slate-700">Home</Link>
             <button
-              onClick={async () => { await signOut(); navigate({ to: "/auth" }); }}
+              onClick={async () => {
+                try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch {}
+                await signOut();
+                navigate({ to: "/auth" });
+              }}
               className="h-10 px-4 inline-flex items-center gap-1 rounded-full bg-slate-900 text-white text-sm font-semibold"
             >
               <LogOut className="w-4 h-4" /> Sign out

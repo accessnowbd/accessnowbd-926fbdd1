@@ -63,6 +63,7 @@ function OrderDetailPage() {
         .from("orders")
         .select("*")
         .eq("id", id)
+        .eq("user_id", user.id)
         .maybeSingle()
         .then(({ data }) => {
           if (!data) setNotFound(true);
