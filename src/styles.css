@@ -623,6 +623,67 @@
     border-color: rgba(124, 58, 237, 0.22) !important;
   }
 
+  /* === Search bar + header icon readability (white theme) === */
+  /* All header SVG icons → consistent dark violet, including text-aqua/text-aurora colored ones */
+  html.theme-white header svg,
+  html.theme-white header.sticky svg,
+  html.theme-white .relative.z-40.overflow-hidden.bg-background svg {
+    color: oklch(0.38 0.18 295) !important;
+  }
+  /* Accent icons (Zap, Phone, Search, ChevronRight) keep a slightly brighter violet */
+  html.theme-white header .text-aqua,
+  html.theme-white header.sticky .text-aqua,
+  html.theme-white .relative.z-40.overflow-hidden.bg-background .text-aqua {
+    color: oklch(0.50 0.20 295) !important;
+  }
+  /* Icons sitting on gradient/primary CTA stay white (override above) */
+  html.theme-white header [class*="bg-gradient"] svg,
+  html.theme-white header.sticky [class*="bg-gradient"] svg,
+  html.theme-white header .bg-aurora svg,
+  html.theme-white header .bg-primary svg {
+    color: #ffffff !important;
+  }
+
+  /* Search pill (xl:inline-flex search button) — strong contrast */
+  html.theme-white header button[aria-label="Search products"],
+  html.theme-white header button[aria-label="Search"] {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(124, 58, 237, 0.22) !important;
+    color: oklch(0.28 0.04 285) !important;
+    box-shadow: 0 4px 14px -6px rgba(124, 58, 237, 0.22) !important;
+  }
+  html.theme-white header button[aria-label="Search products"]:hover,
+  html.theme-white header button[aria-label="Search"]:hover {
+    border-color: rgba(124, 58, 237, 0.40) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+  }
+  /* "Search…" placeholder label + ⌘K kbd inside search pill */
+  html.theme-white header button[aria-label="Search products"] span,
+  html.theme-white header button[aria-label="Search products"] .text-white\/55 {
+    color: oklch(0.40 0.04 285) !important;
+  }
+  html.theme-white header button[aria-label="Search products"] .bg-white\/10 {
+    background-color: rgba(124, 58, 237, 0.10) !important;
+    color: oklch(0.36 0.18 295) !important;
+    border-color: rgba(124, 58, 237, 0.25) !important;
+  }
+
+  /* Cart count badge — keep accent contrast */
+  html.theme-white header .bg-\[var\(--color-orange\)\] {
+    color: #ffffff !important;
+  }
+
+  /* Theme switcher trigger button & dropdown — readable */
+  html.theme-white header button[aria-label*="theme" i] svg,
+  html.theme-white header button[aria-haspopup] svg {
+    color: oklch(0.38 0.18 295) !important;
+  }
+
+  /* Catch-all: any header text-white (no opacity) → dark, except on gradient CTAs */
+  html.theme-white header :not([class*="bg-gradient"]):not(.bg-aurora):not(.bg-primary) > .text-white {
+    color: oklch(0.22 0.04 285) !important;
+  }
+
   /* Generic nav pill borders & dividers anywhere */
   html.theme-white nav [class*="border-white\\/"] {
     border-color: rgba(124, 58, 237, 0.18) !important;
