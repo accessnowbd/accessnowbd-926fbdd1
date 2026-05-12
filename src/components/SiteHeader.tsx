@@ -40,7 +40,7 @@ const NAV: Array<{
 
 export function TopUtilityBar() {
   return (
-    <div className="relative z-40 overflow-hidden bg-background">
+    <div className="relative z-40 overflow-hidden bg-[#0B1220] text-white">
       <div
         className="relative mx-auto max-w-[1440px] px-3 sm:px-5 md:px-10 flex items-center justify-between gap-3 text-white"
         style={{
