@@ -21,6 +21,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EducationRouteImport } from './routes/education'
 import { Route as DeveloperRouteImport } from './routes/developer'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
@@ -95,6 +96,11 @@ const EducationRoute = EducationRouteImport.update({
 const DeveloperRoute = DeveloperRouteImport.update({
   id: '/developer',
   path: '/developer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -181,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/developer': typeof DeveloperRoute
   '/education': typeof EducationRoute
   '/faq': typeof FaqRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/developer': typeof DeveloperRoute
   '/education': typeof EducationRoute
   '/faq': typeof FaqRoute
@@ -239,6 +247,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/developer': typeof DeveloperRoute
   '/education': typeof EducationRoute
   '/faq': typeof FaqRoute
@@ -270,6 +279,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/dashboard'
     | '/developer'
     | '/education'
     | '/faq'
@@ -298,6 +308,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/dashboard'
     | '/developer'
     | '/education'
     | '/faq'
@@ -327,6 +338,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/dashboard'
     | '/developer'
     | '/education'
     | '/faq'
@@ -357,6 +369,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRoute
   DeveloperRoute: typeof DeveloperRoute
   EducationRoute: typeof EducationRoute
   FaqRoute: typeof FaqRoute
@@ -456,6 +469,13 @@ declare module '@tanstack/react-router' {
       path: '/developer'
       fullPath: '/developer'
       preLoaderRoute: typeof DeveloperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -605,6 +625,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRoute,
   DeveloperRoute: DeveloperRoute,
   EducationRoute: EducationRoute,
   FaqRoute: FaqRoute,
