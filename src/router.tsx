@@ -9,12 +9,11 @@ export const getRouter = () => {
     routeTree,
     context: { queryClient },
     scrollRestoration: true,
-    // Preload route code + data when the user hovers/touches a link,
-    // so the click feels instant.
     defaultPreload: "intent",
-    defaultPreloadDelay: 50,
-    // Keep preloaded data warm for 30s to avoid refetch on click.
-    defaultPreloadStaleTime: 30_000,
+    defaultPreloadDelay: 0,
+    // TanStack Query owns freshness; keeping this at 0 prevents router preload
+    // cache conflicts and the intermittent preload error seen on product hovers.
+    defaultPreloadStaleTime: 0,
     defaultPendingMs: 0,
     defaultPendingMinMs: 0,
   });
