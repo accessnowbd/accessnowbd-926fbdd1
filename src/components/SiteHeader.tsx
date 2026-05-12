@@ -484,15 +484,17 @@ function MagneticNav() {
       ref={navRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="hidden lg:flex relative items-center h-12 rounded-full glass-soft border border-white/10 font-semibold backdrop-blur-2xl shrink min-w-0 whitespace-nowrap"
+      className="hidden lg:flex relative items-center h-12 rounded-full border border-[#e4e7ff] font-semibold shrink min-w-0 whitespace-nowrap"
       style={{
         gap: "clamp(0px, 0.25vw, 4px)",
         paddingLeft: "clamp(4px, 0.6vw, 10px)",
         paddingRight: "clamp(4px, 0.6vw, 10px)",
         fontSize: "clamp(11.5px, 0.95vw, 14px)",
+        background: "#ffffff",
+        boxShadow: "0 4px 14px -8px rgba(79,70,229,0.2)",
       }}
     >
-      {/* Magnetic sliding pill — premium purple glow (matches Dashboard active) */}
+      {/* Sliding pill — light lavender with purple border (reference style) */}
       <span
         aria-hidden
         className="pointer-events-none absolute top-1/2 -translate-y-1/2 h-9 rounded-full transition-[left,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
@@ -500,11 +502,8 @@ function MagneticNav() {
           left: pill.left,
           width: pill.width,
           opacity: pill.visible ? 1 : 0,
-          background:
-            "linear-gradient(135deg, color-mix(in oklab, var(--primary) 22%, transparent), color-mix(in oklab, var(--primary) 10%, transparent))",
-          border: "1px solid color-mix(in oklab, var(--primary) 45%, transparent)",
-          boxShadow:
-            "0 0 0 1px rgba(255,255,255,0.06) inset, 0 0 22px -4px var(--primary), 0 8px 26px -12px rgba(124,58,237,0.7)",
+          background: "#eef0ff",
+          border: "1.5px solid #a5b0ff",
         }}
       />
       {NAV.map((n, i) => {
@@ -517,12 +516,11 @@ function MagneticNav() {
               itemRefs.current[i] = el;
             }}
             className={`relative z-10 py-2 rounded-full transition-colors whitespace-nowrap ${
-              isActive ? "text-primary" : "text-white/75 hover:text-white"
+              isActive ? "text-[#4f46e5]" : "text-slate-700 hover:text-[#4f46e5]"
             }`}
             style={{
               paddingLeft: "clamp(8px, 0.9vw, 16px)",
               paddingRight: "clamp(8px, 0.9vw, 16px)",
-              textShadow: isActive ? "0 0 18px color-mix(in oklab, var(--primary) 70%, transparent)" : undefined,
             }}
           >
             {n.label}
