@@ -163,36 +163,29 @@
 }
 
 @layer utilities {
-  /* Light glass — soft, premium */
+  /* DARK NAVY glass cards on white page — premium SaaS pattern */
   .glass {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
+    background: linear-gradient(160deg, #0F172A 0%, #1E293B 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: var(--shadow-glass);
-    background-color: rgba(255, 255, 255, 0.85);
+    color: #F1F5F9;
   }
   .glass-strong {
-    background: var(--glass-bg-strong);
-    border: 1px solid var(--glass-border);
+    background: linear-gradient(160deg, #0B1220 0%, #1E3A8A 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: var(--shadow-glass-lg);
-    background-color: rgba(255, 255, 255, 0.96);
+    color: #F8FAFC;
   }
   .glass-soft {
-    background: var(--glass-bg-soft);
-    border: 1px solid var(--glass-border-soft);
-    box-shadow: var(--shadow-glass-sm);
-    background-color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    color: inherit;
   }
   @media (min-width: 1024px) and (pointer: fine) {
-    .glass {
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px) saturate(140%);
-      -webkit-backdrop-filter: blur(12px) saturate(140%);
-    }
-    .glass-strong {
-      background: var(--glass-bg-strong);
-      backdrop-filter: blur(16px) saturate(150%);
-      -webkit-backdrop-filter: blur(16px) saturate(150%);
-    }
+    .glass { backdrop-filter: blur(8px) saturate(140%); -webkit-backdrop-filter: blur(8px) saturate(140%); }
+    .glass-strong { backdrop-filter: blur(10px) saturate(150%); -webkit-backdrop-filter: blur(10px) saturate(150%); }
+    .glass-soft { backdrop-filter: blur(6px) saturate(130%); -webkit-backdrop-filter: blur(6px) saturate(130%); }
   }
 
   .gradient-border-card {
