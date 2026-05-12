@@ -8,7 +8,7 @@ import {
   Settings, Palette, Globe, Bell as BellIcon, Crown, ShieldCheck, Search, Menu,
   ChevronDown, X, Plus, Download, RefreshCw, Send, Zap, Star, TrendingUp,
   FileText, Lock, Mail, Phone, MapPin, Hash, Copy, Check, Sun, Moon, Megaphone,
-  HelpCircle, Headphones, Award, Coins, Languages, Eye, EyeOff,
+  Headphones, Award, Coins, Languages, Eye,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
