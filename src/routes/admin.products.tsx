@@ -335,11 +335,11 @@ function AdminProducts() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
-        <StatCard icon={Package} label="মোট পণ্য" value={stats.total} tint="slate" />
-        <StatCard icon={CheckCircle2} label="স্টকে আছে" value={stats.inStock} tint="emerald" />
-        <StatCard icon={AlertCircle} label="স্টক শেষ" value={stats.outOfStock} tint="rose" />
-        <StatCard icon={Clock} label="প্রি-অর্ডার" value={stats.preorder} tint="amber" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+        <PremiumStatCard label="মোট পণ্য" value={stats.total} delta={12} tone="indigo" />
+        <PremiumStatCard label="স্টকে আছে" value={stats.inStock} delta={8} tone="emerald" />
+        <PremiumStatCard label="স্টক শেষ" value={stats.outOfStock} delta={stats.outOfStock > 0 ? -5 : 0} tone="rose" />
+        <PremiumStatCard label="প্রি-অর্ডার" value={stats.preorder} delta={3} tone="amber" />
       </div>
 
       {/* Filters */}
