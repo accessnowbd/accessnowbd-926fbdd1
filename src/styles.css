@@ -573,22 +573,97 @@
 
   /* White-theme product card polish */
   html.theme-white .product-card-v2 {
-    background-color: #ffffff !important;
-    border: 1px solid rgba(124, 58, 237, 0.10) !important;
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(124, 58, 237, 0.12) !important;
     box-shadow: 0 4px 18px -8px rgba(124, 58, 237, 0.18) !important;
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
   }
   html.theme-white .product-card-v2:hover {
     box-shadow: 0 16px 38px -16px rgba(124, 58, 237, 0.32) !important;
-    border-color: rgba(124, 58, 237, 0.22) !important;
+    border-color: rgba(124, 58, 237, 0.24) !important;
   }
   html.theme-white .product-card-v2 h3 {
     color: oklch(0.18 0.04 285) !important;
   }
   html.theme-white .product-card-v2 .text-aurora {
-    background-image: linear-gradient(135deg, #06B6D4 0%, #0EA5E9 50%, #2563EB 100%) !important;
+    background-image: linear-gradient(135deg, #7C3AED 0%, #DB2777 50%, #0EA5E9 100%) !important;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent !important;
+  }
+
+  /* Choose Plan / Add to Cart pill — white glassmorphism with violet gradient */
+  html.theme-white .choose-plan-btn {
+    background: linear-gradient(135deg, #A78BFA 0%, #C4B5FD 50%, #7DD3FC 100%) !important;
+    color: #ffffff !important;
+    box-shadow:
+      0 8px 22px -8px rgba(124, 58, 237, 0.45),
+      0 0 0 1px rgba(255, 255, 255, 0.55) inset !important;
+  }
+  html.theme-white .choose-plan-btn:hover {
+    box-shadow:
+      0 14px 30px -10px rgba(124, 58, 237, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.7) inset !important;
+  }
+
+  /* Product detail page — make hero info, plans, features, "How delivery works" clearly readable */
+  html.theme-white section .glass,
+  html.theme-white section .glass-strong,
+  html.theme-white section .glass-soft {
+    color: oklch(0.22 0.04 285) !important;
+  }
+  html.theme-white .text-foreground { color: oklch(0.20 0.04 285) !important; }
+  html.theme-white .text-muted-foreground { color: oklch(0.45 0.04 285) !important; }
+
+  /* Decorative white-ribbon shimmer on product banner — tone down so banner reads */
+  html.theme-white [class*="via-white\\/"] {
+    --tw-gradient-via: rgba(255, 255, 255, 0.45) !important;
+  }
+
+  /* Buttons that intentionally sit on the aurora gradient must keep white text */
+  html.theme-white .bg-aurora,
+  html.theme-white .btn-aurora,
+  html.theme-white [class*="bg-gradient"][class*="from-primary"] {
+    color: #ffffff !important;
+  }
+  html.theme-white .bg-aurora .text-white,
+  html.theme-white .btn-aurora .text-white,
+  html.theme-white .bg-primary .text-white,
+  html.theme-white [class*="bg-gradient"] .text-white,
+  html.theme-white .text-primary-foreground {
+    color: #ffffff !important;
+  }
+
+  /* Badges sitting on solid color chips keep white text */
+  html.theme-white .bg-primary,
+  html.theme-white [class*="bg-emerald-5"],
+  html.theme-white [class*="bg-rose-5"],
+  html.theme-white [class*="bg-amber-5"],
+  html.theme-white [class*="bg-sky-5"],
+  html.theme-white [class*="bg-violet-5"],
+  html.theme-white [class*="bg-pink-5"],
+  html.theme-white [class*="bg-cyan-5"] {
+    color: #ffffff !important;
+  }
+
+  /* Site-wide: any element using arbitrary `text-white/[0.NN]` becomes readable dark
+     EXCEPT when the element also sits on a gradient/aurora/primary background */
+  html.theme-white *:not(.bg-aurora):not(.btn-aurora):not(.bg-primary):not([class*="bg-gradient"]):not([class*="from-primary"]) > [class*="text-white\\/"] {
+    color: oklch(0.32 0.04 285) !important;
+  }
+
+  /* Cards / dropdowns / popovers — solid frosted white with violet rim */
+  html.theme-white [data-radix-popper-content-wrapper] > *,
+  html.theme-white [role="menu"],
+  html.theme-white [role="listbox"],
+  html.theme-white [role="dialog"] {
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid rgba(124, 58, 237, 0.18) !important;
+    box-shadow: 0 24px 60px -24px rgba(124, 58, 237, 0.35) !important;
+    color: oklch(0.22 0.04 285) !important;
   }
 }
 
