@@ -174,6 +174,40 @@ function AdminDashboard() {
     { label: "Facebook", val: 21893, pct: 22 },
   ];
 
+  // Order status breakdown (real)
+  const orderStatusBreakdown = useMemo(() => {
+    const buckets = { completed: 0, pending: 0, processing: 0, cancelled: 0 } as Record<string, number>;
+    orders.forEach((o) => {
+      const k = (o.status || "pending").toLowerCase();
+      if (k in buckets) buckets[k]++; else buckets.pending++;
+    });
+    const total = Object.values(buckets).reduce((a, b) => a + b, 0) || 1;
+    return [
+      { label: "Completed", val: buckets.completed, color: "#10b981", soft: "bg-emerald-400" },
+      { label: "Processing", val: buckets.processing, color: "#3b82f6", soft: "bg-blue-400" },
+      { label: "Pending",    val: buckets.pending,    color: "#f59e0b", soft: "bg-amber-400" },
+      { label: "Cancelled",  val: buckets.cancelled,  color: "#f43f5e", soft: "bg-rose-400" },
+    ].map((s) => ({ ...s, pct: (s.val / total) * 100, total }));
+  }, [orders]);
+
+  // Recent customers (real, from orders) — matches reference table
+  const recentCustomers = useMemo(() => {
+    return orders.slice(0, 6).map((o) => {
+      const item = Array.isArray(o.items) && (o.items as any[])[0];
+      return {
+        id: o.id,
+        orderId: "#" + o.id.slice(0, 6).toUpperCase(),
+        name: o.full_name || o.email || "Guest",
+        date: new Date(o.created_at),
+        price: Number(o.total) || 0,
+        status: (o.status || "pending").toLowerCase(),
+        image: item?.image_url || "",
+        emoji: item?.emoji || "📦",
+        product: item?.name || "Order",
+      };
+    });
+  }, [orders]);
+
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Greeting */}
@@ -288,6 +322,124 @@ function AdminDashboard() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Orders Breakdown (donut) + Recent Customers — matches reference */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Donut */}
+        <div className="rounded-3xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)]">
+          <div className="flex items-center justify-between mb-4">
+            <div className="font-extrabold text-slate-900">Orders Breakdown</div>
+            <button className="text-slate-400 hover:text-slate-700">⋮</button>
+          </div>
+          {(() => {
+            const total = orderStatusBreakdown[0]?.total ?? 0;
+            // build donut segments
+            let acc = 0;
+            const R = 15.915;
+            return (
+              <>
+                <div className="relative w-44 h-44 mx-auto">
+                  <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                    <circle cx="18" cy="18" r={R} fill="transparent" stroke="#eef2ff" strokeWidth="5" />
+                    {orderStatusBreakdown.map((s) => {
+                      if (s.pct <= 0) return null;
+                      const dash = `${s.pct} ${100 - s.pct}`;
+                      const offset = -acc;
+                      acc += s.pct;
+                      return (
+                        <circle
+                          key={s.label}
+                          cx="18" cy="18" r={R}
+                          fill="transparent"
+                          stroke={s.color}
+                          strokeWidth="5"
+                          strokeDasharray={dash}
+                          strokeDashoffset={offset}
+                          strokeLinecap="butt"
+                        />
+                      );
+                    })}
+                  </svg>
+                  <div className="absolute inset-0 grid place-items-center">
+                    <div className="text-center">
+                      <div className="text-3xl font-extrabold text-slate-900 tabular-nums">{total}</div>
+                      <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Total</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-5 space-y-2">
+                  {orderStatusBreakdown.map((s) => (
+                    <div key={s.label} className="flex items-center gap-2 text-xs">
+                      <span className={`w-2.5 h-2.5 rounded-full ${s.soft}`} />
+                      <span className="text-slate-700 font-semibold flex-1 capitalize">{s.label}</span>
+                      <span className="text-slate-900 font-extrabold tabular-nums">{s.val}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
+        </div>
+
+        {/* Recent Customers table */}
+        <div className="lg:col-span-2 rounded-3xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)]">
+          <div className="flex items-center justify-between mb-4">
+            <div className="font-extrabold text-slate-900">Recent Customers</div>
+            <Link to="/admin/orders" className="text-xs font-bold text-blue-600 inline-flex items-center gap-1 hover:underline">
+              View All <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          {loading ? (
+            <div className="text-sm text-slate-500 text-center py-10">Loading…</div>
+          ) : recentCustomers.length === 0 ? (
+            <div className="text-sm text-slate-500 text-center py-10">No orders yet.</div>
+          ) : (
+            <div className="overflow-x-auto -mx-2">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-[11px] uppercase tracking-wider text-slate-500 font-bold">
+                    <th className="text-left py-2 px-2 font-bold">Product</th>
+                    <th className="text-left py-2 px-2 font-bold">Order ID</th>
+                    <th className="text-left py-2 px-2 font-bold">Customer</th>
+                    <th className="text-left py-2 px-2 font-bold">Date</th>
+                    <th className="text-left py-2 px-2 font-bold">Price</th>
+                    <th className="text-left py-2 px-2 font-bold">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentCustomers.map((c) => (
+                    <tr key={c.id} className="border-t border-slate-100/80 hover:bg-white/60 transition">
+                      <td className="py-2.5 px-2">
+                        <div className="w-9 h-9 rounded-xl bg-slate-100 grid place-items-center overflow-hidden border border-slate-200">
+                          {c.image ? (
+                            <img src={c.image} alt={c.product} className="max-h-[80%] max-w-[80%] object-contain" />
+                          ) : (
+                            <span className="text-base">{c.emoji}</span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-2.5 px-2 text-slate-700 font-semibold tabular-nums">{c.orderId}</td>
+                      <td className="py-2.5 px-2 text-slate-900 font-semibold truncate max-w-[160px]">{c.name}</td>
+                      <td className="py-2.5 px-2 text-slate-600">
+                        <span className="inline-flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-slate-400" />
+                          {c.date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "2-digit" })}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-2 text-slate-900 font-extrabold tabular-nums">{fmtBDT(c.price)}</td>
+                      <td className="py-2.5 px-2">
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ring-1 capitalize ${statusChip(c.status)}`}>
+                          {c.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
 
