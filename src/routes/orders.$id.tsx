@@ -244,6 +244,44 @@ function OrderDetailPage() {
           )}
         </div>
 
+        {/* Delivered credentials — visible once admin delivers */}
+        {order.delivered_credentials?.text && (
+          <div className="mt-5 rounded-3xl p-6 bg-gradient-to-br from-emerald-50 to-emerald-100/40 border-2 border-emerald-300 relative overflow-hidden">
+            <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-emerald-200/40 blur-2xl pointer-events-none" />
+            <div className="relative">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="grid place-items-center w-9 h-9 rounded-xl bg-emerald-600 text-white">
+                  <Check className="w-4 h-4" />
+                </span>
+                <div>
+                  <h2 className="text-lg font-bold text-emerald-900" style={{ fontFamily: "var(--font-display)" }}>
+                    Your subscription is ready
+                  </h2>
+                  {order.delivered_at && (
+                    <p className="text-xs text-emerald-700">Delivered on {new Date(order.delivered_at).toLocaleString()}</p>
+                  )}
+                </div>
+              </div>
+              <pre className="font-mono text-sm bg-white border border-emerald-200 rounded-xl p-4 whitespace-pre-wrap break-words text-foreground">{order.delivered_credentials.text}</pre>
+              <button
+                onClick={async () => {
+                  await navigator.clipboard.writeText(order.delivered_credentials!.text!);
+                  toast.success("Credentials copied");
+                }}
+                className="mt-3 inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700"
+              >
+                <Copy className="w-3.5 h-3.5" /> Copy credentials
+              </button>
+              {order.admin_note && (
+                <div className="mt-4 p-3 rounded-xl bg-white/60 border border-emerald-200">
+                  <div className="text-[10px] uppercase tracking-wider font-bold text-emerald-700 mb-1">Note from team</div>
+                  <p className="text-sm text-foreground/90 whitespace-pre-wrap">{order.admin_note}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="grid md:grid-cols-3 gap-5 mt-5">
           {/* Items */}
           <div className="md:col-span-2 glass rounded-2xl p-5">
