@@ -122,22 +122,33 @@ function ProductCardImpl({ product }: { product: Product }) {
           <span className="text-[15px] font-extrabold text-aurora leading-none">{plan?.price ?? "—"}</span>
         </div>
 
-        <div className="mt-auto pt-2">
+        <div className="mt-auto pt-2 flex gap-1.5">
           {hasOptions ? (
-            <span className="choose-plan-btn flex items-center justify-center gap-1.5 h-10 w-full rounded-full text-xs font-bold">
+            <span className="choose-plan-btn flex flex-1 items-center justify-center gap-1.5 h-10 rounded-full text-xs font-bold">
               <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
               Choose Plan
             </span>
           ) : (
             <button
               onClick={onAdd}
-              className="choose-plan-btn flex items-center justify-center gap-1.5 h-10 w-full rounded-full text-xs font-bold"
+              className="choose-plan-btn flex flex-1 items-center justify-center gap-1.5 h-10 rounded-full text-xs font-bold"
               aria-label="Add to cart"
             >
               <ShoppingCart className="w-3.5 h-3.5" />
               Add to Cart
             </button>
           )}
+          <a
+            href={waAskUrl(product.name, { number: shopConfig?.whatsapp_number })}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            aria-label="Order via WhatsApp"
+            title="Order via WhatsApp"
+            className="grid place-items-center w-10 h-10 shrink-0 rounded-full bg-[#25D366] text-white shadow-sm hover:scale-105 active:scale-95 transition"
+          >
+            <MessageCircle className="w-4 h-4" />
+          </a>
         </div>
       </div>
     </Link>
