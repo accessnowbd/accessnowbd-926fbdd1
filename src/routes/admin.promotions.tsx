@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Loader2, Save, X, Tag, Calendar, Percent } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { AdminStatCard, AdminStatGrid, AdminGlassCard } from "@/components/admin/AdminStatCard";
 
 export const Route = createFileRoute("/admin/promotions")({
   component: AdminPromotions,
@@ -101,29 +102,44 @@ function AdminPromotions() {
     load();
   };
 
+  const activeCount = items.filter(p => p.is_active).length;
+  const withCode = items.filter(p => !!p.code).length;
+  const avgDiscount = (() => {
+    const ds = items.map(p => p.discount_percent ?? 0).filter(Boolean);
+    return ds.length ? Math.round(ds.reduce((a, b) => a + b, 0) / ds.length) : 0;
+  })();
+
   return (
-    <div className="space-y-5">
-      <div className="flex items-center justify-between">
+    <div className="space-y-5 animate-fade-in">
+      <div className="flex items-end justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-aurora">Promotions</h1>
-          <p className="text-sm text-white/60 mt-1">Discounts, coupon codes and campaigns.</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Promotions</h1>
+          <p className="text-sm text-slate-500 mt-1">Discounts, coupon codes and campaigns.</p>
         </div>
         <button
           onClick={() => { setEditing({ ...empty }); setIsNew(true); }}
-          className="btn-aurora px-4 h-10 rounded-full text-sm inline-flex items-center gap-1.5"
+          className="px-4 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 text-white text-sm font-semibold inline-flex items-center gap-1.5 shadow-[0_8px_22px_-8px_rgba(37,99,235,0.7)] hover:opacity-95"
         >
           <Plus className="w-4 h-4" /> New promotion
         </button>
       </div>
 
-      <div className="gradient-border-card p-0 overflow-hidden">
+      <AdminStatGrid>
+        <AdminStatCard label="Total Campaigns" value={items.length}    delta={10}            tone="indigo"  loading={loading} />
+        <AdminStatCard label="Active"          value={activeCount}     delta={5}             tone="emerald" loading={loading} />
+        <AdminStatCard label="With Code"       value={withCode}                              tone="violet"  loading={loading} />
+        <AdminStatCard label="Avg Discount"    value={`${avgDiscount}%`} delta={avgDiscount > 20 ? 8 : -3} tone="rose"    loading={loading} />
+      </AdminStatGrid>
+
+      <AdminGlassCard className="overflow-hidden p-0">
         {loading ? (
-          <div className="p-10 text-center text-white/60"><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Loading…</div>
+          <div className="p-10 text-center text-slate-500"><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Loading…</div>
         ) : items.length === 0 ? (
-          <div className="p-10 text-center text-white/60">No promotions yet. Create your first campaign.</div>
+          <div className="p-10 text-center text-slate-500">No promotions yet. Create your first campaign.</div>
         ) : (
+          <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-white/5 text-[11px] uppercase tracking-wider text-white/60">
+            <thead className="bg-slate-50/80 text-[11px] uppercase tracking-wider text-slate-500">
               <tr>
                 <th className="text-left px-4 py-3">Title</th>
                 <th className="text-left px-4 py-3">Code</th>
@@ -133,36 +149,37 @@ function AdminPromotions() {
                 <th className="text-right px-4 py-3">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {items.map((p) => (
-                <tr key={p.id} className="hover:bg-white/[0.03]">
+                <tr key={p.id} className="hover:bg-white/60">
                   <td className="px-4 py-3">
-                    <div className="font-semibold text-white">{p.title}</div>
-                    {p.badge && <div className="text-[10px] text-violet-300 mt-0.5">{p.badge}</div>}
+                    <div className="font-semibold text-slate-900">{p.title}</div>
+                    {p.badge && <div className="text-[10px] text-violet-600 mt-0.5 font-bold">{p.badge}</div>}
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs text-white/80">{p.code || "—"}</td>
-                  <td className="px-4 py-3 text-white/80">{p.discount_percent ? `${p.discount_percent}%` : "—"}</td>
-                  <td className="px-4 py-3 text-white/60">{p.ends_at ? new Date(p.ends_at).toLocaleDateString() : "—"}</td>
+                  <td className="px-4 py-3 font-mono text-xs text-slate-700">{p.code || "—"}</td>
+                  <td className="px-4 py-3 text-slate-700">{p.discount_percent ? `${p.discount_percent}%` : "—"}</td>
+                  <td className="px-4 py-3 text-slate-500">{p.ends_at ? new Date(p.ends_at).toLocaleDateString() : "—"}</td>
                   <td className="px-4 py-3">
                     <button
                       onClick={() => toggleActive(p)}
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${p.is_active ? "bg-emerald-500/15 text-emerald-300 border-emerald-400/30" : "bg-white/5 text-white/50 border-white/10"}`}
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold ring-1 ${p.is_active ? "bg-emerald-50 text-emerald-700 ring-emerald-200" : "bg-slate-50 text-slate-500 ring-slate-200"}`}
                     >
                       {p.is_active ? "Active" : "Paused"}
                     </button>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
-                      <button onClick={() => { setEditing(p); setIsNew(false); }} className="p-1.5 rounded-lg hover:bg-white/10 text-white/70"><Pencil className="w-3.5 h-3.5" /></button>
-                      <button onClick={() => remove(p.id!)} className="p-1.5 rounded-lg hover:bg-rose-500/15 text-rose-300"><Trash2 className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => { setEditing(p); setIsNew(false); }} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-600"><Pencil className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => remove(p.id!)} className="p-1.5 rounded-lg hover:bg-rose-50 text-rose-600"><Trash2 className="w-3.5 h-3.5" /></button>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         )}
-      </div>
+      </AdminGlassCard>
 
       {editing && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm grid place-items-center p-4" onClick={() => setEditing(null)}>
