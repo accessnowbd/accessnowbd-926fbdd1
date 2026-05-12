@@ -1,10 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star, MessageCircle } from "lucide-react";
 import { memo, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCart } from "@/context/CartContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { ProductBanner } from "@/components/ProductBanner";
+import { useShopConfig } from "@/hooks/useShopConfig";
+import { waAskUrl } from "@/lib/whatsapp";
 import type { Product } from "@/data/products";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
