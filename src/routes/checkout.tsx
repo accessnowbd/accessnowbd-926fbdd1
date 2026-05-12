@@ -32,6 +32,7 @@ export const Route = createFileRoute("/checkout")({
 const methods = [
   { id: "bkash", name: "BKash", number: "01711-123456", color: "bg-[#E2136E]" },
   { id: "nagad", name: "Nagad", number: "01911-654321", color: "bg-[#EC1C24]" },
+  { id: "rocket", name: "Rocket", number: "01511-987654", color: "bg-[#8C3494]" },
 ] as const;
 
 type MethodId = typeof methods[number]["id"];
@@ -241,7 +242,7 @@ function CheckoutPage() {
             {step === 2 && (
               <GlassCard>
                 <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>Choose payment method</h2>
-                <div className="mt-4 grid grid-cols-2 gap-3" role="radiogroup" aria-label="Payment method">
+                <div className="mt-4 grid grid-cols-3 gap-3" role="radiogroup" aria-label="Payment method">
                   {methods.map((m) => (
                     <RadioCard key={m.id} checked={method === m.id} onClick={() => setMethod(m.id)} ariaLabel={m.name}>
                       <div className="flex items-center gap-3">

@@ -104,6 +104,8 @@ function Index() {
         <HeroExperience />
         <CategoryExperience />
 
+        <CategoryPillBar />
+
         <FeaturedProducts items={top} isLoading={isLoading} />
         {isLoading && byCategory.length === 0
           ? RAIL_PLACEHOLDER_TITLES.map((title) => (
@@ -119,6 +121,43 @@ function Index() {
     </div>
   );
 }
+
+const PILL_CATEGORIES = [
+  { id: "home", label: "🏠 Home", to: "/" as const },
+  { id: "shop", label: "🛍️ Shop", to: "/products" as const },
+  { id: "top-picks", label: "⭐ Top Picks", to: "/products" as const },
+  { id: "ott", label: "OTT & Streaming", to: "/products" as const },
+  { id: "windows", label: "Windows", to: "/products" as const },
+  { id: "office", label: "Microsoft Office", to: "/products" as const },
+  { id: "ai", label: "AI & Education", to: "/products" as const },
+  { id: "editing", label: "Editing Tools", to: "/products" as const },
+  { id: "software", label: "Software & Productivity", to: "/products" as const },
+  { id: "vpn", label: "VPN & Security", to: "/products" as const },
+  { id: "giftcards", label: "Giftcards", to: "/products" as const },
+];
+
+function CategoryPillBar() {
+  return (
+    <section className="mx-auto max-w-[1440px] px-4 md:px-10 pt-2 pb-1">
+      <div
+        className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        role="navigation"
+        aria-label="Browse categories"
+      >
+        {PILL_CATEGORIES.map((c) => (
+          <Link
+            key={c.id}
+            to={c.to}
+            className="shrink-0 inline-flex items-center gap-1.5 h-10 px-4 rounded-full glass-soft border border-white/10 text-[13px] font-bold text-foreground hover:border-primary/40 hover:bg-primary hover:text-primary-foreground transition whitespace-nowrap"
+          >
+            {c.label}
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 
 function pickTopProducts(products: Product[]) {
   const seen = new Set<string>();

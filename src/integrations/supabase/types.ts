@@ -163,6 +163,7 @@ export type Database = {
           transaction_id: string
           updated_at: string
           user_id: string
+          whatsapp_sent: boolean
         }
         Insert: {
           admin_note?: string | null
@@ -180,6 +181,7 @@ export type Database = {
           transaction_id: string
           updated_at?: string
           user_id: string
+          whatsapp_sent?: boolean
         }
         Update: {
           admin_note?: string | null
@@ -197,6 +199,7 @@ export type Database = {
           transaction_id?: string
           updated_at?: string
           user_id?: string
+          whatsapp_sent?: boolean
         }
         Relationships: []
       }
@@ -222,6 +225,7 @@ export type Database = {
           updated_at: string
           views: number
           warranty: string
+          whatsapp_order_text: string
         }
         Insert: {
           badge?: string | null
@@ -244,6 +248,7 @@ export type Database = {
           updated_at?: string
           views?: number
           warranty?: string
+          whatsapp_order_text?: string
         }
         Update: {
           badge?: string | null
@@ -266,6 +271,7 @@ export type Database = {
           updated_at?: string
           views?: number
           warranty?: string
+          whatsapp_order_text?: string
         }
         Relationships: []
       }

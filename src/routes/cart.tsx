@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, Tag, X, Check } from "lucide-react";
+import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, Tag, X, Check, MessageCircle } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
@@ -11,6 +11,8 @@ import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary } from "@/components/ui-glass/OrderSummary";
 import { applyCoupon } from "@/lib/coupons";
+import { waOrderUrl } from "@/lib/whatsapp";
+import { useShopConfig } from "@/hooks/useShopConfig";
 
 const cartSearchSchema = z.object({
   coupon: fallback(z.string(), "").default(""),
@@ -26,6 +28,7 @@ function CartPage() {
   const { items, remove, setQty, total, count } = useCart();
   const navigate = useNavigate();
   const { coupon } = Route.useSearch();
+  const { data: shopConfig } = useShopConfig();
 
   const applied = useMemo(() => applyCoupon(coupon, total), [coupon, total]);
   const [input, setInput] = useState(coupon);
@@ -142,14 +145,23 @@ function CartPage() {
                 </form>
               }
               action={
-                <GlassButton
-                  onClick={() => navigate({ to: "/checkout", search: { step: 1, coupon: applied.valid ? applied.code : "" } })}
-                  fullWidth
-                  size="lg"
-                  className="mt-5"
-                >
-                  Proceed to Checkout
-                </GlassButton>
+                <div className="mt-5 space-y-2">
+                  <GlassButton
+                    onClick={() => navigate({ to: "/checkout", search: { step: 1, coupon: applied.valid ? applied.code : "" } })}
+                    fullWidth
+                    size="lg"
+                  >
+                    Proceed to Checkout
+                  </GlassButton>
+                  <a
+                    href={waOrderUrl(items, { number: shopConfig?.whatsapp_number })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 h-12 w-full rounded-full bg-[#25D366] text-white text-sm font-bold hover:opacity-90 transition"
+                  >
+                    <MessageCircle className="w-4 h-4" /> Order via WhatsApp
+                  </a>
+                </div>
               }
             />
           </div>
