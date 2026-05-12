@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ShoppingCart, Star } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCart } from "@/context/CartContext";
 import { badgeColorFor } from "@/lib/badgeColor";
@@ -17,7 +17,7 @@ function ratingFor(slug: string): { rating: string; reviews: number } {
   return { rating, reviews };
 }
 
-export function ProductCard({ product }: { product: Product }) {
+function ProductCardImpl({ product }: { product: Product }) {
   const { add } = useCart();
   const queryClient = useQueryClient();
   const cardRef = useRef<HTMLAnchorElement | null>(null);
@@ -140,3 +140,6 @@ export function ProductCard({ product }: { product: Product }) {
     </Link>
   );
 }
+
+export const ProductCard = memo(ProductCardImpl, (a, b) => a.product.slug === b.product.slug);
+

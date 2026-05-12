@@ -20,6 +20,7 @@ import {
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
+import { LazyMount } from "@/components/LazyMount";
 import type { Product } from "@/data/products";
 
 export const Route = createFileRoute("/")({
@@ -109,7 +110,9 @@ function Index() {
               <ProductRail key={title} title={title} items={[]} isLoading />
             ))
           : byCategory.map((section) => (
-              <ProductRail key={section.category} title={section.category} items={section.items} />
+              <LazyMount key={section.category} minHeight={420}>
+                <ProductRail title={section.category} items={section.items} />
+              </LazyMount>
             ))}
       </main>
       <SiteFooter />
