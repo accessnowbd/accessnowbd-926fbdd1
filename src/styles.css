@@ -920,7 +920,7 @@
   /* Auth submit button (dark pill) → violet aurora gradient */
   html.theme-white button.bg-\[\#0c1322\],
   html.theme-white .bg-\[\#0c1322\].rounded-full {
-    background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 50%, #7DD3FC 100%) !important;
+    background: linear-gradient(135deg, #6D28D9 0%, #4F46E5 50%, #2563EB 100%) !important;
     color: #ffffff !important;
     box-shadow: 0 12px 30px -10px rgba(124, 58, 237, 0.55) !important;
   }
