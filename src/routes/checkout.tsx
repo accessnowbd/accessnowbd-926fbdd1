@@ -242,7 +242,7 @@ function CheckoutPage() {
             {step === 2 && (
               <GlassCard>
                 <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>Choose payment method</h2>
-                <div className="mt-4 grid grid-cols-2 gap-3" role="radiogroup" aria-label="Payment method">
+                <div className="mt-4 grid grid-cols-3 gap-3" role="radiogroup" aria-label="Payment method">
                   {methods.map((m) => (
                     <RadioCard key={m.id} checked={method === m.id} onClick={() => setMethod(m.id)} ariaLabel={m.name}>
                       <div className="flex items-center gap-3">
