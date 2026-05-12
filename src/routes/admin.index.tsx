@@ -5,6 +5,8 @@ import {
   CheckCircle2, ChevronRight, TrendingUp, TrendingDown, Sparkles,
   PackageSearch, TicketPercent, Megaphone, LifeBuoy, Bot, FileText,
   Activity, Zap, ArrowUpRight, Clock, Star,
+  Eye, Ear, Accessibility, Bug, AlertTriangle, Bell, Smartphone, Monitor, Tablet,
+  Globe, MessageSquare, UserCheck, ShieldCheck,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -340,6 +342,264 @@ function AdminDashboard() {
               })}
             </div>
           )}
+        </div>
+      </div>
+
+      {/* ───────── PREMIUM CONTROL CENTER MODULES ───────── */}
+
+      {/* Accessibility Monitoring */}
+      <div>
+        <div className="flex items-end justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white grid place-items-center shadow-md">
+              <Accessibility className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-blue-600">Accessibility Control</div>
+              <div className="text-lg font-extrabold text-slate-900">Monitoring & Reports</div>
+            </div>
+          </div>
+          <Link to="/admin/reports" className="text-xs font-semibold text-slate-700 inline-flex items-center gap-1 hover:text-slate-900">
+            View all reports <ArrowUpRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { label: "Vision Issues", value: 12, sub: "+3 this week", icon: Eye, grad: "from-blue-500 to-indigo-600", chip: "bg-blue-50 text-blue-700" },
+            { label: "Hearing Issues", value: 4, sub: "1 critical", icon: Ear, grad: "from-violet-500 to-purple-600", chip: "bg-violet-50 text-violet-700" },
+            { label: "Mobility Issues", value: 7, sub: "2 in review", icon: Accessibility, grad: "from-emerald-500 to-teal-500", chip: "bg-emerald-50 text-emerald-700" },
+            { label: "Bug Reports", value: 18, sub: "5 resolved today", icon: Bug, grad: "from-rose-500 to-red-500", chip: "bg-rose-50 text-rose-700" },
+          ].map((c) => {
+            const Icon = c.icon;
+            return (
+              <div key={c.label} className="group relative bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden">
+                <div className={`pointer-events-none absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${c.grad} opacity-10 blur-2xl group-hover:opacity-25 transition`} />
+                <div className="flex items-start justify-between relative">
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${c.grad} text-white grid place-items-center shadow-md`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${c.chip}`}>LIVE</span>
+                </div>
+                <div className="text-3xl font-extrabold text-slate-900 mt-3 tracking-tight tabular-nums relative">{c.value}</div>
+                <div className="text-xs text-slate-500 mt-1 font-medium relative">{c.label}</div>
+                <div className="text-[11px] text-slate-400 mt-0.5 relative">{c.sub}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Reports list + Status breakdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <div className="font-bold text-slate-900">Recent accessibility reports</div>
+            <Link to="/admin/reports" className="text-xs font-semibold text-slate-700 hover:text-slate-900 inline-flex items-center gap-1">
+              All <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <div className="space-y-1">
+            {[
+              { user: "Rahim Uddin", issue: "Screen reader skips checkout step 2", type: "Vision", status: "critical", time: "12 min ago" },
+              { user: "Sumi Akter", issue: "Keyboard focus lost in modal", type: "Mobility", status: "in_review", time: "1 hr ago" },
+              { user: "Anonymous", issue: "Caption missing on tutorial video", type: "Hearing", status: "pending", time: "3 hr ago" },
+              { user: "Karim Ahmed", issue: "Low contrast on warning badges", type: "UI", status: "resolved", time: "Yesterday" },
+              { user: "Nadia Islam", issue: "Bangla numerals not announced", type: "Vision", status: "in_review", time: "2 days ago" },
+            ].map((r, i) => {
+              const statusStyle: Record<string, string> = {
+                critical: "bg-rose-50 text-rose-700 ring-rose-200",
+                in_review: "bg-sky-50 text-sky-700 ring-sky-200",
+                pending: "bg-amber-50 text-amber-700 ring-amber-200",
+                resolved: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+              };
+              return (
+                <div key={i} className="flex items-center gap-3 py-2.5 px-2 rounded-xl hover:bg-slate-50 transition">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white grid place-items-center text-[11px] font-bold shrink-0">
+                    {r.user.slice(0, 2).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold text-slate-900 truncate">{r.issue}</div>
+                    <div className="text-[11px] text-slate-500">{r.user} · {r.type} · {r.time}</div>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ring-1 capitalize ${statusStyle[r.status]}`}>
+                    {r.status.replace("_", " ")}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Status breakdown donut */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+          <div className="font-bold text-slate-900 mb-1">Issue status breakdown</div>
+          <div className="text-xs text-slate-500 mb-5">Across all accessibility reports</div>
+          <div className="flex items-center justify-center mb-5">
+            <div className="relative w-40 h-40">
+              <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#fee2e2" strokeWidth="3.5" strokeDasharray="20 100" />
+                <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#dbeafe" strokeWidth="3.5" strokeDasharray="30 100" strokeDashoffset="-20" />
+                <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#fef3c7" strokeWidth="3.5" strokeDasharray="15 100" strokeDashoffset="-50" />
+                <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#dcfce7" strokeWidth="3.5" strokeDasharray="35 100" strokeDashoffset="-65" />
+              </svg>
+              <div className="absolute inset-0 grid place-items-center">
+                <div className="text-center">
+                  <div className="text-2xl font-extrabold text-slate-900">41</div>
+                  <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Total</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            {[
+              { label: "Critical", val: 8, color: "bg-rose-400" },
+              { label: "In Review", val: 12, color: "bg-blue-400" },
+              { label: "Pending", val: 6, color: "bg-amber-400" },
+              { label: "Resolved", val: 15, color: "bg-emerald-400" },
+            ].map((s) => (
+              <div key={s.label} className="flex items-center gap-2 text-xs">
+                <span className={`w-2.5 h-2.5 rounded-full ${s.color}`} />
+                <span className="text-slate-700 font-medium flex-1">{s.label}</span>
+                <span className="text-slate-900 font-bold tabular-nums">{s.val}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Support Tickets + Notifications + Device Analytics */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Support tickets */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white grid place-items-center"><LifeBuoy className="w-4 h-4" /></div>
+              <div>
+                <div className="font-bold text-slate-900">Support tickets</div>
+                <div className="text-xs text-slate-500">9 open · 3 urgent</div>
+              </div>
+            </div>
+            <Link to="/admin/tickets" className="text-xs font-semibold text-slate-700 hover:text-slate-900">All</Link>
+          </div>
+          <div className="space-y-2">
+            {[
+              { id: "TKT-2841", subject: "Cannot reset password", priority: "urgent", user: "Rahim U." },
+              { id: "TKT-2840", subject: "Subscription renewal failed", priority: "high", user: "Sumi A." },
+              { id: "TKT-2839", subject: "Need invoice for ChatGPT plan", priority: "normal", user: "Karim A." },
+              { id: "TKT-2838", subject: "Voice navigation not working", priority: "high", user: "Nadia I." },
+            ].map((t) => {
+              const pStyle: Record<string, string> = {
+                urgent: "bg-rose-100 text-rose-700",
+                high: "bg-amber-100 text-amber-700",
+                normal: "bg-slate-100 text-slate-700",
+              };
+              return (
+                <div key={t.id} className="p-3 rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-sm transition">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[10px] font-bold text-slate-400 tabular-nums">{t.id}</span>
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase ${pStyle[t.priority]}`}>{t.priority}</span>
+                  </div>
+                  <div className="text-sm font-semibold text-slate-900 mt-1 truncate">{t.subject}</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">{t.user}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Notifications feed */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-500 to-pink-500 text-white grid place-items-center relative">
+                <Bell className="w-4 h-4" />
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-white" />
+              </div>
+              <div>
+                <div className="font-bold text-slate-900">Live notifications</div>
+                <div className="text-xs text-slate-500">Real-time activity</div>
+              </div>
+            </div>
+            <Link to="/admin/notifications" className="text-xs font-semibold text-slate-700 hover:text-slate-900">All</Link>
+          </div>
+          <div className="space-y-2.5">
+            {[
+              { type: "order", icon: ShoppingBag, color: "from-emerald-500 to-teal-500", text: "New order ৳1,200 from Anika R.", time: "Just now" },
+              { type: "alert", icon: AlertTriangle, color: "from-rose-500 to-red-500", text: "Critical accessibility issue reported", time: "5 min ago" },
+              { type: "user", icon: UserCheck, color: "from-blue-500 to-indigo-500", text: "12 new users joined today", time: "1 hr ago" },
+              { type: "ticket", icon: MessageSquare, color: "from-violet-500 to-fuchsia-500", text: "Support ticket TKT-2841 opened", time: "2 hr ago" },
+              { type: "system", icon: ShieldCheck, color: "from-amber-500 to-orange-500", text: "Backup completed successfully", time: "4 hr ago" },
+            ].map((n, i) => {
+              const Icon = n.icon;
+              return (
+                <div key={i} className="flex items-start gap-3 p-2 rounded-xl hover:bg-slate-50 transition animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
+                  <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${n.color} text-white grid place-items-center shrink-0 shadow-sm`}>
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm text-slate-800 leading-snug">{n.text}</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5">{n.time}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Device analytics */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 text-white grid place-items-center"><Monitor className="w-4 h-4" /></div>
+              <div>
+                <div className="font-bold text-slate-900">Device analytics</div>
+                <div className="text-xs text-slate-500">Visitor breakdown</div>
+              </div>
+            </div>
+            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+18%</span>
+          </div>
+          <div className="space-y-3.5">
+            {[
+              { label: "Mobile", val: 68, icon: Smartphone, color: "from-violet-500 to-fuchsia-500" },
+              { label: "Desktop", val: 24, icon: Monitor, color: "from-blue-500 to-cyan-500" },
+              { label: "Tablet", val: 8, icon: Tablet, color: "from-emerald-500 to-teal-500" },
+            ].map((d) => {
+              const Icon = d.icon;
+              return (
+                <div key={d.label}>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${d.color} text-white grid place-items-center shadow-sm`}>
+                      <Icon className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-sm font-semibold text-slate-700 flex-1">{d.label}</span>
+                    <span className="text-sm font-extrabold text-slate-900 tabular-nums">{d.val}%</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
+                    <div className={`h-full rounded-full bg-gradient-to-r ${d.color} transition-all`} style={{ width: `${d.val}%` }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-5 pt-5 border-t border-slate-100">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2.5">Top browsers</div>
+            <div className="space-y-1.5">
+              {[
+                { label: "Chrome", val: "62%" },
+                { label: "Safari", val: "21%" },
+                { label: "Firefox", val: "9%" },
+                { label: "Edge", val: "8%" },
+              ].map((b) => (
+                <div key={b.label} className="flex items-center gap-2 text-xs">
+                  <Globe className="w-3 h-3 text-slate-400" />
+                  <span className="text-slate-600 flex-1">{b.label}</span>
+                  <span className="text-slate-900 font-bold tabular-nums">{b.val}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
