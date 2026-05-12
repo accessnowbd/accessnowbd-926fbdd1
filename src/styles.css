@@ -94,18 +94,18 @@
   --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(1 0 0);
 
-  --border: rgba(29, 78, 216, 0.12);
-  --input: rgba(29, 78, 216, 0.08);
+  --border: rgba(15, 23, 42, 0.08);
+  --input: rgba(15, 23, 42, 0.06);
   --ring: oklch(0.55 0.2 264);
   --radius: 16px;
 
-  /* Glass tokens — light frosted */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-bg-strong: rgba(255, 255, 255, 0.92);
-  --glass-bg-soft: rgba(255, 255, 255, 0.55);
-  --glass-border: rgba(29, 78, 216, 0.12);
-  --glass-border-soft: rgba(29, 78, 216, 0.06);
-  --glass-highlight: rgba(255, 255, 255, 0.9);
+  /* Glass tokens — DARK NAVY GLASS on white page (Stripe/Linear style) */
+  --glass-bg: rgba(15, 23, 42, 0.92);
+  --glass-bg-strong: rgba(15, 23, 42, 0.96);
+  --glass-bg-soft: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-soft: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.16);
 
   /* Brand gradients — all blue */
   --gradient-aurora: linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #3B82F6 100%);
