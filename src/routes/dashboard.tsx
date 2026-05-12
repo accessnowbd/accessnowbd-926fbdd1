@@ -130,17 +130,41 @@ function DashboardPage() {
     if (!user) { navigate({ to: "/auth" }); return; }
     let cancelled = false;
     setLoading(true);
-    Promise.all([
-      supabase.from("orders").select("*").order("created_at", { ascending: false }),
-      supabase.from("profiles").select("display_name, phone").eq("id", user.id).maybeSingle(),
-    ])
+    const t0 = performance.now();
+    const mark = (label: string, start: number) => {
+      const ms = Math.round(performance.now() - start);
+      const tag = ms > 1500 ? "🐢 SLOW" : ms > 600 ? "⚠️" : "✅";
+      console.info(`[dashboard-perf] ${tag} ${label}: ${ms}ms`);
+      return ms;
+    };
+
+    const tOrders = performance.now();
+    const ordersP = supabase.from("orders").select("*").order("created_at", { ascending: false })
+      .then((r) => { mark("orders fetch", tOrders); return r; });
+
+    const tProfile = performance.now();
+    const profileP = supabase.from("profiles").select("display_name, phone").eq("id", user.id).maybeSingle()
+      .then((r) => { mark("profile fetch", tProfile); return r; });
+
+    Promise.all([ordersP, profileP])
       .then(([o, p]) => {
         if (cancelled) return;
         setOrders(((o.data as unknown) as Order[]) || []);
         setProfile((p.data as { display_name?: string | null; phone?: string | null } | null) || null);
       })
-      .catch((err) => { console.error("Dashboard load failed:", err); })
-      .finally(() => { if (!cancelled) setLoading(false); });
+      .catch((err) => {
+        console.error("[dashboard-perf] ❌ load failed after", Math.round(performance.now() - t0), "ms", err);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+        const totalMs = mark("TOTAL dashboard load", t0);
+        try {
+          const w = window as unknown as { __dashboardPerf?: Array<{ at: string; totalMs: number; userId: string }> };
+          w.__dashboardPerf = w.__dashboardPerf || [];
+          w.__dashboardPerf.push({ at: new Date().toISOString(), totalMs, userId: user.id });
+          if (w.__dashboardPerf.length > 20) w.__dashboardPerf.shift();
+        } catch { /* noop */ }
+      });
     return () => { cancelled = true; };
   }, [user, authLoading, navigate]);
 
