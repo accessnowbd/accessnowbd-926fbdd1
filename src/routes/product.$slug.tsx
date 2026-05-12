@@ -4,8 +4,6 @@ import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
-import { CartIcon } from "@/components/CartIcon";
-import { AccountIcon } from "@/components/AccountIcon";
 import { ProductBanner } from "@/components/ProductBanner";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
