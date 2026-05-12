@@ -187,21 +187,18 @@ export function SiteHeader() {
                 />
                 {/* Inner round badge — frosted light bg so dark logo strokes stay readable */}
                 <span
-                  className="relative grid place-items-center w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden ring-1 ring-white/20 shadow-[0_8px_24px_-6px_rgba(15,23,42,0.6)] backdrop-blur-xl group-hover:scale-105 transition-transform duration-500"
-                  style={{
-                    background:
-                      "radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 55%, rgba(255,255,255,0.04) 100%)",
-                  }}
+                  className="relative grid place-items-center w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden ring-1 ring-white/30 shadow-[0_8px_24px_-6px_rgba(15,23,42,0.6)] group-hover:scale-105 transition-transform duration-500"
+                  style={{ background: "#ffffff" }}
                 >
                   {/* Top gloss highlight */}
-                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/30 blur-[3px]" />
+                  <span className="pointer-events-none absolute inset-x-1 top-0.5 h-3 rounded-full bg-white/60 blur-[3px]" />
                   {/* Bottom inner shadow */}
-                  <span className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_-6px_12px_-6px_rgba(0,0,0,0.35)]" />
+                  <span className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_-6px_12px_-6px_rgba(0,0,0,0.08)]" />
                   <img
                     src={accessNowLogo}
                     alt="AccessNow BD"
                     draggable={false}
-                    className="relative w-[145%] h-[145%] object-contain translate-y-[2%] drop-shadow-[0_2px_4px_rgba(30,79,216,0.3)]"
+                    className="relative w-[145%] h-[145%] object-contain -translate-y-[6%] drop-shadow-[0_2px_4px_rgba(30,79,216,0.25)]"
                   />
                   {/* Sweeping shine effect on hover */}
                   <span
