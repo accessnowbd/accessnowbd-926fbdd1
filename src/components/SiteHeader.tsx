@@ -307,7 +307,7 @@ export function SiteHeader() {
               </button>
 
 
-              <AccountIcon />
+              <ThemeSwitcher />
               <CartIcon />
 
               {user ? (
