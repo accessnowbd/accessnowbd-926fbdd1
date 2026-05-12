@@ -438,3 +438,11 @@
     animation: none !important;
   }
 }
+
+/* Tame Tailwind's backdrop-blur utilities on small/touch devices to prevent scroll lag */
+@media (max-width: 1023px), (pointer: coarse) {
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
