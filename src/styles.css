@@ -229,15 +229,15 @@
 
     color-scheme: light;
   }
-  /* Premium white-glass canvas — soft violet/indigo/blue mesh, no pink */
+  /* Premium light glass canvas — soft sky/cyan/blue luminous mesh */
   html.theme-white body {
-    background-color: #f4f9ff;
+    background-color: #f8fbff;
     background-image:
-      radial-gradient(70% 60% at 8% 6%, rgba(186, 230, 253, 0.55), transparent 65%),
-      radial-gradient(60% 55% at 92% 4%, rgba(186, 230, 253, 0.55), transparent 68%),
-      radial-gradient(70% 60% at 100% 90%, rgba(191, 219, 254, 0.55), transparent 65%),
-      radial-gradient(60% 55% at 0% 95%, rgba(219, 234, 254, 0.55), transparent 65%),
-      linear-gradient(135deg, #f8fbff 0%, #eef5ff 45%, #cfe7ff 100%);
+      radial-gradient(70% 60% at 8% 6%, rgba(56, 189, 248, 0.28), transparent 65%),
+      radial-gradient(60% 55% at 92% 4%, rgba(96, 165, 250, 0.30), transparent 68%),
+      radial-gradient(70% 60% at 100% 90%, rgba(125, 211, 252, 0.26), transparent 65%),
+      radial-gradient(60% 55% at 0% 95%, rgba(186, 230, 253, 0.40), transparent 65%),
+      linear-gradient(135deg, #f8fbff 0%, #eef5ff 35%, #f5f9ff 70%, #ffffff 100%);
     color: var(--color-foreground);
   }
   html.theme-white body::before { display: none; }
