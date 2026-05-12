@@ -238,7 +238,7 @@ export function SupportWidget() {
               <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/20 blur-[3px]" />
               <span className="absolute -bottom-4 inset-x-3 h-6 rounded-full bg-aqua/40 blur-xl" />
 
-              {chooser ? (
+              {(chooser || open) ? (
                 <X className="h-7 w-7 relative text-white drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]" strokeWidth={2.6} />
               ) : (
                 <>
