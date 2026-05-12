@@ -39,13 +39,14 @@ type Body = {
   imagePrompt?: string;
 };
 
-const json = (body: unknown, status = 200) =>
+const json = (body: unknown, status = 200, corsHeaders: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 
 serve(async (req) => {
+  const corsHeaders = corsFor(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
