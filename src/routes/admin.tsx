@@ -102,9 +102,11 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate]);
 
-  // Only block when auth itself hasn't hydrated AND we have no cache at all.
-  if (loading && !cached) {
-    return <AdminBootSplash />;
+  // Never show a boot splash — render the shell immediately. Auth hydration
+  // and admin verification happen silently in the background; access denial
+  // is handled below once verification completes.
+  if (loading && !cached && !user) {
+    return null;
   }
 
   // Verified denial → access denied page.
