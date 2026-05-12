@@ -32,11 +32,7 @@ function ProductPage() {
   const [selected, setSelected] = useState(0);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen grid place-items-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
+    return <ProductSkeleton />;
   }
   if (!product) {
     return (
