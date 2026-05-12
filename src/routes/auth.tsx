@@ -183,7 +183,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
             <button
               type="button"
               onClick={() => oauth("apple")}
-              className="h-12 rounded-full border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition inline-flex items-center justify-center"
+              className="h-12 rounded-full bg-[#7C5CFF] hover:bg-[#6B4BFF] active:bg-[#5A3FE6] shadow-[0_8px_20px_-8px_rgba(124,92,255,0.6)] transition inline-flex items-center justify-center"
               aria-label="Continue with Apple"
             >
               <svg viewBox="0 0 24 24" className="w-5 h-5 text-slate-900" fill="currentColor">
