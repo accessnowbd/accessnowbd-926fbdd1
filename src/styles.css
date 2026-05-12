@@ -457,6 +457,53 @@
     background-color: rgba(243, 232, 255, 0.9) !important;
     color: oklch(0.32 0.18 295) !important;
   }
+
+  /* ===== Footer-specific (catches arbitrary text-white/NN + bg-white/[0.0xx]) ===== */
+  html.theme-white footer {
+    background: linear-gradient(180deg, rgba(253, 242, 248, 0.9), rgba(243, 232, 255, 0.95)) !important;
+    border-top: 1px solid rgba(124, 58, 237, 0.18) !important;
+    color: oklch(0.22 0.04 285) !important;
+  }
+  html.theme-white footer [class*="text-white"] {
+    color: oklch(0.28 0.04 285) !important;
+  }
+  html.theme-white footer .text-white,
+  html.theme-white footer .font-bold.text-white,
+  html.theme-white footer .font-extrabold.text-white {
+    color: oklch(0.18 0.06 285) !important;
+  }
+  html.theme-white footer [class*="bg-white"] {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(124, 58, 237, 0.14) !important;
+  }
+  html.theme-white footer a.text-aqua,
+  html.theme-white footer .text-aqua {
+    color: oklch(0.5 0.18 220) !important;
+  }
+  html.theme-white footer .blur-\[90px\],
+  html.theme-white footer .blur-\[96px\] {
+    opacity: 0.35 !important;
+  }
+
+  /* ===== Header same treatment ===== */
+  html.theme-white header [class*="text-white"] {
+    color: oklch(0.28 0.04 285) !important;
+  }
+  html.theme-white header [class*="bg-white"] {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  /* ===== Site-wide catch: any text-white/NN arbitrary opacity → readable dark ===== */
+  html.theme-white [class*="text-white\\/"] {
+    color: oklch(0.32 0.04 285) !important;
+  }
+  /* Faint bg-white/[0.0NN] arbitrary opacities → frosted, visible */
+  html.theme-white [class*="bg-white\\/\\[0\\.0"] {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+  }
+  html.theme-white [class*="bg-white\\/\\[0\\.1"] {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+  }
 }
 
 @layer utilities {
