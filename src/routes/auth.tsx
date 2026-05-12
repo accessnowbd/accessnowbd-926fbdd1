@@ -423,8 +423,8 @@ function Field({
   trailing?: React.ReactNode;
 }) {
   return (
-    <label className="block">
-      <span className="text-[13.5px] font-bold text-slate-900">
+    <div className="block">
+      <span className="text-[13.5px] font-bold text-slate-900 block">
         {label}
         {required && <span className="text-rose-500"> *</span>}
       </span>
@@ -435,10 +435,12 @@ function Field({
           onChange={(e) => onChange(e.target.value)}
           required={required}
           placeholder={placeholder}
-          className={`w-full h-12 px-5 ${trailing ? "pr-12" : ""} rounded-full bg-white border border-slate-200 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200 transition`}
+          className={`w-full h-12 px-5 ${trailing ? "pr-14" : ""} rounded-full bg-white border border-slate-200 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200 transition`}
         />
-        {trailing && <span className="absolute right-2.5 top-1/2 -translate-y-1/2">{trailing}</span>}
+        {trailing && (
+          <span className="absolute right-2 top-1/2 -translate-y-1/2 z-10">{trailing}</span>
+        )}
       </div>
-    </label>
+    </div>
   );
 }
