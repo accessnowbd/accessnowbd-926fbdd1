@@ -140,3 +140,6 @@ function ProductCardImpl({ product }: { product: Product }) {
     </Link>
   );
 }
+
+export const ProductCard = memo(ProductCardImpl, (a, b) => a.product.slug === b.product.slug);
+
