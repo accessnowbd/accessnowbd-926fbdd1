@@ -92,7 +92,7 @@ const SOCIALS = [
   { Icon: Send, href: "#", label: "Telegram" },
 ];
 
-const PAYMENTS = ["bKash", "Nagad", "Rocket", "Visa", "Mastercard"];
+const PAYMENTS = ["BKash", "Nagad", "Rocket", "Visa", "Mastercard"];
 
 export function SiteFooter() {
   return (

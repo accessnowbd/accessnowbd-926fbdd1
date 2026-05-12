@@ -101,7 +101,7 @@ function CartPage() {
               variant="totals"
               discount={applied.discount}
               couponCode={applied.valid ? applied.code : undefined}
-              footer="Secure payment with bKash & Nagad"
+              footer="Secure payment with BKash & Nagad"
               extra={
                 <form
                   className="mt-4"

@@ -187,7 +187,7 @@ function ProductPage() {
           <h2 className="text-aurora" style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 600 }}>How delivery works</h2>
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
-              { icon: ShoppingCart, title: "1. Place your order", desc: "Choose your plan and complete payment via bKash, Nagad, or card." },
+              { icon: ShoppingCart, title: "1. Place your order", desc: "Choose your plan and complete payment via BKash, Nagad, or card." },
               { icon: Zap, title: "2. Instant processing", desc: `We deliver your account details within ${product.deliveryTime} on email & WhatsApp.` },
               { icon: Headphones, title: "3. Enjoy & relax", desc: `Use immediately. Covered by our ${product.warranty} guarantee.` },
             ].map((s) => (
