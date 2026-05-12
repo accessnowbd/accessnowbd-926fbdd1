@@ -251,8 +251,9 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
               trailing={
                 <button
                   type="button"
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => setShowPw((v) => !v)}
-                  className="grid place-items-center w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+                  className="grid place-items-center w-9 h-9 rounded-full text-white bg-[#7C5CFF] hover:bg-[#6B4BFF] active:bg-[#5A3FE6] transition shadow-[0_4px_12px_-4px_rgba(124,92,255,0.55)]"
                   aria-label={showPw ? "Hide password" : "Show password"}
                 >
                   {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
