@@ -152,7 +152,7 @@ const brandLogo = (b: { domain: string; logo?: string }) =>
 function HeroExperience() {
   return (
     <section
-      className="relative px-4 md:px-10 pt-8 pb-12 md:pt-12 md:pb-16 overflow-hidden"
+      className="relative px-4 md:px-10 pt-0 pb-12 md:pt-0 md:pb-16 overflow-hidden"
       style={{
         background:
           "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37, 99, 235, 0.18), transparent 70%), linear-gradient(180deg, #07091c 0%, #080a1f 50%, #060818 100%)",
@@ -165,8 +165,7 @@ function HeroExperience() {
         style={{ background: "radial-gradient(circle, rgba(0, 229, 255, 0.45), transparent 65%)" }} />
       <div className="pointer-events-none absolute top-1/3 left-1/2 h-[260px] w-[260px] -translate-x-1/2 rounded-full opacity-15 blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(99, 102, 241, 0.5), transparent 70%)" }} />
-      {/* Top hairline glow to blend with header */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+
 
       <div className="relative mx-auto max-w-[1280px] grid lg:grid-cols-[1.15fr_0.85fr] gap-5 lg:gap-7 items-stretch">
         {/* LEFT — Headline panel */}
