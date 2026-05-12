@@ -7,10 +7,11 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
+import accessNowLogo from "@/assets/accessnow-bd-mark.png";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
-  head: () => ({ meta: [{ title: "RxB Admin — AccessNow BD" }, { name: "robots", content: "noindex,nofollow" }] }),
+  head: () => ({ meta: [{ title: "Admin — AccessNow BD" }, { name: "robots", content: "noindex,nofollow" }] }),
 });
 
 const ADMIN_CACHE_KEY = "anbd:isAdmin";
@@ -196,14 +197,30 @@ function AdminShell({ user, signOut, navigate }: any) {
       >
         {/* Brand */}
         <div className={`h-16 flex items-center justify-between px-4 border-b ${dark ? "border-slate-800" : "border-white/60"}`}>
-          <Link to="/admin" className="flex items-center gap-2 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 grid place-items-center text-white font-bold text-sm shrink-0 shadow-[0_4px_14px_-4px_rgba(37,99,235,0.6)]">
-              Rx
-            </div>
+          <Link to="/admin" className="flex items-center gap-2.5 min-w-0">
+            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-full overflow-hidden ring-1 ring-white/30 shadow-[0_6px_18px_-6px_rgba(47,109,255,0.6)] bg-[radial-gradient(120%_120%_at_30%_20%,rgba(255,255,255,0.95)_0%,rgba(225,236,255,0.9)_55%,rgba(196,218,255,0.88)_100%)]">
+              <img
+                src={accessNowLogo}
+                alt="AccessNow BD"
+                draggable={false}
+                className="relative w-[145%] h-[145%] object-contain translate-y-[2%]"
+              />
+            </span>
             {!collapsed && (
-              <div className={`font-extrabold text-[15px] tracking-tight truncate ${dark ? "text-white" : "text-slate-900"}`}>
-                RxB Admin
-              </div>
+              <span className="leading-[1.05] min-w-0">
+                <span className="flex items-baseline gap-1 whitespace-nowrap">
+                  <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)" }}>Access</span>
+                  <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)" }}>Now</span>
+                  <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)" }}>BD</span>
+                </span>
+                <span className="mt-0.5 flex items-center gap-1">
+                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-400" : "text-slate-500"}`}>Fast</span>
+                  <span className="w-[3px] h-[3px] rounded-full bg-[#2f6dff]" />
+                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-400" : "text-slate-500"}`}>Secure</span>
+                  <span className="w-[3px] h-[3px] rounded-full bg-[#1fc796]" />
+                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-400" : "text-slate-500"}`}>Reliable</span>
+                </span>
+              </span>
             )}
           </Link>
           {/* Mobile close */}
