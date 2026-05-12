@@ -324,14 +324,6 @@ export function SiteHeader() {
                     <UserCircle2 className="w-4 h-4" />
                     <span className="hidden sm:inline max-w-[120px] truncate">Dashboard</span>
                   </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="hidden sm:grid place-items-center w-11 h-11 rounded-full glass-soft border border-white/10 text-white/80 hover:text-white hover:border-rose-400/40 transition"
-                    aria-label="Sign out"
-                    title="Sign out"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </button>
                 </div>
               ) : (
                 <div className="inline-flex items-center p-1 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)]">
