@@ -212,10 +212,18 @@ export function SiteFooter() {
             {COLUMNS.map((col) => (
               <div
                 key={col.title}
-                className="min-h-[360px] rounded-[24px] border border-[var(--glass-border-soft)] bg-white/[0.035] p-5 shadow-[var(--shadow-glass-sm)] md:p-6"
+                className="footer-glass-card group/card relative min-h-[360px] overflow-hidden rounded-[24px] border border-white/15 bg-gradient-to-br from-white/[0.10] via-white/[0.05] to-white/[0.02] p-5 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl backdrop-saturate-150 transition-all duration-300 hover:-translate-y-1 hover:border-aqua/30 hover:shadow-[0_20px_48px_-12px_rgba(34,211,238,0.25),inset_0_1px_0_rgba(255,255,255,0.22)] md:p-6"
               >
-                <div className="mb-5 flex min-h-11 items-center gap-3">
-                  <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_12px_28px_-16px_rgba(34,211,238,0.75)]`}>
+                {/* Glossy top highlight */}
+                <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+                {/* Diagonal sheen */}
+                <span className="pointer-events-none absolute -top-1/2 -left-1/3 h-[200%] w-[40%] rotate-12 bg-gradient-to-r from-transparent via-white/8 to-transparent opacity-60" />
+                {/* Soft color glow */}
+                <span className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/20 blur-[60px] opacity-70 transition-opacity duration-300 group-hover/card:opacity-100" />
+                <span className="pointer-events-none absolute -bottom-20 -left-12 h-44 w-44 rounded-full bg-aqua/12 blur-[70px]" />
+
+                <div className="relative mb-5 flex min-h-11 items-center gap-3">
+                  <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_12px_28px_-16px_rgba(34,211,238,0.75),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-white/20`}>
                     <col.Icon className="h-5 w-5" />
                   </span>
                   <h4
@@ -225,14 +233,14 @@ export function SiteFooter() {
                     {col.title}
                   </h4>
                 </div>
-                <ul className="grid gap-2.5">
+                <ul className="relative grid gap-2.5">
                   {col.links.map((l) => (
                     <li key={l.to + l.label} className="min-h-9">
                       <Link
                         to={l.to}
-                        className="group grid min-h-9 grid-cols-[0.45rem_1fr] items-center gap-3 rounded-xl px-2 text-[13.5px] font-semibold leading-5 text-white/68 transition-colors duration-200 hover:bg-white/[0.045] hover:text-white"
+                        className="group grid min-h-9 grid-cols-[0.45rem_1fr] items-center gap-3 rounded-xl border border-transparent px-2 text-[13.5px] font-semibold leading-5 text-white/72 transition-all duration-200 hover:border-white/10 hover:bg-white/[0.07] hover:text-white hover:backdrop-blur-md"
                       >
-                        <span className={`h-1.5 w-1.5 rounded-full ${col.bullet} opacity-80 transition-opacity duration-200 group-hover:opacity-100`} />
+                        <span className={`h-1.5 w-1.5 rounded-full ${col.bullet} opacity-80 shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-opacity duration-200 group-hover:opacity-100`} />
                         <span className="truncate">{l.label}</span>
                       </Link>
                     </li>
