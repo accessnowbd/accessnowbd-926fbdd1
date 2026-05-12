@@ -395,6 +395,8 @@ function Field({
   required,
   placeholder,
   trailing,
+  name,
+  autoComplete,
 }: {
   label: string;
   value: string;
@@ -403,6 +405,8 @@ function Field({
   required?: boolean;
   placeholder?: string;
   trailing?: React.ReactNode;
+  name?: string;
+  autoComplete?: string;
 }) {
   return (
     <div className="block">
@@ -413,6 +417,8 @@ function Field({
       <div className="mt-2 relative">
         <input
           type={type}
+          name={name}
+          autoComplete={autoComplete}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           required={required}
