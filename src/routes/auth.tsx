@@ -48,7 +48,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
   }, [initialMode]);
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: "/orders" });
+    if (!loading && user) navigate({ to: "/dashboard" });
   }, [user, loading, navigate]);
 
   const update = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
@@ -58,7 +58,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: { redirectTo: `${window.location.origin}/orders` },
+        options: { redirectTo: `${window.location.origin}/dashboard` },
       });
       if (error) throw error;
     } catch (e: unknown) {
@@ -97,7 +97,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
           email: parsed.data.email,
           password: parsed.data.password,
           options: {
-            emailRedirectTo: `${window.location.origin}/orders`,
+            emailRedirectTo: `${window.location.origin}/dashboard`,
             data: { display_name: parsed.data.name, phone: parsed.data.phone },
           },
         });
