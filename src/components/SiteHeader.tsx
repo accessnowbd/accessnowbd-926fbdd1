@@ -40,55 +40,128 @@ const NAV: Array<{
 
 export function TopUtilityBar() {
   return (
-    <div className="relative z-40 border-b border-white/10 bg-background/40 backdrop-blur-2xl text-xs">
-      {/* premium aurora hairline */}
+    <div className="relative z-40 overflow-hidden">
+      {/* base layer: deep aurora gradient */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(90deg, #0a0f25 0%, #14163a 28%, #1a1148 50%, #14163a 72%, #0a0f25 100%)",
+        }}
+      />
+      {/* animated shimmer wash */}
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-60"
+        style={{
+          background:
+            "linear-gradient(115deg, transparent 30%, rgba(124,58,237,0.18) 45%, rgba(0,229,255,0.22) 55%, transparent 70%)",
+          backgroundSize: "220% 100%",
+          animation: "topbar-shimmer 9s linear infinite",
+        }}
+      />
+      {/* fine dot grid texture */}
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-[0.08] mix-blend-screen"
+        style={{
+          backgroundImage:
+            "radial-gradient(rgba(255,255,255,0.7) 1px, transparent 1px)",
+          backgroundSize: "14px 14px",
+        }}
+      />
+      {/* bottom premium hairline */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(124,58,237,0.5)_20%,rgba(0,229,255,0.85)_50%,rgba(124,58,237,0.5)_80%,transparent)]" />
-        <div className="absolute inset-x-1/3 -bottom-1 h-2 blur-md bg-aqua/40" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(124,58,237,0.6)_22%,rgba(0,229,255,0.95)_50%,rgba(124,58,237,0.6)_78%,transparent)]" />
+        <div className="absolute inset-x-1/3 -bottom-1 h-2 blur-md bg-aqua/45" />
       </div>
-      <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-9 flex items-center justify-between">
-        <div className="flex items-center gap-4 text-white/75">
-          <span className="inline-flex items-center gap-1.5 font-semibold">
-            <Zap className="w-3 h-3 text-aqua" />
-            Fast • Secure • Reliable
+
+      <div
+        className="relative mx-auto max-w-[1440px] px-3 sm:px-5 md:px-10 flex items-center justify-between gap-3 text-white"
+        style={{
+          minHeight: "clamp(32px, 2.6vw, 40px)",
+          fontSize: "clamp(10.5px, 0.78vw, 12.5px)",
+        }}
+      >
+        {/* LEFT — trust chips */}
+        <div className="flex items-center" style={{ gap: "clamp(6px, 0.7vw, 14px)" }}>
+          <span
+            className="inline-flex items-center gap-1.5 font-bold tracking-tight rounded-full border border-white/10"
+            style={{
+              padding: "2px clamp(6px, 0.7vw, 12px)",
+              background:
+                "linear-gradient(135deg, rgba(124,58,237,0.25), rgba(0,229,255,0.18))",
+              boxShadow:
+                "inset 0 0 0 1px rgba(255,255,255,0.06), 0 4px 14px -6px rgba(0,229,255,0.4)",
+            }}
+          >
+            <Zap className="w-3 h-3 text-aqua" strokeWidth={2.5} />
+            <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg,#fff,#bce8ff)" }}>
+              Fast · Secure · Reliable
+            </span>
           </span>
-          <span className="hidden md:inline-flex items-center gap-1.5 text-white/60">
-            <ShieldCheck className="w-3 h-3 text-emerald-400" />
-            100% Verified Service
+          <span className="hidden sm:inline-flex items-center gap-1.5 text-white/75 font-medium">
+            <span className="grid place-items-center w-4 h-4 rounded-full bg-emerald-400/15 ring-1 ring-emerald-400/40">
+              <ShieldCheck className="w-2.5 h-2.5 text-emerald-300" strokeWidth={2.5} />
+            </span>
+            <span className="hidden md:inline">100% Verified</span>
+            <span className="md:hidden">Verified</span>
           </span>
-          <span className="hidden lg:inline-flex items-center gap-1.5 text-white/60">
+          <span className="hidden lg:inline-flex items-center gap-1.5 text-white/75 font-medium">
+            <Sparkles className="w-3 h-3 text-violet-300" strokeWidth={2.5} />
             Instant Delivery
           </span>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-2.5 text-white/65">
+
+        {/* RIGHT — socials, phone, status */}
+        <div className="flex items-center" style={{ gap: "clamp(6px, 0.8vw, 16px)" }}>
+          <div className="hidden sm:flex items-center gap-1">
             {[Facebook, Instagram, Youtube, Twitter].map((Icon, i) => (
               <a
                 key={i}
                 href="#"
-                className="hover:text-aqua transition"
                 aria-label="social"
+                className="grid place-items-center w-6 h-6 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition"
               >
-                <Icon className="w-3 h-3" />
+                <Icon className="w-3 h-3" strokeWidth={2.2} />
               </a>
             ))}
           </div>
+          <span className="hidden sm:block w-px h-3.5 bg-white/15" />
           <a
             href="tel:+8801580607614"
-            className="hidden md:inline-flex items-center gap-1.5 text-white/80 hover:text-white transition"
+            className="hidden md:inline-flex items-center gap-1.5 text-white/85 hover:text-white transition font-semibold"
           >
-            <PhoneCall className="w-3 h-3 text-aqua" />
-            +880 1580-607614
+            <span className="grid place-items-center w-5 h-5 rounded-full bg-aqua/15 ring-1 ring-aqua/35">
+              <PhoneCall className="w-2.5 h-2.5 text-aqua" strokeWidth={2.5} />
+            </span>
+            <span className="tabular-nums tracking-tight">+880 1580-607614</span>
           </a>
-          <span className="inline-flex items-center gap-1.5 font-semibold text-white">
+          <span className="hidden md:block w-px h-3.5 bg-white/15" />
+          <span
+            className="inline-flex items-center gap-1.5 font-bold rounded-full border border-emerald-400/30"
+            style={{
+              padding: "2px clamp(6px, 0.6vw, 10px)",
+              background:
+                "linear-gradient(135deg, rgba(16,185,129,0.18), rgba(16,185,129,0.06))",
+            }}
+          >
             <span className="relative flex w-1.5 h-1.5">
               <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
               <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-400" />
             </span>
-            Online · 11 AM – 11 PM
+            <span className="text-emerald-200">Online</span>
+            <span className="text-white/70 font-medium hidden sm:inline">· 11 AM – 11 PM</span>
           </span>
         </div>
       </div>
+
+      <style>{`
+        @keyframes topbar-shimmer {
+          0%   { background-position: 0% 0%; }
+          100% { background-position: 220% 0%; }
+        }
+      `}</style>
     </div>
   );
 }
