@@ -110,7 +110,9 @@ function Index() {
               <ProductRail key={title} title={title} items={[]} isLoading />
             ))
           : byCategory.map((section) => (
-              <ProductRail key={section.category} title={section.category} items={section.items} />
+              <LazyMount key={section.category} minHeight={420}>
+                <ProductRail title={section.category} items={section.items} />
+              </LazyMount>
             ))}
       </main>
       <SiteFooter />
