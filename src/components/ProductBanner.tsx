@@ -97,11 +97,14 @@ export function ProductBanner({
   className = "",
   ratio = "5/4",
   spheres = 5,
+  priority = false,
 }: {
   product: Product;
   className?: string;
   ratio?: "5/4" | "4/3" | "1/1" | "16/9";
   spheres?: number;
+  /** First-fold images: load eagerly with high fetch priority */
+  priority?: boolean;
 }) {
   const seed = hash(product.slug);
   const blobs = useMemo(() => {
