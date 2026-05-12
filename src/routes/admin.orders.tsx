@@ -325,6 +325,56 @@ function OrderDetail({ order, onClose, onStatusChange }: { order: Order; onClose
               ))}
             </div>
           </div>
+
+          {/* Deliver credentials */}
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <KeyRound className="w-4 h-4 text-emerald-600" />
+              <h3 className="text-sm font-bold text-emerald-900">Deliver credentials to customer</h3>
+              {deliveredAt && (
+                <span className="ml-auto text-[10px] uppercase tracking-wider font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                  Delivered {new Date(deliveredAt).toLocaleString()}
+                </span>
+              )}
+            </div>
+            <textarea
+              value={credentialsText}
+              onChange={(e) => setCredentialsText(e.target.value)}
+              placeholder={"Email: customer@example.com\nPassword: ********\nProfile: 1\nNotes: Don't change password"}
+              rows={5}
+              className="w-full rounded-lg border border-emerald-200 bg-white px-3 py-2 text-sm font-mono outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+            />
+            <p className="text-[11px] text-emerald-700 mt-1">Plain text, multi-line. Customer will see this on their order page after delivery.</p>
+            <button
+              onClick={deliverCredentials}
+              disabled={delivering || !credentialsText.trim()}
+              className="mt-3 inline-flex items-center gap-2 h-10 px-4 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {delivering ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              {deliveredAt ? "Update & re-deliver" : "Deliver & mark completed"}
+            </button>
+          </div>
+
+          {/* Admin note */}
+          <div className="rounded-xl border border-border p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <MessageSquare className="w-4 h-4 text-muted-foreground" />
+              <h3 className="text-sm font-bold">Message to customer (optional)</h3>
+            </div>
+            <textarea
+              value={adminNote}
+              onChange={(e) => setAdminNote(e.target.value)}
+              placeholder="e.g. Thanks for your order! Let us know if you need help."
+              rows={3}
+              className="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm outline-none focus:border-primary"
+            />
+            <button
+              onClick={saveNoteOnly}
+              className="mt-2 inline-flex items-center gap-1.5 h-8 px-3 rounded-full border border-border text-xs font-semibold hover:bg-secondary"
+            >
+              Save note
+            </button>
+          </div>
         </div>
 
         <div className="sticky bottom-0 bg-white border-t border-border px-6 py-3 flex items-center justify-end gap-2">
