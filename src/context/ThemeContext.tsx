@@ -37,7 +37,7 @@ type Ctx = {
 };
 
 const ThemeCtx = createContext<Ctx>({
-  theme: "aurora",
+  theme: "white",
   themes: THEMES,
   setTheme: () => {},
 });
@@ -52,7 +52,7 @@ function applyTheme(id: ThemeId) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeId>("aurora");
+  const [theme, setThemeState] = useState<ThemeId>("white");
 
   useEffect(() => {
     try {
@@ -61,10 +61,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         setThemeState(saved);
         applyTheme(saved);
       } else {
-        applyTheme("aurora");
+        applyTheme("white");
       }
     } catch {
-      applyTheme("aurora");
+      applyTheme("white");
     }
   }, []);
 
