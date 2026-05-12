@@ -152,7 +152,7 @@ const brandLogo = (b: { domain: string; logo?: string }) =>
 function HeroExperience() {
   return (
     <section
-      className="relative px-4 md:px-10 pt-0 pb-12 md:pt-0 md:pb-16 overflow-hidden"
+      className="relative px-4 md:px-10 pt-6 pb-12 md:pt-10 md:pb-16 overflow-hidden"
     >
       {/* Subtle deep aurora layers — pushed below to avoid bleeding above hero cards */}
       <div className="pointer-events-none absolute top-40 -left-32 h-[460px] w-[460px] rounded-full opacity-25 blur-3xl"
