@@ -1,9 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, LogOut, Package, Loader2 } from "lucide-react";
+import { ArrowLeft, Package, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
-import { CartIcon } from "@/components/CartIcon";
 
 
 export const Route = createFileRoute("/orders")({
