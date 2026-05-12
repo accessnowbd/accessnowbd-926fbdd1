@@ -4,6 +4,7 @@ import { Loader2, Eye, Search, X, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { downloadReceiptPdf } from "@/lib/receipt";
+import { AdminStatCard, AdminStatGrid, AdminGlassCard } from "@/components/admin/AdminStatCard";
 
 export const Route = createFileRoute("/admin/orders")({
   component: AdminOrders,
@@ -87,33 +88,45 @@ function AdminOrders() {
     return acc;
   }, {} as Record<string, number>);
 
+  const totalRev = orders.filter(o => o.status !== "cancelled").reduce((a, o) => a + Number(o.total || 0), 0);
+  const completed = counts["completed"] ?? 0;
+  const pendingCount = (counts["pending"] ?? 0) + (counts["processing"] ?? 0);
+  const cancelled = counts["cancelled"] ?? 0;
+
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
+    <div className="space-y-5 animate-fade-in">
+      <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-semibold" style={{ fontFamily: "var(--font-display)" }}>Orders</h1>
-          <p className="text-sm text-muted-foreground">{orders.length} total orders</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Orders</h1>
+          <p className="text-sm text-slate-500 mt-1">{orders.length} total orders</p>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-4">
+      <AdminStatGrid>
+        <AdminStatCard label="Total Revenue" value={"৳" + Math.round(totalRev).toLocaleString("en-IN")} delta={12} tone="indigo" loading={loading} />
+        <AdminStatCard label="Total Orders" value={orders.length.toLocaleString("en-IN")} delta={8} tone="emerald" loading={loading} />
+        <AdminStatCard label="Pending" value={pendingCount} delta={pendingCount > 0 ? -5 : 0} tone="amber" loading={loading} />
+        <AdminStatCard label="Cancelled" value={cancelled} delta={cancelled > 0 ? 3 : 0} tone="rose" loading={loading} />
+      </AdminStatGrid>
+
+      <div className="flex flex-wrap gap-2">
         <FilterChip label={`All (${orders.length})`} active={filter === "all"} onClick={() => setFilter("all")} />
         {STATUSES.map((s) => (
           <FilterChip key={s} label={`${s} (${counts[s] ?? 0})`} active={filter === s} onClick={() => setFilter(s)} />
         ))}
       </div>
 
-      <div className="relative mb-3">
-        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+      <div className="relative">
+        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search by order ID, name, email, phone, or transaction ID…"
-          className="w-full h-10 pl-9 pr-3 rounded-full border border-border bg-white text-sm outline-none focus:border-primary"
+          className="w-full h-10 pl-9 pr-3 rounded-full border border-white/60 bg-white/70 backdrop-blur-xl text-sm outline-none focus:border-indigo-400 shadow-sm"
         />
       </div>
 
-      <div className="bg-white border border-border rounded-2xl overflow-hidden">
+      <AdminGlassCard className="overflow-hidden p-0">
         {loading ? (
           <div className="p-10 grid place-items-center text-muted-foreground"><Loader2 className="w-5 h-5 animate-spin" /></div>
         ) : (
@@ -175,7 +188,7 @@ function AdminOrders() {
             </table>
           </div>
         )}
-      </div>
+      </AdminGlassCard>
 
       {selected && (
         <OrderDetail order={selected} onClose={() => setSelected(null)} onStatusChange={(s) => updateStatus(selected.id, s)} />

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Loader2, Save, X, Tag, Calendar, Percent } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { AdminStatCard, AdminStatGrid, AdminGlassCard } from "@/components/admin/AdminStatCard";
 
 export const Route = createFileRoute("/admin/promotions")({
   component: AdminPromotions,
@@ -101,29 +102,44 @@ function AdminPromotions() {
     load();
   };
 
+  const activeCount = items.filter(p => p.is_active).length;
+  const withCode = items.filter(p => !!p.code).length;
+  const avgDiscount = (() => {
+    const ds = items.map(p => p.discount_percent ?? 0).filter(Boolean);
+    return ds.length ? Math.round(ds.reduce((a, b) => a + b, 0) / ds.length) : 0;
+  })();
+
   return (
-    <div className="space-y-5">
-      <div className="flex items-center justify-between">
+    <div className="space-y-5 animate-fade-in">
+      <div className="flex items-end justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-aurora">Promotions</h1>
-          <p className="text-sm text-white/60 mt-1">Discounts, coupon codes and campaigns.</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Promotions</h1>
+          <p className="text-sm text-slate-500 mt-1">Discounts, coupon codes and campaigns.</p>
         </div>
         <button
           onClick={() => { setEditing({ ...empty }); setIsNew(true); }}
-          className="btn-aurora px-4 h-10 rounded-full text-sm inline-flex items-center gap-1.5"
+          className="px-4 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 text-white text-sm font-semibold inline-flex items-center gap-1.5 shadow-[0_8px_22px_-8px_rgba(37,99,235,0.7)] hover:opacity-95"
         >
           <Plus className="w-4 h-4" /> New promotion
         </button>
       </div>
 
-      <div className="gradient-border-card p-0 overflow-hidden">
+      <AdminStatGrid>
+        <AdminStatCard label="Total Campaigns" value={items.length}    delta={10}            tone="indigo"  loading={loading} />
+        <AdminStatCard label="Active"          value={activeCount}     delta={5}             tone="emerald" loading={loading} />
+        <AdminStatCard label="With Code"       value={withCode}                              tone="violet"  loading={loading} />
+        <AdminStatCard label="Avg Discount"    value={`${avgDiscount}%`} delta={avgDiscount > 20 ? 8 : -3} tone="rose"    loading={loading} />
+      </AdminStatGrid>
+
+      <AdminGlassCard className="overflow-hidden p-0">
         {loading ? (
-          <div className="p-10 text-center text-white/60"><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Loading…</div>
+          <div className="p-10 text-center text-slate-500"><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Loading…</div>
         ) : items.length === 0 ? (
-          <div className="p-10 text-center text-white/60">No promotions yet. Create your first campaign.</div>
+          <div className="p-10 text-center text-slate-500">No promotions yet. Create your first campaign.</div>
         ) : (
+          <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-white/5 text-[11px] uppercase tracking-wider text-white/60">
+            <thead className="bg-slate-50/80 text-[11px] uppercase tracking-wider text-slate-500">
               <tr>
                 <th className="text-left px-4 py-3">Title</th>
                 <th className="text-left px-4 py-3">Code</th>
@@ -133,43 +149,44 @@ function AdminPromotions() {
                 <th className="text-right px-4 py-3">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {items.map((p) => (
-                <tr key={p.id} className="hover:bg-white/[0.03]">
+                <tr key={p.id} className="hover:bg-white/60">
                   <td className="px-4 py-3">
-                    <div className="font-semibold text-white">{p.title}</div>
-                    {p.badge && <div className="text-[10px] text-violet-300 mt-0.5">{p.badge}</div>}
+                    <div className="font-semibold text-slate-900">{p.title}</div>
+                    {p.badge && <div className="text-[10px] text-violet-600 mt-0.5 font-bold">{p.badge}</div>}
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs text-white/80">{p.code || "—"}</td>
-                  <td className="px-4 py-3 text-white/80">{p.discount_percent ? `${p.discount_percent}%` : "—"}</td>
-                  <td className="px-4 py-3 text-white/60">{p.ends_at ? new Date(p.ends_at).toLocaleDateString() : "—"}</td>
+                  <td className="px-4 py-3 font-mono text-xs text-slate-700">{p.code || "—"}</td>
+                  <td className="px-4 py-3 text-slate-700">{p.discount_percent ? `${p.discount_percent}%` : "—"}</td>
+                  <td className="px-4 py-3 text-slate-500">{p.ends_at ? new Date(p.ends_at).toLocaleDateString() : "—"}</td>
                   <td className="px-4 py-3">
                     <button
                       onClick={() => toggleActive(p)}
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${p.is_active ? "bg-emerald-500/15 text-emerald-300 border-emerald-400/30" : "bg-white/5 text-white/50 border-white/10"}`}
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold ring-1 ${p.is_active ? "bg-emerald-50 text-emerald-700 ring-emerald-200" : "bg-slate-50 text-slate-500 ring-slate-200"}`}
                     >
                       {p.is_active ? "Active" : "Paused"}
                     </button>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
-                      <button onClick={() => { setEditing(p); setIsNew(false); }} className="p-1.5 rounded-lg hover:bg-white/10 text-white/70"><Pencil className="w-3.5 h-3.5" /></button>
-                      <button onClick={() => remove(p.id!)} className="p-1.5 rounded-lg hover:bg-rose-500/15 text-rose-300"><Trash2 className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => { setEditing(p); setIsNew(false); }} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-600"><Pencil className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => remove(p.id!)} className="p-1.5 rounded-lg hover:bg-rose-50 text-rose-600"><Trash2 className="w-3.5 h-3.5" /></button>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         )}
-      </div>
+      </AdminGlassCard>
 
       {editing && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm grid place-items-center p-4" onClick={() => setEditing(null)}>
-          <div className="gradient-border-card max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm grid place-items-center p-4" onClick={() => setEditing(null)}>
+          <div className="rounded-2xl ring-1 ring-white/60 bg-white/95 backdrop-blur-xl shadow-[0_30px_80px_-20px_rgba(15,23,42,0.35)] max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white">{isNew ? "New Promotion" : "Edit Promotion"}</h2>
-              <button onClick={() => setEditing(null)} className="p-1.5 rounded-lg hover:bg-white/10 text-white/60"><X className="w-4 h-4" /></button>
+              <h2 className="text-xl font-bold text-slate-900">{isNew ? "New Promotion" : "Edit Promotion"}</h2>
+              <button onClick={() => setEditing(null)} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500"><X className="w-4 h-4" /></button>
             </div>
             <div className="space-y-3 text-sm">
               <Field label="Title"><input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} className="admin-input" /></Field>
@@ -192,14 +209,14 @@ function AdminPromotions() {
                   <input type="datetime-local" value={toLocalInput(editing.ends_at)} onChange={(e) => setEditing({ ...editing, ends_at: e.target.value ? new Date(e.target.value).toISOString() : null })} className="admin-input" />
                 </Field>
               </div>
-              <label className="flex items-center gap-2 text-white/80">
+              <label className="flex items-center gap-2 text-slate-700">
                 <input type="checkbox" checked={editing.is_active} onChange={(e) => setEditing({ ...editing, is_active: e.target.checked })} />
                 Active
               </label>
             </div>
             <div className="mt-5 flex justify-end gap-2">
-              <button onClick={() => setEditing(null)} className="px-4 h-9 rounded-full border border-white/15 text-white/80 text-xs font-semibold">Cancel</button>
-              <button onClick={save} className="btn-aurora px-4 h-9 rounded-full text-xs inline-flex items-center gap-1.5"><Save className="w-3.5 h-3.5" /> Save</button>
+              <button onClick={() => setEditing(null)} className="px-4 h-9 rounded-full ring-1 ring-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50">Cancel</button>
+              <button onClick={save} className="px-4 h-9 rounded-full bg-gradient-to-r from-blue-600 to-sky-500 text-white text-xs font-semibold inline-flex items-center gap-1.5 shadow-[0_8px_22px_-8px_rgba(37,99,235,0.7)]"><Save className="w-3.5 h-3.5" /> Save</button>
             </div>
           </div>
         </div>
@@ -208,15 +225,15 @@ function AdminPromotions() {
       <style>{`
         .admin-input {
           width: 100%;
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.1);
+          background: #fff;
+          border: 1px solid #e2e8f0;
           border-radius: 10px;
           padding: 8px 12px;
-          color: white;
+          color: #0f172a;
           font-size: 13px;
           outline: none;
         }
-        .admin-input:focus { border-color: rgba(167,139,250,0.5); background: rgba(255,255,255,0.06); }
+        .admin-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
       `}</style>
     </div>
   );
@@ -225,7 +242,7 @@ function AdminPromotions() {
 function Field({ label, children, icon }: { label: string; children: React.ReactNode; icon?: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="text-[11px] uppercase tracking-wider text-white/60 font-bold mb-1 flex items-center gap-1.5">{icon}{label}</span>
+      <span className="text-[11px] uppercase tracking-wider text-slate-500 font-bold mb-1 flex items-center gap-1.5">{icon}{label}</span>
       {children}
     </label>
   );
