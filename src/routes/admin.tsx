@@ -155,13 +155,20 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className={`min-h-screen flex ${dark ? "bg-slate-900" : "bg-gradient-to-br from-blue-50/60 via-white to-sky-50/40"}`}>
+    <div className={`min-h-screen flex relative ${dark ? "bg-slate-900" : ""}`} style={!dark ? { background: "linear-gradient(135deg,#eef2ff 0%,#f5f3ff 30%,#fdf2f8 65%,#fff7ed 100%)" } : undefined}>
+      {!dark && (
+        <>
+          <div className="pointer-events-none fixed -top-40 -left-40 w-[520px] h-[520px] rounded-full bg-violet-300/35 blur-[120px]" />
+          <div className="pointer-events-none fixed top-1/3 right-1/4 w-[380px] h-[380px] rounded-full bg-pink-200/40 blur-[120px]" />
+          <div className="pointer-events-none fixed bottom-0 left-1/4 w-[460px] h-[460px] rounded-full bg-fuchsia-300/30 blur-[140px]" />
+        </>
+      )}
       {/* SIDEBAR */}
       <aside
-        className={`${collapsed ? "w-[72px]" : "w-[280px]"} shrink-0 transition-all duration-200 border-r ${dark ? "bg-slate-950 border-slate-800" : "bg-white border-slate-200"} flex flex-col h-screen sticky top-0`}
+        className={`${collapsed ? "w-[72px]" : "w-[280px]"} shrink-0 transition-all duration-200 border-r ${dark ? "bg-slate-950 border-slate-800" : "bg-white/70 backdrop-blur-xl border-white/60"} flex flex-col h-screen sticky top-0 z-10`}
       >
         {/* Brand */}
-        <div className={`h-16 flex items-center justify-between px-4 border-b ${dark ? "border-slate-800" : "border-slate-200"}`}>
+        <div className={`h-16 flex items-center justify-between px-4 border-b ${dark ? "border-slate-800" : "border-white/60"}`}>
           <Link to="/admin" className="flex items-center gap-2 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 grid place-items-center text-white font-bold text-sm shrink-0 shadow-[0_4px_14px_-4px_rgba(37,99,235,0.6)]">
               Rx
@@ -230,7 +237,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* MAIN */}
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar */}
-        <header className={`h-16 sticky top-0 z-20 backdrop-blur border-b ${dark ? "bg-slate-900/80 border-slate-800" : "bg-white/80 border-slate-200"}`}>
+        <header className={`h-16 sticky top-0 z-20 backdrop-blur-xl border-b ${dark ? "bg-slate-900/80 border-slate-800" : "bg-white/50 border-white/60"}`}>
           <div className="h-full px-4 md:px-6 flex items-center gap-3">
             {/* Breadcrumb */}
             <div className={`hidden md:flex items-center gap-2 text-sm ${dark ? "text-slate-300" : "text-slate-600"}`}>
@@ -331,18 +338,17 @@ function SidebarItem({ item, collapsed, dark, active }: { item: AdminMenuItem; c
       activeOptions={{ exact: item.exact }}
       title={collapsed ? item.label : undefined}
       className={[
-        "group flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm transition-colors relative",
+        "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all relative",
         collapsed ? "justify-center" : "",
         active
-          ? (dark ? "bg-slate-800 text-white" : "bg-blue-50 text-blue-700 ring-1 ring-blue-100")
-          : (dark ? "text-slate-300 hover:bg-slate-800/70" : "text-slate-700 hover:bg-blue-50/60"),
+          ? (dark ? "bg-slate-800 text-white" : "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-[0_8px_22px_-8px_rgba(37,99,235,0.6)]")
+          : (dark ? "text-slate-300 hover:bg-slate-800/70" : "text-slate-700 hover:bg-white/70"),
       ].join(" ")}
     >
-      <span className={`shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-sky-500 grid place-items-center text-white shadow-sm`}>
+      <span className={`shrink-0 w-7 h-7 rounded-lg grid place-items-center transition ${active ? "bg-white/20 text-white" : "bg-gradient-to-br from-blue-600 to-sky-500 text-white shadow-sm"}`}>
         {item.icon}
       </span>
-      {!collapsed && <span className="font-medium truncate flex-1">{item.label}</span>}
-      {!collapsed && active && <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />}
+      {!collapsed && <span className="font-semibold truncate flex-1">{item.label}</span>}
     </Link>
   );
 }

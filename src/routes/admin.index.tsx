@@ -86,25 +86,16 @@ function AdminDashboard() {
 
   const kpiCards = [
     {
-      label: "Total revenue", value: fmtBDT(stats.revenue), sub: `${counts.orders} orders all-time`,
-      icon: DollarSign, ring: "ring-emerald-200", grad: "from-emerald-500 via-emerald-400 to-teal-400",
-      tint: "text-emerald-700", chip: "bg-emerald-50 text-emerald-700",
+      label: "Today's Sale", value: fmtBDT(stats.todayRev), delta: stats.dayDelta, deltaLabel: "vs yesterday",
+      tint: "from-indigo-100/80 via-violet-50 to-white", stroke: "#6366f1", fill: "rgba(99,102,241,0.18)",
     },
     {
-      label: "Today's sales", value: fmtBDT(stats.todayRev), sub: `${stats.todayCount} orders today`,
-      icon: ShoppingBag, ring: "ring-amber-200", grad: "from-amber-500 via-orange-400 to-rose-400",
-      tint: "text-amber-700", chip: "bg-amber-50 text-amber-700",
-      delta: stats.dayDelta,
+      label: "Total Sales", value: fmtBDT(stats.revenue), delta: -14, deltaLabel: "vs last month",
+      tint: "from-rose-100/80 via-pink-50 to-white", stroke: "#f43f5e", fill: "rgba(244,63,94,0.18)",
     },
     {
-      label: "This month", value: fmtBDT(stats.monthRev), sub: `${stats.monthCount} orders MTD`,
-      icon: BarChart3, ring: "ring-violet-200", grad: "from-violet-500 via-fuchsia-500 to-purple-500",
-      tint: "text-violet-700", chip: "bg-violet-50 text-violet-700",
-    },
-    {
-      label: "Customers", value: counts.users.toLocaleString("en-IN"), sub: `${counts.products} products live`,
-      icon: Users, ring: "ring-sky-200", grad: "from-sky-500 via-cyan-500 to-blue-500",
-      tint: "text-sky-700", chip: "bg-sky-50 text-sky-700",
+      label: "Total Orders", value: counts.orders.toLocaleString("en-IN"), delta: 36, deltaLabel: "vs last month",
+      tint: "from-emerald-100/80 via-teal-50 to-white", stroke: "#10b981", fill: "rgba(16,185,129,0.18)",
     },
   ];
 
@@ -121,6 +112,28 @@ function AdminDashboard() {
     { to: "/admin/analytics", label: "Analytics", icon: Activity, grad: "from-cyan-500 to-blue-600" },
     { to: "/admin/settings", label: "Settings", icon: Settings, grad: "from-slate-600 to-slate-800" },
     { to: "/admin/notifications", label: "Alerts", icon: Zap, grad: "from-rose-500 to-red-500" },
+  ];
+
+  // Sparkline path generator (smooth area)
+  const sparkPath = (vals: number[], w = 200, h = 60) => {
+    const max = Math.max(1, ...vals);
+    const step = w / Math.max(1, vals.length - 1);
+    const pts = vals.map((v, i) => [i * step, h - (v / max) * (h - 6) - 3] as [number, number]);
+    let d = `M ${pts[0][0]},${pts[0][1]}`;
+    for (let i = 1; i < pts.length; i++) {
+      const [x1, y1] = pts[i - 1];
+      const [x2, y2] = pts[i];
+      const cx = (x1 + x2) / 2;
+      d += ` C ${cx},${y1} ${cx},${y2} ${x2},${y2}`;
+    }
+    const area = `${d} L ${w},${h} L 0,${h} Z`;
+    return { line: d, area };
+  };
+
+  const kpiSeries = [
+    spark.map((s) => s.v).concat([100, 140, 110, 180, 160, 220]).slice(-12),
+    [120, 140, 110, 160, 130, 175, 150, 200, 180, 230, 210, 260],
+    [80, 110, 95, 130, 115, 155, 140, 180, 165, 210, 195, 245],
   ];
 
   const lowStock = products.filter((p) => !p.is_active);
@@ -149,134 +162,157 @@ function AdminDashboard() {
     return "bg-slate-100 text-slate-700 ring-slate-200";
   };
 
+  // Sales report mock series
+  const salesMonths = ["Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan"];
+  const seriesA = [220,260,300,250,330,290,340,420,380,460,500,560];
+  const seriesB = [120,140,170,150,200,180,220,260,240,300,340,380];
+  const trafficSources = [
+    { label: "Direct", val: 143382, pct: 92 },
+    { label: "Referral", val: 87974, pct: 66 },
+    { label: "Social Media", val: 45211, pct: 42 },
+    { label: "Twitter", val: 21893, pct: 22 },
+    { label: "Facebook", val: 21893, pct: 22 },
+  ];
+
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* HERO */}
-      <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-900 via-indigo-950 to-violet-900 p-6 md:p-8 text-white shadow-[0_20px_60px_-20px_rgba(76,29,149,0.55)]">
-        <div className="pointer-events-none absolute -top-24 -right-24 w-[360px] h-[360px] rounded-full bg-fuchsia-500/30 blur-[110px]" />
-        <div className="pointer-events-none absolute -bottom-24 -left-16 w-[320px] h-[320px] rounded-full bg-cyan-400/25 blur-[110px]" />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "22px 22px" }} />
-
-        <div className="relative flex items-start justify-between gap-4 flex-wrap">
-          <div className="min-w-0">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 ring-1 ring-white/15 text-[10px] font-bold uppercase tracking-wider">
-              <Sparkles className="w-3 h-3" /> Dashboard
-            </span>
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mt-3">Welcome back 👋</h1>
-            <p className="text-sm text-white/70 mt-1">Here's a snapshot of your store today.</p>
-
-            <div className="mt-5 flex flex-wrap items-center gap-2">
-              <Link to="/admin/add-product" className="h-10 px-4 rounded-full bg-white text-slate-900 text-sm font-semibold inline-flex items-center gap-1.5 hover:bg-white/90 transition">
-                <Plus className="w-4 h-4" /> Add product
-              </Link>
-              <Link to="/admin/orders" className="h-10 px-4 rounded-full bg-white/10 ring-1 ring-white/20 text-white text-sm font-semibold inline-flex items-center gap-1.5 hover:bg-white/15 transition">
-                <ShoppingBag className="w-4 h-4" /> View orders
-              </Link>
-              <Link to="/admin/analytics" className="h-10 px-4 rounded-full bg-white/10 ring-1 ring-white/20 text-white text-sm font-semibold inline-flex items-center gap-1.5 hover:bg-white/15 transition">
-                <BarChart3 className="w-4 h-4" /> Analytics
-              </Link>
-            </div>
-          </div>
-
-          {/* mini live tile */}
-          <div className="rounded-2xl bg-white/8 ring-1 ring-white/15 backdrop-blur px-5 py-4 min-w-[220px]">
-            <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-white/60 font-bold">
-              <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" /></span>
-              Live revenue today
-            </div>
-            <div className="text-2xl font-extrabold mt-1">{loading ? "—" : fmtBDT(stats.todayRev)}</div>
-            <div className="flex items-center gap-1 text-xs mt-1 text-white/70">
-              {stats.dayDelta >= 0 ? <TrendingUp className="w-3.5 h-3.5 text-emerald-300" /> : <TrendingDown className="w-3.5 h-3.5 text-rose-300" />}
-              <span className={stats.dayDelta >= 0 ? "text-emerald-300 font-bold" : "text-rose-300 font-bold"}>{stats.dayDelta >= 0 ? "+" : ""}{stats.dayDelta}%</span>
-              <span>vs yesterday</span>
-            </div>
-          </div>
+      {/* Greeting */}
+      <div className="flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Hi, Admin</h1>
+          <p className="text-sm text-slate-500 mt-1">Welcome back to AccessNow BD <span className="inline-block">👋</span></p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link to="/admin/settings" className="h-10 px-4 rounded-xl bg-white/70 backdrop-blur ring-1 ring-white/60 text-sm font-semibold text-slate-700 inline-flex items-center gap-1.5 hover:bg-white">
+            <Settings className="w-4 h-4" /> Customize
+          </Link>
+          <Link to="/admin/add-product" className="h-10 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 text-white text-sm font-semibold inline-flex items-center gap-1.5 shadow-[0_8px_22px_-8px_rgba(37,99,235,0.7)] hover:opacity-95">
+            <Plus className="w-4 h-4" /> Add New
+          </Link>
         </div>
       </div>
 
-      {/* KPI cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {kpiCards.map((c) => {
-          const Icon = c.icon;
+      {/* KPI cards with sparkline */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {kpiCards.map((c, idx) => {
+          const sp = sparkPath(kpiSeries[idx]);
+          const up = (c.delta ?? 0) >= 0;
           return (
-            <div key={c.label} className="group relative bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden">
-              <div className={`pointer-events-none absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${c.grad} opacity-10 blur-2xl group-hover:opacity-20 transition`} />
-              <div className="flex items-start justify-between relative">
-                <div className="text-xs text-slate-500 font-semibold">{c.label}</div>
-                <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${c.grad} text-white grid place-items-center shadow-md`}>
-                  <Icon className="w-4 h-4" />
-                </div>
+            <div key={c.label} className={`relative overflow-hidden rounded-2xl p-5 ring-1 ring-white/60 bg-gradient-to-br ${c.tint} shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)]`}>
+              <div className="flex items-start justify-between">
+                <div className="text-sm font-semibold text-slate-700">{c.label}</div>
+                <button className="text-slate-400 hover:text-slate-700">⋮</button>
               </div>
-              <div className="text-2xl font-extrabold text-slate-900 mt-3 tracking-tight relative">{loading ? "—" : c.value}</div>
-              <div className="flex items-center gap-1.5 mt-1 relative">
-                <div className="text-xs text-slate-500">{c.sub}</div>
-                {typeof (c as any).delta === "number" && (
-                  <span className={`ml-auto inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md ${(c as any).delta >= 0 ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
-                    {(c as any).delta >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                    {(c as any).delta >= 0 ? "+" : ""}{(c as any).delta}%
+              <div className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight tabular-nums">
+                {loading ? "—" : c.value}
+              </div>
+              <div className="flex items-end justify-between mt-3 gap-3">
+                <div className="flex items-center gap-1.5 text-xs">
+                  <span className={`inline-flex items-center gap-0.5 font-bold ${up ? "text-emerald-600" : "text-rose-600"}`}>
+                    {up ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+                    {up ? "+" : ""}{c.delta}%
                   </span>
-                )}
+                  <span className="text-slate-500">{c.deltaLabel}</span>
+                </div>
+                <svg viewBox="0 0 200 60" className="w-[55%] h-14 -mb-1">
+                  <defs>
+                    <linearGradient id={`g-${idx}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={c.fill} />
+                      <stop offset="100%" stopColor="transparent" />
+                    </linearGradient>
+                  </defs>
+                  <path d={sp.area} fill={`url(#g-${idx})`} />
+                  <path d={sp.line} fill="none" stroke={c.stroke} strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Sales chart + Quick actions */}
+      {/* Sales Report + Traffic Sources */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Chart */}
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <div className="font-bold text-slate-900">Revenue · last 7 days</div>
-              <div className="text-xs text-slate-500">Daily totals across all paid orders</div>
+        <div className="lg:col-span-2 rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)]">
+          <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+            <div className="font-extrabold text-slate-900">Sales Report</div>
+            <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100/70">
+              {["12 MONTHS","6 MONTHS","30 DAYS","7 DAYS"].map((t,i)=>(
+                <button key={t} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg ${i===0?"bg-white shadow-sm text-slate-900":"text-slate-500 hover:text-slate-700"}`}>{t}</button>
+              ))}
             </div>
-            <Link to="/admin/reports" className="text-xs font-semibold text-slate-700 inline-flex items-center gap-1 hover:text-slate-900">
-              Full report <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
+            <button className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-white ring-1 ring-slate-200 text-slate-700 hover:bg-slate-50">
+              <FileText className="w-3.5 h-3.5" /> EXPORT PDF
+            </button>
           </div>
-          <div className="flex items-end gap-2 h-44">
-            {spark.map((d, i) => {
-              const h = Math.max(6, Math.round((d.v / sparkMax) * 100));
-              return (
-                <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                  <div className="w-full flex flex-col justify-end h-36">
-                    <div
-                      className="w-full rounded-t-lg bg-gradient-to-t from-violet-500 via-fuchsia-500 to-cyan-400 shadow-[0_4px_14px_-4px_rgba(139,92,246,0.5)] transition-all hover:opacity-90"
-                      style={{ height: `${h}%` }}
-                      title={fmtBDT(d.v)}
-                    />
-                  </div>
-                  <div className="text-[10px] font-semibold text-slate-500">{d.d}</div>
-                </div>
-              );
-            })}
-          </div>
+          {(() => {
+            const W=720, H=200;
+            const max = Math.max(...seriesA, ...seriesB);
+            const step = W/(seriesA.length-1);
+            const toPath = (arr:number[]) => {
+              const pts = arr.map((v,i)=>[i*step, H - (v/max)*(H-30) - 10] as [number,number]);
+              let d = `M ${pts[0][0]},${pts[0][1]}`;
+              for (let i=1;i<pts.length;i++){
+                const [x1,y1]=pts[i-1],[x2,y2]=pts[i];
+                const cx=(x1+x2)/2;
+                d+=` C ${cx},${y1} ${cx},${y2} ${x2},${y2}`;
+              }
+              return d;
+            };
+            return (
+              <svg viewBox={`0 0 ${W} ${H+30}`} className="w-full h-56">
+                <path d={toPath(seriesA)} fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" />
+                <path d={toPath(seriesB)} fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" />
+                {salesMonths.map((m,i)=>(
+                  <text key={m} x={i*step} y={H+22} textAnchor="middle" className="fill-slate-400" style={{fontSize:11,fontWeight:600}}>{m}</text>
+                ))}
+              </svg>
+            );
+          })()}
         </div>
 
-        {/* Quick actions grid */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="font-bold text-slate-900">Quick actions</div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Shortcuts</span>
+        <div className="rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)]">
+          <div className="flex items-center justify-between mb-5">
+            <div className="font-extrabold text-slate-900">Traffic Sources</div>
+            <button className="text-[11px] font-bold text-slate-500 inline-flex items-center gap-1">LAST 7 DAYS</button>
           </div>
-          <div className="grid grid-cols-3 gap-2.5">
-            {quickActions.map((a) => {
-              const Icon = a.icon;
-              return (
-                <Link
-                  key={a.to}
-                  to={a.to}
-                  className="group flex flex-col items-center gap-1.5 p-2.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-md transition-all"
-                >
-                  <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${a.grad} text-white grid place-items-center shadow-md group-hover:scale-110 transition`}>
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  <div className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{a.label}</div>
-                </Link>
-              );
-            })}
+          <div className="space-y-4">
+            {trafficSources.map((t)=>(
+              <div key={t.label}>
+                <div className="flex items-center justify-between text-xs mb-1.5">
+                  <span className="text-slate-700 font-semibold">{t.label}</span>
+                  <span className="text-slate-900 font-bold tabular-nums">{t.val.toLocaleString("en-IN")}</span>
+                </div>
+                <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                  <div className="h-full rounded-full bg-blue-500" style={{ width: `${t.pct}%` }} />
+                </div>
+              </div>
+            ))}
           </div>
+        </div>
+      </div>
+
+      {/* Quick actions */}
+      <div className="rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)]">
+        <div className="flex items-center justify-between mb-4">
+          <div className="font-extrabold text-slate-900">Quick actions</div>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Shortcuts</span>
+        </div>
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2.5">
+          {quickActions.map((a) => {
+            const Icon = a.icon;
+            return (
+              <Link
+                key={a.to}
+                to={a.to}
+                className="group flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white/80 ring-1 ring-white/70 hover:ring-slate-200 hover:shadow-md transition-all"
+              >
+                <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${a.grad} text-white grid place-items-center shadow-md group-hover:scale-110 transition`}>
+                  <Icon className="w-4 h-4" />
+                </div>
+                <div className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{a.label}</div>
+              </Link>
+            );
+          })}
         </div>
       </div>
 
