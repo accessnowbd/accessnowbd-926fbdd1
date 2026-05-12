@@ -30,7 +30,11 @@ export const Route = createFileRoute("/api/public/products")({
         const products = (data ?? []).map((row) => rowToProduct(row as never));
         return Response.json(slug ? (products[0] ?? null) : products, {
           headers: {
-            "Cache-Control": "public, max-age=60, stale-while-revalidate=600",
+            // Edge/CDN caches for 5 min, browsers revalidate after 60s,
+            // serves stale up to 1h while refreshing in the background.
+            "Cache-Control":
+              "public, max-age=60, s-maxage=300, stale-while-revalidate=3600",
+            Vary: "Accept-Encoding",
           },
         });
       },
