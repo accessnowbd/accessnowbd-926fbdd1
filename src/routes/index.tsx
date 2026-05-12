@@ -152,7 +152,7 @@ const brandLogo = (b: { domain: string; logo?: string }) =>
 function HeroExperience() {
   return (
     <section
-      className="relative px-4 md:px-10 pt-8 pb-12 md:pt-12 md:pb-16 overflow-hidden"
+      className="relative px-4 md:px-10 pt-0 pb-12 md:pt-0 md:pb-16 overflow-hidden"
       style={{
         background:
           "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37, 99, 235, 0.18), transparent 70%), linear-gradient(180deg, #07091c 0%, #080a1f 50%, #060818 100%)",
