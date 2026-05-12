@@ -434,7 +434,7 @@ function ProductRail({ title, items, isLoading }: { title: string; items: Produc
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
       <div className="flex items-end justify-between gap-4">
-        <SectionTitle eyebrow="Collection" title={title} subtitle="Premium products organized by category." compact />
+        <SectionTitle eyebrow="Collection" title={title} compact />
         <div className="hidden md:flex items-center gap-2">
           <button onClick={() => scroll(-1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll left"><ChevronLeft className="h-4 w-4" /></button>
           <button onClick={() => scroll(1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll right"><ChevronRight className="h-4 w-4" /></button>
