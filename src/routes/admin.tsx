@@ -155,7 +155,14 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className={`min-h-screen flex ${dark ? "bg-slate-900" : "bg-gradient-to-br from-blue-50/60 via-white to-sky-50/40"}`}>
+    <div className={`min-h-screen flex relative ${dark ? "bg-slate-900" : ""}`} style={!dark ? { background: "linear-gradient(135deg,#eef2ff 0%,#f5f3ff 30%,#fdf2f8 65%,#fff7ed 100%)" } : undefined}>
+      {!dark && (
+        <>
+          <div className="pointer-events-none fixed -top-40 -left-40 w-[520px] h-[520px] rounded-full bg-violet-300/35 blur-[120px]" />
+          <div className="pointer-events-none fixed top-1/3 right-1/4 w-[380px] h-[380px] rounded-full bg-pink-200/40 blur-[120px]" />
+          <div className="pointer-events-none fixed bottom-0 left-1/4 w-[460px] h-[460px] rounded-full bg-fuchsia-300/30 blur-[140px]" />
+        </>
+      )}
       {/* SIDEBAR */}
       <aside
         className={`${collapsed ? "w-[72px]" : "w-[280px]"} shrink-0 transition-all duration-200 border-r ${dark ? "bg-slate-950 border-slate-800" : "bg-white border-slate-200"} flex flex-col h-screen sticky top-0`}
