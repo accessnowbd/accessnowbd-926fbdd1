@@ -1243,3 +1243,89 @@
     -webkit-backdrop-filter: none !important;
   }
 }
+
+/* ============================================================
+   FINAL: Eliminate all cyan/turquoise/teal leaks in white theme.
+   Map every aqua/cyan/teal text + accent to the violet→indigo→blue
+   IDM-style palette so nothing renders as turquoise.
+   ============================================================ */
+@layer utilities {
+  /* Solid aqua/cyan/teal text → deep indigo */
+  html.theme-white .text-aqua,
+  html.theme-white .text-aqua-deep,
+  html.theme-white [class*="text-cyan-"],
+  html.theme-white [class*="text-teal-"],
+  html.theme-white [class*="text-sky-"] {
+    color: oklch(0.42 0.22 275) !important;
+    text-shadow: none !important;
+  }
+
+  /* Hero gradient headlines that previously read as turquoise */
+  html.theme-white h1 .text-aqua,
+  html.theme-white h2 .text-aqua,
+  html.theme-white h3 .text-aqua {
+    background-image: linear-gradient(135deg, #6D28D9 0%, #4F46E5 50%, #2563EB 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    text-shadow: none !important;
+  }
+
+  /* SVG icons in cyan/teal/sky → indigo */
+  html.theme-white [class*="text-cyan-"] svg,
+  html.theme-white [class*="text-teal-"] svg,
+  html.theme-white [class*="text-sky-"] svg,
+  html.theme-white svg[class*="text-cyan-"],
+  html.theme-white svg[class*="text-teal-"],
+  html.theme-white svg[class*="text-sky-"] {
+    color: oklch(0.42 0.22 275) !important;
+    stroke: oklch(0.42 0.22 275) !important;
+  }
+
+  /* Backgrounds: cyan/teal/sky tints → soft violet wash */
+  html.theme-white [class*="bg-cyan-"],
+  html.theme-white [class*="bg-teal-"],
+  html.theme-white [class*="bg-sky-"] {
+    background-color: rgba(99, 102, 241, 0.14) !important;
+    color: oklch(0.32 0.20 280) !important;
+    border-color: rgba(79, 70, 229, 0.22) !important;
+  }
+
+  /* Tailwind gradient stops with cyan/teal/sky → indigo/blue */
+  html.theme-white [class*="from-cyan-"],
+  html.theme-white [class*="from-teal-"],
+  html.theme-white [class*="from-sky-"] {
+    --tw-gradient-from: #6D28D9 var(--tw-gradient-from-position) !important;
+    --tw-gradient-to: rgb(109 40 217 / 0) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+  }
+  html.theme-white [class*="via-cyan-"],
+  html.theme-white [class*="via-teal-"],
+  html.theme-white [class*="via-sky-"] {
+    --tw-gradient-via: #4F46E5 var(--tw-gradient-via-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to) !important;
+  }
+  html.theme-white [class*="to-cyan-"],
+  html.theme-white [class*="to-teal-"],
+  html.theme-white [class*="to-sky-"] {
+    --tw-gradient-to: #2563EB var(--tw-gradient-to-position) !important;
+  }
+
+  /* Borders/rings */
+  html.theme-white [class*="border-cyan-"],
+  html.theme-white [class*="border-teal-"],
+  html.theme-white [class*="border-sky-"],
+  html.theme-white [class*="ring-cyan-"],
+  html.theme-white [class*="ring-teal-"],
+  html.theme-white [class*="ring-sky-"] {
+    border-color: rgba(79, 70, 229, 0.35) !important;
+  }
+
+  /* Strip cyan glow text-shadows in hero */
+  html.theme-white h1 [style*="rgba(0,229,255"],
+  html.theme-white h1 [style*="rgba(0, 229, 255"],
+  html.theme-white h2 [style*="rgba(0,229,255"],
+  html.theme-white h2 [style*="rgba(0, 229, 255"] {
+    text-shadow: 0 2px 14px rgba(79, 70, 229, 0.28) !important;
+  }
+}
