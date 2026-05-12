@@ -56,14 +56,6 @@ function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center">
-          <Link to="/" className="flex items-center gap-2 font-semibold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
-            <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
-            AccessNow BD
-          </Link>
-        </div>
-      </header>
 
       <div className="mx-auto max-w-md px-4 py-10">
         <Link to="/auth" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">

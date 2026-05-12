@@ -70,20 +70,6 @@ function OrdersPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 font-semibold text-lg" style={{ fontFamily: "var(--font-heading)" }}>
-            <span className="grid place-items-center w-9 h-9 rounded-full bg-white text-primary font-bold">A</span>
-            AccessNow BD
-          </Link>
-          <div className="flex items-center gap-3">
-            <CartIcon />
-            <button onClick={handleSignOut} className="inline-flex items-center gap-1.5 text-xs bg-white/10 hover:bg-white/20 px-3 py-2 rounded-full">
-              <LogOut className="w-3.5 h-3.5" /> Logout
-            </button>
-          </div>
-        </div>
-      </header>
 
       <div className="mx-auto max-w-[1100px] px-4 md:px-10 py-8">
         <Link to="/" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
