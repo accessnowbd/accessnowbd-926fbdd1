@@ -6,12 +6,24 @@
 //  - "image" → AI-generated product image (returns data URL)
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
+  /^https:\/\/accessnowbd\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
+  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/,
+  /^https:\/\/(www\.)?accessnowbd\.com$/,
+  /^http:\/\/localhost(:\d+)?$/,
+];
+function corsFor(req: Request) {
+  const origin = req.headers.get("origin") ?? "";
+  const allow = ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin));
+  return {
+    "Access-Control-Allow-Origin": allow ? origin : "null",
+    "Vary": "Origin",
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  } as Record<string, string>;
+}
 
 type Mode = "short" | "rich" | "all" | "image";
 
