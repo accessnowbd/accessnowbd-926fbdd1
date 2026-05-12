@@ -190,7 +190,8 @@
 
   .gradient-border-card {
     position: relative;
-    background: linear-gradient(180deg, #ffffff, #f8fafc);
+    background: linear-gradient(160deg, #0F172A 0%, #1E293B 100%);
+    color: #F1F5F9;
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-glass);
     isolation: isolate;
