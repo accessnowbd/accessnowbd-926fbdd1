@@ -129,29 +129,107 @@ const PILL_CATEGORIES = [
   { id: "windows", label: "Windows", to: "/products" as const },
   { id: "office", label: "Microsoft Office", to: "/products" as const },
   { id: "ai", label: "AI & Education", to: "/products" as const },
-  { id: "editing", label: "Editing Tools", to: "/products" as const },
   { id: "software", label: "Software & Productivity", to: "/products" as const },
   { id: "vpn", label: "VPN & Security", to: "/products" as const },
-  { id: "giftcards", label: "Giftcards", to: "/products" as const },
 ];
 
 function CategoryPillBar() {
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const [activeId, setActiveId] = useState<string>("home");
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(false);
+
+  const updateArrows = () => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    setCanLeft(el.scrollLeft > 4);
+    setCanRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  };
+
+  useEffect(() => {
+    updateArrows();
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", updateArrows, { passive: true });
+    window.addEventListener("resize", updateArrows);
+    return () => {
+      el.removeEventListener("scroll", updateArrows);
+      window.removeEventListener("resize", updateArrows);
+    };
+  }, []);
+
+  const scrollBy = (dir: 1 | -1) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * Math.max(240, el.clientWidth * 0.7), behavior: "smooth" });
+  };
+
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 pt-2 pb-1">
-      <div
-        className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        role="navigation"
-        aria-label="Browse categories"
-      >
-        {PILL_CATEGORIES.map((c) => (
-          <Link
-            key={c.id}
-            to={c.to}
-            className="shrink-0 inline-flex items-center gap-1.5 h-10 px-4 rounded-full glass-soft border border-white/10 text-[13px] font-bold text-foreground hover:border-primary/40 hover:bg-primary hover:text-primary-foreground transition whitespace-nowrap"
-          >
-            {c.label}
-          </Link>
-        ))}
+      <div className="relative">
+        {/* Left arrow */}
+        <button
+          type="button"
+          onClick={() => scrollBy(-1)}
+          aria-label="Scroll categories left"
+          className={`hidden md:grid place-items-center absolute left-0 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-background/90 backdrop-blur border border-border shadow-md hover:bg-primary hover:text-primary-foreground transition ${canLeft ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+
+        {/* Edge fade hints */}
+        <div className={`pointer-events-none absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-background to-transparent z-10 transition-opacity ${canLeft ? "opacity-100" : "opacity-0"}`} />
+        <div className={`pointer-events-none absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-background to-transparent z-10 transition-opacity ${canRight ? "opacity-100" : "opacity-0"}`} />
+
+        <div
+          ref={scrollerRef}
+          className="flex gap-2 overflow-x-auto pb-2 scroll-smooth -mx-4 px-4 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          role="navigation"
+          aria-label="Browse categories"
+        >
+          {PILL_CATEGORIES.map((c) => {
+            const isActive = activeId === c.id;
+            return (
+              <Link
+                key={c.id}
+                to={c.to}
+                onClick={(e) => {
+                  setActiveId(c.id);
+                  // Ripple effect
+                  const target = e.currentTarget;
+                  const rect = target.getBoundingClientRect();
+                  const ripple = document.createElement("span");
+                  const size = Math.max(rect.width, rect.height);
+                  ripple.style.cssText = `position:absolute;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px;width:${size}px;height:${size}px;border-radius:9999px;background:rgba(255,255,255,0.45);transform:scale(0);opacity:1;pointer-events:none;transition:transform 520ms ease-out,opacity 620ms ease-out;`;
+                  target.appendChild(ripple);
+                  requestAnimationFrame(() => {
+                    ripple.style.transform = "scale(2.4)";
+                    ripple.style.opacity = "0";
+                  });
+                  setTimeout(() => ripple.remove(), 700);
+                }}
+                aria-current={isActive ? "page" : undefined}
+                className={`relative overflow-hidden shrink-0 inline-flex items-center gap-1.5 h-10 px-4 rounded-full border text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 ${
+                  isActive
+                    ? "bg-primary text-primary-foreground border-primary shadow-[0_6px_18px_-6px_hsl(var(--primary)/0.55)] scale-[1.03]"
+                    : "glass-soft border-white/10 text-foreground hover:border-primary/40 hover:bg-primary/10"
+                }`}
+              >
+                {c.label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Right arrow */}
+        <button
+          type="button"
+          onClick={() => scrollBy(1)}
+          aria-label="Scroll categories right"
+          className={`hidden md:grid place-items-center absolute right-0 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-background/90 backdrop-blur border border-border shadow-md hover:bg-primary hover:text-primary-foreground transition ${canRight ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
       </div>
     </section>
   );
