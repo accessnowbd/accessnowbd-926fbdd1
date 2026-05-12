@@ -233,14 +233,14 @@ export function SiteFooter() {
                     {col.title}
                   </h4>
                 </div>
-                <ul className="grid gap-2.5">
+                <ul className="relative grid gap-2.5">
                   {col.links.map((l) => (
                     <li key={l.to + l.label} className="min-h-9">
                       <Link
                         to={l.to}
-                        className="group grid min-h-9 grid-cols-[0.45rem_1fr] items-center gap-3 rounded-xl px-2 text-[13.5px] font-semibold leading-5 text-white/68 transition-colors duration-200 hover:bg-white/[0.045] hover:text-white"
+                        className="group grid min-h-9 grid-cols-[0.45rem_1fr] items-center gap-3 rounded-xl border border-transparent px-2 text-[13.5px] font-semibold leading-5 text-white/72 transition-all duration-200 hover:border-white/10 hover:bg-white/[0.07] hover:text-white hover:backdrop-blur-md"
                       >
-                        <span className={`h-1.5 w-1.5 rounded-full ${col.bullet} opacity-80 transition-opacity duration-200 group-hover:opacity-100`} />
+                        <span className={`h-1.5 w-1.5 rounded-full ${col.bullet} opacity-80 shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-opacity duration-200 group-hover:opacity-100`} />
                         <span className="truncate">{l.label}</span>
                       </Link>
                     </li>
