@@ -1,10 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones, Loader2 } from "lucide-react";
+import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones, Loader2, MessageCircle } from "lucide-react";
 import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { ProductBanner } from "@/components/ProductBanner";
+import { useShopConfig } from "@/hooks/useShopConfig";
+import { waOrderUrl } from "@/lib/whatsapp";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
@@ -27,6 +29,7 @@ function ProductPage() {
   const { products } = useProducts();
   const navigate = useNavigate();
   const { add } = useCart();
+  const { data: shopConfig } = useShopConfig();
   const [selected, setSelected] = useState(0);
 
   if (isLoading) {
@@ -139,6 +142,24 @@ function ProductPage() {
               Add to Cart
             </button>
           </div>
+
+          {/* WhatsApp direct order */}
+          <a
+            href={
+              plan
+                ? waOrderUrl(
+                    [{ name: product.name, planPeriod: plan.period, qty: 1, price: parsePrice(plan.price) }],
+                    { number: shopConfig?.whatsapp_number },
+                  )
+                : "#"
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 h-[48px] w-full rounded-full bg-[#25D366] hover:bg-[#1ebe5b] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 transition shadow-[0_8px_24px_-8px_rgba(37,211,102,0.6)]"
+          >
+            <MessageCircle className="w-4 h-4" /> Order via WhatsApp — {plan?.period ?? ""}
+          </a>
+
 
           {/* Trust strip */}
           <div className="mt-6 grid grid-cols-2 gap-3">
