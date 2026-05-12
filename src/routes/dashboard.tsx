@@ -425,9 +425,9 @@ function Empty({ icon, msg }: { icon: React.ReactNode; msg: string }) {
 function Badge({ children, color = "primary" }: { children: React.ReactNode; color?: "primary" | "success" | "warn" | "danger" | "muted" }) {
   const c = {
     primary: "bg-primary/15 text-primary border-primary/30",
-    success: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-    warn: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-    danger: "bg-red-500/15 text-red-300 border-red-500/30",
+    success: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
+    warn: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30",
+    danger: "bg-pink-500/15 text-pink-300 border-pink-500/30",
     muted: "bg-white/5 text-muted-foreground border-[var(--glass-border)]",
   }[color];
   return <span className={`inline-block text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border ${c}`}>{children}</span>;
