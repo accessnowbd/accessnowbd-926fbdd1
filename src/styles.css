@@ -136,35 +136,31 @@
     position: relative;
     overflow-x: hidden;
   }
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background:
-      radial-gradient(60% 50% at 12% 18%, rgba(124, 58, 237, 0.45), transparent 70%),
-      radial-gradient(50% 45% at 88% 14%, rgba(6, 182, 212, 0.28), transparent 70%),
-      radial-gradient(55% 50% at 72% 92%, rgba(236, 72, 153, 0.22), transparent 70%),
-      radial-gradient(45% 40% at 30% 80%, rgba(99, 102, 241, 0.32), transparent 70%);
-    transform: translateZ(0);
-    will-change: transform;
-  }
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
+  /* Single static background layer — baked into body (no fixed pseudo-elements
+     to avoid scroll-time repaints). Grid pattern only on large screens. */
+  body {
+    background-color: #06051a;
     background-image:
-      linear-gradient(rgba(140, 180, 255, 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(140, 180, 255, 0.045) 1px, transparent 1px),
-      radial-gradient(ellipse at 50% 0%, transparent 38%, rgba(6, 5, 26, 0.65) 100%),
-      linear-gradient(180deg, rgba(6,5,26,0) 60%, rgba(6,5,26,0.5) 100%);
-    background-size: 56px 56px, 56px 56px, auto, auto;
-    mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 40%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 40%, transparent 100%);
-    transform: translateZ(0);
+      radial-gradient(60% 50% at 12% 18%, rgba(124, 58, 237, 0.38), transparent 70%),
+      radial-gradient(50% 45% at 88% 14%, rgba(6, 182, 212, 0.22), transparent 70%),
+      radial-gradient(55% 50% at 72% 92%, rgba(236, 72, 153, 0.18), transparent 70%),
+      radial-gradient(45% 40% at 30% 80%, rgba(99, 102, 241, 0.26), transparent 70%);
+    background-attachment: scroll;
+  }
+  @media (min-width: 1024px) {
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(140, 180, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140, 180, 255, 0.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 40%, transparent 100%);
+    }
   }
   body > * { position: relative; z-index: 1; }
 }
