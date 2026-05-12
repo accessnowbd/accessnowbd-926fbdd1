@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import {
   Plus, Pencil, Trash2, ArrowUp, ArrowDown, Loader2, Save, X, Eye, EyeOff,
   Sparkles, FileText, Database, Download, Upload, Search, Copy, Package,
-  CheckCircle2, AlertCircle, Clock, Filter,
+  CheckCircle2, AlertCircle, Clock, Filter, Wand2, ImageIcon, Zap, RefreshCw,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -502,12 +502,33 @@ function IconBtn({ children, onClick, disabled, danger, title }: { children: Rea
   );
 }
 
+/* ============================== PRODUCT EDITOR (WordPress-style) ============================== */
+
+const slugify = (s: string) =>
+  s.toLowerCase().trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+
+type AiBusy = "" | "all" | "short" | "rich" | "image-gen" | "image-up";
+
 function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product; isNew: boolean; onClose: () => void; onSaved: () => void }) {
   const [form, setForm] = useState<Product>(product);
   const [busy, setBusy] = useState(false);
   const [featuresText, setFeaturesText] = useState((product.features ?? []).join("\n"));
+  const [ai, setAi] = useState<AiBusy>("");
+  const [imagePrompt, setImagePrompt] = useState("");
+  const [autoSlug, setAutoSlug] = useState(isNew); // auto-derive slug from name while creating
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const set = <K extends keyof Product>(k: K, v: Product[K]) => setForm((f) => ({ ...f, [k]: v }));
+
+  // Auto slug from name
+  useEffect(() => {
+    if (autoSlug && form.name) set("slug", slugify(form.name));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.name, autoSlug]);
 
   const setPlan = (i: number, patch: Partial<Plan>) => {
     setForm((f) => ({ ...f, plans: f.plans.map((p, idx) => idx === i ? { ...p, ...patch } : p) }));
@@ -522,6 +543,91 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
       [next[i], next[j]] = [next[j], next[i]];
       return { ...f, plans: next };
     });
+  };
+
+  /* ======== AI helpers ======== */
+  const callAi = async (mode: "short" | "rich" | "all") => {
+    if (!form.name.trim()) { toast.error("আগে Name লিখুন"); return; }
+    setAi(mode);
+    try {
+      const { data, error } = await supabase.functions.invoke("product-ai", {
+        body: { mode, product: { name: form.name, category: form.category, tagline: form.tagline, description: form.description, features: featuresText.split("\n").filter(Boolean) } },
+      });
+      if (error) throw error;
+      const d = data as Record<string, unknown> & { error?: string };
+      if (d?.error) throw new Error(d.error);
+
+      setForm((f) => {
+        const next = { ...f };
+        if (typeof d.tagline === "string") next.tagline = d.tagline;
+        if (typeof d.short_description === "string") next.short_description = d.short_description;
+        if (typeof d.description === "string") next.description = d.description;
+        return next;
+      });
+      if (Array.isArray(d.features)) {
+        setFeaturesText((d.features as string[]).join("\n"));
+      }
+      toast.success("AI কপি তৈরি হয়েছে ✨");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "AI generation failed");
+    } finally {
+      setAi("");
+    }
+  };
+
+  /* ======== Image: AI generate (saves data URL → uploads to Storage) ======== */
+  const generateImage = async () => {
+    if (!form.name.trim()) { toast.error("আগে Name লিখুন"); return; }
+    setAi("image-gen");
+    try {
+      const { data, error } = await supabase.functions.invoke("product-ai", {
+        body: { mode: "image", product: { name: form.name, category: form.category }, imagePrompt },
+      });
+      if (error) throw error;
+      const d = data as { image?: string; error?: string };
+      if (d?.error) throw new Error(d.error);
+      if (!d.image) throw new Error("No image returned");
+
+      // Convert data URL → Blob → upload
+      const blob = await (await fetch(d.image)).blob();
+      const file = new File([blob], `${slugify(form.name) || "product"}-ai-${Date.now()}.png`, { type: blob.type || "image/png" });
+      const url = await uploadProductImage(file);
+      set("image_url", url);
+      toast.success("AI ইমেজ তৈরি হয়েছে 🎨");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Image generation failed");
+    } finally {
+      setAi("");
+    }
+  };
+
+  /* ======== Image: file upload ======== */
+  const uploadProductImage = async (file: File): Promise<string> => {
+    if (file.size > 8 * 1024 * 1024) throw new Error("ফাইল 8MB-এর কম হতে হবে");
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `products/${slugify(form.name) || "untitled"}-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("admin-uploads").upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type || undefined,
+    });
+    if (error) throw error;
+    const { data } = supabase.storage.from("admin-uploads").getPublicUrl(path);
+    return data.publicUrl;
+  };
+
+  const onPickFile = async (file: File | undefined) => {
+    if (!file) return;
+    setAi("image-up");
+    try {
+      const url = await uploadProductImage(file);
+      set("image_url", url);
+      toast.success("ইমেজ আপলোড হয়েছে ✓");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Upload failed");
+    } finally {
+      setAi("");
+    }
   };
 
   const save = async () => {
@@ -539,110 +645,305 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
     onSaved();
   };
 
+  const aiBusy = ai !== "";
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-4 overflow-y-auto" onClick={onClose}>
-      <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="sticky top-0 bg-white border-b border-border px-6 py-4 flex items-center justify-between">
-          <h2 className="font-semibold text-lg" style={{ fontFamily: "var(--font-display)" }}>
-            {isNew ? "নতুন পণ্য" : `এডিট: ${product.name}`}
-          </h2>
-          <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-md hover:bg-secondary"><X className="w-4 h-4" /></button>
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm grid place-items-start md:place-items-center p-2 md:p-4 overflow-y-auto" onClick={onClose}>
+      <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[95vh] overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 px-5 md:px-6 py-3 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-violet-600">{isNew ? "New product" : "Edit product"}</div>
+            <h2 className="font-bold text-base md:text-lg truncate" style={{ fontFamily: "var(--font-display)" }}>
+              {isNew ? "নতুন পণ্য তৈরি করুন" : product.name}
+            </h2>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => callAi("all")}
+              disabled={aiBusy}
+              className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full text-white text-xs font-bold shadow-sm disabled:opacity-50"
+              style={{ background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)" }}
+              title="Generate everything with AI"
+            >
+              {ai === "all" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />}
+              AI Auto-fill
+            </button>
+            <button onClick={onClose} className="w-9 h-9 grid place-items-center rounded-lg hover:bg-slate-100"><X className="w-4 h-4" /></button>
+          </div>
         </div>
 
-        <div className="p-6 space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Field label="Slug *" value={form.slug} onChange={(v) => set("slug", v)} disabled={!isNew} placeholder="netflix-premium" />
-            <Field label="Name *" value={form.name} onChange={(v) => set("name", v)} />
-            <Field label="Category" value={form.category} onChange={(v) => set("category", v)} />
-            <Field label="Badge (optional)" value={form.badge ?? ""} onChange={(v) => set("badge", v || null)} placeholder="HOT, SALE…" />
-            <Field label="Emoji" value={form.emoji} onChange={(v) => set("emoji", v)} />
-            <Field label="Image URL" value={form.image_url} onChange={(v) => set("image_url", v)} />
-            <Field label="Delivery time" value={form.delivery_time} onChange={(v) => set("delivery_time", v)} />
-            <Field label="Warranty" value={form.warranty} onChange={(v) => set("warranty", v)} />
-            <label className="block">
-              <span className="text-xs font-semibold text-[#333]">Stock status</span>
-              <select
-                value={form.stock_status}
-                onChange={(e) => set("stock_status", e.target.value as StockStatus)}
-                className="mt-1.5 w-full h-10 px-3 rounded-md border border-border text-sm outline-none focus:border-primary"
-              >
-                <option value="in_stock">স্টকে আছে</option>
-                <option value="out_of_stock">স্টক শেষ</option>
-                <option value="preorder">প্রি-অর্ডার</option>
-              </select>
-            </label>
-            <Field label="Sort order" type="number" value={String(form.sort_order)} onChange={(v) => set("sort_order", Number(v) || 0)} />
-          </div>
-
-          <Field label="Tagline" value={form.tagline} onChange={(v) => set("tagline", v)} />
-          <TextArea label="Short description" value={form.short_description} onChange={(v) => set("short_description", v)} rows={2} />
-          <TextArea label="Description" value={form.description} onChange={(v) => set("description", v)} rows={5} />
-          <TextArea label="Features (one per line)" value={featuresText} onChange={setFeaturesText} rows={5} />
-
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-semibold text-[#333]">Plans</label>
-              <button onClick={addPlan} className="text-xs px-3 h-8 inline-flex items-center gap-1 rounded-full bg-secondary hover:bg-primary/10">
-                <Plus className="w-3.5 h-3.5" /> Add plan
-              </button>
-            </div>
-            <div className="space-y-2">
-              {form.plans.map((p, i) => (
-                <div key={i} className="border border-border rounded-xl p-3 grid grid-cols-12 gap-2 items-center">
-                  <input className="col-span-3 h-9 px-3 rounded-md border border-border text-sm" placeholder="Label" value={p.label} onChange={(e) => setPlan(i, { label: e.target.value })} />
-                  <input className="col-span-2 h-9 px-3 rounded-md border border-border text-sm" type="number" placeholder="Price" value={p.price} onChange={(e) => setPlan(i, { price: Number(e.target.value) })} />
-                  <input className="col-span-2 h-9 px-3 rounded-md border border-border text-sm" type="number" placeholder="MRP" value={p.original_price ?? ""} onChange={(e) => setPlan(i, { original_price: e.target.value ? Number(e.target.value) : undefined })} />
-                  <input className="col-span-2 h-9 px-3 rounded-md border border-border text-sm" placeholder="Duration" value={p.duration ?? ""} onChange={(e) => setPlan(i, { duration: e.target.value })} />
-                  <input className="col-span-2 h-9 px-3 rounded-md border border-border text-sm" placeholder="Note" value={p.note ?? ""} onChange={(e) => setPlan(i, { note: e.target.value })} />
-                  <div className="col-span-1 flex items-center justify-end gap-1">
-                    <IconBtn title="Up" onClick={() => movePlan(i, -1)} disabled={i === 0}><ArrowUp className="w-3.5 h-3.5" /></IconBtn>
-                    <IconBtn title="Down" onClick={() => movePlan(i, 1)} disabled={i === form.plans.length - 1}><ArrowDown className="w-3.5 h-3.5" /></IconBtn>
-                    <IconBtn title="Remove" onClick={() => removePlan(i)} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <label className="flex items-center gap-2">
-            <input type="checkbox" checked={form.is_active} onChange={(e) => set("is_active", e.target.checked)} />
-            <span className="text-sm">Active (visible on storefront)</span>
-          </label>
-        </div>
-
-        <div className="sticky bottom-0 bg-white border-t border-border px-6 py-3 flex items-center justify-end gap-2">
-          <button onClick={onClose} className="h-10 px-4 rounded-full border border-border text-sm font-semibold">Cancel</button>
-          <button onClick={save} disabled={busy} className="h-10 px-5 rounded-full bg-primary text-primary-foreground text-sm font-semibold inline-flex items-center gap-2 disabled:opacity-60">
-            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {isNew ? "Create" : "Save changes"}
+        {/* AI Auto-fill banner (mobile) */}
+        <div className="sm:hidden px-5 py-3 border-b border-slate-100">
+          <button
+            onClick={() => callAi("all")}
+            disabled={aiBusy}
+            className="w-full inline-flex items-center justify-center gap-1.5 h-10 rounded-full text-white text-xs font-bold disabled:opacity-50"
+            style={{ background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)" }}
+          >
+            {ai === "all" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />}
+            AI দিয়ে সব ফিল করুন
           </button>
+        </div>
+
+        <div className="p-5 md:p-6 grid lg:grid-cols-[1fr_320px] gap-6">
+          {/* ===== LEFT: main content ===== */}
+          <div className="space-y-5 min-w-0">
+            {/* Title block */}
+            <div className="bg-slate-50/60 border border-slate-200 rounded-xl p-4">
+              <Field label="Product name *" value={form.name} onChange={(v) => set("name", v)} placeholder="Netflix Premium Subscription" big />
+              <div className="mt-3 flex items-center gap-2 text-xs text-slate-500">
+                <LinkIconLocal />
+                <span className="font-mono">/product/</span>
+                {autoSlug ? (
+                  <span className="font-mono font-semibold text-slate-700">{form.slug || "—"}</span>
+                ) : (
+                  <input
+                    value={form.slug}
+                    onChange={(e) => set("slug", slugify(e.target.value))}
+                    disabled={!isNew}
+                    className="font-mono font-semibold text-slate-700 bg-white border border-slate-200 rounded px-2 py-0.5 outline-none focus:border-violet-400 disabled:bg-slate-100"
+                  />
+                )}
+                {isNew && (
+                  <button onClick={() => setAutoSlug((v) => !v)} className="text-violet-600 font-semibold hover:underline">
+                    {autoSlug ? "Edit" : "Auto"}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Tagline + Short description with AI button */}
+            <SectionCard
+              title="Short copy"
+              right={
+                <AiBtn busy={ai === "short"} onClick={() => callAi("short")}>
+                  AI Short
+                </AiBtn>
+              }
+            >
+              <Field label="Tagline" value={form.tagline} onChange={(v) => set("tagline", v)} placeholder="Premium streaming, instant delivery" />
+              <TextArea label="Short description" value={form.short_description} onChange={(v) => set("short_description", v)} rows={2} />
+            </SectionCard>
+
+            {/* Full description */}
+            <SectionCard
+              title="Full description"
+              right={
+                <AiBtn busy={ai === "rich"} onClick={() => callAi("rich")}>
+                  AI Rich Desc + SEO
+                </AiBtn>
+              }
+            >
+              <TextArea value={form.description} onChange={(v) => set("description", v)} rows={8} placeholder="Write or generate with AI…" />
+            </SectionCard>
+
+            {/* Features */}
+            <SectionCard title="Features (one per line)">
+              <TextArea value={featuresText} onChange={setFeaturesText} rows={5} placeholder={"Instant access\n4K Ultra HD\n4 device support"} />
+            </SectionCard>
+
+            {/* Plans */}
+            <SectionCard
+              title="Pricing plans"
+              right={
+                <button onClick={addPlan} className="text-xs h-8 px-3 inline-flex items-center gap-1 rounded-full bg-slate-900 text-white">
+                  <Plus className="w-3.5 h-3.5" /> Add plan
+                </button>
+              }
+            >
+              <div className="space-y-2">
+                {form.plans.map((p, i) => (
+                  <div key={i} className="border border-slate-200 rounded-xl p-3 grid grid-cols-12 gap-2 items-center bg-white">
+                    <input className="col-span-12 sm:col-span-3 h-9 px-3 rounded-md border border-slate-200 text-sm" placeholder="Label" value={p.label} onChange={(e) => setPlan(i, { label: e.target.value })} />
+                    <input className="col-span-6 sm:col-span-2 h-9 px-3 rounded-md border border-slate-200 text-sm" type="number" placeholder="Price" value={p.price} onChange={(e) => setPlan(i, { price: Number(e.target.value) })} />
+                    <input className="col-span-6 sm:col-span-2 h-9 px-3 rounded-md border border-slate-200 text-sm" type="number" placeholder="MRP" value={p.original_price ?? ""} onChange={(e) => setPlan(i, { original_price: e.target.value ? Number(e.target.value) : undefined })} />
+                    <input className="col-span-6 sm:col-span-2 h-9 px-3 rounded-md border border-slate-200 text-sm" placeholder="Duration" value={p.duration ?? ""} onChange={(e) => setPlan(i, { duration: e.target.value })} />
+                    <input className="col-span-6 sm:col-span-2 h-9 px-3 rounded-md border border-slate-200 text-sm" placeholder="Note" value={p.note ?? ""} onChange={(e) => setPlan(i, { note: e.target.value })} />
+                    <div className="col-span-12 sm:col-span-1 flex items-center justify-end gap-1">
+                      <IconBtn title="Up" onClick={() => movePlan(i, -1)} disabled={i === 0}><ArrowUp className="w-3.5 h-3.5" /></IconBtn>
+                      <IconBtn title="Down" onClick={() => movePlan(i, 1)} disabled={i === form.plans.length - 1}><ArrowDown className="w-3.5 h-3.5" /></IconBtn>
+                      <IconBtn title="Remove" onClick={() => removePlan(i)} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </SectionCard>
+          </div>
+
+          {/* ===== RIGHT: sidebar ===== */}
+          <div className="space-y-5">
+            {/* Featured image */}
+            <SectionCard
+              title="Featured image"
+              right={<span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Upload or AI</span>}
+            >
+              <div
+                className="relative aspect-square w-full rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 grid place-items-center overflow-hidden cursor-pointer hover:border-violet-300 transition"
+                onClick={() => fileRef.current?.click()}
+                onDragOver={(e) => { e.preventDefault(); }}
+                onDrop={(e) => { e.preventDefault(); onPickFile(e.dataTransfer.files?.[0]); }}
+              >
+                {form.image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={form.image_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                ) : (
+                  <div className="text-center text-slate-400 px-4">
+                    <ImageIcon className="w-7 h-7 mx-auto mb-1.5" />
+                    <div className="text-xs font-semibold">Click or drop image</div>
+                    <div className="text-[10px] mt-0.5">PNG · JPG · WebP · max 8MB</div>
+                  </div>
+                )}
+                {ai === "image-up" && (
+                  <div className="absolute inset-0 bg-black/40 grid place-items-center text-white">
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  </div>
+                )}
+              </div>
+              <input
+                ref={fileRef} type="file" accept="image/*" className="hidden"
+                onChange={(e) => { onPickFile(e.target.files?.[0]); e.target.value = ""; }}
+              />
+              <div className="mt-3 flex flex-col gap-2">
+                <input
+                  value={form.image_url}
+                  onChange={(e) => set("image_url", e.target.value)}
+                  placeholder="Or paste image URL…"
+                  className="h-9 px-3 rounded-md border border-slate-200 text-xs outline-none focus:border-violet-400"
+                />
+                <div className="border-t border-dashed border-slate-200 pt-3">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-violet-600 flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" /> AI image (optional prompt)
+                  </label>
+                  <input
+                    value={imagePrompt}
+                    onChange={(e) => setImagePrompt(e.target.value)}
+                    placeholder="leave blank for auto"
+                    className="mt-1.5 w-full h-9 px-3 rounded-md border border-slate-200 text-xs outline-none focus:border-violet-400"
+                  />
+                  <button
+                    onClick={generateImage}
+                    disabled={aiBusy}
+                    className="mt-2 w-full inline-flex items-center justify-center gap-1.5 h-10 rounded-full text-white text-xs font-bold disabled:opacity-50"
+                    style={{ background: "linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)" }}
+                  >
+                    {ai === "image-gen" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />}
+                    Generate with AI
+                  </button>
+                </div>
+              </div>
+            </SectionCard>
+
+            {/* Organize */}
+            <SectionCard title="Organize">
+              <Field label="Category" value={form.category} onChange={(v) => set("category", v)} />
+              <Field label="Badge" value={form.badge ?? ""} onChange={(v) => set("badge", v || null)} placeholder="HOT, SALE…" />
+              <Field label="Emoji" value={form.emoji} onChange={(v) => set("emoji", v)} />
+            </SectionCard>
+
+            {/* Inventory & status */}
+            <SectionCard title="Status">
+              <label className="block">
+                <span className="text-xs font-semibold text-slate-700">Stock</span>
+                <select
+                  value={form.stock_status}
+                  onChange={(e) => set("stock_status", e.target.value as StockStatus)}
+                  className="mt-1.5 w-full h-10 px-3 rounded-md border border-slate-200 text-sm outline-none focus:border-violet-400"
+                >
+                  <option value="in_stock">স্টকে আছে</option>
+                  <option value="out_of_stock">স্টক শেষ</option>
+                  <option value="preorder">প্রি-অর্ডার</option>
+                </select>
+              </label>
+              <Field label="Delivery time" value={form.delivery_time} onChange={(v) => set("delivery_time", v)} />
+              <Field label="Warranty" value={form.warranty} onChange={(v) => set("warranty", v)} />
+              <Field label="Sort order (auto)" type="number" value={String(form.sort_order)} onChange={(v) => set("sort_order", Number(v) || 0)} />
+              <label className="flex items-center gap-2 mt-2">
+                <input type="checkbox" checked={form.is_active} onChange={(e) => set("is_active", e.target.checked)} />
+                <span className="text-sm">Active (visible on storefront)</span>
+              </label>
+            </SectionCard>
+          </div>
+        </div>
+
+        {/* Sticky footer */}
+        <div className="sticky bottom-0 bg-white/95 backdrop-blur border-t border-slate-200 px-5 md:px-6 py-3 flex items-center justify-between gap-2">
+          <div className="text-[11px] text-slate-500 hidden sm:block">
+            {aiBusy ? "AI কাজ করছে…" : isNew ? "Save করলে storefront-এ লাইভ হবে" : "Auto-saved on Save"}
+          </div>
+          <div className="flex items-center gap-2 ml-auto">
+            <button onClick={onClose} className="h-10 px-4 rounded-full border border-slate-200 text-sm font-semibold hover:bg-slate-50">Cancel</button>
+            <button
+              onClick={save}
+              disabled={busy || aiBusy}
+              className="h-10 px-5 rounded-full text-white text-sm font-bold shadow-md inline-flex items-center gap-2 disabled:opacity-60"
+              style={{ background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)" }}
+            >
+              {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              {isNew ? "Publish" : "Save changes"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-function Field({ label, value, onChange, type = "text", disabled, placeholder }: { label: string; value: string; onChange: (v: string) => void; type?: string; disabled?: boolean; placeholder?: string }) {
+/* ============================== Small UI bits ============================== */
+
+function SectionCard({ title, right, children }: { title: string; right?: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">{title}</h3>
+        {right}
+      </div>
+      <div className="space-y-3">{children}</div>
+    </div>
+  );
+}
+
+function AiBtn({ busy, onClick, children }: { busy: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={busy}
+      className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-white text-[11px] font-bold shadow-sm disabled:opacity-60"
+      style={{ background: "linear-gradient(135deg, #a855f7 0%, #6366f1 100%)" }}
+    >
+      {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+      {children}
+    </button>
+  );
+}
+
+function LinkIconLocal() {
+  // tiny placeholder so we don't pull a new import; small chain glyph
+  return <span aria-hidden className="text-slate-400">🔗</span>;
+}
+
+function Field({ label, value, onChange, type = "text", disabled, placeholder, big }: { label: string; value: string; onChange: (v: string) => void; type?: string; disabled?: boolean; placeholder?: string; big?: boolean }) {
   return (
     <label className="block">
-      <span className="text-xs font-semibold text-[#333]">{label}</span>
+      <span className="text-xs font-semibold text-slate-700">{label}</span>
       <input
         type={type} value={value} disabled={disabled} placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1.5 w-full h-10 px-3 rounded-md border border-border text-sm outline-none focus:border-primary disabled:bg-secondary disabled:text-muted-foreground"
+        className={`mt-1.5 w-full ${big ? "h-12 text-base font-semibold" : "h-10 text-sm"} px-3 rounded-md border border-slate-200 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 disabled:bg-slate-100 disabled:text-slate-500`}
       />
     </label>
   );
 }
 
-function TextArea({ label, value, onChange, rows = 3 }: { label: string; value: string; onChange: (v: string) => void; rows?: number }) {
+function TextArea({ label, value, onChange, rows = 3, placeholder }: { label?: string; value: string; onChange: (v: string) => void; rows?: number; placeholder?: string }) {
   return (
     <label className="block">
-      <span className="text-xs font-semibold text-[#333]">{label}</span>
+      {label && <span className="text-xs font-semibold text-slate-700">{label}</span>}
       <textarea
-        value={value} rows={rows}
+        value={value} rows={rows} placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1.5 w-full px-3 py-2 rounded-md border border-border text-sm outline-none focus:border-primary"
+        className={`${label ? "mt-1.5" : ""} w-full px-3 py-2 rounded-md border border-slate-200 text-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100`}
       />
     </label>
   );
