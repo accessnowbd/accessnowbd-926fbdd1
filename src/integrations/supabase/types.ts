@@ -202,10 +202,13 @@ export type Database = {
           is_active: boolean
           name: string
           plans: Json
+          short_description: string
           slug: string
           sort_order: number
+          stock_status: string
           tagline: string
           updated_at: string
+          views: number
           warranty: string
         }
         Insert: {
@@ -221,10 +224,13 @@ export type Database = {
           is_active?: boolean
           name: string
           plans?: Json
+          short_description?: string
           slug: string
           sort_order?: number
+          stock_status?: string
           tagline?: string
           updated_at?: string
+          views?: number
           warranty?: string
         }
         Update: {
@@ -240,10 +246,13 @@ export type Database = {
           is_active?: boolean
           name?: string
           plans?: Json
+          short_description?: string
           slug?: string
           sort_order?: number
+          stock_status?: string
           tagline?: string
           updated_at?: string
+          views?: number
           warranty?: string
         }
         Relationships: []
