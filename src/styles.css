@@ -166,32 +166,36 @@
 }
 
 @layer utilities {
+  /* Glass — desktop gets backdrop blur; mobile/tablet falls back to a slightly
+     more opaque bg to keep the look without the GPU cost. */
   .glass {
     background: var(--glass-bg);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass);
-    isolation: isolate;
-    contain: paint;
-    transform: translateZ(0);
+    background-color: rgba(20, 22, 45, 0.55);
   }
   .glass-strong {
     background: var(--glass-bg-strong);
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass-lg);
-    isolation: isolate;
-    contain: paint;
-    transform: translateZ(0);
+    background-color: rgba(24, 26, 52, 0.65);
   }
   .glass-soft {
-    /* Nested inside .glass-strong — drop backdrop-filter to avoid scroll tile artifacts */
     background: var(--glass-bg-soft);
     border: 1px solid var(--glass-border-soft);
     box-shadow: var(--shadow-glass-sm);
-    transform: translateZ(0);
+  }
+  @media (min-width: 1024px) and (pointer: fine) {
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+    }
+    .glass-strong {
+      background: var(--glass-bg-strong);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+    }
   }
 
   /* SIGNATURE: Dark Glassmorphism Card — premium, no jitter */
