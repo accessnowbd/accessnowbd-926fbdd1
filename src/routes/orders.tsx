@@ -25,10 +25,10 @@ type Order = {
 };
 
 const statusColors: Record<string, string> = {
-  pending: "bg-amber-100 text-amber-800",
-  processing: "bg-blue-100 text-blue-800",
-  delivered: "bg-emerald-100 text-emerald-800",
-  cancelled: "bg-red-100 text-red-800",
+  pending: "bg-amber-500/15 text-amber-300 border border-amber-400/30",
+  processing: "bg-sky-500/15 text-sky-300 border border-sky-400/30",
+  delivered: "bg-emerald-500/15 text-emerald-300 border border-emerald-400/30",
+  cancelled: "bg-rose-500/15 text-rose-300 border border-rose-400/30",
 };
 
 function OrdersPage() {
@@ -87,27 +87,30 @@ function OrdersPage() {
         </div>
 
         {orders.length === 0 ? (
-          <div className="mt-10 rounded-2xl border-2 border-dashed border-border bg-white p-12 text-center">
-            <Package className="w-10 h-10 text-muted-foreground mx-auto" />
-            <h2 className="mt-3 font-semibold">No orders yet</h2>
-            <p className="text-sm text-muted-foreground mt-1">Browse our subscriptions and place your first order.</p>
-            <Link to="/" className="inline-block mt-5 h-[42px] leading-[42px] px-6 rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+          <div className="mt-10 glass-strong rounded-3xl p-12 text-center relative overflow-hidden">
+            <div className="absolute inset-0 -z-10 opacity-60 bg-mesh pointer-events-none" />
+            <div className="mx-auto w-16 h-16 rounded-2xl grid place-items-center bg-gradient-to-br from-primary/30 to-aqua/20 border border-white/10 shadow-glow-violet">
+              <Package className="w-8 h-8 text-foreground/90" />
+            </div>
+            <h2 className="mt-4 text-xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>No orders yet</h2>
+            <p className="text-sm text-muted-foreground mt-1.5">Browse our subscriptions and place your first order.</p>
+            <Link to="/" className="btn-aurora inline-flex items-center mt-6 h-11 px-7 text-sm">
               Browse subscriptions
             </Link>
           </div>
         ) : (
           <div className="mt-6 space-y-4">
             {orders.map((o) => (
-              <Link to="/orders/$id" params={{ id: o.id }} key={o.id} className="block bg-white border border-border rounded-2xl p-5 hover:shadow-[var(--shadow-glass)] hover:-translate-y-0.5 transition">
+              <Link to="/orders/$id" params={{ id: o.id }} key={o.id} className="block glass rounded-2xl p-5 hover:border-primary/40 hover:-translate-y-0.5 hover:shadow-glow-violet transition-all duration-300">
                 <article>
-                <header className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-3">
+                <header className="flex flex-wrap items-start justify-between gap-3 border-b border-white/10 pb-3">
                   <div>
-                    <div className="text-xs text-muted-foreground">Order ID</div>
-                    <div className="font-semibold" style={{ fontFamily: "var(--font-heading)" }}>{o.id.slice(0, 8).toUpperCase()}</div>
+                    <div className="text-[11px] uppercase tracking-wider text-muted-foreground">Order ID</div>
+                    <div className="font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>{o.id.slice(0, 8).toUpperCase()}</div>
                     <div className="text-xs text-muted-foreground mt-1">{new Date(o.created_at).toLocaleString()}</div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`text-[11px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded ${statusColors[o.status] || "bg-secondary text-foreground"}`}>
+                    <span className={`text-[11px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-full ${statusColors[o.status] || "bg-white/5 text-foreground border border-white/10"}`}>
                       {o.status}
                     </span>
                   </div>
@@ -116,29 +119,29 @@ function OrdersPage() {
                 <div className="mt-3 space-y-2">
                   {o.items.map((it, i) => (
                     <div key={i} className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${it.gradient ?? "from-secondary to-secondary"} grid place-items-center text-lg`}>
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${it.gradient ?? "from-primary/30 to-aqua/20"} border border-white/10 grid place-items-center text-lg`}>
                         {it.emoji ?? "📦"}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold truncate">{it.name ?? it.slug}</div>
+                        <div className="text-sm font-semibold truncate text-foreground">{it.name ?? it.slug}</div>
                         <div className="text-xs text-muted-foreground">{it.planPeriod} × {it.qty}</div>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <footer className="mt-4 grid sm:grid-cols-3 gap-3 text-xs border-t border-border pt-3">
+                <footer className="mt-4 grid sm:grid-cols-3 gap-3 text-xs border-t border-white/10 pt-3">
                   <div>
                     <div className="text-muted-foreground">Payment</div>
-                    <div className="font-semibold capitalize">{o.payment_method}</div>
+                    <div className="font-semibold capitalize text-foreground">{o.payment_method}</div>
                   </div>
                   <div>
                     <div className="text-muted-foreground">TrxID</div>
-                    <div className="font-semibold">{o.transaction_id}</div>
+                    <div className="font-semibold text-foreground">{o.transaction_id}</div>
                   </div>
                   <div className="sm:text-right">
                     <div className="text-muted-foreground">Total</div>
-                    <div className="font-semibold text-primary text-base" style={{ fontFamily: "var(--font-heading)" }}>৳{Number(o.total).toLocaleString()}</div>
+                    <div className="font-bold text-aurora text-base" style={{ fontFamily: "var(--font-heading)" }}>৳{Number(o.total).toLocaleString()}</div>
                   </div>
                 </footer>
                 </article>
