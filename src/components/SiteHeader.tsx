@@ -263,7 +263,7 @@ export function SiteHeader() {
                     BD
                   </span>
                 </span>
-                <span className="hidden sm:flex w-full items-center justify-between mt-1">
+                <span className="flex w-full items-center justify-between mt-1">
                   <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.22em] font-bold text-white/70">
                     Fast
                   </span>
@@ -311,10 +311,10 @@ export function SiteHeader() {
               <CartIcon />
 
               {user ? (
-                <div className="hidden sm:flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5">
                   <Link
                     to="/orders"
-                    className="inline-flex items-center gap-2 h-11 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition whitespace-nowrap"
+                    className="inline-flex items-center gap-1.5 sm:gap-2 h-10 sm:h-11 px-3 sm:px-0 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition whitespace-nowrap"
                     style={{
                       paddingLeft: "clamp(10px, 1vw, 18px)",
                       paddingRight: "clamp(10px, 1vw, 18px)",
@@ -322,11 +322,11 @@ export function SiteHeader() {
                     }}
                   >
                     <UserCircle2 className="w-4 h-4" />
-                    <span className="max-w-[120px] truncate">Dashboard</span>
+                    <span className="hidden sm:inline max-w-[120px] truncate">Dashboard</span>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="grid place-items-center w-11 h-11 rounded-full glass-soft border border-white/10 text-white/80 hover:text-white hover:border-rose-400/40 transition"
+                    className="hidden sm:grid place-items-center w-11 h-11 rounded-full glass-soft border border-white/10 text-white/80 hover:text-white hover:border-rose-400/40 transition"
                     aria-label="Sign out"
                     title="Sign out"
                   >
@@ -334,16 +334,16 @@ export function SiteHeader() {
                   </button>
                 </div>
               ) : (
-                <div className="hidden sm:inline-flex items-center p-1 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)]">
+                <div className="inline-flex items-center p-1 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)]">
                   <Link
                     to="/login"
-                    className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full text-white text-[13px] font-semibold hover:bg-white/[0.08] transition"
+                    className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-full text-white text-[12px] sm:text-[13px] font-semibold hover:bg-white/[0.08] transition"
                   >
-                    <LogIn className="w-3.5 h-3.5" /> Sign In
+                    <LogIn className="w-3.5 h-3.5" /> <span className="hidden xs:inline">Sign In</span><span className="xs:hidden">In</span>
                   </Link>
                   <Link
                     to="/register"
-                    className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full text-white text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-aqua shadow-[0_8px_24px_-10px_rgba(0,229,255,0.55)] hover:brightness-110 transition"
+                    className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-3 sm:px-4 rounded-full text-white text-[12px] sm:text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-aqua shadow-[0_8px_24px_-10px_rgba(0,229,255,0.55)] hover:brightness-110 transition"
                   >
                     Register
                   </Link>
@@ -358,6 +358,29 @@ export function SiteHeader() {
                 {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
               </button>
             </div>
+          </div>
+
+          {/* Mobile: desktop-style nav pill bar (horizontal scroll) */}
+          <div className="lg:hidden border-t border-white/5">
+            <nav
+              className="mx-auto max-w-[1440px] px-3 sm:px-4 py-2 flex items-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-none"
+              style={{ scrollbarWidth: "none" }}
+            >
+              {NAV.map((n) => (
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  activeOptions={{ exact: n.to === "/" }}
+                  activeProps={{
+                    className:
+                      "bg-gradient-to-r from-primary/30 via-violet-500/20 to-aqua/25 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.12)_inset]",
+                  }}
+                  className="shrink-0 inline-flex items-center h-9 px-3.5 rounded-full text-[12.5px] font-semibold text-white/75 hover:text-white glass-soft border border-white/10 transition-colors"
+                >
+                  {n.label}
+                </Link>
+              ))}
+            </nav>
           </div>
 
           {/* bottom hairline removed */}
