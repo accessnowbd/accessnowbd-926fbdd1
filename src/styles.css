@@ -173,19 +173,20 @@
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.22 0.04 285);
 
-    --primary: oklch(0.62 0.24 295);
+    /* Reference palette: deep violet → indigo → blue (IDM-style badge) */
+    --primary: oklch(0.50 0.24 280);
     --primary-foreground: oklch(1 0 0);
-    --primary-dark: oklch(0.46 0.22 295);
+    --primary-dark: oklch(0.36 0.22 275);
 
-    --secondary: oklch(0.97 0.012 320);
-    --secondary-foreground: oklch(0.24 0.04 285);
-    --muted: oklch(0.965 0.012 320);
-    --muted-foreground: oklch(0.5 0.04 285);
-    --accent: oklch(0.94 0.04 330);
-    --accent-foreground: oklch(0.24 0.04 285);
+    --secondary: oklch(0.97 0.012 280);
+    --secondary-foreground: oklch(0.24 0.05 280);
+    --muted: oklch(0.965 0.012 280);
+    --muted-foreground: oklch(0.5 0.04 280);
+    --accent: oklch(0.94 0.05 280);
+    --accent-foreground: oklch(0.24 0.05 280);
 
-    --aqua: oklch(0.74 0.16 200);
-    --aqua-deep: oklch(0.62 0.18 220);
+    --aqua: oklch(0.62 0.20 250);
+    --aqua-deep: oklch(0.50 0.22 260);
     --gold: oklch(0.78 0.16 88);
     --coral: oklch(0.7 0.22 18);
 
@@ -194,9 +195,9 @@
     --destructive: oklch(0.62 0.24 22);
     --destructive-foreground: oklch(1 0 0);
 
-    --border: rgba(124, 58, 237, 0.14);
+    --border: rgba(79, 70, 229, 0.16);
     --input: rgba(255, 255, 255, 0.85);
-    --ring: oklch(0.62 0.24 295);
+    --ring: oklch(0.50 0.24 280);
 
     /* Frosted-white glass over pastel canvas */
     --glass-bg: rgba(255, 255, 255, 0.55);
@@ -206,12 +207,12 @@
     --glass-border-soft: rgba(255, 255, 255, 0.5);
     --glass-highlight: rgba(255, 255, 255, 0.95);
 
-    /* Soft pastel gradients */
-    --gradient-aurora: linear-gradient(135deg, #C4B5FD 0%, #FBCFE8 50%, #BAE6FD 100%);
-    --gradient-aurora-strong: linear-gradient(135deg, #7C3AED 0%, #DB2777 55%, #0EA5E9 100%);
-    --gradient-cyan: linear-gradient(135deg, #67E8F9 0%, #A5B4FC 100%);
-    --gradient-violet: linear-gradient(135deg, #C4B5FD 0%, #818CF8 100%);
-    --gradient-sunset: linear-gradient(135deg, #FBCFE8 0%, #C4B5FD 100%);
+    /* IDM-inspired gradient family: deep violet → indigo → blue */
+    --gradient-aurora: linear-gradient(135deg, #6D28D9 0%, #4F46E5 50%, #2563EB 100%);
+    --gradient-aurora-strong: linear-gradient(135deg, #5B21B6 0%, #4338CA 50%, #1D4ED8 100%);
+    --gradient-cyan: linear-gradient(135deg, #6366F1 0%, #2563EB 100%);
+    --gradient-violet: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%);
+    --gradient-sunset: linear-gradient(135deg, #C4B5FD 0%, #818CF8 100%);
     --gradient-mesh:
       radial-gradient(at 8% 8%, rgba(196, 181, 253, 0.55) 0px, transparent 55%),
       radial-gradient(at 92% 10%, rgba(186, 230, 253, 0.55) 0px, transparent 55%),
@@ -297,7 +298,7 @@
 
   /* Buttons / accents */
   html.theme-white .btn-aurora {
-    background: linear-gradient(135deg, #A78BFA 0%, #F0ABFC 50%, #7DD3FC 100%);
+    background: linear-gradient(135deg, #6D28D9 0%, #4F46E5 50%, #2563EB 100%);
     color: #ffffff;
     box-shadow: 0 12px 30px -10px rgba(168, 85, 247, 0.45), 0 0 0 1px rgba(255,255,255,0.4) inset;
   }
@@ -432,7 +433,7 @@
   html.theme-white .text-aurora-strong,
   html.theme-white .text-neon,
   html.theme-white .text-sunset {
-    background-image: linear-gradient(135deg, #7C3AED 0%, #DB2777 50%, #0EA5E9 100%);
+    background-image: linear-gradient(135deg, #5B21B6 0%, #4338CA 50%, #1D4ED8 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -559,7 +560,7 @@
     -webkit-backdrop-filter: blur(10px) saturate(160%);
   }
   html.theme-white .relative.z-40.overflow-hidden.bg-background .bg-clip-text.text-transparent {
-    background-image: linear-gradient(135deg, #7C3AED 0%, #DB2777 50%, #0EA5E9 100%) !important;
+    background-image: linear-gradient(135deg, #5B21B6 0%, #4338CA 50%, #1D4ED8 100%) !important;
     color: transparent !important;
   }
   html.theme-white .relative.z-40.overflow-hidden.bg-background .bg-white\/15,
@@ -816,7 +817,7 @@
     color: oklch(0.18 0.04 285) !important;
   }
   html.theme-white .product-card-v2 .text-aurora {
-    background-image: linear-gradient(135deg, #7C3AED 0%, #DB2777 50%, #0EA5E9 100%) !important;
+    background-image: linear-gradient(135deg, #5B21B6 0%, #4338CA 50%, #1D4ED8 100%) !important;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent !important;
@@ -824,7 +825,7 @@
 
   /* Choose Plan / Add to Cart pill — white glassmorphism with violet gradient */
   html.theme-white .choose-plan-btn {
-    background: linear-gradient(135deg, #A78BFA 0%, #C4B5FD 50%, #7DD3FC 100%) !important;
+    background: linear-gradient(135deg, #6D28D9 0%, #4F46E5 50%, #2563EB 100%) !important;
     color: #ffffff !important;
     box-shadow:
       0 8px 22px -8px rgba(124, 58, 237, 0.45),
@@ -919,7 +920,7 @@
   /* Auth submit button (dark pill) → violet aurora gradient */
   html.theme-white button.bg-\[\#0c1322\],
   html.theme-white .bg-\[\#0c1322\].rounded-full {
-    background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 50%, #7DD3FC 100%) !important;
+    background: linear-gradient(135deg, #6D28D9 0%, #4F46E5 50%, #2563EB 100%) !important;
     color: #ffffff !important;
     box-shadow: 0 12px 30px -10px rgba(124, 58, 237, 0.55) !important;
   }
@@ -930,7 +931,7 @@
   }
   html.theme-white section.bg-\[\#07071a\] .text-aurora,
   html.theme-white section.bg-\[\#07071a\] [class*="bg-clip-text"] {
-    background-image: linear-gradient(135deg, #7C3AED 0%, #DB2777 50%, #0EA5E9 100%) !important;
+    background-image: linear-gradient(135deg, #5B21B6 0%, #4338CA 50%, #1D4ED8 100%) !important;
     color: transparent !important;
   }
 
