@@ -161,56 +161,202 @@
   body > * { position: relative; z-index: 1; }
 
   /* ===========================
-     White (Light) theme — applied via <html class="theme-white">
-     Bright surfaces with soft neutral palette. Designed to be safely tweaked.
+     White (Glassmorp) theme — applied via <html class="theme-white">
+     Soft pastel pink/lavender/blue canvas with frosted-white glass cards,
+     violet accents, gentle drop shadows. Inspired by Glassmorp dashboards.
      =========================== */
   html.theme-white {
-    --background: oklch(0.985 0.003 250);
-    --foreground: oklch(0.18 0.02 270);
+    --background: oklch(0.985 0.008 320);
+    --foreground: oklch(0.22 0.04 285);
     --card: oklch(1 0 0);
-    --card-foreground: oklch(0.18 0.02 270);
+    --card-foreground: oklch(0.22 0.04 285);
     --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.18 0.02 270);
+    --popover-foreground: oklch(0.22 0.04 285);
 
-    --primary: oklch(0.55 0.22 285);
+    --primary: oklch(0.62 0.24 295);
     --primary-foreground: oklch(1 0 0);
-    --primary-dark: oklch(0.4 0.2 285);
+    --primary-dark: oklch(0.46 0.22 295);
 
-    --secondary: oklch(0.96 0.005 260);
-    --secondary-foreground: oklch(0.2 0.02 270);
-    --muted: oklch(0.96 0.005 260);
-    --muted-foreground: oklch(0.45 0.02 260);
-    --accent: oklch(0.95 0.02 220);
-    --accent-foreground: oklch(0.2 0.02 270);
+    --secondary: oklch(0.97 0.012 320);
+    --secondary-foreground: oklch(0.24 0.04 285);
+    --muted: oklch(0.965 0.012 320);
+    --muted-foreground: oklch(0.5 0.04 285);
+    --accent: oklch(0.94 0.04 330);
+    --accent-foreground: oklch(0.24 0.04 285);
 
-    --border: rgba(15, 23, 42, 0.10);
-    --input: rgba(15, 23, 42, 0.06);
-    --ring: oklch(0.55 0.22 285);
+    --aqua: oklch(0.74 0.16 200);
+    --aqua-deep: oklch(0.62 0.18 220);
+    --gold: oklch(0.78 0.16 88);
+    --coral: oklch(0.7 0.22 18);
 
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-bg-strong: rgba(255, 255, 255, 0.88);
-    --glass-bg-soft: rgba(255, 255, 255, 0.55);
-    --glass-border: rgba(15, 23, 42, 0.10);
-    --glass-border-soft: rgba(15, 23, 42, 0.06);
-    --glass-highlight: rgba(255, 255, 255, 0.9);
+    --success: oklch(0.7 0.18 158);
+    --warning: oklch(0.78 0.16 88);
+    --destructive: oklch(0.62 0.24 22);
+    --destructive-foreground: oklch(1 0 0);
+
+    --border: rgba(124, 58, 237, 0.14);
+    --input: rgba(255, 255, 255, 0.85);
+    --ring: oklch(0.62 0.24 295);
+
+    /* Frosted-white glass over pastel canvas */
+    --glass-bg: rgba(255, 255, 255, 0.55);
+    --glass-bg-strong: rgba(255, 255, 255, 0.78);
+    --glass-bg-soft: rgba(255, 255, 255, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.7);
+    --glass-border-soft: rgba(255, 255, 255, 0.5);
+    --glass-highlight: rgba(255, 255, 255, 0.95);
+
+    /* Soft pastel gradients */
+    --gradient-aurora: linear-gradient(135deg, #C4B5FD 0%, #FBCFE8 50%, #BAE6FD 100%);
+    --gradient-aurora-strong: linear-gradient(135deg, #7C3AED 0%, #DB2777 55%, #0EA5E9 100%);
+    --gradient-cyan: linear-gradient(135deg, #67E8F9 0%, #A5B4FC 100%);
+    --gradient-violet: linear-gradient(135deg, #C4B5FD 0%, #818CF8 100%);
+    --gradient-sunset: linear-gradient(135deg, #FBCFE8 0%, #C4B5FD 100%);
+    --gradient-mesh:
+      radial-gradient(at 8% 8%, rgba(196, 181, 253, 0.55) 0px, transparent 55%),
+      radial-gradient(at 92% 10%, rgba(186, 230, 253, 0.55) 0px, transparent 55%),
+      radial-gradient(at 70% 92%, rgba(251, 207, 232, 0.5) 0px, transparent 60%),
+      radial-gradient(at 22% 78%, rgba(199, 210, 254, 0.55) 0px, transparent 60%);
+
+    --shadow-glass-sm: 0 2px 8px -2px rgba(124, 58, 237, 0.10), 0 0 0 1px rgba(255,255,255,0.6) inset;
+    --shadow-glass: 0 18px 48px -22px rgba(124, 58, 237, 0.28), 0 0 0 1px rgba(255,255,255,0.7) inset;
+    --shadow-glass-lg: 0 32px 80px -28px rgba(124, 58, 237, 0.32), 0 0 0 1px rgba(255,255,255,0.8) inset;
+    --shadow-glow-violet: 0 0 50px -10px rgba(168, 85, 247, 0.35);
+    --shadow-glow-aqua: 0 0 50px -10px rgba(56, 189, 248, 0.35);
+    --shadow-glow-blue: 0 0 50px -10px rgba(129, 140, 248, 0.35);
+    --shadow-glow-pink: 0 0 50px -10px rgba(244, 114, 182, 0.35);
 
     color-scheme: light;
   }
+  /* Pastel mesh canvas */
   html.theme-white body {
-    background-color: #f4f6fb;
+    background-color: #f5e9f7;
     background-image:
-      radial-gradient(60% 50% at 12% 12%, rgba(124, 58, 237, 0.10), transparent 70%),
-      radial-gradient(55% 50% at 90% 10%, rgba(6, 182, 212, 0.10), transparent 72%),
-      radial-gradient(60% 55% at 80% 92%, rgba(236, 72, 153, 0.08), transparent 72%);
+      radial-gradient(70% 60% at 8% 6%, rgba(196, 181, 253, 0.85), transparent 65%),
+      radial-gradient(60% 55% at 92% 4%, rgba(186, 230, 253, 0.75), transparent 68%),
+      radial-gradient(70% 60% at 100% 90%, rgba(251, 207, 232, 0.85), transparent 65%),
+      radial-gradient(60% 55% at 0% 95%, rgba(199, 210, 254, 0.75), transparent 65%),
+      linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 40%, #e0f2fe 100%);
     color: var(--color-foreground);
   }
   html.theme-white body::before { display: none; }
-  html.theme-white .glass,
-  html.theme-white .glass-strong,
+
+  /* GLASS CARDS — frosted white over pastel */
+  html.theme-white .glass {
+    background: rgba(255, 255, 255, 0.55) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow:
+      0 18px 48px -22px rgba(124, 58, 237, 0.25),
+      0 1px 0 0 rgba(255, 255, 255, 0.9) inset !important;
+  }
+  html.theme-white .glass-strong {
+    background: rgba(255, 255, 255, 0.78) !important;
+    border: 1px solid rgba(255, 255, 255, 0.9) !important;
+    box-shadow:
+      0 24px 60px -24px rgba(124, 58, 237, 0.3),
+      0 1px 0 0 rgba(255, 255, 255, 0.95) inset !important;
+  }
   html.theme-white .glass-soft {
+    background: rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 6px 18px -10px rgba(124, 58, 237, 0.18) !important;
+  }
+  @media (min-width: 1024px) and (pointer: fine) {
+    html.theme-white .glass,
+    html.theme-white .glass-strong,
+    html.theme-white .glass-soft {
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    }
+  }
+
+  /* Gradient bordered cards adapt to light glass */
+  html.theme-white .gradient-border-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));
+    box-shadow: 0 18px 48px -22px rgba(124, 58, 237, 0.28);
+  }
+  html.theme-white .gradient-border-card::before {
+    background: linear-gradient(135deg, rgba(196, 181, 253, 0.8), rgba(186, 230, 253, 0.7) 50%, rgba(251, 207, 232, 0.8));
+    opacity: 0.6;
+  }
+  html.theme-white .gradient-border-card::after {
+    background:
+      radial-gradient(120% 70% at 50% -10%, rgba(186, 230, 253, 0.4), transparent 55%),
+      radial-gradient(80% 60% at 50% 110%, rgba(251, 207, 232, 0.4), transparent 60%);
+  }
+  html.theme-white .gradient-border-card:hover {
+    box-shadow: 0 28px 70px -24px rgba(124, 58, 237, 0.4);
+  }
+  html.theme-white .gradient-border-soft {
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 6px 18px -10px rgba(124, 58, 237, 0.18);
+  }
+  html.theme-white .gradient-border-soft::before {
+    background: linear-gradient(135deg, rgba(196, 181, 253, 0.7), rgba(186, 230, 253, 0.6) 50%, rgba(251, 207, 232, 0.6));
+  }
+
+  /* Buttons / accents */
+  html.theme-white .btn-aurora {
+    background: linear-gradient(135deg, #A78BFA 0%, #F0ABFC 50%, #7DD3FC 100%);
+    color: #ffffff;
+    box-shadow: 0 12px 30px -10px rgba(168, 85, 247, 0.45), 0 0 0 1px rgba(255,255,255,0.4) inset;
+  }
+  html.theme-white .btn-aurora:hover {
+    box-shadow: 0 18px 40px -10px rgba(168, 85, 247, 0.6), 0 0 0 1px rgba(255,255,255,0.5) inset;
+  }
+  html.theme-white .neon-border {
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.1), 0 0 20px -4px rgba(168, 85, 247, 0.3);
+  }
+
+  /* Text contrast tweaks for light bg */
+  html.theme-white .text-white { color: oklch(0.22 0.04 285) !important; }
+  html.theme-white .text-white\/90 { color: oklch(0.28 0.04 285) !important; }
+  html.theme-white .text-white\/80 { color: oklch(0.34 0.04 285) !important; }
+  html.theme-white .text-white\/70 { color: oklch(0.42 0.04 285) !important; }
+  html.theme-white .text-white\/60 { color: oklch(0.5 0.04 285) !important; }
+  html.theme-white .text-white\/50 { color: oklch(0.55 0.04 285) !important; }
+  html.theme-white .text-foreground { color: oklch(0.22 0.04 285) !important; }
+
+  /* Scrollbar in white theme */
+  html.theme-white {
+    scrollbar-color: rgba(168, 85, 247, 0.5) transparent;
+  }
+  html.theme-white ::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.45);
+  }
+  html.theme-white ::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 85, 247, 0.7);
+  }
+
+  /* Inputs / form fields */
+  html.theme-white input,
+  html.theme-white textarea,
+  html.theme-white select {
     background-color: rgba(255, 255, 255, 0.85);
-    border-color: rgba(15, 23, 42, 0.08);
-    box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.15);
+    border-color: rgba(124, 58, 237, 0.18);
+    color: oklch(0.22 0.04 285);
+  }
+  html.theme-white input::placeholder,
+  html.theme-white textarea::placeholder {
+    color: oklch(0.55 0.04 285);
+  }
+
+  /* Tables */
+  html.theme-white table { color: oklch(0.22 0.04 285); }
+  html.theme-white thead { background: rgba(255, 255, 255, 0.6); }
+  html.theme-white tbody tr { border-color: rgba(124, 58, 237, 0.08); }
+  html.theme-white tbody tr:hover { background: rgba(196, 181, 253, 0.12); }
+
+  /* Hard-coded dark backgrounds → light glass */
+  html.theme-white [class*="bg-black"],
+  html.theme-white [class*="bg-slate-9"],
+  html.theme-white [class*="bg-slate-8"],
+  html.theme-white [class*="bg-zinc-9"],
+  html.theme-white [class*="bg-neutral-9"],
+  html.theme-white [class*="bg-gray-9"] {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    color: oklch(0.22 0.04 285) !important;
   }
 }
 
