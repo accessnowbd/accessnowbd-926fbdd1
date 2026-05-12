@@ -40,7 +40,7 @@ const NAV: Array<{
 
 export function TopUtilityBar() {
   return (
-    <div className="relative z-40 overflow-hidden bg-[#0B1220] text-white">
+    <div className="relative z-40 overflow-hidden bg-background">
       <div
         className="relative mx-auto max-w-[1440px] px-3 sm:px-5 md:px-10 flex items-center justify-between gap-3 text-white"
         style={{
@@ -149,10 +149,10 @@ export function SiteHeader() {
       <header className="sticky top-0 z-40">
         <div
           className={[
-            "relative transition-[background-color,box-shadow,backdrop-filter] duration-300 will-change-[background-color] text-white",
+            "relative transition-[background-color,box-shadow,backdrop-filter] duration-300 will-change-[background-color]",
             scrolled
-              ? "bg-[#0B1220]/95 backdrop-blur-2xl shadow-[0_18px_50px_-24px_rgba(15,23,42,0.5)]"
-              : "bg-[#0B1220]/85 backdrop-blur-xl",
+              ? "bg-background/65 backdrop-blur-2xl shadow-[0_18px_50px_-24px_rgba(0,0,0,0.7)]"
+              : "bg-background/35 backdrop-blur-xl",
           ].join(" ")}
         >
           <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-10 h-[64px] md:h-[68px] flex items-center justify-between gap-2 md:gap-5 flex-nowrap">
