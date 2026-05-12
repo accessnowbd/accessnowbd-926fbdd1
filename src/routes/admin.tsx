@@ -237,7 +237,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* MAIN */}
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar */}
-        <header className={`h-16 sticky top-0 z-20 backdrop-blur border-b ${dark ? "bg-slate-900/80 border-slate-800" : "bg-white/80 border-slate-200"}`}>
+        <header className={`h-16 sticky top-0 z-20 backdrop-blur-xl border-b ${dark ? "bg-slate-900/80 border-slate-800" : "bg-white/50 border-white/60"}`}>
           <div className="h-full px-4 md:px-6 flex items-center gap-3">
             {/* Breadcrumb */}
             <div className={`hidden md:flex items-center gap-2 text-sm ${dark ? "text-slate-300" : "text-slate-600"}`}>
