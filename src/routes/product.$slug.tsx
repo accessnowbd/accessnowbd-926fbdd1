@@ -58,7 +58,14 @@ function ProductPage() {
   const buyNow = () => { addToCart(); navigate({ to: "/checkout" }); };
 
   return (
-    <div className="min-h-screen">
+    <div key={product.slug} className="min-h-screen animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both]">
+      <style>{`
+        @keyframes product-in {
+          0%   { opacity: 0; transform: translateY(14px); filter: blur(4px); }
+          60%  { opacity: 1; filter: blur(0); }
+          100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+      `}</style>
       {/* Top Nav */}
       <header className="bg-aurora text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-mesh opacity-40 pointer-events-none" />
