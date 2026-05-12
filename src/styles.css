@@ -159,6 +159,59 @@
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
   body > * { position: relative; z-index: 1; }
+
+  /* ===========================
+     White (Light) theme — applied via <html class="theme-white">
+     Bright surfaces with soft neutral palette. Designed to be safely tweaked.
+     =========================== */
+  html.theme-white {
+    --background: oklch(0.985 0.003 250);
+    --foreground: oklch(0.18 0.02 270);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.18 0.02 270);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.18 0.02 270);
+
+    --primary: oklch(0.55 0.22 285);
+    --primary-foreground: oklch(1 0 0);
+    --primary-dark: oklch(0.4 0.2 285);
+
+    --secondary: oklch(0.96 0.005 260);
+    --secondary-foreground: oklch(0.2 0.02 270);
+    --muted: oklch(0.96 0.005 260);
+    --muted-foreground: oklch(0.45 0.02 260);
+    --accent: oklch(0.95 0.02 220);
+    --accent-foreground: oklch(0.2 0.02 270);
+
+    --border: rgba(15, 23, 42, 0.10);
+    --input: rgba(15, 23, 42, 0.06);
+    --ring: oklch(0.55 0.22 285);
+
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg-strong: rgba(255, 255, 255, 0.88);
+    --glass-bg-soft: rgba(255, 255, 255, 0.55);
+    --glass-border: rgba(15, 23, 42, 0.10);
+    --glass-border-soft: rgba(15, 23, 42, 0.06);
+    --glass-highlight: rgba(255, 255, 255, 0.9);
+
+    color-scheme: light;
+  }
+  html.theme-white body {
+    background-color: #f4f6fb;
+    background-image:
+      radial-gradient(60% 50% at 12% 12%, rgba(124, 58, 237, 0.10), transparent 70%),
+      radial-gradient(55% 50% at 90% 10%, rgba(6, 182, 212, 0.10), transparent 72%),
+      radial-gradient(60% 55% at 80% 92%, rgba(236, 72, 153, 0.08), transparent 72%);
+    color: var(--color-foreground);
+  }
+  html.theme-white body::before { display: none; }
+  html.theme-white .glass,
+  html.theme-white .glass-strong,
+  html.theme-white .glass-soft {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-color: rgba(15, 23, 42, 0.08);
+    box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.15);
+  }
 }
 
 @layer utilities {
