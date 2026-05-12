@@ -32,6 +32,9 @@ type Order = {
   total: number;
   status: string;
   created_at: string;
+  admin_note?: string | null;
+  delivered_credentials?: { text?: string } | null;
+  delivered_at?: string | null;
 };
 
 const statusStyles: Record<string, string> = {
