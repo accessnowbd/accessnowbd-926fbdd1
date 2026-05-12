@@ -154,10 +154,10 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
             <button
               type="button"
               onClick={() => oauth("google")}
-              className="h-12 rounded-full bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 active:bg-slate-100 shadow-[0_4px_14px_-6px_rgba(15,23,42,0.15)] transition inline-flex items-center justify-center gap-2.5"
+              className="h-12 rounded-full bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 active:bg-slate-100 transition inline-flex items-center justify-center gap-2.5"
               aria-label="Continue with Google"
             >
-              <svg viewBox="0 0 48 48" className="w-5 h-5">
+              <svg viewBox="0 0 48 48" className="w-[18px] h-[18px]">
                 <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.3 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.3-.4-3.5z" />
                 <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3 0 5.8 1.1 7.9 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
                 <path fill="#4CAF50" d="M24 44c5.3 0 10.1-2 13.7-5.3l-6.3-5.3C29.4 35 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z" />
@@ -168,13 +168,13 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
             <button
               type="button"
               onClick={() => oauth("apple")}
-              className="h-12 rounded-full bg-[#0F1B2D] hover:bg-[#16243A] active:bg-[#0A1424] shadow-[0_8px_20px_-8px_rgba(15,27,45,0.55)] transition inline-flex items-center justify-center gap-2.5"
+              className="h-12 rounded-full bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 active:bg-slate-100 transition inline-flex items-center justify-center gap-2.5"
               aria-label="Continue with Apple"
             >
-              <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="currentColor">
+              <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] text-slate-900" fill="currentColor">
                 <path d="M16.365 1.43c0 1.14-.46 2.23-1.21 3.01-.81.86-2.13 1.52-3.21 1.43-.14-1.09.42-2.24 1.13-2.97.79-.82 2.16-1.43 3.29-1.47zM20.5 17.06c-.55 1.27-.81 1.84-1.52 2.96-.99 1.56-2.39 3.5-4.12 3.52-1.54.02-1.93-1-4.02-.99-2.09.01-2.52 1.01-4.06.99-1.73-.02-3.05-1.77-4.04-3.33C.04 15.97-.26 11.4 1.41 8.97c1.19-1.74 3.07-2.76 4.83-2.76 1.79 0 2.92 1 4.4 1 1.43 0 2.3-1 4.37-1 1.57 0 3.23.86 4.42 2.34-3.88 2.13-3.25 7.68-.93 8.51z" />
               </svg>
-              <span className="text-[14px] font-semibold text-white">Apple</span>
+              <span className="text-[14px] font-semibold text-slate-900">Apple</span>
             </button>
           </div>
 
