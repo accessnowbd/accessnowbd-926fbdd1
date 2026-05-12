@@ -1,23 +1,15 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-export type ThemeId = "aurora";
+export type ThemeId = "aurora" | "white";
 
 export interface ThemeMeta {
   id: ThemeId;
   name: string;
   description: string;
-  /** CSS class applied to <html> when this theme is active. Empty = default tokens. */
   className: string;
-  /** Small color swatch shown in the picker. */
   swatch: string;
 }
 
-/**
- * Theme registry. To add a new theme later:
- *  1. Add a new entry here with a unique id + className.
- *  2. In src/styles.css, define the CSS variables under `html.<className> { ... }`.
- * The switcher UI will pick it up automatically.
- */
 export const THEMES: ThemeMeta[] = [
   {
     id: "aurora",
@@ -25,6 +17,13 @@ export const THEMES: ThemeMeta[] = [
     description: "Premium dark glass with violet · cyan · pink aurora",
     className: "",
     swatch: "linear-gradient(135deg, #7C3AED 0%, #06B6D4 55%, #EC4899 100%)",
+  },
+  {
+    id: "white",
+    name: "White",
+    description: "Clean light theme — bright surfaces, soft shadows",
+    className: "theme-white",
+    swatch: "linear-gradient(135deg, #ffffff 0%, #e5e7eb 55%, #cbd5e1 100%)",
   },
 ];
 
