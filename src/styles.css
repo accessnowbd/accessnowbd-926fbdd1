@@ -126,6 +126,10 @@
 @layer base {
   * { border-color: var(--color-border); }
   html, body { background-color: #06051a; color-scheme: dark; }
+  html {
+    overflow-x: clip;
+    max-width: 100%;
+  }
   body {
     color: var(--color-foreground);
     font-family: var(--font-body);
@@ -134,8 +138,11 @@
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     position: relative;
-    overflow-x: hidden;
+    overflow-x: clip;
+    max-width: 100%;
   }
+  /* Defense-in-depth: stop wide media/fixed-width children from blowing out the viewport on mobile */
+  img, video, svg, canvas, iframe { max-width: 100%; height: auto; }
   /* Premium aurora background — layered radial glows with subtle vignette and
      a faint noise overlay for depth. No grid lines. */
   body {
