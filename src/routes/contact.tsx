@@ -70,7 +70,7 @@ function ContactPage() {
 
       <section className="mx-auto max-w-[1200px] px-4 md:px-10 py-12 grid md:grid-cols-2 gap-8">
         <div className="space-y-4">
-          <InfoCard icon={MessageCircle} title="WhatsApp" desc="দ্রুততম রেসপন্স — ১৫ মিনিটের মধ্যে।"
+          <InfoCard icon={MessageCircle} title="WhatsApp" desc="দ্রুততম রেসপন্স — 15 মিনিটের মধ্যে।"
             action={<a href="https://wa.me/8801580607614" className="text-primary font-bold hover:underline">+880 1580-607614</a>} />
           <InfoCard icon={Mail} title="Email" desc="বিস্তারিত প্রশ্নের জন্য।"
             action={<a href="mailto:hello@accessnowbd.com" className="text-primary font-bold hover:underline">hello@accessnowbd.com</a>} />

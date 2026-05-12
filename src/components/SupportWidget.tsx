@@ -43,7 +43,7 @@ const QUICK_PROMPTS = [
 const FAQS: { q: string; a: string }[] = [
   {
     q: "ডেলিভারি কত সময়ে পাবো?",
-    a: "অর্ডার কনফার্ম হওয়ার ৫-৩০ মিনিটের মধ্যে আপনি অ্যাকাউন্ট ইমেইলে / WhatsApp-এ পেয়ে যাবেন।",
+    a: "অর্ডার কনফার্ম হওয়ার 5-30 মিনিটের মধ্যে আপনি অ্যাকাউন্ট ইমেইলে / WhatsApp-এ পেয়ে যাবেন।",
   },
   {
     q: "পেমেন্ট মেথড কী কী আছে?",
@@ -317,11 +317,11 @@ export function SupportWidget() {
                 <div className="mt-2.5 flex items-center gap-2 text-[11.5px] font-semibold text-white/90">
                   <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-300/40 backdrop-blur-sm">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
-                    <span>২৪/৭ অনলাইন</span>
+                    <span>24/7 অনলাইন</span>
                   </span>
                   <span className="inline-flex items-center gap-1 text-white/80">
                     <Clock className="h-3 w-3" />
-                    ~২ মিনিটে রিপ্লাই
+                    ~2 মিনিটে রিপ্লাই
                   </span>
                 </div>
               </div>
@@ -346,7 +346,7 @@ export function SupportWidget() {
                       </span>
                     </div>
                     <span className="block text-[11.5px] text-white/60 mt-0.5">
-                      তাৎক্ষণিক উত্তর — বাংলায়, ২৪/৭
+                      তাৎক্ষণিক উত্তর — বাংলায়, 24/7
                     </span>
                   </div>
                   <ChevronRight className="h-4 w-4 text-white/50 group-hover:text-white group-hover:translate-x-1 transition" />
@@ -405,7 +405,7 @@ export function SupportWidget() {
                 <div className="rounded-xl border border-white/8 bg-white/[0.02] px-2 py-2 text-center">
                   <Zap className="h-3.5 w-3.5 text-amber-300 mx-auto" />
                   <div className="text-[10px] text-white/55 mt-1">দ্রুত রেসপন্স</div>
-                  <div className="text-[11px] font-extrabold text-white">~২ মিনিট</div>
+                  <div className="text-[11px] font-extrabold text-white">~2 মিনিট</div>
                 </div>
                 <div className="rounded-xl border border-white/8 bg-white/[0.02] px-2 py-2 text-center">
                   <Star className="h-3.5 w-3.5 text-amber-300 mx-auto fill-amber-300" />
@@ -415,7 +415,7 @@ export function SupportWidget() {
                 <div className="rounded-xl border border-white/8 bg-white/[0.02] px-2 py-2 text-center">
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-300 mx-auto" />
                   <div className="text-[10px] text-white/55 mt-1">ভেরিফাইড</div>
-                  <div className="text-[11px] font-extrabold text-white">৫০০০+</div>
+                  <div className="text-[11px] font-extrabold text-white">5000+</div>
                 </div>
               </div>
             </div>
@@ -544,7 +544,7 @@ export function SupportWidget() {
                     <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/[0.06] px-3 py-2 flex items-center gap-2">
                       <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
                       <span className="text-[11px] text-emerald-100/80">
-                        ১০০% সিকিউর — আপনার মেসেজ এনক্রিপ্টেড
+                        100% সিকিউর — আপনার মেসেজ এনক্রিপ্টেড
                       </span>
                     </div>
                   </div>

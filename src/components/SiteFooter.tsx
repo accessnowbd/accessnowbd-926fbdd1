@@ -180,7 +180,7 @@ export function SiteFooter() {
                   বাংলাদেশের সবচেয়ে{" "}
                   <span className="font-bold text-white">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span>{" "}
                   — ভেরিফাইড সাবস্ক্রিপশন, সফটওয়্যার লাইসেন্স, AI টুলস ও{" "}
-                  <span className="font-bold text-white">২৪/৭ লাইভ সাপোর্টে</span>{" "}
+                  <span className="font-bold text-white">24/7 লাইভ সাপোর্টে</span>{" "}
                   আপনার ডিজিটাল প্রয়োজন এক ক্লিকেই পূরণ।
                 </p>
               </div>

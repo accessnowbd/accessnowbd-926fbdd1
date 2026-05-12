@@ -35,25 +35,25 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORY_DECK = [
-  { title: "OTT & Streaming", label: "Netflix · Prime · Hoichoi", icon: PlayCircle, to: "/streaming" as const, count: "১২+" },
-  { title: "AI Tools", label: "ChatGPT · Claude · Gemini", icon: Bot, to: "/ai-tools" as const, count: "৮+" },
-  { title: "Office & Windows", label: "Windows · Office · 365", icon: MonitorSmartphone, to: "/products" as const, count: "১০+" },
-  { title: "Design & Editing", label: "Canva · Adobe · CapCut", icon: Palette, to: "/products" as const, count: "৯+" },
-  { title: "Education", label: "Coursera · Grammarly", icon: GraduationCap, to: "/education" as const, count: "৬+" },
-  { title: "VPN & Security", label: "NordVPN · Surfshark", icon: ShieldCheck, to: "/products" as const, count: "৫+" },
+  { title: "OTT & Streaming", label: "Netflix · Prime · Hoichoi", icon: PlayCircle, to: "/streaming" as const, count: "12+" },
+  { title: "AI Tools", label: "ChatGPT · Claude · Gemini", icon: Bot, to: "/ai-tools" as const, count: "8+" },
+  { title: "Office & Windows", label: "Windows · Office · 365", icon: MonitorSmartphone, to: "/products" as const, count: "10+" },
+  { title: "Design & Editing", label: "Canva · Adobe · CapCut", icon: Palette, to: "/products" as const, count: "9+" },
+  { title: "Education", label: "Coursera · Grammarly", icon: GraduationCap, to: "/education" as const, count: "6+" },
+  { title: "VPN & Security", label: "NordVPN · Surfshark", icon: ShieldCheck, to: "/products" as const, count: "5+" },
 ];
 
 const TRUST_ITEMS = [
-  { icon: Clock3, title: "১০ মিনিটে ডেলিভারি", text: "পেমেন্ট কনফার্ম হলেই দ্রুত প্রসেসিং" },
+  { icon: Clock3, title: "10 মিনিটে ডেলিভারি", text: "পেমেন্ট কনফার্ম হলেই দ্রুত প্রসেসিং" },
   { icon: ShieldCheck, title: "ভেরিফাইড সার্ভিস", text: "অরিজিনাল লাইসেন্স ও প্রিমিয়াম অ্যাক্সেস" },
   { icon: Headphones, title: "লাইভ সাপোর্ট", text: "অর্ডার থেকে সেটআপ পর্যন্ত সহায়তা" },
   { icon: CheckCircle2, title: "ওয়ারেন্টি কাভার", text: "সমস্যা হলে রিপ্লেসমেন্ট সাপোর্ট" },
 ];
 
 const FEATURE_BUNDLES = [
-  { title: "Creator Stack", items: ["Canva Pro", "CapCut Pro", "Adobe CC", "Freepik"], price: "৳৪৯৯+" },
-  { title: "Student Stack", items: ["ChatGPT", "Grammarly", "Coursera", "Google One"], price: "৳৩৯৯+" },
-  { title: "Entertainment Stack", items: ["Netflix", "Prime Video", "Spotify", "YouTube"], price: "৳২৯৯+" },
+  { title: "Creator Stack", items: ["Canva Pro", "CapCut Pro", "Adobe CC", "Freepik"], price: "৳499+" },
+  { title: "Student Stack", items: ["ChatGPT", "Grammarly", "Coursera", "Google One"], price: "৳399+" },
+  { title: "Entertainment Stack", items: ["Netflix", "Prime Video", "Spotify", "YouTube"], price: "৳299+" },
 ];
 
 const ACTIVITY = [
@@ -172,7 +172,7 @@ function HeroExperience() {
           <div className="relative">
             <div className="flex flex-wrap items-center gap-2">
               <div className="inline-flex items-center gap-2 rounded-full glass-soft px-3 py-1.5 text-[11px] font-bold text-aurora-strong neon-border">
-                #১ Premium Marketplace · BD
+                #1 Premium Marketplace · BD
               </div>
               <div className="inline-flex items-center gap-1.5 rounded-full glass-soft px-3 py-1.5 text-[11px] font-bold text-white">
                 <span className="flex">
@@ -180,7 +180,7 @@ function HeroExperience() {
                     <Star key={i} className="h-3 w-3 fill-[var(--gold)] text-[var(--gold)]" />
                   ))}
                 </span>
-                <span>৪.৯ · ১২K+ রিভিউ</span>
+                <span>4.9 · 12K+ রিভিউ</span>
               </div>
             </div>
 
@@ -203,7 +203,7 @@ function HeroExperience() {
             </h1>
 
             <p className="mt-3 max-w-lg text-sm md:text-[15px] text-white/75 leading-relaxed">
-              ভেরিফাইড লাইসেন্স · ১০ মিনিটে ডেলিভারি · ২৪/৭ লাইভ সাপোর্ট
+              ভেরিফাইড লাইসেন্স · 10 মিনিটে ডেলিভারি · 24/7 লাইভ সাপোর্ট
             </p>
 
             {/* Trust ribbon */}
@@ -235,9 +235,9 @@ function HeroExperience() {
 
           <div className="relative mt-7 grid grid-cols-3 gap-2.5">
             {[
-              ["৩৬+", "Products", ShieldCheck],
-              ["১০মিনিট", "Delivery", Clock3],
-              ["২৪/৭", "Support", Headphones],
+              ["36+", "Products", ShieldCheck],
+              ["10মিনিট", "Delivery", Clock3],
+              ["24/7", "Support", Headphones],
             ].map(([value, label, Icon]) => {
               const I = Icon as typeof ShieldCheck;
               return (
@@ -329,7 +329,7 @@ function HeroExperience() {
                   Limited Offer
                 </div>
                 <h4 className="mt-2 text-lg md:text-xl font-extrabold text-white" style={{ fontFamily: "var(--font-display)", lineHeight: 1.15 }}>
-                  প্রথম অর্ডারে <span className="text-aurora">২০% ছাড়</span>
+                  প্রথম অর্ডারে <span className="text-aurora">20% ছাড়</span>
                 </h4>
                 <p className="mt-1 text-[11px] md:text-xs text-white/70">
                   Coupon: <span className="font-mono font-bold text-white">WELCOME20</span> · সকল প্রোডাক্টে প্রযোজ্য
