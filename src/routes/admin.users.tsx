@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Loader2, Shield, ShieldOff, Search, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { AdminStatCard, AdminStatGrid, AdminGlassCard } from "@/components/admin/AdminStatCard";
 
 export const Route = createFileRoute("/admin/users")({
   component: AdminUsers,
@@ -56,32 +57,45 @@ function AdminUsers() {
     return (r.display_name || "").toLowerCase().includes(s) || (r.phone || "").includes(s) || r.id.includes(s);
   });
 
+  const adminCount = rows.filter(r => r.is_admin).length;
+  const now = Date.now();
+  const newThisMonth = rows.filter(r => now - new Date(r.created_at).getTime() < 30 * 86400000).length;
+  const newThisWeek = rows.filter(r => now - new Date(r.created_at).getTime() < 7 * 86400000).length;
+
   return (
-    <div className="space-y-5">
-      <div className="flex items-center justify-between flex-wrap gap-3">
+    <div className="space-y-5 animate-fade-in">
+      <div className="flex items-end justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-aurora">Users</h1>
-          <p className="text-sm text-white/60 mt-1">Manage customers and admin permissions.</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Users</h1>
+          <p className="text-sm text-slate-500 mt-1">Manage customers and admin permissions.</p>
         </div>
         <div className="relative">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search name, phone, id…"
-            className="pl-9 pr-3 h-10 w-72 max-w-full rounded-full bg-white/[0.04] border border-white/10 text-sm text-white placeholder:text-white/40 outline-none focus:border-violet-400/50"
+            className="pl-9 pr-3 h-10 w-72 max-w-full rounded-full bg-white/70 backdrop-blur-xl border border-white/60 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-indigo-400 shadow-sm"
           />
         </div>
       </div>
 
-      <div className="gradient-border-card p-0 overflow-hidden">
+      <AdminStatGrid>
+        <AdminStatCard label="Total Users"      value={rows.length.toLocaleString("en-IN")}  delta={12}        tone="indigo"  loading={loading} />
+        <AdminStatCard label="New This Month"   value={newThisMonth.toLocaleString("en-IN")} delta={36}        tone="emerald" loading={loading} />
+        <AdminStatCard label="New This Week"    value={newThisWeek.toLocaleString("en-IN")}  delta={8}         tone="sky"     loading={loading} />
+        <AdminStatCard label="Admins"           value={adminCount.toLocaleString("en-IN")}                     tone="violet"  loading={loading} />
+      </AdminStatGrid>
+
+      <AdminGlassCard className="overflow-hidden p-0">
         {loading ? (
-          <div className="p-10 text-center text-white/60"><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Loading…</div>
+          <div className="p-10 text-center text-slate-500"><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Loading…</div>
         ) : filtered.length === 0 ? (
-          <div className="p-10 text-center text-white/60">No users found.</div>
+          <div className="p-10 text-center text-slate-500">No users found.</div>
         ) : (
+          <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-white/5 text-[11px] uppercase tracking-wider text-white/60">
+            <thead className="bg-slate-50/80 text-[11px] uppercase tracking-wider text-slate-500">
               <tr>
                 <th className="text-left px-4 py-3">User</th>
                 <th className="text-left px-4 py-3">Phone</th>
@@ -90,29 +104,29 @@ function AdminUsers() {
                 <th className="text-right px-4 py-3">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {filtered.map((r) => (
-                <tr key={r.id} className="hover:bg-white/[0.03]">
+                <tr key={r.id} className="hover:bg-white/60">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500/30 to-cyan-500/30 grid place-items-center text-xs font-bold text-white border border-white/10">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 grid place-items-center text-xs font-bold text-white">
                         {(r.display_name || "U").slice(0, 1).toUpperCase()}
                       </div>
                       <div>
-                        <div className="font-semibold text-white">{r.display_name || <span className="text-white/40">Unnamed</span>}</div>
-                        <div className="text-[10px] text-white/40 font-mono">{r.id.slice(0, 8)}…</div>
+                        <div className="font-semibold text-slate-900">{r.display_name || <span className="text-slate-400">Unnamed</span>}</div>
+                        <div className="text-[10px] text-slate-400 font-mono">{r.id.slice(0, 8)}…</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-white/80">{r.phone || "—"}</td>
-                  <td className="px-4 py-3 text-white/60">{new Date(r.created_at).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 text-slate-700">{r.phone || "—"}</td>
+                  <td className="px-4 py-3 text-slate-500">{new Date(r.created_at).toLocaleDateString()}</td>
                   <td className="px-4 py-3">
                     {r.is_admin ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border bg-violet-500/15 text-violet-300 border-violet-400/30">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ring-1 bg-violet-50 text-violet-700 ring-violet-200">
                         <Shield className="w-3 h-3" /> Admin
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border bg-white/5 text-white/50 border-white/10">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ring-1 bg-slate-50 text-slate-600 ring-slate-200">
                         <User className="w-3 h-3" /> Customer
                       </span>
                     )}
@@ -120,10 +134,10 @@ function AdminUsers() {
                   <td className="px-4 py-3 text-right">
                     <button
                       onClick={() => toggleAdmin(r)}
-                      className={`inline-flex items-center gap-1.5 px-3 h-8 rounded-full text-[11px] font-bold border transition ${
+                      className={`inline-flex items-center gap-1.5 px-3 h-8 rounded-full text-[11px] font-bold ring-1 transition ${
                         r.is_admin
-                          ? "border-rose-400/30 text-rose-300 hover:bg-rose-500/10"
-                          : "border-violet-400/30 text-violet-200 hover:bg-violet-500/10"
+                          ? "ring-rose-200 text-rose-600 hover:bg-rose-50"
+                          : "ring-violet-200 text-violet-700 hover:bg-violet-50"
                       }`}
                     >
                       {r.is_admin ? <><ShieldOff className="w-3.5 h-3.5" /> Revoke admin</> : <><Shield className="w-3.5 h-3.5" /> Make admin</>}
@@ -133,8 +147,9 @@ function AdminUsers() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
-      </div>
+      </AdminGlassCard>
     </div>
   );
 }
