@@ -52,6 +52,7 @@ const SYSTEM_PROMPT = `তুমি AccessNow BD-এর প্রিমিয়
 - অজানা প্রশ্নে honest থেকো, সরাসরি WhatsApp suggest করো`;
 
 Deno.serve(async (req) => {
+  const corsHeaders = corsFor(req);
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -59,11 +60,24 @@ Deno.serve(async (req) => {
   try {
     const { messages } = await req.json();
 
-    if (!Array.isArray(messages)) {
+    if (!Array.isArray(messages) || messages.length === 0 || messages.length > MAX_MESSAGES) {
       return new Response(
-        JSON.stringify({ error: "messages array required" }),
+        JSON.stringify({ error: `messages must be an array of 1..${MAX_MESSAGES} items` }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
+    }
+
+    // Validate each message shape and length
+    for (const m of messages) {
+      if (!m || typeof m !== "object") return new Response(JSON.stringify({ error: "invalid message" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      const role = (m as any).role;
+      const content = (m as any).content;
+      if (role !== "user" && role !== "assistant" && role !== "system") {
+        return new Response(JSON.stringify({ error: "invalid role" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      if (typeof content !== "string" || content.length === 0 || content.length > MAX_CONTENT_LEN) {
+        return new Response(JSON.stringify({ error: `content must be a string of 1..${MAX_CONTENT_LEN} chars` }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
