@@ -282,7 +282,7 @@ export function SupportWidget() {
               >
                 <div className="flex items-center gap-3">
                   <span className="relative grid place-items-center h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-purple-600 text-white shadow-[0_12px_28px_-8px_rgba(168,85,247,0.7)] shrink-0">
-                    <Sparkles className="h-5 w-5" />
+                    <MessageCircleMore className="h-5 w-5" />
                   </span>
                   <div className="flex-1 leading-tight">
                     <div className="flex items-center gap-1.5">
@@ -423,7 +423,7 @@ export function SupportWidget() {
                 onClick={() => setTab("ai")}
                 className="mt-3 w-full flex items-center justify-center gap-2 rounded-2xl border border-violet-400/30 bg-gradient-to-r from-violet-500/15 to-primary/15 hover:from-violet-500/25 hover:to-primary/25 px-3 py-3 text-[12.5px] font-extrabold text-white transition"
               >
-                <Sparkles className="h-4 w-4 text-violet-300" />
+                
                 আপনার প্রশ্ন খুঁজে পাননি? AI-কে জিজ্ঞাসা করুন
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -572,7 +572,6 @@ export function SupportWidget() {
               </div>
               <div className="mt-2 flex items-center justify-between px-1">
                 <div className="flex items-center gap-1.5 text-[10px] text-white/40">
-                  <Sparkles className="h-3 w-3 text-violet-300" />
                   Powered by AI · বাংলায় সাপোর্টেড
                 </div>
                 <a
@@ -659,7 +658,7 @@ function BottomTabs({
 }) {
   const items: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "home", label: "হোম", icon: <Headphones className="h-4 w-4" /> },
-    { id: "ai", label: "চ্যাট", icon: <Sparkles className="h-4 w-4" /> },
+    { id: "ai", label: "চ্যাট", icon: <MessageCircleMore className="h-4 w-4" /> },
     { id: "faq", label: "হেল্প", icon: <HelpCircle className="h-4 w-4" /> },
   ];
   return (

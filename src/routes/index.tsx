@@ -180,7 +180,7 @@ function HeroExperience() {
           <div className="relative">
             <div className="flex flex-wrap items-center gap-2">
               <div className="inline-flex items-center gap-2 rounded-full glass-soft px-3 py-1.5 text-[11px] font-bold text-aurora-strong neon-border">
-                <Sparkles className="h-3.5 w-3.5 text-aqua" /> #১ Premium Marketplace · BD
+                #১ Premium Marketplace · BD
               </div>
               <div className="inline-flex items-center gap-1.5 rounded-full glass-soft px-3 py-1.5 text-[11px] font-bold text-white">
                 <span className="flex">
@@ -243,11 +243,11 @@ function HeroExperience() {
 
           <div className="relative mt-7 grid grid-cols-3 gap-2.5">
             {[
-              ["৩৬+", "Products", Sparkles],
+              ["৩৬+", "Products", ShieldCheck],
               ["১০মিনিট", "Delivery", Clock3],
               ["২৪/৭", "Support", Headphones],
             ].map(([value, label, Icon]) => {
-              const I = Icon as typeof Sparkles;
+              const I = Icon as typeof ShieldCheck;
               return (
                 <div key={label as string} className="gradient-border-soft p-3 transition-[box-shadow,border-color] duration-300">
                   <div className="flex items-center gap-2">
@@ -334,7 +334,7 @@ function HeroExperience() {
             <div className="relative flex items-center justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <div className="inline-flex items-center gap-2 rounded-full glass-soft px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-aqua">
-                  <Sparkles className="h-3 w-3" /> Limited Offer
+                  Limited Offer
                 </div>
                 <h4 className="mt-2 text-lg md:text-xl font-extrabold text-white" style={{ fontFamily: "var(--font-display)", lineHeight: 1.15 }}>
                   প্রথম অর্ডারে <span className="text-aurora">২০% ছাড়</span>

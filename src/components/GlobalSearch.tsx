@@ -366,7 +366,6 @@ export function GlobalSearch({
                       onClick={() => setQ(t)}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white bg-gradient-to-r from-primary/25 to-aqua/25 border border-white/10 hover:from-primary/40 hover:to-aqua/40 transition"
                     >
-                      <Sparkles className="w-3 h-3 text-aqua" />
                       {t}
                     </button>
                   ))}

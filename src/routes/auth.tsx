@@ -198,7 +198,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
               {/* Brand */}
               <div className="relative flex items-center gap-3">
                 <span className="relative grid place-items-center h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 via-primary to-aqua text-white shadow-[0_14px_36px_-8px_rgba(124,58,237,0.7)] ring-1 ring-white/20">
-                  {mode === "login" ? <KeyRound className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
+                  {mode === "login" ? <KeyRound className="h-5 w-5" /> : <KeyRound className="h-5 w-5" />}
                   <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-[#0a0d28]">
                     <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
                   </span>
@@ -506,7 +506,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                 <ShieldCheck className="w-3 h-3 text-emerald-400" /> 256-bit encrypted
               </span>
               <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-white/55">
-                <Sparkles className="w-3 h-3 text-violet-300" /> Powered by AccessNow BD
+                Powered by AccessNow BD
               </span>
             </div>
           </div>
