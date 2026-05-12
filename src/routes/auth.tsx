@@ -84,14 +84,22 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
     }
   };
 
-  const submit = async (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErr(null);
     setBusy(true);
     try {
+      // Read values from the form so browser-autofilled values are always picked up
+      const fd = new FormData(e.currentTarget);
+      const values = {
+        name: String(fd.get("name") || form.name || "").trim(),
+        email: String(fd.get("email") || form.email || "").trim(),
+        phone: String(fd.get("phone") || form.phone || "").trim(),
+        password: String(fd.get("password") || form.password || ""),
+      };
       if (mode === "signup") {
         if (!agree) throw new Error("Please agree to the Terms & Privacy Policy");
-        const parsed = signupSchema.safeParse(form);
+        const parsed = signupSchema.safeParse(values);
         if (!parsed.success) throw new Error(parsed.error.issues[0].message);
         const { error } = await supabase.auth.signUp({
           email: parsed.data.email,
@@ -103,7 +111,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
         });
         if (error) throw error;
       } else {
-        const parsed = loginSchema.safeParse({ email: form.email, password: form.password });
+        const parsed = loginSchema.safeParse({ email: values.email, password: values.password });
         if (!parsed.success) throw new Error(parsed.error.issues[0].message);
         const { error } = await supabase.auth.signInWithPassword(parsed.data);
         if (error) throw error;
