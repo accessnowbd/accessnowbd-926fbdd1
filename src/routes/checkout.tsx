@@ -17,6 +17,7 @@ import { RadioCard } from "@/components/ui-glass/RadioCard";
 import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary, SummaryRow } from "@/components/ui-glass/OrderSummary";
 import { applyCoupon } from "@/lib/coupons";
+import { usePaymentMethods } from "@/hooks/useShopConfig";
 
 const checkoutSearchSchema = z.object({
   step: fallback(z.union([z.literal(1), z.literal(2), z.literal(3)]), 1).default(1),
@@ -29,13 +30,19 @@ export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — AccessNow BD" }] }),
 });
 
-const methods = [
+type PayMethod = { id: string; name: string; number: string; color: string; instructions?: string };
+
+const FALLBACK_METHODS: PayMethod[] = [
   { id: "bkash", name: "BKash", number: "01711-123456", color: "bg-[#E2136E]" },
   { id: "nagad", name: "Nagad", number: "01911-654321", color: "bg-[#EC1C24]" },
   { id: "rocket", name: "Rocket", number: "01511-987654", color: "bg-[#8C3494]" },
-] as const;
+];
 
-type MethodId = typeof methods[number]["id"];
+const COLOR_BY_NAME: Record<string, string> = {
+  bkash: "bg-[#E2136E]",
+  nagad: "bg-[#EC1C24]",
+  rocket: "bg-[#8C3494]",
+};
 
 const steps = [
   { label: "Contact" },
