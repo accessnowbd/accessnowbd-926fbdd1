@@ -41,10 +41,10 @@ type SectionId =
   | "settings-general" | "settings-theme" | "settings-language" | "settings-notif";
 
 const statusColors: Record<string, string> = {
-  pending: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-  processing: "bg-blue-500/15 text-blue-300 border-blue-500/30",
-  delivered: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-  cancelled: "bg-red-500/15 text-red-300 border-red-500/30",
+  pending: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30",
+  processing: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
+  delivered: "bg-violet-500/15 text-violet-200 border-violet-500/30",
+  cancelled: "bg-pink-500/15 text-pink-300 border-pink-500/30",
 };
 
 type NavItem = { id: SectionId; label: string; icon: React.ComponentType<{ className?: string }> };
@@ -425,9 +425,9 @@ function Empty({ icon, msg }: { icon: React.ReactNode; msg: string }) {
 function Badge({ children, color = "primary" }: { children: React.ReactNode; color?: "primary" | "success" | "warn" | "danger" | "muted" }) {
   const c = {
     primary: "bg-primary/15 text-primary border-primary/30",
-    success: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-    warn: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-    danger: "bg-red-500/15 text-red-300 border-red-500/30",
+    success: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
+    warn: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30",
+    danger: "bg-pink-500/15 text-pink-300 border-pink-500/30",
     muted: "bg-white/5 text-muted-foreground border-[var(--glass-border)]",
   }[color];
   return <span className={`inline-block text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border ${c}`}>{children}</span>;
@@ -491,12 +491,12 @@ function Overview({ stats, orders, greetingName, onNavigate }: { stats: { total:
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <Stat icon={<Package className="w-5 h-5" />} label="Total Orders" value={String(stats.total)} accent="from-primary/30 to-primary/5" />
         <Stat icon={<Zap className="w-5 h-5" />} label="Active Services" value={String(stats.pending + stats.delivered)} accent="from-cyan-400/30 to-cyan-400/5" />
-        <Stat icon={<Wallet className="w-5 h-5" />} label="Wallet Balance" value="৳1,250" accent="from-emerald-400/30 to-emerald-400/5" />
+        <Stat icon={<Wallet className="w-5 h-5" />} label="Wallet Balance" value="৳1,250" accent="from-cyan-400/30 to-cyan-400/5" />
         <Stat icon={<Download className="w-5 h-5" />} label="Downloads" value="12" accent="from-pink-400/30 to-pink-400/5" />
-        <Stat icon={<Trophy className="w-5 h-5" />} label="Reward Points" value="850" accent="from-amber-400/30 to-amber-400/5" />
+        <Stat icon={<Trophy className="w-5 h-5" />} label="Reward Points" value="850" accent="from-fuchsia-400/30 to-fuchsia-400/5" />
         <Stat icon={<Users className="w-5 h-5" />} label="Affiliate" value="৳420" accent="from-violet-400/30 to-violet-400/5" />
-        <Stat icon={<Smartphone className="w-5 h-5" />} label="Sessions" value="3" accent="from-blue-400/30 to-blue-400/5" />
-        <Stat icon={<LifeBuoy className="w-5 h-5" />} label="Open Tickets" value="0" accent="from-orange-400/30 to-orange-400/5" />
+        <Stat icon={<Smartphone className="w-5 h-5" />} label="Sessions" value="3" accent="from-violet-400/30 to-violet-400/5" />
+        <Stat icon={<LifeBuoy className="w-5 h-5" />} label="Open Tickets" value="0" accent="from-pink-400/30 to-pink-400/5" />
       </section>
 
       <Card>
@@ -637,8 +637,8 @@ function Analytics() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <Stat icon={<TrendingUp className="w-5 h-5" />} label="This Month" value="৳3,420" accent="from-primary/30 to-primary/5" />
         <Stat icon={<ShoppingBag className="w-5 h-5" />} label="Purchases" value="14" accent="from-cyan-400/30 to-cyan-400/5" />
-        <Stat icon={<Users className="w-5 h-5" />} label="Referrals" value="8" accent="from-emerald-400/30 to-emerald-400/5" />
-        <Stat icon={<Star className="w-5 h-5" />} label="Avg Rating" value="4.9" accent="from-amber-400/30 to-amber-400/5" />
+        <Stat icon={<Users className="w-5 h-5" />} label="Referrals" value="8" accent="from-cyan-400/30 to-cyan-400/5" />
+        <Stat icon={<Star className="w-5 h-5" />} label="Avg Rating" value="4.9" accent="from-fuchsia-400/30 to-fuchsia-400/5" />
       </div>
       <Card><h3 className="font-semibold mb-4">Monthly Spending</h3><MiniBarChart values={[120, 250, 180, 420, 320, 510, 380, 600, 450, 700, 540, 820]} /></Card>
       <Card><h3 className="font-semibold mb-4">Purchase History</h3><MiniBarChart values={[2, 4, 1, 6, 3, 8, 5, 10, 4, 12, 6, 14]} /></Card>
@@ -1005,7 +1005,7 @@ function SubscriptionPlans() {
             <div className="mt-2 text-xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>{pl.n}</div>
             <div className="mt-2 text-3xl font-bold text-primary">{pl.p}</div>
             <ul className="mt-4 space-y-2 text-sm">
-              {pl.f.map((x) => <li key={x} className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" />{x}</li>)}
+              {pl.f.map((x) => <li key={x} className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-300" />{x}</li>)}
             </ul>
             <Btn variant={pl.hi ? "primary" : "ghost"} className="w-full mt-5">{pl.n === "Starter" ? "Current" : "Upgrade"}</Btn>
           </Card>
@@ -1030,9 +1030,9 @@ function WalletView() {
         </div>
       </div>
       <div className="grid md:grid-cols-3 gap-4">
-        <Stat icon={<ArrowDownToLine className="w-5 h-5" />} label="Total Loaded" value="৳12,500" accent="from-emerald-400/30 to-emerald-400/5" />
-        <Stat icon={<ArrowUpFromLine className="w-5 h-5" />} label="Total Spent" value="৳11,250" accent="from-red-400/30 to-red-400/5" />
-        <Stat icon={<Coins className="w-5 h-5" />} label="Pending" value="৳0" accent="from-amber-400/30 to-amber-400/5" />
+        <Stat icon={<ArrowDownToLine className="w-5 h-5" />} label="Total Loaded" value="৳12,500" accent="from-cyan-400/30 to-cyan-400/5" />
+        <Stat icon={<ArrowUpFromLine className="w-5 h-5" />} label="Total Spent" value="৳11,250" accent="from-fuchsia-400/30 to-fuchsia-400/5" />
+        <Stat icon={<Coins className="w-5 h-5" />} label="Pending" value="৳0" accent="from-fuchsia-400/30 to-fuchsia-400/5" />
       </div>
     </div>
   );
@@ -1096,7 +1096,7 @@ function Transactions() {
                 <tr key={t.id} className="border-b border-[var(--glass-border)]/50 hover:bg-white/5">
                   <td className="py-3 px-2 font-mono">{t.id}</td>
                   <td className="py-3 px-2">{t.m}</td>
-                  <td className={`py-3 px-2 font-bold ${t.a.startsWith("+") ? "text-emerald-400" : "text-red-300"}`}>{t.a}</td>
+                  <td className={`py-3 px-2 font-bold ${t.a.startsWith("+") ? "text-cyan-300" : "text-red-300"}`}>{t.a}</td>
                   <td className="py-3 px-2"><Badge color={t.s === "success" ? "success" : "warn"}>{t.s}</Badge></td>
                   <td className="py-3 px-2 text-muted-foreground">{t.d}</td>
                 </tr>
@@ -1157,9 +1157,9 @@ function AffiliateDashboard() {
       </Card>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <Stat icon={<Eye className="w-5 h-5" />} label="Clicks" value="245" accent="from-primary/30 to-primary/5" />
-        <Stat icon={<Users className="w-5 h-5" />} label="Conversions" value="18" accent="from-emerald-400/30 to-emerald-400/5" />
+        <Stat icon={<Users className="w-5 h-5" />} label="Conversions" value="18" accent="from-cyan-400/30 to-cyan-400/5" />
         <Stat icon={<Coins className="w-5 h-5" />} label="Earnings" value="৳420" accent="from-cyan-400/30 to-cyan-400/5" />
-        <Stat icon={<Wallet className="w-5 h-5" />} label="Withdrawable" value="৳420" accent="from-amber-400/30 to-amber-400/5" />
+        <Stat icon={<Wallet className="w-5 h-5" />} label="Withdrawable" value="৳420" accent="from-fuchsia-400/30 to-fuchsia-400/5" />
       </div>
     </div>
   );
