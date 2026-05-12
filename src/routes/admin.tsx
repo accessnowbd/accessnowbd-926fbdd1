@@ -165,10 +165,10 @@ function AdminShell({ user, signOut, navigate }: any) {
       )}
       {/* SIDEBAR */}
       <aside
-        className={`${collapsed ? "w-[72px]" : "w-[280px]"} shrink-0 transition-all duration-200 border-r ${dark ? "bg-slate-950 border-slate-800" : "bg-white border-slate-200"} flex flex-col h-screen sticky top-0`}
+        className={`${collapsed ? "w-[72px]" : "w-[280px]"} shrink-0 transition-all duration-200 border-r ${dark ? "bg-slate-950 border-slate-800" : "bg-white/70 backdrop-blur-xl border-white/60"} flex flex-col h-screen sticky top-0 z-10`}
       >
         {/* Brand */}
-        <div className={`h-16 flex items-center justify-between px-4 border-b ${dark ? "border-slate-800" : "border-slate-200"}`}>
+        <div className={`h-16 flex items-center justify-between px-4 border-b ${dark ? "border-slate-800" : "border-white/60"}`}>
           <Link to="/admin" className="flex items-center gap-2 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 grid place-items-center text-white font-bold text-sm shrink-0 shadow-[0_4px_14px_-4px_rgba(37,99,235,0.6)]">
               Rx
