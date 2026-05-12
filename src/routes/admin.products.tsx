@@ -16,6 +16,42 @@ export const Route = createFileRoute("/admin/products")({
 
 type Plan = { label: string; price: number; original_price?: number; duration?: string; note?: string };
 type StockStatus = "in_stock" | "out_of_stock" | "preorder";
+
+type ProductType = "digital" | "license" | "account" | "subscription" | "service" | "physical";
+type AccountType = "none" | "personal" | "shared" | "family" | "student" | "business";
+type DeliveryType = "instant" | "manual" | "24h";
+type AiCardStyle = "dark-neon" | "light-glass" | "clean-light" | "soft-aurora" | "glass-gradient" | "glassmorphism";
+type CustomField = { label: string; type: "text" | "email" | "password" | "number"; required: boolean };
+type FaqItem = { q: string; a: string };
+
+type ProductMeta = {
+  product_type?: ProductType;
+  account_type?: AccountType;
+  brand?: string;
+  subcategory?: string;
+  additional_categories?: string[];
+  status?: "draft" | "published";
+  tags?: string[];
+  flags?: { featured?: boolean; digital?: boolean; flash_sale?: boolean; require_email?: boolean };
+  sku?: string;
+  stock_qty?: number | null;
+  selling_price?: number;
+  original_price?: number;
+  cost_price?: number;
+  discount_percent?: number;
+  gallery?: string[];
+  video_url?: string;
+  ai_card_style?: AiCardStyle;
+  delivery_type?: DeliveryType;
+  download_link?: string;
+  refund_policy?: string;
+  what_you_get?: string[];
+  faq?: FaqItem[];
+  custom_fields?: CustomField[];
+  seo_title?: string;
+  meta_description?: string;
+};
+
 type Product = {
   slug: string;
   name: string;
@@ -35,15 +71,25 @@ type Product = {
   views: number;
   sort_order: number;
   image_url: string;
+  meta?: ProductMeta;
 };
 
 const empty: Product = {
   slug: "", name: "", emoji: "📦", gradient: "from-primary to-primary",
-  category: "OTT & Streaming", badge: null, tagline: "", description: "",
+  category: "", badge: null, tagline: "", description: "",
   short_description: "",
-  delivery_time: "Within 30 mins", warranty: "Full warranty",
+  delivery_time: "Instant / 24 hours", warranty: "",
   features: [], plans: [{ label: "1 Month", price: 0, duration: "1 month" }],
   is_active: true, stock_status: "in_stock", views: 0, sort_order: 0, image_url: "",
+  meta: {
+    product_type: "digital",
+    account_type: "none",
+    status: "published",
+    flags: { featured: false, digital: true, flash_sale: false, require_email: false },
+    delivery_type: "instant",
+    ai_card_style: "glassmorphism",
+    stock_qty: null,
+  },
 };
 
 const STOCK_LABELS: Record<StockStatus, { label: string; bn: string; cls: string; icon: typeof CheckCircle2 }> = {
