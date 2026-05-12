@@ -415,8 +415,7 @@ export function SiteHeader() {
             </div>
           </div>
 
-          {/* bottom soft hairline */}
-          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+          {/* bottom hairline removed */}
         </div>
 
         {/* Mobile menu */}
