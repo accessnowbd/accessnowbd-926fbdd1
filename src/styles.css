@@ -242,58 +242,60 @@
   }
   html.theme-white body::before { display: none; }
 
-  /* GLASS CARDS — frosted white over pastel */
+  /* GLASS CARDS — premium frosted white over violet/indigo mesh */
   html.theme-white .glass {
-    background: rgba(255, 255, 255, 0.55) !important;
-    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    background: linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.45) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
     box-shadow:
-      0 18px 48px -22px rgba(124, 58, 237, 0.25),
-      0 1px 0 0 rgba(255, 255, 255, 0.9) inset !important;
+      0 22px 60px -22px rgba(79, 70, 229, 0.28),
+      0 1px 0 0 rgba(255, 255, 255, 0.95) inset,
+      0 0 0 1px rgba(124, 58, 237, 0.06) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
   }
   html.theme-white .glass-strong {
-    background: rgba(255, 255, 255, 0.78) !important;
-    border: 1px solid rgba(255, 255, 255, 0.9) !important;
+    background: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.68) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.95) !important;
     box-shadow:
-      0 24px 60px -24px rgba(124, 58, 237, 0.3),
-      0 1px 0 0 rgba(255, 255, 255, 0.95) inset !important;
+      0 30px 80px -28px rgba(79, 70, 229, 0.35),
+      0 1px 0 0 rgba(255, 255, 255, 1) inset,
+      0 0 0 1px rgba(124, 58, 237, 0.08) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
   }
   html.theme-white .glass-soft {
-    background: rgba(255, 255, 255, 0.4) !important;
-    border: 1px solid rgba(255, 255, 255, 0.6) !important;
-    box-shadow: 0 6px 18px -10px rgba(124, 58, 237, 0.18) !important;
-  }
-  @media (min-width: 1024px) and (pointer: fine) {
-    html.theme-white .glass,
-    html.theme-white .glass-strong,
-    html.theme-white .glass-soft {
-      backdrop-filter: blur(20px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-    }
+    background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.32) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    box-shadow:
+      0 8px 24px -10px rgba(79, 70, 229, 0.18),
+      0 1px 0 0 rgba(255, 255, 255, 0.85) inset !important;
+    backdrop-filter: blur(18px) saturate(170%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(170%) !important;
   }
 
-  /* Gradient bordered cards adapt to light glass */
+  /* Gradient bordered cards adapt to white-glass premium look (no pink) */
   html.theme-white .gradient-border-card {
-    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));
-    box-shadow: 0 18px 48px -22px rgba(124, 58, 237, 0.28);
+    background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.6));
+    box-shadow: 0 22px 60px -22px rgba(79, 70, 229, 0.30);
   }
   html.theme-white .gradient-border-card::before {
-    background: linear-gradient(135deg, rgba(196, 181, 253, 0.8), rgba(186, 230, 253, 0.7) 50%, rgba(251, 207, 232, 0.8));
+    background: linear-gradient(135deg, rgba(196, 181, 253, 0.8), rgba(186, 230, 253, 0.7) 50%, rgba(199, 210, 254, 0.8));
     opacity: 0.6;
   }
   html.theme-white .gradient-border-card::after {
     background:
       radial-gradient(120% 70% at 50% -10%, rgba(186, 230, 253, 0.4), transparent 55%),
-      radial-gradient(80% 60% at 50% 110%, rgba(251, 207, 232, 0.4), transparent 60%);
+      radial-gradient(80% 60% at 50% 110%, rgba(199, 210, 254, 0.45), transparent 60%);
   }
   html.theme-white .gradient-border-card:hover {
-    box-shadow: 0 28px 70px -24px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 32px 80px -24px rgba(79, 70, 229, 0.42);
   }
   html.theme-white .gradient-border-soft {
-    background: rgba(255, 255, 255, 0.6);
-    box-shadow: 0 6px 18px -10px rgba(124, 58, 237, 0.18);
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 22px -10px rgba(79, 70, 229, 0.20);
   }
   html.theme-white .gradient-border-soft::before {
-    background: linear-gradient(135deg, rgba(196, 181, 253, 0.7), rgba(186, 230, 253, 0.6) 50%, rgba(251, 207, 232, 0.6));
+    background: linear-gradient(135deg, rgba(196, 181, 253, 0.7), rgba(186, 230, 253, 0.6) 50%, rgba(199, 210, 254, 0.7));
   }
 
   /* Buttons / accents */
