@@ -88,7 +88,7 @@ function ProductPage() {
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8 grid md:grid-cols-2 gap-10">
         {/* Image */}
         <div className="relative">
-          <ProductBanner product={product} ratio="1/1" spheres={6} className="rounded-3xl shadow-[var(--shadow-glass-lg)]" />
+          <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-3xl shadow-[var(--shadow-glass-lg)]" />
           <span className={`absolute top-5 left-5 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>{product.badge ?? "New"}</span>
         </div>
 
