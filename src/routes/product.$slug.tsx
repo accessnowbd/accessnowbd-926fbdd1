@@ -29,6 +29,7 @@ function ProductPage() {
   const { products } = useProducts();
   const navigate = useNavigate();
   const { add } = useCart();
+  const { data: shopConfig } = useShopConfig();
   const [selected, setSelected] = useState(0);
 
   if (isLoading) {
