@@ -39,7 +39,7 @@ export function ProductCard({ product }: { product: Product }) {
     <Link
       to="/product/$slug"
       params={{ slug: product.slug }}
-      preload="render"
+      preload="intent"
       className="group gradient-border-card overflow-hidden flex flex-col h-full"
     >
       <div className="relative">
