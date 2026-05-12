@@ -182,11 +182,11 @@ function AdminPromotions() {
       </AdminGlassCard>
 
       {editing && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm grid place-items-center p-4" onClick={() => setEditing(null)}>
-          <div className="gradient-border-card max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm grid place-items-center p-4" onClick={() => setEditing(null)}>
+          <div className="rounded-2xl ring-1 ring-white/60 bg-white/95 backdrop-blur-xl shadow-[0_30px_80px_-20px_rgba(15,23,42,0.35)] max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white">{isNew ? "New Promotion" : "Edit Promotion"}</h2>
-              <button onClick={() => setEditing(null)} className="p-1.5 rounded-lg hover:bg-white/10 text-white/60"><X className="w-4 h-4" /></button>
+              <h2 className="text-xl font-bold text-slate-900">{isNew ? "New Promotion" : "Edit Promotion"}</h2>
+              <button onClick={() => setEditing(null)} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500"><X className="w-4 h-4" /></button>
             </div>
             <div className="space-y-3 text-sm">
               <Field label="Title"><input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} className="admin-input" /></Field>
@@ -209,14 +209,14 @@ function AdminPromotions() {
                   <input type="datetime-local" value={toLocalInput(editing.ends_at)} onChange={(e) => setEditing({ ...editing, ends_at: e.target.value ? new Date(e.target.value).toISOString() : null })} className="admin-input" />
                 </Field>
               </div>
-              <label className="flex items-center gap-2 text-white/80">
+              <label className="flex items-center gap-2 text-slate-700">
                 <input type="checkbox" checked={editing.is_active} onChange={(e) => setEditing({ ...editing, is_active: e.target.checked })} />
                 Active
               </label>
             </div>
             <div className="mt-5 flex justify-end gap-2">
-              <button onClick={() => setEditing(null)} className="px-4 h-9 rounded-full border border-white/15 text-white/80 text-xs font-semibold">Cancel</button>
-              <button onClick={save} className="btn-aurora px-4 h-9 rounded-full text-xs inline-flex items-center gap-1.5"><Save className="w-3.5 h-3.5" /> Save</button>
+              <button onClick={() => setEditing(null)} className="px-4 h-9 rounded-full ring-1 ring-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50">Cancel</button>
+              <button onClick={save} className="px-4 h-9 rounded-full bg-gradient-to-r from-blue-600 to-sky-500 text-white text-xs font-semibold inline-flex items-center gap-1.5 shadow-[0_8px_22px_-8px_rgba(37,99,235,0.7)]"><Save className="w-3.5 h-3.5" /> Save</button>
             </div>
           </div>
         </div>
@@ -225,15 +225,15 @@ function AdminPromotions() {
       <style>{`
         .admin-input {
           width: 100%;
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.1);
+          background: #fff;
+          border: 1px solid #e2e8f0;
           border-radius: 10px;
           padding: 8px 12px;
-          color: white;
+          color: #0f172a;
           font-size: 13px;
           outline: none;
         }
-        .admin-input:focus { border-color: rgba(167,139,250,0.5); background: rgba(255,255,255,0.06); }
+        .admin-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
       `}</style>
     </div>
   );
@@ -242,7 +242,7 @@ function AdminPromotions() {
 function Field({ label, children, icon }: { label: string; children: React.ReactNode; icon?: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="text-[11px] uppercase tracking-wider text-white/60 font-bold mb-1 flex items-center gap-1.5">{icon}{label}</span>
+      <span className="text-[11px] uppercase tracking-wider text-slate-500 font-bold mb-1 flex items-center gap-1.5">{icon}{label}</span>
       {children}
     </label>
   );
