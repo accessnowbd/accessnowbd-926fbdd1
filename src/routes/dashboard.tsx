@@ -157,7 +157,7 @@ function DashboardPage() {
           <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 scrollbar-thin">
             {NAV.map((group) => (
               <div key={group.title}>
-                <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
+                <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-foreground/60">
                   {group.title}
                 </div>
                 <div className="space-y-1">
@@ -170,8 +170,8 @@ function DashboardPage() {
                         onClick={() => { setSection(it.id); setSidebarOpen(false); }}
                         className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition group ${
                           active
-                            ? "bg-primary/15 text-primary border border-primary/30 shadow-[0_0_20px_-5px_var(--primary)]"
-                            : "text-foreground/70 hover:text-foreground hover:bg-white/5 border border-transparent"
+                            ? "bg-primary/15 text-primary border border-primary/40 shadow-[0_0_20px_-5px_var(--primary)]"
+                            : "text-foreground hover:text-primary hover:bg-primary/10 border border-transparent"
                         }`}
                       >
                         <Icon className={`w-4 h-4 ${active ? "text-primary" : ""}`} />
