@@ -894,6 +894,71 @@
     box-shadow: 0 24px 60px -24px rgba(124, 58, 237, 0.35) !important;
     color: oklch(0.22 0.04 285) !important;
   }
+
+  /* === Final unification: catch any remaining dark/glass leaks → frosted lavender card === */
+  /* Hardcoded dark hex backgrounds used in heroes, modals, support widget */
+  html.theme-white .bg-\[\#07071a\],
+  html.theme-white .bg-\[\#070922\],
+  html.theme-white .bg-\[\#070922\]\/95,
+  html.theme-white .bg-\[\#0a0c1e\],
+  html.theme-white .bg-\[\#0a0c1e\]\/95,
+  html.theme-white .bg-\[\#0b0f29\],
+  html.theme-white .bg-\[\#0b0f29\]\/95,
+  html.theme-white .bg-\[\#0c1322\],
+  html.theme-white .bg-\[\#1a2238\],
+  html.theme-white .hover\:bg-\[\#1a2238\]:hover {
+    background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(245,243,255,0.88)) !important;
+    color: oklch(0.22 0.04 285) !important;
+    border-color: rgba(124, 58, 237, 0.18) !important;
+    box-shadow:
+      0 18px 48px -22px rgba(124, 58, 237, 0.30),
+      0 0 0 1px rgba(255,255,255,0.7) inset !important;
+    backdrop-filter: blur(16px) saturate(170%);
+    -webkit-backdrop-filter: blur(16px) saturate(170%);
+  }
+  /* Auth submit button (dark pill) → violet aurora gradient */
+  html.theme-white button.bg-\[\#0c1322\],
+  html.theme-white .bg-\[\#0c1322\].rounded-full {
+    background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 50%, #7DD3FC 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 30px -10px rgba(124, 58, 237, 0.55) !important;
+  }
+  /* Section heroes (faq/contact) — text inside dark hero must read on lavender */
+  html.theme-white section.bg-\[\#07071a\],
+  html.theme-white section.bg-\[\#07071a\] * {
+    color: oklch(0.22 0.04 285) !important;
+  }
+  html.theme-white section.bg-\[\#07071a\] .text-aurora,
+  html.theme-white section.bg-\[\#07071a\] [class*="bg-clip-text"] {
+    background-image: linear-gradient(135deg, #7C3AED 0%, #DB2777 50%, #0EA5E9 100%) !important;
+    color: transparent !important;
+  }
+
+  /* Support widget chat panels & quick-action cards */
+  html.theme-white [class*="bg-\\[\\#070922\\]"],
+  html.theme-white [class*="bg-\\[\\#0b0f29\\]"],
+  html.theme-white [class*="bg-\\[\\#0a0c1e\\]"] {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(124, 58, 237, 0.18) !important;
+    color: oklch(0.22 0.04 285) !important;
+  }
+
+  /* Any inline-style dark gradient on hero/admin chrome */
+  html.theme-white [style*="#06051a"],
+  html.theme-white [style*="#0b1020"],
+  html.theme-white [style*="#0f1535"],
+  html.theme-white [style*="#1a0f3d"],
+  html.theme-white [style*="#070922"],
+  html.theme-white [style*="#07071a"] {
+    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(245,243,255,0.78)) !important;
+    color: oklch(0.22 0.04 285) !important;
+  }
+
+  /* Heavy dark text-shadows assumed dark bg → soften */
+  html.theme-white [style*="textShadow"][style*="rgba(0,0,0"],
+  html.theme-white [style*="text-shadow"][style*="rgba(0,0,0"] {
+    text-shadow: 0 1px 2px rgba(124, 58, 237, 0.18) !important;
+  }
 }
 
 @layer utilities {
