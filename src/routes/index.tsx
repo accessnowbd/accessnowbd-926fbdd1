@@ -97,7 +97,7 @@ function Index() {
   }, [products]);
 
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="min-h-screen">
 
       <main>
         <HeroExperience />
