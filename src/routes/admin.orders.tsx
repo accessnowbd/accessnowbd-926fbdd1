@@ -22,6 +22,9 @@ type Order = {
   email: string;
   full_name: string;
   user_id: string;
+  admin_note: string | null;
+  delivered_credentials: { text?: string } | null;
+  delivered_at: string | null;
 };
 
 const STATUSES = ["pending", "processing", "completed", "cancelled", "refunded"] as const;
