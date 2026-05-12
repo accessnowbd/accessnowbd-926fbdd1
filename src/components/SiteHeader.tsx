@@ -21,6 +21,7 @@ import {
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import { GlobalSearch, useGlobalSearch } from "@/components/GlobalSearch";
@@ -307,7 +308,7 @@ export function SiteHeader() {
               </button>
 
 
-              <AccountIcon />
+              <ThemeSwitcher />
               <CartIcon />
 
               {user ? (

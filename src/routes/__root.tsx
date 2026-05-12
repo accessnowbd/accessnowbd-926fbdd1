@@ -1,5 +1,6 @@
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { SupportWidget } from "@/components/SupportWidget";
 import { SiteHeader } from "@/components/SiteHeader";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -124,13 +125,15 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <CartProvider>
-          {!isAdmin && <SiteHeader />}
-          <Outlet />
-          {!isAdmin && <SupportWidget />}
-        </CartProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <CartProvider>
+            {!isAdmin && <SiteHeader />}
+            <Outlet />
+            {!isAdmin && <SupportWidget />}
+          </CartProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
