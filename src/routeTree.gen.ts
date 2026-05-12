@@ -37,6 +37,7 @@ import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
+import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
 
 const StreamingRoute = StreamingRouteImport.update({
   id: '/streaming',
@@ -178,6 +179,11 @@ const AdminPageRoute = AdminPageRouteImport.update({
   path: '/$page',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiPublicProductsRoute = ApiPublicProductsRouteImport.update({
+  id: '/api/public/products',
+  path: '/api/public/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -208,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/products': typeof ApiPublicProductsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -237,6 +244,7 @@ export interface FileRoutesByTo {
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/api/public/products': typeof ApiPublicProductsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -268,6 +276,7 @@ export interface FileRoutesById {
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/products': typeof ApiPublicProductsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -300,6 +309,7 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/product/$slug'
     | '/admin/'
+    | '/api/public/products'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -329,6 +339,7 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/product/$slug'
     | '/admin'
+    | '/api/public/products'
   id:
     | '__root__'
     | '/'
@@ -359,6 +370,7 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/product/$slug'
     | '/admin/'
+    | '/api/public/products'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -383,6 +395,7 @@ export interface RootRouteChildren {
   SitemapRoute: typeof SitemapRoute
   StreamingRoute: typeof StreamingRoute
   ProductSlugRoute: typeof ProductSlugRoute
+  ApiPublicProductsRoute: typeof ApiPublicProductsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -583,6 +596,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPageRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/public/products': {
+      id: '/api/public/products'
+      path: '/api/public/products'
+      fullPath: '/api/public/products'
+      preLoaderRoute: typeof ApiPublicProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -639,17 +659,8 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapRoute: SitemapRoute,
   StreamingRoute: StreamingRoute,
   ProductSlugRoute: ProductSlugRoute,
+  ApiPublicProductsRoute: ApiPublicProductsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
