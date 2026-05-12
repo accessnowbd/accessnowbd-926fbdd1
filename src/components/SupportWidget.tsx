@@ -65,6 +65,7 @@ const FAQS: { q: string; a: string }[] = [
 
 export function SupportWidget() {
   const [open, setOpen] = useState(false);
+  const [chooser, setChooser] = useState(false);
   const [tab, setTab] = useState<Tab>("home");
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
