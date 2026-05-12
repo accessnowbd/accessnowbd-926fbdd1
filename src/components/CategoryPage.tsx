@@ -60,17 +60,17 @@ export function CategoryPage({
               {title}
             </h1>
           </div>
-          <p className="mt-3 text-foreground/80 max-w-2xl font-medium">{subtitle}</p>
-          <div className="mt-6 flex items-center bg-card/90 border border-[var(--glass-border)] rounded-full h-12 pl-5 pr-1.5 max-w-xl shadow-[var(--shadow-glass-sm)] backdrop-blur-md">
-            <Search className="w-4 h-4 text-foreground/60" />
+          <p className="mt-3 text-slate-700 max-w-2xl font-medium drop-shadow-[0_1px_0_rgba(255,255,255,0.6)]">{subtitle}</p>
+          <div className="mt-6 flex items-center bg-white border border-slate-200 rounded-full h-12 pl-5 pr-1.5 max-w-xl shadow-[0_8px_24px_-12px_rgba(15,23,42,0.18)]">
+            <Search className="w-4 h-4 text-slate-500" />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search subscriptions..."
-              className="flex-1 px-3 bg-transparent outline-none text-sm placeholder:text-foreground/50 text-foreground"
+              className="flex-1 px-3 bg-transparent outline-none text-sm placeholder:text-slate-400 text-slate-900"
             />
             {q && (
-              <button onClick={() => setQ("")} className="grid place-items-center w-8 h-8 rounded-full hover:bg-secondary text-foreground/70" aria-label="Clear">
+              <button onClick={() => setQ("")} className="grid place-items-center w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500" aria-label="Clear">
                 <X className="w-4 h-4" />
               </button>
             )}
