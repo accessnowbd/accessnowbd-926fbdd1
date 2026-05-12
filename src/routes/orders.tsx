@@ -87,11 +87,14 @@ function OrdersPage() {
         </div>
 
         {orders.length === 0 ? (
-          <div className="mt-10 rounded-2xl border-2 border-dashed border-border bg-white p-12 text-center">
-            <Package className="w-10 h-10 text-muted-foreground mx-auto" />
-            <h2 className="mt-3 font-semibold">No orders yet</h2>
-            <p className="text-sm text-muted-foreground mt-1">Browse our subscriptions and place your first order.</p>
-            <Link to="/" className="inline-block mt-5 h-[42px] leading-[42px] px-6 rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+          <div className="mt-10 glass-strong rounded-3xl p-12 text-center relative overflow-hidden">
+            <div className="absolute inset-0 -z-10 opacity-60 bg-mesh pointer-events-none" />
+            <div className="mx-auto w-16 h-16 rounded-2xl grid place-items-center bg-gradient-to-br from-primary/30 to-aqua/20 border border-white/10 shadow-glow-violet">
+              <Package className="w-8 h-8 text-foreground/90" />
+            </div>
+            <h2 className="mt-4 text-xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>No orders yet</h2>
+            <p className="text-sm text-muted-foreground mt-1.5">Browse our subscriptions and place your first order.</p>
+            <Link to="/" className="btn-aurora inline-flex items-center mt-6 h-11 px-7 text-sm">
               Browse subscriptions
             </Link>
           </div>
