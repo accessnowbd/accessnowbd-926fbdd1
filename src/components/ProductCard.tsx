@@ -1,9 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingCart, Star, Sparkles } from "lucide-react";
+import { ShoppingCart, Star } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useCart } from "@/context/CartContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { ProductBanner } from "@/components/ProductBanner";
-import type { Product } from "@/data/products";
+import { supabase } from "@/integrations/supabase/client";
+import { rowToProduct, type Product } from "@/data/products";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
@@ -17,9 +20,58 @@ function ratingFor(slug: string): { rating: string; reviews: number } {
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
+  const queryClient = useQueryClient();
+  const cardRef = useRef<HTMLAnchorElement | null>(null);
+  const prefetchedRef = useRef(false);
+
   const plan = product.plans[0];
   const hasOptions = product.plans.length > 1;
   const { rating, reviews } = ratingFor(product.slug);
+
+  // Prefetch product detail when card scrolls into view
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el || prefetchedRef.current) return;
+    if (typeof IntersectionObserver === "undefined") return;
+
+    const slug = product.slug;
+    const doPrefetch = () => {
+      if (prefetchedRef.current) return;
+      prefetchedRef.current = true;
+      queryClient.prefetchQuery({
+        queryKey: ["product", slug],
+        queryFn: async (): Promise<Product | null> => {
+          const { data, error } = await supabase
+            .from("products")
+            .select("*")
+            .eq("slug", slug)
+            .eq("is_active", true)
+            .maybeSingle();
+          if (error) throw error;
+          return data ? rowToProduct(data as never) : null;
+        },
+        staleTime: 5 * 60_000,
+      });
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            // Defer to idle so scroll stays smooth
+            const w = window as unknown as { requestIdleCallback?: (cb: () => void) => void };
+            if (w.requestIdleCallback) w.requestIdleCallback(doPrefetch);
+            else setTimeout(doPrefetch, 200);
+            io.disconnect();
+            break;
+          }
+        }
+      },
+      { rootMargin: "400px 0px", threshold: 0.01 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [product.slug, queryClient]);
 
   const onAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -37,6 +89,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <Link
+      ref={cardRef}
       to="/product/$slug"
       params={{ slug: product.slug }}
       preload="intent"
