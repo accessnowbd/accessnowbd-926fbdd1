@@ -30,7 +30,7 @@ export const Route = createFileRoute("/checkout")({
 });
 
 const methods = [
-  { id: "bkash", name: "bKash", number: "01711-123456", color: "bg-[#E2136E]" },
+  { id: "bkash", name: "BKash", number: "01711-123456", color: "bg-[#E2136E]" },
   { id: "nagad", name: "Nagad", number: "01911-654321", color: "bg-[#EC1C24]" },
 ] as const;
 
