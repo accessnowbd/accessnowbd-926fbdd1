@@ -1,89 +1,108 @@
 ## লক্ষ্য
 
-বর্তমানের single-page checkout-কে একটি **multi-step guided flow** এ রূপান্তর করা — Aurora Glass theme, button style ও accessible color tokens-এর সাথে সম্পূর্ণ consistent।
+পুরো AccessNowBD-কে dark navy theme থেকে **light premium Apple-style Glassmorphism**-এ migrate করা। Structure / functionality / route / data flow অপরিবর্তিত। শুধু visual layer + reusable utilities।
 
----
+## Design tokens (src/styles.css এ rewrite)
 
-## নতুন ফ্লো (4 steps)
+Light palette + glass tokens:
 
+```text
+--background:        #f8fbff (soft blue-white)
+--foreground:        #0f172a (navy ink)
+--muted-foreground:  #475569
+--card:              rgba(255,255,255,0.65)
+--border:            rgba(255,255,255,0.45)
+--primary:           #0ea5e9 (sky)
+--accent:            #2563eb (electric blue)
+--accent-soft:       #cfe7ff
+--ring:              #38bdf8
+
+--glass-bg:          rgba(255,255,255,0.55)
+--glass-bg-strong:   rgba(255,255,255,0.78)
+--glass-border:      rgba(255,255,255,0.45)
+--glass-blur:        18px
+--shadow-glass:      0 10px 40px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.6)
+--shadow-glow:       0 0 32px rgba(14,165,233,0.18)
+
+--gradient-page:     linear-gradient(135deg,#f8fbff 0%,#eef5ff 35%,#f5f9ff 70%,#ffffff 100%)
+--gradient-text:     linear-gradient(90deg,#0ea5e9,#2563eb)
 ```
-[1] Cart Review → [2] Contact Info → [3] Payment → [4] Confirm
-                                                      ↓
-                                                  Success page
-```
 
-`/cart` থাকবে stand-alone cart page (item list edit), আর `/checkout` হবে stepper সহ ৩-ধাপের wizard (Contact → Payment → Review)। শেষে success page।
+Mobile-এ blur auto-reduce: `@media (max-width: 640px) { --glass-blur: 10px }`।
+`prefers-reduced-motion` সম্মান।
 
----
+## Reusable utility classes (Tailwind v4 / styles.css এ)
 
-## ১. শেয়ার্ড UI primitives (নতুন, theme-consistent)
+| class | কাজ |
+|---|---|
+| `.glass-card` | bg + blur + border + shadow + radius (24px) |
+| `.glass-card-strong` | বেশি opaque variant — text-heavy block-এর জন্য |
+| `.glass-button` | primary glass btn + cyan glow + hover-lift |
+| `.glass-button-ghost` | secondary, thin border |
+| `.glass-input` | input/textarea/select base |
+| `.glass-navbar` | floating sticky header pill |
+| `.glow-text` | gradient text highlight |
+| `.glow-border` | cyan ring |
+| `.floating-panel` | card + scroll-reveal hover-elevate |
+| `.bg-aurora-light` | page background (gradient + radial blobs) |
 
-`src/components/ui-glass/`-এ ছোট reusable component set, যাতে পুরো app এক স্টাইলে চলে:
+`hover:` → `translateY(-2px) scale(1.01)` + glow ↑, `transition 300ms ease`।
 
-- **`<GlassCard>`** — `glass-strong rounded-2xl p-6` wrapper, optional `tone="soft"`।
-- **`<GlassField>`** — label + input/textarea, focus ring `--ring`, error state, helper text, accessible `aria-describedby` ও `aria-invalid`।
-- **`<GlassButton>`** — variants: `primary` (bg-aurora + glow-violet), `secondary` (glass-soft), `ghost`, `destructive`। sizes: `sm/md/lg`। `min-h-[44px]` for touch, `:focus-visible` ring থেকে accessible।
-- **`<Stepper>`** — top progress bar with 3 steps, current/completed/upcoming states, keyboard-accessible (`aria-current="step"`)।
-- **`<RadioCard>`** — payment method ও plan-এর জন্য large tappable card, checked state aurora border + glow।
-- **`<SummaryRow>`** — order summary item rows।
+## Background system
 
-এগুলো শুধু existing tokens (`--primary`, `--aurora`, `glass-*`, `glow-*`) ব্যবহার করবে — কোনো hardcoded color নয় (বর্তমান `text-[#333333]` মতো hex গুলো `text-foreground/80` দিয়ে replace হবে)।
+`<body>` এ `bg-aurora-light` apply। ৩টা soft animated radial blobs (sky/cyan/indigo, very low opacity, 60s drift) — `pointer-events-none`, GPU-only `transform`। Mobile-এ blobs static।
 
-## ২. `/cart` রিফ্যাক্টর
+## Phased rollout
 
-- নতুন `<GlassCard>` + `<GlassButton>` দিয়ে rebuild।
-- Empty state CTA, qty stepper, line totals — same look, কিন্তু shared components।
-- "Proceed to Checkout" → `/checkout` (step 1 শুরু)।
+**Phase 1 — Foundation (এই turn-এ deliverable)**
+1. `src/styles.css` rewrite — light tokens + all glass utilities + animations + scroll-reveal helper।
+2. `src/components/ui-glass/GlassCard.tsx`, `GlassButton.tsx`, `GlassField.tsx` light theme-এ refit।
+3. `src/components/SiteHeader.tsx` → floating glass navbar (compact-on-scroll already আছে, color shift)।
+4. `src/components/SiteFooter.tsx` → glass panel।
+5. `src/routes/index.tsx` (Hero, Featured, Rails, CTA) → glass surfaces, gradient heading, soft glow orbs।
+6. `src/components/ProductCard.tsx` + `ProductBanner.tsx` → light glass card (white surface, navy text)।
+7. shadcn primitives যেগুলো hard-coded dark color ব্যবহার করছে (Button, Input, Dialog, Sheet, Sonner) — token-driven করা।
 
-## ৩. `/checkout` — Multi-step wizard
+**Phase 2 (next turn, approve হলে)**
+- `auth/login/register/forgot-password/reset-password`
+- `cart`, `checkout`, `orders`, `orders.$id`
+- `product.$slug`, `products`, category pages (`streaming`, `ai-tools`, `education`)
+- `dashboard`, `profile`, `contact`, `faq`, `developer`, `sitemap`
+- `SupportWidget`, `GlobalSearch`, `ThemeSwitcher`, `CartIcon`, `AccountIcon`
 
-`useState` দিয়ে `step: 1 | 2 | 3` track। URL search param-এও sync (`?step=2`) যাতে refresh-এ থাকে এবং browser back কাজ করে।
+**Phase 3**
+- `admin.*` routes (Tables, forms — glass treatment with stronger opacity for data density)।
 
-### Step 1 — Contact details
-- Full name, email (auth হলে prefill), WhatsApp number।
-- Inline validation (email format, BD phone regex)।
-- "Continue to Payment" button — invalid হলে disabled + error helper text।
+প্রতিটা phase-এর পর preview দেখে adjust।
 
-### Step 2 — Payment method
-- bKash / Nagad `<RadioCard>`।
-- "How to pay" instructions panel।
-- Number copy button।
-- Sender number + TrxID fields with validation (TrxID min length)।
-- Back / Continue buttons।
+## Animations
 
-### Step 3 — Review & Confirm
-- Read-only summary of contact + payment + items।
-- "Edit" link beside each section → jump back to that step।
-- Optional notes textarea।
-- Terms checkbox ("I confirm the TrxID is correct")।
-- **Place Order** button → existing `supabase.from("orders").insert()` logic অপরিবর্তিত।
+CSS keyframes (already-defined `fade-in`, `scale-in`) + নতুন `float`, `glow-pulse`, `reveal-up`। Framer Motion শুধু hero + section reveal-এ — bundle bloat এড়াতে রেস্ট-এ pure CSS।
 
-### Sticky right summary (desktop) / collapsible top summary (mobile)
-সব step জুড়ে দৃশ্যমান, items + total সহ।
+`.reveal-up` + IntersectionObserver hook (`useReveal`) — ১বার trigger।
 
-### Success state
-আগের সফল order screen একই, কিন্তু `<GlassButton>` ব্যবহার করে।
+## Accessibility
 
-## ৪. Accessibility & consistency pass
+- Text/background contrast ≥ WCAG AA (navy `#0f172a` on white-ish glass = pass)।
+- গুরুত্বপূর্ণ text-এর পেছনে `glass-card-strong` (78% opacity) ব্যবহার, transparent না।
+- Focus ring: `0 0 0 3px rgba(14,165,233,0.45)` সব interactive element-এ।
+- Tap target ≥ 44px।
+- `prefers-reduced-motion: reduce` → animation disable।
 
-- সব interactive element-এ `:focus-visible` outline (`--ring`)।
-- Color contrast: `text-muted-foreground` শুধু secondary text-এ; primary copy-তে `text-foreground`।
-- `aria-label` ও `aria-current` stepper-এ; form errors `role="alert"`।
-- Min touch target 44×44।
-- Mobile: stepper horizontal scroll-free (icons + short labels), summary collapsible।
+## Performance
 
----
+- Mobile blur 10px, desktop 18px।
+- Blur layers stack করব না — একই surface-এ একবার backdrop-filter।
+- Background blobs CSS `will-change: transform`, `contain: paint`।
+- Existing `LazyMount` rails বহাল, `ProductCard` memoized।
+- নতুন কোনো heavy dep ইনস্টল করব না (Framer Motion ইতিমধ্যে আছে কিনা চেক — না থাকলে শুধু hero-এ `bun add framer-motion`)।
 
-### Technical notes
+## Risk / scope notes
 
-- কোনো DB schema বা business logic পরিবর্তন নেই — শুধু UI restructure + shared components।
-- Cart context (`useCart`) ও order insert query unchanged।
-- নতুন files:
-  - `src/components/ui-glass/GlassCard.tsx`
-  - `src/components/ui-glass/GlassField.tsx`
-  - `src/components/ui-glass/GlassButton.tsx`
-  - `src/components/ui-glass/Stepper.tsx`
-  - `src/components/ui-glass/RadioCard.tsx`
-- Edit: `src/routes/cart.tsx`, `src/routes/checkout.tsx`।
-- Validation hand-rolled (no extra dep) — simple regex + required checks।
-- Out of scope: address book, multiple saved payment methods, coupon codes, real payment gateway।
+- Site বর্তমানে dark navy + neon (aqua/violet/aurora gradient) এ tightly coupled — `text-aurora`, `text-neon`, `bg-aurora`, glass-soft/strong বহু component-এ। আমি এই tokens-কেই **light variant-এ remap** করব যাতে existing markup auto-inherit করে; class-by-class rewrite করতে হবে না সব ফাইলে।
+- আগের turn-এ আপনি product cards সাদা theme-এ আনতে বলেছিলেন — নতুন light glass system এর সাথে natural fit, ওটা retain।
+- Admin dashboard data-density বেশি, তাই Phase 3-এ আলাদা treatment (less blur, more opacity)।
+
+## Deliverable for Phase 1
+
+Approve করলে এই turn-এ deliver করব: tokens + utilities + Header + Footer + Home (Hero/Featured/Rails/CTA) + ProductCard + glass primitives + shadcn token shift। Preview-এ পুরো homepage premium light glass হিসেবে দেখাবে; বাকি pages temporary inherit করবে (functional থাকবে, polished না)।
