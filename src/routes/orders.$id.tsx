@@ -40,11 +40,13 @@ type Order = {
 const statusStyles: Record<string, string> = {
   pending: "bg-amber-100 text-amber-800 border-amber-200",
   processing: "bg-blue-100 text-blue-800 border-blue-200",
+  completed: "bg-emerald-100 text-emerald-800 border-emerald-200",
   delivered: "bg-emerald-100 text-emerald-800 border-emerald-200",
   cancelled: "bg-red-100 text-red-800 border-red-200",
+  refunded: "bg-amber-100 text-amber-800 border-amber-200",
 };
 
-const statusSteps = ["pending", "processing", "delivered"];
+const statusSteps = ["pending", "processing", "completed"];
 
 function OrderDetailPage() {
   const { id } = Route.useParams();
