@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { rowToProduct, type Product } from "@/data/products";
 
@@ -23,11 +23,30 @@ export function useProducts() {
 }
 
 export function useProduct(slug: string | undefined) {
-  const { products, isLoading, error } = useProducts();
+  const queryClient = useQueryClient();
+  const q = useQuery({
+    queryKey: ["product", slug],
+    enabled: !!slug,
+    queryFn: async (): Promise<Product | null> => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("slug", slug!)
+        .eq("is_active", true)
+        .maybeSingle();
+      if (error) throw error;
+      return data ? rowToProduct(data as never) : null;
+    },
+    initialData: () => queryClient.getQueryData<Product[]>(["products"])?.find((p) => p.slug === slug),
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
   return {
-    product: slug ? products.find((p) => p.slug === slug) : undefined,
-    isLoading,
-    error,
+    product: q.data ?? undefined,
+    isLoading: q.isLoading,
+    error: q.error,
   };
 }
 
