@@ -2,6 +2,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { rowToProduct, type Product } from "@/data/products";
 
+// Tunables: SWR strategy for product data.
+// - staleTime: how long data is considered fresh (no background refetch).
+// - gcTime: how long unused cache entries are kept in memory.
+const PRODUCT_STALE_MS = 10 * 60_000; // 10 minutes
+const PRODUCT_GC_MS = 60 * 60_000;    // 1 hour
+
 export function useProducts() {
   const q = useQuery({
     queryKey: ["products"],
@@ -14,9 +20,11 @@ export function useProducts() {
       if (error) throw error;
       return (data ?? []).map((r) => rowToProduct(r as never));
     },
-    staleTime: 5 * 60_000,
+    staleTime: PRODUCT_STALE_MS,
+    gcTime: PRODUCT_GC_MS,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
     retry: 2,
   });
   return { products: q.data ?? [], isLoading: q.isLoading, error: q.error };
@@ -37,10 +45,18 @@ export function useProduct(slug: string | undefined) {
       if (error) throw error;
       return data ? rowToProduct(data as never) : null;
     },
-    initialData: () => queryClient.getQueryData<Product[]>(["products"])?.find((p) => p.slug === slug),
-    staleTime: 5 * 60_000,
+    // Seed from the products list cache (and from any prior single-product
+    // prefetch via the same queryKey) so the detail page paints instantly.
+    initialData: () =>
+      queryClient.getQueryData<Product[]>(["products"])?.find((p) => p.slug === slug),
+    initialDataUpdatedAt: () =>
+      queryClient.getQueryState(["products"])?.dataUpdatedAt,
+    // SWR: serve cached data immediately; only refetch in background after staleTime.
+    staleTime: PRODUCT_STALE_MS,
+    gcTime: PRODUCT_GC_MS,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
     retry: 1,
   });
   return {
@@ -62,6 +78,11 @@ export function usePromotions() {
       if (error) throw error;
       return data ?? [];
     },
+    staleTime: 5 * 60_000,
+    gcTime: 30 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
 
@@ -80,5 +101,7 @@ export function useIsAdmin() {
       if (error) return false;
       return !!data;
     },
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
