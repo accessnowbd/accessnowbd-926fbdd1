@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
-import { Loader2, Eye, Search, X, Download } from "lucide-react";
+import { Loader2, Eye, Search, X, Download, KeyRound, Send, MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { downloadReceiptPdf } from "@/lib/receipt";
