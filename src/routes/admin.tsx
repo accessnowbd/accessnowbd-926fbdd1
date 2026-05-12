@@ -75,9 +75,11 @@ function AdminBootSplash() {
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  // Read cache eagerly (any uid). If it says admin, render shell instantly while auth resolves.
   const cached = useMemo(() => readAdminCacheAny(), []);
-  const [isAdmin, setIsAdmin] = useState<boolean>(cached?.isAdmin === true);
+  // Optimistic: assume admin if we have a session OR cached signal.
+  // Verification runs in the background and only blocks render when it
+  // explicitly resolves to "not admin".
+  const [isAdmin, setIsAdmin] = useState<boolean>(cached?.isAdmin !== false);
   const [verified, setVerified] = useState<boolean>(false);
 
   useEffect(() => {
@@ -85,10 +87,13 @@ function AdminLayout() {
     if (!user) { navigate({ to: "/auth" }); return; }
     let cancelled = false;
     (async () => {
-      const { data, error } = await supabase
-        .from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
+      // Use security-definer RPC — single-row, indexed, fastest path.
+      const { data, error } = await supabase.rpc("has_role", {
+        _user_id: user.id,
+        _role: "admin",
+      });
       if (cancelled) return;
-      const ok = !!data && !error;
+      const ok = !error && data === true;
       writeAdminCache(user.id, ok);
       setIsAdmin(ok);
       setVerified(true);
@@ -96,12 +101,12 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate]);
 
-  // Only block when we have NO optimistic admin signal at all.
-  if (!isAdmin && (loading || !verified)) {
+  // Only block when auth itself hasn't hydrated AND we have no cache at all.
+  if (loading && !cached) {
     return <AdminBootSplash />;
   }
 
-
+  // Verified denial → access denied page.
   if (verified && !isAdmin) {
     return (
       <div className="min-h-screen grid place-items-center bg-[#f6f7fb] px-4">
