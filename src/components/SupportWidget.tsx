@@ -166,14 +166,14 @@ export function SupportWidget() {
   }
 
   const PANEL =
-    "fixed bottom-5 right-5 z-50 w-[min(400px,calc(100vw-1.5rem))] origin-bottom-right";
+    "fixed bottom-24 right-5 z-50 w-[min(400px,calc(100vw-1.5rem))] origin-bottom-right";
   const SHELL =
     "relative rounded-[28px] overflow-hidden border border-white/[0.12] bg-[#070922]/95 backdrop-blur-2xl shadow-[0_50px_120px_-20px_rgba(0,0,0,0.9)]";
 
   return (
     <>
       {/* === Floating launcher === */}
-      {!open && (
+      {true && (
         <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
           {/* Chooser popup */}
           {chooser && (
@@ -213,8 +213,11 @@ export function SupportWidget() {
           )}
 
           <button
-            onClick={() => (chooser ? setChooser(false) : setChooser(true))}
-            aria-label={chooser ? "Close support menu" : "Open support"}
+            onClick={() => {
+              if (open) { setOpen(false); setChooser(false); return; }
+              setChooser((v) => !v);
+            }}
+            aria-label={open || chooser ? "Close support" : "Open support"}
             className="relative group"
           >
             {/* Soft ambient glow */}
@@ -235,7 +238,7 @@ export function SupportWidget() {
               <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/20 blur-[3px]" />
               <span className="absolute -bottom-4 inset-x-3 h-6 rounded-full bg-aqua/40 blur-xl" />
 
-              {chooser ? (
+              {(chooser || open) ? (
                 <X className="h-7 w-7 relative text-white drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]" strokeWidth={2.6} />
               ) : (
                 <>
