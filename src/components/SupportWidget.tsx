@@ -213,8 +213,11 @@ export function SupportWidget() {
           )}
 
           <button
-            onClick={() => (chooser ? setChooser(false) : setChooser(true))}
-            aria-label={chooser ? "Close support menu" : "Open support"}
+            onClick={() => {
+              if (open) { setOpen(false); setChooser(false); return; }
+              setChooser((v) => !v);
+            }}
+            aria-label={open || chooser ? "Close support" : "Open support"}
             className="relative group"
           >
             {/* Soft ambient glow */}
