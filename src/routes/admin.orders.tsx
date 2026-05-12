@@ -200,6 +200,45 @@ function FilterChip({ label, active, onClick }: { label: string; active: boolean
 
 function OrderDetail({ order, onClose, onStatusChange }: { order: Order; onClose: () => void; onStatusChange: (s: string) => void }) {
   const [downloading, setDownloading] = useState(false);
+  const [credentialsText, setCredentialsText] = useState(order.delivered_credentials?.text ?? "");
+  const [adminNote, setAdminNote] = useState(order.admin_note ?? "");
+  const [delivering, setDelivering] = useState(false);
+  const [deliveredAt, setDeliveredAt] = useState<string | null>(order.delivered_at);
+
+  const deliverCredentials = async () => {
+    if (!credentialsText.trim()) {
+      toast.error("Please paste the credentials before delivering");
+      return;
+    }
+    setDelivering(true);
+    const now = new Date().toISOString();
+    const { error } = await supabase
+      .from("orders")
+      .update({
+        delivered_credentials: { text: credentialsText.trim() },
+        admin_note: adminNote.trim() || null,
+        delivered_at: now,
+        status: "completed",
+      })
+      .eq("id", order.id);
+    setDelivering(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setDeliveredAt(now);
+    onStatusChange("completed");
+    toast.success("Credentials delivered to customer");
+  };
+
+  const saveNoteOnly = async () => {
+    const { error } = await supabase
+      .from("orders")
+      .update({ admin_note: adminNote.trim() || null })
+      .eq("id", order.id);
+    if (error) toast.error(error.message);
+    else toast.success("Note saved");
+  };
 
   const downloadReceipt = async () => {
     setDownloading(true);
