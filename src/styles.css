@@ -417,3 +417,24 @@
     background: transparent;
   }
 }
+
+/* ===== Performance guards ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Disable continuous decorative animations on small/touch devices to save battery + GPU */
+@media (max-width: 1023px), (pointer: coarse) {
+  .animate-blob,
+  .animate-aurora-pan,
+  .animate-orbit,
+  .animate-float,
+  .animate-pulse-glow,
+  .animate-shine {
+    animation: none !important;
+  }
+}
