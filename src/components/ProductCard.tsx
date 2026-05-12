@@ -93,7 +93,7 @@ export function ProductCard({ product }: { product: Product }) {
       to="/product/$slug"
       params={{ slug: product.slug }}
       preload="intent"
-      className="group gradient-border-card overflow-hidden flex flex-col h-full"
+      className="group product-card-v2 overflow-hidden flex flex-col h-full rounded-2xl border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-shadow hover:shadow-[var(--shadow-glass)]"
     >
       <div className="relative">
         <ProductBanner product={product} ratio="5/4" />
@@ -108,33 +108,37 @@ export function ProductCard({ product }: { product: Product }) {
         </span>
       </div>
 
-      <div className="relative p-4 flex flex-col flex-1 z-10">
-        <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-          <span className="text-primary font-bold">{product.category}</span>
-          <span>·</span>
-          <span>({reviews}) reviews</span>
-        </div>
-        <h3 className="mt-1.5 text-sm font-extrabold tracking-tight line-clamp-2 min-h-[2.6rem] text-foreground">{product.name}</h3>
-        <p className="text-[11px] text-muted-foreground mt-0.5">{plan?.period}</p>
+      <div className="relative p-3.5 flex flex-col flex-1 z-10 gap-2">
+        <h3 className="text-[13.5px] font-extrabold tracking-tight line-clamp-2 min-h-[2.6rem] text-foreground leading-snug">
+          {product.name}
+        </h3>
 
-        <div className="mt-4 pt-3 border-t border-border flex items-end justify-between gap-2">
-          <div>
-            {plan?.original && (
-              <div className="text-[11px] text-muted-foreground line-through leading-none">{plan.original}</div>
-            )}
-            <div className="text-lg font-extrabold text-aurora leading-tight">{plan?.price ?? "—"}</div>
-          </div>
+        <div className="inline-flex items-center gap-1.5 self-start rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-bold text-emerald-600">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          In Stock
+        </div>
+
+        <div className="flex items-baseline gap-2">
+          {plan?.original && (
+            <span className="text-[11px] text-muted-foreground line-through">{plan.original}</span>
+          )}
+          <span className="text-[15px] font-extrabold text-aurora leading-none">{plan?.price ?? "—"}</span>
+        </div>
+
+        <div className="mt-auto pt-2">
           {hasOptions ? (
-            <span className="h-9 px-3.5 inline-flex items-center gap-1 rounded-full btn-aurora text-xs">
-              Options
+            <span className="choose-plan-btn flex items-center justify-center gap-1.5 h-10 w-full rounded-full text-xs font-bold">
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              Choose Plan
             </span>
           ) : (
             <button
               onClick={onAdd}
-              className="grid place-items-center w-10 h-10 rounded-full btn-aurora"
+              className="choose-plan-btn flex items-center justify-center gap-1.5 h-10 w-full rounded-full text-xs font-bold"
               aria-label="Add to cart"
             >
-              <ShoppingCart className="w-4 h-4" />
+              <ShoppingCart className="w-3.5 h-3.5" />
+              Add to Cart
             </button>
           )}
         </div>
