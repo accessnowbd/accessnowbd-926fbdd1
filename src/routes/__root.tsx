@@ -1,6 +1,7 @@
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { SupportWidget } from "@/components/SupportWidget";
+import { SiteHeader } from "@/components/SiteHeader";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
