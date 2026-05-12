@@ -153,17 +153,13 @@ function HeroExperience() {
   return (
     <section
       className="relative px-4 md:px-10 pt-0 pb-12 md:pt-0 md:pb-16 overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37, 99, 235, 0.18), transparent 70%), linear-gradient(180deg, #07091c 0%, #080a1f 50%, #060818 100%)",
-      }}
     >
-      {/* Subtle deep aurora layers — tuned to match header/footer navy */}
-      <div className="pointer-events-none absolute -top-40 -left-32 h-[460px] w-[460px] rounded-full opacity-25 blur-3xl"
+      {/* Subtle deep aurora layers — pushed below to avoid bleeding above hero cards */}
+      <div className="pointer-events-none absolute top-40 -left-32 h-[460px] w-[460px] rounded-full opacity-25 blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(124, 58, 237, 0.55), transparent 65%)" }} />
       <div className="pointer-events-none absolute -bottom-40 -right-24 h-[500px] w-[500px] rounded-full opacity-20 blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(0, 229, 255, 0.45), transparent 65%)" }} />
-      <div className="pointer-events-none absolute top-1/3 left-1/2 h-[260px] w-[260px] -translate-x-1/2 rounded-full opacity-15 blur-3xl"
+      <div className="pointer-events-none absolute top-1/2 left-1/2 h-[260px] w-[260px] -translate-x-1/2 rounded-full opacity-15 blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(99, 102, 241, 0.5), transparent 70%)" }} />
 
 
