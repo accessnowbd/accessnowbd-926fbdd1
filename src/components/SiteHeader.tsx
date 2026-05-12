@@ -209,8 +209,9 @@ export function SiteHeader() {
               <span className="leading-[1.05] min-w-0">
                 <span className="flex items-baseline gap-1.5 whitespace-nowrap">
                   <span
-                    className="text-[17px] sm:text-[19px] md:text-[22px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="font-extrabold tracking-tight bg-clip-text text-transparent"
                     style={{
+                      fontSize: "clamp(15px, 1.45vw, 22px)",
                       backgroundImage:
                         "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)",
                       filter:
@@ -220,8 +221,9 @@ export function SiteHeader() {
                     Access
                   </span>
                   <span
-                    className="text-[17px] sm:text-[19px] md:text-[22px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="font-extrabold tracking-tight bg-clip-text text-transparent"
                     style={{
+                      fontSize: "clamp(15px, 1.45vw, 22px)",
                       backgroundImage:
                         "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)",
                       filter:
@@ -231,8 +233,9 @@ export function SiteHeader() {
                     Now
                   </span>
                   <span
-                    className="text-[17px] sm:text-[19px] md:text-[22px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="font-extrabold tracking-tight bg-clip-text text-transparent"
                     style={{
+                      fontSize: "clamp(15px, 1.45vw, 22px)",
                       backgroundImage:
                         "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)",
                       filter:
@@ -293,7 +296,12 @@ export function SiteHeader() {
                 <div className="hidden sm:flex items-center gap-1.5">
                   <Link
                     to="/orders"
-                    className="inline-flex items-center gap-2 h-11 px-4 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition"
+                    className="inline-flex items-center gap-2 h-11 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition whitespace-nowrap"
+                    style={{
+                      paddingLeft: "clamp(10px, 1vw, 18px)",
+                      paddingRight: "clamp(10px, 1vw, 18px)",
+                      fontSize: "clamp(11.5px, 0.9vw, 14px)",
+                    }}
                   >
                     <UserCircle2 className="w-4 h-4" />
                     <span className="max-w-[120px] truncate">Dashboard</span>
@@ -472,7 +480,13 @@ function MagneticNav() {
       ref={navRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="hidden lg:flex relative items-center gap-0.5 xl:gap-1 px-1.5 xl:px-2 h-12 rounded-full glass-soft border border-white/10 text-[13px] xl:text-sm font-semibold backdrop-blur-2xl shrink min-w-0"
+      className="hidden lg:flex relative items-center h-12 rounded-full glass-soft border border-white/10 font-semibold backdrop-blur-2xl shrink min-w-0 whitespace-nowrap"
+      style={{
+        gap: "clamp(0px, 0.25vw, 4px)",
+        paddingLeft: "clamp(4px, 0.6vw, 10px)",
+        paddingRight: "clamp(4px, 0.6vw, 10px)",
+        fontSize: "clamp(11.5px, 0.95vw, 14px)",
+      }}
     >
       {/* Magnetic sliding pill */}
       <span
@@ -491,7 +505,11 @@ function MagneticNav() {
           ref={(el) => {
             itemRefs.current[i] = el;
           }}
-          className="relative z-10 px-2.5 xl:px-4 py-2 rounded-full text-white/75 hover:text-white transition-colors whitespace-nowrap"
+          className="relative z-10 py-2 rounded-full text-white/75 hover:text-white transition-colors whitespace-nowrap"
+          style={{
+            paddingLeft: "clamp(8px, 0.9vw, 16px)",
+            paddingRight: "clamp(8px, 0.9vw, 16px)",
+          }}
         >
           {n.label}
         </Link>
