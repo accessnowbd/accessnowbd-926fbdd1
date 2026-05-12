@@ -262,9 +262,7 @@ export function SiteFooter() {
               © 2026 ·{" "}
               <span className="font-extrabold text-white">AccessNow BD</span> · All Rights Reserved · Designed &amp; Developed by{" "}
               <a
-                href="https://shahedit.com/"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/developer"
                 className="font-bold text-aqua transition-colors duration-200 hover:text-white"
               >
                 Shahed IT
