@@ -57,7 +57,6 @@ export function TopUtilityBar() {
             100% Verified Service
           </span>
           <span className="hidden lg:inline-flex items-center gap-1.5 text-white/60">
-            <Sparkles className="w-3 h-3 text-violet-300" />
             Instant Delivery
           </span>
         </div>
@@ -322,7 +321,7 @@ export function SiteHeader() {
                     to="/register"
                     className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full text-white text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-aqua shadow-[0_8px_24px_-10px_rgba(0,229,255,0.55)] hover:-translate-y-0.5 transition-all duration-300"
                   >
-                    <Sparkles className="w-3.5 h-3.5" /> Register
+                    Register
                   </Link>
                 </div>
               )}
@@ -391,7 +390,7 @@ export function SiteHeader() {
                     onClick={() => setOpen(false)}
                     className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full glass-soft border border-white/15 text-white text-sm font-semibold hover:border-aqua/40 transition"
                   >
-                    <Sparkles className="w-4 h-4" /> Create Account
+                    Create Account
                   </Link>
                 </>
               )}

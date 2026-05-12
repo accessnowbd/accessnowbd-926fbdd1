@@ -72,7 +72,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
           {hasOptions ? (
             <span className="h-9 px-3.5 inline-flex items-center gap-1 rounded-full btn-aurora text-xs">
-              <Sparkles className="w-3 h-3" /> Options
+              Options
             </span>
           ) : (
             <button
