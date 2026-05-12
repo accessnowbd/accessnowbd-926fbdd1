@@ -153,18 +153,8 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
           <div className="mt-7 grid grid-cols-2 gap-3">
             <button
               type="button"
-              onClick={() => oauth("apple")}
-              className="h-12 rounded-full bg-[#7C5CFF] hover:bg-[#6B4BFF] active:bg-[#5A3FE6] shadow-[0_8px_20px_-8px_rgba(124,92,255,0.6)] transition inline-flex items-center justify-center"
-              aria-label="Continue with Apple"
-            >
-              <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="currentColor">
-                <path d="M16.365 1.43c0 1.14-.46 2.23-1.21 3.01-.81.86-2.13 1.52-3.21 1.43-.14-1.09.42-2.24 1.13-2.97.79-.82 2.16-1.43 3.29-1.47zM20.5 17.06c-.55 1.27-.81 1.84-1.52 2.96-.99 1.56-2.39 3.5-4.12 3.52-1.54.02-1.93-1-4.02-.99-2.09.01-2.52 1.01-4.06.99-1.73-.02-3.05-1.77-4.04-3.33C.04 15.97-.26 11.4 1.41 8.97c1.19-1.74 3.07-2.76 4.83-2.76 1.79 0 2.92 1 4.4 1 1.43 0 2.3-1 4.37-1 1.57 0 3.23.86 4.42 2.34-3.88 2.13-3.25 7.68-.93 8.51z" />
-              </svg>
-            </button>
-            <button
-              type="button"
               onClick={() => oauth("google")}
-              className="h-12 rounded-full bg-[#7C5CFF] hover:bg-[#6B4BFF] active:bg-[#5A3FE6] shadow-[0_8px_20px_-8px_rgba(124,92,255,0.6)] transition inline-flex items-center justify-center"
+              className="h-12 rounded-full bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 active:bg-slate-100 shadow-[0_4px_14px_-6px_rgba(15,23,42,0.15)] transition inline-flex items-center justify-center gap-2.5"
               aria-label="Continue with Google"
             >
               <svg viewBox="0 0 48 48" className="w-5 h-5">
@@ -173,6 +163,18 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                 <path fill="#4CAF50" d="M24 44c5.3 0 10.1-2 13.7-5.3l-6.3-5.3C29.4 35 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z" />
                 <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.7l6.3 5.3C41 35 44 30 44 24c0-1.2-.1-2.3-.4-3.5z" />
               </svg>
+              <span className="text-[14px] font-semibold text-slate-800">Google</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => oauth("apple")}
+              className="h-12 rounded-full bg-[#0F1B2D] hover:bg-[#16243A] active:bg-[#0A1424] shadow-[0_8px_20px_-8px_rgba(15,27,45,0.55)] transition inline-flex items-center justify-center gap-2.5"
+              aria-label="Continue with Apple"
+            >
+              <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="currentColor">
+                <path d="M16.365 1.43c0 1.14-.46 2.23-1.21 3.01-.81.86-2.13 1.52-3.21 1.43-.14-1.09.42-2.24 1.13-2.97.79-.82 2.16-1.43 3.29-1.47zM20.5 17.06c-.55 1.27-.81 1.84-1.52 2.96-.99 1.56-2.39 3.5-4.12 3.52-1.54.02-1.93-1-4.02-.99-2.09.01-2.52 1.01-4.06.99-1.73-.02-3.05-1.77-4.04-3.33C.04 15.97-.26 11.4 1.41 8.97c1.19-1.74 3.07-2.76 4.83-2.76 1.79 0 2.92 1 4.4 1 1.43 0 2.3-1 4.37-1 1.57 0 3.23.86 4.42 2.34-3.88 2.13-3.25 7.68-.93 8.51z" />
+              </svg>
+              <span className="text-[14px] font-semibold text-white">Apple</span>
             </button>
           </div>
 
