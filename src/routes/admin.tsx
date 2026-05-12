@@ -15,15 +15,15 @@ export const Route = createFileRoute("/admin")({
 
 const ADMIN_CACHE_KEY = "anbd:isAdmin";
 
-function readAdminCache(userId: string | undefined): boolean | null {
-  if (!userId) return null;
+type AdminCache = { uid: string; isAdmin: boolean };
+
+function readAdminCacheAny(): AdminCache | null {
   try {
     const store = typeof localStorage !== "undefined" ? localStorage : null;
     if (!store) return null;
     const raw = store.getItem(ADMIN_CACHE_KEY);
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as { uid: string; isAdmin: boolean };
-    return parsed.uid === userId ? parsed.isAdmin : null;
+    return JSON.parse(raw) as AdminCache;
   } catch { return null; }
 }
 function writeAdminCache(userId: string, isAdmin: boolean) {
