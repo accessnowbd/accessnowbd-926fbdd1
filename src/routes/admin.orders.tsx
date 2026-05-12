@@ -188,7 +188,7 @@ function AdminOrders() {
             </table>
           </div>
         )}
-      </div>
+      </AdminGlassCard>
 
       {selected && (
         <OrderDetail order={selected} onClose={() => setSelected(null)} onStatusChange={(s) => updateStatus(selected.id, s)} />
