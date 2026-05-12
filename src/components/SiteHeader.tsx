@@ -209,8 +209,9 @@ export function SiteHeader() {
               <span className="leading-[1.05] min-w-0">
                 <span className="flex items-baseline gap-1.5 whitespace-nowrap">
                   <span
-                    className="text-[17px] sm:text-[19px] md:text-[22px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="font-extrabold tracking-tight bg-clip-text text-transparent"
                     style={{
+                      fontSize: "clamp(15px, 1.45vw, 22px)",
                       backgroundImage:
                         "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)",
                       filter:
@@ -220,8 +221,9 @@ export function SiteHeader() {
                     Access
                   </span>
                   <span
-                    className="text-[17px] sm:text-[19px] md:text-[22px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="font-extrabold tracking-tight bg-clip-text text-transparent"
                     style={{
+                      fontSize: "clamp(15px, 1.45vw, 22px)",
                       backgroundImage:
                         "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)",
                       filter:
@@ -231,8 +233,9 @@ export function SiteHeader() {
                     Now
                   </span>
                   <span
-                    className="text-[17px] sm:text-[19px] md:text-[22px] font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="font-extrabold tracking-tight bg-clip-text text-transparent"
                     style={{
+                      fontSize: "clamp(15px, 1.45vw, 22px)",
                       backgroundImage:
                         "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)",
                       filter:
@@ -293,7 +296,12 @@ export function SiteHeader() {
                 <div className="hidden sm:flex items-center gap-1.5">
                   <Link
                     to="/orders"
-                    className="inline-flex items-center gap-2 h-11 px-4 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition"
+                    className="inline-flex items-center gap-2 h-11 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition whitespace-nowrap"
+                    style={{
+                      paddingLeft: "clamp(10px, 1vw, 18px)",
+                      paddingRight: "clamp(10px, 1vw, 18px)",
+                      fontSize: "clamp(11.5px, 0.9vw, 14px)",
+                    }}
                   >
                     <UserCircle2 className="w-4 h-4" />
                     <span className="max-w-[120px] truncate">Dashboard</span>
