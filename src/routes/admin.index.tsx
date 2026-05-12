@@ -174,6 +174,40 @@ function AdminDashboard() {
     { label: "Facebook", val: 21893, pct: 22 },
   ];
 
+  // Order status breakdown (real)
+  const orderStatusBreakdown = useMemo(() => {
+    const buckets = { completed: 0, pending: 0, processing: 0, cancelled: 0 } as Record<string, number>;
+    orders.forEach((o) => {
+      const k = (o.status || "pending").toLowerCase();
+      if (k in buckets) buckets[k]++; else buckets.pending++;
+    });
+    const total = Object.values(buckets).reduce((a, b) => a + b, 0) || 1;
+    return [
+      { label: "Completed", val: buckets.completed, color: "#10b981", soft: "bg-emerald-400" },
+      { label: "Processing", val: buckets.processing, color: "#3b82f6", soft: "bg-blue-400" },
+      { label: "Pending",    val: buckets.pending,    color: "#f59e0b", soft: "bg-amber-400" },
+      { label: "Cancelled",  val: buckets.cancelled,  color: "#f43f5e", soft: "bg-rose-400" },
+    ].map((s) => ({ ...s, pct: (s.val / total) * 100, total }));
+  }, [orders]);
+
+  // Recent customers (real, from orders) — matches reference table
+  const recentCustomers = useMemo(() => {
+    return orders.slice(0, 6).map((o) => {
+      const item = Array.isArray(o.items) && (o.items as any[])[0];
+      return {
+        id: o.id,
+        orderId: "#" + o.id.slice(0, 6).toUpperCase(),
+        name: o.full_name || o.email || "Guest",
+        date: new Date(o.created_at),
+        price: Number(o.total) || 0,
+        status: (o.status || "pending").toLowerCase(),
+        image: item?.image_url || "",
+        emoji: item?.emoji || "📦",
+        product: item?.name || "Order",
+      };
+    });
+  }, [orders]);
+
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Greeting */}
