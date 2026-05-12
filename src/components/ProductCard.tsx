@@ -21,6 +21,7 @@ function ratingFor(slug: string): { rating: string; reviews: number } {
 
 function ProductCardImpl({ product }: { product: Product }) {
   const { add } = useCart();
+  const { data: shopConfig } = useShopConfig();
   const queryClient = useQueryClient();
   const cardRef = useRef<HTMLAnchorElement | null>(null);
   const prefetchedRef = useRef(false);
