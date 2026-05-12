@@ -102,7 +102,6 @@ function Index() {
 
       <main>
         <HeroExperience />
-        <CategoryExperience />
 
         <CategoryPillBar />
 
