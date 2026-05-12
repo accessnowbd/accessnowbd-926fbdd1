@@ -485,48 +485,66 @@
     opacity: 0.35 !important;
   }
 
-  /* ===== Header — premium DARK chrome on white theme so existing white text stays readable ===== */
-  /* Top utility bar (uses bg-background) */
+  /* ===== Header — WHITE + Glassmorphism chrome ===== */
+  /* Top utility bar (uses bg-background) — soft frosted lavender */
   html.theme-white .relative.z-40.overflow-hidden.bg-background {
-    background: linear-gradient(90deg, #0b0b1f 0%, #1a1147 50%, #0b0b1f 100%) !important;
-    border-bottom: 1px solid rgba(124, 58, 237, 0.35) !important;
+    background: linear-gradient(90deg, rgba(245, 243, 255, 0.85) 0%, rgba(236, 233, 254, 0.82) 50%, rgba(245, 243, 255, 0.85) 100%) !important;
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border-bottom: 1px solid rgba(124, 58, 237, 0.18) !important;
   }
-  /* Sticky main header — dark glass bar */
+  /* Soften top-bar decorative blurs/gradients */
+  html.theme-white .relative.z-40.overflow-hidden.bg-background .absolute.inset-0 {
+    opacity: 0.35 !important;
+  }
+  /* Sticky main header — white glass bar */
   html.theme-white header.sticky > div {
-    background: linear-gradient(180deg, rgba(11, 11, 31, 0.92), rgba(20, 17, 60, 0.88)) !important;
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    box-shadow: 0 10px 30px -16px rgba(15, 10, 50, 0.55) !important;
-    border-bottom: 1px solid rgba(124, 58, 237, 0.28);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(250, 248, 255, 0.72)) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 10px 30px -16px rgba(124, 58, 237, 0.22) !important;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.14) !important;
   }
-  /* Inside the dark header, keep text-white classes WHITE (override generic white-theme rule) */
+  /* Header text → readable dark */
   html.theme-white header [class*="text-white"],
   html.theme-white header.sticky [class*="text-white"],
-  html.theme-white .relative.z-40.overflow-hidden.bg-background [class*="text-white"] {
-    color: #ffffff !important;
+  html.theme-white .relative.z-40.overflow-hidden.bg-background [class*="text-white"],
+  html.theme-white header [class*="text-white\\/"],
+  html.theme-white .relative.z-40.overflow-hidden.bg-background [class*="text-white\\/"] {
+    color: oklch(0.28 0.04 285) !important;
   }
   html.theme-white header a,
   html.theme-white header.sticky a {
-    color: rgba(255, 255, 255, 0.85) !important;
+    color: oklch(0.32 0.05 285) !important;
   }
   html.theme-white header a:hover,
   html.theme-white header.sticky a:hover {
-    color: #ffffff !important;
+    color: oklch(0.45 0.22 295) !important;
   }
-  /* Faint white pills/borders inside header should remain frosty on dark */
+  /* Frosted pills (Home / All Products / nav, search, icons) */
   html.theme-white header [class*="bg-white\\/"],
-  html.theme-white header.sticky [class*="bg-white\\/"] {
-    background-color: rgba(255, 255, 255, 0.08) !important;
+  html.theme-white header.sticky [class*="bg-white\\/"],
+  html.theme-white .relative.z-40.overflow-hidden.bg-background [class*="bg-white\\/"] {
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
   }
   html.theme-white header [class*="border-white\\/"],
-  html.theme-white header.sticky [class*="border-white\\/"] {
-    border-color: rgba(255, 255, 255, 0.14) !important;
+  html.theme-white header.sticky [class*="border-white\\/"],
+  html.theme-white .relative.z-40.overflow-hidden.bg-background [class*="border-white\\/"] {
+    border-color: rgba(124, 58, 237, 0.18) !important;
   }
   /* Mobile nav pill bar inside header */
   html.theme-white header nav .glass-soft {
-    background: rgba(255, 255, 255, 0.06) !important;
-    border-color: rgba(255, 255, 255, 0.14) !important;
-    color: rgba(255, 255, 255, 0.85) !important;
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(124, 58, 237, 0.18) !important;
+    color: oklch(0.28 0.04 285) !important;
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+  }
+  /* Top-bar small status chips/icons keep premium accent */
+  html.theme-white .relative.z-40.overflow-hidden.bg-background svg {
+    color: oklch(0.45 0.22 295);
   }
 
   /* ===== Site-wide catch: any text-white/NN arbitrary opacity → readable dark ===== */
