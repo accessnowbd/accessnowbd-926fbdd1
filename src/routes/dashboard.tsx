@@ -41,10 +41,10 @@ type SectionId =
   | "settings-general" | "settings-theme" | "settings-language" | "settings-notif";
 
 const statusColors: Record<string, string> = {
-  pending: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-  processing: "bg-blue-500/15 text-blue-300 border-blue-500/30",
-  delivered: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-  cancelled: "bg-red-500/15 text-red-300 border-red-500/30",
+  pending: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30",
+  processing: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
+  delivered: "bg-violet-500/15 text-violet-200 border-violet-500/30",
+  cancelled: "bg-pink-500/15 text-pink-300 border-pink-500/30",
 };
 
 type NavItem = { id: SectionId; label: string; icon: React.ComponentType<{ className?: string }> };
