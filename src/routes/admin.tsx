@@ -154,7 +154,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className={`min-h-screen flex ${dark ? "bg-slate-900" : "bg-[#f6f7fb]"}`}>
+    <div className={`min-h-screen flex ${dark ? "bg-slate-900" : "bg-gradient-to-br from-blue-50/60 via-white to-sky-50/40"}`}>
       {/* SIDEBAR */}
       <aside
         className={`${collapsed ? "w-[72px]" : "w-[280px]"} shrink-0 transition-all duration-200 border-r ${dark ? "bg-slate-950 border-slate-800" : "bg-white border-slate-200"} flex flex-col h-screen sticky top-0`}
@@ -162,7 +162,7 @@ function AdminShell({ user, signOut, navigate }: any) {
         {/* Brand */}
         <div className={`h-16 flex items-center justify-between px-4 border-b ${dark ? "border-slate-800" : "border-slate-200"}`}>
           <Link to="/admin" className="flex items-center gap-2 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-slate-900 to-slate-700 grid place-items-center text-white font-bold text-sm shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 grid place-items-center text-white font-bold text-sm shrink-0 shadow-[0_4px_14px_-4px_rgba(37,99,235,0.6)]">
               Rx
             </div>
             {!collapsed && (
@@ -205,7 +205,7 @@ function AdminShell({ user, signOut, navigate }: any) {
         {/* User */}
         <div className={`border-t ${dark ? "border-slate-800" : "border-slate-200"} p-3 space-y-2`}>
           <div className={`flex items-center gap-2 ${collapsed ? "justify-center" : ""}`}>
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 text-white grid place-items-center text-xs font-bold shrink-0">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-sky-500 text-white grid place-items-center text-xs font-bold shrink-0">
               {(user?.email ?? "A").slice(0, 1).toUpperCase()}
             </div>
             {!collapsed && (
@@ -257,14 +257,14 @@ function AdminShell({ user, signOut, navigate }: any) {
               <input placeholder="Search" className={`bg-transparent outline-none text-xs w-32 ${dark ? "text-white placeholder:text-slate-500" : "placeholder:text-slate-400"}`} />
               <kbd className={`text-[10px] px-1.5 py-0.5 rounded border ${dark ? "border-slate-700 text-slate-400" : "border-slate-300 text-slate-500"}`}>⌘K</kbd>
             </div>
-            <button className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90">
+            <button className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-sky-500 text-white hover:opacity-90 shadow-[0_4px_14px_-4px_rgba(37,99,235,0.5)]">
               <Plus className="w-3.5 h-3.5" /> Create <ChevronDown className="w-3 h-3" />
             </button>
             <button className={`relative h-9 w-9 rounded-lg grid place-items-center border ${dark ? "border-slate-700 text-slate-200 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}>
               <Bell className="w-4 h-4" />
               <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold grid place-items-center">22</span>
             </button>
-            <Link to="/" className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-slate-900 text-white hover:bg-slate-800">
+            <Link to="/" className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-blue-600 text-white hover:bg-blue-700">
               <ExternalLink className="w-3.5 h-3.5" /> View store
             </Link>
           </div>
@@ -306,8 +306,8 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
         onClick={() => setOpen((v) => !v)}
         className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider ${dark ? "text-slate-400 hover:bg-slate-800" : "text-slate-500 hover:bg-slate-50"}`}
       >
-        <span className="inline-flex items-center gap-2">
-          <span className="text-violet-500">{group.icon}</span>
+          <span className="inline-flex items-center gap-2">
+          <span className="text-blue-600">{group.icon}</span>
           {group.title}
         </span>
         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "" : "-rotate-90"}`} />
@@ -333,15 +333,15 @@ function SidebarItem({ item, collapsed, dark, active }: { item: AdminMenuItem; c
         "group flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm transition-colors relative",
         collapsed ? "justify-center" : "",
         active
-          ? (dark ? "bg-slate-800 text-white" : "bg-violet-50 text-violet-700")
-          : (dark ? "text-slate-300 hover:bg-slate-800/70" : "text-slate-700 hover:bg-slate-50"),
+          ? (dark ? "bg-slate-800 text-white" : "bg-blue-50 text-blue-700 ring-1 ring-blue-100")
+          : (dark ? "text-slate-300 hover:bg-slate-800/70" : "text-slate-700 hover:bg-blue-50/60"),
       ].join(" ")}
     >
-      <span className={`shrink-0 w-8 h-8 rounded-full bg-gradient-to-br ${item.grad} grid place-items-center text-white shadow-sm`}>
+      <span className={`shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-sky-500 grid place-items-center text-white shadow-sm`}>
         {item.icon}
       </span>
       {!collapsed && <span className="font-medium truncate flex-1">{item.label}</span>}
-      {!collapsed && active && <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />}
+      {!collapsed && active && <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />}
     </Link>
   );
 }
