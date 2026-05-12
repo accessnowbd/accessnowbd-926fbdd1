@@ -66,50 +66,68 @@ function ProductCardImpl({ product }: { product: Product }) {
         </span>
       </div>
 
-      <div className="relative p-3.5 flex flex-col flex-1 z-10 gap-2">
-        <h3 className="text-[13.5px] font-extrabold tracking-tight line-clamp-2 min-h-[2.6rem] text-foreground leading-snug">
+      <div className="relative p-4 flex flex-col flex-1 z-10 gap-2.5">
+        <h3 className="text-[14px] font-extrabold tracking-tight line-clamp-2 min-h-[2.6rem] text-foreground leading-snug">
           {product.name}
         </h3>
 
-        <div className="inline-flex items-center gap-1.5 self-start rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-bold text-emerald-600">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          In Stock
+        {/* Rating row */}
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-0.5">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Star
+                key={i}
+                className={`w-3.5 h-3.5 ${
+                  i < Math.round(Number(rating))
+                    ? "fill-[var(--color-gold)] text-[var(--color-gold)]"
+                    : "fill-muted text-muted"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-[11px] text-muted-foreground font-medium">({reviews})</span>
         </div>
 
+        {/* Price row */}
         <div className="flex items-baseline gap-2">
+          <span className="text-[20px] font-extrabold text-aurora leading-none">{plan?.price ?? "—"}</span>
           {plan?.original && (
-            <span className="text-[11px] text-muted-foreground line-through">{plan.original}</span>
+            <span className="text-[12px] text-muted-foreground line-through">{plan.original}</span>
           )}
-          <span className="text-[15px] font-extrabold text-aurora leading-none">{plan?.price ?? "—"}</span>
         </div>
 
-        <div className="mt-auto pt-2 flex gap-1.5">
-          {hasOptions ? (
-            <span className="choose-plan-btn flex flex-1 items-center justify-center gap-1.5 h-10 rounded-full text-xs font-bold">
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              Choose Plan
-            </span>
-          ) : (
+        {/* Action stack — Buy Now on top, WhatsApp + Cart below */}
+        <div className="mt-auto pt-2 flex flex-col gap-2">
+          <span
+            className="flex items-center justify-center gap-2 h-11 rounded-full text-[13px] font-bold text-white shadow-[0_8px_20px_-10px_rgba(124,92,255,0.6)]"
+            style={{ background: "linear-gradient(90deg, #8B5CF6 0%, #6366F1 50%, #3B82F6 100%)" }}
+          >
+            <ShoppingCart className="w-4 h-4" />
+            Buy Now
+          </span>
+
+          <div className="grid grid-cols-2 gap-2">
+            <a
+              href={waAskUrl(product.name, { number: shopConfig?.whatsapp_number })}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              aria-label="Order via WhatsApp"
+              className="flex items-center justify-center gap-1.5 h-10 rounded-full bg-emerald-500/15 text-emerald-600 text-[12px] font-bold border border-emerald-500/25 hover:bg-emerald-500/25 transition"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              WhatsApp
+            </a>
             <button
               onClick={onAdd}
-              className="choose-plan-btn flex flex-1 items-center justify-center gap-1.5 h-10 rounded-full text-xs font-bold"
+              disabled={hasOptions}
               aria-label="Add to cart"
+              className="flex items-center justify-center gap-1.5 h-10 rounded-full bg-muted/40 text-foreground text-[12px] font-bold border border-[var(--glass-border)] hover:bg-muted/70 transition disabled:opacity-60"
             >
               <ShoppingCart className="w-3.5 h-3.5" />
-              Add to Cart
+              Cart
             </button>
-          )}
-          <a
-            href={waAskUrl(product.name, { number: shopConfig?.whatsapp_number })}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            aria-label="Order via WhatsApp"
-            title="Order via WhatsApp"
-            className="grid place-items-center w-10 h-10 shrink-0 rounded-full bg-[#25D366] text-white shadow-sm hover:scale-105 active:scale-95 transition"
-          >
-            <MessageCircle className="w-4 h-4" />
-          </a>
+          </div>
         </div>
       </div>
     </Link>
