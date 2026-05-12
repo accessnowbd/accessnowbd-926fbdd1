@@ -495,7 +495,7 @@ function Overview({ stats, orders, greetingName, onNavigate }: { stats: { total:
         <Stat icon={<Download className="w-5 h-5" />} label="Downloads" value="12" accent="from-pink-400/30 to-pink-400/5" />
         <Stat icon={<Trophy className="w-5 h-5" />} label="Reward Points" value="850" accent="from-fuchsia-400/30 to-fuchsia-400/5" />
         <Stat icon={<Users className="w-5 h-5" />} label="Affiliate" value="৳420" accent="from-violet-400/30 to-violet-400/5" />
-        <Stat icon={<Smartphone className="w-5 h-5" />} label="Sessions" value="3" accent="from-sky-400/30 to-sky-400/5" />
+        <Stat icon={<Smartphone className="w-5 h-5" />} label="Sessions" value="3" accent="from-violet-400/30 to-violet-400/5" />
         <Stat icon={<LifeBuoy className="w-5 h-5" />} label="Open Tickets" value="0" accent="from-pink-400/30 to-pink-400/5" />
       </section>
 
@@ -1005,7 +1005,7 @@ function SubscriptionPlans() {
             <div className="mt-2 text-xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>{pl.n}</div>
             <div className="mt-2 text-3xl font-bold text-primary">{pl.p}</div>
             <ul className="mt-4 space-y-2 text-sm">
-              {pl.f.map((x) => <li key={x} className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" />{x}</li>)}
+              {pl.f.map((x) => <li key={x} className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-300" />{x}</li>)}
             </ul>
             <Btn variant={pl.hi ? "primary" : "ghost"} className="w-full mt-5">{pl.n === "Starter" ? "Current" : "Upgrade"}</Btn>
           </Card>
@@ -1096,7 +1096,7 @@ function Transactions() {
                 <tr key={t.id} className="border-b border-[var(--glass-border)]/50 hover:bg-white/5">
                   <td className="py-3 px-2 font-mono">{t.id}</td>
                   <td className="py-3 px-2">{t.m}</td>
-                  <td className={`py-3 px-2 font-bold ${t.a.startsWith("+") ? "text-emerald-400" : "text-red-300"}`}>{t.a}</td>
+                  <td className={`py-3 px-2 font-bold ${t.a.startsWith("+") ? "text-cyan-300" : "text-red-300"}`}>{t.a}</td>
                   <td className="py-3 px-2"><Badge color={t.s === "success" ? "success" : "warn"}>{t.s}</Badge></td>
                   <td className="py-3 px-2 text-muted-foreground">{t.d}</td>
                 </tr>
