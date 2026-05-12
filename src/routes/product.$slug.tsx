@@ -32,11 +32,7 @@ function ProductPage() {
   const [selected, setSelected] = useState(0);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen grid place-items-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
+    return <ProductSkeleton />;
   }
   if (!product) {
     return (
@@ -234,6 +230,94 @@ function ProductPage() {
       <footer className="border-t border-[var(--glass-border-soft)] py-6 text-center text-xs text-muted-foreground">
         © 2026 AccessNow BD. All rights reserved.
       </footer>
+    </div>
+  );
+}
+
+function Shimmer({ className = "" }: { className?: string }) {
+  return (
+    <div
+      className={`relative overflow-hidden bg-muted/60 rounded-xl ${className}`}
+    >
+      <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.4s_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+    </div>
+  );
+}
+
+function ProductSkeleton() {
+  return (
+    <div className="min-h-screen animate-fade-in">
+      <style>{`@keyframes shimmer { 100% { transform: translateX(100%); } }`}</style>
+
+      {/* Top nav placeholder */}
+      <header className="bg-aurora text-primary-foreground relative overflow-hidden">
+        <div className="absolute inset-0 bg-mesh opacity-40 pointer-events-none" />
+        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-full bg-white/30" />
+            <div className="h-4 w-32 rounded bg-white/30" />
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-full bg-white/30" />
+            <div className="w-9 h-9 rounded-full bg-white/30" />
+          </div>
+        </div>
+      </header>
+
+      {/* Breadcrumb */}
+      <div className="mx-auto max-w-[1440px] px-4 md:px-10 pt-6">
+        <Shimmer className="h-4 w-64" />
+      </div>
+
+      {/* Hero */}
+      <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8 grid md:grid-cols-2 gap-10">
+        <Shimmer className="aspect-square rounded-3xl" />
+        <div className="space-y-4">
+          <Shimmer className="h-6 w-24 rounded-full" />
+          <Shimmer className="h-10 w-3/4" />
+          <Shimmer className="h-4 w-full" />
+          <Shimmer className="h-4 w-5/6" />
+          <div className="flex items-center gap-3 pt-2">
+            <Shimmer className="h-4 w-28" />
+            <Shimmer className="h-4 w-20" />
+          </div>
+          <Shimmer className="h-20 w-full" />
+
+          <div className="pt-4">
+            <Shimmer className="h-4 w-32 mb-3" />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <Shimmer className="h-24" />
+              <Shimmer className="h-24" />
+              <Shimmer className="h-24" />
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <Shimmer className="h-12 w-40 rounded-full" />
+            <Shimmer className="h-12 w-40 rounded-full" />
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 pt-4">
+            <Shimmer className="h-16" />
+            <Shimmer className="h-16" />
+            <Shimmer className="h-16" />
+          </div>
+        </div>
+      </section>
+
+      {/* Related */}
+      <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8">
+        <Shimmer className="h-6 w-48 mb-5" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="space-y-3">
+              <Shimmer className="aspect-[4/3]" />
+              <Shimmer className="h-4 w-3/4" />
+              <Shimmer className="h-4 w-1/2" />
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
