@@ -15,15 +15,15 @@ export const Route = createFileRoute("/admin")({
 
 const ADMIN_CACHE_KEY = "anbd:isAdmin";
 
-function readAdminCache(userId: string | undefined): boolean | null {
-  if (!userId) return null;
+type AdminCache = { uid: string; isAdmin: boolean };
+
+function readAdminCacheAny(): AdminCache | null {
   try {
     const store = typeof localStorage !== "undefined" ? localStorage : null;
     if (!store) return null;
     const raw = store.getItem(ADMIN_CACHE_KEY);
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as { uid: string; isAdmin: boolean };
-    return parsed.uid === userId ? parsed.isAdmin : null;
+    return JSON.parse(raw) as AdminCache;
   } catch { return null; }
 }
 function writeAdminCache(userId: string, isAdmin: boolean) {
@@ -75,10 +75,10 @@ function AdminBootSplash() {
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const cached = readAdminCache(user?.id);
-  // Optimistic: if cache says admin, render shell instantly. Verify silently in background.
-  const [isAdmin, setIsAdmin] = useState<boolean>(cached ?? false);
-  const [verified, setVerified] = useState<boolean>(cached !== null);
+  // Read cache eagerly (any uid). If it says admin, render shell instantly while auth resolves.
+  const cached = useMemo(() => readAdminCacheAny(), []);
+  const [isAdmin, setIsAdmin] = useState<boolean>(cached?.isAdmin === true);
+  const [verified, setVerified] = useState<boolean>(false);
 
   useEffect(() => {
     if (loading) return;
@@ -96,10 +96,11 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate]);
 
-  // Only block on first-ever visit (no cache and not yet verified).
-  if ((loading || !verified) && cached === null) {
+  // Only block when we have NO optimistic admin signal at all.
+  if (!isAdmin && (loading || !verified)) {
     return <AdminBootSplash />;
   }
+
 
   if (verified && !isAdmin) {
     return (
