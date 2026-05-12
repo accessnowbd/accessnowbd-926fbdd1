@@ -126,6 +126,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
+          {!isAdmin && <SiteHeader />}
           <Outlet />
           {!isAdmin && <SupportWidget />}
         </CartProvider>
