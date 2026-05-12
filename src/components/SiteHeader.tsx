@@ -456,22 +456,22 @@ export function SiteHeader() {
                   </button>
                 </>
               ) : (
-                <>
+                <div className="w-full inline-flex items-center p-1 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md">
                   <Link
                     to="/login"
                     onClick={() => setOpen(false)}
-                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
+                    className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-full text-white text-sm font-semibold hover:bg-white/[0.08] transition"
                   >
                     <LogIn className="w-4 h-4" /> Sign In
                   </Link>
                   <Link
                     to="/register"
                     onClick={() => setOpen(false)}
-                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full glass-soft border border-white/15 text-white text-sm font-semibold hover:border-aqua/40 transition"
+                    className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
                   >
-                    Create Account
+                    Register
                   </Link>
-                </>
+                </div>
               )}
             </div>
           </div>
