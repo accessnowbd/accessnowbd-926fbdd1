@@ -4,6 +4,8 @@ import {
   Plus, Pencil, Trash2, ArrowUp, ArrowDown, Loader2, Save, X, Eye, EyeOff,
   Sparkles, FileText, Database, Download, Upload, Search, Copy, Package,
   CheckCircle2, AlertCircle, Clock, Filter, Wand2, ImageIcon, Zap, RefreshCw,
+  Tag, Settings, Search as SearchIcon, ListChecks, HelpCircle, Star,
+  Truck, Shield, Layers, Hash, Link2, ChevronDown,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -14,6 +16,42 @@ export const Route = createFileRoute("/admin/products")({
 
 type Plan = { label: string; price: number; original_price?: number; duration?: string; note?: string };
 type StockStatus = "in_stock" | "out_of_stock" | "preorder";
+
+type ProductType = "digital" | "license" | "account" | "subscription" | "service" | "physical";
+type AccountType = "none" | "personal" | "shared" | "family" | "student" | "business";
+type DeliveryType = "instant" | "manual" | "24h";
+type AiCardStyle = "dark-neon" | "light-glass" | "clean-light" | "soft-aurora" | "glass-gradient" | "glassmorphism";
+type CustomField = { label: string; type: "text" | "email" | "password" | "number"; required: boolean };
+type FaqItem = { q: string; a: string };
+
+type ProductMeta = {
+  product_type?: ProductType;
+  account_type?: AccountType;
+  brand?: string;
+  subcategory?: string;
+  additional_categories?: string[];
+  status?: "draft" | "published";
+  tags?: string[];
+  flags?: { featured?: boolean; digital?: boolean; flash_sale?: boolean; require_email?: boolean };
+  sku?: string;
+  stock_qty?: number | null;
+  selling_price?: number;
+  original_price?: number;
+  cost_price?: number;
+  discount_percent?: number;
+  gallery?: string[];
+  video_url?: string;
+  ai_card_style?: AiCardStyle;
+  delivery_type?: DeliveryType;
+  download_link?: string;
+  refund_policy?: string;
+  what_you_get?: string[];
+  faq?: FaqItem[];
+  custom_fields?: CustomField[];
+  seo_title?: string;
+  meta_description?: string;
+};
+
 type Product = {
   slug: string;
   name: string;
@@ -33,15 +71,25 @@ type Product = {
   views: number;
   sort_order: number;
   image_url: string;
+  meta?: ProductMeta;
 };
 
 const empty: Product = {
   slug: "", name: "", emoji: "📦", gradient: "from-primary to-primary",
-  category: "OTT & Streaming", badge: null, tagline: "", description: "",
+  category: "", badge: null, tagline: "", description: "",
   short_description: "",
-  delivery_time: "Within 30 mins", warranty: "Full warranty",
+  delivery_time: "Instant / 24 hours", warranty: "",
   features: [], plans: [{ label: "1 Month", price: 0, duration: "1 month" }],
   is_active: true, stock_status: "in_stock", views: 0, sort_order: 0, image_url: "",
+  meta: {
+    product_type: "digital",
+    account_type: "none",
+    status: "published",
+    flags: { featured: false, digital: true, flash_sale: false, require_email: false },
+    delivery_type: "instant",
+    ai_card_style: "glassmorphism",
+    stock_qty: null,
+  },
 };
 
 const STOCK_LABELS: Record<StockStatus, { label: string; bn: string; cls: string; icon: typeof CheckCircle2 }> = {
@@ -512,17 +560,72 @@ const slugify = (s: string) =>
     .slice(0, 80);
 
 type AiBusy = "" | "all" | "short" | "rich" | "image-gen" | "image-up";
+type TabId = "general" | "inventory" | "media" | "details" | "seo";
+
+const TABS: { id: TabId; label: string; icon: string }[] = [
+  { id: "general",   label: "General",   icon: "🍂" },
+  { id: "inventory", label: "Inventory", icon: "🍯" },
+  { id: "media",     label: "Media",     icon: "🖼️" },
+  { id: "details",   label: "Details",   icon: "📋" },
+  { id: "seo",       label: "SEO",       icon: "🔍" },
+];
+
+const PRODUCT_TYPES: { id: ProductType; label: string; icon: string }[] = [
+  { id: "digital",      label: "Digital Download", icon: "💾" },
+  { id: "license",      label: "License Key",      icon: "🔑" },
+  { id: "account",      label: "Account Delivery", icon: "👤" },
+  { id: "subscription", label: "Subscription",     icon: "🔁" },
+  { id: "service",      label: "Service",          icon: "🛎️" },
+  { id: "physical",     label: "Physical Product", icon: "📦" },
+];
+
+const ACCOUNT_TYPES: { id: AccountType; label: string; icon: string }[] = [
+  { id: "none",     label: "— নেই —", icon: "" },
+  { id: "personal", label: "Personal", icon: "👤" },
+  { id: "shared",   label: "Shared",   icon: "👥" },
+  { id: "family",   label: "Family",   icon: "👪" },
+  { id: "student",  label: "Student",  icon: "🎓" },
+  { id: "business", label: "Business", icon: "🛍️" },
+];
+
+const DURATION_CHIPS = [
+  "1 মাস", "2 মাস", "3 মাস", "4 মাস", "5 মাস", "6 মাস",
+  "7 মাস", "8 মাস", "9 মাস", "10 মাস", "11 মাস", "12 মাস",
+  "1 বছর", "2 বছর", "3 বছর", "Lifetime", "Custom",
+];
+
+const AI_CARD_STYLES: { id: AiCardStyle; label: string; sub: string; icon: string; tint: string }[] = [
+  { id: "dark-neon",    label: "Dark Neon",      sub: "গাঢ় ব্যাকগ্রাউন্ড, নিয়ন গ্লোয়িং বর্ডার",       icon: "🌙", tint: "from-slate-900 to-slate-700" },
+  { id: "light-glass",  label: "Light Glass",    sub: "পাস্টেল গ্রেডিয়েন্ট, ফ্রস্টেড গ্লাস",          icon: "🌸", tint: "from-pink-200 to-rose-100" },
+  { id: "clean-light",  label: "Clean Light",    sub: "ক্লিন হোয়াইট, বোকে এফেক্ট",                 icon: "💎", tint: "from-cyan-100 to-sky-50" },
+  { id: "soft-aurora",  label: "Soft Aurora",    sub: "সফট অরোরা গ্রেডিয়েন্ট, লাইট প্রিমিয়াম",     icon: "🌈", tint: "from-emerald-200 to-violet-200" },
+  { id: "glass-gradient", label: "Glass Gradient", sub: "গ্লাসমরফিজম গ্রেডিয়েন্ট বর্ডার",            icon: "✨", tint: "from-indigo-100 to-blue-100" },
+  { id: "glassmorphism", label: "Glassmorphism UI", sub: "প্রিমিয়াম গ্লাস প্লাস, অ্যাকসেন্ট",         icon: "🪟", tint: "from-blue-100 to-indigo-100" },
+];
 
 function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product; isNew: boolean; onClose: () => void; onSaved: () => void }) {
-  const [form, setForm] = useState<Product>(product);
+  const initial: Product = { ...product, meta: { ...empty.meta, ...(product.meta ?? {}) } };
+  const [form, setForm] = useState<Product>(initial);
+  const [tab, setTab] = useState<TabId>("general");
   const [busy, setBusy] = useState(false);
-  const [featuresText, setFeaturesText] = useState((product.features ?? []).join("\n"));
+  const [featuresList, setFeaturesList] = useState<string[]>(product.features?.length ? product.features : [""]);
+  const [tagsText, setTagsText] = useState((product.meta?.tags ?? []).join(", "));
+  const [addCatsText, setAddCatsText] = useState((product.meta?.additional_categories ?? []).join(", "));
+  const [whatYouGet, setWhatYouGet] = useState<string[]>(product.meta?.what_you_get?.length ? product.meta.what_you_get : [""]);
+  const [faq, setFaq] = useState<FaqItem[]>(product.meta?.faq ?? []);
+  const [customFields, setCustomFields] = useState<CustomField[]>(product.meta?.custom_fields ?? []);
+  const [gallery, setGallery] = useState<string[]>(product.meta?.gallery ?? []);
   const [ai, setAi] = useState<AiBusy>("");
   const [imagePrompt, setImagePrompt] = useState("");
-  const [autoSlug, setAutoSlug] = useState(isNew); // auto-derive slug from name while creating
+  const [autoSlug, setAutoSlug] = useState(isNew);
   const fileRef = useRef<HTMLInputElement>(null);
+  const galleryRef = useRef<HTMLInputElement>(null);
+  const aiBusy = ai !== "";
 
   const set = <K extends keyof Product>(k: K, v: Product[K]) => setForm((f) => ({ ...f, [k]: v }));
+  const setMeta = <K extends keyof ProductMeta>(k: K, v: ProductMeta[K]) =>
+    setForm((f) => ({ ...f, meta: { ...(f.meta ?? {}), [k]: v } }));
+  const meta = form.meta ?? {};
 
   // Auto slug from name
   useEffect(() => {
@@ -530,43 +633,47 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.name, autoSlug]);
 
-  const setPlan = (i: number, patch: Partial<Plan>) => {
-    setForm((f) => ({ ...f, plans: f.plans.map((p, idx) => idx === i ? { ...p, ...patch } : p) }));
-  };
-  const addPlan = () => setForm((f) => ({ ...f, plans: [...f.plans, { label: "New plan", price: 0, duration: "" }] }));
-  const removePlan = (i: number) => setForm((f) => ({ ...f, plans: f.plans.filter((_, idx) => idx !== i) }));
-  const movePlan = (i: number, dir: -1 | 1) => {
-    const j = i + dir;
-    setForm((f) => {
-      if (j < 0 || j >= f.plans.length) return f;
-      const next = [...f.plans];
-      [next[i], next[j]] = [next[j], next[i]];
-      return { ...f, plans: next };
-    });
-  };
+  // Auto discount % from selling/original
+  useEffect(() => {
+    const sp = Number(meta.selling_price ?? 0);
+    const op = Number(meta.original_price ?? 0);
+    if (op > 0 && sp > 0 && sp < op) {
+      const pct = Math.round(((op - sp) / op) * 100);
+      if (meta.discount_percent !== pct) setMeta("discount_percent", pct);
+    } else if (meta.discount_percent !== 0) {
+      setMeta("discount_percent", 0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [meta.selling_price, meta.original_price]);
 
-  /* ======== AI helpers ======== */
+  /* ---------- plans (packages) ---------- */
+  const setPlan = (i: number, patch: Partial<Plan>) =>
+    setForm((f) => ({ ...f, plans: f.plans.map((p, idx) => (idx === i ? { ...p, ...patch } : p)) }));
+  const addPlan = () =>
+    setForm((f) => ({ ...f, plans: [...f.plans, { label: `Package ${f.plans.length + 1}`, price: 0, duration: "" }] }));
+  const removePlan = (i: number) => setForm((f) => ({ ...f, plans: f.plans.filter((_, idx) => idx !== i) }));
+
+  /* ---------- AI ---------- */
   const callAi = async (mode: "short" | "rich" | "all") => {
-    if (!form.name.trim()) { toast.error("আগে Name লিখুন"); return; }
+    if (!form.name.trim()) { toast.error("আগে Product Title লিখুন"); return; }
     setAi(mode);
     try {
       const { data, error } = await supabase.functions.invoke("product-ai", {
-        body: { mode, product: { name: form.name, category: form.category, tagline: form.tagline, description: form.description, features: featuresText.split("\n").filter(Boolean) } },
+        body: { mode, product: { name: form.name, category: form.category, tagline: form.tagline, description: form.description, features: featuresList.filter(Boolean) } },
       });
       if (error) throw error;
       const d = data as Record<string, unknown> & { error?: string };
       if (d?.error) throw new Error(d.error);
-
       setForm((f) => {
         const next = { ...f };
         if (typeof d.tagline === "string") next.tagline = d.tagline;
         if (typeof d.short_description === "string") next.short_description = d.short_description;
         if (typeof d.description === "string") next.description = d.description;
+        if (typeof d.seo_title === "string") next.meta = { ...(next.meta ?? {}), seo_title: d.seo_title };
+        if (typeof d.meta_description === "string") next.meta = { ...(next.meta ?? {}), meta_description: d.meta_description };
         return next;
       });
-      if (Array.isArray(d.features)) {
-        setFeaturesText((d.features as string[]).join("\n"));
-      }
+      if (Array.isArray(d.features)) setFeaturesList(d.features as string[]);
       toast.success("AI কপি তৈরি হয়েছে ✨");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "AI generation failed");
@@ -575,24 +682,50 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
     }
   };
 
-  /* ======== Image: AI generate (saves data URL → uploads to Storage) ======== */
+  /* ---------- Image upload ---------- */
+  const uploadOne = async (file: File): Promise<string> => {
+    if (file.size > 8 * 1024 * 1024) throw new Error("ফাইল 8MB-এর কম হতে হবে");
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `products/${slugify(form.name) || "untitled"}-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("admin-uploads").upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type || undefined });
+    if (error) throw error;
+    const { data } = supabase.storage.from("admin-uploads").getPublicUrl(path);
+    return data.publicUrl;
+  };
+  const onPickFile = async (file: File | undefined) => {
+    if (!file) return;
+    setAi("image-up");
+    try { set("image_url", await uploadOne(file)); toast.success("ইমেজ আপলোড হয়েছে ✓"); }
+    catch (e) { toast.error(e instanceof Error ? e.message : "Upload failed"); }
+    finally { setAi(""); }
+  };
+  const onPickGallery = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setAi("image-up");
+    try {
+      const urls: string[] = [];
+      for (const f of Array.from(files)) urls.push(await uploadOne(f));
+      const next = [...gallery, ...urls];
+      setGallery(next); setMeta("gallery", next);
+      toast.success(`${urls.length}টি ইমেজ যোগ হয়েছে`);
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Upload failed"); }
+    finally { setAi(""); }
+  };
+
   const generateImage = async () => {
-    if (!form.name.trim()) { toast.error("আগে Name লিখুন"); return; }
+    if (!form.name.trim()) { toast.error("আগে Product Title লিখুন"); return; }
     setAi("image-gen");
     try {
       const { data, error } = await supabase.functions.invoke("product-ai", {
-        body: { mode: "image", product: { name: form.name, category: form.category }, imagePrompt },
+        body: { mode: "image", product: { name: form.name, category: form.category }, imagePrompt, style: meta.ai_card_style },
       });
       if (error) throw error;
       const d = data as { image?: string; error?: string };
       if (d?.error) throw new Error(d.error);
       if (!d.image) throw new Error("No image returned");
-
-      // Convert data URL → Blob → upload
       const blob = await (await fetch(d.image)).blob();
       const file = new File([blob], `${slugify(form.name) || "product"}-ai-${Date.now()}.png`, { type: blob.type || "image/png" });
-      const url = await uploadProductImage(file);
-      set("image_url", url);
+      set("image_url", await uploadOne(file));
       toast.success("AI ইমেজ তৈরি হয়েছে 🎨");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Image generation failed");
@@ -601,40 +734,24 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
     }
   };
 
-  /* ======== Image: file upload ======== */
-  const uploadProductImage = async (file: File): Promise<string> => {
-    if (file.size > 8 * 1024 * 1024) throw new Error("ফাইল 8MB-এর কম হতে হবে");
-    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-    const path = `products/${slugify(form.name) || "untitled"}-${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("admin-uploads").upload(path, file, {
-      cacheControl: "3600",
-      upsert: false,
-      contentType: file.type || undefined,
-    });
-    if (error) throw error;
-    const { data } = supabase.storage.from("admin-uploads").getPublicUrl(path);
-    return data.publicUrl;
-  };
-
-  const onPickFile = async (file: File | undefined) => {
-    if (!file) return;
-    setAi("image-up");
-    try {
-      const url = await uploadProductImage(file);
-      set("image_url", url);
-      toast.success("ইমেজ আপলোড হয়েছে ✓");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Upload failed");
-    } finally {
-      setAi("");
-    }
-  };
-
+  /* ---------- save ---------- */
   const save = async () => {
-    if (!form.slug.trim() || !form.name.trim()) return toast.error("Slug and name are required");
+    if (!form.slug.trim() || !form.name.trim()) return toast.error("Title and slug are required");
     setBusy(true);
-    const features = featuresText.split("\n").map((s) => s.trim()).filter(Boolean);
-    const payload = { ...form, features, plans: form.plans };
+    const features = featuresList.map((s) => s.trim()).filter(Boolean);
+    const tags = tagsText.split(",").map((s) => s.trim()).filter(Boolean);
+    const additional_categories = addCatsText.split(",").map((s) => s.trim()).filter(Boolean);
+    const what_you_get = whatYouGet.map((s) => s.trim()).filter(Boolean);
+    const payload = {
+      ...form,
+      features,
+      meta: {
+        ...(form.meta ?? {}),
+        tags, additional_categories, what_you_get,
+        faq, custom_fields: customFields, gallery,
+      },
+      is_active: (form.meta?.status ?? "published") === "published" ? form.is_active : false,
+    };
     const op = isNew
       ? supabase.from("products").insert(payload as never)
       : supabase.from("products").update(payload as never).eq("slug", form.slug);
@@ -645,265 +762,595 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
     onSaved();
   };
 
-  const aiBusy = ai !== "";
-
+  /* ============================================================ RENDER */
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm grid place-items-start md:place-items-center p-2 md:p-4 overflow-y-auto" onClick={onClose}>
-      <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[95vh] overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[95vh] flex flex-col shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 px-5 md:px-6 py-3 flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-violet-600">{isNew ? "New product" : "Edit product"}</div>
-            <h2 className="font-bold text-base md:text-lg truncate" style={{ fontFamily: "var(--font-display)" }}>
-              {isNew ? "নতুন পণ্য তৈরি করুন" : product.name}
-            </h2>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => callAi("all")}
-              disabled={aiBusy}
-              className="hidden sm:inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full text-white text-xs font-bold shadow-sm disabled:opacity-50"
-              style={{ background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)" }}
-              title="Generate everything with AI"
-            >
-              {ai === "all" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />}
-              AI Auto-fill
-            </button>
-            <button onClick={onClose} className="w-9 h-9 grid place-items-center rounded-lg hover:bg-slate-100"><X className="w-4 h-4" /></button>
+        <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
+          <h2 className="font-bold text-xl text-slate-900">{isNew ? "New Product" : "Edit Product"}</h2>
+          <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100 text-slate-500"><X className="w-5 h-5" /></button>
+        </div>
+
+        {/* Tabs */}
+        <div className="px-6 pt-3 border-b border-slate-100">
+          <div className="flex items-center gap-1 overflow-x-auto -mb-px">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 h-10 rounded-t-lg text-sm font-semibold border-b-2 transition ${
+                  tab === t.id
+                    ? "text-violet-600 border-violet-500 bg-violet-50/60"
+                    : "text-slate-500 border-transparent hover:text-slate-700"
+                }`}
+              >
+                <span>{t.icon}</span> {t.label}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* AI Auto-fill banner (mobile) */}
-        <div className="sm:hidden px-5 py-3 border-b border-slate-100">
-          <button
-            onClick={() => callAi("all")}
-            disabled={aiBusy}
-            className="w-full inline-flex items-center justify-center gap-1.5 h-10 rounded-full text-white text-xs font-bold disabled:opacity-50"
-            style={{ background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)" }}
-          >
-            {ai === "all" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />}
-            AI দিয়ে সব ফিল করুন
-          </button>
-        </div>
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+          {tab === "general" && (
+            <>
+              {/* Product type */}
+              <div>
+                <Label>Product Type *</Label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {PRODUCT_TYPES.map((t) => (
+                    <ChipBig key={t.id} active={meta.product_type === t.id} onClick={() => setMeta("product_type", t.id)}>
+                      <span>{t.icon}</span> {t.label}
+                    </ChipBig>
+                  ))}
+                </div>
+              </div>
 
-        <div className="p-5 md:p-6 grid lg:grid-cols-[1fr_320px] gap-6">
-          {/* ===== LEFT: main content ===== */}
-          <div className="space-y-5 min-w-0">
-            {/* Title block */}
-            <div className="bg-slate-50/60 border border-slate-200 rounded-xl p-4">
-              <Field label="Product name *" value={form.name} onChange={(v) => set("name", v)} placeholder="Netflix Premium Subscription" big />
-              <div className="mt-3 flex items-center gap-2 text-xs text-slate-500">
-                <LinkIconLocal />
-                <span className="font-mono">/product/</span>
-                {autoSlug ? (
-                  <span className="font-mono font-semibold text-slate-700">{form.slug || "—"}</span>
-                ) : (
+              {/* Title */}
+              <div>
+                <Label>Product Title *</Label>
+                <input
+                  value={form.name}
+                  onChange={(e) => set("name", e.target.value)}
+                  placeholder="e.g. Windows 11 Pro License Key"
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100"
+                />
+              </div>
+
+              {/* Subtitle */}
+              <div>
+                <Label>📝 Subtitle / Custom Tagline <span className="text-slate-400 font-normal">(ঐচ্ছিক)</span></Label>
+                <input
+                  value={form.tagline}
+                  onChange={(e) => set("tagline", e.target.value)}
+                  placeholder="যেমন: Best quality guaranteed, Instant delivery..."
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400"
+                />
+                <p className="text-[11px] text-slate-500 mt-1">প্রোডাক্ট টাইটেলের নিচে এই ছোট টেক্সটটি দেখাবে</p>
+              </div>
+
+              {/* Account type */}
+              <div>
+                <Label>👤 অ্যাকাউন্ট টাইপ <span className="text-slate-400 font-normal">(প্রযোজ্য হলে)</span></Label>
+                <div className="flex flex-wrap gap-2">
+                  {ACCOUNT_TYPES.map((t) => (
+                    <ChipBig key={t.id} active={(meta.account_type ?? "none") === t.id} onClick={() => setMeta("account_type", t.id)}>
+                      {t.icon && <span>{t.icon}</span>} {t.label}
+                    </ChipBig>
+                  ))}
+                </div>
+              </div>
+
+              {/* Slug + Brand */}
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <Label>Slug (URL) *</Label>
+                    {isNew && (
+                      <button onClick={() => setAutoSlug((v) => !v)} className="text-[11px] text-violet-600 font-bold hover:underline">
+                        ⟳ নাম থেকে রিজেনারেট
+                      </button>
+                    )}
+                  </div>
                   <input
                     value={form.slug}
-                    onChange={(e) => set("slug", slugify(e.target.value))}
+                    onChange={(e) => { setAutoSlug(false); set("slug", slugify(e.target.value)); }}
+                    placeholder="product-name-here"
                     disabled={!isNew}
-                    className="font-mono font-semibold text-slate-700 bg-white border border-slate-200 rounded px-2 py-0.5 outline-none focus:border-violet-400 disabled:bg-slate-100"
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm font-mono outline-none focus:border-violet-400 disabled:bg-slate-50 disabled:text-slate-500"
                   />
-                )}
-                {isNew && (
-                  <button onClick={() => setAutoSlug((v) => !v)} className="text-violet-600 font-semibold hover:underline">
-                    {autoSlug ? "Edit" : "Auto"}
-                  </button>
-                )}
+                </div>
+                <div>
+                  <Label>Brand / Publisher</Label>
+                  <input
+                    value={meta.brand ?? ""}
+                    onChange={(e) => setMeta("brand", e.target.value)}
+                    placeholder="e.g. Microsoft, Adobe"
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400"
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Tagline + Short description with AI button */}
-            <SectionCard
-              title="Short copy"
-              right={
-                <AiBtn busy={ai === "short"} onClick={() => callAi("short")}>
-                  AI Short
-                </AiBtn>
-              }
-            >
-              <Field label="Tagline" value={form.tagline} onChange={(v) => set("tagline", v)} placeholder="Premium streaming, instant delivery" />
-              <TextArea label="Short description" value={form.short_description} onChange={(v) => set("short_description", v)} rows={2} />
-            </SectionCard>
-
-            {/* Full description */}
-            <SectionCard
-              title="Full description"
-              right={
-                <AiBtn busy={ai === "rich"} onClick={() => callAi("rich")}>
-                  AI Rich Desc + SEO
-                </AiBtn>
-              }
-            >
-              <TextArea value={form.description} onChange={(v) => set("description", v)} rows={8} placeholder="Write or generate with AI…" />
-            </SectionCard>
-
-            {/* Features */}
-            <SectionCard title="Features (one per line)">
-              <TextArea value={featuresText} onChange={setFeaturesText} rows={5} placeholder={"Instant access\n4K Ultra HD\n4 device support"} />
-            </SectionCard>
-
-            {/* Plans */}
-            <SectionCard
-              title="Pricing plans"
-              right={
-                <button onClick={addPlan} className="text-xs h-8 px-3 inline-flex items-center gap-1 rounded-full bg-slate-900 text-white">
-                  <Plus className="w-3.5 h-3.5" /> Add plan
-                </button>
-              }
-            >
-              <div className="space-y-2">
-                {form.plans.map((p, i) => (
-                  <div key={i} className="border border-slate-200 rounded-xl p-3 grid grid-cols-12 gap-2 items-center bg-white">
-                    <input className="col-span-12 sm:col-span-3 h-9 px-3 rounded-md border border-slate-200 text-sm" placeholder="Label" value={p.label} onChange={(e) => setPlan(i, { label: e.target.value })} />
-                    <input className="col-span-6 sm:col-span-2 h-9 px-3 rounded-md border border-slate-200 text-sm" type="number" placeholder="Price" value={p.price} onChange={(e) => setPlan(i, { price: Number(e.target.value) })} />
-                    <input className="col-span-6 sm:col-span-2 h-9 px-3 rounded-md border border-slate-200 text-sm" type="number" placeholder="MRP" value={p.original_price ?? ""} onChange={(e) => setPlan(i, { original_price: e.target.value ? Number(e.target.value) : undefined })} />
-                    <input className="col-span-6 sm:col-span-2 h-9 px-3 rounded-md border border-slate-200 text-sm" placeholder="Duration" value={p.duration ?? ""} onChange={(e) => setPlan(i, { duration: e.target.value })} />
-                    <input className="col-span-6 sm:col-span-2 h-9 px-3 rounded-md border border-slate-200 text-sm" placeholder="Note" value={p.note ?? ""} onChange={(e) => setPlan(i, { note: e.target.value })} />
-                    <div className="col-span-12 sm:col-span-1 flex items-center justify-end gap-1">
-                      <IconBtn title="Up" onClick={() => movePlan(i, -1)} disabled={i === 0}><ArrowUp className="w-3.5 h-3.5" /></IconBtn>
-                      <IconBtn title="Down" onClick={() => movePlan(i, 1)} disabled={i === form.plans.length - 1}><ArrowDown className="w-3.5 h-3.5" /></IconBtn>
-                      <IconBtn title="Remove" onClick={() => removePlan(i)} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
+              {/* Bullet points */}
+              <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/40">
+                <div className="flex items-center justify-between mb-3">
+                  <Label className="!mb-0">📝 প্রোডাক্ট বিবরণ (বুলেট পয়েন্ট) <span className="text-slate-400 font-normal">(টাইটেলের নিচে দেখাবে)</span></Label>
+                  <div className="flex items-center gap-2">
+                    <AiBtnSm busy={ai === "short"} onClick={() => callAi("short")}>AI</AiBtnSm>
+                    <button onClick={() => setFeaturesList((l) => [...l, ""])} className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-violet-100 text-violet-700 text-xs font-bold hover:bg-violet-200">
+                      <Plus className="w-3 h-3" /> যোগ করুন
+                    </button>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  {featuresList.map((f, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <span className="w-6 h-6 grid place-items-center rounded-full bg-violet-500 text-white text-[10px] shrink-0">●</span>
+                      <input
+                        value={f}
+                        onChange={(e) => setFeaturesList((l) => l.map((x, idx) => (idx === i ? e.target.value : x)))}
+                        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setFeaturesList((l) => [...l, ""]); } }}
+                        placeholder={`বুলেট পয়েন্ট ${i + 1} লিখুন...`}
+                        className="flex-1 h-10 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400 bg-white"
+                      />
+                      {featuresList.length > 1 && (
+                        <button onClick={() => setFeaturesList((l) => l.filter((_, idx) => idx !== i))} className="w-8 h-8 grid place-items-center rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50">
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <p className="text-[11px] text-slate-500 mt-2">💡 Enter চাপলে নতুন বুলেট যোগ হবে। প্রোডাক্ট পেজে বুলেট লিস্ট হিসেবে দেখাবে।</p>
               </div>
-            </SectionCard>
-          </div>
 
-          {/* ===== RIGHT: sidebar ===== */}
-          <div className="space-y-5">
-            {/* Featured image */}
-            <SectionCard
-              title="Featured image"
-              right={<span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Upload or AI</span>}
-            >
-              <div
-                className="relative aspect-square w-full rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 grid place-items-center overflow-hidden cursor-pointer hover:border-violet-300 transition"
-                onClick={() => fileRef.current?.click()}
-                onDragOver={(e) => { e.preventDefault(); }}
-                onDrop={(e) => { e.preventDefault(); onPickFile(e.dataTransfer.files?.[0]); }}
-              >
-                {form.image_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={form.image_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
-                ) : (
-                  <div className="text-center text-slate-400 px-4">
-                    <ImageIcon className="w-7 h-7 mx-auto mb-1.5" />
-                    <div className="text-xs font-semibold">Click or drop image</div>
-                    <div className="text-[10px] mt-0.5">PNG · JPG · WebP · max 8MB</div>
-                  </div>
-                )}
-                {ai === "image-up" && (
-                  <div className="absolute inset-0 bg-black/40 grid place-items-center text-white">
-                    <Loader2 className="w-6 h-6 animate-spin" />
-                  </div>
-                )}
-              </div>
-              <input
-                ref={fileRef} type="file" accept="image/*" className="hidden"
-                onChange={(e) => { onPickFile(e.target.files?.[0]); e.target.value = ""; }}
-              />
-              <div className="mt-3 flex flex-col gap-2">
-                <input
-                  value={form.image_url}
-                  onChange={(e) => set("image_url", e.target.value)}
-                  placeholder="Or paste image URL…"
-                  className="h-9 px-3 rounded-md border border-slate-200 text-xs outline-none focus:border-violet-400"
+              {/* Full description */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <Label className="!mb-0">Full Description</Label>
+                  <AiBtnSm busy={ai === "rich"} onClick={() => callAi("rich")}>AI Generate</AiBtnSm>
+                </div>
+                <textarea
+                  value={form.description}
+                  onChange={(e) => set("description", e.target.value)}
+                  rows={5}
+                  placeholder="Detailed product description..."
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100"
                 />
-                <div className="relative mt-1 rounded-2xl p-[1px] overflow-hidden" style={{ background: "linear-gradient(135deg, rgba(236,72,153,0.55), rgba(139,92,246,0.55), rgba(59,130,246,0.55))" }}>
-                  <div className="relative rounded-2xl p-3.5 bg-white/70 backdrop-blur-xl">
-                    {/* aurora blobs inside the card */}
-                    <div className="pointer-events-none absolute -top-10 -left-8 w-32 h-32 rounded-full bg-fuchsia-300/40 blur-2xl" />
-                    <div className="pointer-events-none absolute -bottom-10 -right-8 w-36 h-36 rounded-full bg-violet-300/40 blur-2xl" />
-                    <div className="pointer-events-none absolute top-6 right-10 w-20 h-20 rounded-full bg-sky-300/30 blur-2xl" />
+              </div>
 
-                    <div className="relative">
-                      <label className="text-[10px] font-extrabold uppercase tracking-[0.18em] inline-flex items-center gap-1.5 bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg,#ec4899,#8b5cf6,#3b82f6)" }}>
-                        <Sparkles className="w-3 h-3 text-fuchsia-500" />
-                        AI Image · Gemini
-                        <span className="ml-1 text-[8px] font-bold text-violet-700 bg-violet-100/80 px-1.5 py-0.5 rounded-full not-italic tracking-normal">PREMIUM</span>
-                      </label>
-                      <div className="mt-2 relative">
-                        <input
-                          value={imagePrompt}
-                          onChange={(e) => setImagePrompt(e.target.value)}
-                          placeholder="leave blank for auto · describe the look you want…"
-                          className="w-full h-10 pl-9 pr-3 rounded-xl border border-white/60 bg-white/80 backdrop-blur text-xs outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200/60 placeholder:text-slate-400 text-slate-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]"
-                        />
-                        <Wand2 className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-violet-500" />
+              {/* AI banner */}
+              <button onClick={() => callAi("all")} disabled={aiBusy} className="w-full inline-flex items-center justify-between px-4 h-11 rounded-xl border border-violet-200 bg-violet-50/50 text-violet-700 text-sm font-bold hover:bg-violet-50 disabled:opacity-60">
+                <span className="inline-flex items-center gap-2"><Sparkles className="w-4 h-4" /> 🎯 Demo দেখিয়ে AI Description লেখান</span>
+                <span className="text-[11px]">▼ খুলুন</span>
+              </button>
+
+              {/* Categories */}
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <Label>Primary Category</Label>
+                  <input
+                    value={form.category}
+                    onChange={(e) => set("category", e.target.value)}
+                    placeholder="Select Category"
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400"
+                  />
+                </div>
+                <div>
+                  <Label>Subcategory</Label>
+                  <input
+                    value={meta.subcategory ?? ""}
+                    onChange={(e) => setMeta("subcategory", e.target.value)}
+                    placeholder="None"
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label>Additional Categories <span className="text-slate-400 font-normal">(একাধিক ক্যাটাগরিতে দেখাবে)</span></Label>
+                <input
+                  value={addCatsText}
+                  onChange={(e) => setAddCatsText(e.target.value)}
+                  placeholder="Select additional categories..."
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400"
+                />
+                <p className="text-[11px] text-slate-500 mt-1">কমা দিয়ে আলাদা করুন</p>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <Label>Status</Label>
+                  <select
+                    value={meta.status ?? "published"}
+                    onChange={(e) => setMeta("status", e.target.value as "draft" | "published")}
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm bg-white"
+                  >
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                  </select>
+                </div>
+                <div>
+                  <Label>Badge Label</Label>
+                  <select
+                    value={form.badge ?? ""}
+                    onChange={(e) => set("badge", e.target.value || null)}
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm bg-white"
+                  >
+                    <option value="">— None —</option>
+                    <option value="HOT">HOT</option>
+                    <option value="NEW">NEW</option>
+                    <option value="SALE">SALE</option>
+                    <option value="BESTSELLER">BESTSELLER</option>
+                    <option value="LIMITED">LIMITED</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <Label>Product Tags <span className="text-slate-400 font-normal">(comma separated)</span></Label>
+                <input
+                  value={tagsText}
+                  onChange={(e) => setTagsText(e.target.value)}
+                  placeholder="windows, license, digital..."
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400"
+                />
+              </div>
+
+              {/* Flags */}
+              <div className="flex flex-wrap items-center gap-4 pt-1">
+                <FlagCheck label="⭐ Featured" checked={!!meta.flags?.featured} onChange={(v) => setMeta("flags", { ...(meta.flags ?? {}), featured: v })} />
+                <FlagCheck label="📘 Digital" checked={!!meta.flags?.digital} onChange={(v) => setMeta("flags", { ...(meta.flags ?? {}), digital: v })} />
+                <FlagCheck label="🔥 Flash Sale" checked={!!meta.flags?.flash_sale} onChange={(v) => setMeta("flags", { ...(meta.flags ?? {}), flash_sale: v })} />
+                <FlagCheck label="📧 গ্রাহকের ইমেইল লাগবে" checked={!!meta.flags?.require_email} onChange={(v) => setMeta("flags", { ...(meta.flags ?? {}), require_email: v })} />
+              </div>
+            </>
+          )}
+
+          {tab === "inventory" && (
+            <>
+              {/* Packages */}
+              <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/40">
+                <div className="flex items-center justify-between mb-3">
+                  <Label className="!mb-0">⏳ মেয়াদ ও মূল্য পরিকল্পনা <span className="text-slate-400 font-normal">(একাধিক প্যাকেজ)</span></Label>
+                  <button onClick={addPlan} className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-violet-100 text-violet-700 text-xs font-bold hover:bg-violet-200">
+                    <Plus className="w-3 h-3" /> প্যাকেজ যোগ করুন
+                  </button>
+                </div>
+                <div className="space-y-3">
+                  {form.plans.map((p, i) => (
+                    <div key={i} className="border border-slate-200 rounded-xl p-3.5 bg-white">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-semibold text-slate-700">প্যাকেজ #{i + 1}</span>
+                        {form.plans.length > 1 && (
+                          <button onClick={() => removePlan(i)} className="w-7 h-7 grid place-items-center rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></button>
+                        )}
                       </div>
-                      <button
-                        onClick={generateImage}
-                        disabled={aiBusy}
-                        className="group relative mt-2.5 w-full inline-flex items-center justify-center gap-2 h-11 rounded-xl text-white text-xs font-extrabold uppercase tracking-wider disabled:opacity-50 overflow-hidden shadow-[0_10px_30px_-10px_rgba(139,92,246,0.7)] hover:shadow-[0_14px_36px_-10px_rgba(139,92,246,0.85)] transition-shadow"
-                        style={{ background: "linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%)" }}
-                      >
-                        <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "linear-gradient(135deg, #f472b6 0%, #a78bfa 50%, #60a5fa 100%)" }} />
-                        <span className="relative inline-flex items-center gap-2">
-                          {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                          {ai === "image-gen" ? "Generating…" : "Generate with AI"}
-                        </span>
-                      </button>
-                      <div className="mt-2 flex items-center justify-center gap-1.5 text-[10px] text-slate-500 font-semibold">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        Powered by your Gemini API key · square HD output
+                      <div className="text-xs font-semibold text-slate-600 mb-1.5">মেয়াদ</div>
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        {DURATION_CHIPS.map((d) => (
+                          <button
+                            key={d}
+                            onClick={() => setPlan(i, { duration: d, label: d })}
+                            className={`px-3 h-7 rounded-full text-xs font-semibold border transition ${
+                              p.duration === d
+                                ? "bg-violet-500 text-white border-violet-500"
+                                : "bg-white text-slate-600 border-slate-200 hover:border-violet-300"
+                            }`}
+                          >{d}</button>
+                        ))}
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <div className="text-xs font-semibold text-slate-600 mb-1.5">বিক্রয় মূল্য (৳) *</div>
+                          <input type="number" value={p.price || ""} onChange={(e) => setPlan(i, { price: Number(e.target.value) || 0 })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-slate-600 mb-1.5">আসল মূল্য (৳) <span className="text-slate-400">কাটা দামে</span></div>
+                          <input type="number" value={p.original_price ?? ""} onChange={(e) => setPlan(i, { original_price: e.target.value ? Number(e.target.value) : undefined })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+                        </div>
                       </div>
                     </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Aggregate pricing */}
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <Label>Selling Price (৳) *</Label>
+                  <input type="number" value={meta.selling_price ?? ""} onChange={(e) => setMeta("selling_price", Number(e.target.value) || 0)} placeholder="0.00" className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm" />
+                </div>
+                <div>
+                  <Label>Original / MRP (৳)</Label>
+                  <input type="number" value={meta.original_price ?? ""} onChange={(e) => setMeta("original_price", Number(e.target.value) || 0)} placeholder="0.00" className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm" />
+                </div>
+                <div>
+                  <Label>Discount % <span className="text-slate-400 font-normal">(auto-calculated)</span></Label>
+                  <input type="number" value={meta.discount_percent ?? 0} readOnly className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm bg-slate-50 text-slate-500" />
+                </div>
+                <div>
+                  <Label>Cost Price (৳) <span className="text-slate-400 font-normal">internal</span></Label>
+                  <input type="number" value={meta.cost_price ?? ""} onChange={(e) => setMeta("cost_price", Number(e.target.value) || 0)} placeholder="0.00" className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm" />
+                </div>
+              </div>
+
+              <div className="border-t border-slate-100 pt-4">
+                <h4 className="text-sm font-bold text-slate-800 mb-3">Stock & SKU</h4>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <Label>SKU</Label>
+                    <div className="flex gap-2">
+                      <input value={meta.sku ?? ""} onChange={(e) => setMeta("sku", e.target.value)} placeholder="AUTO-SKU" className="flex-1 h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+                      <button onClick={() => setMeta("sku", `SKU-${Date.now().toString(36).toUpperCase()}`)} className="w-11 h-11 grid place-items-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50"><RefreshCw className="w-4 h-4" /></button>
+                    </div>
+                  </div>
+                  <div>
+                    <Label>Stock Quantity</Label>
+                    <input
+                      value={meta.stock_qty == null ? "" : meta.stock_qty}
+                      onChange={(e) => setMeta("stock_qty", e.target.value === "" ? null : Number(e.target.value))}
+                      placeholder="∞"
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400"
+                    />
                   </div>
                 </div>
               </div>
-            </SectionCard>
+            </>
+          )}
 
-            {/* Organize */}
-            <SectionCard title="Organize">
-              <Field label="Category" value={form.category} onChange={(v) => set("category", v)} />
-              <Field label="Badge" value={form.badge ?? ""} onChange={(v) => set("badge", v || null)} placeholder="HOT, SALE…" />
-              <Field label="Emoji" value={form.emoji} onChange={(v) => set("emoji", v)} />
-            </SectionCard>
+          {tab === "media" && (
+            <>
+              <div>
+                <Label>Featured Image</Label>
+                <div className="flex gap-3">
+                  <div
+                    className="relative w-24 h-24 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 grid place-items-center overflow-hidden cursor-pointer hover:border-violet-300 shrink-0"
+                    onClick={() => fileRef.current?.click()}
+                  >
+                    {form.image_url ? (
+                      <img src={form.image_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                    ) : (
+                      <ImageIcon className="w-6 h-6 text-slate-400" />
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <button onClick={() => fileRef.current?.click()} className="w-full h-11 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                      {ai === "image-up" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />} Upload Image
+                    </button>
+                    <input value={form.image_url} onChange={(e) => set("image_url", e.target.value)} placeholder="or paste image URL..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+                  </div>
+                </div>
+                <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => { onPickFile(e.target.files?.[0]); e.target.value = ""; }} />
+              </div>
 
-            {/* Inventory & status */}
-            <SectionCard title="Status">
-              <label className="block">
-                <span className="text-xs font-semibold text-slate-700">Stock</span>
-                <select
-                  value={form.stock_status}
-                  onChange={(e) => set("stock_status", e.target.value as StockStatus)}
-                  className="mt-1.5 w-full h-10 px-3 rounded-md border border-slate-200 text-sm outline-none focus:border-violet-400"
+              {/* AI Card Generator */}
+              <div className="border border-slate-200 rounded-2xl p-4 bg-white">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-full grid place-items-center text-white shrink-0" style={{ background: "linear-gradient(135deg,#a855f7,#6366f1)" }}>
+                    <Wand2 className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-bold text-slate-900">AI Card Generator</span>
+                      <span className="text-[9px] font-bold tracking-wider text-violet-700 bg-violet-100 px-1.5 py-0.5 rounded-full">PREMIUM</span>
+                    </div>
+                    <div className="text-xs text-slate-500">Shahed Store ব্র্যান্ডিংসহ প্রিমিয়াম প্রোডাক্ট কার্ড তৈরি করুন</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-xs font-bold text-slate-700">ডিজাইন স্টাইল</div>
+                  <div className="text-[11px] text-slate-400">৬টি স্টাইল</div>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-2">
+                  {AI_CARD_STYLES.map((s) => {
+                    const active = (meta.ai_card_style ?? "glassmorphism") === s.id;
+                    return (
+                      <button
+                        key={s.id}
+                        onClick={() => setMeta("ai_card_style", s.id)}
+                        className={`flex items-center gap-3 p-2.5 rounded-xl border-2 text-left transition ${active ? "border-violet-500 bg-violet-50/40" : "border-slate-200 hover:border-slate-300"}`}
+                      >
+                        <div className={`w-10 h-10 rounded-lg grid place-items-center bg-gradient-to-br ${s.tint} text-lg shrink-0`}>{s.icon}</div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-slate-800">{s.label}</div>
+                          <div className="text-[10px] text-slate-500 truncate">{s.sub}</div>
+                        </div>
+                        {active && <CheckCircle2 className="w-4 h-4 text-violet-500 ml-auto shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-3 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600">
+                  💡 {AI_CARD_STYLES.find((s) => s.id === (meta.ai_card_style ?? "glassmorphism"))?.sub}, Shahed Store ব্র্যান্ডিং সহ
+                </div>
+
+                <input value={imagePrompt} onChange={(e) => setImagePrompt(e.target.value)} placeholder="Optional: describe the look..." className="mt-3 w-full h-10 px-3 rounded-xl border border-slate-200 text-xs outline-none focus:border-violet-400" />
+
+                <button
+                  onClick={generateImage}
+                  disabled={aiBusy}
+                  className="mt-3 w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl text-white text-sm font-extrabold shadow-[0_10px_30px_-10px_rgba(139,92,246,0.7)] disabled:opacity-50"
+                  style={{ background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #3b82f6 100%)" }}
                 >
-                  <option value="in_stock">স্টকে আছে</option>
-                  <option value="out_of_stock">স্টক শেষ</option>
-                  <option value="preorder">প্রি-অর্ডার</option>
-                </select>
-              </label>
-              <Field label="Delivery time" value={form.delivery_time} onChange={(v) => set("delivery_time", v)} />
-              <Field label="Warranty" value={form.warranty} onChange={(v) => set("warranty", v)} />
-              <Field label="Sort order (auto)" type="number" value={String(form.sort_order)} onChange={(v) => set("sort_order", Number(v) || 0)} />
-              <label className="flex items-center gap-2 mt-2">
-                <input type="checkbox" checked={form.is_active} onChange={(e) => set("is_active", e.target.checked)} />
-                <span className="text-sm">Active (visible on storefront)</span>
-              </label>
-            </SectionCard>
-          </div>
+                  {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                  {ai === "image-gen" ? "Generating…" : "✨ এই স্টাইলে Card তৈরি করুন"}
+                </button>
+              </div>
+
+              {/* Gallery */}
+              <div>
+                <Label>Gallery Images <span className="text-slate-400 font-normal">(multiple)</span></Label>
+                <button onClick={() => galleryRef.current?.click()} className="w-full h-11 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                  <ImageIcon className="w-4 h-4" /> Add Gallery Images
+                </button>
+                <input ref={galleryRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => { onPickGallery(e.target.files); e.target.value = ""; }} />
+                {gallery.length > 0 && (
+                  <div className="mt-3 grid grid-cols-4 gap-2">
+                    {gallery.map((u, i) => (
+                      <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-slate-200">
+                        <img src={u} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                        <button onClick={() => { const next = gallery.filter((_, idx) => idx !== i); setGallery(next); setMeta("gallery", next); }} className="absolute top-1 right-1 w-5 h-5 grid place-items-center rounded-full bg-black/60 text-white"><X className="w-3 h-3" /></button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <Label>Video Preview URL</Label>
+                <input value={meta.video_url ?? ""} onChange={(e) => setMeta("video_url", e.target.value)} placeholder="https://youtube.com/watch?v=..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+              </div>
+            </>
+          )}
+
+          {tab === "details" && (
+            <>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <Label>Delivery Type</Label>
+                  <select value={meta.delivery_type ?? "instant"} onChange={(e) => setMeta("delivery_type", e.target.value as DeliveryType)} className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm bg-white">
+                    <option value="instant">⚡ Instant Delivery</option>
+                    <option value="24h">🕐 Within 24 hours</option>
+                    <option value="manual">🤝 Manual Delivery</option>
+                  </select>
+                </div>
+                <div>
+                  <Label>Delivery Time</Label>
+                  <input value={form.delivery_time} onChange={(e) => set("delivery_time", e.target.value)} placeholder="Instant / 24 hours..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+                </div>
+              </div>
+
+              <div>
+                <Label>Download Link</Label>
+                <input value={meta.download_link ?? ""} onChange={(e) => setMeta("download_link", e.target.value)} placeholder="https://..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+              </div>
+
+              <div>
+                <Label>Warranty / Guarantee Note</Label>
+                <input value={form.warranty} onChange={(e) => set("warranty", e.target.value)} placeholder="e.g. 1 Year Genuine Warranty" className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+              </div>
+
+              <div>
+                <Label>Refund Policy Note</Label>
+                <input value={meta.refund_policy ?? ""} onChange={(e) => setMeta("refund_policy", e.target.value)} placeholder="e.g. No refund after activation" className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+              </div>
+
+              {/* What you get */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="!mb-0">What You Get</Label>
+                  <button onClick={() => setWhatYouGet((l) => [...l, ""])} className="inline-flex items-center gap-1 text-xs font-bold text-violet-600 hover:underline"><Plus className="w-3 h-3" /> Add</button>
+                </div>
+                <div className="space-y-2">
+                  {whatYouGet.map((item, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <input value={item} onChange={(e) => setWhatYouGet((l) => l.map((x, idx) => (idx === i ? e.target.value : x)))} placeholder={`Item ${i + 1}`} className="flex-1 h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+                      <button onClick={() => setWhatYouGet((l) => l.filter((_, idx) => idx !== i))} className="w-8 h-8 grid place-items-center rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* FAQ */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="!mb-0">FAQ</Label>
+                  <button onClick={() => setFaq((l) => [...l, { q: "", a: "" }])} className="inline-flex items-center gap-1 text-xs font-bold text-violet-600 hover:underline"><Plus className="w-3 h-3" /> Add</button>
+                </div>
+                <div className="space-y-3">
+                  {faq.map((it, i) => (
+                    <div key={i} className="border border-slate-200 rounded-xl p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-semibold text-slate-700">FAQ #{i + 1}</span>
+                        <button onClick={() => setFaq((l) => l.filter((_, idx) => idx !== i))} className="w-7 h-7 grid place-items-center rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></button>
+                      </div>
+                      <input value={it.q} onChange={(e) => setFaq((l) => l.map((x, idx) => (idx === i ? { ...x, q: e.target.value } : x)))} placeholder="Question" className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400 mb-2" />
+                      <textarea value={it.a} onChange={(e) => setFaq((l) => l.map((x, idx) => (idx === i ? { ...x, a: e.target.value } : x)))} placeholder="Answer" rows={2} className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Custom fields */}
+              <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/40">
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <Label className="!mb-0">📋 অর্ডার কাস্টম ফিল্ড</Label>
+                    <p className="text-[11px] text-slate-500 mt-0.5">অর্ডার করার সময় গ্রাহক কী তথ্য দেবে (ইমেইল, পাসওয়ার্ড ইত্যাদি) তা নির্ধারণ করুন</p>
+                  </div>
+                  <button onClick={() => setCustomFields((l) => [...l, { label: "", type: "text", required: false }])} className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-violet-100 text-violet-700 text-xs font-bold hover:bg-violet-200">
+                    <Plus className="w-3 h-3" /> ফিল্ড যোগ করুন
+                  </button>
+                </div>
+                {customFields.length === 0 ? (
+                  <div className="text-center text-xs text-slate-500 py-6 border-2 border-dashed border-slate-200 rounded-xl">কোনো কাস্টম ফিল্ড নেই</div>
+                ) : (
+                  <div className="space-y-2">
+                    {customFields.map((cf, i) => (
+                      <div key={i} className="grid grid-cols-12 gap-2 items-center bg-white border border-slate-200 rounded-xl p-2">
+                        <input value={cf.label} onChange={(e) => setCustomFields((l) => l.map((x, idx) => (idx === i ? { ...x, label: e.target.value } : x)))} placeholder="Field label" className="col-span-5 h-9 px-3 rounded-lg border border-slate-200 text-sm" />
+                        <select value={cf.type} onChange={(e) => setCustomFields((l) => l.map((x, idx) => (idx === i ? { ...x, type: e.target.value as CustomField["type"] } : x)))} className="col-span-3 h-9 px-2 rounded-lg border border-slate-200 text-sm bg-white">
+                          <option value="text">Text</option>
+                          <option value="email">Email</option>
+                          <option value="password">Password</option>
+                          <option value="number">Number</option>
+                        </select>
+                        <label className="col-span-3 inline-flex items-center gap-1.5 text-xs text-slate-700">
+                          <input type="checkbox" checked={cf.required} onChange={(e) => setCustomFields((l) => l.map((x, idx) => (idx === i ? { ...x, required: e.target.checked } : x)))} /> Required
+                        </label>
+                        <button onClick={() => setCustomFields((l) => l.filter((_, idx) => idx !== i))} className="col-span-1 w-8 h-8 grid place-items-center rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 ml-auto"><X className="w-4 h-4" /></button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+
+          {tab === "seo" && (
+            <>
+              <button onClick={() => callAi("rich")} disabled={aiBusy} className="w-full inline-flex items-center justify-center gap-2 h-11 rounded-xl border border-violet-200 bg-violet-50/60 text-violet-700 text-sm font-bold hover:bg-violet-50 disabled:opacity-60">
+                <Sparkles className="w-4 h-4" /> ✨ AI দিয়ে SEO Title ও Meta Description অটো-জেনারেট করুন
+              </button>
+
+              <div>
+                <Label>SEO Title <span className="text-slate-400 font-normal">(max 60 chars)</span></Label>
+                <input maxLength={60} value={meta.seo_title ?? ""} onChange={(e) => setMeta("seo_title", e.target.value)} placeholder="SEO title..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+                <div className="text-[11px] text-slate-400 mt-1">{(meta.seo_title ?? "").length}/60</div>
+              </div>
+
+              <div>
+                <Label>Meta Description <span className="text-slate-400 font-normal">(max 160 chars)</span></Label>
+                <textarea maxLength={160} rows={3} value={meta.meta_description ?? ""} onChange={(e) => setMeta("meta_description", e.target.value)} placeholder="Meta description..." className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
+                <div className="text-[11px] text-slate-400 mt-1">{(meta.meta_description ?? "").length}/160</div>
+              </div>
+
+              {/* SEO checklist */}
+              <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/40">
+                <h4 className="text-sm font-bold text-slate-800 mb-2">SEO Checklist</h4>
+                <ul className="space-y-1.5 text-sm">
+                  <SeoCheck ok={(meta.seo_title?.length ?? 0) >= 10 && (meta.seo_title?.length ?? 0) <= 60}>Title between 10–60 chars</SeoCheck>
+                  <SeoCheck ok={(meta.meta_description?.length ?? 0) >= 50 && (meta.meta_description?.length ?? 0) <= 160}>Description 50–160 chars</SeoCheck>
+                  <SeoCheck ok={!!form.image_url}>Featured image set</SeoCheck>
+                  <SeoCheck ok={!!form.slug}>URL slug defined</SeoCheck>
+                  <SeoCheck ok={form.description.length > 50}>Full description added</SeoCheck>
+                </ul>
+              </div>
+            </>
+          )}
         </div>
 
-        {/* Sticky footer */}
-        <div className="sticky bottom-0 bg-white/95 backdrop-blur border-t border-slate-200 px-5 md:px-6 py-3 flex items-center justify-between gap-2">
-          <div className="text-[11px] text-slate-500 hidden sm:block">
-            {aiBusy ? "AI কাজ করছে…" : isNew ? "Save করলে storefront-এ লাইভ হবে" : "Auto-saved on Save"}
-          </div>
-          <div className="flex items-center gap-2 ml-auto">
-            <button onClick={onClose} className="h-10 px-4 rounded-full border border-slate-200 text-sm font-semibold hover:bg-slate-50">Cancel</button>
-            <button
-              onClick={save}
-              disabled={busy || aiBusy}
-              className="h-10 px-5 rounded-full text-white text-sm font-bold shadow-md inline-flex items-center gap-2 disabled:opacity-60"
-              style={{ background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)" }}
-            >
-              {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {isNew ? "Publish" : "Save changes"}
-            </button>
-          </div>
+        {/* Footer */}
+        <div className="border-t border-slate-100 px-6 py-3.5 flex items-center justify-between gap-3 bg-white">
+          <button onClick={onClose} className="h-11 px-6 rounded-full border border-slate-200 text-sm font-semibold hover:bg-slate-50">Cancel</button>
+          <button onClick={save} disabled={busy || aiBusy} className="h-11 px-6 rounded-full text-slate-900 text-sm font-bold inline-flex items-center gap-2 disabled:opacity-60">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+            {isNew ? "Add Product" : "Save Changes"}
+          </button>
         </div>
       </div>
     </div>
@@ -912,60 +1359,45 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
 /* ============================== Small UI bits ============================== */
 
-function SectionCard({ title, right, children }: { title: string; right?: React.ReactNode; children: React.ReactNode }) {
+function Label({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <div className={`text-xs font-bold text-slate-800 mb-1.5 ${className}`}>{children}</div>;
+}
+
+function ChipBig({ active, onClick, children }: { active?: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">{title}</h3>
-        {right}
-      </div>
-      <div className="space-y-3">{children}</div>
-    </div>
+    <button
+      onClick={onClick}
+      className={`inline-flex items-center justify-center gap-1.5 h-11 px-3.5 rounded-xl text-sm font-semibold border-2 transition ${
+        active ? "border-violet-500 bg-violet-50 text-violet-700" : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+      }`}
+    >{children}</button>
   );
 }
 
-function AiBtn({ busy, onClick, children }: { busy: boolean; onClick: () => void; children: React.ReactNode }) {
+function FlagCheck({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={busy}
-      className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-white text-[11px] font-bold shadow-sm disabled:opacity-60"
-      style={{ background: "linear-gradient(135deg, #a855f7 0%, #6366f1 100%)" }}
-    >
+    <label className="inline-flex items-center gap-2 cursor-pointer">
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="w-4 h-4 rounded border-slate-300 text-violet-600" />
+      <span className="text-sm text-slate-700">{label}</span>
+    </label>
+  );
+}
+
+function AiBtnSm({ busy, onClick, children }: { busy: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button onClick={onClick} disabled={busy} className="inline-flex items-center gap-1 h-8 px-3 rounded-full text-violet-700 bg-violet-100 hover:bg-violet-200 text-xs font-bold disabled:opacity-60">
       {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
       {children}
     </button>
   );
 }
 
-function LinkIconLocal() {
-  // tiny placeholder so we don't pull a new import; small chain glyph
-  return <span aria-hidden className="text-slate-400">🔗</span>;
-}
-
-function Field({ label, value, onChange, type = "text", disabled, placeholder, big }: { label: string; value: string; onChange: (v: string) => void; type?: string; disabled?: boolean; placeholder?: string; big?: boolean }) {
+function SeoCheck({ ok, children }: { ok: boolean; children: React.ReactNode }) {
   return (
-    <label className="block">
-      <span className="text-xs font-semibold text-slate-700">{label}</span>
-      <input
-        type={type} value={value} disabled={disabled} placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
-        className={`mt-1.5 w-full ${big ? "h-12 text-base font-semibold" : "h-10 text-sm"} px-3 rounded-md border border-slate-200 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 disabled:bg-slate-100 disabled:text-slate-500`}
-      />
-    </label>
+    <li className="flex items-center gap-2 text-slate-600">
+      <span className={`w-4 h-4 rounded-full grid place-items-center text-[10px] font-bold ${ok ? "bg-emerald-100 text-emerald-700" : "bg-slate-200 text-slate-500"}`}>{ok ? "✓" : "○"}</span>
+      {children}
+    </li>
   );
 }
 
-function TextArea({ label, value, onChange, rows = 3, placeholder }: { label?: string; value: string; onChange: (v: string) => void; rows?: number; placeholder?: string }) {
-  return (
-    <label className="block">
-      {label && <span className="text-xs font-semibold text-slate-700">{label}</span>}
-      <textarea
-        value={value} rows={rows} placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
-        className={`${label ? "mt-1.5" : ""} w-full px-3 py-2 rounded-md border border-slate-200 text-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100`}
-      />
-    </label>
-  );
-}
