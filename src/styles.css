@@ -207,10 +207,10 @@
     --glass-border-soft: rgba(255, 255, 255, 0.5);
     --glass-highlight: rgba(255, 255, 255, 0.95);
 
-    /* IDM-inspired gradient family: deep violet → indigo → blue */
-    --gradient-aurora: linear-gradient(135deg, #0284C7 0%, #2563EB 50%, #2563EB 100%);
-    --gradient-aurora-strong: linear-gradient(135deg, #0369A1 0%, #1D4ED8 50%, #1D4ED8 100%);
-    --gradient-cyan: linear-gradient(135deg, #6366F1 0%, #2563EB 100%);
+    /* Premium cyan → electric blue → indigo gradient family */
+    --gradient-aurora: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 45%, #2563EB 100%);
+    --gradient-aurora-strong: linear-gradient(135deg, #0EA5E9 0%, #0284C7 45%, #1D4ED8 100%);
+    --gradient-cyan: linear-gradient(135deg, #38BDF8 0%, #2563EB 100%);
     --gradient-violet: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%);
     --gradient-sunset: linear-gradient(135deg, #BAE6FD 0%, #60A5FA 100%);
     --gradient-mesh:
