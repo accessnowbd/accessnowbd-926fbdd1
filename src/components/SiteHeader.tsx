@@ -296,9 +296,7 @@ export function SiteHeader() {
                     className="inline-flex items-center gap-2 h-11 px-4 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition"
                   >
                     <UserCircle2 className="w-4 h-4" />
-                    <span className="max-w-[120px] truncate">
-                      {user.email?.split("@")[0] ?? "Account"}
-                    </span>
+                    <span className="max-w-[120px] truncate">Dashboard</span>
                   </Link>
                   <button
                     onClick={handleLogout}
