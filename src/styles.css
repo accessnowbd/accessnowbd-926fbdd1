@@ -548,8 +548,8 @@
   }
 
   /* === Header chips & inline-styled pills → white glassmorphism === */
-  html.theme-white .relative.z-40.overflow-hidden.bg-background span[style*="linear-gradient"],
-  html.theme-white .relative.z-40.overflow-hidden.bg-background a[style*="linear-gradient"] {
+  html.theme-white .relative.z-40.overflow-hidden.bg-background > div > div > span[style*="linear-gradient"]:not(.bg-clip-text),
+  html.theme-white .relative.z-40.overflow-hidden.bg-background > div > div > a[style*="linear-gradient"]:not(.bg-clip-text) {
     background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(245,243,255,0.7)) !important;
     border-color: rgba(124, 58, 237, 0.22) !important;
     box-shadow:
