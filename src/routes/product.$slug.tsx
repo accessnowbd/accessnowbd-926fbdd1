@@ -1,10 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones, Loader2 } from "lucide-react";
+import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones, Loader2, MessageCircle } from "lucide-react";
 import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { ProductBanner } from "@/components/ProductBanner";
+import { useShopConfig } from "@/hooks/useShopConfig";
+import { waOrderUrl } from "@/lib/whatsapp";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
