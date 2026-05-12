@@ -78,6 +78,12 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
 
   const pw = useMemo(() => passwordScore(form.password), [form.password]);
 
+  // Sync mode when navigating between /login and /register without remount
+  useEffect(() => {
+    setMode(initialMode);
+    setErr(null);
+  }, [initialMode]);
+
   useEffect(() => {
     if (!loading && user) navigate({ to: "/orders" });
   }, [user, loading, navigate]);
