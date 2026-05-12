@@ -198,6 +198,8 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
               <>
                 <Field
                   label="Full Name"
+                  name="name"
+                  autoComplete="name"
                   value={form.name}
                   onChange={(v) => update("name", v)}
                   placeholder="আপনার পুরো নাম"
@@ -205,6 +207,8 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                 />
                 <Field
                   label="WhatsApp Number"
+                  name="phone"
+                  autoComplete="tel"
                   value={form.phone}
                   onChange={(v) => update("phone", v)}
                   placeholder="01XXXXXXXXX"
@@ -216,6 +220,8 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
             <Field
               label="E-Mail Address"
               type="email"
+              name="email"
+              autoComplete={isLogin ? "username" : "email"}
               value={form.email}
               onChange={(v) => update("email", v)}
               placeholder="Enter your email..."
@@ -225,6 +231,8 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
             <Field
               label="Password"
               type={showPw ? "text" : "password"}
+              name="password"
+              autoComplete={isLogin ? "current-password" : "new-password"}
               value={form.password}
               onChange={(v) => update("password", v)}
               placeholder="Password@123"
