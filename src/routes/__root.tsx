@@ -1,6 +1,7 @@
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { SupportWidget } from "@/components/SupportWidget";
+import { SiteHeader } from "@/components/SiteHeader";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -125,6 +126,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
+          {!isAdmin && <SiteHeader />}
           <Outlet />
           {!isAdmin && <SupportWidget />}
         </CartProvider>

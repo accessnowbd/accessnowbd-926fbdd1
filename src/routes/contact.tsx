@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { z } from "zod";
 import { MessageCircle, Mail, Clock, MapPin, Send, CheckCircle2 } from "lucide-react";
-import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { cn } from "@/lib/utils";
 
@@ -57,7 +56,7 @@ function ContactPage() {
 
   return (
     <div className="min-h-screen">
-      <SiteHeader />
+
       <section className="relative bg-[#07071a] text-white overflow-hidden">
         <div className="pointer-events-none absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-primary/35 blur-[140px]" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 w-[420px] h-[420px] rounded-full bg-[var(--color-aqua)]/35 blur-[140px]" />
