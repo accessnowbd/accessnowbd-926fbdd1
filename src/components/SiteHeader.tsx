@@ -224,56 +224,47 @@ export function SiteHeader() {
                 </span>
               </span>
 
-              {/* Wordmark — matches the official logo (Access · Now · BD + tagline) */}
+              {/* Wordmark — matches footer brand (Access · Now · BD + tagline) */}
               <span className="leading-[1.05] min-w-0">
                 <span className="flex items-baseline gap-1.5 whitespace-nowrap">
                   <span
-                    className="font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="text-[18px] sm:text-[20px] md:text-[24px] font-extrabold tracking-normal bg-clip-text text-transparent"
                     style={{
-                      fontSize: "clamp(15px, 1.45vw, 22px)",
                       backgroundImage:
                         "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)",
-                      filter:
-                        "drop-shadow(0 1px 6px rgba(47,109,255,0.35))",
                     }}
                   >
                     Access
                   </span>
                   <span
-                    className="font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="text-[18px] sm:text-[20px] md:text-[24px] font-extrabold tracking-normal bg-clip-text text-transparent"
                     style={{
-                      fontSize: "clamp(15px, 1.45vw, 22px)",
                       backgroundImage:
                         "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)",
-                      filter:
-                        "drop-shadow(0 1px 6px rgba(31,199,150,0.35))",
                     }}
                   >
                     Now
                   </span>
                   <span
-                    className="font-extrabold tracking-tight bg-clip-text text-transparent"
+                    className="text-[18px] sm:text-[20px] md:text-[24px] font-extrabold tracking-normal bg-clip-text text-transparent"
                     style={{
-                      fontSize: "clamp(15px, 1.45vw, 22px)",
                       backgroundImage:
                         "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)",
-                      filter:
-                        "drop-shadow(0 1px 6px rgba(245,158,11,0.35))",
                     }}
                   >
                     BD
                   </span>
                 </span>
-                <span className="flex w-full items-center justify-between mt-1">
-                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.22em] font-bold text-white/70">
+                <span className="mt-1 flex w-full max-w-[180px] md:max-w-[200px] items-center justify-between gap-2">
+                  <span className="text-[9px] md:text-[10px] uppercase tracking-[0.22em] font-bold text-white/70">
                     Fast
                   </span>
                   <span className="w-1 h-1 rounded-full bg-[#2f6dff] shadow-[0_0_6px_rgba(47,109,255,0.8)]" />
-                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.22em] font-bold text-white/70">
+                  <span className="text-[9px] md:text-[10px] uppercase tracking-[0.22em] font-bold text-white/70">
                     Secure
                   </span>
                   <span className="w-1 h-1 rounded-full bg-[#1fc796] shadow-[0_0_6px_rgba(31,199,150,0.8)]" />
-                  <span className="text-[8.5px] md:text-[9.5px] uppercase tracking-[0.22em] font-bold text-white/70">
+                  <span className="text-[9px] md:text-[10px] uppercase tracking-[0.22em] font-bold text-white/70">
                     Reliable
                   </span>
                 </span>
