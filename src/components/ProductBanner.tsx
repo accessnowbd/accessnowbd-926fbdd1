@@ -166,7 +166,13 @@ export function ProductBanner({
           <img
             src={primary}
             alt={product.name}
-            loading="lazy"
+            loading={priority ? "eager" : "lazy"}
+            decoding="async"
+            // @ts-expect-error - valid HTML attr, React types lag
+            fetchpriority={priority ? "high" : "low"}
+            width={480}
+            height={384}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 280px"
             className="relative z-10 max-h-[75%] max-w-[80%] object-contain drop-shadow-[0_10px_24px_rgba(0,229,255,0.35)]"
             onError={() => setImgFailed(true)}
           />
@@ -175,7 +181,12 @@ export function ProductBanner({
             key={currentLogo}
             src={currentLogo}
             alt={product.name}
-            loading="lazy"
+            loading={priority ? "eager" : "lazy"}
+            decoding="async"
+            // @ts-expect-error - valid HTML attr, React types lag
+            fetchpriority={priority ? "high" : "low"}
+            width={256}
+            height={256}
             className="relative z-10 max-h-[70%] max-w-[75%] object-contain drop-shadow-[0_10px_24px_rgba(0,229,255,0.35)]"
             onError={() => setLogoIdx((i) => i + 1)}
           />
