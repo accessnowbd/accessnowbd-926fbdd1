@@ -9,18 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as StreamingRouteImport } from './routes/streaming'
 import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as RefundRequestRouteImport } from './routes/refund-request'
+import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as OrderCancellationRouteImport } from './routes/order-cancellation'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EducationRouteImport } from './routes/education'
 import { Route as DeveloperRouteImport } from './routes/developer'
+import { Route as DeliveryInfoRouteImport } from './routes/delivery-info'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -39,6 +45,11 @@ import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
 import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StreamingRoute = StreamingRouteImport.update({
   id: '/streaming',
   path: '/streaming',
@@ -59,6 +70,16 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RefundRequestRoute = RefundRequestRouteImport.update({
+  id: '/refund-request',
+  path: '/refund-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundPolicyRoute = RefundPolicyRouteImport.update({
+  id: '/refund-policy',
+  path: '/refund-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -69,9 +90,19 @@ const ProductsRoute = ProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrdersRoute = OrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderCancellationRoute = OrderCancellationRouteImport.update({
+  id: '/order-cancellation',
+  path: '/order-cancellation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -97,6 +128,11 @@ const EducationRoute = EducationRouteImport.update({
 const DeveloperRoute = DeveloperRouteImport.update({
   id: '/developer',
   path: '/developer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeliveryInfoRoute = DeliveryInfoRouteImport.update({
+  id: '/delivery-info',
+  path: '/delivery-info',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -194,18 +230,24 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/delivery-info': typeof DeliveryInfoRoute
   '/developer': typeof DeveloperRoute
   '/education': typeof EducationRoute
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/order-cancellation': typeof OrderCancellationRoute
   '/orders': typeof OrdersRouteWithChildren
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
+  '/refund-request': typeof RefundRequestRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
+  '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -224,18 +266,24 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/delivery-info': typeof DeliveryInfoRoute
   '/developer': typeof DeveloperRoute
   '/education': typeof EducationRoute
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/order-cancellation': typeof OrderCancellationRoute
   '/orders': typeof OrdersRouteWithChildren
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
+  '/refund-request': typeof RefundRequestRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
+  '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -256,18 +304,24 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/delivery-info': typeof DeliveryInfoRoute
   '/developer': typeof DeveloperRoute
   '/education': typeof EducationRoute
   '/faq': typeof FaqRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/order-cancellation': typeof OrderCancellationRoute
   '/orders': typeof OrdersRouteWithChildren
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
+  '/refund-request': typeof RefundRequestRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
   '/streaming': typeof StreamingRoute
+  '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -289,18 +343,24 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/dashboard'
+    | '/delivery-info'
     | '/developer'
     | '/education'
     | '/faq'
     | '/forgot-password'
     | '/login'
+    | '/order-cancellation'
     | '/orders'
+    | '/privacy-policy'
     | '/products'
     | '/profile'
+    | '/refund-policy'
+    | '/refund-request'
     | '/register'
     | '/reset-password'
     | '/sitemap'
     | '/streaming'
+    | '/terms'
     | '/admin/$page'
     | '/admin/orders'
     | '/admin/products'
@@ -319,18 +379,24 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/dashboard'
+    | '/delivery-info'
     | '/developer'
     | '/education'
     | '/faq'
     | '/forgot-password'
     | '/login'
+    | '/order-cancellation'
     | '/orders'
+    | '/privacy-policy'
     | '/products'
     | '/profile'
+    | '/refund-policy'
+    | '/refund-request'
     | '/register'
     | '/reset-password'
     | '/sitemap'
     | '/streaming'
+    | '/terms'
     | '/admin/$page'
     | '/admin/orders'
     | '/admin/products'
@@ -350,18 +416,24 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contact'
     | '/dashboard'
+    | '/delivery-info'
     | '/developer'
     | '/education'
     | '/faq'
     | '/forgot-password'
     | '/login'
+    | '/order-cancellation'
     | '/orders'
+    | '/privacy-policy'
     | '/products'
     | '/profile'
+    | '/refund-policy'
+    | '/refund-request'
     | '/register'
     | '/reset-password'
     | '/sitemap'
     | '/streaming'
+    | '/terms'
     | '/admin/$page'
     | '/admin/orders'
     | '/admin/products'
@@ -382,24 +454,37 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
+  DeliveryInfoRoute: typeof DeliveryInfoRoute
   DeveloperRoute: typeof DeveloperRoute
   EducationRoute: typeof EducationRoute
   FaqRoute: typeof FaqRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  OrderCancellationRoute: typeof OrderCancellationRoute
   OrdersRoute: typeof OrdersRouteWithChildren
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ProductsRoute: typeof ProductsRoute
   ProfileRoute: typeof ProfileRoute
+  RefundPolicyRoute: typeof RefundPolicyRoute
+  RefundRequestRoute: typeof RefundRequestRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapRoute: typeof SitemapRoute
   StreamingRoute: typeof StreamingRoute
+  TermsRoute: typeof TermsRoute
   ProductSlugRoute: typeof ProductSlugRoute
   ApiPublicProductsRoute: typeof ApiPublicProductsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/streaming': {
       id: '/streaming'
       path: '/streaming'
@@ -428,6 +513,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/refund-request': {
+      id: '/refund-request'
+      path: '/refund-request'
+      fullPath: '/refund-request'
+      preLoaderRoute: typeof RefundRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund-policy': {
+      id: '/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof RefundPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -442,11 +541,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/orders': {
       id: '/orders'
       path: '/orders'
       fullPath: '/orders'
       preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order-cancellation': {
+      id: '/order-cancellation'
+      path: '/order-cancellation'
+      fullPath: '/order-cancellation'
+      preLoaderRoute: typeof OrderCancellationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -482,6 +595,13 @@ declare module '@tanstack/react-router' {
       path: '/developer'
       fullPath: '/developer'
       preLoaderRoute: typeof DeveloperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/delivery-info': {
+      id: '/delivery-info'
+      path: '/delivery-info'
+      fullPath: '/delivery-info'
+      preLoaderRoute: typeof DeliveryInfoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -646,18 +766,24 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
+  DeliveryInfoRoute: DeliveryInfoRoute,
   DeveloperRoute: DeveloperRoute,
   EducationRoute: EducationRoute,
   FaqRoute: FaqRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  OrderCancellationRoute: OrderCancellationRoute,
   OrdersRoute: OrdersRouteWithChildren,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
   ProductsRoute: ProductsRoute,
   ProfileRoute: ProfileRoute,
+  RefundPolicyRoute: RefundPolicyRoute,
+  RefundRequestRoute: RefundRequestRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapRoute: SitemapRoute,
   StreamingRoute: StreamingRoute,
+  TermsRoute: TermsRoute,
   ProductSlugRoute: ProductSlugRoute,
   ApiPublicProductsRoute: ApiPublicProductsRoute,
 }
