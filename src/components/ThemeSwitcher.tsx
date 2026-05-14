@@ -79,7 +79,7 @@ export function ThemeSwitcher() {
             })}
           </div>
           <div className="px-3 pt-2 pb-1 mt-1 border-t border-white/5">
-            <p className="text-[10.5px] text-white/40 leading-relaxed">
+            <p className="text-[10.5px] text-white/65 leading-relaxed">
               আরও theme শীঘ্রই যোগ হবে।
             </p>
           </div>
