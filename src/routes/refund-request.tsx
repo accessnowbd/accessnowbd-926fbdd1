@@ -43,7 +43,9 @@ function RefundRequestPage() {
 
       <p className="pt-4">
         বিস্তারিত পলিসি দেখুন:{" "}
-        <Link to="/refund-policy">Refund & Return Policy</Link>
+        <Link to="/refund-policy" className="text-primary underline underline-offset-4 hover:opacity-80">
+          রিফান্ড ও রিটার্ন পলিসি
+        </Link>
       </p>
     </PolicyPage>
   );
