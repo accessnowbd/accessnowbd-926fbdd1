@@ -9,6 +9,7 @@ import {
   Globe, MessageSquare, UserCheck, ShieldCheck,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import RoleDebugPanel from "@/components/admin/RoleDebugPanel";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
@@ -210,6 +211,8 @@ function AdminDashboard() {
 
   return (
     <div className="space-y-6 animate-fade-in">
+      <RoleDebugPanel />
+
       {/* Greeting */}
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
