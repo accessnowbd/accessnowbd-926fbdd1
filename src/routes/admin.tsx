@@ -81,13 +81,15 @@ function AdminLayout() {
   // RPC verification resolves. Cache is only used to avoid sign-out flicker
   // (skip the splash if we previously verified this same user).
   const cached = useMemo(() => readAdminCacheAny(), []);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [verified, setVerified] = useState<boolean>(false);
+  // Optimistically trust the cache so the panel opens instantly on click.
+  // Server-side RLS still protects every query; the background RPC only
+  // demotes the user if their role was revoked.
+  const [isAdmin, setIsAdmin] = useState<boolean>(cached?.isAdmin ?? false);
+  const [verified, setVerified] = useState<boolean>(!!cached);
 
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      // Clear stale cache on sign-out to prevent stale escalation hints.
       try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch {}
       navigate({ to: "/auth" });
       return;
@@ -107,10 +109,9 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate]);
 
-  // Show splash until server verification completes — never render admin
-  // shell optimistically.
+  // Only show the splash on the very first ever visit (no cache yet).
   if (loading || !verified) {
-    return cached ? <AdminBootSplash /> : <AdminBootSplash />;
+    return <AdminBootSplash />;
   }
 
   if (!isAdmin) {
