@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { ShieldCheck, Copy, Check, RefreshCw, KeyRound, User, Database } from "lucide-react";
+import { ShieldCheck, Copy, Check, RefreshCw, KeyRound, User, Database, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 
 type RoleRow = { role: string; created_at: string };
 
 type Capability = { resource: string; actions: string; requires: string };
+
+type GrantRow = { grantee: string; signature: string; can_execute: boolean };
 
 // Mirror of the actual RLS policies in Postgres (kept in sync manually).
 const ADMIN_CAPABILITIES: Capability[] = [
@@ -36,6 +38,8 @@ export default function RoleDebugPanel() {
   const { user } = useAuth();
   const [roles, setRoles] = useState<RoleRow[]>([]);
   const [adminCheck, setAdminCheck] = useState<boolean | null>(null);
+  const [grants, setGrants] = useState<GrantRow[]>([]);
+  const [grantsError, setGrantsError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -47,16 +51,25 @@ export default function RoleDebugPanel() {
     (async () => {
       setLoading(true);
       setError(null);
+      setGrantsError(null);
       try {
-        const [rolesRes, hasRoleRes] = await Promise.all([
+        const [rolesRes, hasRoleRes, grantsRes] = await Promise.all([
           supabase.from("user_roles").select("role, created_at").eq("user_id", user.id),
           supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (supabase as any).from("v_has_role_permissions").select("grantee, signature, can_execute"),
         ]);
         if (cancelled) return;
         if (rolesRes.error) throw rolesRes.error;
         if (hasRoleRes.error) throw hasRoleRes.error;
         setRoles((rolesRes.data ?? []) as RoleRow[]);
         setAdminCheck(Boolean(hasRoleRes.data));
+        if (grantsRes.error) {
+          setGrantsError(grantsRes.error.message);
+          setGrants([]);
+        } else {
+          setGrants((grantsRes.data ?? []) as GrantRow[]);
+        }
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : String(e));
       } finally {
@@ -200,6 +213,85 @@ export default function RoleDebugPanel() {
             {debugJson}
           </pre>
         </div>
+      </div>
+
+      {/* has_role EXECUTE grants (from v_has_role_permissions) */}
+      <div className="px-5 pb-5">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center justify-between">
+          <span className="inline-flex items-center gap-1.5">
+            <Lock className="w-3 h-3" aria-hidden="true" />
+            has_role EXECUTE grants
+          </span>
+          <span className="text-slate-400 normal-case font-medium">
+            Source: public.v_has_role_permissions
+          </span>
+        </div>
+        <div className="rounded-xl border border-slate-200 overflow-hidden">
+          {grantsError ? (
+            <div className="p-3 text-xs text-rose-600 font-mono bg-rose-50">{grantsError}</div>
+          ) : loading ? (
+            <div className="p-3 text-xs text-slate-500">Checking grants…</div>
+          ) : grants.length === 0 ? (
+            <div className="p-3 text-xs text-slate-500">No rows returned.</div>
+          ) : (
+            <table className="w-full text-[12.5px]">
+              <thead className="bg-slate-50 text-slate-600">
+                <tr>
+                  <th scope="col" className="text-left font-semibold px-3 py-2">Grantee</th>
+                  <th scope="col" className="text-left font-semibold px-3 py-2 hidden sm:table-cell">Signature</th>
+                  <th scope="col" className="text-left font-semibold px-3 py-2">can_execute</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {grants.map((g) => {
+                  const required = g.grantee === "authenticated" || g.grantee === "anon";
+                  const ok = g.can_execute === true;
+                  return (
+                    <tr key={g.grantee} className="hover:bg-slate-50/70">
+                      <td className="px-3 py-2 font-mono text-slate-900">
+                        {g.grantee}
+                        {required && (
+                          <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200">
+                            required
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2 font-mono text-[10.5px] text-slate-600 hidden sm:table-cell">{g.signature}</td>
+                      <td className="px-3 py-2">
+                        <span
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold ${
+                            ok
+                              ? "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-300"
+                              : required
+                                ? "bg-rose-100 text-rose-700 ring-1 ring-rose-300"
+                                : "bg-slate-100 text-slate-600 ring-1 ring-slate-200"
+                          }`}
+                        >
+                          {ok ? <Check className="w-3 h-3" aria-hidden="true" /> : null}
+                          {ok ? "true" : "false"}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
+        {!loading && !grantsError && (() => {
+          const missing = ["authenticated", "anon"].filter(
+            (r) => !grants.find((g) => g.grantee === r && g.can_execute),
+          );
+          return missing.length > 0 ? (
+            <p className="mt-2 text-[11px] font-semibold text-rose-600">
+              ⚠ Missing EXECUTE for: {missing.join(", ")} — RPC calls to has_role will fail.
+            </p>
+          ) : (
+            <p className="mt-2 text-[11px] text-emerald-700">
+              ✓ authenticated &amp; anon both have EXECUTE — RPC calls will work.
+            </p>
+          );
+        })()}
       </div>
 
       {/* Capabilities table */}
