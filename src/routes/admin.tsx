@@ -355,11 +355,11 @@ function AdminShell({ user, signOut, navigate }: any) {
           </div>
         </header>
 
-        <main className={`flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden ${dark ? "text-slate-100" : "text-slate-900"}`}>
+        <div className={`flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden ${dark ? "text-slate-100" : "text-slate-900"}`}>
           <div className="mx-auto max-w-[1400px]">
             <Outlet />
           </div>
-        </main>
+        </div>
       </div>
 
       <style>{`

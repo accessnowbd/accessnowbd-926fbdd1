@@ -232,7 +232,7 @@ function DashboardPage() {
           </div>
         </header>
 
-        <main className="flex-1 p-4 md:p-8">
+        <div className="flex-1 p-4 md:p-8">
           <SectionRenderer
             section={section}
             stats={stats}
@@ -242,7 +242,7 @@ function DashboardPage() {
             profile={profile}
             onNavigate={setSection}
           />
-        </main>
+        </div>
 
         <footer className="px-6 py-5 border-t border-[var(--glass-border)] text-xs text-muted-foreground flex flex-wrap items-center justify-between gap-3">
           <span>© 2026 AccessNow BD. All Rights Reserved.</span>

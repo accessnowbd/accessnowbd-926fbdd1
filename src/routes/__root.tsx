@@ -145,7 +145,9 @@ function RootComponent() {
         <AuthProvider>
           <CartProvider>
             {!isAdmin && <SiteHeader />}
-            <Outlet />
+            <main id="main-content">
+              <Outlet />
+            </main>
             {!isAdmin && <SupportWidget />}
             {!isAdmin && <WelcomePopup />}
           </CartProvider>

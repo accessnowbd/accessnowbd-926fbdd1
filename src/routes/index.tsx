@@ -100,7 +100,7 @@ function Index() {
   return (
     <div className="min-h-screen">
 
-      <main>
+      <div>
         <HeroExperience />
 
         <CategoryPillBar />
@@ -115,7 +115,7 @@ function Index() {
                 <ProductRail title={section.category} items={section.items} />
               </LazyMount>
             ))}
-      </main>
+      </div>
       <SiteFooter />
     </div>
   );
