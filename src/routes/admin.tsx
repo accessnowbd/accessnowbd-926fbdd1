@@ -7,7 +7,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
-import accessNowLogo from "@/assets/accessnow-bd-mark.png";
+import accessNowLogo from "@/assets/accessnow-bd-mark.webp";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
