@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { ShieldCheck, Copy, Check, RefreshCw, KeyRound, User, Database } from "lucide-react";
+import { ShieldCheck, Copy, Check, RefreshCw, KeyRound, User, Database, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 
 type RoleRow = { role: string; created_at: string };
 
 type Capability = { resource: string; actions: string; requires: string };
+
+type GrantRow = { grantee: string; signature: string; can_execute: boolean };
 
 // Mirror of the actual RLS policies in Postgres (kept in sync manually).
 const ADMIN_CAPABILITIES: Capability[] = [
@@ -36,6 +38,8 @@ export default function RoleDebugPanel() {
   const { user } = useAuth();
   const [roles, setRoles] = useState<RoleRow[]>([]);
   const [adminCheck, setAdminCheck] = useState<boolean | null>(null);
+  const [grants, setGrants] = useState<GrantRow[]>([]);
+  const [grantsError, setGrantsError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -47,16 +51,25 @@ export default function RoleDebugPanel() {
     (async () => {
       setLoading(true);
       setError(null);
+      setGrantsError(null);
       try {
-        const [rolesRes, hasRoleRes] = await Promise.all([
+        const [rolesRes, hasRoleRes, grantsRes] = await Promise.all([
           supabase.from("user_roles").select("role, created_at").eq("user_id", user.id),
           supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (supabase as any).from("v_has_role_permissions").select("grantee, signature, can_execute"),
         ]);
         if (cancelled) return;
         if (rolesRes.error) throw rolesRes.error;
         if (hasRoleRes.error) throw hasRoleRes.error;
         setRoles((rolesRes.data ?? []) as RoleRow[]);
         setAdminCheck(Boolean(hasRoleRes.data));
+        if (grantsRes.error) {
+          setGrantsError(grantsRes.error.message);
+          setGrants([]);
+        } else {
+          setGrants((grantsRes.data ?? []) as GrantRow[]);
+        }
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : String(e));
       } finally {
