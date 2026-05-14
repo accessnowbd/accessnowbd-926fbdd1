@@ -211,6 +211,8 @@ function AdminDashboard() {
 
   return (
     <div className="space-y-6 animate-fade-in">
+      <RoleDebugPanel />
+
       {/* Greeting */}
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
