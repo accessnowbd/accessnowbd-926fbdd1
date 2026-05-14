@@ -43,7 +43,7 @@ export function ThemeSwitcher() {
           className="absolute right-0 mt-2 w-72 rounded-2xl border border-white/10 bg-[rgba(20,22,45,0.92)] backdrop-blur-xl shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)] p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
         >
           <div className="px-3 py-2">
-            <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-white/50">Theme</div>
+            <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-white/70">Theme</div>
           </div>
           <div className="space-y-1">
             {themes.map((t) => {
