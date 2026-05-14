@@ -224,11 +224,11 @@ function AdminShell({ user, signOut, navigate }: any) {
                   <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)" }}>BD</span>
                 </span>
                 <span className="mt-0.5 flex items-center gap-1">
-                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-400" : "text-slate-500"}`}>Fast</span>
+                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-500" : "text-slate-500"}`}>Fast</span>
                   <span className="w-[3px] h-[3px] rounded-full bg-[#2f6dff]" />
-                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-400" : "text-slate-500"}`}>Secure</span>
+                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-500" : "text-slate-500"}`}>Secure</span>
                   <span className="w-[3px] h-[3px] rounded-full bg-[#1fc796]" />
-                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-400" : "text-slate-500"}`}>Reliable</span>
+                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-500" : "text-slate-500"}`}>Reliable</span>
                 </span>
               </span>
             )}
@@ -255,12 +255,12 @@ function AdminShell({ user, signOut, navigate }: any) {
         {!collapsed && (
           <div className="p-3">
             <div className={`flex items-center gap-2 h-10 px-3 rounded-xl border ${dark ? "bg-slate-900 border-slate-800" : "bg-slate-50 border-slate-200"}`}>
-              <Search className="w-4 h-4 text-slate-400" />
+              <Search className="w-4 h-4 text-slate-500" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search menu..."
-                className={`bg-transparent flex-1 outline-none text-sm ${dark ? "text-white placeholder:text-slate-500" : "text-slate-900 placeholder:text-slate-400"}`}
+                className={`bg-transparent flex-1 outline-none text-sm ${dark ? "text-white placeholder:text-slate-500" : "text-slate-900 placeholder:text-slate-500"}`}
               />
             </div>
           </div>
@@ -282,7 +282,7 @@ function AdminShell({ user, signOut, navigate }: any) {
             {!collapsed && (
               <div className="min-w-0 flex-1">
                 <div className={`text-sm font-semibold truncate ${dark ? "text-white" : "text-slate-900"}`}>Admin</div>
-                <div className={`text-[11px] truncate ${dark ? "text-slate-400" : "text-slate-500"}`}>{user?.email}</div>
+                <div className={`text-[11px] truncate ${dark ? "text-slate-500" : "text-slate-500"}`}>{user?.email}</div>
               </div>
             )}
           </div>
@@ -317,7 +317,7 @@ function AdminShell({ user, signOut, navigate }: any) {
                 {currentPage?.group.icon ?? ADMIN_MENU[0].icon}
                 <span className="font-medium">{currentPage?.group.title ?? "Product Management"}</span>
               </span>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
               <span className={`font-semibold ${dark ? "text-white" : "text-slate-900"}`}>
                 {currentPage?.item.label ?? "Dashboard"}
               </span>
@@ -338,9 +338,9 @@ function AdminShell({ user, signOut, navigate }: any) {
               {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <div className={`hidden xl:flex items-center gap-2 h-9 px-3 rounded-lg border ${dark ? "border-slate-700 bg-slate-800/50" : "border-slate-200 bg-slate-50"}`}>
-              <Search className="w-3.5 h-3.5 text-slate-400" />
-              <input placeholder="Search" className={`bg-transparent outline-none text-xs w-32 ${dark ? "text-white placeholder:text-slate-500" : "placeholder:text-slate-400"}`} />
-              <kbd className={`text-[10px] px-1.5 py-0.5 rounded border ${dark ? "border-slate-700 text-slate-400" : "border-slate-300 text-slate-500"}`}>⌘K</kbd>
+              <Search className="w-3.5 h-3.5 text-slate-500" />
+              <input placeholder="Search" className={`bg-transparent outline-none text-xs w-32 ${dark ? "text-white placeholder:text-slate-500" : "placeholder:text-slate-500"}`} />
+              <kbd className={`text-[10px] px-1.5 py-0.5 rounded border ${dark ? "border-slate-700 text-slate-500" : "border-slate-300 text-slate-500"}`}>⌘K</kbd>
             </div>
             <button className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-gradient-to-r from-blue-600 to-sky-500 text-white hover:opacity-90 shadow-[0_4px_14px_-4px_rgba(37,99,235,0.5)]">
               <Plus className="w-3.5 h-3.5" /> Create <ChevronDown className="w-3 h-3" />
@@ -389,7 +389,7 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
     <div className="mt-3">
       <button
         onClick={() => setOpen((v) => !v)}
-        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider ${dark ? "text-slate-400 hover:bg-slate-800" : "text-slate-500 hover:bg-slate-50"}`}
+        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider ${dark ? "text-slate-500 hover:bg-slate-800" : "text-slate-500 hover:bg-slate-50"}`}
       >
           <span className="inline-flex items-center gap-2">
           <span className="text-blue-600">{group.icon}</span>
