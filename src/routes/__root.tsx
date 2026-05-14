@@ -3,6 +3,7 @@ import { CartProvider } from "@/context/CartContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { SupportWidget } from "@/components/SupportWidget";
 import { SiteHeader } from "@/components/SiteHeader";
+import { WelcomePopup } from "@/components/WelcomePopup";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
