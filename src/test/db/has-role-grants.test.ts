@@ -6,7 +6,7 @@ const CONN =
   process.env.DATABASE_URL ||
   process.env.POSTGRES_URL;
 
-const FUNC_SIG = "public.has_role(uuid, public.app_role)";
+const FUNC_SIG = "public.has_role(uuid, app_role)";
 const REQUIRED_ROLES = ["authenticated", "anon"] as const;
 
 // Skip locally when no DB URL is configured; CI must set SUPABASE_DB_URL
@@ -24,17 +24,13 @@ d("migration: GRANT EXECUTE on public.has_role(uuid, app_role)", () => {
     await client.connect();
     try {
       const { rows: fnRows } = await client.query(
-        `SELECT 1
-           FROM pg_proc p
-           JOIN pg_namespace n ON n.oid = p.pronamespace
-          WHERE n.nspname = 'public'
-            AND p.proname = 'has_role'
-            AND pg_get_function_identity_arguments(p.oid) = 'uuid, app_role'`,
+        `SELECT to_regprocedure($1) AS oid`,
+        [FUNC_SIG],
       );
       expect(
-        fnRows.length,
+        fnRows[0]?.oid,
         `function ${FUNC_SIG} must exist`,
-      ).toBeGreaterThan(0);
+      ).toBeTruthy();
 
       for (const role of REQUIRED_ROLES) {
         const { rows } = await client.query(

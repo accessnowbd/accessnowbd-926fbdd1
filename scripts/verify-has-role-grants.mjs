@@ -23,7 +23,7 @@ if (!CONN) {
   process.exit(2);
 }
 
-const FUNC_SIG = "public.has_role(uuid, public.app_role)";
+const FUNC_SIG = "public.has_role(uuid, app_role)";
 const REQUIRED_ROLES = ["authenticated", "anon"];
 
 const client = new pg.Client({
@@ -34,16 +34,12 @@ const client = new pg.Client({
 try {
   await client.connect();
 
-  // 1. Function exists?
+  // 1. Function exists? (resolve via regprocedure cast)
   const { rows: fnRows } = await client.query(
-    `SELECT 1
-       FROM pg_proc p
-       JOIN pg_namespace n ON n.oid = p.pronamespace
-      WHERE n.nspname = 'public'
-        AND p.proname = 'has_role'
-        AND pg_get_function_identity_arguments(p.oid) = 'uuid, app_role'`,
+    `SELECT to_regprocedure($1) AS oid`,
+    [FUNC_SIG],
   );
-  if (fnRows.length === 0) {
+  if (!fnRows[0]?.oid) {
     console.error(
       `[verify-has-role-grants] FAIL: function ${FUNC_SIG} does not exist.`,
     );
