@@ -6,8 +6,9 @@
  *
  * Usage: node scripts/a11y-scan-static.mjs [baseUrl]
  */
-import { JSDOM, ResourceLoader } from "jsdom";
+import jsdomPkg from "jsdom";
 import axe from "axe-core";
+const { JSDOM } = jsdomPkg;
 import { writeFileSync } from "node:fs";
 
 const baseUrl = (process.argv[2] || process.env.BASE_URL || "https://accessnowbd.lovable.app").replace(/\/$/, "");
