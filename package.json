@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:db:has-role-grants": "node scripts/verify-has-role-grants.mjs"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",
