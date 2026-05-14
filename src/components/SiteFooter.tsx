@@ -30,7 +30,13 @@ type LinkTo =
   | "/register"
   | "/forgot-password"
   | "/cart"
-  | "/checkout";
+  | "/checkout"
+  | "/privacy-policy"
+  | "/terms"
+  | "/refund-policy"
+  | "/order-cancellation"
+  | "/delivery-info"
+  | "/refund-request";
 
 const COLUMNS: {
   title: string;
@@ -74,12 +80,12 @@ const COLUMNS: {
     iconBg: "from-primary to-aqua",
     bullet: "bg-aqua",
     links: [
-      { label: "Privacy Policy", to: "/faq" },
-      { label: "Terms & Conditions", to: "/faq" },
-      { label: "Refund & Return Policy", to: "/faq" },
-      { label: "Order & Cancellation", to: "/faq" },
-      { label: "Delivery Info", to: "/faq" },
-      { label: "Refund Request", to: "/contact" },
+      { label: "Privacy Policy", to: "/privacy-policy" },
+      { label: "Terms & Conditions", to: "/terms" },
+      { label: "Refund & Return Policy", to: "/refund-policy" },
+      { label: "Order & Cancellation", to: "/order-cancellation" },
+      { label: "Delivery Info", to: "/delivery-info" },
+      { label: "Refund Request", to: "/refund-request" },
     ],
   },
 ];
