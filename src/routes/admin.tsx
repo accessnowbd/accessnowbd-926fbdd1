@@ -86,6 +86,56 @@ function AdminLayout() {
   // demotes the user if their role was revoked.
   const [isAdmin, setIsAdmin] = useState<boolean>(cached?.isAdmin ?? false);
   const [verified, setVerified] = useState<boolean>(!!cached);
+  const [roleError, setRoleError] = useState<{
+    message: string;
+    code?: string;
+    details?: string;
+    hint?: string;
+    raw?: unknown;
+  } | null>(null);
+  const [checkedAt, setCheckedAt] = useState<string | null>(null);
+
+  const verifyRole = useMemo(
+    () => async (uid: string) => {
+      setRoleError(null);
+      try {
+        const { data, error } = await supabase.rpc("has_role", {
+          _user_id: uid,
+          _role: "admin",
+        });
+        setCheckedAt(new Date().toISOString());
+        if (error) {
+          setRoleError({
+            message: error.message || "Unknown RPC error",
+            code: (error as any).code,
+            details: (error as any).details,
+            hint: (error as any).hint,
+            raw: error,
+          });
+          writeAdminCache(uid, false);
+          setIsAdmin(false);
+          return;
+        }
+        if (data !== true) {
+          setRoleError({
+            message: `has_role returned ${JSON.stringify(data)} (expected true). Your account is not assigned the 'admin' role in user_roles.`,
+          });
+        }
+        const ok = data === true;
+        writeAdminCache(uid, ok);
+        setIsAdmin(ok);
+      } catch (e: any) {
+        setCheckedAt(new Date().toISOString());
+        setRoleError({
+          message: e?.message || "Network/unknown error calling has_role",
+          raw: e,
+        });
+        writeAdminCache(uid, false);
+        setIsAdmin(false);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     if (loading) return;
@@ -96,18 +146,12 @@ function AdminLayout() {
     }
     let cancelled = false;
     (async () => {
-      const { data, error } = await supabase.rpc("has_role", {
-        _user_id: user.id,
-        _role: "admin",
-      });
+      await verifyRole(user.id);
       if (cancelled) return;
-      const ok = !error && data === true;
-      writeAdminCache(user.id, ok);
-      setIsAdmin(ok);
       setVerified(true);
     })();
     return () => { cancelled = true; };
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, verifyRole]);
 
   // Only show the splash on the very first ever visit (no cache yet).
   if (loading || !verified) {
