@@ -456,7 +456,14 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      v_has_role_permissions: {
+        Row: {
+          can_execute: boolean | null
+          grantee: string | null
+          signature: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
