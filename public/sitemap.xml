@@ -5,13 +5,14 @@
   <url><loc>https://accessnowbd.com/streaming</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://accessnowbd.com/ai-tools</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://accessnowbd.com/education</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://accessnowbd.com/cart</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://accessnowbd.com/checkout</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://accessnowbd.com/orders</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://accessnowbd.com/profile</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://accessnowbd.com/auth</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://accessnowbd.com/reset-password</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
   <url><loc>https://accessnowbd.com/contact</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://accessnowbd.com/faq</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://accessnowbd.com/sitemap</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://accessnowbd.com/privacy-policy</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://accessnowbd.com/terms</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://accessnowbd.com/refund-policy</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://accessnowbd.com/order-cancellation</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://accessnowbd.com/delivery-info</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://accessnowbd.com/refund-request</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://accessnowbd.com/auth</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
 </urlset>
