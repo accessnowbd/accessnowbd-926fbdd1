@@ -32,7 +32,7 @@ function AdminFeaturePage() {
   if (!item) {
     return (
       <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center shadow-sm">
-        <div className="mx-auto w-14 h-14 rounded-full bg-slate-100 grid place-items-center text-slate-400 mb-4">
+        <div className="mx-auto w-14 h-14 rounded-full bg-slate-100 grid place-items-center text-slate-500 mb-4">
           <Construction className="w-6 h-6" />
         </div>
         <h1 className="text-xl font-bold text-slate-900">Page not found</h1>
@@ -189,7 +189,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
 
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -197,7 +197,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
             className="w-full h-10 pl-9 pr-9 rounded-full border border-slate-200 text-sm bg-white outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100"
           />
           {query && (
-            <button onClick={() => setQuery("")} className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 grid place-items-center rounded-full text-slate-400 hover:bg-slate-100" aria-label="Clear">
+            <button onClick={() => setQuery("")} className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 grid place-items-center rounded-full text-slate-500 hover:bg-slate-100" aria-label="Clear">
               <X className="w-3.5 h-3.5" />
             </button>
           )}
@@ -308,7 +308,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
 
 function renderCell(value: unknown, f: AdminField) {
   if (value == null || value === "") return <span className="text-slate-300">—</span>;
-  if (f.type === "boolean") return value ? <Check className="w-4 h-4 text-emerald-600" /> : <X className="w-4 h-4 text-slate-400" />;
+  if (f.type === "boolean") return value ? <Check className="w-4 h-4 text-emerald-600" /> : <X className="w-4 h-4 text-slate-500" />;
   if (f.type === "image") return <img src={String(value)} alt="" className="w-8 h-8 rounded object-cover" />;
   return String(value);
 }
@@ -443,7 +443,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
   if (loading) {
     return (
       <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm">
-        <Loader2 className="w-4 h-4 animate-spin inline mr-2 text-slate-400" />
+        <Loader2 className="w-4 h-4 animate-spin inline mr-2 text-slate-500" />
         <span className="text-sm text-slate-500">Loading…</span>
       </div>
     );

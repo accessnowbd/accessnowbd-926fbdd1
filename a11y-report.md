@@ -3,7 +3,7 @@
 # Accessibility Scan Report (static SSR scan)
 
 - Base: https://accessnowbd.lovable.app
-- Date: 2026-05-14T16:46:21.299Z
+- Date: 2026-05-14T16:54:01.904Z
 - Note: scans server-rendered HTML only. Run `scripts/a11y-scan.mjs` locally for full SPA coverage.
 
 ## /

@@ -367,7 +367,7 @@ function HeroExperience() {
                     </span>
                     <div className="text-base md:text-lg font-extrabold text-white drop-shadow-[0_2px_10px_rgba(0,229,255,0.5)]">{value as string}</div>
                   </div>
-                  <div className="mt-1.5 text-[10px] font-semibold uppercase tracking-wider text-white/60">{label as string}</div>
+                  <div className="mt-1.5 text-[10px] font-semibold uppercase tracking-wider text-white/70">{label as string}</div>
                 </div>
               );
             })}
@@ -532,7 +532,7 @@ function FeaturedProducts({ items, isLoading }: { items: Product[]; isLoading?: 
           : Array.from({ length: 8 }).map((_, i) => <ProductSkeleton key={i} />)}
       </div>
       {!isLoading && !items.length && (
-        <p className="mt-4 text-center text-sm text-white/60">প্রোডাক্ট লোড হচ্ছে… একটু পরে রিফ্রেশ করুন।</p>
+        <p className="mt-4 text-center text-sm text-white/70">প্রোডাক্ট লোড হচ্ছে… একটু পরে রিফ্রেশ করুন।</p>
       )}
     </section>
   );

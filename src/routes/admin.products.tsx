@@ -821,7 +821,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
               {/* Subtitle */}
               <div>
-                <Label>📝 Subtitle / Custom Tagline <span className="text-slate-400 font-normal">(ঐচ্ছিক)</span></Label>
+                <Label>📝 Subtitle / Custom Tagline <span className="text-slate-500 font-normal">(ঐচ্ছিক)</span></Label>
                 <input
                   value={form.tagline}
                   onChange={(e) => set("tagline", e.target.value)}
@@ -833,7 +833,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
               {/* Account type */}
               <div>
-                <Label>👤 অ্যাকাউন্ট টাইপ <span className="text-slate-400 font-normal">(প্রযোজ্য হলে)</span></Label>
+                <Label>👤 অ্যাকাউন্ট টাইপ <span className="text-slate-500 font-normal">(প্রযোজ্য হলে)</span></Label>
                 <div className="flex flex-wrap gap-2">
                   {ACCOUNT_TYPES.map((t) => (
                     <ChipBig key={t.id} active={(meta.account_type ?? "none") === t.id} onClick={() => setMeta("account_type", t.id)}>
@@ -876,7 +876,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
               {/* Bullet points */}
               <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/40">
                 <div className="flex items-center justify-between mb-3">
-                  <Label className="!mb-0">📝 প্রোডাক্ট বিবরণ (বুলেট পয়েন্ট) <span className="text-slate-400 font-normal">(টাইটেলের নিচে দেখাবে)</span></Label>
+                  <Label className="!mb-0">📝 প্রোডাক্ট বিবরণ (বুলেট পয়েন্ট) <span className="text-slate-500 font-normal">(টাইটেলের নিচে দেখাবে)</span></Label>
                   <div className="flex items-center gap-2">
                     <AiBtnSm busy={ai === "short"} onClick={() => callAi("short")}>AI</AiBtnSm>
                     <button onClick={() => setFeaturesList((l) => [...l, ""])} className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-violet-100 text-violet-700 text-xs font-bold hover:bg-violet-200">
@@ -896,7 +896,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
                         className="flex-1 h-10 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400 bg-white"
                       />
                       {featuresList.length > 1 && (
-                        <button onClick={() => setFeaturesList((l) => l.filter((_, idx) => idx !== i))} className="w-8 h-8 grid place-items-center rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50">
+                        <button onClick={() => setFeaturesList((l) => l.filter((_, idx) => idx !== i))} className="w-8 h-8 grid place-items-center rounded-lg text-slate-500 hover:text-rose-500 hover:bg-rose-50">
                           <X className="w-4 h-4" />
                         </button>
                       )}
@@ -950,7 +950,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
               </div>
 
               <div>
-                <Label>Additional Categories <span className="text-slate-400 font-normal">(একাধিক ক্যাটাগরিতে দেখাবে)</span></Label>
+                <Label>Additional Categories <span className="text-slate-500 font-normal">(একাধিক ক্যাটাগরিতে দেখাবে)</span></Label>
                 <input
                   value={addCatsText}
                   onChange={(e) => setAddCatsText(e.target.value)}
@@ -990,7 +990,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
               </div>
 
               <div>
-                <Label>Product Tags <span className="text-slate-400 font-normal">(comma separated)</span></Label>
+                <Label>Product Tags <span className="text-slate-500 font-normal">(comma separated)</span></Label>
                 <input
                   value={tagsText}
                   onChange={(e) => setTagsText(e.target.value)}
@@ -1014,7 +1014,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
               {/* Packages */}
               <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/40">
                 <div className="flex items-center justify-between mb-3">
-                  <Label className="!mb-0">⏳ মেয়াদ ও মূল্য পরিকল্পনা <span className="text-slate-400 font-normal">(একাধিক প্যাকেজ)</span></Label>
+                  <Label className="!mb-0">⏳ মেয়াদ ও মূল্য পরিকল্পনা <span className="text-slate-500 font-normal">(একাধিক প্যাকেজ)</span></Label>
                   <button onClick={addPlan} className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-violet-100 text-violet-700 text-xs font-bold hover:bg-violet-200">
                     <Plus className="w-3 h-3" /> প্যাকেজ যোগ করুন
                   </button>
@@ -1025,7 +1025,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-semibold text-slate-700">প্যাকেজ #{i + 1}</span>
                         {form.plans.length > 1 && (
-                          <button onClick={() => removePlan(i)} className="w-7 h-7 grid place-items-center rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></button>
+                          <button onClick={() => removePlan(i)} className="w-7 h-7 grid place-items-center rounded-lg text-slate-500 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></button>
                         )}
                       </div>
                       <div className="text-xs font-semibold text-slate-600 mb-1.5">মেয়াদ</div>
@@ -1048,7 +1048,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
                           <input type="number" value={p.price || ""} onChange={(e) => setPlan(i, { price: Number(e.target.value) || 0 })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
                         </div>
                         <div>
-                          <div className="text-xs font-semibold text-slate-600 mb-1.5">আসল মূল্য (৳) <span className="text-slate-400">কাটা দামে</span></div>
+                          <div className="text-xs font-semibold text-slate-600 mb-1.5">আসল মূল্য (৳) <span className="text-slate-500">কাটা দামে</span></div>
                           <input type="number" value={p.original_price ?? ""} onChange={(e) => setPlan(i, { original_price: e.target.value ? Number(e.target.value) : undefined })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
                         </div>
                       </div>
@@ -1068,11 +1068,11 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
                   <input type="number" value={meta.original_price ?? ""} onChange={(e) => setMeta("original_price", Number(e.target.value) || 0)} placeholder="0.00" className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm" />
                 </div>
                 <div>
-                  <Label>Discount % <span className="text-slate-400 font-normal">(auto-calculated)</span></Label>
+                  <Label>Discount % <span className="text-slate-500 font-normal">(auto-calculated)</span></Label>
                   <input type="number" value={meta.discount_percent ?? 0} readOnly className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm bg-slate-50 text-slate-500" />
                 </div>
                 <div>
-                  <Label>Cost Price (৳) <span className="text-slate-400 font-normal">internal</span></Label>
+                  <Label>Cost Price (৳) <span className="text-slate-500 font-normal">internal</span></Label>
                   <input type="number" value={meta.cost_price ?? ""} onChange={(e) => setMeta("cost_price", Number(e.target.value) || 0)} placeholder="0.00" className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm" />
                 </div>
               </div>
@@ -1113,7 +1113,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
                     {form.image_url ? (
                       <img src={form.image_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
                     ) : (
-                      <ImageIcon className="w-6 h-6 text-slate-400" />
+                      <ImageIcon className="w-6 h-6 text-slate-500" />
                     )}
                   </div>
                   <div className="flex-1 space-y-2">
@@ -1143,7 +1143,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
                 <div className="flex items-center justify-between mb-2">
                   <div className="text-xs font-bold text-slate-700">ডিজাইন স্টাইল</div>
-                  <div className="text-[11px] text-slate-400">৬টি স্টাইল</div>
+                  <div className="text-[11px] text-slate-500">৬টি স্টাইল</div>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-2">
                   {AI_CARD_STYLES.map((s) => {
@@ -1184,7 +1184,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
               {/* Gallery */}
               <div>
-                <Label>Gallery Images <span className="text-slate-400 font-normal">(multiple)</span></Label>
+                <Label>Gallery Images <span className="text-slate-500 font-normal">(multiple)</span></Label>
                 <button onClick={() => galleryRef.current?.click()} className="w-full h-11 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
                   <ImageIcon className="w-4 h-4" /> Add Gallery Images
                 </button>
@@ -1250,7 +1250,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
                   {whatYouGet.map((item, i) => (
                     <div key={i} className="flex items-center gap-2">
                       <input value={item} onChange={(e) => setWhatYouGet((l) => l.map((x, idx) => (idx === i ? e.target.value : x)))} placeholder={`Item ${i + 1}`} className="flex-1 h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
-                      <button onClick={() => setWhatYouGet((l) => l.filter((_, idx) => idx !== i))} className="w-8 h-8 grid place-items-center rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></button>
+                      <button onClick={() => setWhatYouGet((l) => l.filter((_, idx) => idx !== i))} className="w-8 h-8 grid place-items-center rounded-lg text-slate-500 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></button>
                     </div>
                   ))}
                 </div>
@@ -1267,7 +1267,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
                     <div key={i} className="border border-slate-200 rounded-xl p-3">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-semibold text-slate-700">FAQ #{i + 1}</span>
-                        <button onClick={() => setFaq((l) => l.filter((_, idx) => idx !== i))} className="w-7 h-7 grid place-items-center rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></button>
+                        <button onClick={() => setFaq((l) => l.filter((_, idx) => idx !== i))} className="w-7 h-7 grid place-items-center rounded-lg text-slate-500 hover:text-rose-500 hover:bg-rose-50"><X className="w-4 h-4" /></button>
                       </div>
                       <input value={it.q} onChange={(e) => setFaq((l) => l.map((x, idx) => (idx === i ? { ...x, q: e.target.value } : x)))} placeholder="Question" className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400 mb-2" />
                       <textarea value={it.a} onChange={(e) => setFaq((l) => l.map((x, idx) => (idx === i ? { ...x, a: e.target.value } : x)))} placeholder="Answer" rows={2} className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
@@ -1303,7 +1303,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
                         <label className="col-span-3 inline-flex items-center gap-1.5 text-xs text-slate-700">
                           <input type="checkbox" checked={cf.required} onChange={(e) => setCustomFields((l) => l.map((x, idx) => (idx === i ? { ...x, required: e.target.checked } : x)))} /> Required
                         </label>
-                        <button onClick={() => setCustomFields((l) => l.filter((_, idx) => idx !== i))} className="col-span-1 w-8 h-8 grid place-items-center rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 ml-auto"><X className="w-4 h-4" /></button>
+                        <button onClick={() => setCustomFields((l) => l.filter((_, idx) => idx !== i))} className="col-span-1 w-8 h-8 grid place-items-center rounded-lg text-slate-500 hover:text-rose-500 hover:bg-rose-50 ml-auto"><X className="w-4 h-4" /></button>
                       </div>
                     ))}
                   </div>
@@ -1319,15 +1319,15 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
               </button>
 
               <div>
-                <Label>SEO Title <span className="text-slate-400 font-normal">(max 60 chars)</span></Label>
+                <Label>SEO Title <span className="text-slate-500 font-normal">(max 60 chars)</span></Label>
                 <input maxLength={60} value={meta.seo_title ?? ""} onChange={(e) => setMeta("seo_title", e.target.value)} placeholder="SEO title..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
-                <div className="text-[11px] text-slate-400 mt-1">{(meta.seo_title ?? "").length}/60</div>
+                <div className="text-[11px] text-slate-500 mt-1">{(meta.seo_title ?? "").length}/60</div>
               </div>
 
               <div>
-                <Label>Meta Description <span className="text-slate-400 font-normal">(max 160 chars)</span></Label>
+                <Label>Meta Description <span className="text-slate-500 font-normal">(max 160 chars)</span></Label>
                 <textarea maxLength={160} rows={3} value={meta.meta_description ?? ""} onChange={(e) => setMeta("meta_description", e.target.value)} placeholder="Meta description..." className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-violet-400" />
-                <div className="text-[11px] text-slate-400 mt-1">{(meta.meta_description ?? "").length}/160</div>
+                <div className="text-[11px] text-slate-500 mt-1">{(meta.meta_description ?? "").length}/160</div>
               </div>
 
               {/* SEO checklist */}

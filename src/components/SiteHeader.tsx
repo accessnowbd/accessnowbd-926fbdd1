@@ -271,8 +271,8 @@ export function SiteHeader() {
                 aria-label="Search products"
               >
                 <Search className="w-4 h-4 text-aqua" />
-                <span className="text-white/55 font-medium">Search…</span>
-                <span className="ml-1 hidden xl:inline text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-white/10 text-white/55 border border-white/10">
+                <span className="text-white/70 font-medium">Search…</span>
+                <span className="ml-1 hidden xl:inline text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-white/10 text-white/70 border border-white/10">
                   ⌘K
                 </span>
               </button>
