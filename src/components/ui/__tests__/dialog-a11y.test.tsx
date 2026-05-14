@@ -45,7 +45,7 @@ function ControlledDialog() {
           </DialogHeader>
           <input aria-label="first" />
           <input aria-label="second" />
-          <DialogClose>Close</DialogClose>
+          <DialogClose>Done</DialogClose>
         </DialogContent>
       </Dialog>
       <button>after</button>
@@ -68,7 +68,7 @@ describe("Dialog (shadcn/Radix)", () => {
     // Focus inside dialog
     const first = screen.getByLabelText("first");
     const second = screen.getByLabelText("second");
-    const close = screen.getByText("Close");
+    const close = screen.getByText("Done");
 
     first.focus();
     expect(first).toHaveFocus();
@@ -93,7 +93,7 @@ describe("Dialog (shadcn/Radix)", () => {
     render(<ControlledDialog />);
     await user.click(screen.getByText("Open"));
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
-    await user.click(screen.getByText("Close"));
+    await user.click(screen.getByText("Done"));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });
