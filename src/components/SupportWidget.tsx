@@ -357,7 +357,7 @@ export function SupportWidget() {
                       তাৎক্ষণিক উত্তর — বাংলায়, 24/7
                     </span>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-white/50 group-hover:text-white group-hover:translate-x-1 transition" />
+                  <ChevronRight className="h-4 w-4 text-white/70 group-hover:text-white group-hover:translate-x-1 transition" />
                 </div>
               </button>
 
@@ -467,7 +467,7 @@ export function SupportWidget() {
                       </span>
                       <span className="flex-1 text-[12.5px] font-bold text-white">{f.q}</span>
                       <ChevronRight
-                        className={`h-4 w-4 text-white/50 transition-transform ${
+                        className={`h-4 w-4 text-white/70 transition-transform ${
                           isOpen ? "rotate-90 text-white" : ""
                         }`}
                       />
@@ -532,7 +532,7 @@ export function SupportWidget() {
                   </div>
 
                   <div className="pl-10 space-y-2">
-                    <div className="text-[10.5px] font-bold uppercase tracking-wider text-white/45">
+                    <div className="text-[10.5px] font-bold uppercase tracking-wider text-white/70">
                       জনপ্রিয় প্রশ্ন
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -732,7 +732,7 @@ function BottomTabs({
             key={it.id}
             onClick={() => setTab(it.id)}
             className={`relative flex flex-col items-center justify-center gap-1 py-2.5 text-[10.5px] font-bold transition ${
-              active ? "text-white" : "text-white/50 hover:text-white/80"
+              active ? "text-white" : "text-white/70 hover:text-white/80"
             }`}
           >
             {active && (
