@@ -132,6 +132,7 @@ function RootComponent() {
             {!isAdmin && <SiteHeader />}
             <Outlet />
             {!isAdmin && <SupportWidget />}
+            {!isAdmin && <WelcomePopup />}
           </CartProvider>
         </AuthProvider>
       </ThemeProvider>
