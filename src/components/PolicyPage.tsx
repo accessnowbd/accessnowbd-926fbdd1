@@ -12,7 +12,7 @@ export function PolicyPage({
 }) {
   return (
     <div className="min-h-screen">
-      <main className="mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16">
+      <div className="mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16">
         <header className="mb-8">
           <h1
             className="text-3xl md:text-4xl font-extrabold bg-clip-text text-transparent"
@@ -27,7 +27,7 @@ export function PolicyPage({
         <article className="space-y-6 rounded-3xl border border-[var(--glass-border)] bg-white/[0.04] p-6 md:p-8 text-[15px] leading-8 text-white/82 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-6 [&_h2]:mb-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1 [&_a]:text-aqua [&_a]:underline">
           {children}
         </article>
-      </main>
+      </div>
       <SiteFooter />
     </div>
   );

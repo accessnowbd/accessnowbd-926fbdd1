@@ -405,7 +405,7 @@ export function SupportWidget() {
                     জনপ্রিয় প্রশ্ন ও তাৎক্ষণিক উত্তর
                   </div>
                 </div>
-                <ChevronRight className="h-4 w-4 text-white/40 group-hover:text-white/80 group-hover:translate-x-0.5 transition" />
+                <ChevronRight className="h-4 w-4 text-white/65 group-hover:text-white/80 group-hover:translate-x-0.5 transition" />
               </button>
 
               {/* Trust strip */}
@@ -616,7 +616,7 @@ export function SupportWidget() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="আপনার মেসেজ লিখুন…"
-                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-white placeholder:text-white/40"
+                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-white placeholder:text-white/65"
                   disabled={loading}
                 />
                 <button
@@ -633,7 +633,7 @@ export function SupportWidget() {
                 </button>
               </div>
               <div className="mt-2 flex items-center justify-between px-1">
-                <div className="flex items-center gap-1.5 text-[10px] text-white/40">
+                <div className="flex items-center gap-1.5 text-[10px] text-white/65">
                   Powered by AI · বাংলায় সাপোর্টেড
                 </div>
                 <a

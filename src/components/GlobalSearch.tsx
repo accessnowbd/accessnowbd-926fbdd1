@@ -198,7 +198,7 @@ export function GlobalSearch({
             onChange={(e) => setQ(e.target.value)}
             onKeyDown={onKeyDown}
             placeholder="Search Netflix, ChatGPT, Spotify, Canva…"
-            className="flex-1 bg-transparent outline-none text-[15px] text-white placeholder:text-white/40"
+            className="flex-1 bg-transparent outline-none text-[15px] text-white placeholder:text-white/65"
             autoComplete="off"
             spellCheck={false}
           />
@@ -231,7 +231,7 @@ export function GlobalSearch({
                 <span className="flex-1 text-sm text-white truncate">
                   Search for "<span className="font-semibold">{needle}</span>" in all products
                 </span>
-                <CornerDownLeft className="w-3.5 h-3.5 text-white/40" />
+                <CornerDownLeft className="w-3.5 h-3.5 text-white/65" />
               </button>
 
               {/* Product matches */}
@@ -269,7 +269,7 @@ export function GlobalSearch({
                           <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-white/55 px-2 py-1 rounded-full bg-white/5 border border-white/10">
                             {p.category}
                           </span>
-                          <CornerDownLeft className="w-3.5 h-3.5 text-white/40 shrink-0" />
+                          <CornerDownLeft className="w-3.5 h-3.5 text-white/65 shrink-0" />
                         </button>
                       );
                     })}
@@ -300,7 +300,7 @@ export function GlobalSearch({
                           <span className="flex-1 text-sm text-white truncate">
                             {highlight(c, needle)}
                           </span>
-                          <span className="text-[10px] text-white/40">Category</span>
+                          <span className="text-[10px] text-white/65">Category</span>
                         </button>
                       );
                     })}

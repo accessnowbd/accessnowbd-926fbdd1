@@ -77,7 +77,7 @@ const VALUES = [
 function DeveloperPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <main className="mx-auto max-w-4xl px-4 py-12 md:py-20">
+      <div className="mx-auto max-w-4xl px-4 py-12 md:py-20">
         {/* Hero */}
         <article>
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
@@ -240,7 +240,7 @@ function DeveloperPage() {
             Shahed IT
           </p>
         </article>
-      </main>
+      </div>
       <SiteFooter />
     </div>
   );
