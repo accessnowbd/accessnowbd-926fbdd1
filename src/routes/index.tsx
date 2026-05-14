@@ -255,7 +255,7 @@ const HERO_BRANDS: { name: string; domain: string; color: string; logo?: string 
   { name: "Spotify", domain: "spotify.com", color: "#1DB954" },
   { name: "Canva", domain: "canva.com", color: "#00C4CC" },
   { name: "Adobe", domain: "adobe.com", color: "#FF0000" },
-  { name: "Office 365", domain: "office.com", color: "#EA3E23", logo: "/images/office-365.png" },
+  { name: "Office 365", domain: "office.com", color: "#EA3E23", logo: "/images/office-365.webp" },
   { name: "Prime Video", domain: "primevideo.com", color: "#00A8E1" },
   { name: "Grammarly", domain: "grammarly.com", color: "#27AE60" },
   { name: "NordVPN", domain: "nordvpn.com", color: "#4687FF" },
