@@ -44,6 +44,7 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
 import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
+import { Route as ApiPublicClientErrorsRouteImport } from './routes/api/public/client-errors'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -220,6 +221,11 @@ const ApiPublicProductsRoute = ApiPublicProductsRouteImport.update({
   path: '/api/public/products',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicClientErrorsRoute = ApiPublicClientErrorsRouteImport.update({
+  id: '/api/public/client-errors',
+  path: '/api/public/client-errors',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -256,6 +262,7 @@ export interface FileRoutesByFullPath {
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
 }
 export interface FileRoutesByTo {
@@ -292,6 +299,7 @@ export interface FileRoutesByTo {
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
 }
 export interface FileRoutesById {
@@ -330,6 +338,7 @@ export interface FileRoutesById {
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
 }
 export interface FileRouteTypes {
@@ -369,6 +378,7 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/product/$slug'
     | '/admin/'
+    | '/api/public/client-errors'
     | '/api/public/products'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -405,6 +415,7 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/product/$slug'
     | '/admin'
+    | '/api/public/client-errors'
     | '/api/public/products'
   id:
     | '__root__'
@@ -442,6 +453,7 @@ export interface FileRouteTypes {
     | '/orders/$id'
     | '/product/$slug'
     | '/admin/'
+    | '/api/public/client-errors'
     | '/api/public/products'
   fileRoutesById: FileRoutesById
 }
@@ -473,6 +485,7 @@ export interface RootRouteChildren {
   StreamingRoute: typeof StreamingRoute
   TermsRoute: typeof TermsRoute
   ProductSlugRoute: typeof ProductSlugRoute
+  ApiPublicClientErrorsRoute: typeof ApiPublicClientErrorsRoute
   ApiPublicProductsRoute: typeof ApiPublicProductsRoute
 }
 
@@ -723,6 +736,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/client-errors': {
+      id: '/api/public/client-errors'
+      path: '/api/public/client-errors'
+      fullPath: '/api/public/client-errors'
+      preLoaderRoute: typeof ApiPublicClientErrorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -785,6 +805,7 @@ const rootRouteChildren: RootRouteChildren = {
   StreamingRoute: StreamingRoute,
   TermsRoute: TermsRoute,
   ProductSlugRoute: ProductSlugRoute,
+  ApiPublicClientErrorsRoute: ApiPublicClientErrorsRoute,
   ApiPublicProductsRoute: ApiPublicProductsRoute,
 }
 export const routeTree = rootRouteImport

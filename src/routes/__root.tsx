@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { installErrorLogger } from "@/lib/error-logger";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -132,6 +134,10 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isAdmin = pathname.startsWith("/admin");
+
+  useEffect(() => {
+    installErrorLogger();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
