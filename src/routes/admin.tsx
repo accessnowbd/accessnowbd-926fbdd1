@@ -53,7 +53,7 @@ function AdminBootSplash() {
 
         <div className="text-center">
           <div className="text-white text-base font-bold tracking-tight">AccessNow BD</div>
-          <div className="mt-1 text-[12px] text-white/55">Preparing your workspace…</div>
+          <div className="mt-1 text-[12px] text-white/70">Preparing your workspace…</div>
         </div>
 
         {/* progress bar */}
