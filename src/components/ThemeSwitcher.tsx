@@ -71,7 +71,7 @@ export function ThemeSwitcher() {
                   />
                   <span className="flex-1 min-w-0">
                     <span className="block text-[13px] font-semibold text-white truncate">{t.name}</span>
-                    <span className="block text-[11px] text-white/55 truncate">{t.description}</span>
+                    <span className="block text-[11px] text-white/70 truncate">{t.description}</span>
                   </span>
                   {isActive && <Check className="w-4 h-4 text-primary shrink-0" />}
                 </button>

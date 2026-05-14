@@ -199,7 +199,7 @@ export function SupportWidget() {
                 </span>
                 <div className="leading-tight">
                   <div className="text-[13px] font-extrabold text-white">AI Support</div>
-                  <div className="text-[11px] text-white/60 mt-0.5">তাৎক্ষণিক উত্তর পান</div>
+                  <div className="text-[11px] text-white/70 mt-0.5">তাৎক্ষণিক উত্তর পান</div>
                 </div>
               </button>
 
@@ -216,11 +216,11 @@ export function SupportWidget() {
                 </span>
                 <div className="leading-tight">
                   <div className="text-[13px] font-extrabold text-white">WhatsApp</div>
-                  <div className="text-[11px] text-white/60 mt-0.5">সরাসরি কথা বলুন</div>
+                  <div className="text-[11px] text-white/70 mt-0.5">সরাসরি কথা বলুন</div>
                 </div>
               </a>
 
-              <div className="text-center text-[11px] text-white/55 mt-1">কোনটি পছন্দ করবেন?</div>
+              <div className="text-center text-[11px] text-white/70 mt-1">কোনটি পছন্দ করবেন?</div>
             </div>
           )}
 
@@ -353,7 +353,7 @@ export function SupportWidget() {
                         AI
                       </span>
                     </div>
-                    <span className="block text-[11.5px] text-white/60 mt-0.5">
+                    <span className="block text-[11.5px] text-white/70 mt-0.5">
                       তাৎক্ষণিক উত্তর — বাংলায়, 24/7
                     </span>
                   </div>
@@ -374,7 +374,7 @@ export function SupportWidget() {
                     <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-300 ring-2 ring-[#070922] animate-pulse" />
                   </span>
                   <div className="mt-2 text-[12.5px] font-extrabold text-white">WhatsApp</div>
-                  <div className="text-[10.5px] text-white/55 mt-0.5">সরাসরি চ্যাট</div>
+                  <div className="text-[10.5px] text-white/70 mt-0.5">সরাসরি চ্যাট</div>
                 </a>
 
                 <a
@@ -385,7 +385,7 @@ export function SupportWidget() {
                     <Phone className="h-4.5 w-4.5" />
                   </span>
                   <div className="mt-2 text-[12.5px] font-extrabold text-white">কল করুন</div>
-                  <div className="text-[10.5px] text-white/55 mt-0.5 font-mono">
+                  <div className="text-[10.5px] text-white/70 mt-0.5 font-mono">
                     {ADMIN_PHONE}
                   </div>
                 </a>
@@ -401,7 +401,7 @@ export function SupportWidget() {
                 </span>
                 <div className="flex-1 leading-tight">
                   <div className="text-[13px] font-extrabold text-white">হেল্প সেন্টার</div>
-                  <div className="text-[11px] text-white/55 mt-0.5">
+                  <div className="text-[11px] text-white/70 mt-0.5">
                     জনপ্রিয় প্রশ্ন ও তাৎক্ষণিক উত্তর
                   </div>
                 </div>
@@ -412,17 +412,17 @@ export function SupportWidget() {
               <div className="grid grid-cols-3 gap-2 pt-1">
                 <div className="rounded-xl border border-white/8 bg-white/[0.02] px-2 py-2 text-center">
                   <Zap className="h-3.5 w-3.5 text-amber-300 mx-auto" />
-                  <div className="text-[10px] text-white/55 mt-1">দ্রুত রেসপন্স</div>
+                  <div className="text-[10px] text-white/70 mt-1">দ্রুত রেসপন্স</div>
                   <div className="text-[11px] font-extrabold text-white">~2 মিনিট</div>
                 </div>
                 <div className="rounded-xl border border-white/8 bg-white/[0.02] px-2 py-2 text-center">
                   <Star className="h-3.5 w-3.5 text-amber-300 mx-auto fill-amber-300" />
-                  <div className="text-[10px] text-white/55 mt-1">রেটিং</div>
+                  <div className="text-[10px] text-white/70 mt-1">রেটিং</div>
                   <div className="text-[11px] font-extrabold text-white">4.9 / 5</div>
                 </div>
                 <div className="rounded-xl border border-white/8 bg-white/[0.02] px-2 py-2 text-center">
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-300 mx-auto" />
-                  <div className="text-[10px] text-white/55 mt-1">ভেরিফাইড</div>
+                  <div className="text-[10px] text-white/70 mt-1">ভেরিফাইড</div>
                   <div className="text-[11px] font-extrabold text-white">5000+</div>
                 </div>
               </div>
@@ -697,7 +697,7 @@ function PanelHeader({
           {showOnlineDot && (
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
           )}
-          <span className="text-[11px] font-semibold text-white/60 truncate">{subtitle}</span>
+          <span className="text-[11px] font-semibold text-white/70 truncate">{subtitle}</span>
         </div>
       </div>
       <button

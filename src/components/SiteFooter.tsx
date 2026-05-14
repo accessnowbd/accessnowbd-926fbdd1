@@ -272,7 +272,7 @@ export function SiteFooter() {
               ))}
             </div>
 
-            <p className="text-[12.5px] leading-6 text-white/55">
+            <p className="text-[12.5px] leading-6 text-white/70">
               © 2026 ·{" "}
               <span className="font-extrabold text-white">AccessNow BD</span> · All Rights Reserved · Designed &amp; Developed by{" "}
               <a

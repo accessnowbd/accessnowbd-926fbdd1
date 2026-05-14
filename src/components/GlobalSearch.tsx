@@ -205,13 +205,13 @@ export function GlobalSearch({
           {q && (
             <button
               onClick={() => setQ("")}
-              className="grid place-items-center w-8 h-8 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition"
+              className="grid place-items-center w-8 h-8 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition"
               aria-label="Clear"
             >
               <X className="w-4 h-4" />
             </button>
           )}
-          <kbd className="hidden sm:inline-flex items-center h-6 px-2 rounded-md text-[10px] font-mono bg-white/10 text-white/55 border border-white/10">
+          <kbd className="hidden sm:inline-flex items-center h-6 px-2 rounded-md text-[10px] font-mono bg-white/10 text-white/70 border border-white/10">
             ESC
           </kbd>
         </div>
@@ -262,11 +262,11 @@ export function GlobalSearch({
                             <div className="text-sm font-semibold text-white truncate">
                               {highlight(p.name, needle)}
                             </div>
-                            <div className="text-xs text-white/55 truncate">
+                            <div className="text-xs text-white/70 truncate">
                               {p.tagline || p.category}
                             </div>
                           </div>
-                          <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-white/55 px-2 py-1 rounded-full bg-white/5 border border-white/10">
+                          <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-white/70 px-2 py-1 rounded-full bg-white/5 border border-white/10">
                             {p.category}
                           </span>
                           <CornerDownLeft className="w-3.5 h-3.5 text-white/65 shrink-0" />
@@ -386,7 +386,7 @@ export function GlobalSearch({
                       className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition group"
                     >
                       <div className="grid place-items-center w-8 h-8 rounded-lg bg-white/5 border border-white/10 group-hover:border-aqua/40 transition">
-                        <CornerDownLeft className="w-3.5 h-3.5 text-white/60 group-hover:text-aqua" />
+                        <CornerDownLeft className="w-3.5 h-3.5 text-white/70 group-hover:text-aqua" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="text-sm font-semibold text-white truncate">{l.label}</div>
