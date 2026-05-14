@@ -119,17 +119,23 @@ function ProductCardImpl({ product }: { product: Product }) {
           </span>
 
           <div className="grid grid-cols-2 gap-2">
-            <a
-              href={waAskUrl(product.name, { number: shopConfig?.whatsapp_number })}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.open(
+                  waAskUrl(product.name, { number: shopConfig?.whatsapp_number }),
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }}
               aria-label="Order via WhatsApp"
               className="flex items-center justify-center gap-1.5 h-10 rounded-full bg-emerald-500/15 text-emerald-600 text-[12px] font-bold border border-emerald-500/25 hover:bg-emerald-500/25 transition"
             >
               <MessageCircle className="w-3.5 h-3.5" />
               WhatsApp
-            </a>
+            </button>
             <button
               onClick={onAdd}
               disabled={hasOptions}

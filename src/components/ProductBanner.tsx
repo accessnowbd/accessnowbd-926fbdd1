@@ -111,8 +111,7 @@ export function ProductBanner({
           alt={product.name}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
-          // @ts-expect-error - valid HTML attr, React types lag
-          fetchpriority={priority ? "high" : "low"}
+          fetchPriority={priority ? "high" : "low"}
           width={1024}
           height={1024}
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
@@ -126,8 +125,7 @@ export function ProductBanner({
           alt={product.name}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
-          // @ts-expect-error - valid HTML attr, React types lag
-          fetchpriority={priority ? "high" : "low"}
+          fetchPriority={priority ? "high" : "low"}
           width={256}
           height={256}
           className="relative z-10 max-h-[72%] max-w-[72%] object-contain"
