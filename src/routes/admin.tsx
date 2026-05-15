@@ -337,14 +337,14 @@ function AdminShell({ user, signOut, navigate }: any) {
 
         {/* Search */}
         {!collapsed && (
-          <div className="p-3">
-            <div className="flex items-center gap-2 h-10 px-3 rounded-xl border bg-white/60 backdrop-blur-md border-white/60">
-              <Search className="w-4 h-4 text-slate-500" />
+          <div className="px-3 pt-3 pb-1">
+            <div className="flex items-center gap-2 h-10 px-4 rounded-full bg-slate-100/80">
+              <Search className="w-4 h-4 text-slate-400" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search menu..."
-                className="bg-transparent flex-1 outline-none text-sm text-slate-900 placeholder:text-slate-500"
+                className="bg-transparent flex-1 outline-none text-sm text-slate-900 placeholder:text-slate-400"
               />
             </div>
           </div>
@@ -470,13 +470,13 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
     <div className="mt-3">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:bg-slate-50"
+        className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-50"
       >
-          <span className="inline-flex items-center gap-2">
-          <span className="text-blue-600">{group.icon}</span>
+        <span className="inline-flex items-center gap-2">
+          <span className="text-slate-500">{group.icon}</span>
           {group.title}
         </span>
-        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "" : "-rotate-90"}`} />
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform text-slate-400 ${open ? "" : "-rotate-90"}`} />
       </button>
       {open && (
         <div className="space-y-1 mt-1">
@@ -489,24 +489,28 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
   );
 }
 
-function SidebarItem({ item, collapsed, dark, active }: { item: AdminMenuItem; collapsed?: boolean; dark: boolean; active: boolean }) {
+function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenuItem; collapsed?: boolean; dark: boolean; active: boolean }) {
+  const grad = item.grad || "from-slate-500 to-slate-700";
   return (
     <Link
       to={item.to}
       activeOptions={{ exact: item.exact }}
       title={collapsed ? item.label : undefined}
       className={[
-        "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all relative",
+        "group flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm transition-all relative",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-[0_8px_22px_-8px_rgba(37,99,235,0.6)]"
-          : "text-slate-700 hover:bg-white/70",
+          ? "bg-violet-100/70 text-slate-900 ring-1 ring-violet-200/60"
+          : "text-slate-700 hover:bg-slate-50",
       ].join(" ")}
     >
-      <span className={`shrink-0 w-7 h-7 rounded-lg grid place-items-center transition ${active ? "bg-white/20 text-white" : "bg-gradient-to-br from-blue-600 to-sky-500 text-white shadow-sm"}`}>
+      <span className={`shrink-0 w-9 h-9 rounded-full grid place-items-center bg-gradient-to-br ${grad} text-white shadow-[0_4px_10px_-4px_rgba(15,23,42,0.35)] ring-1 ring-white/40`}>
         {item.icon}
       </span>
       {!collapsed && <span className="font-semibold truncate flex-1">{item.label}</span>}
+      {!collapsed && active && (
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" aria-hidden />
+      )}
     </Link>
   );
 }
