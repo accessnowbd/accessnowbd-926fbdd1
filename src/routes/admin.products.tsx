@@ -594,12 +594,9 @@ const DURATION_CHIPS = [
 ];
 
 const AI_CARD_STYLES: { id: AiCardStyle; label: string; sub: string; icon: string; tint: string }[] = [
-  { id: "dark-neon",    label: "Dark Neon",      sub: "গাঢ় ব্যাকগ্রাউন্ড, নিয়ন গ্লোয়িং বর্ডার",       icon: "🌙", tint: "from-slate-900 to-slate-700" },
-  { id: "light-glass",  label: "Light Glass",    sub: "পাস্টেল গ্রেডিয়েন্ট, ফ্রস্টেড গ্লাস",          icon: "🌸", tint: "from-pink-200 to-rose-100" },
-  { id: "clean-light",  label: "Clean Light",    sub: "ক্লিন হোয়াইট, বোকে এফেক্ট",                 icon: "💎", tint: "from-cyan-100 to-sky-50" },
-  { id: "soft-aurora",  label: "Soft Aurora",    sub: "সফট অরোরা গ্রেডিয়েন্ট, লাইট প্রিমিয়াম",     icon: "🌈", tint: "from-emerald-200 to-violet-200" },
-  { id: "glass-gradient", label: "Glass Gradient", sub: "গ্লাসমরফিজম গ্রেডিয়েন্ট বর্ডার",            icon: "✨", tint: "from-indigo-100 to-blue-100" },
-  { id: "glassmorphism", label: "Glassmorphism UI", sub: "প্রিমিয়াম গ্লাস প্লাস, অ্যাকসেন্ট",         icon: "🪟", tint: "from-blue-100 to-indigo-100" },
+  { id: "glassmorphism", label: "Glassmorphism UI", sub: "প্রিমিয়াম ফ্রস্টেড গ্লাস + অ্যাকসেন্ট গ্লো",      icon: "🪟", tint: "from-blue-100 to-indigo-100" },
+  { id: "soft-aurora",   label: "Soft Aurora",      sub: "সফট অরোরা গ্রেডিয়েন্ট, লাইট প্রিমিয়াম",         icon: "🌈", tint: "from-emerald-200 to-violet-200" },
+  { id: "dark-neon",     label: "Dark Neon",        sub: "গাঢ় ব্যাকগ্রাউন্ড, নিয়ন গ্লোয়িং বর্ডার",         icon: "🌙", tint: "from-slate-900 to-slate-700" },
 ];
 
 function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product; isNew: boolean; onClose: () => void; onSaved: () => void }) {
