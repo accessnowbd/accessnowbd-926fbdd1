@@ -18,6 +18,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
+import { listProducts } from "@/lib/products.functions";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LazyMount } from "@/components/LazyMount";
@@ -25,6 +26,14 @@ import type { Product } from "@/data/products";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  loader: async () => {
+    try {
+      const products = await listProducts();
+      return { products };
+    } catch {
+      return { products: [] as Product[] };
+    }
+  },
   head: () => ({
     meta: [
       { title: "AccessNow BD — Digital Products & Software" },
@@ -76,7 +85,10 @@ const RAIL_PLACEHOLDER_TITLES: string[] = [
 ];
 
 function Index() {
-  const { products, isLoading } = useProducts();
+  const loaderData = Route.useLoaderData();
+  const initialProducts = (loaderData?.products ?? []) as Product[];
+  const { products: liveProducts, isLoading } = useProducts(initialProducts);
+  const products: Product[] = liveProducts.length ? liveProducts : initialProducts;
   const top = useMemo(() => pickTopProducts(products), [products]);
   const byCategory = useMemo(() => {
     const desired = [
