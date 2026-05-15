@@ -18,6 +18,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
+import { listProducts } from "@/lib/products.functions";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LazyMount } from "@/components/LazyMount";
@@ -25,6 +26,13 @@ import type { Product } from "@/data/products";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  loader: async ({ context }) => {
+    await context.queryClient.prefetchQuery({
+      queryKey: ["products"],
+      queryFn: () => listProducts(),
+      staleTime: 10 * 60_000,
+    });
+  },
   head: () => ({
     meta: [
       { title: "AccessNow BD — Digital Products & Software" },
