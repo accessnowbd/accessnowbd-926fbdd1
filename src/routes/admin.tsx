@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tan
 import { useEffect, useMemo, useState } from "react";
 import {
   ShieldAlert, LogOut, Search, Bell, Plus, Globe,
-  PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X,
+  PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X, Pin,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -498,20 +498,33 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
       activeOptions={{ exact: item.exact }}
       title={collapsed ? item.label : undefined}
       className={[
-        "group flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm transition-all relative",
+        "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all relative",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-slate-100 text-slate-900 ring-1 ring-slate-200"
+          ? "bg-slate-100 text-slate-900"
           : "text-slate-700 hover:bg-slate-50",
       ].join(" ")}
     >
-      <span className="shrink-0 w-9 h-9 rounded-full grid place-items-center bg-white/70 backdrop-blur-md text-slate-600 ring-1 ring-slate-200">
+      <span
+        className={[
+          "shrink-0 w-9 h-9 rounded-full grid place-items-center text-white",
+          "bg-gradient-to-br shadow-sm ring-1 ring-white/40",
+          item.grad,
+        ].join(" ")}
+      >
         {item.icon}
       </span>
-      {!collapsed && <span className="font-semibold truncate flex-1">{item.label}</span>}
+      {!collapsed && <span className="font-semibold truncate flex-1 text-[14px]">{item.label}</span>}
       {!collapsed && active && (
-        <span className="w-1.5 h-1.5 rounded-full bg-slate-500 shrink-0" aria-hidden />
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-700 shrink-0" aria-hidden />
+      )}
+      {!collapsed && !active && (
+        <Pin
+          className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+          aria-hidden
+        />
       )}
     </Link>
   );
 }
+
