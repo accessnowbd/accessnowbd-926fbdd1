@@ -9,7 +9,7 @@ import {
   Globe, MessageSquare, UserCheck, ShieldCheck,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import RoleDebugPanel from "@/components/admin/RoleDebugPanel";
+
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
@@ -213,8 +213,6 @@ function AdminDashboard() {
 
   return (
     <div className="space-y-5 animate-fade-in">
-      <RoleDebugPanel />
-
       {/* Welcome hero card */}
       <div className="rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)] p-6 md:p-8 flex items-start md:items-center justify-between gap-6 flex-wrap">
         <div className="min-w-0">
