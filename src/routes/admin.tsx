@@ -337,14 +337,14 @@ function AdminShell({ user, signOut, navigate }: any) {
 
         {/* Search */}
         {!collapsed && (
-          <div className="p-3">
-            <div className="flex items-center gap-2 h-10 px-3 rounded-xl border bg-white/60 backdrop-blur-md border-white/60">
-              <Search className="w-4 h-4 text-slate-500" />
+          <div className="px-3 pt-3 pb-1">
+            <div className="flex items-center gap-2 h-10 px-4 rounded-full bg-slate-100/80">
+              <Search className="w-4 h-4 text-slate-400" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search menu..."
-                className="bg-transparent flex-1 outline-none text-sm text-slate-900 placeholder:text-slate-500"
+                className="bg-transparent flex-1 outline-none text-sm text-slate-900 placeholder:text-slate-400"
               />
             </div>
           </div>
