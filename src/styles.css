@@ -351,6 +351,44 @@
   html.theme-white .text-white\/50 { color: oklch(0.48 0.06 280) !important; }
   html.theme-white .text-white\/40 { color: oklch(0.54 0.06 280) !important; }
   html.theme-white .text-foreground { color: oklch(0.22 0.04 285) !important; }
+  /* Tailwind alpha variants like text-foreground/85 become faded ghosts on the
+     translucent white-glass cards. Force every opacity variant back to a
+     readable violet-tinted dark color. */
+  html.theme-white [class*="text-foreground\/"] { color: oklch(0.26 0.05 285) !important; }
+  html.theme-white .text-foreground\/95,
+  html.theme-white .text-foreground\/90 { color: oklch(0.22 0.04 285) !important; }
+  html.theme-white .text-foreground\/85,
+  html.theme-white .text-foreground\/80 { color: oklch(0.26 0.05 285) !important; }
+  html.theme-white .text-foreground\/75,
+  html.theme-white .text-foreground\/70 { color: oklch(0.32 0.05 282) !important; }
+  html.theme-white .text-foreground\/65,
+  html.theme-white .text-foreground\/60 { color: oklch(0.38 0.06 280) !important; }
+  html.theme-white .text-foreground\/55,
+  html.theme-white .text-foreground\/50 { color: oklch(0.44 0.06 280) !important; }
+  html.theme-white .text-foreground\/40,
+  html.theme-white .text-foreground\/30 { color: oklch(0.50 0.06 280) !important; }
+
+  /* Catch-all for any remaining washed-out light grays that slipped through
+     on white backgrounds (slate-100/200/300, gray-100/200/300, neutral-100/200/300,
+     zinc-100/200/300). Force them to a readable violet-dark. */
+  html.theme-white .text-white,
+  html.theme-white .text-slate-50,
+  html.theme-white .text-slate-100,
+  html.theme-white .text-slate-200,
+  html.theme-white .text-slate-300,
+  html.theme-white .text-gray-50,
+  html.theme-white .text-gray-100,
+  html.theme-white .text-gray-200,
+  html.theme-white .text-gray-300,
+  html.theme-white .text-neutral-100,
+  html.theme-white .text-neutral-200,
+  html.theme-white .text-neutral-300,
+  html.theme-white .text-zinc-100,
+  html.theme-white .text-zinc-200,
+  html.theme-white .text-zinc-300,
+  html.theme-white .text-stone-100,
+  html.theme-white .text-stone-200,
+  html.theme-white .text-stone-300 { color: oklch(0.26 0.05 285) !important; }
 
   /* Drop dark text-shadows that were designed for dark theme — they smudge text on white */
   html.theme-white h1,
