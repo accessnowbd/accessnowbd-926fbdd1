@@ -479,7 +479,7 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
     <div className="mt-3">
       <button
         onClick={() => setOpen((v) => !v)}
-        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider ${dark ? "text-slate-500 hover:bg-slate-800" : "text-slate-500 hover:bg-slate-50"}`}
+        className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:bg-slate-50"
       >
           <span className="inline-flex items-center gap-2">
           <span className="text-blue-600">{group.icon}</span>
