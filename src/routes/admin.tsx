@@ -326,7 +326,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           {/* Mobile close */}
           <button
             onClick={() => setMobileOpen(false)}
-            className={`lg:hidden p-1.5 rounded-lg ${dark ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"}`}
+            className="lg:hidden p-1.5 rounded-lg hover:bg-slate-100 text-slate-600"
             aria-label="Close menu"
           >
             <X className="w-4 h-4" />
@@ -334,7 +334,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           {/* Desktop collapse */}
           <button
             onClick={() => setCollapsed((v) => !v)}
-            className={`hidden lg:block p-1.5 rounded-lg ${dark ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-600"}`}
+            className="hidden lg:block p-1.5 rounded-lg hover:bg-slate-100 text-slate-600"
             aria-label="Collapse sidebar"
           >
             {collapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
