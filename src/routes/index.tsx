@@ -85,9 +85,10 @@ const RAIL_PLACEHOLDER_TITLES: string[] = [
 ];
 
 function Index() {
-  const { products: initialProducts } = Route.useLoaderData();
+  const loaderData = Route.useLoaderData();
+  const initialProducts = (loaderData?.products ?? []) as Product[];
   const { products: liveProducts, isLoading } = useProducts(initialProducts);
-  const products = liveProducts.length ? liveProducts : initialProducts;
+  const products: Product[] = liveProducts.length ? liveProducts : initialProducts;
   const top = useMemo(() => pickTopProducts(products), [products]);
   const byCategory = useMemo(() => {
     const desired = [
