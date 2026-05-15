@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  ShieldAlert, LogOut, Search, Bell, Plus, Moon, Sun, Globe, Sparkles,
+  ShieldAlert, LogOut, Search, Bell, Plus, Moon, Sun, Globe,
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
