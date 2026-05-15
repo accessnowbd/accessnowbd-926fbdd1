@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  ShieldAlert, LogOut, Search, Bell, Plus, Moon, Sun, Globe,
+  ShieldAlert, LogOut, Search, Bell, Plus, Globe,
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -15,20 +15,20 @@ export const Route = createFileRoute("/admin")({
 });
 
 const ADMIN_CACHE_KEY = "anbd:isAdmin";
+const ADMIN_ROLE_CHECK_TIMEOUT_MS = 8000;
 
-type AdminCache = { uid: string; isAdmin: boolean };
-
-function readAdminCacheAny(): AdminCache | null {
+async function withAdminTimeout<T>(promise: PromiseLike<T>): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
   try {
-    const store = typeof localStorage !== "undefined" ? localStorage : null;
-    if (!store) return null;
-    const raw = store.getItem(ADMIN_CACHE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as AdminCache;
-  } catch { return null; }
-}
-function writeAdminCache(userId: string, isAdmin: boolean) {
-  try { localStorage.setItem(ADMIN_CACHE_KEY, JSON.stringify({ uid: userId, isAdmin })); } catch {}
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error("Admin permission check timed out")), ADMIN_ROLE_CHECK_TIMEOUT_MS);
+      }),
+    ]);
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
 }
 
 // Legacy splash/loader cache keys written by earlier versions. We scrub these
@@ -40,6 +40,7 @@ const LEGACY_SPLASH_KEYS = [
   "anbd:adminBootSplash",
   "anbd:splash",
   "anbd:bootSplash",
+  ADMIN_CACHE_KEY,
   "adminSplash",
   "admin:splash",
 ];
@@ -55,14 +56,11 @@ function purgeLegacySplashFlags() {
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  // Wipe any historical splash flag immediately on mount.
+  // Wipe historical splash/admin flags immediately on mount so a stale client
+  // flag can never leave the route on an empty gradient screen.
   useEffect(() => { purgeLegacySplashFlags(); }, []);
-  // Security: never trust the localStorage cache as an authorization signal.
-  // The role cache is only used to avoid a flash for users we already
-  // verified — it is NOT a splash flag and never gates UI on its own.
-  const cached = useMemo(() => readAdminCacheAny(), []);
-  const [isAdmin, setIsAdmin] = useState<boolean>(cached?.isAdmin ?? false);
-  const [verified, setVerified] = useState<boolean>(!!cached);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [verified, setVerified] = useState(false);
   const [roleError, setRoleError] = useState<{
     message: string;
     code?: string;
@@ -76,10 +74,12 @@ function AdminLayout() {
     () => async (uid: string) => {
       setRoleError(null);
       try {
-        const { data, error } = await supabase.rpc("has_role", {
-          _user_id: uid,
-          _role: "admin",
-        });
+        const { data, error } = await withAdminTimeout(
+          supabase.rpc("has_role", {
+            _user_id: uid,
+            _role: "admin",
+          }),
+        );
         setCheckedAt(new Date().toISOString());
         if (error) {
           setRoleError({
@@ -89,7 +89,6 @@ function AdminLayout() {
             hint: (error as any).hint,
             raw: error,
           });
-          writeAdminCache(uid, false);
           setIsAdmin(false);
           return;
         }
@@ -99,7 +98,6 @@ function AdminLayout() {
           });
         }
         const ok = data === true;
-        writeAdminCache(uid, ok);
         setIsAdmin(ok);
       } catch (e: any) {
         setCheckedAt(new Date().toISOString());
@@ -107,7 +105,6 @@ function AdminLayout() {
           message: e?.message || "Network/unknown error calling has_role",
           raw: e,
         });
-        writeAdminCache(uid, false);
         setIsAdmin(false);
       }
     },
@@ -130,13 +127,9 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate, verifyRole]);
 
-  // No splash/loader: while auth is loading or role hasn't been verified yet,
-  // render nothing for unverified users (no cache) or optimistically render the
-  // admin shell when we have a cached admin flag. Verification runs silently in
-  // the background and only flips to "Access denied" if it fails.
-  if (loading) return null;
-  if (!user) return null;
-  if (!verified && !cached?.isAdmin) return null;
+  if (loading || !user || !verified) {
+    return <AdminBlankState />;
+  }
 
   if (!isAdmin && verified) {
     const hasError = !!roleError;
@@ -236,10 +229,14 @@ function AdminLayout() {
   return <AdminShell user={user} signOut={signOut} navigate={navigate} />;
 }
 
+function AdminBlankState() {
+  return <div className="min-h-screen bg-white" aria-hidden="true" />;
+}
+
 function AdminShell({ user, signOut, navigate }: any) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dark, setDark] = useState(false);
+  const dark = false;
   const [search, setSearch] = useState("");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -423,9 +420,6 @@ function AdminShell({ user, signOut, navigate }: any) {
             {/* Actions */}
             <button className={`hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border ${dark ? "border-slate-700 text-slate-200 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}>
               <Globe className="w-3.5 h-3.5" /> বাং
-            </button>
-            <button onClick={() => setDark((v) => !v)} className={`h-9 w-9 rounded-lg grid place-items-center border ${dark ? "border-slate-700 text-amber-300 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}>
-              {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <div className={`hidden xl:flex items-center gap-2 h-9 px-3 rounded-lg border ${dark ? "border-slate-700 bg-slate-800/50" : "border-slate-200 bg-slate-50"}`}>
               <Search className="w-3.5 h-3.5 text-slate-500" />
