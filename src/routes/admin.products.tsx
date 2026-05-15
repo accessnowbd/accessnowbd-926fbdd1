@@ -21,7 +21,7 @@ type StockStatus = "in_stock" | "out_of_stock" | "preorder";
 type ProductType = "digital" | "license" | "account" | "subscription" | "service" | "physical";
 type AccountType = "none" | "personal" | "shared" | "family" | "student" | "business";
 type DeliveryType = "instant" | "manual" | "24h";
-type AiCardStyle = "dark-neon" | "light-glass" | "clean-light" | "soft-aurora" | "glass-gradient" | "glassmorphism";
+type AiCardStyle = "glassmorphism" | "soft-aurora" | "dark-neon";
 type CustomField = { label: string; type: "text" | "email" | "password" | "number"; required: boolean };
 type FaqItem = { q: string; a: string };
 
