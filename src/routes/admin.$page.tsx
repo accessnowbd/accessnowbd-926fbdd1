@@ -218,9 +218,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
       </div>
 
       <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-        {loading ? (
-          <div className="p-10 text-center text-slate-500"><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Loading…</div>
-        ) : visibleRows.length === 0 ? (
+        {loading ? null : visibleRows.length === 0 ? (
           <div className="p-10 text-center text-slate-500">
             {rows.length === 0 ? `No entries yet. Click "Add new" to create the first one.` : "No matches for your search."}
           </div>
