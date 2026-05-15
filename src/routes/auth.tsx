@@ -145,7 +145,8 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
               src={accessNowLogo}
               alt="AccessNow BD — Fast, Secure, Reliable"
               draggable={false}
-              className="h-14 w-auto object-contain drop-shadow-[0_4px_10px_rgba(47,109,255,0.25)] group-hover:scale-105 transition-transform"
+              style={{ mixBlendMode: "multiply" }}
+              className="h-14 w-auto object-contain group-hover:scale-105 transition-transform"
             />
           </Link>
 
@@ -162,7 +163,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
             <button
               type="button"
               onClick={() => oauth("google")}
-              className="h-12 rounded-full bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 active:bg-slate-100 transition inline-flex items-center justify-center gap-2.5"
+              className="h-12 rounded-full bg-white border border-slate-300 hover:border-slate-400 hover:bg-slate-50 active:bg-slate-100 transition inline-flex items-center justify-center gap-2.5 shadow-sm"
               aria-label="Continue with Google"
             >
               <svg viewBox="0 0 48 48" className="w-[18px] h-[18px]">
@@ -176,13 +177,13 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
             <button
               type="button"
               onClick={() => oauth("apple")}
-              className="h-12 rounded-full bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 active:bg-slate-100 transition inline-flex items-center justify-center gap-2.5"
+              className="h-12 rounded-full bg-slate-900 hover:bg-slate-800 active:bg-black transition inline-flex items-center justify-center gap-2.5 shadow-sm"
               aria-label="Continue with Apple"
             >
-              <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] text-slate-900" fill="currentColor">
+              <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] text-white" fill="currentColor">
                 <path d="M16.365 1.43c0 1.14-.46 2.23-1.21 3.01-.81.86-2.13 1.52-3.21 1.43-.14-1.09.42-2.24 1.13-2.97.79-.82 2.16-1.43 3.29-1.47zM20.5 17.06c-.55 1.27-.81 1.84-1.52 2.96-.99 1.56-2.39 3.5-4.12 3.52-1.54.02-1.93-1-4.02-.99-2.09.01-2.52 1.01-4.06.99-1.73-.02-3.05-1.77-4.04-3.33C.04 15.97-.26 11.4 1.41 8.97c1.19-1.74 3.07-2.76 4.83-2.76 1.79 0 2.92 1 4.4 1 1.43 0 2.3-1 4.37-1 1.57 0 3.23.86 4.42 2.34-3.88 2.13-3.25 7.68-.93 8.51z" />
               </svg>
-              <span className="text-[14px] font-semibold text-slate-900">Apple</span>
+              <span className="text-[14px] font-semibold text-white">Apple</span>
             </button>
           </div>
 
