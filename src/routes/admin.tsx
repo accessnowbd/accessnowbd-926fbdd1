@@ -296,7 +296,7 @@ function AdminShell({ user, signOut, navigate }: any) {
         ].join(" ")}
       >
         {/* Brand */}
-        <div className={`h-16 flex items-center justify-between px-4 border-b ${dark ? "border-slate-800" : "border-white/60"}`}>
+        <div className="h-16 flex items-center justify-between px-4 border-b border-white/60">
           <Link to="/admin" className="flex items-center gap-2.5 min-w-0">
             <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-full overflow-hidden ring-1 ring-white/30 shadow-[0_6px_18px_-6px_rgba(47,109,255,0.6)] bg-[radial-gradient(120%_120%_at_30%_20%,rgba(255,255,255,0.95)_0%,rgba(225,236,255,0.9)_55%,rgba(196,218,255,0.88)_100%)]">
               <img
