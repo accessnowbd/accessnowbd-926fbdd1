@@ -314,11 +314,11 @@ function AdminShell({ user, signOut, navigate }: any) {
                   <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)" }}>BD</span>
                 </span>
                 <span className="mt-0.5 flex items-center gap-1">
-                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-500" : "text-slate-500"}`}>Fast</span>
+                  <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Fast</span>
                   <span className="w-[3px] h-[3px] rounded-full bg-[#2f6dff]" />
-                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-500" : "text-slate-500"}`}>Secure</span>
+                  <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Secure</span>
                   <span className="w-[3px] h-[3px] rounded-full bg-[#1fc796]" />
-                  <span className={`text-[8px] uppercase tracking-[0.2em] font-bold ${dark ? "text-slate-500" : "text-slate-500"}`}>Reliable</span>
+                  <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Reliable</span>
                 </span>
               </span>
             )}
