@@ -26,6 +26,7 @@ function corsFor(req: Request) {
 }
 
 type Mode = "short" | "rich" | "all" | "image";
+type CardStyle = "glassmorphism" | "soft-aurora" | "dark-neon";
 
 type Body = {
   mode: Mode;
@@ -37,7 +38,20 @@ type Body = {
     features?: string[];
   };
   imagePrompt?: string;
+  style?: CardStyle;
 };
+
+const STYLE_PROMPTS: Record<CardStyle, string> = {
+  "glassmorphism":
+    "premium glassmorphism product mockup: frosted glass card on a soft pastel aurora gradient background, subtle inner glow, vibrant accent highlights, ultra-clean studio lighting",
+  "soft-aurora":
+    "soft aurora gradient hero shot: airy light pastel background (mint, lilac, peach), gentle bokeh, premium light theme, polished e-commerce hero",
+  "dark-neon":
+    "premium dark neon product hero: deep midnight gradient background, subtle neon violet/cyan rim glow, sharp studio lighting, cinematic mood",
+};
+
+const SHOP_BRAND = "AccessNow BD";
+
 
 const json = (body: unknown, status = 200, corsHeaders: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
@@ -52,44 +66,87 @@ serve(async (req) => {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     const geminiKey = Deno.env.get("GEMINI_API_KEY");
 
-    const { mode, product, imagePrompt } = (await req.json()) as Body;
+    const { mode, product, imagePrompt, style } = (await req.json()) as Body;
     if (!product?.name) throw new Error("product.name is required");
 
-    // ===== IMAGE GENERATION (direct Gemini API with user's key) =====
+    // ===== IMAGE GENERATION =====
+    // Prefer Lovable AI Gateway (no extra key needed). Fallback to direct
+    // Gemini API if a GEMINI_API_KEY is configured on the project.
     if (mode === "image") {
-      if (!geminiKey) throw new Error("GEMINI_API_KEY not configured");
+      const styleId: CardStyle = (style as CardStyle) || "glassmorphism";
+      const styleText = STYLE_PROMPTS[styleId] ?? STYLE_PROMPTS["glassmorphism"];
       const prompt =
         imagePrompt?.trim() ||
-        `Premium glassmorphism product mockup of "${product.name}"${product.category ? ` (${product.category})` : ""}: clean studio background with soft pastel aurora gradient, frosted glass card, subtle glow, vibrant brand colors, professional e-commerce hero shot, ultra high detail, 1:1 square. No text, no watermark.`;
+        `${styleText}. Subject: "${product.name}"${
+          product.category ? ` (${product.category})` : ""
+        }. Branded for ${SHOP_BRAND}. 1:1 square, ultra high detail, no text, no watermark.`;
 
-      const model = "gemini-2.5-flash-image-preview";
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
-
-      const r = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          generationConfig: { responseModalities: ["IMAGE", "TEXT"] },
-        }),
-      });
-
-      if (r.status === 429) return json({ error: "Gemini rate limit, please retry shortly." }, 429, corsHeaders);
-      if (!r.ok) {
-        const t = await r.text();
-        console.error("gemini image error", r.status, t);
-        return json({ error: `Gemini API error (${r.status}): ${t.slice(0, 200)}` }, 500, corsHeaders);
+      // ---- Path A: Lovable AI Gateway (preferred) ----
+      if (apiKey) {
+        try {
+          const gw = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: "google/gemini-2.5-flash-image-preview",
+              messages: [{ role: "user", content: prompt }],
+              modalities: ["image", "text"],
+            }),
+          });
+          if (gw.status === 429) return json({ error: "Rate limited, please retry shortly." }, 429, corsHeaders);
+          if (gw.status === 402) return json({ error: "AI credits exhausted. Add credits in Lovable workspace." }, 402, corsHeaders);
+          if (gw.ok) {
+            const gd = await gw.json();
+            const msg = gd?.choices?.[0]?.message ?? {};
+            const url: string | undefined =
+              msg?.images?.[0]?.image_url?.url ||
+              msg?.images?.[0]?.url ||
+              (Array.isArray(msg?.content)
+                ? msg.content.find((c: any) => c?.image_url?.url)?.image_url?.url
+                : undefined);
+            if (url) return json({ image: url }, 200, corsHeaders);
+            console.error("gateway returned no image", JSON.stringify(gd).slice(0, 400));
+          } else {
+            console.error("gateway image error", gw.status, (await gw.text()).slice(0, 200));
+          }
+        } catch (e) {
+          console.error("gateway image exception", e);
+        }
       }
-      const data = await r.json();
-      const parts = data?.candidates?.[0]?.content?.parts ?? [];
-      const inline = parts.find((p: any) => p?.inlineData?.data)?.inlineData;
-      if (!inline?.data) {
-        console.error("no image in gemini response", JSON.stringify(data).slice(0, 400));
-        return json({ error: "No image returned from Gemini" }, 500, corsHeaders);
+
+      // ---- Path B: Direct Gemini API ----
+      if (geminiKey) {
+        const model = "gemini-2.5-flash-image-preview";
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
+        const r = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            generationConfig: { responseModalities: ["IMAGE", "TEXT"] },
+          }),
+        });
+        if (r.status === 429) return json({ error: "Gemini rate limit, please retry shortly." }, 429, corsHeaders);
+        if (!r.ok) {
+          const t = await r.text();
+          console.error("gemini image error", r.status, t);
+          return json({ error: `Gemini API error (${r.status}): ${t.slice(0, 200)}` }, 500, corsHeaders);
+        }
+        const data = await r.json();
+        const parts = data?.candidates?.[0]?.content?.parts ?? [];
+        const inline = parts.find((p: any) => p?.inlineData?.data)?.inlineData;
+        if (!inline?.data) {
+          console.error("no image in gemini response", JSON.stringify(data).slice(0, 400));
+          return json({ error: "No image returned from Gemini" }, 500, corsHeaders);
+        }
+        const mime = inline.mimeType || "image/png";
+        return json({ image: `data:${mime};base64,${inline.data}` }, 200, corsHeaders);
       }
-      const mime = inline.mimeType || "image/png";
-      const dataUrl = `data:${mime};base64,${inline.data}`;
-      return json({ image: dataUrl }, 200, corsHeaders);
+
+      return json({ error: "No image provider configured. Add LOVABLE_API_KEY or GEMINI_API_KEY." }, 500, corsHeaders);
     }
 
     // ===== TEXT GENERATION (still via Lovable AI Gateway) =====
