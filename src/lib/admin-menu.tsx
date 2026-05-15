@@ -116,6 +116,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/ai-api", label: "AI API Settings", icon: ic(Bot), grad: "from-violet-500 to-fuchsia-500" },
       { to: "/admin/settings", label: "Settings", icon: ic(Settings), grad: "from-slate-600 to-slate-800" },
       { to: "/admin/roles", label: "Admin Roles", icon: ic(ShieldCheck), grad: "from-rose-500 to-red-500" },
+      { to: "/admin/security", label: "Security & MFA", icon: ic(ShieldCheck), grad: "from-rose-600 to-red-700" },
       { to: "/admin/backup", label: "Backup", icon: ic(DatabaseBackup), grad: "from-cyan-500 to-blue-600" },
       { to: "/admin/order-recovery", label: "অর্ডার রিকভারি", icon: ic(ShoppingCart), grad: "from-emerald-500 to-teal-500" },
       { to: "/admin/activity-log", label: "Activity Log", icon: ic(ClipboardList), grad: "from-amber-500 to-orange-500" },
