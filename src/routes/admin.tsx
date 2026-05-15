@@ -227,9 +227,19 @@ function AdminLayout() {
     );
   }
 
-  // MFA / 2FA gate is temporarily disabled — admin can log in directly with email + password.
-  // Re-enable later by wrapping <AdminShell /> with <AdminMfaGate>...</AdminMfaGate>.
-  return <AdminShell user={user} signOut={signOut} navigate={navigate} />;
+  // MFA gate: requires Authenticator code OR email OTP fallback before admin shell renders.
+  return (
+    <AdminMfaGate
+      userEmail={user?.email}
+      onSignOut={async () => {
+        try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
+        await signOut();
+        navigate({ to: "/auth" });
+      }}
+    >
+      <AdminShell user={user} signOut={signOut} navigate={navigate} />
+    </AdminMfaGate>
+  );
 }
 
 function AdminBlankState() {
