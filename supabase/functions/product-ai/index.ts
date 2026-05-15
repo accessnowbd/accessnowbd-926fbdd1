@@ -66,17 +66,6 @@ serve(async (req) => {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     const geminiKey = Deno.env.get("GEMINI_API_KEY");
 
-    const { mode, product, imagePrompt } = (await req.json()) as Body;
-    if (!product?.name) throw new Error("product.name is required");
-
-    // ===== IMAGE GENERATION (direct Gemini API with user's key) =====
-    if (mode === "image") {
-      if (!geminiKey) throw new Error("GEMINI_API_KEY not configured");
-      const prompt =
-        imagePrompt?.trim() ||
-        `Premium glassmorphism product mockup of "${product.name}"${product.category ? ` (${product.category})` : ""}: clean studio background with soft pastel aurora gradient, frosted glass card, subtle glow, vibrant brand colors, professional e-commerce hero shot, ultra high detail, 1:1 square. No text, no watermark.`;
-
-      const model = "gemini-2.5-flash-image-preview";
     const { mode, product, imagePrompt, style } = (await req.json()) as Body;
     if (!product?.name) throw new Error("product.name is required");
 
