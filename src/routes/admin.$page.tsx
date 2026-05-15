@@ -440,14 +440,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
     toast.success("Saved");
   };
 
-  if (loading) {
-    return (
-      <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm">
-        <Loader2 className="w-4 h-4 animate-spin inline mr-2 text-slate-500" />
-        <span className="text-sm text-slate-500">Loading…</span>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
