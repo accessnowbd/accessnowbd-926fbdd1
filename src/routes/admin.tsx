@@ -227,7 +227,18 @@ function AdminLayout() {
     );
   }
 
-  return <AdminShell user={user} signOut={signOut} navigate={navigate} />;
+  return (
+    <AdminMfaGate
+      userEmail={user?.email}
+      onSignOut={async () => {
+        try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch {}
+        await signOut();
+        navigate({ to: "/auth" });
+      }}
+    >
+      <AdminShell user={user} signOut={signOut} navigate={navigate} />
+    </AdminMfaGate>
+  );
 }
 
 function AdminBlankState() {
