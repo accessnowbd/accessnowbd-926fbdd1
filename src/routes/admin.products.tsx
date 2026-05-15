@@ -1138,7 +1138,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
                 <div className="flex items-center justify-between mb-2">
                   <div className="text-xs font-bold text-slate-700">ডিজাইন স্টাইল</div>
-                  <div className="text-[11px] text-slate-500">৬টি স্টাইল</div>
+                  <div className="text-[11px] text-slate-500">৩টি স্টাইল</div>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-2">
                   {AI_CARD_STYLES.map((s) => {
