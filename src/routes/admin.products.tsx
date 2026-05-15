@@ -376,9 +376,7 @@ function AdminProducts() {
 
       {/* Table */}
       <div className="bg-white border border-border rounded-2xl overflow-hidden">
-        {loading ? (
-          <div className="p-10 grid place-items-center text-muted-foreground"><Loader2 className="w-5 h-5 animate-spin" /></div>
-        ) : (
+        {loading ? null : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm min-w-[900px]">
               <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
