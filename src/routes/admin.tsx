@@ -31,19 +31,36 @@ function writeAdminCache(userId: string, isAdmin: boolean) {
   try { localStorage.setItem(ADMIN_CACHE_KEY, JSON.stringify({ uid: userId, isAdmin })); } catch {}
 }
 
-// Splash screen removed per user request.
+// Legacy splash/loader cache keys written by earlier versions. We scrub these
+// on every admin mount so any stale "splash seen" / "boot" flag is wiped from
+// localStorage and the splash can never reappear.
+const LEGACY_SPLASH_KEYS = [
+  "anbd:adminSplashSeen",
+  "anbd:adminBoot",
+  "anbd:adminBootSplash",
+  "anbd:splash",
+  "anbd:bootSplash",
+  "adminSplash",
+  "admin:splash",
+];
+
+function purgeLegacySplashFlags() {
+  if (typeof localStorage === "undefined") return;
+  for (const k of LEGACY_SPLASH_KEYS) {
+    try { localStorage.removeItem(k); } catch { /* ignore */ }
+    try { sessionStorage.removeItem(k); } catch { /* ignore */ }
+  }
+}
 
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  // Wipe any historical splash flag immediately on mount.
+  useEffect(() => { purgeLegacySplashFlags(); }, []);
   // Security: never trust the localStorage cache as an authorization signal.
-  // Always start with isAdmin=false and only flip to true after the server-side
-  // RPC verification resolves. Cache is only used to avoid sign-out flicker
-  // (skip the splash if we previously verified this same user).
+  // The role cache is only used to avoid a flash for users we already
+  // verified — it is NOT a splash flag and never gates UI on its own.
   const cached = useMemo(() => readAdminCacheAny(), []);
-  // Optimistically trust the cache so the panel opens instantly on click.
-  // Server-side RLS still protects every query; the background RPC only
-  // demotes the user if their role was revoked.
   const [isAdmin, setIsAdmin] = useState<boolean>(cached?.isAdmin ?? false);
   const [verified, setVerified] = useState<boolean>(!!cached);
   const [roleError, setRoleError] = useState<{
