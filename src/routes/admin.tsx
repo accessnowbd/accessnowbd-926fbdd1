@@ -298,15 +298,15 @@ function AdminShell({ user, signOut, navigate }: any) {
             {!collapsed && (
               <span className="leading-[1.05] min-w-0">
                 <span className="flex items-baseline gap-1 whitespace-nowrap">
-                  <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)" }}>Access</span>
-                  <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)" }}>Now</span>
-                  <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)" }}>BD</span>
+                  <span className="font-extrabold tracking-tight text-[14px] text-slate-900">Access</span>
+                  <span className="font-extrabold tracking-tight text-[14px] text-slate-900">Now</span>
+                  <span className="font-extrabold tracking-tight text-[14px] text-slate-900">BD</span>
                 </span>
                 <span className="mt-0.5 flex items-center gap-1">
                   <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Fast</span>
-                  <span className="w-[3px] h-[3px] rounded-full bg-[#2f6dff]" />
+                  <span className="w-[3px] h-[3px] rounded-full bg-slate-400" />
                   <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Secure</span>
-                  <span className="w-[3px] h-[3px] rounded-full bg-[#1fc796]" />
+                  <span className="w-[3px] h-[3px] rounded-full bg-slate-400" />
                   <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Reliable</span>
                 </span>
               </span>
@@ -419,7 +419,7 @@ function AdminShell({ user, signOut, navigate }: any) {
             </button>
             <button className="relative h-9 w-9 rounded-lg grid place-items-center border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white">
               <Bell className="w-4 h-4" />
-              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold grid place-items-center">22</span>
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-slate-700 text-white text-[10px] font-bold grid place-items-center">22</span>
             </button>
             <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
               <ExternalLink className="w-3.5 h-3.5" /> View store
@@ -480,7 +480,6 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
 }
 
 function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenuItem; collapsed?: boolean; dark: boolean; active: boolean }) {
-  const grad = item.grad || "from-slate-500 to-slate-700";
   return (
     <Link
       to={item.to}
@@ -490,16 +489,16 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
         "group flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm transition-all relative",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-violet-100/70 text-slate-900 ring-1 ring-violet-200/60"
+          ? "bg-slate-100 text-slate-900 ring-1 ring-slate-200"
           : "text-slate-700 hover:bg-slate-50",
       ].join(" ")}
     >
-      <span className={`shrink-0 w-9 h-9 rounded-full grid place-items-center bg-gradient-to-br ${grad} text-white shadow-[0_4px_10px_-4px_rgba(15,23,42,0.35)] ring-1 ring-white/40`}>
+      <span className="shrink-0 w-9 h-9 rounded-full grid place-items-center bg-white/70 backdrop-blur-md text-slate-600 ring-1 ring-slate-200">
         {item.icon}
       </span>
       {!collapsed && <span className="font-semibold truncate flex-1">{item.label}</span>}
       {!collapsed && active && (
-        <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" aria-hidden />
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-500 shrink-0" aria-hidden />
       )}
     </Link>
   );
