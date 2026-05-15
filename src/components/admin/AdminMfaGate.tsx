@@ -316,24 +316,26 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
 
         {mode === "challenge" && (
           <div className="mt-5">
-            <div className="flex p-1 rounded-full bg-slate-100 text-sm">
-              <button
-                onClick={() => { setTab("totp"); setError(null); setInfo(null); setCode(""); }}
-                className={`flex-1 h-9 rounded-full inline-flex items-center justify-center gap-1.5 font-medium transition ${
-                  tab === "totp" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
-                }`}
-              >
-                <Smartphone className="w-4 h-4" /> Authenticator
-              </button>
-              <button
-                onClick={() => { setTab("email"); setError(null); setInfo(null); setCode(""); }}
-                className={`flex-1 h-9 rounded-full inline-flex items-center justify-center gap-1.5 font-medium transition ${
-                  tab === "email" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
-                }`}
-              >
-                <Mail className="w-4 h-4" /> Email code
-              </button>
-            </div>
+            {settings?.allow_totp && settings?.allow_email_otp && (
+              <div className="flex p-1 rounded-full bg-slate-100 text-sm">
+                <button
+                  onClick={() => { setTab("totp"); setError(null); setInfo(null); setCode(""); }}
+                  className={`flex-1 h-9 rounded-full inline-flex items-center justify-center gap-1.5 font-medium transition ${
+                    tab === "totp" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
+                  }`}
+                >
+                  <Smartphone className="w-4 h-4" /> Authenticator
+                </button>
+                <button
+                  onClick={() => { setTab("email"); setError(null); setInfo(null); setCode(""); }}
+                  className={`flex-1 h-9 rounded-full inline-flex items-center justify-center gap-1.5 font-medium transition ${
+                    tab === "email" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
+                  }`}
+                >
+                  <Mail className="w-4 h-4" /> Email code
+                </button>
+              </div>
+            )}
 
             {tab === "totp" && (
               <div className="mt-5 space-y-4">
