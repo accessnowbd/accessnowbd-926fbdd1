@@ -364,22 +364,22 @@ function AdminShell({ user, signOut, navigate }: any) {
         </nav>
 
         {/* User */}
-        <div className={`border-t ${dark ? "border-slate-800" : "border-slate-200"} p-3 space-y-2`}>
+        <div className="border-t border-white/60 p-3 space-y-2">
           <div className={`flex items-center gap-2 ${collapsed ? "justify-center" : ""}`}>
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-sky-500 text-white grid place-items-center text-xs font-bold shrink-0">
               {(user?.email ?? "A").slice(0, 1).toUpperCase()}
             </div>
             {!collapsed && (
               <div className="min-w-0 flex-1">
-                <div className={`text-sm font-semibold truncate ${dark ? "text-white" : "text-slate-900"}`}>Admin</div>
-                <div className={`text-[11px] truncate ${dark ? "text-slate-500" : "text-slate-500"}`}>{user?.email}</div>
+                <div className="text-sm font-semibold truncate text-slate-900">Admin</div>
+                <div className="text-[11px] truncate text-slate-500">{user?.email}</div>
               </div>
             )}
           </div>
           {!collapsed && (
             <button
               onClick={async () => { await signOut(); navigate({ to: "/auth" }); }}
-              className={`w-full h-9 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 ${dark ? "bg-slate-800 hover:bg-slate-700 text-rose-300" : "bg-rose-50 hover:bg-rose-100 text-rose-600"}`}
+              className="w-full h-9 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600"
             >
               <LogOut className="w-3.5 h-3.5" /> Logout
             </button>
