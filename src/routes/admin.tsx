@@ -480,7 +480,6 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
 }
 
 function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenuItem; collapsed?: boolean; dark: boolean; active: boolean }) {
-  const grad = item.grad || "from-slate-500 to-slate-700";
   return (
     <Link
       to={item.to}
@@ -490,16 +489,16 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
         "group flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm transition-all relative",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-violet-100/70 text-slate-900 ring-1 ring-violet-200/60"
+          ? "bg-slate-100 text-slate-900 ring-1 ring-slate-200"
           : "text-slate-700 hover:bg-slate-50",
       ].join(" ")}
     >
-      <span className={`shrink-0 w-9 h-9 rounded-full grid place-items-center bg-gradient-to-br ${grad} text-white shadow-[0_4px_10px_-4px_rgba(15,23,42,0.35)] ring-1 ring-white/40`}>
+      <span className="shrink-0 w-9 h-9 rounded-full grid place-items-center bg-white/70 backdrop-blur-md text-slate-600 ring-1 ring-slate-200">
         {item.icon}
       </span>
       {!collapsed && <span className="font-semibold truncate flex-1">{item.label}</span>}
       {!collapsed && active && (
-        <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" aria-hidden />
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-500 shrink-0" aria-hidden />
       )}
     </Link>
   );
