@@ -286,7 +286,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       <aside
         className={[
           "shrink-0 transition-transform duration-200 border-r flex flex-col h-screen",
-          "bg-white/95 lg:bg-white/70 backdrop-blur-xl border-white/60",
+          "bg-white/80 lg:bg-white/70 backdrop-blur-2xl border-white/60 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.18)] lg:shadow-none",
           // Desktop: sticky sidebar with collapse width
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
           collapsed ? "lg:w-[72px]" : "lg:w-[280px]",
