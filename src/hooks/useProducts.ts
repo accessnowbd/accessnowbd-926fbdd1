@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/data/products";
+import { listProducts } from "@/lib/products.functions";
 
 // Tunables: SWR strategy for product data.
 // - staleTime: how long data is considered fresh (no background refetch).
@@ -8,10 +9,15 @@ import type { Product } from "@/data/products";
 const PRODUCT_STALE_MS = 10 * 60_000; // 10 minutes
 const PRODUCT_GC_MS = 60 * 60_000;    // 1 hour
 
+export const productsQueryOptions = {
+  queryKey: ["products"] as const,
+  queryFn: () => listProducts(),
+  staleTime: PRODUCT_STALE_MS,
+  gcTime: PRODUCT_GC_MS,
+};
+
 async function fetchProducts(): Promise<Product[]> {
-  const response = await fetch("/api/public/products");
-  if (!response.ok) throw new Error("Products could not be loaded");
-  return response.json();
+  return listProducts();
 }
 
 async function fetchProduct(slug: string): Promise<Product | null> {
