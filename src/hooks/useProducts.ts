@@ -26,7 +26,7 @@ async function fetchProduct(slug: string): Promise<Product | null> {
   return response.json();
 }
 
-export function useProducts() {
+export function useProducts(initialData?: Product[]) {
   const q = useQuery({
     queryKey: ["products"],
     queryFn: fetchProducts,
@@ -36,6 +36,7 @@ export function useProducts() {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     retry: 2,
+    initialData,
   });
   return { products: q.data ?? [], isLoading: q.isLoading, error: q.error };
 }
