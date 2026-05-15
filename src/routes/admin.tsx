@@ -113,11 +113,15 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate, verifyRole]);
 
-  if (loading || !verified) {
-    return null;
-  }
+  // No splash/loader: while auth is loading or role hasn't been verified yet,
+  // render nothing for unverified users (no cache) or optimistically render the
+  // admin shell when we have a cached admin flag. Verification runs silently in
+  // the background and only flips to "Access denied" if it fails.
+  if (loading) return null;
+  if (!user) return null;
+  if (!verified && !cached?.isAdmin) return null;
 
-  if (!isAdmin) {
+  if (!isAdmin && verified) {
     const hasError = !!roleError;
     return (
       <div className="min-h-screen grid place-items-center bg-[#f6f7fb] px-4 py-10">
