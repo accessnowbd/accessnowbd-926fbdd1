@@ -88,9 +88,7 @@ function AdminUsers() {
       </AdminStatGrid>
 
       <AdminGlassCard className="overflow-hidden p-0">
-        {loading ? (
-          <div className="p-10 text-center text-slate-500"><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Loading…</div>
-        ) : filtered.length === 0 ? (
+        {loading ? null : filtered.length === 0 ? (
           <div className="p-10 text-center text-slate-500">No users found.</div>
         ) : (
           <div className="overflow-x-auto">
