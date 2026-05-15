@@ -145,7 +145,8 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
               src={accessNowLogo}
               alt="AccessNow BD — Fast, Secure, Reliable"
               draggable={false}
-              className="h-14 w-auto object-contain drop-shadow-[0_4px_10px_rgba(47,109,255,0.25)] group-hover:scale-105 transition-transform"
+              style={{ mixBlendMode: "multiply" }}
+              className="h-14 w-auto object-contain group-hover:scale-105 transition-transform"
             />
           </Link>
 
