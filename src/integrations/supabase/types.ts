@@ -83,6 +83,66 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_mfa_grants: {
+        Row: {
+          expires_at: string
+          granted_at: string
+          id: string
+          ip: string | null
+          method: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          expires_at: string
+          granted_at?: string
+          id?: string
+          ip?: string | null
+          method: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          expires_at?: string
+          granted_at?: string
+          id?: string
+          ip?: string | null
+          method?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      admin_otp_codes: {
+        Row: {
+          attempts: number
+          code_hash: string
+          consumed_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          code_hash: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          code_hash?: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       admin_records: {
         Row: {
           created_at: string
