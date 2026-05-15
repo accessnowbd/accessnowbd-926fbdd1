@@ -127,9 +127,7 @@ function AdminOrders() {
       </div>
 
       <AdminGlassCard className="overflow-hidden p-0">
-        {loading ? (
-          <div className="p-10 grid place-items-center text-muted-foreground"><Loader2 className="w-5 h-5 animate-spin" /></div>
-        ) : (
+        {loading ? null : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-secondary/50 text-xs uppercase tracking-wide text-muted-foreground">

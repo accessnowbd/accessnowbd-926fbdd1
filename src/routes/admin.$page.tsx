@@ -218,9 +218,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
       </div>
 
       <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-        {loading ? (
-          <div className="p-10 text-center text-slate-500"><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Loading…</div>
-        ) : visibleRows.length === 0 ? (
+        {loading ? null : visibleRows.length === 0 ? (
           <div className="p-10 text-center text-slate-500">
             {rows.length === 0 ? `No entries yet. Click "Add new" to create the first one.` : "No matches for your search."}
           </div>
@@ -440,14 +438,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
     toast.success("Saved");
   };
 
-  if (loading) {
-    return (
-      <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm">
-        <Loader2 className="w-4 h-4 animate-spin inline mr-2 text-slate-500" />
-        <span className="text-sm text-slate-500">Loading…</span>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
