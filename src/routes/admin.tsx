@@ -113,9 +113,8 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate, verifyRole]);
 
-  // Only show the splash on the very first ever visit (no cache yet).
   if (loading || !verified) {
-    return <AdminBootSplash />;
+    return null;
   }
 
   if (!isAdmin) {
