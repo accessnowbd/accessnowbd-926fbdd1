@@ -286,8 +286,6 @@ export function SiteHeader() {
                 <Search className="w-4 h-4 text-aqua" />
               </button>
 
-
-              <ThemeSwitcher />
               <CartIcon />
 
               {user ? (
