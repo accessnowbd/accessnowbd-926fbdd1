@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  ShieldAlert, LogOut, Search, Bell, Plus, Moon, Sun, Globe,
+  ShieldAlert, LogOut, Search, Bell, Plus, Globe,
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -15,20 +15,20 @@ export const Route = createFileRoute("/admin")({
 });
 
 const ADMIN_CACHE_KEY = "anbd:isAdmin";
+const ADMIN_ROLE_CHECK_TIMEOUT_MS = 8000;
 
-type AdminCache = { uid: string; isAdmin: boolean };
-
-function readAdminCacheAny(): AdminCache | null {
+async function withAdminTimeout<T>(promise: PromiseLike<T>): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
   try {
-    const store = typeof localStorage !== "undefined" ? localStorage : null;
-    if (!store) return null;
-    const raw = store.getItem(ADMIN_CACHE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as AdminCache;
-  } catch { return null; }
-}
-function writeAdminCache(userId: string, isAdmin: boolean) {
-  try { localStorage.setItem(ADMIN_CACHE_KEY, JSON.stringify({ uid: userId, isAdmin })); } catch {}
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error("Admin permission check timed out")), ADMIN_ROLE_CHECK_TIMEOUT_MS);
+      }),
+    ]);
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
 }
 
 // Legacy splash/loader cache keys written by earlier versions. We scrub these
@@ -40,6 +40,7 @@ const LEGACY_SPLASH_KEYS = [
   "anbd:adminBootSplash",
   "anbd:splash",
   "anbd:bootSplash",
+  ADMIN_CACHE_KEY,
   "adminSplash",
   "admin:splash",
 ];
