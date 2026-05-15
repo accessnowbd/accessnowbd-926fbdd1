@@ -26,12 +26,13 @@ import type { Product } from "@/data/products";
 
 export const Route = createFileRoute("/")({
   component: Index,
-  loader: async ({ context }) => {
-    await context.queryClient.prefetchQuery({
-      queryKey: ["products"],
-      queryFn: () => listProducts(),
-      staleTime: 10 * 60_000,
-    });
+  loader: async () => {
+    try {
+      const products = await listProducts();
+      return { products };
+    } catch {
+      return { products: [] as Product[] };
+    }
   },
   head: () => ({
     meta: [
