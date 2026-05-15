@@ -31,47 +31,7 @@ function writeAdminCache(userId: string, isAdmin: boolean) {
   try { localStorage.setItem(ADMIN_CACHE_KEY, JSON.stringify({ uid: userId, isAdmin })); } catch {}
 }
 
-/** Modern animated loader — only shown on the very first verification ever. */
-function AdminBootSplash() {
-  return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#0b1020] via-[#0f1535] to-[#1a0f3d] grid place-items-center">
-      {/* aurora blobs */}
-      <div className="pointer-events-none absolute -top-24 -left-24 w-[480px] h-[480px] rounded-full bg-violet-500/30 blur-[120px] animate-pulse" />
-      <div className="pointer-events-none absolute -bottom-24 -right-24 w-[520px] h-[520px] rounded-full bg-cyan-400/25 blur-[120px] animate-pulse" style={{ animationDelay: "0.6s" }} />
-      <div className="pointer-events-none absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "22px 22px" }} />
-
-      <div className="relative z-10 flex flex-col items-center gap-5">
-        {/* orbit logo */}
-        <div className="relative w-24 h-24">
-          <span className="absolute inset-0 rounded-full border border-white/10" />
-          <span className="absolute inset-0 rounded-full border-t-2 border-violet-400 animate-spin" style={{ animationDuration: "1.4s" }} />
-          <span className="absolute inset-2 rounded-full border-b-2 border-cyan-300 animate-spin" style={{ animationDuration: "2.2s", animationDirection: "reverse" }} />
-          <span className="absolute inset-4 rounded-2xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-cyan-400 grid place-items-center shadow-[0_0_40px_-5px_rgba(139,92,246,0.7)]">
-            <Sparkles className="w-7 h-7 text-white" />
-          </span>
-        </div>
-
-        <div className="text-center">
-          <div className="text-white text-base font-bold tracking-tight">AccessNow BD</div>
-          <div className="mt-1 text-[12px] text-white/70">Preparing your workspace…</div>
-        </div>
-
-        {/* progress bar */}
-        <div className="w-56 h-1 rounded-full bg-white/10 overflow-hidden">
-          <div className="h-full w-1/3 rounded-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-300 animate-[adminslide_1.2s_ease-in-out_infinite]" />
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes adminslide {
-          0%   { transform: translateX(-120%); }
-          50%  { transform: translateX(80%); }
-          100% { transform: translateX(260%); }
-        }
-      `}</style>
-    </div>
-  );
-}
+// Splash screen removed per user request.
 
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
