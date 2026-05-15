@@ -26,6 +26,7 @@ function corsFor(req: Request) {
 }
 
 type Mode = "short" | "rich" | "all" | "image";
+type CardStyle = "glassmorphism" | "soft-aurora" | "dark-neon";
 
 type Body = {
   mode: Mode;
@@ -37,7 +38,20 @@ type Body = {
     features?: string[];
   };
   imagePrompt?: string;
+  style?: CardStyle;
 };
+
+const STYLE_PROMPTS: Record<CardStyle, string> = {
+  "glassmorphism":
+    "premium glassmorphism product mockup: frosted glass card on a soft pastel aurora gradient background, subtle inner glow, vibrant accent highlights, ultra-clean studio lighting",
+  "soft-aurora":
+    "soft aurora gradient hero shot: airy light pastel background (mint, lilac, peach), gentle bokeh, premium light theme, polished e-commerce hero",
+  "dark-neon":
+    "premium dark neon product hero: deep midnight gradient background, subtle neon violet/cyan rim glow, sharp studio lighting, cinematic mood",
+};
+
+const SHOP_BRAND = "AccessNow BD";
+
 
 const json = (body: unknown, status = 200, corsHeaders: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
