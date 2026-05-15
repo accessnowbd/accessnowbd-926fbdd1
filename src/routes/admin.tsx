@@ -508,8 +508,8 @@ function SidebarItem({ item, collapsed, dark, active }: { item: AdminMenuItem; c
         "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all relative",
         collapsed ? "justify-center" : "",
         active
-          ? (dark ? "bg-slate-800 text-white" : "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-[0_8px_22px_-8px_rgba(37,99,235,0.6)]")
-          : (dark ? "text-slate-300 hover:bg-slate-800/70" : "text-slate-700 hover:bg-white/70"),
+          ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-[0_8px_22px_-8px_rgba(37,99,235,0.6)]"
+          : "text-slate-700 hover:bg-white/70",
       ].join(" ")}
     >
       <span className={`shrink-0 w-7 h-7 rounded-lg grid place-items-center transition ${active ? "bg-white/20 text-white" : "bg-gradient-to-br from-blue-600 to-sky-500 text-white shadow-sm"}`}>
