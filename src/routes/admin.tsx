@@ -298,15 +298,15 @@ function AdminShell({ user, signOut, navigate }: any) {
             {!collapsed && (
               <span className="leading-[1.05] min-w-0">
                 <span className="flex items-baseline gap-1 whitespace-nowrap">
-                  <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)" }}>Access</span>
-                  <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #6ce4b8 0%, #1fc796 55%, #0e9472 100%)" }}>Now</span>
-                  <span className="font-extrabold tracking-tight text-[14px] bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(180deg, #ffd86b 0%, #f59e0b 55%, #c2780a 100%)" }}>BD</span>
+                  <span className="font-extrabold tracking-tight text-[14px] text-slate-900">Access</span>
+                  <span className="font-extrabold tracking-tight text-[14px] text-slate-900">Now</span>
+                  <span className="font-extrabold tracking-tight text-[14px] text-slate-900">BD</span>
                 </span>
                 <span className="mt-0.5 flex items-center gap-1">
                   <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Fast</span>
-                  <span className="w-[3px] h-[3px] rounded-full bg-[#2f6dff]" />
+                  <span className="w-[3px] h-[3px] rounded-full bg-slate-400" />
                   <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Secure</span>
-                  <span className="w-[3px] h-[3px] rounded-full bg-[#1fc796]" />
+                  <span className="w-[3px] h-[3px] rounded-full bg-slate-400" />
                   <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Reliable</span>
                 </span>
               </span>
