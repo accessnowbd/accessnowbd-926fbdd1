@@ -262,12 +262,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen flex relative bg-white">
-      {/* Soft white blur ambient layers — no colored tints */}
-      <div className="pointer-events-none fixed -top-40 -left-40 w-[520px] h-[520px] rounded-full bg-white/80 blur-[120px]" />
-      <div className="pointer-events-none fixed top-1/3 right-1/4 w-[380px] h-[380px] rounded-full bg-white/70 blur-[120px]" />
-      <div className="pointer-events-none fixed bottom-0 left-1/4 w-[460px] h-[460px] rounded-full bg-white/80 blur-[140px]" />
-
+    <div className="min-h-screen flex relative bg-[#fafafa]">
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
@@ -279,18 +274,18 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* SIDEBAR */}
       <aside
         className={[
-          "shrink-0 transition-transform duration-200 border-r flex flex-col h-screen",
-          "bg-white/80 lg:bg-white/70 backdrop-blur-2xl border-white/60 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.18)] lg:shadow-none",
+          "shrink-0 transition-transform duration-200 flex flex-col h-screen",
+          "bg-white border-r border-slate-200/80",
           // Desktop: sticky sidebar with collapse width
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
           collapsed ? "lg:w-[72px]" : "lg:w-[280px]",
           // Mobile: fixed drawer that slides in
-          "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw]",
+          "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-xl lg:shadow-none",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         ].join(" ")}
       >
         {/* Brand */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-white/60">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200/80">
           <Link to="/admin" className="flex items-center gap-2.5 min-w-0">
             <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-full overflow-hidden ring-1 ring-white/30 shadow-[0_6px_18px_-6px_rgba(47,109,255,0.6)] bg-[radial-gradient(120%_120%_at_30%_20%,rgba(255,255,255,0.95)_0%,rgba(225,236,255,0.9)_55%,rgba(196,218,255,0.88)_100%)]">
               <img
