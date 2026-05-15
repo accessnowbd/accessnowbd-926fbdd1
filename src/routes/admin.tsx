@@ -7,7 +7,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
-import { AdminMfaGate } from "@/components/admin/AdminMfaGate";
+// import { AdminMfaGate } from "@/components/admin/AdminMfaGate"; // re-enable when MFA is required
 import accessNowLogo from "@/assets/accessnow-bd-mark.webp";
 
 export const Route = createFileRoute("/admin")({
@@ -227,18 +227,9 @@ function AdminLayout() {
     );
   }
 
-  return (
-    <AdminMfaGate
-      userEmail={user?.email}
-      onSignOut={async () => {
-        try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch {}
-        await signOut();
-        navigate({ to: "/auth" });
-      }}
-    >
-      <AdminShell user={user} signOut={signOut} navigate={navigate} />
-    </AdminMfaGate>
-  );
+  // MFA / 2FA gate is temporarily disabled — admin can log in directly with email + password.
+  // Re-enable later by wrapping <AdminShell /> with <AdminMfaGate>...</AdminMfaGate>.
+  return <AdminShell user={user} signOut={signOut} navigate={navigate} />;
 }
 
 function AdminBlankState() {
