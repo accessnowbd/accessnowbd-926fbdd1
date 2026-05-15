@@ -28,6 +28,7 @@ interface Props {
 export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
   const [mode, setMode] = useState<Mode>("loading");
   const [tab, setTab] = useState<Tab>("totp");
+  const [settings, setSettings] = useState<AdminSecuritySettings | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
 
@@ -62,6 +63,15 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
     setInfo(null);
     setMode("loading");
     try {
+      // 0. Load admin-controlled security settings. If MFA is not enforced,
+      //    skip the gate entirely.
+      const { settings: cfg } = await loadSecuritySettings();
+      setSettings(cfg);
+      if (!cfg.mfa_enforced) {
+        setMode("ok");
+        return;
+      }
+
       // 1. Existing grant?
       const grant = await checkGrant();
       if (grant.granted) {
@@ -72,43 +82,56 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
       // 2. Existing aal2 session?
       const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
       if (aalData?.currentLevel === "aal2") {
-        // Promote to grant so future checks don't need aal2
         try { await recordTotp(); } catch { /* ignore */ }
         setMode("ok");
         return;
       }
 
-      // 3. Pick path: enroll or challenge
-      const { data: factorsData, error: factorsErr } = await supabase.auth.mfa.listFactors();
-      if (factorsErr) throw factorsErr;
-      const totp: Factor[] = (factorsData?.totp ?? []) as any;
-      const verified = totp.find((f) => f.status === "verified");
+      // 3. Pick path based on allowed methods
+      if (cfg.allow_totp) {
+        const { data: factorsData, error: factorsErr } = await supabase.auth.mfa.listFactors();
+        if (factorsErr) throw factorsErr;
+        const totp: Factor[] = (factorsData?.totp ?? []) as any;
+        const verified = totp.find((f) => f.status === "verified");
 
-      if (verified) {
-        setActiveFactorId(verified.id);
-        setHasVerifiedFactor(true);
-        setMode("challenge");
+        if (verified) {
+          setActiveFactorId(verified.id);
+          setHasVerifiedFactor(true);
+          setMode("challenge");
+          setTab("totp");
+          return;
+        }
+
+        // No verified TOTP — clean up unverified leftovers + start enrollment
+        for (const f of totp) {
+          if (f.status === "unverified") {
+            try { await supabase.auth.mfa.unenroll({ factorId: f.id }); } catch { /* ignore */ }
+          }
+        }
+        const { data: enrollData, error: enrollErr } = await supabase.auth.mfa.enroll({
+          factorType: "totp",
+          friendlyName: `AccessNow BD Admin (${new Date().toISOString().slice(0, 10)})`,
+        });
+        if (enrollErr) throw enrollErr;
+        setEnrollFactorId(enrollData.id);
+        setQr(enrollData.totp.qr_code);
+        setSecret(enrollData.totp.secret);
+        setHasVerifiedFactor(false);
+        setMode("enroll");
         setTab("totp");
         return;
       }
 
-      // No verified TOTP — clean up unverified leftovers + start enrollment
-      for (const f of totp) {
-        if (f.status === "unverified") {
-          try { await supabase.auth.mfa.unenroll({ factorId: f.id }); } catch { /* ignore */ }
-        }
+      // TOTP disabled — fall back to email-only challenge
+      if (cfg.allow_email_otp) {
+        setHasVerifiedFactor(false);
+        setMode("challenge");
+        setTab("email");
+        return;
       }
-      const { data: enrollData, error: enrollErr } = await supabase.auth.mfa.enroll({
-        factorType: "totp",
-        friendlyName: `AccessNow BD Admin (${new Date().toISOString().slice(0, 10)})`,
-      });
-      if (enrollErr) throw enrollErr;
-      setEnrollFactorId(enrollData.id);
-      setQr(enrollData.totp.qr_code);
-      setSecret(enrollData.totp.secret);
-      setHasVerifiedFactor(false);
-      setMode("enroll");
-      setTab("totp");
+
+      // No method allowed (shouldn't happen — UI prevents saving this combo)
+      throw new Error("কোনো MFA method allow করা নেই — admin panel-এর Security page থেকে enable করুন");
     } catch (e: any) {
       setError(e?.message || "MFA initialization failed");
       setMode("error");
