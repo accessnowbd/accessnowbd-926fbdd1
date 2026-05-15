@@ -8,6 +8,7 @@ import {
   verifyAdminEmailOtp,
   recordAdminTotpGrant,
 } from "@/lib/admin-mfa.functions";
+import { loadSecuritySettings, type AdminSecuritySettings } from "@/lib/admin-security";
 
 type Factor = {
   id: string;
