@@ -209,62 +209,99 @@ function AdminDashboard() {
     });
   }, [orders]);
 
+  const lowStockItems = lowStock.slice(0, 6);
+
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-5 animate-fade-in">
       <RoleDebugPanel />
 
-      {/* Greeting */}
-      <div className="flex items-end justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Hi, Admin</h1>
-          <p className="text-sm text-slate-500 mt-1">Welcome back to AccessNow BD <span className="inline-block">👋</span></p>
+      {/* Welcome hero card */}
+      <div className="rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)] p-6 md:p-8 flex items-start md:items-center justify-between gap-6 flex-wrap">
+        <div className="min-w-0">
+          <span className="inline-flex items-center text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
+            Dashboard
+          </span>
+          <h1 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">Welcome back</h1>
+          <p className="text-sm text-slate-500 mt-1.5">Here's what's happening with your store today.</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Link to="/admin/settings" className="h-10 px-4 rounded-xl bg-white/70 backdrop-blur ring-1 ring-white/60 text-sm font-semibold text-slate-700 inline-flex items-center gap-1.5 hover:bg-white">
-            <Settings className="w-4 h-4" /> Customize
+        <div className="flex items-center gap-2.5">
+          <Link to="/admin/add-product" className="h-12 px-5 rounded-2xl bg-white ring-1 ring-slate-200 text-sm font-semibold text-slate-900 inline-flex items-center gap-2 hover:bg-slate-50 transition">
+            <Plus className="w-4 h-4" /> Add product
           </Link>
-          <Link to="/admin/add-product" className="h-10 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 text-white text-sm font-semibold inline-flex items-center gap-1.5 shadow-[0_8px_22px_-8px_rgba(37,99,235,0.7)] hover:opacity-95">
-            <Plus className="w-4 h-4" /> Add New
+          <Link to="/admin/orders" className="h-12 px-5 rounded-2xl bg-slate-900 text-white text-sm font-semibold inline-flex items-center gap-2 hover:bg-slate-800 transition">
+            <ShoppingBag className="w-4 h-4" /> View orders
           </Link>
         </div>
       </div>
 
-      {/* KPI cards with sparkline */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {kpiCards.map((c, idx) => {
-          const sp = sparkPath(kpiSeries[idx]);
-          const up = (c.delta ?? 0) >= 0;
-          return (
-            <div key={c.label} className={`relative overflow-hidden rounded-2xl p-5 ring-1 ring-white/60 bg-gradient-to-br ${c.tint} shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)]`}>
-              <div className="flex items-start justify-between">
-                <div className="text-sm font-semibold text-slate-700">{c.label}</div>
-                <button className="text-slate-500 hover:text-slate-700">⋮</button>
-              </div>
-              <div className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight tabular-nums">
-                {loading ? "—" : c.value}
-              </div>
-              <div className="flex items-end justify-between mt-3 gap-3">
-                <div className="flex items-center gap-1.5 text-xs">
-                  <span className={`inline-flex items-center gap-0.5 font-bold ${up ? "text-emerald-600" : "text-rose-600"}`}>
-                    {up ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-                    {up ? "+" : ""}{c.delta}%
-                  </span>
-                  <span className="text-slate-500">{c.deltaLabel}</span>
-                </div>
-                <svg viewBox="0 0 200 60" className="w-[55%] h-14 -mb-1">
-                  <defs>
-                    <linearGradient id={`g-${idx}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor={c.fill} />
-                      <stop offset="100%" stopColor="transparent" />
-                    </linearGradient>
-                  </defs>
-                  <path d={sp.area} fill={`url(#g-${idx})`} />
-                  <path d={sp.line} fill="none" stroke={c.stroke} strokeWidth="2.5" strokeLinecap="round" />
-                </svg>
-              </div>
+      {/* KPI cards — clean white */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: "Total revenue", value: fmtBDT(stats.revenue), sub: `${counts.orders} orders`, Icon: DollarSign },
+          { label: "Today's sales", value: fmtBDT(stats.todayRev), sub: `${stats.todayCount} orders`, Icon: ShoppingBag },
+          { label: "This month", value: fmtBDT(stats.monthRev), sub: `${stats.monthCount} orders`, Icon: BarChart3 },
+          { label: "Customers", value: counts.users.toLocaleString("en-IN"), sub: `${counts.products} products`, Icon: Users },
+        ].map(({ label, value, sub, Icon }) => (
+          <div key={label} className="rounded-3xl bg-white ring-1 ring-slate-200/70 p-5 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.18)]">
+            <div className="flex items-start justify-between gap-3">
+              <div className="text-sm text-slate-500 font-medium">{label}</div>
+              <span className="w-9 h-9 rounded-full bg-slate-100 text-slate-500 grid place-items-center">
+                <Icon className="w-4 h-4" />
+              </span>
             </div>
-          );
-        })}
+            <div className="mt-4 text-3xl md:text-[34px] font-extrabold text-slate-900 tracking-tight tabular-nums">
+              {loading ? "—" : value}
+            </div>
+            <div className="mt-1.5 text-xs text-slate-500">{sub}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Stock alerts */}
+      <div className="rounded-3xl bg-white ring-1 ring-slate-200/70 p-5 md:p-6 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.18)]">
+        <div className="flex items-start justify-between gap-3 mb-4">
+          <div className="flex items-center gap-3">
+            <span className="w-10 h-10 rounded-2xl bg-slate-100 text-slate-600 grid place-items-center">
+              <Box className="w-5 h-5" />
+            </span>
+            <div>
+              <div className="font-extrabold text-slate-900">Stock alerts</div>
+              <div className="text-xs text-slate-500">Threshold ≤ 3</div>
+            </div>
+          </div>
+          <Link to="/admin/products" className="text-xs font-semibold text-slate-600 hover:text-slate-900 inline-flex items-center gap-1">
+            <Settings className="w-3.5 h-3.5" /> View all <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+        <div className="rounded-2xl bg-amber-50 ring-1 ring-amber-100 p-4 mb-3">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-amber-700 inline-flex items-center gap-1.5">
+            <Box className="w-3.5 h-3.5" /> Low stock
+          </div>
+          <div className="text-3xl font-extrabold text-amber-700 mt-1 tabular-nums">{lowStockItems.length}</div>
+        </div>
+        <div className="space-y-2">
+          {lowStockItems.length === 0 ? (
+            <div className="text-sm text-slate-500 text-center py-6">All products in stock 🎉</div>
+          ) : lowStockItems.map((p) => (
+            <div key={p.slug} className="flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-rose-50/50 ring-1 ring-rose-100/60">
+              <div className="w-10 h-10 rounded-xl bg-white grid place-items-center overflow-hidden ring-1 ring-slate-200 shrink-0">
+                {p.image_url ? (
+                  <img src={p.image_url} alt={p.name} className="max-w-[80%] max-h-[80%] object-contain" />
+                ) : (
+                  <span className="text-base">{p.emoji || "📦"}</span>
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-bold text-slate-900 truncate">{p.name}</div>
+                <div className="text-[11px] text-slate-500">Out of stock</div>
+              </div>
+              <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-md bg-rose-500 text-white tracking-wider">OUT</span>
+              <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 inline-flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> Done
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Sales Report + Traffic Sources */}
