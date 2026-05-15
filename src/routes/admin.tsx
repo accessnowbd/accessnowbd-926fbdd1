@@ -56,14 +56,11 @@ function purgeLegacySplashFlags() {
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  // Wipe any historical splash flag immediately on mount.
+  // Wipe historical splash/admin flags immediately on mount so a stale client
+  // flag can never leave the route on an empty gradient screen.
   useEffect(() => { purgeLegacySplashFlags(); }, []);
-  // Security: never trust the localStorage cache as an authorization signal.
-  // The role cache is only used to avoid a flash for users we already
-  // verified — it is NOT a splash flag and never gates UI on its own.
-  const cached = useMemo(() => readAdminCacheAny(), []);
-  const [isAdmin, setIsAdmin] = useState<boolean>(cached?.isAdmin ?? false);
-  const [verified, setVerified] = useState<boolean>(!!cached);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [verified, setVerified] = useState(false);
   const [roleError, setRoleError] = useState<{
     message: string;
     code?: string;
@@ -77,10 +74,12 @@ function AdminLayout() {
     () => async (uid: string) => {
       setRoleError(null);
       try {
-        const { data, error } = await supabase.rpc("has_role", {
-          _user_id: uid,
-          _role: "admin",
-        });
+        const { data, error } = await withAdminTimeout(
+          supabase.rpc("has_role", {
+            _user_id: uid,
+            _role: "admin",
+          }),
+        );
         setCheckedAt(new Date().toISOString());
         if (error) {
           setRoleError({
@@ -90,7 +89,6 @@ function AdminLayout() {
             hint: (error as any).hint,
             raw: error,
           });
-          writeAdminCache(uid, false);
           setIsAdmin(false);
           return;
         }
@@ -100,7 +98,6 @@ function AdminLayout() {
           });
         }
         const ok = data === true;
-        writeAdminCache(uid, ok);
         setIsAdmin(ok);
       } catch (e: any) {
         setCheckedAt(new Date().toISOString());
@@ -108,7 +105,6 @@ function AdminLayout() {
           message: e?.message || "Network/unknown error calling has_role",
           raw: e,
         });
-        writeAdminCache(uid, false);
         setIsAdmin(false);
       }
     },
@@ -131,13 +127,9 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate, verifyRole]);
 
-  // No splash/loader: while auth is loading or role hasn't been verified yet,
-  // render nothing for unverified users (no cache) or optimistically render the
-  // admin shell when we have a cached admin flag. Verification runs silently in
-  // the background and only flips to "Access denied" if it fails.
-  if (loading) return null;
-  if (!user) return null;
-  if (!verified && !cached?.isAdmin) return null;
+  if (loading || !user || !verified) {
+    return <AdminBlankState />;
+  }
 
   if (!isAdmin && verified) {
     const hasError = !!roleError;
