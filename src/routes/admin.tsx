@@ -229,10 +229,14 @@ function AdminLayout() {
   return <AdminShell user={user} signOut={signOut} navigate={navigate} />;
 }
 
+function AdminBlankState() {
+  return <div className="min-h-screen bg-white" aria-hidden="true" />;
+}
+
 function AdminShell({ user, signOut, navigate }: any) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dark, setDark] = useState(false);
+  const dark = false;
   const [search, setSearch] = useState("");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -416,9 +420,6 @@ function AdminShell({ user, signOut, navigate }: any) {
             {/* Actions */}
             <button className={`hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border ${dark ? "border-slate-700 text-slate-200 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}>
               <Globe className="w-3.5 h-3.5" /> বাং
-            </button>
-            <button onClick={() => setDark((v) => !v)} className={`h-9 w-9 rounded-lg grid place-items-center border ${dark ? "border-slate-700 text-amber-300 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}>
-              {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <div className={`hidden xl:flex items-center gap-2 h-9 px-3 rounded-lg border ${dark ? "border-slate-700 bg-slate-800/50" : "border-slate-200 bg-slate-50"}`}>
               <Search className="w-3.5 h-3.5 text-slate-500" />
