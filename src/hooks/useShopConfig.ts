@@ -16,7 +16,7 @@ export type PaymentMethod = {
 };
 
 const DEFAULT: ShopConfig = {
-  whatsapp_number: "8801711000000",
+  whatsapp_number: "8801580607614",
   shop_name: "AccessNow BD",
   support_hours: "9 AM – 12 AM",
 };
