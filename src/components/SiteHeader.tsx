@@ -129,9 +129,9 @@ export function TopUtilityBar() {
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [headerQuery, setHeaderQuery] = useState("");
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
 
   const handleLogout = async () => {
     await signOut();
