@@ -272,19 +272,22 @@ export function SiteFooter() {
               ))}
             </div>
 
-            <p className="text-[12.5px] leading-6 text-foreground/65 tracking-[0.01em]">
-              <span className="text-foreground/50">©</span>{" "}
-              <span className="font-semibold text-foreground/85">2026</span>
-              <span className="mx-2 text-foreground/30">|</span>
-              <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text font-extrabold tracking-tight text-transparent">AccessNow BD</span>
-              <span className="mx-2 text-foreground/30">·</span>
-              <span className="italic text-foreground/55">Crafted with precision</span>
-              <span className="mx-2 text-foreground/30">·</span>
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] leading-6 text-foreground/70">
+              <span className="font-medium text-foreground/55">© 2026</span>
+              <span className="text-foreground/25">/</span>
+              <span className="font-extrabold tracking-tight text-foreground">AccessNow BD</span>
+              <span className="rounded-full border border-[var(--glass-border)] bg-foreground/[0.04] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/65">
+                All Rights Reserved
+              </span>
+              <span className="text-foreground/25">·</span>
+              <span className="italic text-foreground/60" style={{ fontFamily: "var(--font-display, serif)" }}>
+                Crafted with precision by
+              </span>
               <a
                 href="/developer"
-                className="group/dev inline-flex items-center font-bold tracking-tight transition-colors duration-200"
+                className="font-extrabold tracking-tight text-primary underline-offset-4 transition-colors duration-200 hover:text-[var(--gold)] hover:underline"
               >
-                <span className="bg-gradient-to-r from-primary via-aqua to-[var(--gold)] bg-clip-text text-transparent group-hover/dev:from-[var(--gold)] group-hover/dev:via-[var(--gold)] group-hover/dev:to-[var(--gold)]">Shahed IT</span>
+                Shahed IT
               </a>
             </p>
           </div>
