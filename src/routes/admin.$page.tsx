@@ -189,19 +189,14 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  </div>
 
  <div className="flex flex-wrap items-center gap-2">
- <div className="relative flex-1 min-w-[200px]">
- <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
- <input
+ <div className="flex-1 min-w-[200px]">
+ <SearchBar
  value={query}
- onChange={(e) => setQuery(e.target.value)}
+ onChange={setQuery}
  placeholder={`Search ${[primary, ...secondary].filter(Boolean).map((f) => f!.label.toLowerCase()).join(", ")}…`}
- className="w-full h-10 pl-9 pr-9 rounded-full border border-slate-200 text-sm bg-white outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100"
+ size="md"
+ className="w-full"
  />
- {query && (
- <button onClick={() => setQuery("")} className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 grid place-items-center rounded-full text-slate-500 hover:bg-slate-100" aria-label="Clear">
- <X className="w-3.5 h-3.5" />
- </button>
- )}
  </div>
  <div className="inline-flex h-10 rounded-full border border-slate-200 bg-white p-0.5 text-xs font-semibold">
  {(["all", "active", "inactive"] as const).map((s) => (
