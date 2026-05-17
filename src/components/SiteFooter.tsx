@@ -295,8 +295,6 @@ export function SiteFooter() {
                 >
                   Shahed IT
                 </a>
-                  Shahed IT
-                </a>
               </p>
             </div>
           </div>
