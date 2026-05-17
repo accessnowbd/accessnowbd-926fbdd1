@@ -1131,21 +1131,32 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  </div>
  </div>
 
- <div className="px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600">
- 💡 প্রতিবার একটি নতুন, প্রফেশনাল ডিজাইন স্বয়ংক্রিয়ভাবে জেনারেট হবে — AccessNow BD ব্র্যান্ডিং সহ
- </div>
+          <div className="px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600">
+            💡 দুই ধরনের প্রিমিয়াম গ্লাস-কার্ড ডিজাইন — AccessNow BD ব্র্যান্ডিং, ওয়েবসাইট ও ফোন নম্বর সহ
+          </div>
 
- <input value={imagePrompt} onChange={(e) => setImagePrompt(e.target.value)} placeholder="Optional: describe the look..." className="mt-3 w-full h-10 px-3 rounded-xl border border-slate-200 text-xs outline-none focus:border-slate-400" />
+          <input value={imagePrompt} onChange={(e) => setImagePrompt(e.target.value)} placeholder="Optional: describe the look..." className="mt-3 w-full h-10 px-3 rounded-xl border border-slate-200 text-xs outline-none focus:border-slate-400" />
 
- <button
- onClick={generateImage}
- disabled={aiBusy}
- className="mt-3 w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl text-white text-sm font-extrabold shadow-[0_10px_30px_-10px_rgba(100,116,139,0.7)] disabled:opacity-50"
- style={{ background: "linear-gradient(135deg, #94a3b8 0%, #94a3b8 50%, #94a3b8 100%)" }}
- >
- {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
- {ai === "image-gen" ? "Generating…" : "✨ Professional Card তৈরি করুন"}
- </button>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <button
+              onClick={() => generateImage("premium-pastel")}
+              disabled={aiBusy}
+              className="inline-flex items-center justify-center gap-2 h-12 rounded-xl text-white text-sm font-extrabold shadow-[0_10px_30px_-10px_rgba(168,85,247,0.5)] disabled:opacity-50"
+              style={{ background: "linear-gradient(135deg,#c4b5fd 0%,#f9a8d4 50%,#fdba74 100%)" }}
+            >
+              {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              Style 1 · Pastel
+            </button>
+            <button
+              onClick={() => generateImage("premium-dark")}
+              disabled={aiBusy}
+              className="inline-flex items-center justify-center gap-2 h-12 rounded-xl text-white text-sm font-extrabold shadow-[0_10px_30px_-10px_rgba(30,41,59,0.7)] disabled:opacity-50"
+              style={{ background: "linear-gradient(135deg,#0f172a 0%,#4c1d95 60%,#9333ea 100%)" }}
+            >
+              {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              Style 2 · Dark
+            </button>
+          </div>
  </div>
 
  {/* Gallery */}
