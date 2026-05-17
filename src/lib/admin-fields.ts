@@ -499,7 +499,7 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
     mode: "single",
     description: "WhatsApp number ও shop information যা product page, checkout এবং WhatsApp order button-এ ব্যবহার হবে।",
     fields: [
-      { name: "whatsapp_number", label: "WhatsApp number (with country code, no +)", type: "text", required: true, placeholder: "8801711000000" },
+      { name: "whatsapp_number", label: "WhatsApp number (with country code, no +)", type: "text", required: true, placeholder: "8801580607614" },
       { name: "shop_name", label: "Shop name", type: "text", placeholder: "AccessNow BD" },
       { name: "support_hours", label: "Support hours", type: "text", placeholder: "9 AM – 12 AM" },
     ],
