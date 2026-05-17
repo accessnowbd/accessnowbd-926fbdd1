@@ -257,7 +257,7 @@ export function SiteFooter() {
           </section>
         </div>
 
-        <div className="mt-6 grid gap-4 rounded-[24px] border border-[var(--glass-border-soft)] bg-white/[0.03] px-4 py-4 md:grid-cols-[1fr_auto] md:items-center md:px-5">
+        <div className="mt-6 grid gap-4 rounded-[24px] border border-[var(--glass-border-soft)] bg-foreground/[0.04] px-4 py-4 md:grid-cols-[1fr_auto] md:items-center md:px-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-2.5">
               {SOCIALS.map(({ Icon, href, label }) => (
@@ -265,19 +265,19 @@ export function SiteFooter() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[var(--glass-border-soft)] bg-white/[0.04] text-white/70 transition-colors duration-200 hover:border-aqua/35 hover:text-white"
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-primary/30 bg-gradient-to-br from-primary to-aqua text-white shadow-[0_8px_20px_-12px_rgba(34,211,228,0.6)] transition-all duration-200 hover:scale-110 hover:shadow-[0_10px_24px_-10px_rgba(79,70,229,0.7)]"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
 
-            <p className="text-[12.5px] leading-6 text-white/70">
+            <p className="text-[12.5px] leading-6 text-foreground/70">
               © 2026 ·{" "}
-              <span className="font-extrabold text-white">AccessNow BD</span> · All Rights Reserved · Designed &amp; Developed by{" "}
+              <span className="font-extrabold text-foreground">AccessNow BD</span> · All Rights Reserved · Designed &amp; Developed by{" "}
               <a
                 href="/developer"
-                className="font-bold text-aqua transition-colors duration-200 hover:text-white"
+                className="font-bold text-primary transition-colors duration-200 hover:text-aqua"
               >
                 Shahed IT
               </a>
