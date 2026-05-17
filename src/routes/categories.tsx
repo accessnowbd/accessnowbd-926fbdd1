@@ -61,7 +61,7 @@ function CategoriesPage() {
               <Link
                 key={c.name}
                 to="/products"
-                search={{ category: c.name }}
+                search={{ q: c.name }}
                 className="group relative glass-strong rounded-2xl p-4 flex items-center justify-between gap-3 transition hover:border-primary/40 hover:shadow-[0_10px_30px_-12px_var(--color-primary)]"
               >
                 <span className="min-w-0">
