@@ -111,8 +111,7 @@ function ProductCardImpl({ product }: { product: Product }) {
         {/* Action stack — Buy Now on top, WhatsApp + Cart below */}
         <div className="mt-auto pt-2 flex flex-col gap-2">
           <span
-            className="flex items-center justify-center gap-2 h-11 rounded-full text-[13px] font-bold text-white shadow-[0_8px_20px_-10px_rgba(124,92,255,0.6)]"
-            style={{ background: "linear-gradient(90deg, #8B5CF6 0%, #6366F1 50%, #3B82F6 100%)" }}
+            className="product-action-button product-buy-button flex items-center justify-center gap-2 h-11 rounded-full text-[13px] font-bold"
           >
             <ShoppingCart className="w-4 h-4" />
             Buy Now
@@ -131,7 +130,7 @@ function ProductCardImpl({ product }: { product: Product }) {
                 );
               }}
               aria-label="Order via WhatsApp"
-              className="flex items-center justify-center gap-1.5 h-10 rounded-full bg-emerald-500/15 text-emerald-600 text-[12px] font-bold border border-emerald-500/25 hover:bg-emerald-500/25 transition"
+              className="product-action-button product-whatsapp-button flex items-center justify-center gap-1.5 h-10 rounded-full text-[12px] font-bold transition"
             >
               <MessageCircle className="w-3.5 h-3.5" />
               WhatsApp
@@ -140,7 +139,7 @@ function ProductCardImpl({ product }: { product: Product }) {
               onClick={onAdd}
               disabled={hasOptions}
               aria-label="Add to cart"
-              className="flex items-center justify-center gap-1.5 h-10 rounded-full bg-muted/40 text-foreground text-[12px] font-bold border border-[var(--glass-border)] hover:bg-muted/70 transition disabled:opacity-60"
+              className="product-action-button product-cart-button flex items-center justify-center gap-1.5 h-10 rounded-full text-[12px] font-bold transition disabled:opacity-100"
             >
               <ShoppingCart className="w-3.5 h-3.5" />
               Cart

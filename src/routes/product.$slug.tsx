@@ -137,15 +137,13 @@ function ProductPage() {
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <button
               onClick={buyNow}
-              className="h-[52px] flex-1 rounded-full text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02] hover:shadow-[0_18px_40px_-12px_rgba(124,58,237,0.7)] shadow-[0_12px_30px_-10px_rgba(124,58,237,0.55)]"
-              style={{ background: "linear-gradient(135deg,#6366f1 0%,#8b5cf6 45%,#ec4899 100%)" }}
+              className="product-action-button product-buy-button h-[52px] flex-1 rounded-full text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
             >
               <ShoppingCart className="w-4 h-4" /> Buy Now — {plan?.price ?? ""}
             </button>
             <button
               onClick={addToCart}
-              className="h-[52px] px-6 rounded-full text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02] hover:shadow-[0_18px_40px_-12px_rgba(15,23,42,0.6)] shadow-[0_12px_30px_-10px_rgba(15,23,42,0.45)]"
-              style={{ background: "linear-gradient(135deg,#1e293b 0%,#334155 50%,#475569 100%)" }}
+              className="product-action-button product-cart-button h-[52px] px-6 rounded-full text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
             >
               <ShoppingCart className="w-4 h-4" /> Add to Cart
             </button>
@@ -163,8 +161,7 @@ function ProductPage() {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 h-[52px] w-full rounded-full text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02] hover:shadow-[0_18px_40px_-12px_rgba(16,185,129,0.65)] shadow-[0_12px_30px_-10px_rgba(16,185,129,0.5)]"
-            style={{ background: "linear-gradient(135deg,#059669 0%,#10b981 50%,#34d399 100%)" }}
+            className="product-action-button product-whatsapp-button mt-3 h-[52px] w-full rounded-full text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
           >
             <MessageCircle className="w-4 h-4" /> Order via WhatsApp — {plan?.period ?? ""}
           </a>
