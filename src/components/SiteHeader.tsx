@@ -264,23 +264,31 @@ export function SiteHeader() {
 
             {/* Actions */}
             <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => setSearchOpen(true)}
-                className="hidden xl:inline-flex items-center gap-2 h-10 px-3.5 rounded-full glass-soft border border-white/10 text-sm text-white/80 hover:text-white hover:border-aqua/40 transition group shrink-0"
-                aria-label="Search products"
-              >
-                <Search className="w-4 h-4 text-aqua" />
-                <span className="text-white/70 font-medium">Search…</span>
-                <span className="ml-1 hidden xl:inline text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-white/10 text-white/70 border border-white/10">
-                  ⌘K
-                </span>
-              </button>
+              <SearchBar
+                value={headerQuery}
+                onChange={setHeaderQuery}
+                onSubmit={(v) => {
+                  const q = v.trim();
+                  navigate({
+                    to: "/products",
+                    search: q ? { q } : undefined,
+                  } as never);
+                }}
+                size="md"
+                placeholder="প্রোডাক্ট সার্চ করুন..."
+                className="hidden md:flex w-[260px] lg:w-[320px] xl:w-[360px]"
+              />
 
               <button
                 type="button"
-                onClick={() => setSearchOpen(true)}
-                className="xl:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
+                onClick={() => {
+                  const q = headerQuery.trim();
+                  navigate({
+                    to: "/products",
+                    search: q ? { q } : undefined,
+                  } as never);
+                }}
+                className="md:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
                 aria-label="Search"
               >
                 <Search className="w-4 h-4 text-aqua" />
