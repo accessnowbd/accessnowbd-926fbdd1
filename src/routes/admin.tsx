@@ -428,13 +428,6 @@ function AdminShell({ user, signOut, navigate }: any) {
               <input placeholder="Search" className="bg-transparent outline-none text-xs w-32 placeholder:text-slate-400" />
               <kbd className="text-[10px] px-1.5 py-0.5 rounded border border-slate-200 text-slate-500">⌘K</kbd>
             </div>
-            <button className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-slate-900 text-white hover:bg-slate-800">
-              <Plus className="w-3.5 h-3.5" /> Create <ChevronDown className="w-3 h-3" />
-            </button>
-            <button className="relative h-9 w-9 rounded-lg grid place-items-center border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white">
-              <Bell className="w-4 h-4" />
-              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-slate-700 text-white text-[10px] font-bold grid place-items-center">22</span>
-            </button>
             <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
               <ExternalLink className="w-3.5 h-3.5" /> View store
             </Link>
