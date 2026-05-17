@@ -185,13 +185,11 @@ export function GlobalSearch({
 
         {/* Input row */}
         <div className="relative flex items-center gap-3 px-5 h-16 border-b border-white/10">
-          <div className="grid place-items-center w-9 h-9 rounded-full bg-gradient-to-br from-primary/30 to-aqua/30 ring-1 ring-white/10">
-            {isLoading ? (
-              <Loader2 className="w-4 h-4 text-white animate-spin" />
-            ) : (
-              <Search className="w-4 h-4 text-white" />
-            )}
-          </div>
+          {isLoading ? (
+            <Loader2 className="w-4 h-4 text-white/80 animate-spin shrink-0" />
+          ) : (
+            <Search className="w-4 h-4 text-white/80 shrink-0" />
+          )}
           <input
             ref={inputRef}
             value={q}
