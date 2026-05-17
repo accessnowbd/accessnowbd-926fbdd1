@@ -275,15 +275,20 @@ export function SiteFooter() {
             <div className="relative inline-flex items-center overflow-hidden rounded-full border border-[var(--glass-border)] bg-gradient-to-r from-primary/[0.08] via-aqua/[0.06] to-[var(--gold)]/[0.08] px-4 py-1.5 shadow-[0_4px_18px_-10px_rgba(79,70,229,0.35)]">
               <span aria-hidden className="pointer-events-none absolute inset-0 opacity-60" style={{ background: "radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.18), transparent 60%)" }} />
               <p className="relative text-[12.5px] leading-6 tracking-[0.01em]">
-                <span className="text-foreground/55">©</span>{" "}
-                <span className="font-bold text-foreground/85">2026</span>
+                <span className="text-rose-500">©</span>{" "}
+                <span className="font-bold text-fuchsia-600 dark:text-fuchsia-400">2026</span>
                 <span className="mx-2 text-foreground/25">·</span>
                 <span className="font-extrabold tracking-tight text-primary">Access</span><span className="font-extrabold tracking-tight text-aqua-deep">Now</span>{" "}
                 <span className="font-extrabold tracking-tight text-[var(--gold)]">BD</span>
                 <span className="mx-2 text-foreground/25">·</span>
-                <span className="text-foreground/65">All Rights Reserved</span>
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400">All</span>{" "}
+                <span className="font-semibold text-sky-600 dark:text-sky-400">Rights</span>{" "}
+                <span className="font-semibold text-violet-600 dark:text-violet-400">Reserved</span>
                 <span className="mx-2 text-foreground/25">·</span>
-                <span className="italic text-foreground/55">Designed &amp; Developed by</span>{" "}
+                <span className="italic text-amber-700 dark:text-amber-400">Designed</span>{" "}
+                <span className="italic text-foreground/55">&amp;</span>{" "}
+                <span className="italic text-teal-600 dark:text-teal-400">Developed</span>{" "}
+                <span className="italic text-foreground/55">by</span>{" "}
                 <a
                   href="/developer"
                   className="font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary via-aqua to-[var(--gold)] underline-offset-4 transition hover:underline"
