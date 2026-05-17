@@ -308,6 +308,43 @@
     -webkit-backdrop-filter: blur(18px) saturate(170%) !important;
   }
 
+  /* Product cards — frosted glassmorphism */
+  html.theme-white .product-card-v2 {
+    background: linear-gradient(135deg, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.38) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    box-shadow:
+      0 14px 40px -18px rgba(79, 70, 229, 0.28),
+      0 1px 0 0 rgba(255, 255, 255, 0.95) inset,
+      0 0 0 1px rgba(124, 58, 237, 0.05) !important;
+    backdrop-filter: blur(22px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+  }
+  html.theme-white .product-card-v2:hover {
+    transform: translateY(-3px);
+    border-color: rgba(124, 58, 237, 0.35) !important;
+    box-shadow:
+      0 24px 60px -20px rgba(79, 70, 229, 0.42),
+      0 1px 0 0 rgba(255, 255, 255, 1) inset !important;
+  }
+
+  /* Aurora dark theme — also give product cards a subtle frosted glass look */
+  html:not(.theme-white) .product-card-v2 {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(18px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(150%) !important;
+    box-shadow:
+      0 12px 32px -14px rgba(0, 0, 0, 0.5),
+      0 1px 0 0 rgba(255, 255, 255, 0.08) inset !important;
+  }
+  html:not(.theme-white) .product-card-v2:hover {
+    border-color: rgba(34, 211, 238, 0.32) !important;
+    box-shadow:
+      0 22px 52px -16px rgba(34, 211, 238, 0.25),
+      0 1px 0 0 rgba(255, 255, 255, 0.12) inset !important;
+  }
+
   /* Gradient bordered cards adapt to white-glass premium look (no pink) */
   html.theme-white .gradient-border-card {
     background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.6));
