@@ -1574,3 +1574,46 @@ html.theme-white .flex button[class*="rounded"]:has(svg):not([class*="bg-gradien
   background: linear-gradient(90deg, rgba(124, 58, 237, 0.35), rgba(6, 182, 212, 0.22)) !important;
   color: #ffffff !important;
 }
+
+/* =====================================================
+   FULL-WIDTH RESPONSIVE — Site fills the entire display
+   on any device (phone, tablet, desktop, ultra-wide).
+   Removes legacy 1440px / 1280px content caps.
+   ===================================================== */
+.max-w-\[1440px\],
+.max-w-\[1280px\],
+.max-w-7xl,
+.max-w-6xl {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* Comfortable side padding that scales with viewport so content
+   never hugs the screen edges on ultra-wide monitors. */
+@media (min-width: 1440px) {
+  .px-4.md\:px-10,
+  .px-4 {
+    padding-left: clamp(1rem, 3vw, 4rem) !important;
+    padding-right: clamp(1rem, 3vw, 4rem) !important;
+  }
+}
+@media (min-width: 1920px) {
+  .px-4.md\:px-10 {
+    padding-left: clamp(2rem, 4vw, 6rem) !important;
+    padding-right: clamp(2rem, 4vw, 6rem) !important;
+  }
+}
+
+/* Allow product grids to use more columns on wide displays */
+@media (min-width: 1536px) {
+  .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-4 {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+}
+@media (min-width: 1920px) {
+  .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-4 {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
+}
+
+html, body { width: 100%; }
