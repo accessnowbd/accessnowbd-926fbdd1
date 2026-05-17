@@ -492,12 +492,12 @@ function MagneticNav() {
       ref={navRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="hidden lg:flex relative items-center h-12 rounded-full border border-[#e4e7ff] font-semibold shrink min-w-0 whitespace-nowrap"
+      className="hidden lg:flex relative items-center h-12 rounded-full border border-[#e4e7ff] font-semibold shrink min-w-0 max-w-full whitespace-nowrap overflow-hidden"
       style={{
-        gap: "clamp(0px, 0.25vw, 4px)",
-        paddingLeft: "clamp(4px, 0.6vw, 10px)",
-        paddingRight: "clamp(4px, 0.6vw, 10px)",
-        fontSize: "clamp(11.5px, 0.95vw, 14px)",
+        gap: "clamp(0px, 0.15vw, 2px)",
+        paddingLeft: "clamp(3px, 0.4vw, 8px)",
+        paddingRight: "clamp(3px, 0.4vw, 8px)",
+        fontSize: "clamp(10px, 0.78vw, 13px)",
         background: "#ffffff",
         boxShadow: "0 4px 14px -8px rgba(79,70,229,0.2)",
       }}
@@ -523,12 +523,12 @@ function MagneticNav() {
             ref={(el) => {
               itemRefs.current[i] = el;
             }}
-            className={`relative z-10 py-2 rounded-full transition-colors whitespace-nowrap ${
+            className={`relative z-10 py-2 rounded-full transition-colors whitespace-nowrap shrink-0 ${
               isActive ? "text-[#4f46e5]" : "text-slate-700 hover:text-[#4f46e5]"
             }`}
             style={{
-              paddingLeft: "clamp(8px, 0.9vw, 16px)",
-              paddingRight: "clamp(8px, 0.9vw, 16px)",
+              paddingLeft: "clamp(5px, 0.65vw, 12px)",
+              paddingRight: "clamp(5px, 0.65vw, 12px)",
             }}
           >
             {n.label}
