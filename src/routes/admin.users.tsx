@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import { Loader2, Shield, ShieldOff, Search, User } from "lucide-react";
+import { Loader2, Shield, ShieldOff, User } from "lucide-react";
+import { SearchBar } from "@/components/SearchBar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AdminStatCard, AdminStatGrid, AdminGlassCard } from "@/components/admin/AdminStatCard";
