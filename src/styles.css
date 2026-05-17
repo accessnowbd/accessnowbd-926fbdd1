@@ -539,6 +539,34 @@
     color: #ffffff !important;
   }
 
+  html.theme-white .product-action-button,
+  html.theme-white .product-action-button span,
+  html.theme-white .product-action-button svg {
+    color: #ffffff !important;
+    opacity: 1 !important;
+  }
+
+  html.theme-white .product-buy-button,
+  .product-buy-button {
+    background: linear-gradient(135deg, #7C3AED 0%, #2563EB 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 18px 42px -14px rgba(124, 58, 237, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+  }
+
+  html.theme-white .product-cart-button,
+  .product-cart-button {
+    background: linear-gradient(135deg, #111827 0%, #374151 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 16px 36px -14px rgba(17, 24, 39, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
+  }
+
+  html.theme-white .product-whatsapp-button,
+  .product-whatsapp-button {
+    background: linear-gradient(135deg, #075E54 0%, #128C7E 38%, #25D366 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 18px 42px -14px rgba(37, 211, 102, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+  }
+
   html.theme-white .bg-secondary {
     background-color: rgba(243, 232, 255, 0.9) !important;
     color: oklch(0.32 0.18 295) !important;
