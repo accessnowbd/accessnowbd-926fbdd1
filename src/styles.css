@@ -583,9 +583,18 @@
 
   /* ===== Footer-specific (catches arbitrary text-white/NN + bg-white/[0.0xx]) ===== */
   html.theme-white footer {
-    background: linear-gradient(180deg, rgba(253, 242, 248, 0.9), rgba(243, 232, 255, 0.95)) !important;
-    border-top: 1px solid rgba(124, 58, 237, 0.18) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.92)) !important;
+    backdrop-filter: blur(28px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(140%) !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
     color: oklch(0.22 0.04 285) !important;
+  }
+  html.theme-white footer .blur-\[60px\],
+  html.theme-white footer .blur-\[70px\],
+  html.theme-white footer .blur-\[90px\],
+  html.theme-white footer .blur-\[96px\] {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+    opacity: 0.5 !important;
   }
   html.theme-white footer [class*="text-white"] {
     color: oklch(0.28 0.04 285) !important;
