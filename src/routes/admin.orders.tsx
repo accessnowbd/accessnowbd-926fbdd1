@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
-import { Loader2, Eye, Search, X, Download } from "lucide-react";
+import { Loader2, Eye, X, Download } from "lucide-react";
+import { SearchBar } from "@/components/SearchBar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { downloadReceiptPdf } from "@/lib/receipt";
@@ -116,15 +117,13 @@ function AdminOrders() {
  ))}
  </div>
 
- <div className="relative">
- <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
- <input
+ <SearchBar
  value={q}
- onChange={(e) => setQ(e.target.value)}
+ onChange={setQ}
  placeholder="Search by order ID, name, email, phone, or transaction ID…"
- className="w-full h-10 pl-9 pr-3 rounded-full border border-white/60 bg-white/70 backdrop-blur-xl text-sm outline-none focus:border-slate-400 shadow-sm"
+ size="md"
+ className="w-full"
  />
- </div>
 
  <AdminGlassCard className="overflow-hidden p-0">
  {loading ? null : (

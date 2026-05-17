@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
-import { Search, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearch } from "@tanstack/react-router";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
+import { SearchBar } from "@/components/SearchBar";
 
 export function CategoryPage({
   title,
@@ -16,8 +17,13 @@ export function CategoryPage({
   showFilters?: boolean;
 }) {
   const { products, isLoading } = useProducts();
-  const [q, setQ] = useState("");
+  const urlSearch = useSearch({ strict: false }) as { q?: string };
+  const [q, setQ] = useState<string>(urlSearch?.q ?? "");
   const [cat, setCat] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof urlSearch?.q === "string") setQ(urlSearch.q);
+  }, [urlSearch?.q]);
 
   const cats = useMemo(() => {
     const set = new Set<string>();
@@ -61,20 +67,14 @@ export function CategoryPage({
             </h1>
           </div>
           <p className="mt-3 text-slate-700 max-w-2xl font-medium drop-shadow-[0_1px_0_rgba(255,255,255,0.6)]">{subtitle}</p>
-          <div className="mt-6 flex items-center bg-white border border-slate-200 rounded-full h-12 pl-5 pr-1.5 max-w-xl shadow-[0_8px_24px_-12px_rgba(15,23,42,0.18)]">
-            <Search className="w-4 h-4 text-slate-500" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search subscriptions..."
-              className="flex-1 px-3 bg-transparent outline-none text-sm placeholder:text-slate-400 text-slate-900"
-            />
-            {q && (
-              <button onClick={() => setQ("")} className="grid place-items-center w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500" aria-label="Clear">
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+          <SearchBar
+            value={q}
+            onChange={setQ}
+            onSubmit={setQ}
+            placeholder="প্রোডাক্ট সার্চ করুন..."
+            size="lg"
+            className="mt-6 max-w-xl"
+          />
         </div>
       </section>
 

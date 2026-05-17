@@ -1,9 +1,10 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  ShieldAlert, LogOut, Search, Bell, Plus, Globe,
+  ShieldAlert, LogOut, Bell, Globe,
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X, Pin,
 } from "lucide-react";
+import { SearchBar } from "@/components/SearchBar";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
@@ -346,16 +347,13 @@ function AdminShell({ user, signOut, navigate }: any) {
         {/* Search */}
         {!collapsed && (
           <div className="px-3 pt-3 pb-1">
-            <div className="flex items-center gap-2 h-10 px-4 rounded-full bg-slate-100/80 focus-within:ring-2 focus-within:ring-violet-500 focus-within:ring-offset-0">
-              <Search className="w-4 h-4 text-slate-400" />
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search menu..."
-                className="bg-transparent flex-1 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:outline-none focus-visible:outline-none"
-                style={{ outline: "none" }}
-              />
-            </div>
+            <SearchBar
+              value={search}
+              onChange={setSearch}
+              placeholder="Search menu..."
+              size="sm"
+              className="w-full"
+            />
           </div>
         )}
 
@@ -423,10 +421,14 @@ function AdminShell({ user, signOut, navigate }: any) {
             <button className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white">
               <Globe className="w-3.5 h-3.5" /> বাং
             </button>
-            <div className="hidden xl:flex items-center gap-2 h-9 px-3 rounded-lg border border-slate-200 bg-white">
-              <Search className="w-3.5 h-3.5 text-slate-400" />
-              <input placeholder="Search" className="bg-transparent outline-none text-xs w-32 placeholder:text-slate-400" />
-              <kbd className="text-[10px] px-1.5 py-0.5 rounded border border-slate-200 text-slate-500">⌘K</kbd>
+            <div className="hidden xl:block">
+              <SearchBar
+                value={search}
+                onChange={setSearch}
+                placeholder="Search…"
+                size="sm"
+                className="w-56"
+              />
             </div>
             <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
               <ExternalLink className="w-3.5 h-3.5" /> View store
