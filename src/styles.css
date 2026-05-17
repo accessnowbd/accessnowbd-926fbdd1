@@ -255,18 +255,27 @@
 
     color-scheme: light;
   }
-  /* Premium white-glass canvas — soft violet/indigo/blue mesh, no pink */
+  /* Pure white blurred canvas — no color tint, just soft white */
   html.theme-white body {
-    background-color: #f4f1fb;
+    background-color: #ffffff;
     background-image:
-      radial-gradient(70% 60% at 8% 6%, rgba(196, 181, 253, 0.55), transparent 65%),
-      radial-gradient(60% 55% at 92% 4%, rgba(186, 230, 253, 0.55), transparent 68%),
-      radial-gradient(70% 60% at 100% 90%, rgba(199, 210, 254, 0.55), transparent 65%),
-      radial-gradient(60% 55% at 0% 95%, rgba(224, 231, 255, 0.55), transparent 65%),
-      linear-gradient(135deg, #f8fafc 0%, #eef2ff 45%, #e0e7ff 100%);
+      radial-gradient(60% 50% at 50% 0%, rgba(245, 245, 250, 0.9), transparent 70%),
+      radial-gradient(50% 40% at 100% 100%, rgba(248, 248, 252, 0.8), transparent 70%),
+      radial-gradient(50% 40% at 0% 100%, rgba(248, 248, 252, 0.8), transparent 70%);
+    background-attachment: fixed;
     color: var(--color-foreground);
   }
   html.theme-white body::before { display: none; }
+  html.theme-white body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background: rgba(255, 255, 255, 0.4);
+  }
 
   /* GLASS CARDS — premium frosted white over violet/indigo mesh */
   html.theme-white .glass {
