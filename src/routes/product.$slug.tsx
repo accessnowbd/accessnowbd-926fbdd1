@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
 import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones, Loader2, MessageCircle } from "lucide-react";
 import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
@@ -7,12 +7,45 @@ import { useCart } from "@/context/CartContext";
 import { ProductBanner } from "@/components/ProductBanner";
 import { useShopConfig } from "@/hooks/useShopConfig";
 import { waOrderUrl } from "@/lib/whatsapp";
+import { getProduct } from "@/lib/products.functions";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
 export const Route = createFileRoute("/product/$slug")({
+  loader: async ({ params, context }) => {
+    const product = await context.queryClient.ensureQueryData({
+      queryKey: ["product", params.slug],
+      queryFn: () => getProduct({ data: { slug: params.slug } }),
+      staleTime: 10 * 60_000,
+    });
+    if (!product) throw notFound();
+    return { product };
+  },
   component: ProductPage,
-  head: () => ({ meta: [{ title: "Subscription details — AccessNow BD" }] }),
+  head: ({ loaderData }) => ({
+    meta: [
+      { title: loaderData?.product ? `${loaderData.product.name} — AccessNow BD` : "Subscription details — AccessNow BD" },
+      ...(loaderData?.product
+        ? [
+            { name: "description", content: loaderData.product.tagline ?? loaderData.product.description ?? "" },
+            { property: "og:title", content: loaderData.product.name },
+            { property: "og:description", content: loaderData.product.tagline ?? loaderData.product.description ?? "" },
+            ...(loaderData.product.imageUrl
+              ? [{ property: "og:image", content: loaderData.product.imageUrl }]
+              : []),
+          ]
+        : []),
+    ],
+  }),
+  errorComponent: ({ error }) => (
+    <div className="min-h-screen grid place-items-center px-4">
+      <div className="text-center">
+        <h1 className="text-2xl font-semibold mb-2">Something went wrong</h1>
+        <p className="text-sm text-muted-foreground mb-4">{error.message}</p>
+        <Link to="/" className="text-primary underline">Back to home</Link>
+      </div>
+    </div>
+  ),
   notFoundComponent: () => (
     <div className="min-h-screen grid place-items-center px-4">
       <div className="text-center">
