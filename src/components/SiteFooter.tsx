@@ -259,27 +259,32 @@ export function SiteFooter() {
 
         <div className="mt-6 grid gap-4 rounded-[24px] border border-[var(--glass-border-soft)] bg-foreground/[0.04] px-4 py-4 md:grid-cols-[1fr_auto] md:items-center md:px-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               {SOCIALS.map(({ Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-primary/30 bg-gradient-to-br from-primary to-aqua text-white shadow-[0_8px_20px_-12px_rgba(34,211,228,0.6)] transition-all duration-200 hover:scale-110 hover:shadow-[0_10px_24px_-10px_rgba(79,70,229,0.7)]"
+                  className="group relative grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[var(--glass-border)] bg-foreground/[0.04] text-foreground/80 transition-all duration-300 hover:border-[var(--gold)]/50 hover:bg-foreground/[0.07] hover:text-[var(--gold)] hover:shadow-[0_8px_22px_-12px_rgba(212,175,55,0.55)]"
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-[15px] w-[15px] transition-transform duration-300 group-hover:scale-110" />
                 </a>
               ))}
             </div>
 
-            <p className="text-[12.5px] leading-6 text-foreground/70">
-              © 2026 ·{" "}
-              <span className="font-extrabold text-foreground">AccessNow BD</span> · All Rights Reserved · Designed &amp; Developed by{" "}
+            <p className="text-[12.5px] leading-6 text-foreground/65 tracking-[0.01em]">
+              <span className="text-foreground/50">©</span>{" "}
+              <span className="font-semibold text-foreground/85">2026</span>
+              <span className="mx-2 text-foreground/30">|</span>
+              <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text font-extrabold tracking-tight text-transparent">AccessNow BD</span>
+              <span className="mx-2 text-foreground/30">·</span>
+              <span className="italic text-foreground/55">Crafted with precision</span>
+              <span className="mx-2 text-foreground/30">·</span>
               <a
                 href="/developer"
-                className="font-bold text-primary transition-colors duration-200 hover:text-aqua"
+                className="group/dev inline-flex items-center font-bold tracking-tight transition-colors duration-200"
               >
-                Shahed IT
+                <span className="bg-gradient-to-r from-primary via-aqua to-[var(--gold)] bg-clip-text text-transparent group-hover/dev:from-[var(--gold)] group-hover/dev:via-[var(--gold)] group-hover/dev:to-[var(--gold)]">Shahed IT</span>
               </a>
             </p>
           </div>
