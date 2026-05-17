@@ -17,8 +17,13 @@ export function CategoryPage({
   showFilters?: boolean;
 }) {
   const { products, isLoading } = useProducts();
-  const [q, setQ] = useState("");
+  const urlSearch = useSearch({ strict: false }) as { q?: string };
+  const [q, setQ] = useState<string>(urlSearch?.q ?? "");
   const [cat, setCat] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof urlSearch?.q === "string") setQ(urlSearch.q);
+  }, [urlSearch?.q]);
 
   const cats = useMemo(() => {
     const set = new Set<string>();
