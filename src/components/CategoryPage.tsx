@@ -22,7 +22,7 @@ export function CategoryPage({
   const [cat, setCat] = useState<string | null>(null);
 
   const updateSearch = (value: string) => {
-    navigate({ search: (prev) => ({ ...prev, q: value.trim() || undefined }) });
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, q: value.trim() || undefined }) } as never);
   };
 
   const cats = useMemo(() => {
