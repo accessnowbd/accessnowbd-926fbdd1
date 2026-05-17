@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { useSearch } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -17,13 +17,13 @@ export function CategoryPage({
   showFilters?: boolean;
 }) {
   const { products, isLoading } = useProducts();
-  const urlSearch = useSearch({ strict: false }) as { q?: string };
-  const [q, setQ] = useState<string>(urlSearch?.q ?? "");
+  const navigate = useNavigate();
+  const { q = "" } = useSearch({ strict: false });
   const [cat, setCat] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (typeof urlSearch?.q === "string") setQ(urlSearch.q);
-  }, [urlSearch?.q]);
+  const updateSearch = (value: string) => {
+    navigate({ search: (prev) => ({ ...prev, q: value.trim() || undefined }) });
+  };
 
   const cats = useMemo(() => {
     const set = new Set<string>();
@@ -69,8 +69,8 @@ export function CategoryPage({
           <p className="mt-3 text-slate-700 max-w-2xl font-medium drop-shadow-[0_1px_0_rgba(255,255,255,0.6)]">{subtitle}</p>
           <SearchBar
             value={q}
-            onChange={setQ}
-            onSubmit={setQ}
+            onChange={updateSearch}
+            onSubmit={updateSearch}
             placeholder="প্রোডাক্ট সার্চ করুন..."
             size="lg"
             className="mt-6 max-w-xl"
