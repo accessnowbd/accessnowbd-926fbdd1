@@ -1309,11 +1309,11 @@
   .animate-blob { animation: blobDrift 18s ease-in-out infinite; }
 }
 
-/* ===== Premium custom scrollbar (desktop only) ===== */
+/* ===== Minimal neutral scrollbar (desktop only) ===== */
 @media (pointer: fine) {
   html {
     scrollbar-width: thin;
-    scrollbar-color: oklch(0.62 0.18 285) transparent;
+    scrollbar-color: rgba(120, 120, 120, 0.45) transparent;
   }
   ::-webkit-scrollbar {
     width: 8px;
@@ -1323,13 +1323,21 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: oklch(0.55 0.18 285);
+    background: rgba(120, 120, 120, 0.45);
     border-radius: 999px;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.65 0.22 285);
+    background: rgba(120, 120, 120, 0.7);
+    background-clip: padding-box;
+  }
+  html.theme-white ::-webkit-scrollbar-thumb {
+    background: rgba(100, 100, 100, 0.35);
+    background-clip: padding-box;
+  }
+  html.theme-white ::-webkit-scrollbar-thumb:hover {
+    background: rgba(80, 80, 80, 0.55);
     background-clip: padding-box;
   }
   ::-webkit-scrollbar-corner {
