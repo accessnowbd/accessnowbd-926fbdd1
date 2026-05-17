@@ -291,7 +291,7 @@ export function SiteFooter() {
                 <span className="italic text-foreground/55">by</span>{" "}
                 <a
                   href="/developer"
-                  className="font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary via-aqua to-[var(--gold)] underline-offset-4 transition hover:underline"
+                  className="font-extrabold tracking-tight text-rose-600 dark:text-rose-400 underline-offset-4 transition hover:underline hover:text-rose-700 dark:hover:text-rose-300"
                 >
                   Shahed IT
                 </a>
