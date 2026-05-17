@@ -421,10 +421,14 @@ function AdminShell({ user, signOut, navigate }: any) {
             <button className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white">
               <Globe className="w-3.5 h-3.5" /> বাং
             </button>
-            <div className="hidden xl:flex items-center gap-2 h-9 px-3 rounded-lg border border-slate-200 bg-white">
-              <Search className="w-3.5 h-3.5 text-slate-400" />
-              <input placeholder="Search" className="bg-transparent outline-none text-xs w-32 placeholder:text-slate-400" />
-              <kbd className="text-[10px] px-1.5 py-0.5 rounded border border-slate-200 text-slate-500">⌘K</kbd>
+            <div className="hidden xl:block">
+              <SearchBar
+                value={search}
+                onChange={setSearch}
+                placeholder="Search…"
+                size="sm"
+                className="w-56"
+              />
             </div>
             <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
               <ExternalLink className="w-3.5 h-3.5" /> View store
