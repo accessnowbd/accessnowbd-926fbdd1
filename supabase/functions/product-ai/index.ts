@@ -77,13 +77,14 @@ serve(async (req) => {
     // Prefer Lovable AI Gateway (no extra key needed). Fallback to direct
     // Gemini API if a GEMINI_API_KEY is configured on the project.
     if (mode === "image") {
-      const styleId: CardStyle = (style as CardStyle) || "glassmorphism";
-      const styleText = STYLE_PROMPTS[styleId] ?? STYLE_PROMPTS["glassmorphism"];
-      const prompt =
-        imagePrompt?.trim() ||
-        `${styleText}. Subject: "${product.name}"${
-          product.category ? ` (${product.category})` : ""
-        }. Branded for ${SHOP_BRAND}. 1:1 square, ultra high detail, no text, no watermark.`;
+      const styleId: CardStyle = (style as CardStyle) || "premium-pastel";
+      const styleText = STYLE_PROMPTS[styleId] ?? STYLE_PROMPTS["premium-pastel"];
+      const isPremium = styleId === "premium-pastel" || styleId === "premium-dark";
+      const subjectLine = `Subject / product being showcased: "${product.name}"${product.category ? ` (${product.category})` : ""}.`;
+      const userExtra = imagePrompt?.trim() ? ` Additional direction: ${imagePrompt.trim()}.` : "";
+      const prompt = isPremium
+        ? `${styleText} ${subjectLine}${userExtra} Render exactly the small text shown (brand pill, product pill, website www.accessnowbd.com, phone +880 1580-607614). Do NOT add any other text or watermark. Ultra high detail, 1:1 square.`
+        : (imagePrompt?.trim() || `${styleText}. ${subjectLine} Branded for ${SHOP_BRAND}. 1:1 square, ultra high detail, no text, no watermark.`);
 
       // ---- Path A: Lovable AI Gateway (preferred) ----
       if (apiKey) {
