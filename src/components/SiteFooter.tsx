@@ -272,24 +272,26 @@ export function SiteFooter() {
               ))}
             </div>
 
-            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] leading-6 text-foreground/70">
-              <span className="font-medium text-foreground/55">© 2026</span>
-              <span className="text-foreground/25">/</span>
-              <span className="font-extrabold tracking-tight text-foreground">AccessNow BD</span>
-              <span className="rounded-full border border-[var(--glass-border)] bg-foreground/[0.04] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/65">
-                All Rights Reserved
-              </span>
-              <span className="text-foreground/25">·</span>
-              <span className="italic text-foreground/60" style={{ fontFamily: "var(--font-display, serif)" }}>
-                Crafted with precision by
-              </span>
-              <a
-                href="/developer"
-                className="font-extrabold tracking-tight text-primary underline-offset-4 transition-colors duration-200 hover:text-[var(--gold)] hover:underline"
-              >
-                Shahed IT
-              </a>
-            </p>
+            <div className="relative inline-flex items-center overflow-hidden rounded-full border border-[var(--glass-border)] bg-gradient-to-r from-primary/[0.08] via-aqua/[0.06] to-[var(--gold)]/[0.08] px-4 py-1.5 shadow-[0_4px_18px_-10px_rgba(79,70,229,0.35)]">
+              <span aria-hidden className="pointer-events-none absolute inset-0 opacity-60" style={{ background: "radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.18), transparent 60%)" }} />
+              <p className="relative text-[12.5px] leading-6 tracking-[0.01em]">
+                <span className="text-foreground/55">©</span>{" "}
+                <span className="font-bold text-foreground/85">2026</span>
+                <span className="mx-2 text-foreground/25">·</span>
+                <span className="font-extrabold tracking-tight text-primary">Access</span><span className="font-extrabold tracking-tight text-aqua-deep">Now</span>{" "}
+                <span className="font-extrabold tracking-tight text-[var(--gold)]">BD</span>
+                <span className="mx-2 text-foreground/25">·</span>
+                <span className="text-foreground/65">All Rights Reserved</span>
+                <span className="mx-2 text-foreground/25">·</span>
+                <span className="italic text-foreground/55">Designed &amp; Developed by</span>{" "}
+                <a
+                  href="/developer"
+                  className="font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary via-aqua to-[var(--gold)] underline-offset-4 transition hover:underline"
+                >
+                  Shahed IT
+                </a>
+              </p>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 md:justify-end">
