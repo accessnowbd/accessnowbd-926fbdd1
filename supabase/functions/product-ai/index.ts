@@ -26,7 +26,7 @@ function corsFor(req: Request) {
 }
 
 type Mode = "short" | "rich" | "all" | "image";
-type CardStyle = "glassmorphism" | "soft-aurora" | "dark-neon";
+type CardStyle = "premium-pastel" | "premium-dark" | "glassmorphism" | "soft-aurora" | "dark-neon";
 
 type Body = {
   mode: Mode;
@@ -42,6 +42,10 @@ type Body = {
 };
 
 const STYLE_PROMPTS: Record<CardStyle, string> = {
+  "premium-pastel":
+    "A premium 1:1 square social-media product card with a dreamy pastel gradient background that blends soft lilac, baby pink, sky blue, and warm peach corner to corner. Scatter a few delicate translucent bubble circles across the background. In the foreground place ONE large centered frosted-glass square panel (rounded corners, soft white inner glow, subtle border, glass-morphism). Inside that glass panel, place a single big rounded-square 3D app-style product icon dead-center, taking ~45% of the panel. Top-left corner of the glass panel: small pill badge with the text 'ACCESSNOW BD' in white uppercase on a translucent dark pill. Top-right corner: a clean white rounded pill badge containing the product/brand name with its logo mark. Bottom of the glass panel: one row, small dark text, a globe icon followed by 'www.accessnowbd.com', then a phone icon followed by '+880 1580-607614'. Studio quality, ultra crisp, no extra text, no watermark.",
+  "premium-dark":
+    "A premium 1:1 square social-media product card with a moody dark gradient background mixing deep midnight blue, violet, and a hint of magenta, with soft neon orb highlights and a few translucent bubble circles. In the foreground place ONE large centered frosted dark-glass square panel (rounded corners, subtle neon rim glow, glass-morphism). Inside that glass panel, place a single big rounded-square 3D app-style product icon dead-center, taking ~45% of the panel. Top-left corner of the glass panel: small pill badge 'ACCESSNOW BD' in white uppercase on a translucent light pill. Top-right corner: a clean light/white rounded pill badge containing the product/brand name with its logo mark. Bottom of the glass panel: one row, small light text, a globe icon followed by 'www.accessnowbd.com', then a phone icon followed by '+880 1580-607614'. Cinematic studio quality, ultra crisp, no extra text, no watermark.",
   "glassmorphism":
     "premium glassmorphism product mockup: frosted glass card on a soft pastel aurora gradient background, subtle inner glow, vibrant accent highlights, ultra-clean studio lighting",
   "soft-aurora":
@@ -73,13 +77,14 @@ serve(async (req) => {
     // Prefer Lovable AI Gateway (no extra key needed). Fallback to direct
     // Gemini API if a GEMINI_API_KEY is configured on the project.
     if (mode === "image") {
-      const styleId: CardStyle = (style as CardStyle) || "glassmorphism";
-      const styleText = STYLE_PROMPTS[styleId] ?? STYLE_PROMPTS["glassmorphism"];
-      const prompt =
-        imagePrompt?.trim() ||
-        `${styleText}. Subject: "${product.name}"${
-          product.category ? ` (${product.category})` : ""
-        }. Branded for ${SHOP_BRAND}. 1:1 square, ultra high detail, no text, no watermark.`;
+      const styleId: CardStyle = (style as CardStyle) || "premium-pastel";
+      const styleText = STYLE_PROMPTS[styleId] ?? STYLE_PROMPTS["premium-pastel"];
+      const isPremium = styleId === "premium-pastel" || styleId === "premium-dark";
+      const subjectLine = `Subject / product being showcased: "${product.name}"${product.category ? ` (${product.category})` : ""}.`;
+      const userExtra = imagePrompt?.trim() ? ` Additional direction: ${imagePrompt.trim()}.` : "";
+      const prompt = isPremium
+        ? `${styleText} ${subjectLine}${userExtra} Render exactly the small text shown (brand pill, product pill, website www.accessnowbd.com, phone +880 1580-607614). Do NOT add any other text or watermark. Ultra high detail, 1:1 square.`
+        : (imagePrompt?.trim() || `${styleText}. ${subjectLine} Branded for ${SHOP_BRAND}. 1:1 square, ultra high detail, no text, no watermark.`);
 
       // ---- Path A: Lovable AI Gateway (preferred) ----
       if (apiKey) {
