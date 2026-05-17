@@ -135,11 +135,19 @@ function ProductPage() {
 
           {/* Buy buttons */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <button onClick={buyNow} className="h-[48px] flex-1 rounded-full bg-aurora text-primary-foreground text-sm font-semibold hover:opacity-90 transition glow-violet inline-flex items-center justify-center gap-2">
+            <button
+              onClick={buyNow}
+              className="h-[52px] flex-1 rounded-full text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02] hover:shadow-[0_18px_40px_-12px_rgba(124,58,237,0.7)] shadow-[0_12px_30px_-10px_rgba(124,58,237,0.55)]"
+              style={{ background: "linear-gradient(135deg,#6366f1 0%,#8b5cf6 45%,#ec4899 100%)" }}
+            >
               <ShoppingCart className="w-4 h-4" /> Buy Now — {plan?.price ?? ""}
             </button>
-            <button onClick={addToCart} className="h-[48px] px-6 rounded-full glass-soft text-sm font-semibold hover:bg-[var(--glass-bg-strong)] transition">
-              Add to Cart
+            <button
+              onClick={addToCart}
+              className="h-[52px] px-6 rounded-full text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02] hover:shadow-[0_18px_40px_-12px_rgba(15,23,42,0.6)] shadow-[0_12px_30px_-10px_rgba(15,23,42,0.45)]"
+              style={{ background: "linear-gradient(135deg,#1e293b 0%,#334155 50%,#475569 100%)" }}
+            >
+              <ShoppingCart className="w-4 h-4" /> Add to Cart
             </button>
           </div>
 
@@ -155,7 +163,8 @@ function ProductPage() {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 h-[48px] w-full rounded-full bg-[#25D366] hover:bg-[#1ebe5b] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 transition shadow-[0_8px_24px_-8px_rgba(37,211,102,0.6)]"
+            className="mt-3 h-[52px] w-full rounded-full text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02] hover:shadow-[0_18px_40px_-12px_rgba(16,185,129,0.65)] shadow-[0_12px_30px_-10px_rgba(16,185,129,0.5)]"
+            style={{ background: "linear-gradient(135deg,#059669 0%,#10b981 50%,#34d399 100%)" }}
           >
             <MessageCircle className="w-4 h-4" /> Order via WhatsApp — {plan?.period ?? ""}
           </a>
