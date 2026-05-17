@@ -133,6 +133,14 @@ export function SiteHeader() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
+  const goToSearch = (rawValue: string) => {
+    const q = rawValue.trim();
+    navigate({
+      to: "/products",
+      search: q ? { q } : {},
+    });
+  };
+
   const handleLogout = async () => {
     await signOut();
     navigate({ to: "/" });
@@ -267,13 +275,7 @@ export function SiteHeader() {
               <SearchBar
                 value={headerQuery}
                 onChange={setHeaderQuery}
-                onSubmit={(v) => {
-                  const q = v.trim();
-                  navigate({
-                    to: "/products",
-                    search: q ? { q } : undefined,
-                  } as never);
-                }}
+                onSubmit={goToSearch}
                 size="md"
                 placeholder="প্রোডাক্ট সার্চ করুন..."
                 className="hidden md:flex w-[260px] lg:w-[320px] xl:w-[360px]"
@@ -282,11 +284,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => {
-                  const q = headerQuery.trim();
-                  navigate({
-                    to: "/products",
-                    search: q ? { q } : undefined,
-                  } as never);
+                  goToSearch(headerQuery);
                 }}
                 className="md:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
                 aria-label="Search"
