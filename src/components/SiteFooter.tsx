@@ -272,22 +272,21 @@ export function SiteFooter() {
               ))}
             </div>
 
-            <div className="relative inline-flex items-center overflow-hidden rounded-full border border-foreground/15 bg-background/92 px-4 py-1.5 shadow-[0_12px_34px_-20px_rgba(15,23,42,0.55)] ring-1 ring-foreground/10 backdrop-blur-xl">
-              <span aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-r from-primary/10 via-aqua/10 to-[var(--gold)]/12" />
-              <span aria-hidden className="pointer-events-none absolute inset-x-4 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)]/45 to-transparent" />
-              <p className="relative text-[12.75px] font-semibold leading-6 tracking-[0.01em] text-foreground/86">
-                <span className="font-black text-foreground/78">©</span>{" "}
-                <span className="font-black text-foreground">2026</span>
-                <span className="mx-2 text-foreground/45">·</span>
-                <span className="font-black tracking-tight text-primary">Access</span><span className="font-black tracking-tight text-aqua">Now</span>{" "}
-                <span className="font-black tracking-tight text-[var(--gold)]">BD</span>
-                <span className="mx-2 text-foreground/45">·</span>
-                <span className="font-bold text-foreground/82">All Rights Reserved</span>
-                <span className="mx-2 text-foreground/45">·</span>
-                <span className="font-display italic text-foreground/72">Designed &amp; Developed by</span>{" "}
+            <div className="relative inline-flex items-center overflow-hidden rounded-full border border-[var(--glass-border)] bg-gradient-to-r from-primary/[0.08] via-aqua/[0.06] to-[var(--gold)]/[0.08] px-4 py-1.5 shadow-[0_4px_18px_-10px_rgba(79,70,229,0.35)]">
+              <span aria-hidden className="pointer-events-none absolute inset-0 opacity-60" style={{ background: "radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.18), transparent 60%)" }} />
+              <p className="relative text-[12.5px] leading-6 tracking-[0.01em]">
+                <span className="text-foreground/55">©</span>{" "}
+                <span className="font-bold text-foreground/85">2026</span>
+                <span className="mx-2 text-foreground/25">·</span>
+                <span className="font-extrabold tracking-tight text-primary">Access</span><span className="font-extrabold tracking-tight text-aqua-deep">Now</span>{" "}
+                <span className="font-extrabold tracking-tight text-[var(--gold)]">BD</span>
+                <span className="mx-2 text-foreground/25">·</span>
+                <span className="text-foreground/65">All Rights Reserved</span>
+                <span className="mx-2 text-foreground/25">·</span>
+                <span className="italic text-foreground/55">Designed &amp; Developed by</span>{" "}
                 <a
                   href="/developer"
-                  className="font-black tracking-tight text-[var(--gold)] underline-offset-4 drop-shadow-[0_1px_10px_rgba(212,175,55,0.28)] transition hover:text-primary hover:underline"
+                  className="font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary via-aqua to-[var(--gold)] underline-offset-4 transition hover:underline"
                 >
                   Shahed IT
                 </a>
