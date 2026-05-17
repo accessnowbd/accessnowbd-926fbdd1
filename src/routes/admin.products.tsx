@@ -1134,36 +1134,12 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <span className="font-bold text-slate-900">AI Card Generator</span>
  <span className="text-[9px] font-bold tracking-wider text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded-full">PREMIUM</span>
  </div>
- <div className="text-xs text-slate-500">Shahed Store ব্র্যান্ডিংসহ প্রিমিয়াম প্রোডাক্ট কার্ড তৈরি করুন</div>
+ <div className="text-xs text-slate-500">AccessNow BD ব্র্যান্ডিংসহ প্রিমিয়াম প্রোডাক্ট কার্ড তৈরি করুন</div>
  </div>
  </div>
 
- <div className="flex items-center justify-between mb-2">
- <div className="text-xs font-bold text-slate-700">ডিজাইন স্টাইল</div>
- <div className="text-[11px] text-slate-500">৩টি স্টাইল</div>
- </div>
- <div className="grid sm:grid-cols-2 gap-2">
- {AI_CARD_STYLES.map((s) => {
- const active = (meta.ai_card_style ?? "glassmorphism") === s.id;
- return (
- <button
- key={s.id}
- onClick={() => setMeta("ai_card_style", s.id)}
- className={`flex items-center gap-3 p-2.5 rounded-xl border-2 text-left transition ${active ? "border-slate-500 bg-slate-50" : "border-slate-200 hover:border-slate-300"}`}
- >
- <div className={`w-10 h-10 rounded-lg grid place-items-center bg-gradient-to-br ${s.tint} text-lg shrink-0`}>{s.icon}</div>
- <div className="min-w-0">
- <div className="text-xs font-bold text-slate-800">{s.label}</div>
- <div className="text-[10px] text-slate-500 truncate">{s.sub}</div>
- </div>
- {active && <CheckCircle2 className="w-4 h-4 text-slate-500 ml-auto shrink-0" />}
- </button>
- );
- })}
- </div>
-
- <div className="mt-3 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600">
- 💡 {AI_CARD_STYLES.find((s) => s.id === (meta.ai_card_style ?? "glassmorphism"))?.sub}, Shahed Store ব্র্যান্ডিং সহ
+ <div className="px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600">
+ 💡 প্রতিবার একটি নতুন, প্রফেশনাল ডিজাইন স্বয়ংক্রিয়ভাবে জেনারেট হবে — AccessNow BD ব্র্যান্ডিং সহ
  </div>
 
  <input value={imagePrompt} onChange={(e) => setImagePrompt(e.target.value)} placeholder="Optional: describe the look..." className="mt-3 w-full h-10 px-3 rounded-xl border border-slate-200 text-xs outline-none focus:border-slate-400" />
@@ -1175,7 +1151,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  style={{ background: "linear-gradient(135deg, #94a3b8 0%, #94a3b8 50%, #94a3b8 100%)" }}
  >
  {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
- {ai === "image-gen" ? "Generating…" : "✨ এই স্টাইলে Card তৈরি করুন"}
+ {ai === "image-gen" ? "Generating…" : "✨ Professional Card তৈরি করুন"}
  </button>
  </div>
 
