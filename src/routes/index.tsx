@@ -551,30 +551,14 @@ function FeaturedProducts({ items, isLoading }: { items: Product[]; isLoading?: 
 }
 
 function ProductRail({ title, items, isLoading }: { title: string; items: Product[]; isLoading?: boolean }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const scroll = (dir: 1 | -1) => ref.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
   const showSkeleton = isLoading || items.length === 0;
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
-      <div className="flex items-end justify-between gap-4">
-        <SectionTitle eyebrow="Collection" title={title} compact />
-        <div className="hidden md:flex items-center gap-2">
-          <button onClick={() => scroll(-1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll left"><ChevronLeft className="h-4 w-4" /></button>
-          <button onClick={() => scroll(1)} className="glass grid h-10 w-10 place-items-center rounded-full text-foreground" aria-label="Scroll right"><ChevronRight className="h-4 w-4" /></button>
-        </div>
-      </div>
-      <div ref={ref} className="mt-6 flex gap-4 md:gap-5 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <SectionTitle eyebrow="Collection" title={title} compact />
+      <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
         {showSkeleton
-          ? Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="snap-start shrink-0 w-[68%] sm:w-[44%] md:w-[30%] lg:w-[23%]">
-                <ProductSkeleton />
-              </div>
-            ))
-          : items.map((product) => (
-              <div key={product.slug} className="snap-start shrink-0 w-[68%] sm:w-[44%] md:w-[30%] lg:w-[23%]">
-                <ProductCard product={product} />
-              </div>
-            ))}
+          ? Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)
+          : items.map((product) => <ProductCard key={product.slug} product={product} />)}
       </div>
     </section>
   );
