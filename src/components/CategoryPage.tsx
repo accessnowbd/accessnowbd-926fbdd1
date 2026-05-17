@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
-import { Search, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearch } from "@tanstack/react-router";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
+import { SearchBar } from "@/components/SearchBar";
 
 export function CategoryPage({
   title,
