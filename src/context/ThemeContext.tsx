@@ -55,19 +55,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemeId>("white");
 
   useEffect(() => {
-    // Force the premium light glassmorphism theme everywhere — overrides any
-    // previously stored "aurora" preference so the whole site adopts the
-    // lavender/violet glass design consistently.
-    try { localStorage.setItem(STORAGE_KEY, "white"); } catch { /* ignore */ }
-    applyTheme("white");
-    setThemeState("white");
+    let stored: ThemeId = "white";
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY) as ThemeId | null;
+      if (saved && THEMES.some((t) => t.id === saved)) stored = saved;
+    } catch { /* ignore */ }
+    applyTheme(stored);
+    setThemeState(stored);
   }, []);
 
-  const setTheme = useCallback((_id: ThemeId) => {
-    // Theme is locked to "white". Switching is a no-op for now.
-    applyTheme("white");
-    setThemeState("white");
-    try { localStorage.setItem(STORAGE_KEY, "white"); } catch { /* ignore */ }
+  const setTheme = useCallback((id: ThemeId) => {
+    if (!THEMES.some((t) => t.id === id)) return;
+    applyTheme(id);
+    setThemeState(id);
+    try { localStorage.setItem(STORAGE_KEY, id); } catch { /* ignore */ }
   }, []);
 
   const value = useMemo(() => ({ theme, themes: THEMES, setTheme }), [theme, setTheme]);
