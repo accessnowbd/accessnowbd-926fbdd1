@@ -593,11 +593,6 @@ const DURATION_CHIPS = [
  "1 বছর", "2 বছর", "3 বছর", "Lifetime", "Custom",
 ];
 
-const AI_CARD_STYLES: { id: AiCardStyle; label: string; sub: string; icon: string; tint: string }[] = [
- { id: "glassmorphism", label: "Glassmorphism UI", sub: "প্রিমিয়াম ফ্রস্টেড গ্লাস + অ্যাকসেন্ট গ্লো", icon: "🪟", tint: " " },
- { id: "soft-aurora", label: "Soft Aurora", sub: "সফট অরোরা গ্রেডিয়েন্ট, লাইট প্রিমিয়াম", icon: "🌈", tint: " " },
- { id: "dark-neon", label: "Dark Neon", sub: "গাঢ় ব্যাকগ্রাউন্ড, নিয়ন গ্লোয়িং বর্ডার", icon: "🌙", tint: " " },
-];
 
 function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product; isNew: boolean; onClose: () => void; onSaved: () => void }) {
  const initial: Product = { ...product, meta: { ...empty.meta, ...(product.meta ?? {}) } };
