@@ -70,15 +70,13 @@ function AdminUsers() {
  <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Users</h1>
  <p className="text-sm text-slate-500 mt-1">Manage customers and admin permissions.</p>
  </div>
- <div className="relative">
- <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
- <input
+ <SearchBar
  value={q}
- onChange={(e) => setQ(e.target.value)}
+ onChange={setQ}
  placeholder="Search name, phone, id…"
- className="pl-9 pr-3 h-10 w-72 max-w-full rounded-full bg-white/70 backdrop-blur-xl border border-white/60 text-sm text-slate-900 placeholder:text-slate-500 outline-none focus:border-slate-400 shadow-sm"
+ size="md"
+ className="w-72 max-w-full"
  />
- </div>
  </div>
 
  <AdminStatGrid>
