@@ -26,7 +26,7 @@ function corsFor(req: Request) {
 }
 
 type Mode = "short" | "rich" | "all" | "image";
-type CardStyle = "glassmorphism" | "soft-aurora" | "dark-neon";
+type CardStyle = "premium-pastel" | "premium-dark" | "glassmorphism" | "soft-aurora" | "dark-neon";
 
 type Body = {
   mode: Mode;
