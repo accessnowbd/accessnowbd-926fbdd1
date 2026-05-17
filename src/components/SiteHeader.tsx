@@ -136,9 +136,10 @@ export function SiteHeader() {
 
   const goToSearch = (rawValue: string) => {
     const q = rawValue.trim();
+    if (!q) return; // Google-style: empty submit does nothing
     navigate({
       to: "/products",
-      search: q ? { q } : {},
+      search: { q },
     });
   };
 
