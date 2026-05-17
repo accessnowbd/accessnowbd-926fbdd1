@@ -490,20 +490,20 @@ function MagneticNav() {
       ref={navRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="hidden lg:flex relative items-center h-12 rounded-full border border-[#e4e7ff] font-semibold shrink min-w-0 max-w-full whitespace-nowrap overflow-hidden"
+      className="hidden lg:flex relative items-center h-14 rounded-full border border-[#e4e7ff] font-semibold shrink min-w-0 max-w-full whitespace-nowrap overflow-hidden"
       style={{
-        gap: "clamp(0px, 0.15vw, 2px)",
-        paddingLeft: "clamp(3px, 0.4vw, 8px)",
-        paddingRight: "clamp(3px, 0.4vw, 8px)",
-        fontSize: "clamp(10px, 0.78vw, 13px)",
+        gap: "clamp(2px, 0.3vw, 6px)",
+        paddingLeft: "clamp(10px, 0.9vw, 18px)",
+        paddingRight: "clamp(10px, 0.9vw, 18px)",
+        fontSize: "clamp(13px, 0.95vw, 15px)",
         background: "#ffffff",
-        boxShadow: "0 4px 14px -8px rgba(79,70,229,0.2)",
+        boxShadow: "0 6px 18px -10px rgba(79,70,229,0.22)",
       }}
     >
       {/* Sliding pill — light lavender with purple border (reference style) */}
       <span
         aria-hidden
-        className="pointer-events-none absolute top-1/2 -translate-y-1/2 h-9 rounded-full transition-[left,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="pointer-events-none absolute top-1/2 -translate-y-1/2 h-11 rounded-full transition-[left,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{
           left: pill.left,
           width: pill.width,
@@ -521,12 +521,12 @@ function MagneticNav() {
             ref={(el) => {
               itemRefs.current[i] = el;
             }}
-            className={`relative z-10 py-2 rounded-full transition-colors whitespace-nowrap shrink-0 ${
+            className={`relative z-10 py-2.5 rounded-full transition-colors whitespace-nowrap shrink-0 ${
               isActive ? "text-[#4f46e5]" : "text-slate-700 hover:text-[#4f46e5]"
             }`}
             style={{
-              paddingLeft: "clamp(5px, 0.65vw, 12px)",
-              paddingRight: "clamp(5px, 0.65vw, 12px)",
+              paddingLeft: "clamp(12px, 1.2vw, 22px)",
+              paddingRight: "clamp(12px, 1.2vw, 22px)",
             }}
           >
             {n.label}
