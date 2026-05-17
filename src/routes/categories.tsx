@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useProducts } from "@/hooks/useProducts";
-import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ChevronRight, LayoutGrid } from "lucide-react";
 
@@ -32,7 +31,6 @@ function CategoriesPage() {
 
   return (
     <div className="min-h-screen">
-      <SiteHeader />
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
         <div className="flex items-center gap-3 mb-2">
           <span className="grid place-items-center w-10 h-10 rounded-2xl bg-primary/10 text-primary">
