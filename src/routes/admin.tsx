@@ -347,16 +347,13 @@ function AdminShell({ user, signOut, navigate }: any) {
         {/* Search */}
         {!collapsed && (
           <div className="px-3 pt-3 pb-1">
-            <div className="flex items-center gap-2 h-10 px-4 rounded-full bg-slate-100/80 focus-within:ring-2 focus-within:ring-violet-500 focus-within:ring-offset-0">
-              <Search className="w-4 h-4 text-slate-400" />
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search menu..."
-                className="bg-transparent flex-1 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:outline-none focus-visible:outline-none"
-                style={{ outline: "none" }}
-              />
-            </div>
+            <SearchBar
+              value={search}
+              onChange={setSearch}
+              placeholder="Search menu..."
+              size="sm"
+              className="w-full"
+            />
           </div>
         )}
 
