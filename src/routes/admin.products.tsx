@@ -703,29 +703,27 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  finally { setAi(""); }
  };
 
- const generateImage = async () => {
- if (!form.name.trim()) { toast.error("আগে Product Title লিখুন"); return; }
- setAi("image-gen");
- try {
- const styles: AiCardStyle[] = ["glassmorphism", "soft-aurora", "dark-neon"];
- const randomStyle = styles[Math.floor(Math.random() * styles.length)];
- const { data, error } = await supabase.functions.invoke("product-ai", {
- body: { mode: "image", product: { name: form.name, category: form.category }, imagePrompt, style: randomStyle },
- });
- if (error) throw error;
- const d = data as { image?: string; error?: string };
- if (d?.error) throw new Error(d.error);
- if (!d.image) throw new Error("No image returned");
- const blob = await (await fetch(d.image)).blob();
- const file = new File([blob], `${slugify(form.name) || "product"}-ai-${Date.now()}.png`, { type: blob.type || "image/png" });
- set("image_url", await uploadOne(file));
- toast.success("AI ইমেজ তৈরি হয়েছে 🎨");
- } catch (e) {
- toast.error(e instanceof Error ? e.message : "Image generation failed");
- } finally {
- setAi("");
- }
- };
+  const generateImage = async (style: AiCardStyle = "premium-pastel") => {
+    if (!form.name.trim()) { toast.error("আগে Product Title লিখুন"); return; }
+    setAi("image-gen");
+    try {
+      const { data, error } = await supabase.functions.invoke("product-ai", {
+        body: { mode: "image", product: { name: form.name, category: form.category }, imagePrompt, style },
+      });
+      if (error) throw error;
+      const d = data as { image?: string; error?: string };
+      if (d?.error) throw new Error(d.error);
+      if (!d.image) throw new Error("No image returned");
+      const blob = await (await fetch(d.image)).blob();
+      const file = new File([blob], `${slugify(form.name) || "product"}-ai-${Date.now()}.png`, { type: blob.type || "image/png" });
+      set("image_url", await uploadOne(file));
+      toast.success("AI ইমেজ তৈরি হয়েছে 🎨");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Image generation failed");
+    } finally {
+      setAi("");
+    }
+  };
 
  /* ---------- save ---------- */
  const save = async () => {
