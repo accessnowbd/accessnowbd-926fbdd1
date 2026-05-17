@@ -712,8 +712,10 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  if (!form.name.trim()) { toast.error("আগে Product Title লিখুন"); return; }
  setAi("image-gen");
  try {
+ const styles: AiCardStyle[] = ["glassmorphism", "soft-aurora", "dark-neon"];
+ const randomStyle = styles[Math.floor(Math.random() * styles.length)];
  const { data, error } = await supabase.functions.invoke("product-ai", {
- body: { mode: "image", product: { name: form.name, category: form.category }, imagePrompt, style: meta.ai_card_style },
+ body: { mode: "image", product: { name: form.name, category: form.category }, imagePrompt, style: randomStyle },
  });
  if (error) throw error;
  const d = data as { image?: string; error?: string };
