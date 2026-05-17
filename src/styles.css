@@ -1742,107 +1742,134 @@ html.theme-white .product-whatsapp-button,
 /* =====================================================
    DARK MODE STABILITY FIX — calmer colors, no blur jitter
    ===================================================== */
+/* =============================================================
+   Premium Dark Mode — refined obsidian palette
+   Deep near-black base, warm-cool neutrals, restrained accents,
+   high contrast type, calm static surfaces (no jitter).
+   ============================================================= */
 :root:not(.theme-white) {
-  --background: oklch(0.105 0.018 255);
-  --foreground: oklch(0.975 0.006 250);
-  --card: oklch(0.16 0.022 255);
-  --card-foreground: oklch(0.975 0.006 250);
-  --popover: oklch(0.145 0.022 255);
-  --popover-foreground: oklch(0.975 0.006 250);
-  --primary: oklch(0.62 0.18 265);
-  --primary-dark: oklch(0.42 0.16 265);
-  --secondary: oklch(0.18 0.018 255);
-  --muted: oklch(0.2 0.016 255);
-  --muted-foreground: oklch(0.76 0.018 250);
-  --accent: oklch(0.78 0.12 215);
-  --aqua: oklch(0.78 0.13 215);
-  --aqua-deep: oklch(0.62 0.14 230);
-  --border: rgba(160, 180, 220, 0.16);
-  --glass-bg: rgba(15, 23, 42, 0.84);
-  --glass-bg-strong: rgba(17, 24, 39, 0.9);
-  --glass-bg-soft: rgba(20, 29, 48, 0.78);
-  --glass-border: rgba(160, 180, 220, 0.18);
-  --glass-border-soft: rgba(160, 180, 220, 0.12);
-  --gradient-aurora: linear-gradient(135deg, #4f46e5 0%, #2563eb 55%, #0891b2 100%);
-  --gradient-aurora-strong: linear-gradient(135deg, #4338ca 0%, #2563eb 55%, #0e7490 100%);
-  --gradient-cyan: linear-gradient(135deg, #22d3ee 0%, #4f46e5 100%);
-  --gradient-violet: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
-  --gradient-sunset: linear-gradient(135deg, #64748b 0%, #4f46e5 100%);
+  --background: oklch(0.115 0.012 260);
+  --foreground: oklch(0.97 0.005 250);
+  --card: oklch(0.165 0.014 260);
+  --card-foreground: oklch(0.97 0.005 250);
+  --popover: oklch(0.15 0.014 260);
+  --popover-foreground: oklch(0.97 0.005 250);
+  --primary: oklch(0.66 0.16 258);
+  --primary-foreground: oklch(0.98 0.005 250);
+  --primary-dark: oklch(0.46 0.14 258);
+  --secondary: oklch(0.19 0.012 260);
+  --muted: oklch(0.21 0.011 260);
+  --muted-foreground: oklch(0.74 0.014 250);
+  --accent: oklch(0.78 0.10 210);
+  --aqua: oklch(0.80 0.11 208);
+  --aqua-deep: oklch(0.64 0.12 225);
+  --gold: oklch(0.82 0.13 85);
+  --border: rgba(186, 200, 230, 0.10);
+  --input: rgba(186, 200, 230, 0.12);
+  --ring: oklch(0.66 0.16 258);
+  --glass-bg: rgba(20, 26, 42, 0.78);
+  --glass-bg-strong: rgba(22, 28, 46, 0.88);
+  --glass-bg-soft: rgba(24, 30, 48, 0.66);
+  --glass-border: rgba(186, 200, 230, 0.12);
+  --glass-border-soft: rgba(186, 200, 230, 0.07);
+  --gradient-aurora: linear-gradient(135deg, #4338ca 0%, #2563eb 55%, #0e7490 100%);
+  --gradient-aurora-strong: linear-gradient(135deg, #3730a3 0%, #1d4ed8 55%, #075985 100%);
+  --gradient-cyan: linear-gradient(135deg, #0891b2 0%, #4338ca 100%);
+  --gradient-violet: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+  --gradient-sunset: linear-gradient(135deg, #475569 0%, #4338ca 100%);
   --gradient-mesh:
-    radial-gradient(at 8% 8%, rgba(79, 70, 229, 0.22) 0px, transparent 56%),
-    radial-gradient(at 92% 10%, rgba(8, 145, 178, 0.16) 0px, transparent 58%),
-    radial-gradient(at 25% 85%, rgba(37, 99, 235, 0.16) 0px, transparent 60%);
-  --shadow-glass-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(255,255,255,0.05) inset;
-  --shadow-glass: 0 12px 34px -18px rgba(0, 0, 0, 0.68), 0 0 0 1px rgba(255,255,255,0.06) inset;
-  --shadow-glass-lg: 0 22px 56px -28px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(255,255,255,0.08) inset;
-  --shadow-glow-violet: 0 0 28px -12px rgba(99, 102, 241, 0.38);
-  --shadow-glow-aqua: 0 0 28px -12px rgba(34, 211, 238, 0.32);
-  --shadow-glow-blue: 0 0 28px -12px rgba(37, 99, 235, 0.34);
-  --shadow-glow-pink: 0 0 24px -14px rgba(99, 102, 241, 0.25);
+    radial-gradient(at 8% 8%, rgba(67, 56, 202, 0.18) 0px, transparent 58%),
+    radial-gradient(at 92% 10%, rgba(14, 116, 144, 0.12) 0px, transparent 60%),
+    radial-gradient(at 25% 85%, rgba(29, 78, 216, 0.12) 0px, transparent 62%);
+  --shadow-glass-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.04) inset;
+  --shadow-glass: 0 14px 38px -22px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.05) inset;
+  --shadow-glass-lg: 0 28px 64px -30px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255,255,255,0.06) inset;
+  --shadow-glow-violet: 0 0 26px -14px rgba(99, 102, 241, 0.32);
+  --shadow-glow-aqua: 0 0 26px -14px rgba(34, 211, 238, 0.28);
+  --shadow-glow-blue: 0 0 26px -14px rgba(37, 99, 235, 0.30);
+  --shadow-glow-pink: 0 0 22px -16px rgba(99, 102, 241, 0.20);
 }
 
 :root:not(.theme-white) body {
-  background-color: #080d1a !important;
+  background-color: #07090f !important;
   background-image:
-    radial-gradient(60% 45% at 12% 8%, rgba(79, 70, 229, 0.22), transparent 72%),
-    radial-gradient(55% 42% at 90% 10%, rgba(8, 145, 178, 0.14), transparent 74%),
-    radial-gradient(70% 55% at 50% 100%, rgba(37, 99, 235, 0.10), transparent 76%) !important;
+    radial-gradient(70% 50% at 15% 5%, rgba(67, 56, 202, 0.16), transparent 72%),
+    radial-gradient(60% 45% at 88% 12%, rgba(14, 116, 144, 0.10), transparent 74%),
+    radial-gradient(80% 60% at 50% 105%, rgba(29, 78, 216, 0.08), transparent 78%) !important;
+  background-attachment: fixed !important;
 }
 
-:root:not(.theme-white) body::before {
-  opacity: 0.16 !important;
-  mix-blend-mode: normal !important;
+:root:not(.theme-white) body::before,
+:root:not(.theme-white) body::after {
+  display: none !important;
 }
 
+/* Kill all backdrop blur in dark mode — primary cause of jitter */
 :root:not(.theme-white) .glass,
 :root:not(.theme-white) .glass-strong,
 :root:not(.theme-white) .glass-soft,
 :root:not(.theme-white) .gradient-border-soft,
 :root:not(.theme-white) .product-card-v2,
-:root:not(.theme-white) [class*="backdrop-blur"] {
+:root:not(.theme-white) [class*="backdrop-blur"],
+:root:not(.theme-white) [class*="backdrop-saturate"] {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
 
 :root:not(.theme-white) .glass,
 :root:not(.theme-white) [class*="backdrop-blur"] {
-  background: rgba(15, 23, 42, 0.88) !important;
+  background: rgba(20, 26, 42, 0.86) !important;
+  border-color: rgba(186, 200, 230, 0.10) !important;
 }
 
 :root:not(.theme-white) .glass-strong {
-  background: rgba(17, 24, 39, 0.92) !important;
+  background: linear-gradient(180deg, rgba(26, 32, 50, 0.92), rgba(18, 24, 38, 0.92)) !important;
+  border-color: rgba(186, 200, 230, 0.12) !important;
 }
 
 :root:not(.theme-white) .glass-soft,
 :root:not(.theme-white) .gradient-border-soft {
-  background: rgba(20, 29, 48, 0.82) !important;
+  background: rgba(22, 28, 44, 0.74) !important;
+  border-color: rgba(186, 200, 230, 0.08) !important;
 }
 
 :root:not(.theme-white) .product-card-v2 {
-  background: linear-gradient(180deg, rgba(17, 24, 39, 0.92), rgba(15, 23, 42, 0.9)) !important;
-  border-color: rgba(160, 180, 220, 0.18) !important;
-  box-shadow: 0 14px 36px -22px rgba(0, 0, 0, 0.76), 0 0 0 1px rgba(255,255,255,0.06) inset !important;
-  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease !important;
+  background: linear-gradient(180deg, rgba(24, 30, 48, 0.95), rgba(16, 22, 36, 0.95)) !important;
+  border-color: rgba(186, 200, 230, 0.10) !important;
+  box-shadow: 0 16px 40px -24px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255,255,255,0.04) inset !important;
+  transition: border-color 220ms ease, box-shadow 220ms ease !important;
 }
 
 :root:not(.theme-white) .product-card-v2:hover {
   transform: none !important;
-  border-color: rgba(96, 165, 250, 0.34) !important;
-  box-shadow: 0 18px 42px -24px rgba(37, 99, 235, 0.38), 0 0 0 1px rgba(255,255,255,0.08) inset !important;
+  border-color: rgba(99, 102, 241, 0.35) !important;
+  box-shadow: 0 22px 50px -26px rgba(67, 56, 202, 0.45), 0 0 0 1px rgba(99,102,241,0.15) inset !important;
 }
 
+/* Disable ALL decorative animations in dark mode — kills white flicker */
 :root:not(.theme-white) .animate-blob,
 :root:not(.theme-white) .animate-aurora-pan,
 :root:not(.theme-white) .animate-orbit,
 :root:not(.theme-white) .animate-float,
 :root:not(.theme-white) .animate-pulse-glow,
 :root:not(.theme-white) .animate-shine,
-:root:not(.theme-white) .animate-pulse {
+:root:not(.theme-white) .animate-pulse,
+:root:not(.theme-white) .animate-marquee {
   animation: none !important;
 }
 
+/* Hide the white shine overlay entirely in dark mode (causes jumping) */
+:root:not(.theme-white) [class*="bg-white/30"][class*="blur"],
+:root:not(.theme-white) [class*="bg-white/40"][class*="blur"],
+:root:not(.theme-white) [class*="bg-white/60"][class*="blur"],
+:root:not(.theme-white) [class*="bg-white/70"][class*="blur"] {
+  display: none !important;
+}
+
+/* Marquee — replace JS animation with a slow, smooth, stable variant */
 :root:not(.theme-white) .animate-marquee {
-  animation-duration: 64s !important;
+  animation: marquee 80s linear infinite !important;
+  will-change: transform;
 }
 
 :root:not(.theme-white) .btn-aurora:hover,
