@@ -29,10 +29,10 @@ import { SearchBar } from "@/components/SearchBar";
 
 const NAV: Array<{
   label: string;
-  to: "/" | "/products" | "/streaming" | "/ai-tools" | "/education" | "/faq" | "/contact";
+  to: "/" | "/categories" | "/streaming" | "/ai-tools" | "/education" | "/faq" | "/contact";
 }> = [
   { label: "Home", to: "/" },
-  { label: "All Products", to: "/products" },
+  { label: "All Products", to: "/categories" },
   { label: "Streaming", to: "/streaming" },
   { label: "AI Tools", to: "/ai-tools" },
   { label: "Education", to: "/education" },
