@@ -17,6 +17,17 @@ import {
   LogIn,
   UserCircle2,
   LogOut,
+  Home,
+  ShoppingBag,
+  GraduationCap,
+  HelpCircle,
+  MessageCircle,
+  Flame,
+  Headphones,
+  Tv,
+  Bot,
+  Package,
+  CheckCircle2,
 } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CartIcon } from "@/components/CartIcon";
@@ -329,74 +340,236 @@ export function SiteHeader() {
           {/* bottom hairline removed */}
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu — premium slide-in panel */}
         {open && (
-          <div className="md:hidden relative border-b border-white/10 bg-background/85 backdrop-blur-2xl">
-            <div className="mx-auto max-w-[1440px] px-4 pt-4 flex items-center justify-center gap-3">
-              <ThemeSwitcher />
-              <CartIcon />
-              <Link
-                to={user ? "/dashboard" : "/login"}
-                onClick={() => setOpen(false)}
-                aria-label={user ? "Dashboard" : "Login"}
-                className="grid place-items-center w-10 h-10 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)]"
-              >
-                {user ? <UserCircle2 className="w-4 h-4" /> : <LogIn className="w-4 h-4" />}
-              </Link>
-            </div>
-            <nav className="mx-auto max-w-[1440px] px-4 py-4 grid grid-cols-2 gap-2.5">
-              {NAV.map((n) => (
-                <Link
-                  key={n.to}
-                  to={n.to}
-                  onClick={() => setOpen(false)}
-                  className="flex items-center justify-between px-4 py-3 rounded-2xl glass-soft border border-white/10 text-sm font-semibold text-white hover:border-aqua/40 hover:bg-white/5 transition"
-                >
-                  {n.label}
-                  <ChevronRight className="w-4 h-4 text-aqua" />
-                </Link>
-              ))}
-            </nav>
-            <div className="px-4 pb-4 grid gap-2">
-              {user ? (
-                <>
-                  <Link
-                    to="/orders"
-                    onClick={() => setOpen(false)}
-                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
-                  >
-                    <UserCircle2 className="w-4 h-4" /> My Account
-                  </Link>
-                  <button
-                    onClick={async () => {
-                      setOpen(false);
-                      await handleLogout();
-                    }}
-                    className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full glass-soft border border-white/10 text-white text-sm font-semibold hover:border-rose-400/40 transition"
-                  >
-                    <LogOut className="w-4 h-4" /> Sign Out
-                  </button>
-                </>
-              ) : (
-                <div className="w-full inline-flex items-center p-1 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md">
-                  <Link
-                    to="/login"
-                    onClick={() => setOpen(false)}
-                    className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-full text-white text-sm font-semibold hover:bg-white/[0.08] transition"
-                  >
-                    <LogIn className="w-4 h-4" /> Sign In
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setOpen(false)}
-                    className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground text-sm font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)]"
-                  >
-                    Register
-                  </Link>
+          <>
+            {/* Backdrop */}
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setOpen(false)}
+              className="md:hidden fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200"
+            />
+            {/* Panel */}
+            <aside
+              className="md:hidden fixed right-0 top-0 z-50 h-[100dvh] w-[88vw] max-w-[360px] overflow-y-auto bg-[linear-gradient(180deg,#0d0b1f_0%,#0a0816_60%,#080614_100%)] border-l border-white/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-in slide-in-from-right duration-300 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Main menu"
+            >
+              {/* Top: brand + close */}
+              <div className="sticky top-0 z-10 flex items-center justify-between px-4 pt-4 pb-3 bg-gradient-to-b from-[#0d0b1f] via-[#0d0b1f]/95 to-transparent">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="relative grid place-items-center w-10 h-10 rounded-xl bg-white shrink-0 ring-1 ring-white/20 shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)] overflow-hidden">
+                    <img src={accessNowLogo} alt="" className="w-[145%] h-[145%] object-contain" draggable={false} />
+                  </span>
+                  <span className="min-w-0 leading-tight">
+                    <span className="flex items-baseline gap-1">
+                      <span className="text-[15px] font-extrabold text-white">Access</span>
+                      <span className="text-[15px] font-extrabold text-aqua">Now</span>
+                      <span className="text-[15px] font-extrabold text-gold">BD</span>
+                    </span>
+                    <span className="block text-[9px] font-bold uppercase tracking-[0.22em] text-white/55 mt-0.5">
+                      Premium Menu
+                    </span>
+                  </span>
                 </div>
-              )}
-            </div>
-          </div>
+                <button
+                  onClick={() => setOpen(false)}
+                  aria-label="Close"
+                  className="grid place-items-center w-9 h-9 rounded-full border border-gold/40 text-gold hover:bg-gold/10 transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="px-4 pb-6 space-y-4">
+                {/* Welcome card */}
+                <div className="relative overflow-hidden rounded-2xl p-4 bg-[linear-gradient(120deg,#6d28d9_0%,#a855f7_50%,#ec4899_100%)] shadow-[0_18px_40px_-14px_rgba(168,85,247,0.55)]">
+                  <span className="pointer-events-none absolute -right-10 -top-10 w-32 h-32 rounded-full bg-white/20 blur-2xl" />
+                  <div className="relative flex items-center gap-3">
+                    <span className="grid place-items-center w-12 h-12 rounded-full bg-white/20 ring-2 ring-white/40 text-white font-extrabold text-base shrink-0">
+                      {user ? (user.email?.[0] ?? "U").toUpperCase() : <UserCircle2 className="w-6 h-6" />}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
+                        {user ? "Welcome Back ✨" : "Welcome Guest ✨"}
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="text-white font-extrabold text-[15px] truncate">
+                          {user ? (user.email?.split("@")[0] ?? "Member") : "Sign in to continue"}
+                        </span>
+                        {user && <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" />}
+                      </div>
+                      {user && (
+                        <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full bg-black/25 border border-white/20 text-[10px] font-bold text-white">
+                          <Crown className="w-3 h-3 text-gold" /> Verified Buyer
+                        </span>
+                      )}
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-white/80 shrink-0" />
+                  </div>
+                </div>
+
+                {/* Quick action tiles */}
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { to: "/orders" as const, label: "Orders", Icon: Package, grad: "from-sky-400 to-blue-600" },
+                    { to: "/cart" as const, label: "Cart", Icon: ShoppingBag, grad: "from-emerald-400 to-teal-600" },
+                    { to: (user ? "/profile" : "/login") as "/profile" | "/login", label: "Profile", Icon: UserCircle2, grad: "from-fuchsia-400 to-pink-600" },
+                    { to: "/contact" as const, label: "Support", Icon: Headphones, grad: "from-amber-400 to-orange-600" },
+                  ].map(({ to, label, Icon, grad }) => (
+                    <Link
+                      key={label}
+                      to={to}
+                      onClick={() => setOpen(false)}
+                      className="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-white/25 hover:bg-white/[0.07] transition active:scale-95"
+                    >
+                      <span className={`grid place-items-center w-10 h-10 rounded-xl bg-gradient-to-br ${grad} text-white shadow-[0_8px_18px_-8px_rgba(0,0,0,0.6)] ring-1 ring-white/25`}>
+                        <Icon className="w-4 h-4" />
+                      </span>
+                      <span className="text-[11px] font-bold text-white/85">{label}</span>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Promo cards */}
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    to="/products"
+                    onClick={() => setOpen(false)}
+                    className="relative overflow-hidden rounded-2xl p-3 bg-[linear-gradient(135deg,#f97316_0%,#ef4444_100%)] shadow-[0_12px_28px_-12px_rgba(239,68,68,0.55)] active:scale-[0.98] transition"
+                  >
+                    <div className="flex items-center gap-1.5 text-white text-[10px] font-bold uppercase tracking-wider">
+                      <Flame className="w-3.5 h-3.5" /> Hot Deals
+                    </div>
+                    <div className="mt-1.5 text-white text-[15px] font-extrabold leading-tight">Up to 50% OFF</div>
+                    <div className="mt-1 text-white/85 text-[10px] font-semibold">প্যাকেজ দেখুন →</div>
+                  </Link>
+                  <a
+                    href="https://wa.me/8801580607614"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="relative overflow-hidden rounded-2xl p-3 bg-[linear-gradient(135deg,#10b981_0%,#059669_100%)] shadow-[0_12px_28px_-12px_rgba(16,185,129,0.55)] active:scale-[0.98] transition"
+                  >
+                    <div className="flex items-center gap-1.5 text-white text-[10px] font-bold uppercase tracking-wider">
+                      <MessageCircle className="w-3.5 h-3.5" /> Live 24/7
+                    </div>
+                    <div className="mt-1.5 text-white text-[15px] font-extrabold leading-tight">সাহায্য নিন</div>
+                    <div className="mt-1 text-white/85 text-[10px] font-semibold">WhatsApp চ্যাট →</div>
+                  </a>
+                </div>
+
+                {/* Trending */}
+                <div>
+                  <div className="flex items-center gap-2 my-3">
+                    <span className="flex-1 h-px bg-gradient-to-r from-transparent via-white/15 to-white/15" />
+                    <span className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-violet-300 inline-flex items-center gap-1.5">
+                      <Sparkles className="w-3 h-3" /> Trending <Sparkles className="w-3 h-3" />
+                    </span>
+                    <span className="flex-1 h-px bg-gradient-to-l from-transparent via-white/15 to-white/15" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      to="/streaming"
+                      onClick={() => setOpen(false)}
+                      className="inline-flex items-center justify-center gap-1.5 h-10 rounded-full bg-white/[0.04] border border-violet-400/30 text-white text-[12px] font-bold hover:bg-violet-500/15 transition"
+                    >
+                      <Tv className="w-3.5 h-3.5 text-violet-300" /> Streaming
+                    </Link>
+                    <Link
+                      to="/ai-tools"
+                      onClick={() => setOpen(false)}
+                      className="inline-flex items-center justify-center gap-1.5 h-10 rounded-full bg-white/[0.04] border border-aqua/30 text-white text-[12px] font-bold hover:bg-aqua/15 transition"
+                    >
+                      <Bot className="w-3.5 h-3.5 text-aqua" /> AI Tools
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Navigation */}
+                <div>
+                  <div className="flex items-center gap-2 my-3">
+                    <span className="flex-1 h-px bg-gradient-to-r from-transparent via-white/15 to-white/15" />
+                    <span className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-violet-300 inline-flex items-center gap-1.5">
+                      <Sparkles className="w-3 h-3" /> Navigation <Sparkles className="w-3 h-3" />
+                    </span>
+                    <span className="flex-1 h-px bg-gradient-to-l from-transparent via-white/15 to-white/15" />
+                  </div>
+                  <nav className="grid gap-2">
+                    {[
+                      { to: "/" as const, label: "Home", Icon: Home, grad: "from-orange-400 to-amber-600", badge: "NOW" },
+                      { to: "/categories" as const, label: "All Products", Icon: ShoppingBag, grad: "from-sky-400 to-blue-600" },
+                      { to: "/products" as const, label: "Categories", Icon: Package, grad: "from-amber-400 to-orange-600" },
+                      { to: "/education" as const, label: "Education", Icon: GraduationCap, grad: "from-violet-400 to-fuchsia-600" },
+                      { to: "/faq" as const, label: "FAQ", Icon: HelpCircle, grad: "from-rose-400 to-pink-600" },
+                      { to: "/contact" as const, label: "Contact", Icon: PhoneCall, grad: "from-emerald-400 to-teal-600" },
+                    ].map(({ to, label, Icon, grad, badge }) => (
+                      <Link
+                        key={label}
+                        to={to}
+                        onClick={() => setOpen(false)}
+                        className="group flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-white/[0.035] border border-white/10 hover:border-violet-400/40 hover:bg-violet-500/10 transition active:scale-[0.98]"
+                      >
+                        <span className={`grid place-items-center w-9 h-9 rounded-xl bg-gradient-to-br ${grad} text-white shadow-[0_8px_18px_-8px_rgba(0,0,0,0.6)] ring-1 ring-white/25 shrink-0`}>
+                          <Icon className="w-4 h-4" />
+                        </span>
+                        <span className="flex-1 text-white text-[14px] font-bold">{label}</span>
+                        {badge && (
+                          <span className="px-2 py-0.5 rounded-full bg-violet-500/25 border border-violet-400/40 text-[9px] font-extrabold text-violet-200 tracking-wider">
+                            {badge}
+                          </span>
+                        )}
+                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white transition" />
+                      </Link>
+                    ))}
+                  </nav>
+                </div>
+
+                {/* Footer CTAs */}
+                <div className="pt-2">
+                  {user ? (
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setOpen(false)}
+                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white text-[13px] font-extrabold shadow-[0_14px_30px_-12px_rgba(168,85,247,0.7)] active:scale-[0.98] transition"
+                      >
+                        <Sparkles className="w-4 h-4" /> Dashboard
+                      </Link>
+                      <button
+                        onClick={async () => {
+                          setOpen(false);
+                          await handleLogout();
+                        }}
+                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-rose-500/15 border border-rose-400/40 text-rose-200 text-[13px] font-extrabold hover:bg-rose-500/25 transition"
+                      >
+                        <LogOut className="w-4 h-4" /> Logout
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        to="/register"
+                        onClick={() => setOpen(false)}
+                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white text-[13px] font-extrabold shadow-[0_14px_30px_-12px_rgba(168,85,247,0.7)] active:scale-[0.98] transition"
+                      >
+                        <Sparkles className="w-4 h-4" /> Get Started
+                      </Link>
+                      <Link
+                        to="/login"
+                        onClick={() => setOpen(false)}
+                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-white/[0.04] border border-white/15 text-white text-[13px] font-extrabold hover:bg-white/[0.08] transition"
+                      >
+                        <LogIn className="w-4 h-4" /> Login
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </aside>
+          </>
         )}
       </header>
       <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
