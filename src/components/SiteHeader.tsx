@@ -132,6 +132,7 @@ export function SiteHeader() {
   const [headerQuery, setHeaderQuery] = useState("");
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
 
   const goToSearch = (rawValue: string) => {
     const q = rawValue.trim();
