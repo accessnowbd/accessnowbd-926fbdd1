@@ -292,6 +292,9 @@ function ProductPage() {
         </div>
       </section>
 
+      {/* Reviews */}
+      <ProductReviews slug={slug} />
+
       {/* FAQ */}
       <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
         <h2 className="text-lg font-bold text-slate-900 mb-4">FAQ</h2>
