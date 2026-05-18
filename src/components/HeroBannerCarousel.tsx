@@ -251,8 +251,12 @@ export function HeroBannerCarousel() {
     <section className="px-4 md:px-10 pt-6 pb-4">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className="force-dark-canvas group/banner relative overflow-hidden rounded-[28px] border border-white/10 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.7)] transition-all duration-700"
-          style={{ background, minHeight: 430 }}
+          className="force-dark-canvas group/banner relative overflow-hidden rounded-[28px] border border-white/15 transition-all duration-700"
+          style={{
+            background,
+            minHeight: 430,
+            boxShadow: `0 30px 80px -30px ${hexAlpha(accent, 0.45)}, 0 10px 40px -15px ${hexAlpha(glow, 0.3)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.18)}, inset 0 0 0 1px ${hexAlpha("#ffffff", 0.04)}`,
+          }}
         >
           {/* Floating blur orbs for depth */}
           <div
