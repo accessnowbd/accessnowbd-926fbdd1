@@ -72,7 +72,8 @@ function ProductPage() {
   const navigate = useNavigate();
   const { add } = useCart();
   useShopConfig();
-  const [selected, setSelected] = useState(0);
+  const popularIdx = (loaderProduct?.plans ?? product?.plans ?? []).findIndex((p: { popular?: boolean }) => p.popular);
+  const [selected, setSelected] = useState(() => (popularIdx > 0 ? popularIdx : 0));
   const [qty, setQty] = useState(1);
   const [descOpen, setDescOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -89,9 +90,7 @@ function ProductPage() {
     );
   }
 
-  const popularIdx = product.plans.findIndex((p) => p.popular);
-  const safeSelected = Math.min(selected, Math.max(product.plans.length - 1, 0));
-  const activeIdx = selected === 0 && popularIdx > 0 ? popularIdx : safeSelected;
+  const activeIdx = Math.min(selected, Math.max(product.plans.length - 1, 0));
   const plan = product.plans[activeIdx];
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 8);
 
@@ -214,30 +213,32 @@ function ProductPage() {
             </GlassButton>
           </div>
 
-          {/* Product Description accordion */}
-          <div className="mt-6 max-w-2xl">
-            <GlassButton
-              variant="outline"
-              fullWidth
-              rounded="xl"
-              onClick={() => setDescOpen((v) => !v)}
-              className="justify-between !font-medium text-slate-900"
-            >
-              <span className="inline-flex items-center gap-2">
-                <span className="w-4 h-4 rounded-sm border border-teal-400/60 bg-teal-500/20 inline-block" /> Product Description
-              </span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${descOpen ? "rotate-180" : ""}`} />
-            </GlassButton>
-            {descOpen && (
-              <GlassCard tint="teal" blur="xl" glow="lg" padding="none" rounded="2xl" orbs className="mt-3">
-                <div className="p-6 text-sm text-slate-700">
-                  <ProductMarkdown source={product.description} />
-                </div>
-              </GlassCard>
-            )}
-          </div>
-
         </GlassCard>
+      </section>
+
+      {/* Product Description — full width, below hero, image stays intact */}
+      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 pb-2">
+        <GlassButton
+          variant="outline"
+          fullWidth
+          rounded="xl"
+          onClick={() => setDescOpen((v) => !v)}
+          className="justify-between !font-medium text-slate-900"
+          aria-expanded={descOpen}
+        >
+          <span className="inline-flex items-center gap-2">
+            <span className="w-4 h-4 rounded-sm border border-slate-300 bg-white inline-block" />
+            Product Description
+          </span>
+          <ChevronDown className={`w-4 h-4 transition-transform ${descOpen ? "rotate-180" : ""}`} />
+        </GlassButton>
+        {descOpen && (
+          <GlassCard tint="neutral" blur="lg" glow="sm" padding="none" rounded="2xl" className="mt-3">
+            <div className="p-5 md:p-7 text-sm md:text-base text-slate-800">
+              <ProductMarkdown source={product.description} />
+            </div>
+          </GlassCard>
+        )}
       </section>
 
       {/* FAQ */}
