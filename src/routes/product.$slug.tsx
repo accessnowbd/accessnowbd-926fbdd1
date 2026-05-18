@@ -166,10 +166,10 @@ function ProductPage() {
                     <button
                       key={p.period}
                       onClick={() => setSelected(idx)}
-                      className={`px-4 h-9 rounded-md text-sm font-medium border transition-colors ${
+                      className={`px-4 h-9 rounded-xl text-sm font-medium backdrop-blur-md border transition-all ${
                         active
-                          ? "bg-slate-900 text-white border-slate-900"
-                          : "bg-white text-slate-900 border-slate-300 hover:border-slate-500"
+                          ? "bg-teal-500/30 text-teal-900 border-teal-400/60 shadow-[0_4px_20px_-4px_rgba(20,184,166,0.5)]"
+                          : "bg-white/40 text-slate-800 border-white/60 hover:bg-white/60 hover:border-teal-300/60"
                       }`}
                     >
                       {p.period}
@@ -183,16 +183,16 @@ function ProductPage() {
           {/* Quantity */}
           <div className="mt-5">
             <div className="text-xs text-slate-500 mb-2">Quantity</div>
-            <div className="inline-flex items-center border border-slate-300 rounded-md overflow-hidden">
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-10 h-10 grid place-items-center hover:bg-slate-50">
+            <div className="inline-flex items-center border border-white/60 rounded-xl overflow-hidden backdrop-blur-md bg-white/40 shadow-[0_4px_20px_-6px_rgba(20,184,166,0.25)]">
+              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-10 h-10 grid place-items-center hover:bg-teal-500/20 transition-colors">
                 <Minus className="w-4 h-4" />
               </button>
               <input
                 value={qty}
                 onChange={(e) => setQty(Math.max(1, Number(e.target.value.replace(/\D/g, "")) || 1))}
-                className="w-12 h-10 text-center text-sm focus:outline-none"
+                className="w-12 h-10 text-center text-sm bg-transparent focus:outline-none"
               />
-              <button onClick={() => setQty((q) => q + 1)} className="w-10 h-10 grid place-items-center hover:bg-slate-50">
+              <button onClick={() => setQty((q) => q + 1)} className="w-10 h-10 grid place-items-center hover:bg-teal-500/20 transition-colors">
                 <Plus className="w-4 h-4" />
               </button>
             </div>
@@ -202,13 +202,13 @@ function ProductPage() {
           <div className="mt-5 space-y-3 max-w-md">
             <button
               onClick={addToCart}
-              className="w-full h-11 rounded-md border border-slate-900 bg-white text-slate-900 text-sm font-semibold hover:bg-slate-50 transition"
+              className="w-full h-11 rounded-xl backdrop-blur-md bg-white/40 border border-teal-400/50 text-teal-900 text-sm font-semibold hover:bg-white/60 hover:border-teal-400/80 shadow-[0_4px_20px_-6px_rgba(20,184,166,0.4)] transition-all"
             >
               Add to cart
             </button>
             <button
               onClick={buyNow}
-              className="w-full h-11 rounded-md bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition"
+              className="w-full h-11 rounded-xl backdrop-blur-md bg-gradient-to-r from-teal-500/70 to-emerald-500/70 border border-white/40 text-white text-sm font-semibold hover:from-teal-500/85 hover:to-emerald-500/85 shadow-[0_8px_28px_-6px_rgba(20,184,166,0.55)] transition-all"
             >
               Buy it now
             </button>
@@ -218,15 +218,15 @@ function ProductPage() {
           <div className="mt-6 max-w-md">
             <button
               onClick={() => setDescOpen((v) => !v)}
-              className="w-full flex items-center justify-between gap-2 px-4 h-11 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-900 hover:bg-slate-50"
+              className="w-full flex items-center justify-between gap-2 px-4 h-11 rounded-xl backdrop-blur-md bg-white/40 border border-white/60 text-sm font-medium text-slate-900 hover:bg-white/60 hover:border-teal-300/60 shadow-[0_4px_20px_-6px_rgba(20,184,166,0.25)] transition-all"
             >
               <span className="inline-flex items-center gap-2">
-                <span className="w-4 h-4 rounded-sm border border-slate-400 inline-block" /> Product Description
+                <span className="w-4 h-4 rounded-sm border border-teal-400/60 bg-teal-500/20 inline-block" /> Product Description
               </span>
               <ChevronDown className={`w-4 h-4 transition-transform ${descOpen ? "rotate-180" : ""}`} />
             </button>
             {descOpen && (
-              <div className="mt-3 p-4 rounded-md border border-slate-200 bg-white text-sm text-slate-700">
+              <div className="mt-3 p-4 rounded-xl border border-white/60 backdrop-blur-md bg-white/40 text-sm text-slate-700 shadow-[0_4px_20px_-6px_rgba(20,184,166,0.2)]">
                 <ProductMarkdown source={product.description} />
               </div>
             )}
