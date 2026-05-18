@@ -403,7 +403,7 @@ function HeroExperience() {
 
                 {/* Offer card */}
                 <div className="rounded-3xl bg-gradient-to-br from-indigo-600 to-purple-700 p-[2px] shadow-xl shadow-purple-500/20">
-                  <div className="h-full w-full bg-[#111420] rounded-[22px] p-5">
+                  <div className="h-full w-full rounded-[22px] p-5" style={{ backgroundColor: "#111420" }}>
                     <div className="text-purple-300 text-[10px] font-extrabold uppercase tracking-[0.18em] mb-2">Limited Offer</div>
                     <div className="text-2xl font-extrabold text-white mb-1" style={{ fontFamily: "var(--font-display)" }}>20% ছাড়</div>
                     <div className="text-[10px] text-slate-400 font-mono mb-4">CODE: WELCOME20</div>
