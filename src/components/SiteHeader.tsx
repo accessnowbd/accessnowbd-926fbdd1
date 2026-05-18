@@ -534,7 +534,7 @@ export function SiteHeader() {
                       <Link
                         to="/dashboard"
                         onClick={() => setOpen(false)}
-                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white text-[13px] font-extrabold shadow-[0_14px_30px_-12px_rgba(168,85,247,0.7)] active:scale-[0.98] transition"
+                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white text-[13px] font-extrabold shadow-[0_14px_30px_-12px_rgba(168,85,247,0.5)] active:scale-[0.98] transition"
                       >
                         <Sparkles className="w-4 h-4" /> Dashboard
                       </Link>
@@ -543,7 +543,7 @@ export function SiteHeader() {
                           setOpen(false);
                           await handleLogout();
                         }}
-                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-rose-500/15 border border-rose-400/40 text-rose-200 text-[13px] font-extrabold hover:bg-rose-500/25 transition"
+                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-rose-50 border border-rose-300 text-rose-600 text-[13px] font-extrabold hover:bg-rose-100 transition"
                       >
                         <LogOut className="w-4 h-4" /> Logout
                       </button>
@@ -553,14 +553,14 @@ export function SiteHeader() {
                       <Link
                         to="/register"
                         onClick={() => setOpen(false)}
-                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white text-[13px] font-extrabold shadow-[0_14px_30px_-12px_rgba(168,85,247,0.7)] active:scale-[0.98] transition"
+                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white text-[13px] font-extrabold shadow-[0_14px_30px_-12px_rgba(168,85,247,0.5)] active:scale-[0.98] transition"
                       >
                         <Sparkles className="w-4 h-4" /> Get Started
                       </Link>
                       <Link
                         to="/login"
                         onClick={() => setOpen(false)}
-                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-white/[0.04] border border-white/15 text-white text-[13px] font-extrabold hover:bg-white/[0.08] transition"
+                        className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-white border border-violet-300 text-violet-700 text-[13px] font-extrabold hover:bg-violet-50 transition"
                       >
                         <LogIn className="w-4 h-4" /> Login
                       </Link>
