@@ -281,159 +281,156 @@ const brandLogo = (b: { domain: string; logo?: string }) =>
 
 
 function HeroExperience() {
-  const leftBrands = [HERO_BRANDS[0], HERO_BRANDS[1]]; // Netflix, ChatGPT
-  const rightFeatured = HERO_BRANDS[2]; // Spotify
+  const netflix = HERO_BRANDS[0];
+  const chatgpt = HERO_BRANDS[1];
+  const spotify = HERO_BRANDS[2];
 
   return (
     <section className="relative px-4 md:px-10 pt-6 pb-12 md:pt-10 md:pb-16">
-      <div className="force-dark-canvas relative mx-auto max-w-[1280px] rounded-[40px] overflow-hidden border border-white/5 shadow-2xl" style={{ backgroundColor: "#111420" }}>
-        {/* Background glows */}
-        <div className="pointer-events-none absolute top-[-10%] left-[-5%] w-[40%] h-[60%] bg-blue-600/20 blur-[120px] rounded-full" />
-        <div className="pointer-events-none absolute bottom-[-10%] right-[-5%] w-[40%] h-[60%] bg-purple-600/25 blur-[120px] rounded-full" />
+      <div className="relative mx-auto max-w-[1280px] overflow-hidden rounded-[40px] border border-slate-200/70 bg-white shadow-[0_30px_80px_-30px_rgba(79,70,229,0.25)]">
+        {/* Soft ambient color glows */}
+        <div aria-hidden className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-violet-200/40 blur-3xl" />
+        <div aria-hidden className="pointer-events-none absolute top-1/2 -left-24 h-72 w-72 rounded-full bg-cyan-200/30 blur-3xl" />
+        <div aria-hidden className="pointer-events-none absolute -bottom-24 right-1/4 h-80 w-80 rounded-full bg-pink-100/50 blur-3xl" />
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 p-7 md:p-12 lg:p-16 items-center">
-          {/* LEFT — Content */}
-          <div className="lg:col-span-7 space-y-7">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md" style={{ backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)" }}>
-              <span className="flex h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-              <span className="text-[11px] font-bold tracking-wider uppercase" style={{ color: "#22d3ee" }}>#1 Premium Marketplace · BD</span>
-              <span className="w-px h-3 mx-1" style={{ backgroundColor: "rgba(255,255,255,0.2)" }} />
-              <span className="inline-flex items-center gap-1 text-[11px]" style={{ color: "#cbd5e1" }}>
-                <Star className="h-3 w-3 fill-[var(--gold)] text-[var(--gold)]" /> 4.9 · 12K+ Reviews
-              </span>
-            </div>
+        <div className="relative px-7 pt-12 pb-10 md:px-12 md:pt-16 md:pb-12 lg:px-16 lg:pt-20">
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            {/* LEFT — Content */}
+            <div className="space-y-7">
+              <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50/80 px-4 py-2 backdrop-blur-sm">
+                <span className="flex h-2 w-2 animate-pulse rounded-full bg-indigo-600" />
+                <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-700">
+                  #1 Premium Marketplace · BD
+                </span>
+                <span className="mx-1 h-3 w-px bg-indigo-200" />
+                <span className="inline-flex items-center gap-1">
+                  <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                  <span className="text-[11px] font-bold text-slate-800">4.9</span>
+                  <span className="text-[11px] font-medium text-slate-500">· 12K+ Reviews</span>
+                </span>
+              </div>
 
-            <h1
-              className="font-extrabold leading-[1.1]"
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 5vw, 64px)", letterSpacing: "-0.02em", color: "#ffffff" }}
-            >
-              <span className="block" style={{ color: "#ffffff" }}>Premium Software</span>
-              <span className="block mt-1" style={{ backgroundImage: "linear-gradient(90deg,#22d3ee,#60a5fa,#a78bfa)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
-                এক ক্লিকেই, আপনার হাতে।
-              </span>
-            </h1>
-
-            <p className="text-base md:text-lg max-w-xl leading-relaxed" style={{ color: "#94a3b8" }}>
-              ভেরিফাইড লাইসেন্স · ১০ মিনিটে ডেলিভারি · ২৪/৭ লাইভ সাপোর্ট। বাংলাদেশের সবচেয়ে বিশ্বস্ত সাবস্ক্রিপশন শপ।
-            </p>
-
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to="/products"
-                className="group inline-flex items-center gap-2 px-7 py-4 text-sm font-extrabold rounded-2xl shadow-lg shadow-cyan-500/25 transition-all hover:-translate-y-0.5"
-                style={{ backgroundImage: "linear-gradient(90deg,#06b6d4,#2563eb)", color: "#ffffff" }}
+              <h1
+                className="font-extrabold tracking-tight text-slate-900"
+                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 5vw, 60px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
               >
-                সব প্রোডাক্ট দেখুন
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 px-7 py-4 text-sm font-bold rounded-2xl backdrop-blur-sm transition-all"
-                style={{ backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#ffffff" }}
-              >
-                <Headphones className="h-4 w-4" style={{ color: "#22d3ee" }} /> কাস্টম অর্ডার
-              </Link>
-            </div>
+                <span className="block">Premium Software</span>
+                <span
+                  className="mt-2 block bg-clip-text text-transparent"
+                  style={{ backgroundImage: "linear-gradient(90deg,#7C3AED,#4F46E5,#0891B2)" }}
+                >
+                  এক ক্লিকেই, আপনার হাতে।
+                </span>
+              </h1>
 
-            <div className="grid grid-cols-3 gap-6 pt-4 max-w-md">
-              {[
-                ["36+", "Products"],
-                ["10 Min", "Delivery"],
-                ["24/7", "Support"],
-              ].map(([value, label]) => (
-                <div key={label} className="flex flex-col">
-                  <span className="text-xl md:text-2xl font-extrabold tracking-tight" style={{ color: "#ffffff" }}>{value}</span>
-                  <span className="text-[10px] uppercase tracking-widest font-semibold mt-1" style={{ color: "#64748b" }}>{label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+              <p className="max-w-xl text-base md:text-lg leading-relaxed text-slate-600">
+                ভেরিফাইড লাইসেন্স · ১০ মিনিটে ডেলিভারি · ২৪/৭ লাইভ সাপোর্ট। বাংলাদেশের সবচেয়ে বিশ্বস্ত সাবস্ক্রিপশন শপ।
+              </p>
 
-          {/* RIGHT — Floating brand card stack */}
-          <div className="lg:col-span-5 relative">
-            <div className="pointer-events-none absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/25 rounded-full blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-10 -left-10 w-32 h-32 bg-purple-500/25 rounded-full blur-3xl" />
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  to="/products"
+                  className="group inline-flex items-center gap-2 rounded-2xl px-7 py-4 text-sm font-extrabold text-white shadow-lg shadow-indigo-200/80 transition-all hover:-translate-y-0.5 hover:shadow-indigo-300/80"
+                  style={{ backgroundImage: "linear-gradient(90deg,#4F46E5,#7C3AED)" }}
+                >
+                  সব প্রোডাক্ট দেখুন
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 rounded-2xl border-2 border-slate-200 bg-white px-7 py-4 text-sm font-bold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-50"
+                >
+                  <Headphones className="h-4 w-4 text-indigo-600" /> কাস্টম অর্ডার
+                </Link>
+              </div>
 
-            <div className="relative z-20 grid grid-cols-2 gap-4">
-              {/* Left column */}
-              <div className="space-y-4">
-                {leftBrands.map((b) => (
-                  <div
-                    key={b.name}
-                    className="group p-5 rounded-3xl backdrop-blur-xl transition-colors" style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)" }}
-                  >
-                    <div
-                      className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg"
-                      style={{ backgroundColor: b.color }}
-                    >
-                      <img
-                        src={brandLogo(b)}
-                        alt={b.name}
-                        loading="lazy"
-                        width={24}
-                        height={24}
-                        className="h-6 w-6 object-contain drop-shadow"
-                      />
-                    </div>
-                    <h3 className="font-bold text-sm" style={{ color: "#ffffff" }}>{b.name}</h3>
-                    <p className="text-[11px] mt-0.5" style={{ color: "#94a3b8" }}>Premium Access</p>
+              <div className="grid max-w-md grid-cols-3 gap-8 pt-4">
+                {[
+                  ["36+", "Products"],
+                  ["10 Min", "Delivery"],
+                  ["24/7", "Support"],
+                ].map(([value, label]) => (
+                  <div key={label} className="flex flex-col">
+                    <span className="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">{value}</span>
+                    <span className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">{label}</span>
                   </div>
                 ))}
               </div>
+            </div>
 
-              {/* Right column (offset down) */}
-              <div className="space-y-4 pt-10">
+            {/* RIGHT — Bento brand showcase (high-transparency glass cards) */}
+            <div className="relative grid h-[460px] grid-cols-2 gap-4 md:h-[500px]">
+              {/* Netflix — top-left, self-start */}
+              <div className="self-start rounded-3xl border border-white/60 bg-white/55 p-6 shadow-xl shadow-slate-200/60 backdrop-blur-2xl transition-transform duration-500 hover:scale-[1.03]">
                 <div
-                  className="group p-5 rounded-3xl backdrop-blur-xl transition-colors" style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)" }}
+                  className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
+                  style={{ backgroundColor: netflix.color }}
                 >
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg"
-                    style={{ backgroundColor: rightFeatured.color }}
-                  >
-                    <img
-                      src={brandLogo(rightFeatured)}
-                      alt={rightFeatured.name}
-                      loading="lazy"
-                      width={24}
-                      height={24}
-                      className="h-6 w-6 object-contain drop-shadow"
-                    />
-                  </div>
-                  <h3 className="font-bold text-sm" style={{ color: "#ffffff" }}>{rightFeatured.name}</h3>
-                  <p className="text-[11px] mt-0.5" style={{ color: "#94a3b8" }}>Family &amp; Individual</p>
+                  <img src={brandLogo(netflix)} alt={netflix.name} loading="lazy" width={24} height={24} className="h-6 w-6 object-contain drop-shadow" />
                 </div>
+                <h3 className="font-bold text-slate-900">{netflix.name}</h3>
+                <p className="text-xs text-slate-500">Premium 4K HDR</p>
+              </div>
 
-                {/* Offer card */}
-                <div className="rounded-3xl bg-gradient-to-br from-indigo-600 to-purple-700 p-[2px] shadow-xl shadow-purple-500/20">
-                  <div className="h-full w-full rounded-[22px] p-5" style={{ backgroundColor: "#111420" }}>
-                    <div className="text-purple-300 text-[10px] font-extrabold uppercase tracking-[0.18em] mb-2">Limited Offer</div>
-                    <div className="text-2xl font-extrabold text-white mb-1" style={{ fontFamily: "var(--font-display)" }}>20% ছাড়</div>
-                    <div className="text-[10px] text-slate-400 font-mono mb-4">CODE: WELCOME20</div>
-                    <Link to="/products" className="text-[11px] font-extrabold text-white inline-flex items-center gap-1 hover:gap-2 transition-all">
-                      এখুনি কিনুন <ArrowRight className="h-3 w-3 text-purple-300" />
-                    </Link>
+              {/* ChatGPT — top-right, offset down */}
+              <div className="mt-12 rounded-3xl border border-white/60 bg-white/55 p-6 shadow-xl shadow-slate-200/60 backdrop-blur-2xl transition-transform duration-500 hover:scale-[1.03]">
+                <div
+                  className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
+                  style={{ backgroundColor: chatgpt.color }}
+                >
+                  <img src={brandLogo(chatgpt)} alt={chatgpt.name} loading="lazy" width={24} height={24} className="h-6 w-6 object-contain drop-shadow" />
+                </div>
+                <h3 className="font-bold text-slate-900">{chatgpt.name}</h3>
+                <p className="text-xs text-slate-500">GPT-4 Plus</p>
+              </div>
+
+              {/* Spotify — bottom-left */}
+              <div className="rounded-3xl border border-white/60 bg-white/55 p-6 shadow-xl shadow-slate-200/60 backdrop-blur-2xl transition-transform duration-500 hover:scale-[1.03]">
+                <div
+                  className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
+                  style={{ backgroundColor: spotify.color }}
+                >
+                  <img src={brandLogo(spotify)} alt={spotify.name} loading="lazy" width={24} height={24} className="h-6 w-6 object-contain drop-shadow" />
+                </div>
+                <h3 className="font-bold text-slate-900">{spotify.name}</h3>
+                <p className="text-xs text-slate-500">Family &amp; Individual</p>
+              </div>
+
+              {/* Offer card — bottom-right with gradient border */}
+              <div className="-mt-8 self-end overflow-hidden rounded-3xl p-[2px]" style={{ backgroundImage: "linear-gradient(135deg,#7C3AED,#4F46E5,#EC4899)" }}>
+                <div className="group h-full rounded-[calc(1.5rem-2px)] bg-white/85 p-6 backdrop-blur-2xl">
+                  <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-600">Limited Offer</p>
+                  <h4 className="text-2xl font-extrabold text-slate-900" style={{ fontFamily: "var(--font-display)" }}>
+                    ২০% ছাড়
+                  </h4>
+                  <div className="mt-2 inline-block rounded-lg bg-slate-100 px-3 py-1">
+                    <p className="font-mono text-[10px] font-bold text-slate-600">CODE: WELCOME20</p>
                   </div>
+                  <Link to="/products" className="mt-4 flex items-center gap-1 text-xs font-bold text-slate-900 transition-all group-hover:gap-2">
+                    এখুনি কিনুন
+                    <ArrowRight className="h-3 w-3 text-indigo-600" />
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Trust bar */}
-        <div className="relative px-6 py-5 flex flex-wrap justify-center items-center gap-x-12 gap-y-4" style={{ backgroundColor: "rgba(255,255,255,0.04)", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-          {[
-            { icon: ShieldCheck, label: "100% ভেরিফাইড", color: "text-cyan-400 bg-cyan-500/15" },
-            { icon: CheckCircle2, label: "ফুল ওয়ারেন্টি", color: "text-blue-400 bg-blue-500/15" },
-            { icon: Zap, label: "ইনস্ট্যান্ট ডেলিভারি", color: "text-purple-400 bg-purple-500/15" },
-            { icon: Clock3, label: "১০ মিনিটে অ্যাক্টিভেশন", color: "text-emerald-400 bg-emerald-500/15" },
-          ].map(({ icon: Icon, label, color }) => (
-            <div key={label} className="flex items-center gap-3">
-              <div className={`w-8 h-8 rounded-full grid place-items-center ${color}`}>
-                <Icon className="w-4 h-4" />
+          {/* Trust badge strip */}
+          <div className="mt-14 grid grid-cols-2 gap-6 border-t border-slate-100 pt-8 md:grid-cols-4">
+            {[
+              { icon: ShieldCheck, label: "১০০% ভেরিফাইড", bg: "bg-indigo-50", fg: "text-indigo-600" },
+              { icon: CheckCircle2, label: "ফুল ওয়ারেন্টি", bg: "bg-cyan-50", fg: "text-cyan-600" },
+              { icon: Zap, label: "ইনস্ট্যান্ট ডেলিভারি", bg: "bg-pink-50", fg: "text-pink-600" },
+              { icon: Clock3, label: "১০ মিনিটে অ্যাক্টিভেশন", bg: "bg-emerald-50", fg: "text-emerald-600" },
+            ].map(({ icon: Icon, label, bg, fg }) => (
+              <div key={label} className="flex items-center gap-3">
+                <div className={`grid h-10 w-10 place-items-center rounded-full ${bg} ${fg}`}>
+                  <Icon className="h-5 w-5" />
+                </div>
+                <span className="text-sm font-bold text-slate-700">{label}</span>
               </div>
-              <span className="text-sm font-medium" style={{ color: "#e2e8f0" }}>{label}</span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
