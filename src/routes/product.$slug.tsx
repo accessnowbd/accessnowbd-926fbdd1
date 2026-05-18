@@ -240,7 +240,8 @@ function ProductPage() {
               <input
                 value={qty}
                 onChange={(e) => setQty(Math.max(1, Number(e.target.value.replace(/\D/g, "")) || 1))}
-                className="w-12 h-10 text-center text-sm font-bold bg-transparent focus:outline-none text-slate-900"
+                style={{ color: "#0f172a" }}
+                className="w-12 h-10 text-center text-sm font-bold bg-transparent focus:outline-none"
               />
               <button onClick={() => setQty((q) => q + 1)} aria-label="Increase" className="w-10 h-10 grid place-items-center text-violet-600 hover:bg-violet-50 transition">
                 <Plus className="w-4 h-4" />
