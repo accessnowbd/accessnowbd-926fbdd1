@@ -247,19 +247,19 @@ function ProductPage() {
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto max-w-[1200px] px-4 md:px-8 py-10">
+      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
         <h2 className="text-lg font-bold text-slate-900 mb-4">FAQ</h2>
         <div className="space-y-2">
           {faqs.map((f, i) => {
             const open = openFaq === i;
             return (
-              <div key={i} className="rounded-md bg-slate-100">
+              <div key={i} className="rounded-xl backdrop-blur-xl bg-white/40 border border-white/60 shadow-[0_4px_20px_-8px_rgba(20,184,166,0.25)]">
                 <button
                   onClick={() => setOpenFaq(open ? null : i)}
                   className="w-full flex items-center justify-between gap-3 px-4 h-11 text-left text-sm font-medium text-slate-800"
                 >
                   <span>{f.q}</span>
-                  <span className="text-violet-600 text-lg leading-none">{open ? "−" : "+"}</span>
+                  <span className="text-teal-600 text-lg leading-none">{open ? "−" : "+"}</span>
                 </button>
                 {open && (
                   <div className="px-4 pb-4 text-sm text-slate-700 leading-relaxed">
@@ -274,7 +274,7 @@ function ProductPage() {
 
       {/* Related */}
       {related.length > 0 && (
-        <section className="mx-auto max-w-[1200px] px-4 md:px-8 py-10">
+        <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
           <h2 className="text-lg font-bold text-slate-900 mb-5">Related products</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {related.map((p) => {
@@ -285,7 +285,7 @@ function ProductPage() {
                   to="/product/$slug"
                   params={{ slug: p.slug }}
                   key={p.slug}
-                  className="group block rounded-lg overflow-hidden bg-white border border-slate-200 hover:shadow-md transition"
+                  className="group block rounded-xl overflow-hidden backdrop-blur-xl bg-white/40 border border-white/60 hover:bg-white/60 hover:border-teal-300/60 shadow-[0_4px_20px_-8px_rgba(20,184,166,0.25)] hover:shadow-[0_10px_30px_-10px_rgba(20,184,166,0.45)] transition-all"
                 >
                   <ProductBanner product={p} ratio="1/1" spheres={4} className="rounded-none" />
                   <div className="p-3">
@@ -306,7 +306,9 @@ function ProductPage() {
         </section>
       )}
 
-      <SiteFooter />
+      <div className="relative">
+        <SiteFooter />
+      </div>
     </div>
   );
 }
