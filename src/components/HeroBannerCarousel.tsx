@@ -550,6 +550,17 @@ export function HeroBannerCarousel() {
                         </div>
                       </div>
                     </div>
+                  ) : brand?.slug && !productsLoaded ? (
+                    // Products still loading — show shimmering skeleton instead of a one-letter fallback
+                    <div className="grid h-full w-full place-items-center px-10">
+                      <div
+                        className="aspect-square w-36 animate-pulse rounded-[28px] md:w-44"
+                        style={{
+                          background: `linear-gradient(135deg, ${hexAlpha(accent, 0.35)}, ${hexAlpha(glow, 0.2)})`,
+                          boxShadow: `0 25px 55px -18px ${hexAlpha(accent, 0.55)}, inset 0 1px 0 ${hexAlpha("#fff", 0.15)}`,
+                        }}
+                      />
+                    </div>
                   ) : (
                     <div className="grid h-full w-full place-items-center px-10 text-center">
                       <div
