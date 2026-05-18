@@ -392,7 +392,7 @@ function HeroExperience() {
               ].map(({ brand, sub, className }) => (
                 <div
                   key={brand.name}
-                  className={`${className} rounded-3xl border border-white/70 p-6 shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2),inset_0_1px_0_rgba(255,255,255,0.8)] transition-transform duration-500 hover:scale-[1.03]`}
+                  className={`${className} rounded-2xl border border-white/70 p-4 shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2),inset_0_1px_0_rgba(255,255,255,0.8)] transition-transform duration-500 hover:scale-[1.03]`}
                   style={{
                     background: "rgba(255,255,255,0.35)",
                     backdropFilter: "blur(22px) saturate(140%)",
@@ -400,20 +400,20 @@ function HeroExperience() {
                   }}
                 >
                   <div
-                    className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
+                    className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl shadow-lg"
                     style={{ backgroundColor: brand.color }}
                   >
-                    <img src={brandLogo(brand)} alt={brand.name} loading="lazy" width={24} height={24} className="h-6 w-6 object-contain drop-shadow" />
+                    <img src={brandLogo(brand)} alt={brand.name} loading="lazy" width={20} height={20} className="h-5 w-5 object-contain drop-shadow" />
                   </div>
-                  <h3 className="font-bold text-slate-900">{brand.name}</h3>
-                  <p className="text-xs text-slate-600">{sub}</p>
+                  <h3 className="text-sm font-bold text-slate-900">{brand.name}</h3>
+                  <p className="text-[11px] text-slate-600">{sub}</p>
                 </div>
               ))}
 
               {/* Offer card — bottom-right with gradient border */}
-              <div className="-mt-8 self-end overflow-hidden rounded-3xl p-[2px]" style={{ backgroundImage: "linear-gradient(135deg,#7C3AED,#4F46E5,#EC4899)" }}>
+              <div className="-mt-6 self-end overflow-hidden rounded-2xl p-[2px]" style={{ backgroundImage: "linear-gradient(135deg,#7C3AED,#4F46E5,#EC4899)" }}>
                 <div
-                  className="group h-full rounded-[calc(1.5rem-2px)] p-6"
+                  className="group h-full rounded-[calc(1rem-2px)] p-4"
                   style={{
                     background: "rgba(255,255,255,0.55)",
                     backdropFilter: "blur(22px) saturate(140%)",
