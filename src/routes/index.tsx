@@ -337,7 +337,7 @@ function HeroExperience() {
 
               <h1
                 className="font-extrabold tracking-tight text-slate-900"
-                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 5vw, 60px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(26px, 3.6vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
               >
                 <span className="block">Premium Software</span>
                 <span
