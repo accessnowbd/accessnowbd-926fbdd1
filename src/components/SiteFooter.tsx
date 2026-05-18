@@ -218,7 +218,7 @@ export function SiteFooter() {
                   </span>
                 </Link>
 
-                <p className="mt-6 max-w-xl text-[14px] leading-7 text-white/72">
+                <p className="mt-6 max-w-xl text-[14px] leading-7 text-slate-700">
                   <span className="font-bold text-cyan-600">বাংলাদেশের</span> সবচেয়ে{" "}
                   <span className="font-bold text-fuchsia-700">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span>{" "}
                   — <span className="font-semibold text-emerald-700">ভেরিফাইড সাবস্ক্রিপশন</span>,{" "}
@@ -239,12 +239,12 @@ export function SiteFooter() {
                   <a
                     key={label}
                     href={href}
-                    className="group grid min-h-11 grid-cols-[2rem_1fr] items-center gap-3 rounded-2xl border border-[var(--glass-border-soft)] bg-white/[0.035] px-3 py-2 transition-colors duration-200 hover:border-aqua/35 hover:bg-white/[0.055]"
+                    className="group grid min-h-11 grid-cols-[2rem_1fr] items-center gap-3 rounded-2xl border border-white/70 bg-white/55 px-3 py-2 backdrop-blur-md transition-colors duration-200 hover:border-aqua/45 hover:bg-white/75"
                   >
                     <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-[var(--gradient-aurora)] text-white shadow-[0_10px_24px_-14px_rgba(34,211,238,0.8)]">
                       <Icon className="h-3.5 w-3.5" />
                     </span>
-                    <span className="min-w-0 truncate text-[13px] font-semibold leading-5 text-white/82 group-hover:text-white">
+                    <span className="min-w-0 truncate text-[13px] font-semibold leading-5 text-slate-700 group-hover:text-slate-900">
                       {label}
                     </span>
                   </a>
