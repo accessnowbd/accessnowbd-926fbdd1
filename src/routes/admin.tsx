@@ -348,13 +348,15 @@ function AdminShell({ user, signOut, navigate }: any) {
         {/* Search */}
         {!collapsed && (
           <div className="px-3 pt-3 pb-1">
-            <SearchBar
-              value={search}
-              onChange={setSearch}
-              placeholder="Search menu..."
-              size="sm"
-              className="w-full"
-            />
+            <button
+              type="button"
+              onClick={() => setGlobalOpen(true)}
+              className="w-full h-9 flex items-center gap-2 px-3 rounded-lg bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-white transition text-left"
+            >
+              <Search className="w-3.5 h-3.5 text-slate-400" />
+              <span className="flex-1 text-xs text-slate-500 truncate">Search anything…</span>
+              <kbd className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white border border-slate-200 text-slate-500">⌘K</kbd>
+            </button>
           </div>
         )}
 
