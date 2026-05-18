@@ -381,31 +381,25 @@ function HeroExperience() {
 
               {/* Right column (offset down) */}
               <div className="space-y-4 pt-10">
-                {featuredRight.slice(0, 1).map(() => {
-                  const b = HERO_BRANDS[1]; // ChatGPT
-                  return (
-                    <div
-                      key={b.name}
-                      className="group p-5 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl hover:bg-white/10 transition-colors"
-                    >
-                      <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg"
-                        style={{ backgroundColor: b.color }}
-                      >
-                        <img
-                          src={brandLogo(b)}
-                          alt={b.name}
-                          loading="lazy"
-                          width={24}
-                          height={24}
-                          className="h-6 w-6 object-contain drop-shadow"
-                        />
-                      </div>
-                      <h3 className="text-white font-bold text-sm">{b.name}</h3>
-                      <p className="text-[11px] text-slate-500 mt-0.5">Plus (Official)</p>
-                    </div>
-                  );
-                })}
+                <div
+                  className="group p-5 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl hover:bg-white/10 transition-colors"
+                >
+                  <div
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg"
+                    style={{ backgroundColor: rightFeatured.color }}
+                  >
+                    <img
+                      src={brandLogo(rightFeatured)}
+                      alt={rightFeatured.name}
+                      loading="lazy"
+                      width={24}
+                      height={24}
+                      className="h-6 w-6 object-contain drop-shadow"
+                    />
+                  </div>
+                  <h3 className="text-white font-bold text-sm">{rightFeatured.name}</h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5">Family & Individual</p>
+                </div>
 
                 {/* Offer card */}
                 <div className="rounded-3xl bg-gradient-to-br from-indigo-600 to-purple-700 p-[2px] shadow-xl shadow-purple-500/20">
