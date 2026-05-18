@@ -1,10 +1,10 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  ShieldAlert, LogOut, Bell, Globe,
+  ShieldAlert, LogOut, Bell, Globe, Search,
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X, Pin,
 } from "lucide-react";
-import { SearchBar } from "@/components/SearchBar";
+import { AdminGlobalSearch, useAdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
@@ -253,6 +253,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   const dark = false;
   const [search, setSearch] = useState("");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { open: globalOpen, setOpen: setGlobalOpen } = useAdminGlobalSearch();
 
   // Close mobile drawer on route change
   useEffect(() => { setMobileOpen(false); }, [pathname]);
@@ -347,13 +348,15 @@ function AdminShell({ user, signOut, navigate }: any) {
         {/* Search */}
         {!collapsed && (
           <div className="px-3 pt-3 pb-1">
-            <SearchBar
-              value={search}
-              onChange={setSearch}
-              placeholder="Search menu..."
-              size="sm"
-              className="w-full"
-            />
+            <button
+              type="button"
+              onClick={() => setGlobalOpen(true)}
+              className="w-full h-9 flex items-center gap-2 px-3 rounded-lg bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-white transition text-left"
+            >
+              <Search className="w-3.5 h-3.5 text-slate-400" />
+              <span className="flex-1 text-xs text-slate-500 truncate">Search anything…</span>
+              <kbd className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white border border-slate-200 text-slate-500">⌘K</kbd>
+            </button>
           </div>
         )}
 
@@ -421,15 +424,15 @@ function AdminShell({ user, signOut, navigate }: any) {
             <button className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white">
               <Globe className="w-3.5 h-3.5" /> বাং
             </button>
-            <div className="hidden xl:block">
-              <SearchBar
-                value={search}
-                onChange={setSearch}
-                placeholder="Search…"
-                size="sm"
-                className="w-56"
-              />
-            </div>
+            <button
+              type="button"
+              onClick={() => setGlobalOpen(true)}
+              className="hidden xl:flex items-center gap-2 h-9 w-64 px-3 rounded-lg bg-white border border-slate-200 hover:border-indigo-300 transition text-left"
+            >
+              <Search className="w-3.5 h-3.5 text-slate-400" />
+              <span className="flex-1 text-xs text-slate-500 truncate">Search…</span>
+              <kbd className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-50 border border-slate-200 text-slate-500">⌘K</kbd>
+            </button>
             <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
               <ExternalLink className="w-3.5 h-3.5" /> View store
             </Link>
@@ -442,6 +445,8 @@ function AdminShell({ user, signOut, navigate }: any) {
           </div>
         </div>
       </div>
+
+      <AdminGlobalSearch open={globalOpen} onOpenChange={setGlobalOpen} />
 
       <style>{`
         .admin-scroll::-webkit-scrollbar { width: 6px; }

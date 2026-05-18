@@ -25,7 +25,7 @@ import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate, useLocation } from "@tanstack/react-router";
-import { SearchBar } from "@/components/SearchBar";
+import { GlobalSearch, useGlobalSearch } from "@/components/GlobalSearch";
 
 const NAV: Array<{
   label: string;
@@ -128,18 +128,9 @@ export function TopUtilityBar() {
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [headerQuery, setHeaderQuery] = useState("");
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-
-  const goToSearch = (rawValue: string) => {
-    const q = rawValue.trim();
-    if (!q) return; // Google-style: empty submit does nothing
-    navigate({
-      to: "/products",
-      search: { q },
-    });
-  };
+  const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
 
   const handleLogout = async () => {
     await signOut();
@@ -272,20 +263,22 @@ export function SiteHeader() {
 
             {/* Actions */}
             <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
-              <SearchBar
-                value={headerQuery}
-                onChange={setHeaderQuery}
-                onSubmit={goToSearch}
-                size="md"
-                placeholder="প্রোডাক্ট সার্চ করুন..."
-                className="hidden md:flex w-[260px] lg:w-[320px] xl:w-[360px]"
-              />
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                aria-label="Open search"
+                className="hidden md:flex items-center gap-2 w-[260px] lg:w-[320px] xl:w-[360px] h-11 pl-4 pr-1.5 rounded-full bg-white border border-slate-200 shadow-[0_4px_14px_-8px_rgba(15,23,42,0.18)] hover:border-violet-400 hover:shadow-[0_6px_18px_-8px_rgba(124,58,237,0.35)] transition text-left"
+              >
+                <Search className="w-4 h-4 text-slate-400 shrink-0" />
+                <span className="flex-1 text-sm text-slate-400 truncate">প্রোডাক্ট সার্চ করুন...</span>
+                <kbd className="hidden lg:inline-flex items-center h-6 px-1.5 rounded-md text-[10px] font-mono bg-slate-100 text-slate-500 border border-slate-200">
+                  ⌘K
+                </kbd>
+              </button>
 
               <button
                 type="button"
-                onClick={() => {
-                  goToSearch(headerQuery);
-                }}
+                onClick={() => setSearchOpen(true)}
                 className="md:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
                 aria-label="Search"
               >
@@ -414,7 +407,7 @@ export function SiteHeader() {
           </div>
         )}
       </header>
-      
+      <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
     </>
   );
 }
