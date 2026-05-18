@@ -255,27 +255,19 @@
 
     color-scheme: light;
   }
-  /* Pure white blurred canvas — no color tint, just soft white */
+  /* Pure white canvas — flat paint, no fixed attachment or full-page
+     backdrop-filter (both cause scroll-time white flicker / repaint storms). */
   html.theme-white body {
     background-color: #ffffff;
     background-image:
       radial-gradient(60% 50% at 50% 0%, rgba(245, 245, 250, 0.9), transparent 70%),
       radial-gradient(50% 40% at 100% 100%, rgba(248, 248, 252, 0.8), transparent 70%),
       radial-gradient(50% 40% at 0% 100%, rgba(248, 248, 252, 0.8), transparent 70%);
-    background-attachment: fixed;
+    background-attachment: scroll;
     color: var(--color-foreground);
   }
   html.theme-white body::before { display: none; }
-  html.theme-white body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: -1;
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    background: rgba(255, 255, 255, 0.4);
-  }
+  html.theme-white body::after { display: none; }
 
   /* GLASS CARDS — premium frosted white over violet/indigo mesh */
   html.theme-white .glass {
@@ -344,6 +336,24 @@
       0 22px 52px -16px rgba(34, 211, 238, 0.25),
       0 1px 0 0 rgba(255, 255, 255, 0.12) inset !important;
   }
+
+  /* GPU-layer promotion for every frosted-glass surface. Prevents the
+     backdrop-filter "white flash / re-sample" flicker during scroll by
+     giving each glass element its own compositor layer, and avoids
+     subpixel jitter from fractional positioning. */
+  .glass,
+  .glass-strong,
+  .glass-soft,
+  .product-card-v2,
+  [style*="backdrop-filter"],
+  [class*="backdrop-blur"] {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  /* Isolate stacking so nested backdrop-filters don't bleed/flash through parents */
+  section, header, main, footer { isolation: isolate; }
 
   /* Gradient bordered cards adapt to white-glass premium look (no pink) */
   html.theme-white .gradient-border-card {
