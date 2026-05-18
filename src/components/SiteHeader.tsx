@@ -409,7 +409,7 @@ export function SiteHeader() {
                   <span className="pointer-events-none absolute -right-10 -top-10 w-32 h-32 rounded-full bg-white/20 blur-2xl" />
                   <div className="relative flex items-center gap-3">
                     <span className="grid place-items-center w-12 h-12 rounded-full bg-white/20 ring-2 ring-white/40 text-white font-extrabold text-base shrink-0">
-                      {user ? (user.email?.[0] ?? "U").toUpperCase() : <UserCircle2 className="w-6 h-6" />}
+                      {user ? friendlyName.charAt(0).toUpperCase() : <UserCircle2 className="w-6 h-6" />}
                     </span>
                     <div className="min-w-0 flex-1">
                       <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
