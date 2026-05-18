@@ -149,16 +149,14 @@ export function HeroBannerCarousel() {
   const gradient = useMemo(
     () =>
       [
-        // top-left soft glow
-        `radial-gradient(ellipse 60% 70% at 15% 20%, ${hexAlpha(accent, 0.55)} 0%, transparent 60%)`,
-        // bottom-right accent glow
-        `radial-gradient(ellipse 50% 60% at 90% 95%, ${hexAlpha(accent, 0.35)} 0%, transparent 65%)`,
-        // top sheen
-        `radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 70%)`,
-        // base depth: bg → mid → near-black
-        `linear-gradient(135deg, ${bg} 0%, ${mix(bg, "#000000", 0.45)} 60%, #050505 100%)`,
+        // very subtle top vignette for depth
+        `radial-gradient(ellipse 100% 60% at 50% 0%, ${mix(bg, "#ffffff", 0.08)} 0%, transparent 70%)`,
+        // bottom-edge darkening for grounding
+        `radial-gradient(ellipse 120% 50% at 50% 100%, ${mix(bg, "#000000", 0.55)} 0%, transparent 70%)`,
+        // mostly uniform deep base — single dominant tone
+        `linear-gradient(180deg, ${bg} 0%, ${mix(bg, "#000000", 0.25)} 100%)`,
       ].join(", "),
-    [accent, bg],
+    [bg],
   );
 
   const go = (dir: 1 | -1) =>
@@ -236,26 +234,39 @@ export function HeroBannerCarousel() {
               </div>
             </div>
 
-            {/* RIGHT — image card */}
+            {/* RIGHT — image card with contrasting accent frame */}
             <div className="relative">
+              {/* outer accent glow halo */}
               <div
-                className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-white/15 bg-white/5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.45)]"
+                aria-hidden
+                className="pointer-events-none absolute -inset-4 rounded-[28px] opacity-60 blur-2xl"
+                style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(accent, 0.55)} 0%, transparent 70%)` }}
+              />
+              {/* accent gradient border via padding wrapper */}
+              <div
+                className="relative rounded-2xl p-[2px]"
                 style={{
-                  boxShadow: `0 0 0 1px ${hexAlpha(accent, 0.25)}, 0 20px 50px -15px rgba(0,0,0,0.45)`,
+                  background: `linear-gradient(135deg, ${accent} 0%, ${hexAlpha(accent, 0.25)} 50%, ${accent} 100%)`,
+                  boxShadow: `0 0 40px -8px ${hexAlpha(accent, 0.55)}, 0 20px 60px -15px rgba(0,0,0,0.55)`,
                 }}
               >
-                {current.data.image_url ? (
-                  <img
-                    src={current.data.image_url}
-                    alt={current.data.title ?? "banner"}
-                    loading="eager"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="grid h-full w-full place-items-center text-white/40 text-sm">
-                    No image
-                  </div>
-                )}
+                <div
+                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[14px]"
+                  style={{ background: mix(bg, "#000000", 0.2) }}
+                >
+                  {current.data.image_url ? (
+                    <img
+                      src={current.data.image_url}
+                      alt={current.data.title ?? "banner"}
+                      loading="eager"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="grid h-full w-full place-items-center text-white/40 text-sm">
+                      No image
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
