@@ -49,9 +49,9 @@ const STYLE_PROMPTS: Record<CardStyle, string> = {
   "glassmorphism":
     "premium glassmorphism product mockup on a clean white background with soft pastel accents, frosted glass card, subtle inner glow, ultra-clean studio lighting",
   "soft-aurora":
-    "soft aurora hero shot on a predominantly white background with airy pastel light leaks (mint, lilac, peach), gentle bokeh, polished e-commerce hero",
+    "A premium 1:1 square product card on a CLEAN WHITE BASE BACKGROUND with airy aurora light leaks (mint, lilac, peach) gently flowing across the corners and a very soft radial glow. Foreground: ONE large centered frosted-glass rounded-square panel with a slight aurora-tinted edge glow. Inside, place a single big premium 3D rounded-square app-style icon dead-center (~45% of panel) — it MUST be the official recognizable brand/product logo for the product name, crisp and polished. Top-left of glass panel: small dark translucent pill 'ACCESSNOW BD' in white uppercase. Top-right: clean white pill with the product/brand name and small logo mark. Bottom row inside panel: small dark text — globe icon then 'www.accessnowbd.com', then phone icon then '+880 1580-607614'. Cinematic studio quality, ultra crisp, no extra text, no watermark.",
   "dark-neon":
-    "premium product hero on a clean white background with subtle cool-tone accents and a soft neon rim around the subject, sharp studio lighting",
+    "A premium 1:1 square product card on a DEEP MIDNIGHT background (near-black with subtle blue/violet gradient), with thin neon rim accents (electric cyan + magenta), faint grid lines and tiny glowing particles. Foreground: ONE large centered dark frosted-glass rounded-square panel with a vivid neon edge glow (cyan→magenta). Inside, place a single big premium 3D rounded-square app-style icon dead-center (~45% of panel) — it MUST be the official recognizable brand/product logo for the product name, crisp and polished. Top-left of glass panel: small translucent pill 'ACCESSNOW BD' in white uppercase. Top-right: dark translucent pill with the product/brand name and small logo mark, white text. Bottom row inside panel: small bright text — globe icon then 'www.accessnowbd.com', then phone icon then '+880 1580-607614'. Cinematic cyberpunk studio quality, ultra crisp, no extra text, no watermark.",
 };
 
 const SHOP_BRAND = "AccessNow BD";
