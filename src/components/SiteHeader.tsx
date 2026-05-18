@@ -7,7 +7,7 @@ import {
   Youtube,
   Twitter,
   Search,
-  MoreVertical,
+  Menu,
   X,
   Zap,
   ShieldCheck,
@@ -319,7 +319,7 @@ export function SiteHeader() {
                 aria-label="Menu"
                 aria-expanded={open}
               >
-                {open ? <X className="w-4 h-4" /> : <MoreVertical className="w-4 h-4" />}
+                {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
               </button>
             </div>
           </div>
