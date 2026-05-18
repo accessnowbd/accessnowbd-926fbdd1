@@ -384,7 +384,7 @@ function HeroExperience() {
             </div>
 
             {/* RIGHT — Glass bento brand showcase */}
-            <div className="relative grid h-[460px] grid-cols-2 gap-4 md:h-[500px]">
+            <div className="relative grid h-[340px] grid-cols-2 gap-3 md:h-[380px]">
               {[
                 { brand: netflix, sub: "Premium 4K HDR", className: "self-start" },
                 { brand: chatgpt, sub: "GPT-4 Plus", className: "mt-12" },
