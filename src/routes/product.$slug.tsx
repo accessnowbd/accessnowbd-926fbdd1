@@ -56,19 +56,6 @@ export const Route = createFileRoute("/product/$slug")({
   ),
 });
 
-const PAYMENT_METHODS = [
-  { label: "Visa", color: "#1A1F71" },
-  { label: "Mastercard", color: "#EB001B" },
-  { label: "Amex", color: "#2E77BB" },
-  { label: "bKash", color: "#E2136E" },
-  { label: "Nagad", color: "#EB1C24" },
-  { label: "Rocket", color: "#8C3494" },
-  { label: "Upay", color: "#E94E1B" },
-  { label: "Tap", color: "#1B998B" },
-  { label: "Cellfin", color: "#F7941D" },
-  { label: "DBBL", color: "#0067A5" },
-  { label: "MyCash", color: "#00A859" },
-];
 
 function ProductPage() {
   const { slug } = Route.useParams();
@@ -110,7 +97,7 @@ function ProductPage() {
 
   const hasDiscount = !!plan?.original && parsePrice(plan.original) > parsePrice(plan.price);
 
-  const faqs = buildFaqs(product.name);
+  const faqs = buildFaqs(product);
 
   return (
     <div key={product.slug} className="min-h-screen bg-white text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both]">
@@ -240,25 +227,6 @@ function ProductPage() {
             )}
           </div>
 
-          {/* Payment methods */}
-          <div className="mt-6 flex items-center gap-3 flex-wrap max-w-md">
-            <span className="text-xs text-slate-500">Pay with</span>
-            <div className="flex flex-wrap items-center gap-1.5">
-              {PAYMENT_METHODS.map((m) => (
-                <span
-                  key={m.label}
-                  title={m.label}
-                  className="inline-flex items-center justify-center h-6 px-2 rounded bg-white border border-slate-200 text-[10px] font-bold tracking-wide"
-                  style={{ color: m.color }}
-                >
-                  {m.label}
-                </span>
-              ))}
-              <span className="inline-flex items-center gap-1 h-6 px-2 rounded bg-white border border-slate-200 text-[10px] font-bold text-slate-500">
-                verified by <span className="text-red-600">EPS</span>
-              </span>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -329,27 +297,57 @@ function ProductPage() {
   );
 }
 
-function buildFaqs(name: string): { q: string; a: string }[] {
+function buildFaqs(product: {
+  name: string;
+  category?: string;
+  delivery_time?: string;
+  warranty?: string;
+  plans?: { period: string; price: string }[];
+}): { q: string; a: string }[] {
+  const name = product.name;
+  const category = product.category || "subscription";
+  const delivery = product.delivery_time || "Within 30 mins";
+  const warranty = product.warranty || "Full warranty";
+  const plans = product.plans || [];
+  const durations = plans.map((p) => p.period).filter(Boolean);
+  const minPrice = plans
+    .map((p) => parsePrice(p.price))
+    .filter((n) => n > 0)
+    .sort((a, b) => a - b)[0];
+
+  const durationLine =
+    durations.length > 0
+      ? `Available durations: ${durations.join(", ")}.`
+      : `Multiple duration options are available — pick one above.`;
+  const priceLine =
+    minPrice && minPrice > 0
+      ? `Plans start from ৳${minPrice.toLocaleString()} — the exact price for your selected duration is shown above the duration selector.`
+      : `The current price is shown above the duration selector for the selected plan.`;
+
   return [
     {
       q: `Can I use ${name} in Bangladesh?`,
-      a: `Yes — ${name} works fully in Bangladesh through AccessNow BD. We provide verified access that runs on any device without restrictions.`,
+      a: `Yes — ${name} works fully in Bangladesh through AccessNow BD. We provide verified ${category} access that runs on any device without restrictions.`,
+    },
+    {
+      q: `How fast will I receive my ${name} access?`,
+      a: `Delivery time: ${delivery}. After payment is confirmed, your ${name} login or activation details are sent to your email and WhatsApp automatically.`,
+    },
+    {
+      q: `What warranty do I get with ${name}?`,
+      a: `Every ${name} order from AccessNow BD includes ${warranty}. If anything stops working during your plan period, contact support and we'll replace or fix it free of charge.`,
     },
     {
       q: `How do I subscribe to ${name} via AccessNow BD?`,
-      a: `Choose your duration above, add to cart and complete payment with bKash, Nagad, Rocket, or card. Your access details arrive on email & WhatsApp within minutes.`,
+      a: `Choose your duration above, add to cart and complete payment with bKash, Nagad, Rocket, or card. ${durationLine}`,
     },
     {
       q: `How much does ${name} cost in Bangladesh via AccessNow BD?`,
-      a: `Pricing depends on the plan duration you choose. The current price is shown above the duration selector for the selected plan.`,
-    },
-    {
-      q: `How to buy an ${name} subscription plan via AccessNow BD?`,
-      a: `Select your preferred duration, set quantity, click "Buy it now", and complete checkout. Your subscription is delivered instantly after payment.`,
+      a: priceLine,
     },
     {
       q: `How do I renew my ${name} subscription with AccessNow BD?`,
-      a: `Simply place a new order for ${name} when your current plan is about to expire. We'll keep your existing access active where possible.`,
+      a: `Simply place a new order for ${name} when your current plan is about to expire. We'll keep your existing access active where possible, and your new ${delivery.toLowerCase()} delivery applies to renewals too.`,
     },
   ];
 }
