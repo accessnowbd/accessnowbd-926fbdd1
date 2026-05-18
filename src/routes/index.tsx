@@ -281,8 +281,8 @@ const brandLogo = (b: { domain: string; logo?: string }) =>
 
 
 function HeroExperience() {
-  const featured = HERO_BRANDS.slice(0, 3);
-  const featuredRight = HERO_BRANDS.slice(0, 2);
+  const leftBrands = [HERO_BRANDS[0], HERO_BRANDS[1]]; // Netflix, ChatGPT
+  const rightFeatured = HERO_BRANDS[2]; // Spotify
 
   return (
     <section className="relative px-4 md:px-10 pt-6 pb-12 md:pt-10 md:pb-16">
