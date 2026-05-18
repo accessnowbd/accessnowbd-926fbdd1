@@ -225,7 +225,7 @@ function ProductPage() {
           <div className="mt-6 max-w-2xl">
             <button
               onClick={() => setDescOpen((v) => !v)}
-              className="w-full flex items-center justify-between gap-2 px-4 h-11 rounded-xl backdrop-blur-xl bg-gradient-to-r from-white/50 to-teal-50/40 border border-white/70 text-sm font-medium text-slate-900 hover:from-white/70 hover:to-teal-50/60 hover:border-teal-300/70 shadow-[0_6px_24px_-8px_rgba(20,184,166,0.3)] transition-all"
+              className="w-full flex items-center justify-between gap-2 px-4 h-11 rounded-xl backdrop-blur-xl bg-gradient-to-br from-white/60 via-white/40 to-teal-50/50 border border-white/60 text-sm font-medium text-slate-900 hover:from-white/75 hover:via-white/55 hover:to-teal-50/65 hover:border-teal-300/60 shadow-[0_6px_24px_-10px_rgba(20,184,166,0.3)] transition-all"
             >
               <span className="inline-flex items-center gap-2">
                 <span className="w-4 h-4 rounded-sm border border-teal-400/60 bg-teal-500/20 inline-block" /> Product Description
