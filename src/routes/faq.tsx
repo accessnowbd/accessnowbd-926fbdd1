@@ -69,17 +69,42 @@ function FaqPage() {
       <section className="mx-auto max-w-[1100px] px-4 md:px-10 py-12 space-y-10">
         {SECTIONS.map((sec) => <FaqGroup key={sec.title} title={sec.title} items={sec.items} />)}
 
-        <div className="rounded-3xl bg-aurora text-white p-8 md:p-12 text-center glow-violet relative overflow-hidden">
-          <div className="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-white/15 blur-3xl" />
-          <h2 className="text-2xl md:text-3xl font-extrabold">আরও প্রশ্ন আছে?</h2>
-          <p className="mt-2 text-white/85">WhatsApp-এ মেসেজ দিন, আমরা সবসময় হাজির।</p>
-          <div className="mt-5 flex flex-wrap gap-3 justify-center">
-            <a href="https://wa.me/8801580607614" className="h-11 px-6 inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white text-sm font-bold hover:scale-105 transition">
-              <MessageCircle className="w-4 h-4" /> Chat on WhatsApp
-            </a>
-            <Link to="/contact" className="h-11 px-6 inline-flex items-center rounded-full bg-white text-primary text-sm font-bold hover:scale-105 transition">
-              Send a message
-            </Link>
+        <div className="relative overflow-hidden rounded-3xl border border-primary/15 bg-card p-8 md:p-12 shadow-[0_20px_60px_-25px_rgba(79,70,229,0.35)]">
+          {/* Decorative left rail */}
+          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-primary via-fuchsia-500 to-emerald-500" />
+          <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+
+          <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10">
+            <div className="grid place-items-center w-14 h-14 rounded-2xl bg-primary/10 text-primary shrink-0">
+              <MessageCircle className="w-7 h-7" />
+            </div>
+
+            <div className="flex-1 text-left">
+              <span className="inline-flex px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 text-[11px] font-bold tracking-wide uppercase mb-2">
+                ● Live support
+              </span>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-foreground leading-tight">
+                আরও প্রশ্ন আছে?
+              </h2>
+              <p className="mt-1.5 text-sm md:text-base text-muted-foreground">
+                WhatsApp-এ মেসেজ দিন — আমরা সবসময় হাজির।
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3 shrink-0">
+              <a
+                href="https://wa.me/8801580607614"
+                className="h-11 px-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white text-sm font-bold shadow-lg shadow-emerald-500/25 hover:scale-[1.03] transition"
+              >
+                <MessageCircle className="w-4 h-4" /> Chat on WhatsApp
+              </a>
+              <Link
+                to="/contact"
+                className="h-11 px-5 inline-flex items-center rounded-full border border-primary/25 bg-background text-primary text-sm font-bold hover:bg-primary/5 transition"
+              >
+                Send a message
+              </Link>
+            </div>
           </div>
         </div>
       </section>
