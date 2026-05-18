@@ -320,16 +320,18 @@ function HeroExperience() {
             <div className="flex flex-wrap gap-3">
               <Link
                 to="/products"
-                className="group inline-flex items-center gap-2 px-7 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-sm font-extrabold rounded-2xl shadow-lg shadow-cyan-500/25 transition-all hover:-translate-y-0.5"
+                className="group inline-flex items-center gap-2 px-7 py-4 text-sm font-extrabold rounded-2xl shadow-lg shadow-cyan-500/25 transition-all hover:-translate-y-0.5"
+                style={{ backgroundImage: "linear-gradient(90deg,#06b6d4,#2563eb)", color: "#ffffff" }}
               >
                 সব প্রোডাক্ট দেখুন
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 px-7 py-4 bg-white/5 hover:bg-white/10 text-white text-sm font-bold rounded-2xl border border-white/10 backdrop-blur-sm transition-all"
+                className="inline-flex items-center gap-2 px-7 py-4 text-sm font-bold rounded-2xl backdrop-blur-sm transition-all"
+                style={{ backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#ffffff" }}
               >
-                <Headphones className="h-4 w-4 text-cyan-400" /> কাস্টম অর্ডার
+                <Headphones className="h-4 w-4" style={{ color: "#22d3ee" }} /> কাস্টম অর্ডার
               </Link>
             </div>
 
@@ -340,8 +342,8 @@ function HeroExperience() {
                 ["24/7", "Support"],
               ].map(([value, label]) => (
                 <div key={label} className="flex flex-col">
-                  <span className="text-xl md:text-2xl font-extrabold text-white tracking-tight">{value}</span>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold mt-1">{label}</span>
+                  <span className="text-xl md:text-2xl font-extrabold tracking-tight" style={{ color: "#ffffff" }}>{value}</span>
+                  <span className="text-[10px] uppercase tracking-widest font-semibold mt-1" style={{ color: "#64748b" }}>{label}</span>
                 </div>
               ))}
             </div>
