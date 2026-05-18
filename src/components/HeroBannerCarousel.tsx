@@ -45,7 +45,7 @@ const BANNER_PALETTES = {
   indigo:   { bg: "#080a3a", accent: "#facc15", glow: "#fde68a", name: "Indigo" },
   spotify:  { bg: "#02160c", accent: "#1ed760", glow: "#86efac", name: "Spotify Green" },
   canva:    { bg: "#0a0a3a", accent: "#7c5cff", glow: "#22d3ee", name: "Canva Blue/Purple" },
-  eid:      { bg: "#1b0633", accent: "#f43f95", glow: "#fbbf24", name: "Eid Festive" },
+  eid:      { bg: "#04140d", accent: "#d4af37", glow: "#10b981", name: "Eid Royal Gold" },
   sunset:   { bg: "#2a0612", accent: "#ff7a45", glow: "#fbbf24", name: "Sunset" },
 } as const;
 
@@ -73,7 +73,7 @@ const BRANDS: BrandDef[] = [
   { keywords: ["windows 11", "windows 10", "windows"], slug: "windows-11-pro", bg: "#03102a", accent: "#0078d4", glow: "#7dd3fc" },
   { keywords: ["office 365", "office", "microsoft"], slug: "office-365", bg: "#1a0808", accent: "#d83b01", glow: "#fb923c" },
   { keywords: ["apple", "itunes", "app store"], slug: "itunes-giftcard", bg: "#0a0a0a", accent: "#a3a3a3", glow: "#e5e5e5" },
-  { keywords: ["eid", "ঈদ"],                                          bg: "#1b0633", accent: "#f43f95", glow: "#fbbf24" },
+  { keywords: ["eid", "ঈদ", "qurbani", "কোরবানি"],                  bg: "#04140d", accent: "#d4af37", glow: "#10b981" },
 ];
 
 function detectBrand(title?: string): BrandDef | null {
@@ -111,10 +111,10 @@ const FALLBACK: BannerRow[] = [
   {
     id: "fallback-eid", is_active: true, sort_order: 2,
     data: {
-      color_preset: "eid", bg_style: "nebula",
-      category: "PREMIUM · DIGITAL",
-      title: "Eid Digital Subscription ৫০-১০০৳ Discount RxBEiD001",
-      subtitle: "RxB Premium Store ঈদ স্পেশাল অফার",
+      color_preset: "eid", bg_style: "nebula", overlay_intensity: "high",
+      category: "কোরবানির ঈদ · প্রিমিয়াম অফার",
+      title: "Qurbani Eid Mega Offer ৳৫০–৳১৫০ Discount",
+      subtitle: "AccessNow BD–এর কোরবানির ঈদ স্পেশাল — কুপন কোড: ACCESSEID25 ব্যবহার করে যেকোনো প্রিমিয়াম সাবস্ক্রিপশনে পান এক্সক্লুসিভ ছাড়।",
       cta: "অর্ডার করুন", link: "/products",
       secondary_cta: "Details", secondary_link: "/products",
       delivery_text: "Instant", support_text: "24/7", rating_text: "4.9 ★",
@@ -193,6 +193,12 @@ export function HeroBannerCarousel() {
 
   // Resolve image: explicit URL > product's image by brand slug
   const resolvedImage = current.data.image_url || (brand?.slug ? productMap[brand.slug] : undefined);
+
+  // Eid / Qurbani detection — adds festive overlay (crescent, mosque, lanterns, sparkles)
+  const isEid = useMemo(() => {
+    const t = (current.data.title || "") + " " + (current.data.category || "") + " " + (current.data.subtitle || "");
+    return /eid|ঈদ|qurbani|কোরবানি/i.test(t);
+  }, [current.data.title, current.data.category, current.data.subtitle]);
 
   const intensityMul = intensity === "low" ? 0.65 : intensity === "high" ? 1.35 : 1;
 
@@ -276,6 +282,94 @@ export function HeroBannerCarousel() {
             className="pointer-events-none absolute inset-x-0 top-0 h-px"
             style={{ background: `linear-gradient(90deg, transparent, ${hexAlpha("#ffffff", 0.35)}, transparent)` }}
           />
+
+          {/* Eid / Qurbani festive ornament layer */}
+          {isEid && (
+            <>
+              {/* Crescent moon top-right */}
+              <div aria-hidden className="pointer-events-none absolute right-6 top-6 md:right-10 md:top-8">
+                <svg width="86" height="86" viewBox="0 0 100 100" className="drop-shadow-[0_0_30px_rgba(212,175,55,0.6)]">
+                  <defs>
+                    <radialGradient id="moonGrad" cx="35%" cy="35%" r="65%">
+                      <stop offset="0%" stopColor="#fde68a" />
+                      <stop offset="60%" stopColor={accent} />
+                      <stop offset="100%" stopColor={mix(accent, "#000", 0.4)} />
+                    </radialGradient>
+                  </defs>
+                  <path d="M50 8 a42 42 0 1 0 30 71 a32 32 0 1 1 0 -62 a42 42 0 0 0 -30 -9 z" fill="url(#moonGrad)" opacity="0.95" />
+                </svg>
+              </div>
+
+              {/* Tiny stars scattered */}
+              <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+                {[
+                  { l: "12%", t: "18%", s: 10, d: "0s" },
+                  { l: "28%", t: "8%",  s: 6,  d: "1.2s" },
+                  { l: "48%", t: "14%", s: 8,  d: "0.6s" },
+                  { l: "62%", t: "22%", s: 5,  d: "2s" },
+                  { l: "78%", t: "55%", s: 7,  d: "1.5s" },
+                  { l: "8%",  t: "62%", s: 6,  d: "0.9s" },
+                  { l: "38%", t: "72%", s: 9,  d: "1.8s" },
+                  { l: "92%", t: "30%", s: 5,  d: "0.3s" },
+                ].map((st, i) => (
+                  <div
+                    key={i}
+                    className="absolute animate-pulse"
+                    style={{
+                      left: st.l, top: st.t, width: st.s, height: st.s,
+                      animationDuration: "2.4s", animationDelay: st.d,
+                      background: `radial-gradient(circle, ${accent} 0%, ${hexAlpha(accent, 0.5)} 50%, transparent 70%)`,
+                      borderRadius: "50%",
+                      boxShadow: `0 0 ${st.s * 2}px ${hexAlpha(accent, 0.8)}`,
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Mosque silhouette bottom band */}
+              <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-24 md:h-32 opacity-25">
+                <svg viewBox="0 0 1200 160" preserveAspectRatio="none" className="h-full w-full">
+                  <defs>
+                    <linearGradient id="mosqueGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={accent} stopOpacity="0" />
+                      <stop offset="100%" stopColor={accent} stopOpacity="0.9" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M0,160 L0,120 L60,120 L60,90 Q60,70 80,70 Q100,70 100,90 L100,120 L160,120 L160,100 L180,100 L180,60 Q180,40 200,40 L200,20 Q210,10 220,20 L220,40 Q240,40 240,60 L240,100 L260,100 L260,120 L340,120 L340,95 Q340,75 360,75 Q380,75 380,95 L380,120 L460,120 L460,100 L480,100 L480,55 Q480,30 500,30 L500,10 Q512,0 524,10 L524,30 Q544,30 544,55 L544,100 L564,100 L564,120 L660,120 L660,90 Q660,70 680,70 Q700,70 700,90 L700,120 L780,120 L780,100 L800,100 L800,60 Q800,40 820,40 L820,20 Q830,10 840,20 L840,40 Q860,40 860,60 L860,100 L880,100 L880,120 L960,120 L960,95 Q960,75 980,75 Q1000,75 1000,95 L1000,120 L1080,120 L1080,100 L1100,100 L1100,55 Q1100,30 1120,30 L1120,10 Q1132,0 1144,10 L1144,30 Q1164,30 1164,55 L1164,100 L1184,100 L1184,120 L1200,120 L1200,160 Z"
+                    fill="url(#mosqueGrad)"
+                  />
+                </svg>
+              </div>
+
+              {/* Gold ornament corner — top-left arabesque */}
+              <div aria-hidden className="pointer-events-none absolute -left-4 -top-4 opacity-40">
+                <svg width="160" height="160" viewBox="0 0 200 200">
+                  <g fill="none" stroke={accent} strokeWidth="1.2" opacity="0.7">
+                    <circle cx="40" cy="40" r="56" />
+                    <circle cx="40" cy="40" r="42" />
+                    <circle cx="40" cy="40" r="28" />
+                    <path d="M40 -16 L40 96 M-16 40 L96 40 M0 0 L80 80 M80 0 L0 80" strokeOpacity="0.4" />
+                  </g>
+                </svg>
+              </div>
+
+              {/* Hanging lantern — left mid */}
+              <div aria-hidden className="pointer-events-none absolute left-8 top-1/2 hidden -translate-y-1/2 md:block" style={{ animation: "swing 4s ease-in-out infinite" }}>
+                <svg width="44" height="80" viewBox="0 0 44 80">
+                  <line x1="22" y1="0" x2="22" y2="16" stroke={accent} strokeWidth="1" opacity="0.6" />
+                  <path d="M14 16 L30 16 L30 20 L14 20 Z" fill={accent} opacity="0.85" />
+                  <path d="M10 22 Q22 18 34 22 L32 54 Q22 60 12 54 Z" fill={hexAlpha(accent, 0.25)} stroke={accent} strokeWidth="1.2" />
+                  <circle cx="22" cy="38" r="6" fill={glow} opacity="0.9" style={{ filter: `drop-shadow(0 0 8px ${glow})` }} />
+                  <path d="M14 56 L30 56 L28 62 L16 62 Z" fill={accent} opacity="0.85" />
+                  <line x1="22" y1="62" x2="22" y2="72" stroke={accent} strokeWidth="1" opacity="0.6" />
+                  <circle cx="22" cy="74" r="3" fill={accent} />
+                </svg>
+              </div>
+
+              <style>{`@keyframes swing { 0%,100% { transform: translateY(-50%) rotate(-4deg); } 50% { transform: translateY(-50%) rotate(4deg); } }`}</style>
+            </>
+          )}
 
           <div className="relative grid items-center gap-7 px-5 py-10 md:grid-cols-2 md:gap-10 md:px-12 md:py-14">
             {/* LEFT */}
