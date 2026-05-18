@@ -331,7 +331,19 @@ export function SiteHeader() {
 
         {/* Mobile menu */}
         {open && (
-          <div className="lg:hidden relative border-b border-white/10 bg-background/85 backdrop-blur-2xl">
+          <div className="md:hidden relative border-b border-white/10 bg-background/85 backdrop-blur-2xl">
+            <div className="mx-auto max-w-[1440px] px-4 pt-4 flex items-center justify-center gap-3">
+              <ThemeSwitcher />
+              <CartIcon />
+              <Link
+                to={user ? "/dashboard" : "/login"}
+                onClick={() => setOpen(false)}
+                aria-label={user ? "Dashboard" : "Login"}
+                className="grid place-items-center w-10 h-10 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)]"
+              >
+                {user ? <UserCircle2 className="w-4 h-4" /> : <LogIn className="w-4 h-4" />}
+              </Link>
+            </div>
             <nav className="mx-auto max-w-[1440px] px-4 py-4 grid grid-cols-2 gap-2.5">
               {NAV.map((n) => (
                 <Link
