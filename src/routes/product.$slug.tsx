@@ -106,10 +106,15 @@ function ProductPage() {
   const faqs = buildFaqs(product);
 
   return (
-    <div key={product.slug} className="min-h-screen bg-white text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both]">
+    <div key={product.slug} className="relative min-h-screen text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both] overflow-hidden bg-gradient-to-br from-teal-50 via-white to-emerald-50">
       <style>{`@keyframes product-in {0%{opacity:0;transform:translateY(14px);filter:blur(4px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}`}</style>
 
-      <div className="mx-auto max-w-[1200px] px-4 md:px-8 pt-6">
+      {/* Ambient glow orbs */}
+      <div className="pointer-events-none absolute -top-32 -left-20 h-[420px] w-[420px] rounded-full bg-teal-300/30 blur-[120px]" />
+      <div className="pointer-events-none absolute top-40 -right-32 h-[480px] w-[480px] rounded-full bg-emerald-300/25 blur-[140px]" />
+      <div className="pointer-events-none absolute bottom-0 left-1/3 h-[380px] w-[380px] rounded-full bg-cyan-200/25 blur-[130px]" />
+
+      <div className="relative mx-auto max-w-[1200px] px-4 md:px-8 pt-6">
         <nav className="text-sm text-slate-500 flex items-center gap-2">
           <Link to="/" className="hover:text-slate-900 inline-flex items-center gap-1">
             <ArrowLeft className="w-3.5 h-3.5" /> Back
@@ -122,17 +127,17 @@ function ProductPage() {
       </div>
 
       {/* Hero */}
-      <section className="mx-auto max-w-[1200px] px-4 md:px-8 py-6 grid md:grid-cols-2 gap-8 md:gap-12">
-        <div className="relative">
-          <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-2xl overflow-hidden" />
+      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-6 grid md:grid-cols-2 gap-8 md:gap-12">
+        <div className="relative rounded-2xl backdrop-blur-xl bg-white/40 border border-white/60 p-3 shadow-[0_10px_40px_-12px_rgba(20,184,166,0.3)]">
+          <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-xl overflow-hidden" />
           {product.badge && (
-            <span className={`absolute top-4 left-4 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>
+            <span className={`absolute top-6 left-6 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>
               {product.badge}
             </span>
           )}
         </div>
 
-        <div>
+        <div className="relative rounded-2xl backdrop-blur-xl bg-white/40 border border-white/60 p-6 shadow-[0_10px_40px_-12px_rgba(20,184,166,0.3)]">
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900">{product.name}</h1>
 
           {/* Price */}
@@ -242,19 +247,19 @@ function ProductPage() {
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto max-w-[1200px] px-4 md:px-8 py-10">
+      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
         <h2 className="text-lg font-bold text-slate-900 mb-4">FAQ</h2>
         <div className="space-y-2">
           {faqs.map((f, i) => {
             const open = openFaq === i;
             return (
-              <div key={i} className="rounded-md bg-slate-100">
+              <div key={i} className="rounded-xl backdrop-blur-xl bg-white/40 border border-white/60 shadow-[0_4px_20px_-8px_rgba(20,184,166,0.25)]">
                 <button
                   onClick={() => setOpenFaq(open ? null : i)}
                   className="w-full flex items-center justify-between gap-3 px-4 h-11 text-left text-sm font-medium text-slate-800"
                 >
                   <span>{f.q}</span>
-                  <span className="text-violet-600 text-lg leading-none">{open ? "−" : "+"}</span>
+                  <span className="text-teal-600 text-lg leading-none">{open ? "−" : "+"}</span>
                 </button>
                 {open && (
                   <div className="px-4 pb-4 text-sm text-slate-700 leading-relaxed">
@@ -269,7 +274,7 @@ function ProductPage() {
 
       {/* Related */}
       {related.length > 0 && (
-        <section className="mx-auto max-w-[1200px] px-4 md:px-8 py-10">
+        <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
           <h2 className="text-lg font-bold text-slate-900 mb-5">Related products</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {related.map((p) => {
@@ -280,7 +285,7 @@ function ProductPage() {
                   to="/product/$slug"
                   params={{ slug: p.slug }}
                   key={p.slug}
-                  className="group block rounded-lg overflow-hidden bg-white border border-slate-200 hover:shadow-md transition"
+                  className="group block rounded-xl overflow-hidden backdrop-blur-xl bg-white/40 border border-white/60 hover:bg-white/60 hover:border-teal-300/60 shadow-[0_4px_20px_-8px_rgba(20,184,166,0.25)] hover:shadow-[0_10px_30px_-10px_rgba(20,184,166,0.45)] transition-all"
                 >
                   <ProductBanner product={p} ratio="1/1" spheres={4} className="rounded-none" />
                   <div className="p-3">
@@ -301,7 +306,9 @@ function ProductPage() {
         </section>
       )}
 
-      <SiteFooter />
+      <div className="relative">
+        <SiteFooter />
+      </div>
     </div>
   );
 }
