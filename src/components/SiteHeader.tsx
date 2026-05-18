@@ -348,28 +348,28 @@ export function SiteHeader() {
               type="button"
               aria-label="Close menu"
               onClick={() => setOpen(false)}
-              className="md:hidden fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200"
+              className="md:hidden fixed inset-0 z-40 bg-violet-900/20 backdrop-blur-sm animate-in fade-in duration-200"
             />
             {/* Panel */}
             <aside
-              className="md:hidden fixed right-0 top-0 z-50 h-[100dvh] w-[88vw] max-w-[360px] overflow-y-auto bg-[linear-gradient(180deg,#0d0b1f_0%,#0a0816_60%,#080614_100%)] border-l border-white/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] animate-in slide-in-from-right duration-300 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className="md:hidden fixed right-0 top-0 z-50 h-[100dvh] w-[88vw] max-w-[360px] overflow-y-auto bg-[linear-gradient(180deg,#ffffff_0%,#faf7ff_60%,#f3eefe_100%)] border-l border-violet-200/60 shadow-[0_30px_80px_-20px_rgba(124,58,237,0.25)] animate-in slide-in-from-right duration-300 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               role="dialog"
               aria-modal="true"
               aria-label="Main menu"
             >
               {/* Top: brand + close */}
-              <div className="sticky top-0 z-10 flex items-center justify-between px-4 pt-4 pb-3 bg-gradient-to-b from-[#0d0b1f] via-[#0d0b1f]/95 to-transparent">
+              <div className="sticky top-0 z-10 flex items-center justify-between px-4 pt-4 pb-3 bg-gradient-to-b from-white via-white/95 to-transparent">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="relative grid place-items-center w-10 h-10 rounded-xl bg-white shrink-0 ring-1 ring-white/20 shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)] overflow-hidden">
+                  <span className="relative grid place-items-center w-10 h-10 rounded-xl bg-white shrink-0 ring-1 ring-violet-200 shadow-[0_8px_22px_-10px_rgba(124,58,237,0.35)] overflow-hidden">
                     <img src={accessNowLogo} alt="" className="w-[145%] h-[145%] object-contain" draggable={false} />
                   </span>
                   <span className="min-w-0 leading-tight">
                     <span className="flex items-baseline gap-1">
-                      <span className="text-[15px] font-extrabold text-white">Access</span>
+                      <span className="text-[15px] font-extrabold text-slate-900">Access</span>
                       <span className="text-[15px] font-extrabold text-aqua">Now</span>
                       <span className="text-[15px] font-extrabold text-gold">BD</span>
                     </span>
-                    <span className="block text-[9px] font-bold uppercase tracking-[0.22em] text-white/55 mt-0.5">
+                    <span className="block text-[9px] font-bold uppercase tracking-[0.22em] text-violet-500/80 mt-0.5">
                       Premium Menu
                     </span>
                   </span>
@@ -377,7 +377,7 @@ export function SiteHeader() {
                 <button
                   onClick={() => setOpen(false)}
                   aria-label="Close"
-                  className="grid place-items-center w-9 h-9 rounded-full border border-gold/40 text-gold hover:bg-gold/10 transition"
+                  className="grid place-items-center w-9 h-9 rounded-full border border-violet-300 text-violet-600 hover:bg-violet-100 transition"
                 >
                   <X className="w-4 h-4" />
                 </button>
