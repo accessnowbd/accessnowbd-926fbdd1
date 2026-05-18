@@ -355,7 +355,7 @@ function HeroExperience() {
             <div className="relative z-20 grid grid-cols-2 gap-4">
               {/* Left column */}
               <div className="space-y-4">
-                {featured.slice(0, 2).map((b) => (
+                {leftBrands.map((b) => (
                   <div
                     key={b.name}
                     className="group p-5 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl hover:bg-white/10 transition-colors"
