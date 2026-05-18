@@ -49,7 +49,7 @@ const COLUMNS: {
     title: "Products",
     Icon: Package,
     iconBg: "from-primary to-aqua",
-    bullet: "bg-aqua",
+    bullet: "bg-fuchsia-600",
     links: [
       { label: "All Products", to: "/products" },
       { label: "Streaming", to: "/streaming" },
@@ -63,7 +63,7 @@ const COLUMNS: {
     title: "Information",
     Icon: Info,
     iconBg: "from-primary to-aqua",
-    bullet: "bg-aqua",
+    bullet: "bg-fuchsia-600",
     links: [
       { label: "FAQ", to: "/faq" },
       { label: "Contact Us", to: "/contact" },
@@ -78,7 +78,7 @@ const COLUMNS: {
     title: "Policies",
     Icon: FileText,
     iconBg: "from-primary to-aqua",
-    bullet: "bg-aqua",
+    bullet: "bg-fuchsia-600",
     links: [
       { label: "Privacy Policy", to: "/privacy-policy" },
       { label: "Terms & Conditions", to: "/terms" },
