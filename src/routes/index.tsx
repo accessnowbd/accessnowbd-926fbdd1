@@ -360,7 +360,7 @@ function HeroExperience() {
                 {leftBrands.map((b) => (
                   <div
                     key={b.name}
-                    className="group p-5 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl hover:bg-white/10 transition-colors"
+                    className="group p-5 rounded-3xl backdrop-blur-xl transition-colors" style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)" }}
                   >
                     <div
                       className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg"
@@ -375,8 +375,8 @@ function HeroExperience() {
                         className="h-6 w-6 object-contain drop-shadow"
                       />
                     </div>
-                    <h3 className="text-white font-bold text-sm">{b.name}</h3>
-                    <p className="text-[11px] text-slate-500 mt-0.5">Premium Access</p>
+                    <h3 className="font-bold text-sm" style={{ color: "#ffffff" }}>{b.name}</h3>
+                    <p className="text-[11px] mt-0.5" style={{ color: "#94a3b8" }}>Premium Access</p>
                   </div>
                 ))}
               </div>
@@ -384,7 +384,7 @@ function HeroExperience() {
               {/* Right column (offset down) */}
               <div className="space-y-4 pt-10">
                 <div
-                  className="group p-5 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl hover:bg-white/10 transition-colors"
+                  className="group p-5 rounded-3xl backdrop-blur-xl transition-colors" style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)" }}
                 >
                   <div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg"
@@ -399,8 +399,8 @@ function HeroExperience() {
                       className="h-6 w-6 object-contain drop-shadow"
                     />
                   </div>
-                  <h3 className="text-white font-bold text-sm">{rightFeatured.name}</h3>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Family & Individual</p>
+                  <h3 className="font-bold text-sm" style={{ color: "#ffffff" }}>{rightFeatured.name}</h3>
+                  <p className="text-[11px] mt-0.5" style={{ color: "#94a3b8" }}>Family &amp; Individual</p>
                 </div>
 
                 {/* Offer card */}
