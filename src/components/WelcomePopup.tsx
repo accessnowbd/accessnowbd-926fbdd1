@@ -152,7 +152,9 @@ export function WelcomePopup() {
               <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">{data.title}</h2>
             )}
             {data.message && (
-              <p className="mt-2 text-sm text-slate-600 whitespace-pre-line">{data.message}</p>
+              <p className="mt-2 text-[15px] leading-relaxed text-slate-700 whitespace-pre-line">
+                {colorizeMessage(data.message)}
+              </p>
             )}
             {data.cta_text && data.cta_link && (
               <a
