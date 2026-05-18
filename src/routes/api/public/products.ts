@@ -1,6 +1,31 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { createClient } from "@supabase/supabase-js";
 import { rowToProduct } from "@/data/products";
+
+const PRODUCT_SELECT =
+  "slug,name,emoji,gradient,category,badge,tagline,description,delivery_time,warranty,features,plans,image_url";
+
+function createPublicProductClient() {
+  const env = typeof process !== "undefined" ? process.env : undefined;
+  const supabaseUrl = env?.SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey =
+    env?.SUPABASE_PUBLISHABLE_KEY ||
+    env?.SUPABASE_ANON_KEY ||
+    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+    import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Product data connection is not configured");
+  }
+
+  return createClient(supabaseUrl, supabaseKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
+}
 
 export const Route = createFileRoute("/api/public/products")({
   server: {
@@ -9,11 +34,9 @@ export const Route = createFileRoute("/api/public/products")({
         const url = new URL(request.url);
         const slug = url.searchParams.get("slug");
 
-        let query = supabaseAdmin
+        let query = createPublicProductClient()
           .from("products")
-          .select(
-            "slug,name,emoji,gradient,category,badge,tagline,description,delivery_time,warranty,features,plans,image_url",
-          )
+          .select(PRODUCT_SELECT)
           .eq("is_active", true)
           .order("sort_order", { ascending: true });
 
