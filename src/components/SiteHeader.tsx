@@ -26,6 +26,7 @@ import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import { SearchBar } from "@/components/SearchBar";
+import { GlobalSearch, useGlobalSearch } from "@/components/GlobalSearch";
 
 const NAV: Array<{
   label: string;
