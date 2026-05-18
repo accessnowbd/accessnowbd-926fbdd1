@@ -88,8 +88,6 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
       { name: "secondary_cta", label: "Secondary button text", type: "text" },
       { name: "secondary_link", label: "Secondary button link", type: "url" },
       { name: "image_url", label: "Right-side image URL", type: "image" },
-      { name: "bg_color", label: "Custom background color (optional)", type: "color" },
-      { name: "accent_color", label: "Custom pop color (optional)", type: "color" },
       { name: "delivery_text", label: "Delivery stat (e.g. Instant)", type: "text" },
       { name: "support_text", label: "Support stat (e.g. 24/7)", type: "text" },
       { name: "rating_text", label: "Rating stat (e.g. 4.9 ★)", type: "text" },
