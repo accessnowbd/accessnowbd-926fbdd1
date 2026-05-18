@@ -446,6 +446,8 @@ function AdminShell({ user, signOut, navigate }: any) {
         </div>
       </div>
 
+      <AdminGlobalSearch open={globalOpen} onOpenChange={setGlobalOpen} />
+
       <style>{`
         .admin-scroll::-webkit-scrollbar { width: 6px; }
         .admin-scroll::-webkit-scrollbar-thumb { background: rgba(100,116,139,.25); border-radius: 999px; }
