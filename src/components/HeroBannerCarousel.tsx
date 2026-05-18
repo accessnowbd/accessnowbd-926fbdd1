@@ -326,3 +326,22 @@ function hexAlpha(hex: string, alpha: number) {
   if ([r, g, b].some(Number.isNaN)) return `rgba(229,9,20,${alpha})`;
   return `rgba(${r},${g},${b},${alpha})`;
 }
+
+function parseHex(hex: string): [number, number, number] | null {
+  const h = hex.replace("#", "");
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  if ([r, g, b].some(Number.isNaN)) return null;
+  return [r, g, b];
+}
+
+function mix(a: string, b: string, t: number) {
+  const A = parseHex(a) ?? [0, 0, 0];
+  const B = parseHex(b) ?? [0, 0, 0];
+  const r = Math.round(A[0] + (B[0] - A[0]) * t);
+  const g = Math.round(A[1] + (B[1] - A[1]) * t);
+  const bl = Math.round(A[2] + (B[2] - A[2]) * t);
+  return `rgb(${r},${g},${bl})`;
+}
