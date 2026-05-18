@@ -8,6 +8,7 @@ import { ProductBanner } from "@/components/ProductBanner";
 import { useShopConfig } from "@/hooks/useShopConfig";
 import { getProduct } from "@/lib/products.functions";
 import { ProductMarkdown } from "@/components/ProductMarkdown";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const parsePrice = (p: unknown) => {
   if (typeof p === "number") return Number.isFinite(p) ? p : 0;
@@ -300,9 +301,7 @@ function ProductPage() {
         </section>
       )}
 
-      <footer className="border-t border-slate-200 py-6 text-center text-xs text-slate-500">
-        © 2026 AccessNow BD. All rights reserved.
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
