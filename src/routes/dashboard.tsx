@@ -5,7 +5,7 @@ import {
   ArrowRight, Sparkles, LifeBuoy, LogOut, LayoutDashboard,
   KeyRound, Receipt, Bell, MessageSquare,
   Menu, ChevronDown, X, Plus, Download,
-  FileText, Mail, Phone, MapPin, Hash, Copy, Check, Zap,
+  FileText, Mail, Phone, MapPin, Hash, Copy, Check, Zap, Shield,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
@@ -68,6 +68,7 @@ function DashboardPage() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
   const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null } | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState<SectionId>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -94,11 +95,14 @@ function DashboardPage() {
     const profileP = supabase.from("profiles").select("display_name, phone").eq("id", user.id).maybeSingle()
       .then((r) => { mark("profile fetch", tProfile); return r; });
 
-    Promise.all([ordersP, profileP])
-      .then(([o, p]) => {
+    const roleP = supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
+
+    Promise.all([ordersP, profileP, roleP])
+      .then(([o, p, r]) => {
         if (cancelled) return;
         setOrders(((o.data as unknown) as Order[]) || []);
         setProfile((p.data as { display_name?: string | null; phone?: string | null } | null) || null);
+        setIsAdmin(!!r.data);
       })
       .catch((err) => {
         console.error("[dashboard-perf] ❌ load failed after", Math.round(performance.now() - t0), "ms", err);
@@ -184,7 +188,17 @@ function DashboardPage() {
             ))}
           </nav>
 
-          <div className="p-3 border-t border-[var(--glass-border)]">
+          <div className="p-3 border-t border-[var(--glass-border)] space-y-2">
+            {isAdmin && (
+              <Link
+                to="/admin"
+                onClick={() => setSidebarOpen(false)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-white shadow-[0_10px_24px_-10px_rgba(124,58,237,0.55)]"
+                style={{ background: "var(--gradient-aurora)" }}
+              >
+                <Shield className="w-4 h-4" /> Admin Panel
+              </Link>
+            )}
             <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-red-300 hover:bg-red-500/10 transition">
               <LogOut className="w-4 h-4" /> Logout
             </button>
@@ -224,6 +238,14 @@ function DashboardPage() {
                   <UserMenuItem icon={<UserIcon className="w-4 h-4" />} label="My Profile" onClick={() => { setSection("profile"); setUserMenu(false); }} />
                   <UserMenuItem icon={<Package className="w-4 h-4" />} label="My Orders" onClick={() => { setSection("orders"); setUserMenu(false); }} />
                   <UserMenuItem icon={<LifeBuoy className="w-4 h-4" />} label="Support" onClick={() => { setSection("open-ticket"); setUserMenu(false); }} />
+                  {isAdmin && (
+                    <>
+                      <div className="my-1 h-px bg-[var(--glass-border)]" />
+                      <Link to="/admin" onClick={() => setUserMenu(false)} className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-primary hover:bg-primary/10 transition">
+                        <Shield className="w-4 h-4" /> Admin Panel
+                      </Link>
+                    </>
+                  )}
                   <div className="my-1 h-px bg-[var(--glass-border)]" />
                   <UserMenuItem icon={<LogOut className="w-4 h-4" />} label="Logout" onClick={handleSignOut} danger />
                 </div>

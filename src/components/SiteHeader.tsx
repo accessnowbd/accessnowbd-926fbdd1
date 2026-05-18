@@ -35,6 +35,7 @@ import { AccountIcon } from "@/components/AccountIcon";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import { GlobalSearch, useGlobalSearch } from "@/components/GlobalSearch";
 
@@ -142,6 +143,25 @@ export function SiteHeader() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
+  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!user) { setDisplayName(null); setIsAdmin(false); return; }
+    let cancelled = false;
+    (async () => {
+      const [p, r] = await Promise.all([
+        supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle(),
+        supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle(),
+      ]);
+      if (cancelled) return;
+      setDisplayName((p.data as { display_name?: string | null } | null)?.display_name || null);
+      setIsAdmin(!!r.data);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  const friendlyName = displayName || user?.email?.split("@")[0] || "Member";
 
   const handleLogout = async () => {
     await signOut();
@@ -389,7 +409,7 @@ export function SiteHeader() {
                   <span className="pointer-events-none absolute -right-10 -top-10 w-32 h-32 rounded-full bg-white/20 blur-2xl" />
                   <div className="relative flex items-center gap-3">
                     <span className="grid place-items-center w-12 h-12 rounded-full bg-white/20 ring-2 ring-white/40 text-white font-extrabold text-base shrink-0">
-                      {user ? (user.email?.[0] ?? "U").toUpperCase() : <UserCircle2 className="w-6 h-6" />}
+                      {user ? friendlyName.charAt(0).toUpperCase() : <UserCircle2 className="w-6 h-6" />}
                     </span>
                     <div className="min-w-0 flex-1">
                       <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
@@ -397,13 +417,13 @@ export function SiteHeader() {
                       </div>
                       <div className="flex items-center gap-1.5 mt-0.5">
                         <span className="text-white font-extrabold text-[15px] truncate">
-                          {user ? (user.email?.split("@")[0] ?? "Member") : "Sign in to continue"}
+                          {user ? friendlyName : "Sign in to continue"}
                         </span>
                         {user && <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" />}
                       </div>
                       {user && (
                         <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full bg-white/25 border border-white/40 text-[10px] font-bold text-white">
-                          <Crown className="w-3 h-3 text-gold" /> Verified Buyer
+                          <Crown className="w-3 h-3 text-gold" /> {isAdmin ? "Admin" : "Verified Buyer"}
                         </span>
                       )}
                     </div>
@@ -414,7 +434,7 @@ export function SiteHeader() {
                 {/* Quick action tiles */}
                 <div className="grid grid-cols-4 gap-2">
                   {[
-                    { to: "/orders" as const, label: "Orders", Icon: Package, grad: "from-sky-400 to-blue-600" },
+                    { to: "/orders" as const, label: "Orders", Icon: Package, grad: "from-indigo-500 to-blue-600" },
                     { to: "/cart" as const, label: "Cart", Icon: ShoppingBag, grad: "from-emerald-400 to-teal-600" },
                     { to: (user ? "/profile" : "/login") as "/profile" | "/login", label: "Profile", Icon: UserCircle2, grad: "from-fuchsia-400 to-pink-600" },
                     { to: "/contact" as const, label: "Support", Icon: Headphones, grad: "from-amber-400 to-orange-600" },
@@ -500,7 +520,7 @@ export function SiteHeader() {
                   <nav className="grid gap-2">
                     {[
                       { to: "/" as const, label: "Home", Icon: Home, grad: "from-orange-400 to-amber-600", badge: "NOW" },
-                      { to: "/categories" as const, label: "All Products", Icon: ShoppingBag, grad: "from-sky-400 to-blue-600" },
+                      { to: "/categories" as const, label: "All Products", Icon: ShoppingBag, grad: "from-indigo-500 to-blue-600" },
                       { to: "/products" as const, label: "Categories", Icon: Package, grad: "from-amber-400 to-orange-600" },
                       { to: "/education" as const, label: "Education", Icon: GraduationCap, grad: "from-violet-400 to-fuchsia-600" },
                       { to: "/faq" as const, label: "FAQ", Icon: HelpCircle, grad: "from-rose-400 to-pink-600" },
