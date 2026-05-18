@@ -337,6 +337,24 @@
       0 1px 0 0 rgba(255, 255, 255, 0.12) inset !important;
   }
 
+  /* GPU-layer promotion for every frosted-glass surface. Prevents the
+     backdrop-filter "white flash / re-sample" flicker during scroll by
+     giving each glass element its own compositor layer, and avoids
+     subpixel jitter from fractional positioning. */
+  .glass,
+  .glass-strong,
+  .glass-soft,
+  .product-card-v2,
+  [style*="backdrop-filter"],
+  [class*="backdrop-blur"] {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  /* Isolate stacking so nested backdrop-filters don't bleed/flash through parents */
+  section, header, main, footer { isolation: isolate; }
+
   /* Gradient bordered cards adapt to white-glass premium look (no pink) */
   html.theme-white .gradient-border-card {
     background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.6));
