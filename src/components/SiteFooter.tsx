@@ -102,20 +102,56 @@ const PAYMENTS = ["BKash", "Nagad", "Rocket", "Visa", "Mastercard"];
 
 export function SiteFooter() {
   return (
-    <footer className="relative mt-16 overflow-hidden border-t border-[var(--glass-border-soft)] bg-[linear-gradient(180deg,rgba(7,9,26,0.74),rgba(7,9,26,0.96))]">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/55 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 opacity-80">
-        <div className="absolute left-1/2 top-0 h-36 w-[min(760px,85vw)] -translate-x-1/2 rounded-full bg-primary/16 blur-[96px]" />
-        <div className="absolute right-[8%] bottom-0 h-60 w-60 rounded-full bg-aqua/8 blur-[90px]" />
-        <div className="absolute left-[8%] bottom-8 h-60 w-60 rounded-full bg-gold/7 blur-[90px]" />
+    <footer
+      className="relative mt-16 overflow-hidden border-t border-white/60"
+      style={{
+        background:
+          "linear-gradient(135deg,#eaf2ff 0%,#f4f7ff 40%,#eef4ff 70%,#e6edff 100%)",
+      }}
+    >
+      {/* Vivid color blobs behind glass */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div
+          className="absolute -top-24 -left-20 h-[420px] w-[420px] rounded-full opacity-80"
+          style={{
+            background:
+              "radial-gradient(closest-side, rgba(255,121,180,0.55), transparent 70%)",
+            filter: "blur(2px)",
+          }}
+        />
+        <div
+          className="absolute -bottom-32 -right-20 h-[460px] w-[460px] rounded-full opacity-70"
+          style={{
+            background:
+              "radial-gradient(closest-side, rgba(74,222,168,0.55), transparent 70%)",
+            filter: "blur(2px)",
+          }}
+        />
+        <div
+          className="absolute left-1/2 top-1/3 h-[360px] w-[360px] -translate-x-1/2 rounded-full opacity-60"
+          style={{
+            background:
+              "radial-gradient(closest-side, rgba(167,139,250,0.5), transparent 70%)",
+            filter: "blur(2px)",
+          }}
+        />
       </div>
+
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-4 pb-7 pt-10 md:px-10 md:pt-12">
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.45fr] lg:items-stretch">
-          <section className="relative min-h-[360px] overflow-hidden rounded-[26px] border border-[var(--glass-border)] bg-[linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.025)_48%,rgba(34,211,238,0.035))] p-6 shadow-[var(--shadow-glass)] md:p-8">
-            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-aqua/55 to-transparent" />
-            <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/18 blur-[90px]" />
-            <div className="pointer-events-none absolute -bottom-28 left-10 h-72 w-72 rounded-full bg-aqua/10 blur-[96px]" />
+          <section
+            className="relative min-h-[360px] overflow-hidden rounded-[26px] border border-white/70 p-6 md:p-8"
+            style={{
+              background: "rgba(255,255,255,0.45)",
+              backdropFilter: "blur(28px) saturate(140%)",
+              WebkitBackdropFilter: "blur(28px) saturate(140%)",
+              boxShadow:
+                "0 20px 60px -20px rgba(31,38,135,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
+            }}
+          >
+            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
 
             <div className="relative flex h-full flex-col justify-between gap-8">
               <div>
