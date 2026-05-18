@@ -148,7 +148,7 @@ function ProductPage() {
             )}
             <span className="text-base font-semibold text-slate-900">Tk {plan ? parsePrice(plan.price) : 0}.00 BDT</span>
             {hasDiscount && (
-              <span className="bg-emerald-600 text-white text-[11px] font-bold px-2 py-0.5 rounded">Sale</span>
+              <span className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white text-[11px] font-bold px-2 py-0.5 rounded shadow-[0_2px_8px_-2px_rgba(20,184,166,0.5)]">Sale</span>
             )}
           </div>
 
@@ -156,7 +156,7 @@ function ProductPage() {
           <div className="mt-2 flex items-center gap-2 text-sm">
             <div className="flex">
               {[1,2,3,4,5].map((i) => (
-                <Star key={i} className="w-4 h-4 fill-red-500 text-red-500" />
+                <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
               ))}
             </div>
             <span className="text-slate-500">12 reviews</span>
@@ -225,7 +225,7 @@ function ProductPage() {
           <div className="mt-6 max-w-2xl">
             <button
               onClick={() => setDescOpen((v) => !v)}
-              className="w-full flex items-center justify-between gap-2 px-4 h-11 rounded-xl backdrop-blur-xl bg-gradient-to-r from-white/50 to-teal-50/40 border border-white/70 text-sm font-medium text-slate-900 hover:from-white/70 hover:to-teal-50/60 hover:border-teal-300/70 shadow-[0_6px_24px_-8px_rgba(20,184,166,0.3)] transition-all"
+              className="w-full flex items-center justify-between gap-2 px-4 h-11 rounded-xl backdrop-blur-xl bg-gradient-to-br from-white/60 via-white/40 to-teal-50/50 border border-white/60 text-sm font-medium text-slate-900 hover:from-white/75 hover:via-white/55 hover:to-teal-50/65 hover:border-teal-300/60 shadow-[0_6px_24px_-10px_rgba(20,184,166,0.3)] transition-all"
             >
               <span className="inline-flex items-center gap-2">
                 <span className="w-4 h-4 rounded-sm border border-teal-400/60 bg-teal-500/20 inline-block" /> Product Description
