@@ -142,6 +142,25 @@ export function SiteHeader() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
+  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!user) { setDisplayName(null); setIsAdmin(false); return; }
+    let cancelled = false;
+    (async () => {
+      const [p, r] = await Promise.all([
+        supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle(),
+        supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle(),
+      ]);
+      if (cancelled) return;
+      setDisplayName((p.data as { display_name?: string | null } | null)?.display_name || null);
+      setIsAdmin(!!r.data);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  const friendlyName = displayName || user?.email?.split("@")[0] || "Member";
 
   const handleLogout = async () => {
     await signOut();
