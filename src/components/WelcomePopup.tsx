@@ -1,6 +1,56 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+
+// Professional multi-color highlighter for marketing copy.
+// Detects important keywords (Bangla + English) and wraps each in a branded gradient span.
+const HIGHLIGHTS: Array<{ pattern: RegExp; className: string }> = [
+  // Trust / quality words — violet
+  {
+    pattern: /(বিশ্বস্ত|ভেরিফাইড|নিরাপদ|অরিজিনাল|গ্যারান্টি|Verified|Trusted|Premium)/g,
+    className: "font-bold bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent",
+  },
+  // Product categories — indigo/blue
+  {
+    pattern: /(ডিজিটাল মার্কেটপ্লেস|মার্কেটপ্লেস|সাবস্ক্রিপশন|সফটওয়্যার|লাইসেন্স|AI টুলস|AI Tools|Streaming|Marketplace)/g,
+    className: "font-bold bg-gradient-to-r from-indigo-600 to-sky-500 bg-clip-text text-transparent",
+  },
+  // Support / time — emerald
+  {
+    pattern: /(24\/7|২৪\/৭|লাইভ সাপোর্ট|Live Support|সাপোর্ট)/g,
+    className: "font-bold bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent",
+  },
+  // Action / urgency — rose/orange
+  {
+    pattern: /(এক ক্লিকেই|এক ক্লিকে|ইনস্ট্যান্ট|Instant|মুহূর্তেই|দ্রুত|ডিজিটাল প্রয়োজন|প্রয়োজন)/g,
+    className: "font-bold bg-gradient-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent",
+  },
+];
+
+function colorizeMessage(text: string): ReactNode[] {
+  // Combine all patterns into one master regex so split preserves match positions correctly.
+  const combined = new RegExp(
+    "(" + HIGHLIGHTS.map((h) => h.pattern.source).join("|") + ")",
+    "g",
+  );
+  const parts = text.split(combined).filter((p) => p !== undefined);
+  const out: ReactNode[] = [];
+  parts.forEach((part, i) => {
+    if (!part) return;
+    const hit = HIGHLIGHTS.find((h) => new RegExp("^(?:" + h.pattern.source + ")$").test(part));
+    if (hit) {
+      out.push(
+        <span key={i} className={hit.className}>
+          {part}
+        </span>,
+      );
+    } else {
+      out.push(<span key={i}>{part}</span>);
+    }
+  });
+  return out;
+}
+
 
 type PopupData = {
   enabled?: boolean;
@@ -102,7 +152,9 @@ export function WelcomePopup() {
               <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">{data.title}</h2>
             )}
             {data.message && (
-              <p className="mt-2 text-sm text-slate-600 whitespace-pre-line">{data.message}</p>
+              <p className="mt-2 text-[15px] leading-relaxed text-slate-700 whitespace-pre-line">
+                {colorizeMessage(data.message)}
+              </p>
             )}
             {data.cta_text && data.cta_link && (
               <a
