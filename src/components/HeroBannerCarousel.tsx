@@ -163,6 +163,7 @@ export function HeroBannerCarousel() {
           if (p.slug && p.image_url) map[p.slug] = p.image_url;
         }
         setProductMap(map);
+        setProductsLoaded(true);
       });
     return () => { mounted = false; };
   }, []);
