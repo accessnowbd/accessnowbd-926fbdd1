@@ -403,7 +403,7 @@ export function HeroBannerCarousel() {
                   fontSize: "clamp(28px, 4.4vw, 56px)",
                   lineHeight: 1.04,
                   letterSpacing: "-0.02em",
-                  textShadow: `0 6px 30px ${hexAlpha("#000", 0.35)}`,
+                  textShadow: `0 1px 2px ${hexAlpha("#000", 0.18)}, 0 0 40px ${hexAlpha(glow, 0.18)}`,
                 }}
               >
                 {current.data.title}
