@@ -51,6 +51,38 @@ const BANNER_PALETTES = {
 
 const PALETTE_KEYS = Object.keys(BANNER_PALETTES) as BannerPaletteKey[];
 
+// Brand auto-detection — match keywords in banner title to a brand palette + product slug.
+// Each brand has its own real signature color so the background takes on the product's identity.
+type BrandDef = { keywords: string[]; slug?: string; bg: string; accent: string; glow: string };
+const BRANDS: BrandDef[] = [
+  { keywords: ["netflix"],            slug: "netflix-premium",      bg: "#1a0408", accent: "#e50914", glow: "#ff4d6a" },
+  { keywords: ["spotify"],            slug: "spotify-premium",      bg: "#03160c", accent: "#1ed760", glow: "#86efac" },
+  { keywords: ["youtube"],            slug: "youtube-premium",      bg: "#1a0606", accent: "#ff0033", glow: "#ff7a90" },
+  { keywords: ["prime video", "amazon"], slug: "amazon-prime-video", bg: "#03152a", accent: "#00a8e1", glow: "#7dd3fc" },
+  { keywords: ["canva"],              slug: "canva-pro",            bg: "#0a0a3a", accent: "#7c5cff", glow: "#22d3ee" },
+  { keywords: ["chatgpt", "openai"],  slug: "chatgpt-plus",         bg: "#04201a", accent: "#10a37f", glow: "#5eead4" },
+  { keywords: ["perplexity"],         slug: "perplexity-pro",       bg: "#021820", accent: "#20b8cd", glow: "#67e8f9" },
+  { keywords: ["adobe", "creative cloud"], slug: "adobe-creative-cloud", bg: "#1a0303", accent: "#fa0f00", glow: "#ff6b6b" },
+  { keywords: ["grammarly"],          slug: "grammarly-premium",    bg: "#04241c", accent: "#15c39a", glow: "#86efac" },
+  { keywords: ["quillbot"],           slug: "quillbot-premium",     bg: "#04201c", accent: "#11a683", glow: "#5eead4" },
+  { keywords: ["capcut"],             slug: "capcut-pro",           bg: "#0a0118", accent: "#ff3b5c", glow: "#a78bfa" },
+  { keywords: ["coursera"],           slug: "coursera-plus",        bg: "#020e2a", accent: "#0056d3", glow: "#60a5fa" },
+  { keywords: ["nordvpn", "nord"],    slug: "nordvpn",              bg: "#020a24", accent: "#4687ff", glow: "#93c5fd" },
+  { keywords: ["surfshark"],          slug: "surfshark-vpn",        bg: "#020a24", accent: "#1ee696", glow: "#86efac" },
+  { keywords: ["expressvpn", "express"], slug: "expressvpn",        bg: "#1a0408", accent: "#da3940", glow: "#ff8080" },
+  { keywords: ["windows 11", "windows 10", "windows"], slug: "windows-11-pro", bg: "#03102a", accent: "#0078d4", glow: "#7dd3fc" },
+  { keywords: ["office 365", "office", "microsoft"], slug: "office-365", bg: "#1a0808", accent: "#d83b01", glow: "#fb923c" },
+  { keywords: ["apple", "itunes", "app store"], slug: "itunes-giftcard", bg: "#0a0a0a", accent: "#a3a3a3", glow: "#e5e5e5" },
+  { keywords: ["eid", "ঈদ"],                                          bg: "#1b0633", accent: "#f43f95", glow: "#fbbf24" },
+];
+
+function detectBrand(title?: string): BrandDef | null {
+  if (!title) return null;
+  const t = title.toLowerCase();
+  for (const b of BRANDS) if (b.keywords.some((k) => t.includes(k))) return b;
+  return null;
+}
+
 const FALLBACK: BannerRow[] = [
   {
     id: "fallback-netflix", is_active: true, sort_order: 0,
@@ -104,6 +136,7 @@ const FALLBACK: BannerRow[] = [
 
 export function HeroBannerCarousel() {
   const [rows, setRows] = useState<BannerRow[]>([]);
+  const [productMap, setProductMap] = useState<Record<string, string>>({});
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -117,6 +150,18 @@ export function HeroBannerCarousel() {
       .then(({ data }) => {
         if (!mounted) return;
         setRows((data ?? []) as BannerRow[]);
+      });
+    supabase
+      .from("products")
+      .select("slug, image_url")
+      .eq("is_active", true)
+      .then(({ data }) => {
+        if (!mounted) return;
+        const map: Record<string, string> = {};
+        for (const p of (data ?? []) as { slug: string; image_url: string }[]) {
+          if (p.slug && p.image_url) map[p.slug] = p.image_url;
+        }
+        setProductMap(map);
       });
     return () => { mounted = false; };
   }, []);
@@ -132,18 +177,25 @@ export function HeroBannerCarousel() {
     return () => window.clearInterval(id);
   }, [banners.length]);
 
+  // Auto-detect brand from banner title — drives both colors and product image
+  const brand = useMemo(() => detectBrand(current.data.title), [current.data.title]);
   const fallbackPalette = BANNER_PALETTES[PALETTE_KEYS[active % PALETTE_KEYS.length]];
   const selectedPalette = current.data.color_preset
     ? BANNER_PALETTES[current.data.color_preset] ?? fallbackPalette
     : fallbackPalette;
 
-  const bg = current.data.bg_color || selectedPalette.bg;
-  const accent = current.data.accent_color || selectedPalette.accent;
-  const glow = current.data.glow_color || selectedPalette.glow;
+  // Priority: explicit custom color > detected brand > preset > fallback
+  const bg = current.data.bg_color || brand?.bg || selectedPalette.bg;
+  const accent = current.data.accent_color || brand?.accent || selectedPalette.accent;
+  const glow = current.data.glow_color || brand?.glow || selectedPalette.glow;
   const style: BgStyle = current.data.bg_style || "spotlight";
   const intensity: OverlayIntensity = current.data.overlay_intensity || "medium";
 
+  // Resolve image: explicit URL > product's image by brand slug
+  const resolvedImage = current.data.image_url || (brand?.slug ? productMap[brand.slug] : undefined);
+
   const intensityMul = intensity === "low" ? 0.65 : intensity === "high" ? 1.35 : 1;
+
 
   // Cinematic layered background — multiple radial glows + linear depth
   const background = useMemo(() => {
@@ -321,13 +373,16 @@ export function HeroBannerCarousel() {
                     className="pointer-events-none absolute inset-x-0 top-0 h-1/3"
                     style={{ background: `linear-gradient(180deg, ${hexAlpha("#ffffff", 0.12)}, transparent)` }}
                   />
-                  {current.data.image_url ? (
-                    <img
-                      src={current.data.image_url}
-                      alt={current.data.title ?? "banner"}
-                      loading="eager"
-                      className="h-full w-full object-cover"
-                    />
+                  {resolvedImage ? (
+                    <div className="relative flex h-full w-full items-center justify-center p-4 md:p-6">
+                      <img
+                        src={resolvedImage}
+                        alt={current.data.title ?? "banner"}
+                        loading="eager"
+                        className="max-h-full max-w-full object-contain drop-shadow-2xl"
+                        style={{ filter: `drop-shadow(0 18px 40px ${hexAlpha(accent, 0.45)})` }}
+                      />
+                    </div>
                   ) : (
                     <div className="grid h-full w-full place-items-center px-10 text-center">
                       <div
