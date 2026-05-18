@@ -129,16 +129,16 @@ function ProductPage() {
 
       {/* Hero */}
       <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-6 grid md:grid-cols-2 gap-8 md:gap-12">
-        <div className="relative rounded-2xl backdrop-blur-xl bg-white/40 border border-white/60 p-3 shadow-[0_10px_40px_-12px_rgba(20,184,166,0.3)]">
+        <GlassCard tint="teal" blur="lg" glow="md" padding="sm" rounded="2xl" className="relative">
           <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-xl overflow-hidden" />
           {product.badge && (
             <span className={`absolute top-6 left-6 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>
               {product.badge}
             </span>
           )}
-        </div>
+        </GlassCard>
 
-        <div className="relative rounded-2xl backdrop-blur-xl bg-white/40 border border-white/60 p-6 shadow-[0_10px_40px_-12px_rgba(20,184,166,0.3)]">
+        <GlassCard tint="teal" blur="lg" glow="md" padding="lg" rounded="2xl">
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900">{product.name}</h1>
 
           {/* Price */}
