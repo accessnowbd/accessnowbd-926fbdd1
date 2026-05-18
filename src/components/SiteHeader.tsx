@@ -323,7 +323,7 @@ export function SiteHeader() {
 
                 {user ? (
                   <Link
-                    to="/dashboard"
+                    to={isAdmin ? "/admin" : "/dashboard"}
                     className="inline-flex items-center gap-1.5 sm:gap-2 h-10 sm:h-11 px-3 sm:px-0 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition whitespace-nowrap"
                     style={{
                       paddingLeft: "clamp(10px, 1vw, 18px)",
@@ -331,8 +331,8 @@ export function SiteHeader() {
                       fontSize: "clamp(11.5px, 0.9vw, 14px)",
                     }}
                   >
-                    <UserCircle2 className="w-4 h-4" />
-                    <span className="hidden sm:inline max-w-[120px] truncate">Dashboard</span>
+                    {isAdmin ? <ShieldCheck className="w-4 h-4" /> : <UserCircle2 className="w-4 h-4" />}
+                    <span className="hidden sm:inline max-w-[120px] truncate">{isAdmin ? "Admin" : "Dashboard"}</span>
                   </Link>
                 ) : (
                   <Link
