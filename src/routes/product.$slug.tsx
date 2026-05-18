@@ -110,7 +110,7 @@ function ProductPage() {
 
   const hasDiscount = !!plan?.original && parsePrice(plan.original) > parsePrice(plan.price);
 
-  const faqs = buildFaqs(product);
+  const faqs = buildFaqs(product.name);
 
   return (
     <div key={product.slug} className="min-h-screen bg-white text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both]">
@@ -329,57 +329,27 @@ function ProductPage() {
   );
 }
 
-function buildFaqs(product: {
-  name: string;
-  category?: string;
-  delivery_time?: string;
-  warranty?: string;
-  plans?: { period: string; price: string }[];
-}): { q: string; a: string }[] {
-  const name = product.name;
-  const category = product.category || "subscription";
-  const delivery = product.delivery_time || "Within 30 mins";
-  const warranty = product.warranty || "Full warranty";
-  const plans = product.plans || [];
-  const durations = plans.map((p) => p.period).filter(Boolean);
-  const minPrice = plans
-    .map((p) => parsePrice(p.price))
-    .filter((n) => n > 0)
-    .sort((a, b) => a - b)[0];
-
-  const durationLine =
-    durations.length > 0
-      ? `Available durations: ${durations.join(", ")}.`
-      : `Multiple duration options are available — pick one above.`;
-  const priceLine =
-    minPrice && minPrice > 0
-      ? `Plans start from ৳${minPrice.toLocaleString()} — the exact price for your selected duration is shown above the duration selector.`
-      : `The current price is shown above the duration selector for the selected plan.`;
-
+function buildFaqs(name: string): { q: string; a: string }[] {
   return [
     {
       q: `Can I use ${name} in Bangladesh?`,
-      a: `Yes — ${name} works fully in Bangladesh through AccessNow BD. We provide verified ${category} access that runs on any device without restrictions.`,
-    },
-    {
-      q: `How fast will I receive my ${name} access?`,
-      a: `Delivery time: ${delivery}. After payment is confirmed, your ${name} login or activation details are sent to your email and WhatsApp automatically.`,
-    },
-    {
-      q: `What warranty do I get with ${name}?`,
-      a: `Every ${name} order from AccessNow BD includes ${warranty}. If anything stops working during your plan period, contact support and we'll replace or fix it free of charge.`,
+      a: `Yes — ${name} works fully in Bangladesh through AccessNow BD. We provide verified access that runs on any device without restrictions.`,
     },
     {
       q: `How do I subscribe to ${name} via AccessNow BD?`,
-      a: `Choose your duration above, add to cart and complete payment with bKash, Nagad, Rocket, or card. ${durationLine}`,
+      a: `Choose your duration above, add to cart and complete payment with bKash, Nagad, Rocket, or card. Your access details arrive on email & WhatsApp within minutes.`,
     },
     {
       q: `How much does ${name} cost in Bangladesh via AccessNow BD?`,
-      a: priceLine,
+      a: `Pricing depends on the plan duration you choose. The current price is shown above the duration selector for the selected plan.`,
+    },
+    {
+      q: `How to buy an ${name} subscription plan via AccessNow BD?`,
+      a: `Select your preferred duration, set quantity, click "Buy it now", and complete checkout. Your subscription is delivered instantly after payment.`,
     },
     {
       q: `How do I renew my ${name} subscription with AccessNow BD?`,
-      a: `Simply place a new order for ${name} when your current plan is about to expire. We'll keep your existing access active where possible, and your new ${delivery.toLowerCase()} delivery applies to renewals too.`,
+      a: `Simply place a new order for ${name} when your current plan is about to expire. We'll keep your existing access active where possible.`,
     },
   ];
 }
