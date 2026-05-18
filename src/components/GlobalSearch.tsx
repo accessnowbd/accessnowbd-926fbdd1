@@ -176,9 +176,9 @@ export function GlobalSearch({
     if (item.kind === "product" && item.product) {
       navigate({ to: "/product/$slug", params: { slug: item.product.slug } });
     } else if (item.kind === "category") {
-      navigate({ to: "/products" });
+      navigate({ to: "/products", search: { q: item.value } as never });
     } else {
-      navigate({ to: "/products" });
+      navigate({ to: "/products", search: { q: needle || item.value } as never });
     }
   };
 
@@ -196,7 +196,7 @@ export function GlobalSearch({
       } else if (needle) {
         saveRecent(needle);
         onOpenChange(false);
-        navigate({ to: "/products" });
+        navigate({ to: "/products", search: { q: needle } as never });
       }
     }
   };
