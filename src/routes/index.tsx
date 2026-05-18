@@ -357,7 +357,7 @@ function HeroExperience() {
             <Link to="/products" className="btn-aurora group relative overflow-hidden inline-flex h-[50px] items-center justify-center gap-2 rounded-full px-7 text-sm font-extrabold">
               <span className="relative z-10">সব প্রোডাক্ট দেখুন</span>
               <ArrowRight className="relative z-10 h-4 w-4 transition group-hover:translate-x-1" />
-              <span className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-white/30 blur-md animate-shine" />
+              
             </Link>
             <Link to="/contact" className="glass inline-flex h-[50px] items-center justify-center gap-2 rounded-full px-7 text-sm font-extrabold text-white hover:shadow-[var(--shadow-glow-aqua)] transition">
               <Headphones className="h-4 w-4 text-aqua" /> কাস্টম অর্ডার
