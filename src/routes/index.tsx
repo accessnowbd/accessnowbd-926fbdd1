@@ -286,18 +286,60 @@ function HeroExperience() {
   const spotify = HERO_BRANDS[2];
 
   return (
-    <section className="relative px-4 md:px-10 pt-6 pb-12 md:pt-10 md:pb-16">
-      <div className="relative mx-auto max-w-[1280px] overflow-hidden rounded-[40px] border border-slate-200/70 bg-white shadow-[0_30px_80px_-30px_rgba(79,70,229,0.25)]">
-        {/* Soft ambient color glows */}
-        <div aria-hidden className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-violet-200/40 blur-3xl" />
-        <div aria-hidden className="pointer-events-none absolute top-1/2 -left-24 h-72 w-72 rounded-full bg-cyan-200/30 blur-3xl" />
-        <div aria-hidden className="pointer-events-none absolute -bottom-24 right-1/4 h-80 w-80 rounded-full bg-pink-100/50 blur-3xl" />
+    <section className="relative overflow-hidden px-4 md:px-10 pt-8 pb-14 md:pt-12 md:pb-20">
+      {/* Soft blue gradient base — like the reference */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            "linear-gradient(135deg,#eaf2ff 0%,#f4f7ff 40%,#eef4ff 70%,#e6edff 100%)",
+        }}
+      />
 
-        <div className="relative px-7 pt-12 pb-10 md:px-12 md:pt-16 md:pb-12 lg:px-16 lg:pt-20">
+      <div className="relative mx-auto max-w-[1280px]">
+        {/* Vivid color blobs behind the glass — pink top-left, green bottom-right */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-16 left-8 h-72 w-72 rounded-full blur-[2px] opacity-90"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 50%,#ff2d87 0%,#ff2d87 35%,rgba(255,45,135,0) 70%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-20 right-16 h-72 w-72 rounded-full blur-[2px] opacity-90"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 50%,#22c55e 0%,#22c55e 35%,rgba(34,197,94,0) 70%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute top-1/3 right-1/3 h-56 w-56 rounded-full blur-[2px] opacity-70"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 50%,#7c3aed 0%,rgba(124,58,237,0) 70%)",
+          }}
+        />
+
+        {/* Frosted glass panel */}
+        <div
+          className="relative overflow-hidden rounded-[32px] border border-white/60 px-7 pt-12 pb-10 md:px-12 md:pt-16 md:pb-14 lg:px-16 lg:pt-20 shadow-[0_30px_80px_-30px_rgba(79,70,229,0.25),inset_0_1px_0_rgba(255,255,255,0.9)]"
+          style={{
+            background: "rgba(255,255,255,0.45)",
+            backdropFilter: "blur(28px) saturate(140%)",
+            WebkitBackdropFilter: "blur(28px) saturate(140%)",
+          }}
+        >
+          {/* subtle inner highlight */}
+          <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             {/* LEFT — Content */}
             <div className="space-y-7">
-              <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50/80 px-4 py-2 backdrop-blur-sm">
+              <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-white/70 bg-white/60 px-4 py-2 backdrop-blur-md shadow-sm">
                 <span className="flex h-2 w-2 animate-pulse rounded-full bg-indigo-600" />
                 <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-700">
                   #1 Premium Marketplace · BD
@@ -323,7 +365,7 @@ function HeroExperience() {
                 </span>
               </h1>
 
-              <p className="max-w-xl text-base md:text-lg leading-relaxed text-slate-600">
+              <p className="max-w-xl text-base md:text-lg leading-relaxed text-slate-700">
                 ভেরিফাইড লাইসেন্স · ১০ মিনিটে ডেলিভারি · ২৪/৭ লাইভ সাপোর্ট। বাংলাদেশের সবচেয়ে বিশ্বস্ত সাবস্ক্রিপশন শপ।
               </p>
 
@@ -338,7 +380,7 @@ function HeroExperience() {
                 </Link>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 rounded-2xl border-2 border-slate-200 bg-white px-7 py-4 text-sm font-bold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-50"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-white/70 bg-white/60 px-7 py-4 text-sm font-bold text-slate-800 backdrop-blur-md transition-all hover:bg-white/80"
                 >
                   <Headphones className="h-4 w-4 text-indigo-600" /> কাস্টম অর্ডার
                 </Link>
@@ -358,53 +400,49 @@ function HeroExperience() {
               </div>
             </div>
 
-            {/* RIGHT — Bento brand showcase (high-transparency glass cards) */}
+            {/* RIGHT — Glass bento brand showcase */}
             <div className="relative grid h-[460px] grid-cols-2 gap-4 md:h-[500px]">
-              {/* Netflix — top-left, self-start */}
-              <div className="self-start rounded-3xl border border-white/60 bg-white/55 p-6 shadow-xl shadow-slate-200/60 backdrop-blur-2xl transition-transform duration-500 hover:scale-[1.03]">
+              {[
+                { brand: netflix, sub: "Premium 4K HDR", className: "self-start" },
+                { brand: chatgpt, sub: "GPT-4 Plus", className: "mt-12" },
+                { brand: spotify, sub: "Family & Individual", className: "" },
+              ].map(({ brand, sub, className }) => (
                 <div
-                  className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
-                  style={{ backgroundColor: netflix.color }}
+                  key={brand.name}
+                  className={`${className} rounded-3xl border border-white/70 p-6 shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2),inset_0_1px_0_rgba(255,255,255,0.8)] transition-transform duration-500 hover:scale-[1.03]`}
+                  style={{
+                    background: "rgba(255,255,255,0.35)",
+                    backdropFilter: "blur(22px) saturate(140%)",
+                    WebkitBackdropFilter: "blur(22px) saturate(140%)",
+                  }}
                 >
-                  <img src={brandLogo(netflix)} alt={netflix.name} loading="lazy" width={24} height={24} className="h-6 w-6 object-contain drop-shadow" />
+                  <div
+                    className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
+                    style={{ backgroundColor: brand.color }}
+                  >
+                    <img src={brandLogo(brand)} alt={brand.name} loading="lazy" width={24} height={24} className="h-6 w-6 object-contain drop-shadow" />
+                  </div>
+                  <h3 className="font-bold text-slate-900">{brand.name}</h3>
+                  <p className="text-xs text-slate-600">{sub}</p>
                 </div>
-                <h3 className="font-bold text-slate-900">{netflix.name}</h3>
-                <p className="text-xs text-slate-500">Premium 4K HDR</p>
-              </div>
-
-              {/* ChatGPT — top-right, offset down */}
-              <div className="mt-12 rounded-3xl border border-white/60 bg-white/55 p-6 shadow-xl shadow-slate-200/60 backdrop-blur-2xl transition-transform duration-500 hover:scale-[1.03]">
-                <div
-                  className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
-                  style={{ backgroundColor: chatgpt.color }}
-                >
-                  <img src={brandLogo(chatgpt)} alt={chatgpt.name} loading="lazy" width={24} height={24} className="h-6 w-6 object-contain drop-shadow" />
-                </div>
-                <h3 className="font-bold text-slate-900">{chatgpt.name}</h3>
-                <p className="text-xs text-slate-500">GPT-4 Plus</p>
-              </div>
-
-              {/* Spotify — bottom-left */}
-              <div className="rounded-3xl border border-white/60 bg-white/55 p-6 shadow-xl shadow-slate-200/60 backdrop-blur-2xl transition-transform duration-500 hover:scale-[1.03]">
-                <div
-                  className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
-                  style={{ backgroundColor: spotify.color }}
-                >
-                  <img src={brandLogo(spotify)} alt={spotify.name} loading="lazy" width={24} height={24} className="h-6 w-6 object-contain drop-shadow" />
-                </div>
-                <h3 className="font-bold text-slate-900">{spotify.name}</h3>
-                <p className="text-xs text-slate-500">Family &amp; Individual</p>
-              </div>
+              ))}
 
               {/* Offer card — bottom-right with gradient border */}
               <div className="-mt-8 self-end overflow-hidden rounded-3xl p-[2px]" style={{ backgroundImage: "linear-gradient(135deg,#7C3AED,#4F46E5,#EC4899)" }}>
-                <div className="group h-full rounded-[calc(1.5rem-2px)] bg-white/85 p-6 backdrop-blur-2xl">
+                <div
+                  className="group h-full rounded-[calc(1.5rem-2px)] p-6"
+                  style={{
+                    background: "rgba(255,255,255,0.55)",
+                    backdropFilter: "blur(22px) saturate(140%)",
+                    WebkitBackdropFilter: "blur(22px) saturate(140%)",
+                  }}
+                >
                   <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-indigo-600">Limited Offer</p>
                   <h4 className="text-2xl font-extrabold text-slate-900" style={{ fontFamily: "var(--font-display)" }}>
                     ২০% ছাড়
                   </h4>
-                  <div className="mt-2 inline-block rounded-lg bg-slate-100 px-3 py-1">
-                    <p className="font-mono text-[10px] font-bold text-slate-600">CODE: WELCOME20</p>
+                  <div className="mt-2 inline-block rounded-lg bg-white/70 px-3 py-1 border border-white/80">
+                    <p className="font-mono text-[10px] font-bold text-slate-700">CODE: WELCOME20</p>
                   </div>
                   <Link to="/products" className="mt-4 flex items-center gap-1 text-xs font-bold text-slate-900 transition-all group-hover:gap-2">
                     এখুনি কিনুন
@@ -416,7 +454,7 @@ function HeroExperience() {
           </div>
 
           {/* Trust badge strip */}
-          <div className="mt-14 grid grid-cols-2 gap-6 border-t border-slate-100 pt-8 md:grid-cols-4">
+          <div className="mt-14 grid grid-cols-2 gap-6 border-t border-white/60 pt-8 md:grid-cols-4">
             {[
               { icon: ShieldCheck, label: "১০০% ভেরিফাইড", bg: "bg-indigo-50", fg: "text-indigo-600" },
               { icon: CheckCircle2, label: "ফুল ওয়ারেন্টি", bg: "bg-cyan-50", fg: "text-cyan-600" },
@@ -427,7 +465,7 @@ function HeroExperience() {
                 <div className={`grid h-10 w-10 place-items-center rounded-full ${bg} ${fg}`}>
                   <Icon className="h-5 w-5" />
                 </div>
-                <span className="text-sm font-bold text-slate-700">{label}</span>
+                <span className="text-sm font-bold text-slate-800">{label}</span>
               </div>
             ))}
           </div>
