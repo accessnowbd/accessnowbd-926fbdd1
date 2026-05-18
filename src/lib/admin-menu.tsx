@@ -37,7 +37,6 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
     items: [
       { to: "/admin", label: "Dashboard", icon: ic(LayoutDashboard), grad: "from-violet-500 to-indigo-500", exact: true },
       { to: "/admin/products", label: "All Products", icon: ic(Package), grad: "from-violet-500 to-fuchsia-500" },
-      { to: "/admin/bulk-update", label: "Bulk Update", icon: ic(ListChecks), grad: "from-amber-500 to-orange-500" },
       { to: "/admin/add-product", label: "Add New Product", icon: ic(PlusSquare), grad: "from-emerald-500 to-teal-500" },
       { to: "/admin/categories", label: "Categories", icon: ic(FolderTree), grad: "from-slate-700 to-slate-900" },
       { to: "/admin/banner-slider", label: "Banner Slider", icon: ic(ImageIcon), grad: "from-fuchsia-500 to-pink-500" },

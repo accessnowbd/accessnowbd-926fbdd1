@@ -8,11 +8,7 @@ import { useShopConfig } from "@/hooks/useShopConfig";
 import { waAskUrl } from "@/lib/whatsapp";
 import type { Product } from "@/data/products";
 
-const parsePrice = (p: unknown) => {
-  if (typeof p === "number") return Number.isFinite(p) ? p : 0;
-  if (typeof p !== "string") return 0;
-  return Number(p.replace(/[^\d]/g, "")) || 0;
-};
+const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
 function ratingFor(slug: string): { rating: string; reviews: number } {
   let h = 0;
