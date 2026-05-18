@@ -9,7 +9,11 @@ import { useShopConfig } from "@/hooks/useShopConfig";
 import { getProduct } from "@/lib/products.functions";
 import { ProductMarkdown } from "@/components/ProductMarkdown";
 
-const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
+const parsePrice = (p: unknown) => {
+  if (typeof p === "number") return Number.isFinite(p) ? p : 0;
+  if (typeof p !== "string") return 0;
+  return Number(p.replace(/[^\d]/g, "")) || 0;
+};
 
 export const Route = createFileRoute("/product/$slug")({
   loader: async ({ params, context }) => {
