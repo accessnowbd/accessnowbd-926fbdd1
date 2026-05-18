@@ -161,19 +161,81 @@ serve(async (req) => {
     if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
 
     // ===== TEXT GENERATION =====
+    // STRUCTURED DESCRIPTION TEMPLATE — every product description must follow this
+    // sectioned layout so the storefront renders a consistent, premium product page.
+    const DESCRIPTION_TEMPLATE = `
+The "description" field MUST be markdown that follows EXACTLY this section order and headings (in clean English, with Bangla "Note" line at the end). Tailor every line to the specific product, brand and category — never leave placeholder text.
+
+## {Product Name} – {one-line value proposition}
+
+{2-4 sentence intro paragraph: what the product is, who it is for in Bangladesh, and the main benefit of buying from AccessNow BD. Mention the brand naturally.}
+
+## Choose Your {Brand} Plan
+Different plans are available depending on how you want to use {Product}.
+
+### 🟪 {Plan 1 name} – {duration}
+- {benefit / feature}
+- {benefit / feature}
+- {benefit / feature}
+- {benefit / feature}
+
+### 🟦 {Plan 2 name} – {duration}
+- {benefit / feature}
+- {benefit / feature}
+- {benefit / feature}
+- {benefit / feature}
+
+### 🟩 {Plan 3 name} – {duration}
+- {benefit / feature}
+- {benefit / feature}
+- {benefit / feature}
+
+(Only include the plan blocks that genuinely exist for this product — 1 to 4 plan blocks max. Always use 🟪 🟦 🟩 🟧 emoji in that order.)
+
+## Powerful {Brand} Features
+- {feature}
+- {feature}
+- {feature}
+- {feature}
+- {feature}
+- {feature}
+
+## Perfect For
+- **Content Creators** – {one-line reason}
+- **Marketers** – {one-line reason}
+- **Developers** – {one-line reason}
+- **Students & Researchers** – {one-line reason}
+- **Business Professionals** – {one-line reason}
+
+## Why Buy From AccessNow BD
+- Trusted digital subscription provider in Bangladesh
+- Secure delivery with verified access
+- Ready-to-use accounts
+- Password change supported (where applicable)
+- Fast customer support
+- Affordable pricing
+
+## Delivery Information
+- Delivery time: within 1–2 hours during office hours
+- Secure account delivery
+- Simple activation process
+
+**Note:** Some {Brand} features may be region-dependent and availability in Bangladesh may vary.
+`;
+
     const systems: Record<Exclude<Mode, "image">, string> = {
       short:
         "You write concise, persuasive Bangladeshi e-commerce product copy in clean English. Output STRICT JSON only.",
       rich:
-        "You write rich, SEO-optimised Bangladeshi e-commerce product descriptions in clean English with light markdown. Output STRICT JSON only.",
+        "You write rich, SEO-optimised Bangladeshi e-commerce product descriptions in clean English markdown for AccessNow BD. You ALWAYS follow the provided section template exactly. Output STRICT JSON only.",
       all:
-        "You are an expert Bangladeshi e-commerce copywriter. Write everything needed for a digital product listing in clean English with light markdown where appropriate. Output STRICT JSON only.",
+        "You are an expert Bangladeshi e-commerce copywriter for AccessNow BD. You ALWAYS write the long description following the provided sectioned markdown template exactly. Output STRICT JSON only.",
     };
 
     const prompts: Record<Exclude<Mode, "image">, string> = {
       short: `Generate copy for this digital product. Keep tagline under 70 chars and short_description 2-3 short sentences. Return JSON: { "tagline": string, "short_description": string }.\n\nProduct:\n${JSON.stringify(product, null, 2)}`,
-      rich: `Generate rich SEO copy. Return JSON: { "description": string (300-500 words, light markdown with bullet points), "seo_title": string (max 60 chars), "seo_description": string (max 155 chars), "tags": string[] (5-8 keywords) }.\n\nProduct:\n${JSON.stringify(product, null, 2)}`,
-      all: `Generate the full listing for this product. Return JSON with: tagline (under 70 chars), short_description (2-3 sentences), description (300-500 words markdown with bullets), features (array of 5-8 short bullet strings), seo_title (max 60 chars), seo_description (max 155 chars), tags (array of 5-8 keywords).\n\nProduct:\n${JSON.stringify(product, null, 2)}`,
+      rich: `Generate rich SEO copy. Return JSON: { "description": string, "seo_title": string (max 60 chars), "seo_description": string (max 155 chars), "tags": string[] (5-8 keywords) }.\n\nThe "description" MUST follow this template exactly:\n${DESCRIPTION_TEMPLATE}\n\nProduct:\n${JSON.stringify(product, null, 2)}`,
+      all: `Generate the full listing for this product. Return JSON with: tagline (under 70 chars), short_description (2-3 sentences), description (markdown following the template below EXACTLY), features (array of 5-8 short bullet strings), seo_title (max 60 chars), seo_description (max 155 chars), tags (array of 5-8 keywords).\n\nDescription template (MANDATORY):\n${DESCRIPTION_TEMPLATE}\n\nProduct:\n${JSON.stringify(product, null, 2)}`,
     };
 
     const tools: Record<Exclude<Mode, "image">, unknown> = {
