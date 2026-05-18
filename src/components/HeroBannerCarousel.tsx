@@ -194,6 +194,12 @@ export function HeroBannerCarousel() {
   // Resolve image: explicit URL > product's image by brand slug
   const resolvedImage = current.data.image_url || (brand?.slug ? productMap[brand.slug] : undefined);
 
+  // Eid / Qurbani detection — adds festive overlay (crescent, mosque, lanterns, sparkles)
+  const isEid = useMemo(() => {
+    const t = (current.data.title || "") + " " + (current.data.category || "") + " " + (current.data.subtitle || "");
+    return /eid|ঈদ|qurbani|কোরবানি/i.test(t);
+  }, [current.data.title, current.data.category, current.data.subtitle]);
+
   const intensityMul = intensity === "low" ? 0.65 : intensity === "high" ? 1.35 : 1;
 
 
