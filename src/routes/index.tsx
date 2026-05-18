@@ -387,7 +387,7 @@ function HeroExperience() {
             <div className="relative grid h-[340px] grid-cols-2 gap-3 md:h-[380px]">
               {[
                 { brand: netflix, sub: "Premium 4K HDR", className: "self-start" },
-                { brand: chatgpt, sub: "GPT-4 Plus", className: "mt-12" },
+                { brand: chatgpt, sub: "GPT-4 Plus", className: "mt-8" },
                 { brand: spotify, sub: "Family & Individual", className: "" },
               ].map(({ brand, sub, className }) => (
                 <div
