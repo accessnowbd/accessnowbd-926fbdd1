@@ -110,12 +110,12 @@ function ProductPage() {
     <div key={product.slug} className="relative min-h-screen text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both] overflow-hidden bg-gradient-to-br from-teal-50 via-white to-emerald-50">
       <style>{`@keyframes product-in {0%{opacity:0;transform:translateY(14px);filter:blur(4px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}`}</style>
 
-      {/* Ambient glow orbs */}
-      <div className="pointer-events-none absolute -top-32 -left-20 h-[420px] w-[420px] rounded-full bg-teal-300/30 blur-[120px]" />
-      <div className="pointer-events-none absolute top-40 -right-32 h-[480px] w-[480px] rounded-full bg-emerald-300/25 blur-[140px]" />
-      <div className="pointer-events-none absolute bottom-0 left-1/3 h-[380px] w-[380px] rounded-full bg-cyan-200/25 blur-[130px]" />
+      {/* Ambient glow orbs — tamer on mobile for readability */}
+      <div className="pointer-events-none absolute -top-32 -left-20 h-[260px] w-[260px] md:h-[420px] md:w-[420px] rounded-full bg-teal-300/20 md:bg-teal-300/30 blur-[90px] md:blur-[120px]" />
+      <div className="pointer-events-none absolute top-40 -right-32 h-[300px] w-[300px] md:h-[480px] md:w-[480px] rounded-full bg-emerald-300/15 md:bg-emerald-300/25 blur-[100px] md:blur-[140px]" />
+      <div className="pointer-events-none hidden md:block absolute bottom-0 left-1/3 h-[380px] w-[380px] rounded-full bg-cyan-200/25 blur-[130px]" />
 
-      <div className="relative mx-auto max-w-[1200px] px-4 md:px-8 pt-6">
+      <div className="relative mx-auto max-w-[1200px] px-4 md:px-8 pt-4 md:pt-6">
         <nav className="text-sm text-slate-500 flex items-center gap-2">
           <Link to="/" className="hover:text-slate-900 inline-flex items-center gap-1">
             <ArrowLeft className="w-3.5 h-3.5" /> Back
@@ -123,12 +123,12 @@ function ProductPage() {
           <span>/</span>
           <span>{product.category}</span>
           <span>/</span>
-          <span className="text-slate-900 font-medium">{product.name}</span>
+          <span className="text-slate-900 font-medium truncate">{product.name}</span>
         </nav>
       </div>
 
       {/* Hero */}
-      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-6 grid md:grid-cols-2 gap-8 md:gap-12">
+      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-4 md:py-6 grid md:grid-cols-2 gap-5 md:gap-12">
         <GlassCard tint="teal" blur="lg" glow="md" padding="sm" rounded="2xl" className="relative">
           <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-xl overflow-hidden" />
           {product.badge && (
