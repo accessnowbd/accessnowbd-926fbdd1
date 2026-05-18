@@ -309,7 +309,7 @@ function HeroExperience() {
 
         {/* Frosted glass panel */}
         <div
-          className="relative overflow-hidden rounded-[32px] border border-white/60 px-7 pt-12 pb-10 md:px-12 md:pt-16 md:pb-14 lg:px-16 lg:pt-20 shadow-[0_30px_80px_-30px_rgba(79,70,229,0.25),inset_0_1px_0_rgba(255,255,255,0.9)]"
+          className="relative overflow-hidden rounded-[28px] border border-white/60 px-6 pt-8 pb-7 md:px-10 md:pt-10 md:pb-9 lg:px-12 lg:pt-12 shadow-[0_30px_80px_-30px_rgba(79,70,229,0.25),inset_0_1px_0_rgba(255,255,255,0.9)]"
           style={{
             background: "rgba(255,255,255,0.45)",
             backdropFilter: "blur(28px) saturate(140%)",
