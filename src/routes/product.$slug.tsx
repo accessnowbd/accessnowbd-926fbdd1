@@ -1,12 +1,11 @@
 import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
-import { ShoppingCart, Check, Clock, Shield, ArrowLeft, Star, Zap, Headphones, Loader2, MessageCircle } from "lucide-react";
+import { ChevronDown, Minus, Plus, Star, ArrowLeft, Loader2 } from "lucide-react";
 import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { ProductBanner } from "@/components/ProductBanner";
 import { useShopConfig } from "@/hooks/useShopConfig";
-import { waOrderUrl } from "@/lib/whatsapp";
 import { getProduct } from "@/lib/products.functions";
 import { ProductMarkdown } from "@/components/ProductMarkdown";
 
@@ -57,18 +56,33 @@ export const Route = createFileRoute("/product/$slug")({
   ),
 });
 
+const PAYMENT_METHODS = [
+  { label: "Visa", color: "#1A1F71" },
+  { label: "Mastercard", color: "#EB001B" },
+  { label: "Amex", color: "#2E77BB" },
+  { label: "bKash", color: "#E2136E" },
+  { label: "Nagad", color: "#EB1C24" },
+  { label: "Rocket", color: "#8C3494" },
+  { label: "Upay", color: "#E94E1B" },
+  { label: "Tap", color: "#1B998B" },
+  { label: "Cellfin", color: "#F7941D" },
+  { label: "DBBL", color: "#0067A5" },
+  { label: "MyCash", color: "#00A859" },
+];
+
 function ProductPage() {
   const { slug } = Route.useParams();
   const { product, isLoading } = useProduct(slug);
   const { products } = useProducts();
   const navigate = useNavigate();
   const { add } = useCart();
-  const { data: shopConfig } = useShopConfig();
+  useShopConfig();
   const [selected, setSelected] = useState(0);
+  const [qty, setQty] = useState(1);
+  const [descOpen, setDescOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  if (isLoading) {
-    return <ProductSkeleton />;
-  }
+  if (isLoading) return <ProductSkeleton />;
   if (!product) {
     return (
       <div className="min-h-screen grid place-items-center px-4">
@@ -84,283 +98,293 @@ function ProductPage() {
   const safeSelected = Math.min(selected, Math.max(product.plans.length - 1, 0));
   const activeIdx = selected === 0 && popularIdx > 0 ? popularIdx : safeSelected;
   const plan = product.plans[activeIdx];
-  const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
+  const related = products.filter((p) => p.slug !== product.slug).slice(0, 8);
 
   const addToCart = () => {
     if (!plan) return;
-    add({ slug: product.slug, planPeriod: plan.period, qty: 1, price: parsePrice(plan.price), name: product.name, emoji: product.emoji, gradient: product.gradient });
+    for (let i = 0; i < qty; i++) {
+      add({ slug: product.slug, planPeriod: plan.period, qty: 1, price: parsePrice(plan.price), name: product.name, emoji: product.emoji, gradient: product.gradient });
+    }
   };
   const buyNow = () => { addToCart(); navigate({ to: "/checkout" }); };
 
-  return (
-    <div key={product.slug} className="min-h-screen animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both]">
-      <style>{`
-        @keyframes product-in {
-          0%   { opacity: 0; transform: translateY(14px); filter: blur(4px); }
-          60%  { opacity: 1; filter: blur(0); }
-          100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
-      `}</style>
-      {/* Top Nav */}
+  const hasDiscount = !!plan?.original && parsePrice(plan.original) > parsePrice(plan.price);
 
-      {/* Breadcrumb */}
-      <div className="mx-auto max-w-[1440px] px-4 md:px-10 pt-6">
-        <nav className="text-sm text-muted-foreground flex items-center gap-2">
-          <Link to="/" className="hover:text-primary inline-flex items-center gap-1">
+  const faqs = buildFaqs(product.name);
+
+  return (
+    <div key={product.slug} className="min-h-screen bg-white text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both]">
+      <style>{`@keyframes product-in {0%{opacity:0;transform:translateY(14px);filter:blur(4px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}`}</style>
+
+      <div className="mx-auto max-w-[1200px] px-4 md:px-8 pt-6">
+        <nav className="text-sm text-slate-500 flex items-center gap-2">
+          <Link to="/" className="hover:text-slate-900 inline-flex items-center gap-1">
             <ArrowLeft className="w-3.5 h-3.5" /> Back
           </Link>
           <span>/</span>
           <span>{product.category}</span>
           <span>/</span>
-          <span className="text-foreground font-medium">{product.name}</span>
+          <span className="text-slate-900 font-medium">{product.name}</span>
         </nav>
       </div>
 
-      {/* Product Hero */}
-      <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8 grid md:grid-cols-2 gap-10">
-        {/* Image */}
+      {/* Hero */}
+      <section className="mx-auto max-w-[1200px] px-4 md:px-8 py-6 grid md:grid-cols-2 gap-8 md:gap-12">
         <div className="relative">
-          <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-3xl shadow-[var(--shadow-glass-lg)]" />
-          <span className={`absolute top-5 left-5 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>{product.badge ?? "New"}</span>
+          <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-2xl overflow-hidden" />
+          {product.badge && (
+            <span className={`absolute top-4 left-4 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>
+              {product.badge}
+            </span>
+          )}
         </div>
 
-        {/* Info */}
         <div>
-          <span className="inline-block px-3 py-1 rounded-full glass-soft text-primary text-xs font-semibold">{product.category}</span>
-          <h1 className="mt-4 text-aurora" style={{ fontFamily: "var(--font-display)", fontSize: 34, fontWeight: 600, lineHeight: 1.2 }}>
-            {product.name}
-          </h1>
-          <p className="mt-3 text-base text-foreground">{product.tagline}</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">{product.name}</h1>
 
-          <div className="mt-4 flex items-center gap-3 text-sm">
-            <div className="flex items-center gap-1">
-              {[1,2,3,4,5].map((i) => <Star key={i} className="w-4 h-4 fill-[var(--color-gold)] text-[var(--color-gold)]" />)}
+          {/* Price */}
+          <div className="mt-3 flex items-center gap-2 flex-wrap">
+            {hasDiscount && (
+              <span className="text-sm text-slate-400 line-through">Tk {parsePrice(plan!.original!)}.00 BDT</span>
+            )}
+            <span className="text-base font-semibold text-slate-900">Tk {plan ? parsePrice(plan.price) : 0}.00 BDT</span>
+            {hasDiscount && (
+              <span className="bg-emerald-600 text-white text-[11px] font-bold px-2 py-0.5 rounded">Sale</span>
+            )}
+          </div>
+
+          {/* Rating */}
+          <div className="mt-2 flex items-center gap-2 text-sm">
+            <div className="flex">
+              {[1,2,3,4,5].map((i) => (
+                <Star key={i} className="w-4 h-4 fill-red-500 text-red-500" />
+              ))}
             </div>
-            <span className="text-muted-foreground">4.9 · 2,431 sold</span>
+            <span className="text-slate-500">12 reviews</span>
           </div>
 
-          <div className="mt-6 prose prose-sm max-w-none text-foreground prose-headings:font-semibold prose-headings:text-foreground prose-h2:text-lg prose-h2:mt-6 prose-h2:mb-2 prose-h3:text-base prose-h3:mt-4 prose-h3:mb-1 prose-ul:my-2 prose-li:my-0.5 prose-strong:text-foreground prose-p:leading-relaxed">
-            <ProductMarkdown source={product.description} />
-          </div>
+          {/* Duration */}
+          {product.plans.length > 0 && (
+            <div className="mt-5">
+              <div className="text-xs text-slate-500 mb-2">Duration</div>
+              <div className="flex flex-wrap gap-2">
+                {product.plans.map((p, idx) => {
+                  const active = activeIdx === idx;
+                  return (
+                    <button
+                      key={p.period}
+                      onClick={() => setSelected(idx)}
+                      className={`px-4 h-9 rounded-md text-sm font-medium border transition-colors ${
+                        active
+                          ? "bg-slate-900 text-white border-slate-900"
+                          : "bg-white text-slate-900 border-slate-300 hover:border-slate-500"
+                      }`}
+                    >
+                      {p.period}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
-          {/* Plan selector */}
-          <div className="mt-7">
-            <h3 className="text-sm font-semibold mb-3" style={{ fontFamily: "var(--font-heading)" }}>Choose your plan</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {product.plans.map((p, idx) => {
-                const active = activeIdx === idx;
-                return (
-                  <button
-                    key={p.period}
-                    onClick={() => setSelected(idx)}
-                    className={`relative text-left p-4 rounded-xl border-2 transition-all ${
-                      active ? "border-primary glass" : "border-transparent glass-soft hover:border-primary/40"
-                    }`}
-                  >
-                    {p.popular && (
-                      <span className="absolute -top-2 right-3 bg-primary text-primary-foreground text-[10px] font-semibold px-2 py-0.5 rounded-full shadow">POPULAR</span>
-                    )}
-                    <div className="text-xs text-muted-foreground">{p.period}</div>
-                    <div className="mt-1 font-semibold text-lg text-aurora" style={{ fontFamily: "var(--font-heading)" }}>{p.price}</div>
-                    {p.original && <div className="text-xs text-muted-foreground line-through">{p.original}</div>}
-                  </button>
-                );
-              })}
+          {/* Quantity */}
+          <div className="mt-5">
+            <div className="text-xs text-slate-500 mb-2">Quantity</div>
+            <div className="inline-flex items-center border border-slate-300 rounded-md overflow-hidden">
+              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-10 h-10 grid place-items-center hover:bg-slate-50">
+                <Minus className="w-4 h-4" />
+              </button>
+              <input
+                value={qty}
+                onChange={(e) => setQty(Math.max(1, Number(e.target.value.replace(/\D/g, "")) || 1))}
+                className="w-12 h-10 text-center text-sm focus:outline-none"
+              />
+              <button onClick={() => setQty((q) => q + 1)} className="w-10 h-10 grid place-items-center hover:bg-slate-50">
+                <Plus className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
           {/* Buy buttons */}
-          <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={buyNow}
-              className="product-action-button product-buy-button h-[52px] flex-1 rounded-full text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
-            >
-              <ShoppingCart className="w-4 h-4" /> Buy Now — {plan?.price ?? ""}
-            </button>
+          <div className="mt-5 space-y-3 max-w-md">
             <button
               onClick={addToCart}
-              className="product-action-button product-cart-button h-[52px] px-6 rounded-full text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+              className="w-full h-11 rounded-md border border-slate-900 bg-white text-slate-900 text-sm font-semibold hover:bg-slate-50 transition"
             >
-              <ShoppingCart className="w-4 h-4" /> Add to Cart
+              Add to cart
+            </button>
+            <button
+              onClick={buyNow}
+              className="w-full h-11 rounded-md bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition"
+            >
+              Buy it now
             </button>
           </div>
 
-          {/* WhatsApp direct order */}
-          <a
-            href={
-              plan
-                ? waOrderUrl(
-                    [{ name: product.name, planPeriod: plan.period, qty: 1, price: parsePrice(plan.price) }],
-                    { number: shopConfig?.whatsapp_number },
-                  )
-                : "#"
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-            className="product-action-button product-whatsapp-button mt-3 h-[52px] w-full rounded-full text-sm font-bold inline-flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
-          >
-            <MessageCircle className="w-4 h-4" /> Order via WhatsApp — {plan?.period ?? ""}
-          </a>
-
-
-          {/* Trust strip */}
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <div className="flex items-center gap-3 p-3 rounded-xl glass-soft">
-              <Clock className="w-5 h-5 text-primary" />
-              <div>
-                <div className="text-xs text-muted-foreground">Delivery</div>
-                <div className="text-sm font-semibold">{product.deliveryTime}</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 p-3 rounded-xl glass-soft">
-              <Shield className="w-5 h-5 text-primary" />
-              <div>
-                <div className="text-xs text-muted-foreground">Warranty</div>
-                <div className="text-sm font-semibold">{product.warranty}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
-        <h2 className="text-aurora" style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 600 }}>What's included</h2>
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {product.features.map((f) => (
-            <div key={f} className="flex items-start gap-3 p-4 glass rounded-xl">
-              <span className="grid place-items-center w-8 h-8 rounded-full bg-primary text-primary-foreground shrink-0">
-                <Check className="w-4 h-4" />
+          {/* Product Description accordion */}
+          <div className="mt-6 max-w-md">
+            <button
+              onClick={() => setDescOpen((v) => !v)}
+              className="w-full flex items-center justify-between gap-2 px-4 h-11 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-900 hover:bg-slate-50"
+            >
+              <span className="inline-flex items-center gap-2">
+                <span className="w-4 h-4 rounded-sm border border-slate-400 inline-block" /> Product Description
               </span>
-              <span className="text-sm text-foreground mt-1">{f}</span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${descOpen ? "rotate-180" : ""}`} />
+            </button>
+            {descOpen && (
+              <div className="mt-3 p-4 rounded-md border border-slate-200 bg-white text-sm text-slate-700">
+                <ProductMarkdown source={product.description} />
+              </div>
+            )}
+          </div>
+
+          {/* Payment methods */}
+          <div className="mt-6 flex items-center gap-3 flex-wrap max-w-md">
+            <span className="text-xs text-slate-500">Pay with</span>
+            <div className="flex flex-wrap items-center gap-1.5">
+              {PAYMENT_METHODS.map((m) => (
+                <span
+                  key={m.label}
+                  title={m.label}
+                  className="inline-flex items-center justify-center h-6 px-2 rounded bg-white border border-slate-200 text-[10px] font-bold tracking-wide"
+                  style={{ color: m.color }}
+                >
+                  {m.label}
+                </span>
+              ))}
+              <span className="inline-flex items-center gap-1 h-6 px-2 rounded bg-white border border-slate-200 text-[10px] font-bold text-slate-500">
+                verified by <span className="text-red-600">EPS</span>
+              </span>
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-mesh opacity-60 pointer-events-none" />
-        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10">
-          <h2 className="text-aurora" style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 600 }}>How delivery works</h2>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5">
-            {[
-              { icon: ShoppingCart, title: "1. Place your order", desc: "Choose your plan and complete payment via BKash, Nagad, or card." },
-              { icon: Zap, title: "2. Instant processing", desc: `We deliver your account details within ${product.deliveryTime} on email & WhatsApp.` },
-              { icon: Headphones, title: "3. Enjoy & relax", desc: `Use immediately. Covered by our ${product.warranty} guarantee.` },
-            ].map((s) => (
-              <div key={s.title} className="glass-strong rounded-2xl p-6">
-                <div className="w-12 h-12 rounded-full bg-primary text-primary-foreground grid place-items-center mb-4 glow-violet">
-                  <s.icon className="w-5 h-5" />
-                </div>
-                <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{s.title}</h3>
-                <p className="text-sm text-foreground mt-2">{s.desc}</p>
+      {/* FAQ */}
+      <section className="mx-auto max-w-[1200px] px-4 md:px-8 py-10">
+        <h2 className="text-lg font-bold text-slate-900 mb-4">FAQ</h2>
+        <div className="space-y-2">
+          {faqs.map((f, i) => {
+            const open = openFaq === i;
+            return (
+              <div key={i} className="rounded-md bg-slate-100">
+                <button
+                  onClick={() => setOpenFaq(open ? null : i)}
+                  className="w-full flex items-center justify-between gap-3 px-4 h-11 text-left text-sm font-medium text-slate-800"
+                >
+                  <span>{f.q}</span>
+                  <span className="text-violet-600 text-lg leading-none">{open ? "−" : "+"}</span>
+                </button>
+                {open && (
+                  <div className="px-4 pb-4 text-sm text-slate-700 leading-relaxed">
+                    {f.a}
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </section>
 
       {/* Related */}
-      <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
-        <h2 className="text-aurora" style={{ fontFamily: "var(--font-heading)", fontSize: 26, fontWeight: 600 }}>You might also like</h2>
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-5">
-          {related.map((p) => (
-            <Link
-              to="/product/$slug"
-              params={{ slug: p.slug }}
-              key={p.slug}
-              className="group glass rounded-2xl overflow-hidden hover:-translate-y-1 hover:glow-violet transition-all"
-            >
-              <ProductBanner product={p} ratio="4/3" spheres={4} className="rounded-none" />
-              <div className="p-4">
-                <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{p.name}</h3>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-base font-semibold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>{p.plans[0]?.price ?? "—"}</span>
-                  <span className="text-xs text-muted-foreground">{p.plans[0]?.period ?? ""}</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {related.length > 0 && (
+        <section className="mx-auto max-w-[1200px] px-4 md:px-8 py-10">
+          <h2 className="text-lg font-bold text-slate-900 mb-5">Related products</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {related.map((p) => {
+              const first = p.plans[0];
+              const hasOrig = !!first?.original && parsePrice(first.original) > parsePrice(first.price);
+              return (
+                <Link
+                  to="/product/$slug"
+                  params={{ slug: p.slug }}
+                  key={p.slug}
+                  className="group block rounded-lg overflow-hidden bg-white border border-slate-200 hover:shadow-md transition"
+                >
+                  <ProductBanner product={p} ratio="1/1" spheres={4} className="rounded-none" />
+                  <div className="p-3">
+                    <h3 className="text-sm font-semibold text-slate-900 truncate">{p.name}</h3>
+                    <div className="mt-1.5 flex items-center gap-2 text-xs">
+                      {hasOrig && (
+                        <span className="text-slate-400 line-through">Tk {parsePrice(first!.original!)}.00 BDT</span>
+                      )}
+                      <span className="font-semibold text-slate-900">
+                        {p.plans.length > 1 ? "From " : ""}Tk {first ? parsePrice(first.price) : 0}.00 BDT
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
-      <footer className="border-t border-[var(--glass-border-soft)] py-6 text-center text-xs text-muted-foreground">
+      <footer className="border-t border-slate-200 py-6 text-center text-xs text-slate-500">
         © 2026 AccessNow BD. All rights reserved.
       </footer>
     </div>
   );
 }
 
+function buildFaqs(name: string): { q: string; a: string }[] {
+  return [
+    {
+      q: `Can I use ${name} in Bangladesh?`,
+      a: `Yes — ${name} works fully in Bangladesh through AccessNow BD. We provide verified access that runs on any device without restrictions.`,
+    },
+    {
+      q: `How do I subscribe to ${name} via AccessNow BD?`,
+      a: `Choose your duration above, add to cart and complete payment with bKash, Nagad, Rocket, or card. Your access details arrive on email & WhatsApp within minutes.`,
+    },
+    {
+      q: `How much does ${name} cost in Bangladesh via AccessNow BD?`,
+      a: `Pricing depends on the plan duration you choose. The current price is shown above the duration selector for the selected plan.`,
+    },
+    {
+      q: `How to buy an ${name} subscription plan via AccessNow BD?`,
+      a: `Select your preferred duration, set quantity, click "Buy it now", and complete checkout. Your subscription is delivered instantly after payment.`,
+    },
+    {
+      q: `How do I renew my ${name} subscription with AccessNow BD?`,
+      a: `Simply place a new order for ${name} when your current plan is about to expire. We'll keep your existing access active where possible.`,
+    },
+  ];
+}
+
 function Shimmer({ className = "" }: { className?: string }) {
   return (
-    <div
-      className={`relative overflow-hidden bg-muted/60 rounded-xl ${className}`}
-    >
-      <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.4s_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+    <div className={`relative overflow-hidden bg-slate-100 rounded-xl ${className}`}>
+      <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.4s_infinite] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
     </div>
   );
 }
 
 function ProductSkeleton() {
   return (
-    <div className="min-h-screen animate-fade-in">
+    <div className="min-h-screen bg-white animate-fade-in">
       <style>{`@keyframes shimmer { 100% { transform: translateX(100%); } }`}</style>
-
-      {/* Top nav placeholder */}
-
-      {/* Breadcrumb */}
-      <div className="mx-auto max-w-[1440px] px-4 md:px-10 pt-6">
+      <div className="mx-auto max-w-[1200px] px-4 md:px-8 pt-6">
         <Shimmer className="h-4 w-64" />
       </div>
-
-      {/* Hero */}
-      <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8 grid md:grid-cols-2 gap-10">
-        <Shimmer className="aspect-square rounded-3xl" />
+      <section className="mx-auto max-w-[1200px] px-4 md:px-8 py-6 grid md:grid-cols-2 gap-10">
+        <Shimmer className="aspect-square rounded-2xl" />
         <div className="space-y-4">
-          <Shimmer className="h-6 w-24 rounded-full" />
           <Shimmer className="h-10 w-3/4" />
-          <Shimmer className="h-4 w-full" />
-          <Shimmer className="h-4 w-5/6" />
-          <div className="flex items-center gap-3 pt-2">
-            <Shimmer className="h-4 w-28" />
-            <Shimmer className="h-4 w-20" />
+          <Shimmer className="h-5 w-40" />
+          <Shimmer className="h-4 w-32" />
+          <div className="pt-2 grid grid-cols-4 gap-2">
+            <Shimmer className="h-9" /><Shimmer className="h-9" /><Shimmer className="h-9" /><Shimmer className="h-9" />
           </div>
-          <Shimmer className="h-20 w-full" />
-
-          <div className="pt-4">
-            <Shimmer className="h-4 w-32 mb-3" />
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <Shimmer className="h-24" />
-              <Shimmer className="h-24" />
-              <Shimmer className="h-24" />
-            </div>
+          <Shimmer className="h-10 w-32" />
+          <Shimmer className="h-11 w-full max-w-md" />
+          <Shimmer className="h-11 w-full max-w-md" />
+          <div className="flex items-center gap-2 pt-3">
+            <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
+            <span className="text-xs text-slate-500">Loading product…</span>
           </div>
-
-          <div className="flex gap-3 pt-4">
-            <Shimmer className="h-12 w-40 rounded-full" />
-            <Shimmer className="h-12 w-40 rounded-full" />
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 pt-4">
-            <Shimmer className="h-16" />
-            <Shimmer className="h-16" />
-            <Shimmer className="h-16" />
-          </div>
-        </div>
-      </section>
-
-      {/* Related */}
-      <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8">
-        <Shimmer className="h-6 w-48 mb-5" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="space-y-3">
-              <Shimmer className="aspect-[4/3]" />
-              <Shimmer className="h-4 w-3/4" />
-              <Shimmer className="h-4 w-1/2" />
-            </div>
-          ))}
         </div>
       </section>
     </div>
