@@ -414,7 +414,7 @@ export function SiteHeader() {
                 {/* Quick action tiles */}
                 <div className="grid grid-cols-4 gap-2">
                   {[
-                    { to: "/orders" as const, label: "Orders", Icon: Package, grad: "from-sky-400 to-blue-600" },
+                    { to: "/orders" as const, label: "Orders", Icon: Package, grad: "from-indigo-500 to-blue-600" },
                     { to: "/cart" as const, label: "Cart", Icon: ShoppingBag, grad: "from-emerald-400 to-teal-600" },
                     { to: (user ? "/profile" : "/login") as "/profile" | "/login", label: "Profile", Icon: UserCircle2, grad: "from-fuchsia-400 to-pink-600" },
                     { to: "/contact" as const, label: "Support", Icon: Headphones, grad: "from-amber-400 to-orange-600" },
@@ -500,7 +500,7 @@ export function SiteHeader() {
                   <nav className="grid gap-2">
                     {[
                       { to: "/" as const, label: "Home", Icon: Home, grad: "from-orange-400 to-amber-600", badge: "NOW" },
-                      { to: "/categories" as const, label: "All Products", Icon: ShoppingBag, grad: "from-sky-400 to-blue-600" },
+                      { to: "/categories" as const, label: "All Products", Icon: ShoppingBag, grad: "from-indigo-500 to-blue-600" },
                       { to: "/products" as const, label: "Categories", Icon: Package, grad: "from-amber-400 to-orange-600" },
                       { to: "/education" as const, label: "Education", Icon: GraduationCap, grad: "from-violet-400 to-fuchsia-600" },
                       { to: "/faq" as const, label: "FAQ", Icon: HelpCircle, grad: "from-rose-400 to-pink-600" },
