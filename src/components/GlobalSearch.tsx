@@ -53,16 +53,22 @@ function saveRecent(term: string) {
 }
 
 function highlight(text: string, needle: string) {
-  if (!needle) return text;
-  const idx = text.toLowerCase().indexOf(needle.toLowerCase());
-  if (idx === -1) return text;
+  const tokens = needle.trim().split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return text;
+  const escaped = tokens.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const re = new RegExp(`(${escaped.join("|")})`, "gi");
+  const parts = text.split(re);
   return (
     <>
-      {text.slice(0, idx)}
-      <mark className="bg-aqua/25 text-white rounded px-0.5">
-        {text.slice(idx, idx + needle.length)}
-      </mark>
-      {text.slice(idx + needle.length)}
+      {parts.map((part, i) =>
+        re.test(part) ? (
+          <mark key={i} className="bg-aqua/25 text-white rounded px-0.5">
+            {part}
+          </mark>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
     </>
   );
 }
