@@ -56,12 +56,13 @@ function highlight(text: string, needle: string) {
   const tokens = needle.trim().split(/\s+/).filter(Boolean);
   if (tokens.length === 0) return text;
   const escaped = tokens.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const lowerSet = new Set(tokens.map((t) => t.toLowerCase()));
   const re = new RegExp(`(${escaped.join("|")})`, "gi");
   const parts = text.split(re);
   return (
     <>
       {parts.map((part, i) =>
-        re.test(part) ? (
+        lowerSet.has(part.toLowerCase()) ? (
           <mark key={i} className="bg-aqua/25 text-white rounded px-0.5">
             {part}
           </mark>
