@@ -183,14 +183,14 @@ export function SiteFooter() {
                 </Link>
 
                 <p className="mt-6 max-w-xl text-[14px] leading-7 text-white/72">
-                  <span className="font-bold text-cyan-300">বাংলাদেশের</span> সবচেয়ে{" "}
-                  <span className="font-bold text-fuchsia-400">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span>{" "}
-                  — <span className="font-semibold text-emerald-300">ভেরিফাইড সাবস্ক্রিপশন</span>,{" "}
-                  <span className="font-semibold text-amber-300">সফটওয়্যার লাইসেন্স</span>,{" "}
-                  <span className="font-semibold text-sky-300">AI টুলস</span> ও{" "}
-                  <span className="font-bold text-rose-400">24/7 লাইভ সাপোর্টে</span>{" "}
+                  <span className="font-bold text-cyan-600">বাংলাদেশের</span> সবচেয়ে{" "}
+                  <span className="font-bold text-fuchsia-700">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span>{" "}
+                  — <span className="font-semibold text-emerald-700">ভেরিফাইড সাবস্ক্রিপশন</span>,{" "}
+                  <span className="font-semibold text-amber-600">সফটওয়্যার লাইসেন্স</span>,{" "}
+                  <span className="font-semibold text-blue-700">AI টুলস</span> ও{" "}
+                  <span className="font-bold text-rose-600">24/7 লাইভ সাপোর্টে</span>{" "}
                   আপনার ডিজিটাল প্রয়োজন{" "}
-                  <span className="font-bold text-lime-300">এক ক্লিকেই পূরণ</span>।
+                  <span className="font-bold text-lime-700">এক ক্লিকেই পূরণ</span>।
                 </p>
               </div>
 
