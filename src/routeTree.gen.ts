@@ -46,6 +46,7 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
+import { Route as AdminBulkUpdateRouteImport } from './routes/admin.bulk-update'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
 import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
 import { Route as ApiPublicClientErrorsRouteImport } from './routes/api/public/client-errors'
@@ -236,6 +237,11 @@ const AdminDescriptionPreviewRoute = AdminDescriptionPreviewRouteImport.update({
   path: '/description-preview',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBulkUpdateRoute = AdminBulkUpdateRouteImport.update({
+  id: '/bulk-update',
+  path: '/bulk-update',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPageRoute = AdminPageRouteImport.update({
   id: '/$page',
   path: '/$page',
@@ -281,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
+  '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -322,6 +329,7 @@ export interface FileRoutesByTo {
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
+  '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -365,6 +373,7 @@ export interface FileRoutesById {
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
+  '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -409,6 +418,7 @@ export interface FileRouteTypes {
     | '/streaming'
     | '/terms'
     | '/admin/$page'
+    | '/admin/bulk-update'
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/orders'
@@ -450,6 +460,7 @@ export interface FileRouteTypes {
     | '/streaming'
     | '/terms'
     | '/admin/$page'
+    | '/admin/bulk-update'
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/orders'
@@ -492,6 +503,7 @@ export interface FileRouteTypes {
     | '/streaming'
     | '/terms'
     | '/admin/$page'
+    | '/admin/bulk-update'
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/orders'
@@ -800,6 +812,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDescriptionPreviewRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/bulk-update': {
+      id: '/admin/bulk-update'
+      path: '/bulk-update'
+      fullPath: '/admin/bulk-update'
+      preLoaderRoute: typeof AdminBulkUpdateRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/$page': {
       id: '/admin/$page'
       path: '/$page'
@@ -826,6 +845,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminPageRoute: typeof AdminPageRoute
+  AdminBulkUpdateRoute: typeof AdminBulkUpdateRoute
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
@@ -838,6 +858,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminPageRoute: AdminPageRoute,
+  AdminBulkUpdateRoute: AdminBulkUpdateRoute,
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminOrdersRoute: AdminOrdersRoute,

@@ -156,7 +156,12 @@ function BulkUpdatePage() {
     let fail = 0;
 
     for (const p of targets) {
-      const patch: Record<string, unknown> = {};
+      const patch: {
+        description?: string;
+        plans?: Plan[];
+        delivery_time?: string;
+        warranty?: string;
+      } = {};
       if (applyDescription) {
         if (!onlyEmptyDesc || !p.description.trim()) {
           patch.description = applyTemplate(tpl, p);
