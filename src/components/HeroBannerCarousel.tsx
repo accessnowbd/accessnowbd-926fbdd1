@@ -373,13 +373,16 @@ export function HeroBannerCarousel() {
                     className="pointer-events-none absolute inset-x-0 top-0 h-1/3"
                     style={{ background: `linear-gradient(180deg, ${hexAlpha("#ffffff", 0.12)}, transparent)` }}
                   />
-                  {current.data.image_url ? (
-                    <img
-                      src={current.data.image_url}
-                      alt={current.data.title ?? "banner"}
-                      loading="eager"
-                      className="h-full w-full object-cover"
-                    />
+                  {resolvedImage ? (
+                    <div className="relative flex h-full w-full items-center justify-center p-4 md:p-6">
+                      <img
+                        src={resolvedImage}
+                        alt={current.data.title ?? "banner"}
+                        loading="eager"
+                        className="max-h-full max-w-full object-contain drop-shadow-2xl"
+                        style={{ filter: `drop-shadow(0 18px 40px ${hexAlpha(accent, 0.45)})` }}
+                      />
+                    </div>
                   ) : (
                     <div className="grid h-full w-full place-items-center px-10 text-center">
                       <div
