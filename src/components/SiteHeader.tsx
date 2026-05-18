@@ -128,19 +128,9 @@ export function TopUtilityBar() {
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [headerQuery, setHeaderQuery] = useState("");
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
-
-  const goToSearch = (rawValue: string) => {
-    const q = rawValue.trim();
-    if (!q) return; // Google-style: empty submit does nothing
-    navigate({
-      to: "/products",
-      search: { q },
-    });
-  };
 
   const handleLogout = async () => {
     await signOut();
