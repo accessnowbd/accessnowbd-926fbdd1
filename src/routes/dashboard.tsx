@@ -238,6 +238,14 @@ function DashboardPage() {
                   <UserMenuItem icon={<UserIcon className="w-4 h-4" />} label="My Profile" onClick={() => { setSection("profile"); setUserMenu(false); }} />
                   <UserMenuItem icon={<Package className="w-4 h-4" />} label="My Orders" onClick={() => { setSection("orders"); setUserMenu(false); }} />
                   <UserMenuItem icon={<LifeBuoy className="w-4 h-4" />} label="Support" onClick={() => { setSection("open-ticket"); setUserMenu(false); }} />
+                  {isAdmin && (
+                    <>
+                      <div className="my-1 h-px bg-[var(--glass-border)]" />
+                      <Link to="/admin" onClick={() => setUserMenu(false)} className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-primary hover:bg-primary/10 transition">
+                        <Shield className="w-4 h-4" /> Admin Panel
+                      </Link>
+                    </>
+                  )}
                   <div className="my-1 h-px bg-[var(--glass-border)]" />
                   <UserMenuItem icon={<LogOut className="w-4 h-4" />} label="Logout" onClick={handleSignOut} danger />
                 </div>
