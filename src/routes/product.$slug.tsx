@@ -301,9 +301,7 @@ function ProductPage() {
         </section>
       )}
 
-      <footer className="border-t border-slate-200 py-6 text-center text-xs text-slate-500">
-        © 2026 AccessNow BD. All rights reserved.
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
