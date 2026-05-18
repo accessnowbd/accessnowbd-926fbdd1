@@ -12,6 +12,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { waOrderUrl } from "@/lib/whatsapp";
+import { ProductReviews } from "@/components/ProductReviews";
 
 const parsePrice = (p: unknown): number => {
   try {
@@ -290,6 +291,9 @@ function ProductPage() {
           </div>
         </div>
       </section>
+
+      {/* Reviews */}
+      <ProductReviews slug={slug} />
 
       {/* FAQ */}
       <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
