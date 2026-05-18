@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
-import { ChevronDown, Minus, Plus, Star, ArrowLeft, Loader2 } from "lucide-react";
+import { ChevronDown, Minus, Plus, Star, ArrowLeft, Loader2, CreditCard, MessageCircle, ShoppingCart, Check } from "lucide-react";
 import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { ProductMarkdown } from "@/components/ProductMarkdown";
 import { SiteFooter } from "@/components/SiteFooter";
 import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
+import { waOrderUrl } from "@/lib/whatsapp";
 
 const parsePrice = (p: unknown): number => {
   try {
@@ -168,23 +169,51 @@ function ProductPage() {
             <span className="text-slate-500">12 reviews</span>
           </div>
 
-          {/* Duration */}
+          {/* Duration & pricing plans */}
           {product.plans.length > 0 && (
             <div className="mt-5">
-              <div className="text-xs text-slate-500 mb-2">Duration</div>
-              <div className="flex flex-wrap gap-2">
+              <div className="text-sm font-semibold text-slate-700 mb-3">মেয়াদ ও মূল্য পরিকল্পনা</div>
+              <div className="space-y-2.5">
                 {product.plans.map((p, idx) => {
                   const active = activeIdx === idx;
+                  const price = parsePrice(p.price);
+                  const original = p.original ? parsePrice(p.original) : 0;
+                  const hasOff = original > price;
+                  const off = hasOff ? Math.round(((original - price) / original) * 100) : 0;
                   return (
-                    <GlassButton
+                    <button
                       key={p.period}
-                      variant={active ? "solid" : "outline"}
-                      size="sm"
-                      rounded="xl"
+                      type="button"
                       onClick={() => setSelected(idx)}
+                      aria-pressed={active}
+                      className={[
+                        "w-full flex items-center gap-3 px-4 py-3 rounded-2xl border transition text-left",
+                        active
+                          ? "border-violet-500 bg-violet-50 ring-2 ring-violet-300/60 shadow-[0_10px_28px_-14px_rgba(124,58,237,0.45)]"
+                          : "border-slate-200 bg-white hover:border-violet-300 hover:bg-violet-50/40",
+                      ].join(" ")}
                     >
-                      {p.period}
-                    </GlassButton>
+                      <span
+                        className={[
+                          "grid place-items-center w-5 h-5 rounded-full border-2 shrink-0 transition",
+                          active ? "border-violet-600 bg-violet-600" : "border-slate-300 bg-white",
+                        ].join(" ")}
+                      >
+                        {active && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                      </span>
+                      <span className={`flex-1 font-bold text-[15px] ${active ? "text-violet-700" : "text-slate-800"}`}>
+                        {p.period}
+                      </span>
+                      {hasOff && (
+                        <span className="text-slate-400 text-[13px] line-through">৳{original.toLocaleString()}</span>
+                      )}
+                      <span className="text-violet-700 font-extrabold text-[15px]">৳{price.toLocaleString()}</span>
+                      {hasOff && (
+                        <span className="px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-600 text-[11px] font-bold">
+                          -{off}%
+                        </span>
+                      )}
+                    </button>
                   );
                 })}
               </div>
@@ -193,30 +222,46 @@ function ProductPage() {
 
           {/* Quantity */}
           <div className="mt-5">
-            <div className="text-xs text-slate-500 mb-2">Quantity</div>
-            <div className="inline-flex items-center border border-white/60 rounded-xl overflow-hidden backdrop-blur-md bg-white/50 md:bg-white/40 shadow-[0_4px_20px_-6px_rgba(20,184,166,0.25)]">
-              <GlassButton variant="ghost" size="icon" rounded="md" onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Decrease quantity">
+            <div className="text-sm font-semibold text-slate-700 mb-2">Quantity</div>
+            <div className="inline-flex items-center border border-slate-200 rounded-xl overflow-hidden bg-white">
+              <button onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Decrease" className="w-10 h-10 grid place-items-center text-violet-600 hover:bg-violet-50 transition">
                 <Minus className="w-4 h-4" />
-              </GlassButton>
+              </button>
               <input
                 value={qty}
                 onChange={(e) => setQty(Math.max(1, Number(e.target.value.replace(/\D/g, "")) || 1))}
-                className="w-12 h-10 text-center text-sm bg-transparent focus:outline-none"
+                className="w-12 h-10 text-center text-sm font-bold bg-transparent focus:outline-none text-slate-900"
               />
-              <GlassButton variant="ghost" size="icon" rounded="md" onClick={() => setQty((q) => q + 1)} aria-label="Increase quantity">
+              <button onClick={() => setQty((q) => q + 1)} aria-label="Increase" className="w-10 h-10 grid place-items-center text-violet-600 hover:bg-violet-50 transition">
                 <Plus className="w-4 h-4" />
-              </GlassButton>
+              </button>
             </div>
           </div>
 
-          {/* Buy buttons */}
-          <div className="mt-5 space-y-3 max-w-md">
-            <GlassButton variant="secondary" fullWidth onClick={addToCart}>
-              Add to cart
-            </GlassButton>
-            <GlassButton variant="primary" fullWidth onClick={buyNow}>
-              Buy it now
-            </GlassButton>
+          {/* Buy actions card */}
+          <div className="mt-6 relative rounded-3xl p-3 bg-white border-2 border-sky-400/70 shadow-[0_18px_50px_-18px_rgba(56,189,248,0.55),0_0_0_4px_rgba(186,230,253,0.4)]">
+            <button
+              onClick={buyNow}
+              className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-2xl bg-white border border-slate-200 text-slate-900 font-bold text-[15px] hover:bg-slate-50 active:scale-[0.99] transition"
+            >
+              <CreditCard className="w-4 h-4 text-violet-600" /> Buy Now
+            </button>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <a
+                href={plan ? waOrderUrl([{ name: product.name, planPeriod: plan.period, qty, price: parsePrice(plan.price) }]) : "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-violet-50 border border-violet-200 text-violet-700 font-bold text-[13px] hover:bg-violet-100 transition"
+              >
+                <MessageCircle className="w-4 h-4" /> WhatsApp
+              </a>
+              <button
+                onClick={addToCart}
+                className="h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-violet-50 border border-violet-200 text-violet-700 font-bold text-[13px] hover:bg-violet-100 transition"
+              >
+                <ShoppingCart className="w-4 h-4" /> Cart
+              </button>
+            </div>
           </div>
 
         </GlassCard>
