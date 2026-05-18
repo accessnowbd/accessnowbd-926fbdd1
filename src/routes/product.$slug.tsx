@@ -56,19 +56,6 @@ export const Route = createFileRoute("/product/$slug")({
   ),
 });
 
-const PAYMENT_METHODS = [
-  { label: "Visa", color: "#1A1F71" },
-  { label: "Mastercard", color: "#EB001B" },
-  { label: "Amex", color: "#2E77BB" },
-  { label: "bKash", color: "#E2136E" },
-  { label: "Nagad", color: "#EB1C24" },
-  { label: "Rocket", color: "#8C3494" },
-  { label: "Upay", color: "#E94E1B" },
-  { label: "Tap", color: "#1B998B" },
-  { label: "Cellfin", color: "#F7941D" },
-  { label: "DBBL", color: "#0067A5" },
-  { label: "MyCash", color: "#00A859" },
-];
 
 function ProductPage() {
   const { slug } = Route.useParams();
