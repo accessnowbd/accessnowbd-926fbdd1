@@ -208,7 +208,7 @@ export function HeroBannerCarousel() {
   // Cinematic layered background — multiple radial glows + linear depth
   const background = useMemo(() => {
     const a = (n: number) => Math.min(0.95, n * intensityMul);
-    const base = `linear-gradient(135deg, ${mix(bg, "#000", 0.05)} 0%, ${bg} 45%, ${mix(bg, "#000", 0.55)} 100%)`;
+    const base = `linear-gradient(135deg, ${mix(bg, "#ffffff", 0.08)} 0%, ${bg} 50%, ${mix(bg, accent, 0.18)} 100%)`;
     switch (style) {
       case "aurora":
         return [
@@ -250,8 +250,12 @@ export function HeroBannerCarousel() {
     <section className="px-4 md:px-10 pt-6 pb-4">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className="force-dark-canvas group/banner relative overflow-hidden rounded-[28px] border border-white/10 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.7)] transition-all duration-700"
-          style={{ background, minHeight: 430 }}
+          className="force-dark-canvas group/banner relative overflow-hidden rounded-[28px] border border-white/20 backdrop-blur-2xl transition-all duration-700"
+          style={{
+            background,
+            minHeight: 430,
+            boxShadow: `0 30px 80px -30px ${hexAlpha(accent, 0.45)}, 0 8px 32px -8px ${hexAlpha(glow, 0.25)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.18)}, inset 0 0 0 1px ${hexAlpha("#ffffff", 0.05)}`,
+          }}
         >
           {/* Floating blur orbs for depth */}
           <div
@@ -399,7 +403,7 @@ export function HeroBannerCarousel() {
                   fontSize: "clamp(28px, 4.4vw, 56px)",
                   lineHeight: 1.04,
                   letterSpacing: "-0.02em",
-                  textShadow: `0 6px 30px ${hexAlpha("#000", 0.35)}`,
+                  textShadow: `0 1px 2px ${hexAlpha("#000", 0.18)}, 0 0 40px ${hexAlpha(glow, 0.18)}`,
                 }}
               >
                 {current.data.title}
@@ -451,23 +455,30 @@ export function HeroBannerCarousel() {
                 style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(accent, 0.55)} 0%, ${hexAlpha(glow, 0.25)} 45%, transparent 75%)` }}
               />
               <div
-                className="relative rounded-[24px] p-[2px] transition-transform duration-500 hover:scale-[1.015]"
+                className="relative rounded-[24px] p-[1.5px] transition-transform duration-500 hover:scale-[1.015]"
                 style={{
-                  background: `linear-gradient(135deg, ${accent} 0%, ${hexAlpha(glow, 0.5)} 50%, ${accent} 100%)`,
-                  boxShadow: `0 0 60px -12px ${hexAlpha(accent, 0.7)}, 0 30px 80px -20px rgba(0,0,0,0.7)`,
+                  background: `linear-gradient(135deg, ${hexAlpha("#ffffff", 0.5)} 0%, ${hexAlpha(accent, 0.6)} 35%, ${hexAlpha("#ffffff", 0.15)} 65%, ${hexAlpha(glow, 0.55)} 100%)`,
+                  boxShadow: `0 0 50px -10px ${hexAlpha(accent, 0.45)}, 0 20px 60px -20px ${hexAlpha(glow, 0.35)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.3)}`,
                 }}
               >
                 <div
-                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[22px] backdrop-blur-xl"
+                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[22px] backdrop-blur-2xl"
                   style={{
-                    background: `linear-gradient(135deg, ${hexAlpha("#ffffff", 0.08)}, ${hexAlpha("#000000", 0.35)}), linear-gradient(135deg, ${mix(bg, "#fff", 0.04)}, ${mix(bg, "#000", 0.3)})`,
+                    background: `linear-gradient(135deg, ${hexAlpha("#ffffff", 0.18)} 0%, ${hexAlpha("#ffffff", 0.06)} 50%, ${hexAlpha(accent, 0.1)} 100%), linear-gradient(135deg, ${hexAlpha(bg, 0.55)}, ${hexAlpha(mix(bg, accent, 0.25), 0.4)})`,
+                    boxShadow: `inset 0 1px 0 ${hexAlpha("#ffffff", 0.25)}, inset 0 0 40px ${hexAlpha("#ffffff", 0.05)}`,
                   }}
                 >
                   {/* glass top highlight */}
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute inset-x-0 top-0 h-1/3"
-                    style={{ background: `linear-gradient(180deg, ${hexAlpha("#ffffff", 0.12)}, transparent)` }}
+                    className="pointer-events-none absolute inset-x-0 top-0 h-2/5"
+                    style={{ background: `linear-gradient(180deg, ${hexAlpha("#ffffff", 0.22)} 0%, ${hexAlpha("#ffffff", 0.04)} 60%, transparent 100%)` }}
+                  />
+                  {/* diagonal glass sheen */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute -inset-px"
+                    style={{ background: `linear-gradient(115deg, transparent 35%, ${hexAlpha("#ffffff", 0.08)} 50%, transparent 65%)` }}
                   />
                   {resolvedImage ? (
                     <div className="relative flex h-full w-full items-center justify-center p-4 md:p-6">
