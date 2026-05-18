@@ -82,7 +82,7 @@ function ProductPage() {
   const popularIdx = (loaderProduct?.plans ?? product?.plans ?? []).findIndex((p: { popular?: boolean }) => p.popular);
   const [selected, setSelected] = useState(() => (popularIdx > 0 ? popularIdx : 0));
   const [qty, setQty] = useState(1);
-  const [descOpen, setDescOpen] = useState(false);
+  
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   if (isLoading) return <ProductSkeleton />;
