@@ -1448,6 +1448,52 @@
   }
 }
 
+/* === Anti-flicker hardening (desktop + all themes) ============================ */
+
+/* 1. Respect OS-level reduced motion: kill every infinite/loop animation and
+      lengthy transition — these are the main repaint sources behind glass cards. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 2. Prime html with the theme bg color so the very first paint
+      (before CSS background-image resolves) is never browser-default white-on-dark
+      or dark-on-white — eliminates the initial "white flash". */
+html { background-color: #06051a; }
+html.theme-white { background-color: #ffffff; }
+
+/* 3. Belt-and-braces overflow guard. `overflow-x: clip` is already on html/body,
+      but some legacy browsers ignore it on <body>; add hidden as fallback and
+      prevent the iOS rubber-band white gap at the bottom. */
+html, body {
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+}
+
+/* 4. Paint containment on big repeating sections — limits the area the browser
+      has to re-rasterize when something inside changes, and prevents glass
+      cards from triggering full-page repaints on hover. */
+main > section,
+.product-card-v2 {
+  contain: layout paint style;
+}
+
+/* 5. Skeleton loaders: replace the default opacity pulse (which fights the
+      glass blur underneath) with a static tinted surface — no animation, no flicker. */
+.animate-pulse {
+  animation: none !important;
+  background-color: rgba(124, 58, 237, 0.08);
+}
+html:not(.theme-white) .animate-pulse {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+
 /* ============================================================
    FINAL: Eliminate all cyan/turquoise/teal leaks in white theme.
    Map every aqua/cyan/teal text + accent to the violet→indigo→blue
