@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
-import { ChevronDown, Minus, Plus, Star, ArrowLeft, Loader2, CreditCard, MessageCircle, ShoppingCart, Check } from "lucide-react";
+import { Minus, Plus, Star, ArrowLeft, Loader2, CreditCard, MessageCircle, ShoppingCart, Check } from "lucide-react";
 import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { useState } from "react";
@@ -82,7 +82,7 @@ function ProductPage() {
   const popularIdx = (loaderProduct?.plans ?? product?.plans ?? []).findIndex((p: { popular?: boolean }) => p.popular);
   const [selected, setSelected] = useState(() => (popularIdx > 0 ? popularIdx : 0));
   const [qty, setQty] = useState(1);
-  const [descOpen, setDescOpen] = useState(false);
+  
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   if (isLoading) return <ProductSkeleton />;
@@ -267,29 +267,17 @@ function ProductPage() {
         </GlassCard>
       </section>
 
-      {/* Product Description — full width, below hero, image stays intact */}
-      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 pb-2">
-        <GlassButton
-          variant="outline"
-          fullWidth
-          rounded="xl"
-          onClick={() => setDescOpen((v) => !v)}
-          className="justify-between !font-medium text-slate-900"
-          aria-expanded={descOpen}
-        >
-          <span className="inline-flex items-center gap-2">
-            <span className="w-4 h-4 rounded-sm border border-slate-300 bg-white inline-block" />
-            Product Description
-          </span>
-          <ChevronDown className={`w-4 h-4 transition-transform ${descOpen ? "rotate-180" : ""}`} />
-        </GlassButton>
-        {descOpen && (
-          <GlassCard tint="neutral" blur="lg" glow="sm" padding="none" rounded="2xl" className="mt-3">
-            <div className="p-5 md:p-7 text-sm md:text-base text-slate-800">
-              <ProductMarkdown source={product.description} />
-            </div>
-          </GlassCard>
-        )}
+      {/* Product Description — always visible */}
+      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 pb-2 pt-2">
+        <h2 className="flex items-center gap-3 text-xl md:text-2xl font-extrabold text-slate-900 mb-4">
+          <span className="inline-block w-1.5 h-6 md:h-7 rounded-full bg-gradient-to-b from-violet-500 to-fuchsia-500" />
+          Product Description
+        </h2>
+        <div className="rounded-2xl bg-white border border-slate-200 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)]">
+          <div className="p-5 md:p-8 text-sm md:text-base text-slate-800 leading-relaxed">
+            <ProductMarkdown source={product.description} />
+          </div>
+        </div>
       </section>
 
       {/* FAQ */}
