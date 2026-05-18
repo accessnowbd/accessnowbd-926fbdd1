@@ -263,6 +263,42 @@ export type Database = {
         }
         Relationships: []
       }
+      product_reviews: {
+        Row: {
+          comment: string
+          created_at: string
+          id: string
+          is_approved: boolean
+          product_slug: string
+          rating: number
+          reviewer_name: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          comment: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          product_slug: string
+          rating: number
+          reviewer_name: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          product_slug?: string
+          rating?: number
+          reviewer_name?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           badge: string | null
