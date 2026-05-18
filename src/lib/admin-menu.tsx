@@ -100,6 +100,8 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
     icon: ic(FileEdit),
     items: [
       { to: "/admin/pages", label: "Page Management", icon: ic(FileEdit), grad: "from-orange-500 to-amber-500" },
+      { to: "/admin/description-template", label: "Description Template", icon: ic(FileEdit), grad: "from-violet-500 to-fuchsia-500" },
+      { to: "/admin/description-preview", label: "Description Preview", icon: ic(FileEdit), grad: "from-fuchsia-500 to-pink-500" },
       { to: "/admin/blog", label: "Blog", icon: ic(Newspaper), grad: "from-rose-500 to-red-500" },
       { to: "/admin/ceo-message", label: "CEO Message", icon: ic(UserCircle2), grad: "from-amber-500 to-orange-500" },
       { to: "/admin/software-downloads", label: "Software Downloads", icon: ic(Download), grad: "from-emerald-500 to-green-600" },
