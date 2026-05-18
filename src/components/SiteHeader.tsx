@@ -7,7 +7,7 @@ import {
   Youtube,
   Twitter,
   Search,
-  Menu,
+  MoreVertical,
   X,
   Zap,
   ShieldCheck,
@@ -317,34 +317,14 @@ export function SiteHeader() {
                 onClick={() => setOpen((o) => !o)}
                 className="lg:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
                 aria-label="Menu"
+                aria-expanded={open}
               >
-                {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+                {open ? <X className="w-4 h-4" /> : <MoreVertical className="w-4 h-4" />}
               </button>
             </div>
           </div>
 
-          {/* Mobile: desktop-style nav pill bar (horizontal scroll) */}
-          <div className="lg:hidden border-t border-white/5">
-            <nav
-              className="mx-auto max-w-[1440px] px-3 sm:px-4 py-2 flex items-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-none"
-              style={{ scrollbarWidth: "none" }}
-            >
-              {NAV.map((n) => (
-                <Link
-                  key={n.to}
-                  to={n.to}
-                  activeOptions={{ exact: n.to === "/" }}
-                  activeProps={{
-                    className:
-                      "!text-primary !border-[color:color-mix(in_oklab,var(--primary)_45%,transparent)] !bg-[linear-gradient(135deg,color-mix(in_oklab,var(--primary)_22%,transparent),color-mix(in_oklab,var(--primary)_10%,transparent))] shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_0_22px_-4px_var(--primary),0_8px_26px_-12px_rgba(124,58,237,0.7)]",
-                  }}
-                  className="shrink-0 inline-flex items-center h-9 px-3.5 rounded-full text-[12.5px] font-semibold text-white/75 hover:text-white glass-soft border border-white/10 transition-all"
-                >
-                  {n.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
+          {/* Mobile horizontal nav strip removed — nav lives in the three-dot menu */}
 
           {/* bottom hairline removed */}
         </div>
