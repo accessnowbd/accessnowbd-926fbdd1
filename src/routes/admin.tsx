@@ -253,6 +253,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   const dark = false;
   const [search, setSearch] = useState("");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { open: globalOpen, setOpen: setGlobalOpen } = useAdminGlobalSearch();
 
   // Close mobile drawer on route change
   useEffect(() => { setMobileOpen(false); }, [pathname]);
