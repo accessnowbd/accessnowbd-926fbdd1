@@ -369,14 +369,14 @@ function HeroExperience() {
                 </Link>
               </div>
 
-              <div className="grid max-w-md grid-cols-3 gap-8 pt-4">
+              <div className="grid max-w-md grid-cols-3 gap-6 pt-2">
                 {[
                   ["36+", "Products"],
                   ["10 Min", "Delivery"],
                   ["24/7", "Support"],
                 ].map(([value, label]) => (
                   <div key={label} className="flex flex-col">
-                    <span className="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">{value}</span>
+                    <span className="text-lg md:text-xl font-extrabold tracking-tight text-slate-900">{value}</span>
                     <span className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">{label}</span>
                   </div>
                 ))}
