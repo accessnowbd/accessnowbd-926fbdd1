@@ -1138,25 +1138,25 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
           <input value={imagePrompt} onChange={(e) => setImagePrompt(e.target.value)} placeholder="Optional: describe the look..." className="mt-3 w-full h-10 px-3 rounded-xl border border-slate-200 text-xs outline-none focus:border-slate-400" />
 
           <div className="mt-3 grid grid-cols-2 gap-2">
-            <button
-              onClick={() => generateImage("premium-pastel")}
-              disabled={aiBusy}
-              className="inline-flex items-center justify-center gap-2 h-12 rounded-xl text-white text-sm font-extrabold shadow-[0_10px_30px_-10px_rgba(168,85,247,0.5)] disabled:opacity-50"
-              style={{ background: "linear-gradient(135deg,#c4b5fd 0%,#f9a8d4 50%,#fdba74 100%)" }}
-            >
-              {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-              Style 1 · Pastel
-            </button>
-            <button
-              onClick={() => generateImage("premium-dark")}
-              disabled={aiBusy}
-              className="inline-flex items-center justify-center gap-2 h-12 rounded-xl text-white text-sm font-extrabold shadow-[0_10px_30px_-10px_rgba(30,41,59,0.7)] disabled:opacity-50"
-              style={{ background: "linear-gradient(135deg,#0f172a 0%,#4c1d95 60%,#9333ea 100%)" }}
-            >
-              {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-              Style 2 · Dark
-            </button>
+            {([
+              { id: "premium-pastel", label: "Pastel Glass", emoji: "🌸", bg: "linear-gradient(135deg,#a78bfa 0%,#ec4899 50%,#f97316 100%)", shadow: "rgba(168,85,247,0.45)" },
+              { id: "premium-dark", label: "Dark Luxe", emoji: "🌌", bg: "linear-gradient(135deg,#0f172a 0%,#4c1d95 60%,#9333ea 100%)", shadow: "rgba(30,41,59,0.7)" },
+              { id: "soft-aurora", label: "Soft Aurora", emoji: "🌅", bg: "linear-gradient(135deg,#10b981 0%,#06b6d4 50%,#8b5cf6 100%)", shadow: "rgba(16,185,129,0.45)" },
+              { id: "dark-neon", label: "Neon Edge", emoji: "⚡", bg: "linear-gradient(135deg,#0ea5e9 0%,#6366f1 50%,#ec4899 100%)", shadow: "rgba(99,102,241,0.5)" },
+            ] as { id: AiCardStyle; label: string; emoji: string; bg: string; shadow: string }[]).map((s) => (
+              <button
+                key={s.id}
+                onClick={() => generateImage(s.id)}
+                disabled={aiBusy}
+                className="group relative inline-flex items-center justify-center gap-2 h-12 rounded-xl text-white text-sm font-extrabold shadow-lg disabled:opacity-50 transition active:scale-[0.98] hover:brightness-110"
+                style={{ background: s.bg, boxShadow: `0 10px 30px -10px ${s.shadow}`, textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}
+              >
+                {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <span className="text-base leading-none">{s.emoji}</span>}
+                <span className="drop-shadow-sm">{s.label}</span>
+              </button>
+            ))}
           </div>
+          <div className="mt-2 text-[10px] text-slate-400 text-center">✨ Powered by Nano Banana 2 · 1:1 square HD</div>
  </div>
 
  {/* Gallery */}

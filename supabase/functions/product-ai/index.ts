@@ -49,9 +49,9 @@ const STYLE_PROMPTS: Record<CardStyle, string> = {
   "glassmorphism":
     "premium glassmorphism product mockup on a clean white background with soft pastel accents, frosted glass card, subtle inner glow, ultra-clean studio lighting",
   "soft-aurora":
-    "soft aurora hero shot on a predominantly white background with airy pastel light leaks (mint, lilac, peach), gentle bokeh, polished e-commerce hero",
+    "A premium 1:1 square product card on a CLEAN WHITE BASE BACKGROUND with airy aurora light leaks (mint, lilac, peach) gently flowing across the corners and a very soft radial glow. Foreground: ONE large centered frosted-glass rounded-square panel with a slight aurora-tinted edge glow. Inside, place a single big premium 3D rounded-square app-style icon dead-center (~45% of panel) — it MUST be the official recognizable brand/product logo for the product name, crisp and polished. Top-left of glass panel: small dark translucent pill 'ACCESSNOW BD' in white uppercase. Top-right: clean white pill with the product/brand name and small logo mark. Bottom row inside panel: small dark text — globe icon then 'www.accessnowbd.com', then phone icon then '+880 1580-607614'. Cinematic studio quality, ultra crisp, no extra text, no watermark.",
   "dark-neon":
-    "premium product hero on a clean white background with subtle cool-tone accents and a soft neon rim around the subject, sharp studio lighting",
+    "A premium 1:1 square product card on a DEEP MIDNIGHT background (near-black with subtle blue/violet gradient), with thin neon rim accents (electric cyan + magenta), faint grid lines and tiny glowing particles. Foreground: ONE large centered dark frosted-glass rounded-square panel with a vivid neon edge glow (cyan→magenta). Inside, place a single big premium 3D rounded-square app-style icon dead-center (~45% of panel) — it MUST be the official recognizable brand/product logo for the product name, crisp and polished. Top-left of glass panel: small translucent pill 'ACCESSNOW BD' in white uppercase. Top-right: dark translucent pill with the product/brand name and small logo mark, white text. Bottom row inside panel: small bright text — globe icon then 'www.accessnowbd.com', then phone icon then '+880 1580-607614'. Cinematic cyberpunk studio quality, ultra crisp, no extra text, no watermark.",
 };
 
 const SHOP_BRAND = "AccessNow BD";
@@ -79,46 +79,49 @@ serve(async (req) => {
     if (mode === "image") {
       const styleId: CardStyle = (style as CardStyle) || "premium-pastel";
       const styleText = STYLE_PROMPTS[styleId] ?? STYLE_PROMPTS["premium-pastel"];
-      const isPremium = styleId === "premium-pastel" || styleId === "premium-dark";
+      const isPremium = styleId !== "glassmorphism";
       const subjectLine = `Subject / product being showcased: "${product.name}"${product.category ? ` (${product.category})` : ""}.`;
       const userExtra = imagePrompt?.trim() ? ` Additional direction: ${imagePrompt.trim()}.` : "";
       const prompt = isPremium
         ? `${styleText} ${subjectLine}${userExtra} Render exactly the small text shown (brand pill, product pill, website www.accessnowbd.com, phone +880 1580-607614). Do NOT add any other text or watermark. Ultra high detail, 1:1 square.`
         : (imagePrompt?.trim() || `${styleText}. ${subjectLine} Branded for ${SHOP_BRAND}. 1:1 square, ultra high detail, no text, no watermark.`);
 
-      // ---- Path A: Lovable AI Gateway (preferred) ----
+      // ---- Path A: Lovable AI Gateway (preferred) — Nano Banana 2 with fallback ----
       if (apiKey) {
-        try {
-          const gw = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${apiKey}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              model: "google/gemini-2.5-flash-image-preview",
-              messages: [{ role: "user", content: prompt }],
-              modalities: ["image", "text"],
-            }),
-          });
-          if (gw.status === 429) return json({ error: "Rate limited, please retry shortly." }, 429, corsHeaders);
-          if (gw.status === 402) return json({ error: "AI credits exhausted. Add credits in Lovable workspace." }, 402, corsHeaders);
-          if (gw.ok) {
-            const gd = await gw.json();
-            const msg = gd?.choices?.[0]?.message ?? {};
-            const url: string | undefined =
-              msg?.images?.[0]?.image_url?.url ||
-              msg?.images?.[0]?.url ||
-              (Array.isArray(msg?.content)
-                ? msg.content.find((c: any) => c?.image_url?.url)?.image_url?.url
-                : undefined);
-            if (url) return json({ image: url }, 200, corsHeaders);
-            console.error("gateway returned no image", JSON.stringify(gd).slice(0, 400));
-          } else {
-            console.error("gateway image error", gw.status, (await gw.text()).slice(0, 200));
+        const models = ["google/gemini-3.1-flash-image-preview", "google/gemini-2.5-flash-image-preview"];
+        for (const model of models) {
+          try {
+            const gw = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                model,
+                messages: [{ role: "user", content: prompt }],
+                modalities: ["image", "text"],
+              }),
+            });
+            if (gw.status === 429) return json({ error: "Rate limited, please retry shortly." }, 429, corsHeaders);
+            if (gw.status === 402) return json({ error: "AI credits exhausted. Add credits in Lovable workspace." }, 402, corsHeaders);
+            if (gw.ok) {
+              const gd = await gw.json();
+              const msg = gd?.choices?.[0]?.message ?? {};
+              const url: string | undefined =
+                msg?.images?.[0]?.image_url?.url ||
+                msg?.images?.[0]?.url ||
+                (Array.isArray(msg?.content)
+                  ? msg.content.find((c: any) => c?.image_url?.url)?.image_url?.url
+                  : undefined);
+              if (url) return json({ image: url }, 200, corsHeaders);
+              console.error(`gateway ${model} returned no image`, JSON.stringify(gd).slice(0, 400));
+            } else {
+              console.error(`gateway ${model} error`, gw.status, (await gw.text()).slice(0, 200));
+            }
+          } catch (e) {
+            console.error(`gateway ${model} exception`, e);
           }
-        } catch (e) {
-          console.error("gateway image exception", e);
         }
       }
 
