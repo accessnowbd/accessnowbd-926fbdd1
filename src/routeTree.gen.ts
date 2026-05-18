@@ -44,6 +44,7 @@ import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
 import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
 import { Route as ApiPublicClientErrorsRouteImport } from './routes/api/public/client-errors'
@@ -223,6 +224,11 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminDescriptionPreviewRoute = AdminDescriptionPreviewRouteImport.update({
+  id: '/description-preview',
+  path: '/description-preview',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPageRoute = AdminPageRouteImport.update({
   id: '/$page',
   path: '/$page',
@@ -268,6 +274,7 @@ export interface FileRoutesByFullPath {
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
+  '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -307,6 +314,7 @@ export interface FileRoutesByTo {
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
+  '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -348,6 +356,7 @@ export interface FileRoutesById {
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
+  '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -390,6 +399,7 @@ export interface FileRouteTypes {
     | '/streaming'
     | '/terms'
     | '/admin/$page'
+    | '/admin/description-preview'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
@@ -429,6 +439,7 @@ export interface FileRouteTypes {
     | '/streaming'
     | '/terms'
     | '/admin/$page'
+    | '/admin/description-preview'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
@@ -469,6 +480,7 @@ export interface FileRouteTypes {
     | '/streaming'
     | '/terms'
     | '/admin/$page'
+    | '/admin/description-preview'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
@@ -761,6 +773,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrdersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/description-preview': {
+      id: '/admin/description-preview'
+      path: '/description-preview'
+      fullPath: '/admin/description-preview'
+      preLoaderRoute: typeof AdminDescriptionPreviewRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/$page': {
       id: '/admin/$page'
       path: '/$page'
@@ -787,6 +806,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminPageRoute: typeof AdminPageRoute
+  AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminPromotionsRoute: typeof AdminPromotionsRoute
@@ -797,6 +817,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminPageRoute: AdminPageRoute,
+  AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminPromotionsRoute: AdminPromotionsRoute,
