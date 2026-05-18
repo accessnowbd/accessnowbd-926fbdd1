@@ -294,21 +294,21 @@ function HeroExperience() {
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 p-7 md:p-12 lg:p-16 items-center">
           {/* LEFT — Content */}
           <div className="lg:col-span-7 space-y-7">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md" style={{ backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)" }}>
               <span className="flex h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-              <span className="text-[11px] font-bold text-cyan-300 tracking-wider uppercase">#1 Premium Marketplace · BD</span>
-              <span className="w-px h-3 bg-white/20 mx-1" />
-              <span className="inline-flex items-center gap-1 text-[11px] text-slate-300">
+              <span className="text-[11px] font-bold tracking-wider uppercase" style={{ color: "#22d3ee" }}>#1 Premium Marketplace · BD</span>
+              <span className="w-px h-3 mx-1" style={{ backgroundColor: "rgba(255,255,255,0.2)" }} />
+              <span className="inline-flex items-center gap-1 text-[11px]" style={{ color: "#cbd5e1" }}>
                 <Star className="h-3 w-3 fill-[var(--gold)] text-[var(--gold)]" /> 4.9 · 12K+ Reviews
               </span>
             </div>
 
             <h1
-              className="font-extrabold text-white leading-[1.1]"
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 5vw, 64px)", letterSpacing: "-0.02em" }}
+              className="font-extrabold leading-[1.1]"
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 5vw, 64px)", letterSpacing: "-0.02em", color: "#ffffff" }}
             >
-              <span className="block">Premium Software</span>
-              <span className="block mt-1 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <span className="block" style={{ color: "#ffffff" }}>Premium Software</span>
+              <span className="block mt-1" style={{ backgroundImage: "linear-gradient(90deg,#22d3ee,#60a5fa,#a78bfa)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
                 এক ক্লিকেই, আপনার হাতে।
               </span>
             </h1>
