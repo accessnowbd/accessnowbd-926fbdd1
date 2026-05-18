@@ -254,7 +254,7 @@ function ProductPage() {
           {faqs.map((f, i) => {
             const open = openFaq === i;
             return (
-              <div key={i} className="rounded-xl backdrop-blur-xl bg-white/40 border border-white/60 shadow-[0_4px_20px_-8px_rgba(20,184,166,0.25)]">
+              <GlassCard key={i} tint="teal" blur="lg" glow="sm" padding="none" rounded="xl">
                 <button
                   onClick={() => setOpenFaq(open ? null : i)}
                   className="w-full flex items-center justify-between gap-3 px-4 h-11 text-left text-sm font-medium text-slate-800"
@@ -267,7 +267,7 @@ function ProductPage() {
                     {f.a}
                   </div>
                 )}
-              </div>
+              </GlassCard>
             );
           })}
         </div>
