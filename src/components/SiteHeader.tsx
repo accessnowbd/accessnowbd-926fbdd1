@@ -73,7 +73,7 @@ export function TopUtilityBar() {
             }}
           >
             <Zap className="w-3 h-3 text-aqua" strokeWidth={2.5} />
-            <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg,#fff,#bce8ff)" }}>
+            <span className="font-extrabold text-white">
               Fast · Secure · Reliable
             </span>
           </span>
