@@ -1,10 +1,10 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  ShieldAlert, LogOut, Bell, Globe,
+  ShieldAlert, LogOut, Bell, Globe, Search,
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X, Pin,
 } from "lucide-react";
-import { SearchBar } from "@/components/SearchBar";
+import { AdminGlobalSearch, useAdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
