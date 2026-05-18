@@ -72,7 +72,8 @@ function ProductPage() {
   const navigate = useNavigate();
   const { add } = useCart();
   useShopConfig();
-  const [selected, setSelected] = useState(0);
+  const popularIdx = (loaderProduct?.plans ?? product?.plans ?? []).findIndex((p) => p.popular);
+  const [selected, setSelected] = useState(() => (popularIdx > 0 ? popularIdx : 0));
   const [qty, setQty] = useState(1);
   const [descOpen, setDescOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -89,9 +90,7 @@ function ProductPage() {
     );
   }
 
-  const popularIdx = product.plans.findIndex((p) => p.popular);
-  const safeSelected = Math.min(selected, Math.max(product.plans.length - 1, 0));
-  const activeIdx = selected === 0 && popularIdx > 0 ? popularIdx : safeSelected;
+  const activeIdx = Math.min(selected, Math.max(product.plans.length - 1, 0));
   const plan = product.plans[activeIdx];
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 8);
 
