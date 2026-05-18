@@ -285,12 +285,12 @@ export function SiteHeader() {
                 <Search className="w-4 h-4 text-aqua" />
               </button>
 
-              <ThemeSwitcher />
+              <div className="hidden md:flex items-center gap-1.5 md:gap-2">
+                <ThemeSwitcher />
 
-              <CartIcon />
+                <CartIcon />
 
-              {user ? (
-                <div className="flex items-center gap-1.5">
+                {user ? (
                   <Link
                     to="/dashboard"
                     className="inline-flex items-center gap-1.5 sm:gap-2 h-10 sm:h-11 px-3 sm:px-0 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition whitespace-nowrap"
@@ -303,15 +303,15 @@ export function SiteHeader() {
                     <UserCircle2 className="w-4 h-4" />
                     <span className="hidden sm:inline max-w-[120px] truncate">Dashboard</span>
                   </Link>
-                </div>
-              ) : (
-                <Link
-                  to="/login"
-                  className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-3.5 sm:px-4 rounded-full text-white text-[12px] sm:text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-aqua shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)] hover:brightness-110 transition"
-                >
-                  <LogIn className="w-3.5 h-3.5" /> Login
-                </Link>
-              )}
+                ) : (
+                  <Link
+                    to="/login"
+                    className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-3.5 sm:px-4 rounded-full text-white text-[12px] sm:text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-aqua shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)] hover:brightness-110 transition"
+                  >
+                    <LogIn className="w-3.5 h-3.5" /> Login
+                  </Link>
+                )}
+              </div>
 
               <button
                 onClick={() => setOpen((o) => !o)}
