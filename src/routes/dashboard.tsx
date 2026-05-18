@@ -68,6 +68,7 @@ function DashboardPage() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
   const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null } | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState<SectionId>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
