@@ -255,27 +255,19 @@
 
     color-scheme: light;
   }
-  /* Pure white blurred canvas — no color tint, just soft white */
+  /* Pure white canvas — flat paint, no fixed attachment or full-page
+     backdrop-filter (both cause scroll-time white flicker / repaint storms). */
   html.theme-white body {
     background-color: #ffffff;
     background-image:
       radial-gradient(60% 50% at 50% 0%, rgba(245, 245, 250, 0.9), transparent 70%),
       radial-gradient(50% 40% at 100% 100%, rgba(248, 248, 252, 0.8), transparent 70%),
       radial-gradient(50% 40% at 0% 100%, rgba(248, 248, 252, 0.8), transparent 70%);
-    background-attachment: fixed;
+    background-attachment: scroll;
     color: var(--color-foreground);
   }
   html.theme-white body::before { display: none; }
-  html.theme-white body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: -1;
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    background: rgba(255, 255, 255, 0.4);
-  }
+  html.theme-white body::after { display: none; }
 
   /* GLASS CARDS — premium frosted white over violet/indigo mesh */
   html.theme-white .glass {
