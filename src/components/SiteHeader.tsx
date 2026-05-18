@@ -7,7 +7,7 @@ import {
   Youtube,
   Twitter,
   Search,
-  Menu,
+  MoreVertical,
   X,
   Zap,
   ShieldCheck,
