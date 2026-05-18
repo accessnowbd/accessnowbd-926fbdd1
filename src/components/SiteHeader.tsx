@@ -17,6 +17,17 @@ import {
   LogIn,
   UserCircle2,
   LogOut,
+  Home,
+  ShoppingBag,
+  GraduationCap,
+  HelpCircle,
+  MessageCircle,
+  Flame,
+  Headphones,
+  Tv,
+  Bot,
+  Package,
+  CheckCircle2,
 } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CartIcon } from "@/components/CartIcon";
