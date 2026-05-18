@@ -244,7 +244,7 @@ function ProductPage() {
             )}
           </div>
 
-        </div>
+        </GlassCard>
       </section>
 
       {/* FAQ */}
