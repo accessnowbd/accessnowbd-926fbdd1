@@ -298,6 +298,23 @@ function HeroExperience() {
       />
 
       <div className="relative mx-auto max-w-[1280px]">
+        {/* Vivid color blobs behind the glass — pink top-left, green bottom-right */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-16 left-8 h-72 w-72 rounded-full blur-[2px] opacity-90"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 50%,#ff2d87 0%,#ff2d87 35%,rgba(255,45,135,0) 70%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-20 right-16 h-72 w-72 rounded-full blur-[2px] opacity-90"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 50%,#22c55e 0%,#22c55e 35%,rgba(34,197,94,0) 70%)",
+          }}
+        />
         <div
           aria-hidden
           className="pointer-events-none absolute top-1/3 right-1/3 h-56 w-56 rounded-full blur-[2px] opacity-70"
