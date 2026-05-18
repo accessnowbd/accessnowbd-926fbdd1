@@ -208,7 +208,8 @@ export function HeroBannerCarousel() {
   // Cinematic layered background — multiple radial glows + linear depth
   const background = useMemo(() => {
     const a = (n: number) => Math.min(0.95, n * intensityMul);
-    const base = `linear-gradient(135deg, ${mix(bg, "#000", 0.05)} 0%, ${bg} 45%, ${mix(bg, "#000", 0.55)} 100%)`;
+    // Lighter, luminous base — keeps brand hue without crushing into black
+    const base = `linear-gradient(135deg, ${mix(bg, "#ffffff", 0.06)} 0%, ${bg} 50%, ${mix(bg, accent, 0.12)} 100%)`;
     switch (style) {
       case "aurora":
         return [
