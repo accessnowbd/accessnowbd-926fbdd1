@@ -92,7 +92,7 @@ function FaqGroup({ title, items }: { title: string; items: { q: string; a: stri
   const [open, setOpen] = useState<number | null>(0);
   return (
     <div>
-      <h2 className="text-xl font-extrabold mb-4 tracking-tight">{title}</h2>
+      <h2 className="text-xl font-extrabold mb-4 tracking-tight text-foreground">{title}</h2>
       <div className="space-y-3">
         {items.map((it, i) => {
           const isOpen = open === i;
