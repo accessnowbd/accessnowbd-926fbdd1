@@ -348,7 +348,7 @@ function HeroExperience() {
                 </span>
               </h1>
 
-              <p className="max-w-xl text-base md:text-lg leading-relaxed text-slate-700">
+              <p className="max-w-xl text-sm md:text-base leading-relaxed text-slate-700">
                 ভেরিফাইড লাইসেন্স · ১০ মিনিটে ডেলিভারি · ২৪/৭ লাইভ সাপোর্ট। বাংলাদেশের সবচেয়ে বিশ্বস্ত সাবস্ক্রিপশন শপ।
               </p>
 
