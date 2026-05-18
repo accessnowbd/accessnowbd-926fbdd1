@@ -73,7 +73,7 @@ const BRANDS: BrandDef[] = [
   { keywords: ["windows 11", "windows 10", "windows"], slug: "windows-11-pro", bg: "#03102a", accent: "#0078d4", glow: "#7dd3fc" },
   { keywords: ["office 365", "office", "microsoft"], slug: "office-365", bg: "#1a0808", accent: "#d83b01", glow: "#fb923c" },
   { keywords: ["apple", "itunes", "app store"], slug: "itunes-giftcard", bg: "#0a0a0a", accent: "#a3a3a3", glow: "#e5e5e5" },
-  { keywords: ["eid", "ঈদ"],                                          bg: "#1b0633", accent: "#f43f95", glow: "#fbbf24" },
+  { keywords: ["eid", "ঈদ", "qurbani", "কোরবানি"],                  bg: "#04140d", accent: "#d4af37", glow: "#10b981" },
 ];
 
 function detectBrand(title?: string): BrandDef | null {
