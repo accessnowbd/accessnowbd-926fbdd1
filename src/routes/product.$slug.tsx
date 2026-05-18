@@ -253,27 +253,24 @@ function ProductPage() {
           <div className="mt-6 relative rounded-3xl p-3 bg-white border-2 border-sky-400/70 shadow-[0_18px_50px_-18px_rgba(56,189,248,0.55),0_0_0_4px_rgba(186,230,253,0.4)]">
             <button
               onClick={buyNow}
-              style={{ background: "linear-gradient(90deg,#7c3aed,#a855f7)", color: "#fff" }}
-              className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-2xl font-bold text-[15px] hover:opacity-95 active:scale-[0.99] transition shadow-[0_8px_20px_-8px_rgba(124,58,237,0.55)]"
+              className="product-buy-button w-full h-12 inline-flex items-center justify-center gap-2 rounded-2xl font-bold text-[15px] hover:opacity-95 active:scale-[0.99] transition"
             >
-              <CreditCard className="w-4 h-4" style={{ color: "#fff" }} /> Buy Now
+              <CreditCard className="w-4 h-4" /> Buy Now
             </button>
             <div className="mt-2 grid grid-cols-2 gap-2">
               <a
                 href={plan ? waOrderUrl([{ name: product.name, planPeriod: plan.period, qty, price: parsePrice(plan.price) }]) : "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ background: "#10b981", color: "#fff" }}
-                className="h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl font-bold text-[13px] hover:opacity-95 transition shadow-[0_6px_14px_-6px_rgba(16,185,129,0.55)]"
+                className="product-whatsapp-button h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl font-bold text-[13px] hover:opacity-95 transition"
               >
-                <MessageCircle className="w-4 h-4" style={{ color: "#fff" }} /> WhatsApp
+                <MessageCircle className="w-4 h-4" /> WhatsApp
               </a>
               <button
                 onClick={addToCart}
-                style={{ background: "#ffffff", color: "#6d28d9", borderColor: "#c4b5fd" }}
-                className="h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl border-2 font-bold text-[13px] hover:bg-violet-50 transition"
+                className="product-cart-button h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl font-bold text-[13px] hover:opacity-95 transition"
               >
-                <ShoppingCart className="w-4 h-4" style={{ color: "#6d28d9" }} /> Cart
+                <ShoppingCart className="w-4 h-4" /> Cart
               </button>
             </div>
           </div>
