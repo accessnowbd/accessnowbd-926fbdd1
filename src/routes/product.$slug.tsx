@@ -8,6 +8,7 @@ import { ProductBanner } from "@/components/ProductBanner";
 import { useShopConfig } from "@/hooks/useShopConfig";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { getProduct } from "@/lib/products.functions";
+import { ProductMarkdown } from "@/components/ProductMarkdown";
 
 const parsePrice = (p: string) => Number(p.replace(/[^\d]/g, "")) || 0;
 
