@@ -161,67 +161,60 @@ serve(async (req) => {
     if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
 
     // ===== TEXT GENERATION =====
-    // STRUCTURED DESCRIPTION TEMPLATE — every product description must follow this
-    // sectioned layout so the storefront renders a consistent, premium product page.
-    const DESCRIPTION_TEMPLATE = `
+    // STRUCTURED DESCRIPTION TEMPLATE — fetched from admin_records so admins can
+    // edit section order / headings from the admin panel without redeploying.
+    const DEFAULT_DESCRIPTION_TEMPLATE = `
 The "description" field MUST be markdown that follows EXACTLY this section order and headings (in clean English, with Bangla "Note" line at the end). Tailor every line to the specific product, brand and category — never leave placeholder text.
 
 ## {Product Name} – {one-line value proposition}
 
-{2-4 sentence intro paragraph: what the product is, who it is for in Bangladesh, and the main benefit of buying from AccessNow BD. Mention the brand naturally.}
+{2-4 sentence intro paragraph.}
 
 ## Choose Your {Brand} Plan
-Different plans are available depending on how you want to use {Product}.
 
 ### 🟪 {Plan 1 name} – {duration}
-- {benefit / feature}
-- {benefit / feature}
-- {benefit / feature}
-- {benefit / feature}
+- {benefit}
 
 ### 🟦 {Plan 2 name} – {duration}
-- {benefit / feature}
-- {benefit / feature}
-- {benefit / feature}
-- {benefit / feature}
-
-### 🟩 {Plan 3 name} – {duration}
-- {benefit / feature}
-- {benefit / feature}
-- {benefit / feature}
-
-(Only include the plan blocks that genuinely exist for this product — 1 to 4 plan blocks max. Always use 🟪 🟦 🟩 🟧 emoji in that order.)
+- {benefit}
 
 ## Powerful {Brand} Features
 - {feature}
-- {feature}
-- {feature}
-- {feature}
-- {feature}
-- {feature}
 
 ## Perfect For
-- **Content Creators** – {one-line reason}
-- **Marketers** – {one-line reason}
-- **Developers** – {one-line reason}
-- **Students & Researchers** – {one-line reason}
-- **Business Professionals** – {one-line reason}
+- **Content Creators** – {reason}
 
 ## Why Buy From AccessNow BD
 - Trusted digital subscription provider in Bangladesh
 - Secure delivery with verified access
-- Ready-to-use accounts
-- Password change supported (where applicable)
 - Fast customer support
-- Affordable pricing
 
 ## Delivery Information
 - Delivery time: within 1–2 hours during office hours
-- Secure account delivery
-- Simple activation process
 
 **Note:** Some {Brand} features may be region-dependent and availability in Bangladesh may vary.
 `;
+
+    let DESCRIPTION_TEMPLATE = DEFAULT_DESCRIPTION_TEMPLATE;
+    try {
+      const supaUrl = Deno.env.get("SUPABASE_URL");
+      const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (supaUrl && serviceKey) {
+        const r = await fetch(
+          `${supaUrl}/rest/v1/admin_records?kind=eq.description_template&is_active=eq.true&select=data&order=updated_at.desc&limit=1`,
+          { headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` } },
+        );
+        if (r.ok) {
+          const rows = await r.json();
+          const tpl = rows?.[0]?.data?.template;
+          if (typeof tpl === "string" && tpl.trim().length > 50) {
+            DESCRIPTION_TEMPLATE = tpl;
+          }
+        }
+      }
+    } catch (e) {
+      console.error("template fetch failed, using default", e);
+    }
 
     const systems: Record<Exclude<Mode, "image">, string> = {
       short:
