@@ -418,18 +418,18 @@ function HeroExperience() {
         </div>
 
         {/* Trust bar */}
-        <div className="relative bg-white/5 border-t border-white/10 px-6 py-5 flex flex-wrap justify-center items-center gap-x-12 gap-y-4">
+        <div className="relative px-6 py-5 flex flex-wrap justify-center items-center gap-x-12 gap-y-4" style={{ backgroundColor: "rgba(255,255,255,0.04)", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
           {[
-            { icon: ShieldCheck, label: "100% ভেরিফাইড", tone: "cyan", color: "text-cyan-400 bg-cyan-500/15" },
-            { icon: CheckCircle2, label: "ফুল ওয়ারেন্টি", tone: "blue", color: "text-blue-400 bg-blue-500/15" },
-            { icon: Zap, label: "ইনস্ট্যান্ট ডেলিভারি", tone: "purple", color: "text-purple-400 bg-purple-500/15" },
-            { icon: Clock3, label: "১০ মিনিটে অ্যাক্টিভেশন", tone: "emerald", color: "text-emerald-400 bg-emerald-500/15" },
+            { icon: ShieldCheck, label: "100% ভেরিফাইড", color: "text-cyan-400 bg-cyan-500/15" },
+            { icon: CheckCircle2, label: "ফুল ওয়ারেন্টি", color: "text-blue-400 bg-blue-500/15" },
+            { icon: Zap, label: "ইনস্ট্যান্ট ডেলিভারি", color: "text-purple-400 bg-purple-500/15" },
+            { icon: Clock3, label: "১০ মিনিটে অ্যাক্টিভেশন", color: "text-emerald-400 bg-emerald-500/15" },
           ].map(({ icon: Icon, label, color }) => (
             <div key={label} className="flex items-center gap-3">
               <div className={`w-8 h-8 rounded-full grid place-items-center ${color}`}>
                 <Icon className="w-4 h-4" />
               </div>
-              <span className="text-slate-200 text-sm font-medium">{label}</span>
+              <span className="text-sm font-medium" style={{ color: "#e2e8f0" }}>{label}</span>
             </div>
           ))}
         </div>
