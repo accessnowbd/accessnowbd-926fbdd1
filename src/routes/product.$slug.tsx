@@ -240,25 +240,6 @@ function ProductPage() {
             )}
           </div>
 
-          {/* Payment methods */}
-          <div className="mt-6 flex items-center gap-3 flex-wrap max-w-md">
-            <span className="text-xs text-slate-500">Pay with</span>
-            <div className="flex flex-wrap items-center gap-1.5">
-              {PAYMENT_METHODS.map((m) => (
-                <span
-                  key={m.label}
-                  title={m.label}
-                  className="inline-flex items-center justify-center h-6 px-2 rounded bg-white border border-slate-200 text-[10px] font-bold tracking-wide"
-                  style={{ color: m.color }}
-                >
-                  {m.label}
-                </span>
-              ))}
-              <span className="inline-flex items-center gap-1 h-6 px-2 rounded bg-white border border-slate-200 text-[10px] font-bold text-slate-500">
-                verified by <span className="text-red-600">EPS</span>
-              </span>
-            </div>
-          </div>
         </div>
       </section>
 
