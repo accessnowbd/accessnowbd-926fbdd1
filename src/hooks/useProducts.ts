@@ -41,7 +41,7 @@ export function useProducts(initialData?: Product[]) {
   return { products: q.data ?? [], isLoading: q.isLoading, error: q.error };
 }
 
-export function useProduct(slug: string | undefined) {
+export function useProduct(slug: string | undefined, initialData?: Product | null) {
   const queryClient = useQueryClient();
   const q = useQuery({
     queryKey: ["product", slug],
@@ -50,7 +50,7 @@ export function useProduct(slug: string | undefined) {
     // Seed from the products list cache (and from any prior single-product
     // prefetch via the same queryKey) so the detail page paints instantly.
     initialData: () =>
-      queryClient.getQueryData<Product[]>(["products"])?.find((p) => p.slug === slug),
+      initialData ?? queryClient.getQueryData<Product[]>(["products"])?.find((p) => p.slug === slug),
     initialDataUpdatedAt: () =>
       queryClient.getQueryState(["products"])?.dataUpdatedAt,
     // SWR: serve cached data immediately; only refetch in background after staleTime.
