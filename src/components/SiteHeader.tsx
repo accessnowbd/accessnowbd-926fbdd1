@@ -249,7 +249,7 @@ export function SiteHeader() {
                     className="text-[18px] sm:text-[20px] md:text-[24px] font-extrabold tracking-normal bg-clip-text text-transparent"
                     style={{
                       backgroundImage:
-                        "linear-gradient(180deg, #7cb6ff 0%, #2f6dff 55%, #1e3fb8 100%)",
+                        "linear-gradient(180deg, #1e3fb8 0%, #1d4ed8 55%, #0f2773 100%)",
                     }}
                   >
                     Access
