@@ -136,6 +136,7 @@ const FALLBACK: BannerRow[] = [
 
 export function HeroBannerCarousel() {
   const [rows, setRows] = useState<BannerRow[]>([]);
+  const [productMap, setProductMap] = useState<Record<string, string>>({});
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -149,6 +150,18 @@ export function HeroBannerCarousel() {
       .then(({ data }) => {
         if (!mounted) return;
         setRows((data ?? []) as BannerRow[]);
+      });
+    supabase
+      .from("products")
+      .select("slug, image_url")
+      .eq("is_active", true)
+      .then(({ data }) => {
+        if (!mounted) return;
+        const map: Record<string, string> = {};
+        for (const p of (data ?? []) as { slug: string; image_url: string }[]) {
+          if (p.slug && p.image_url) map[p.slug] = p.image_url;
+        }
+        setProductMap(map);
       });
     return () => { mounted = false; };
   }, []);
@@ -164,18 +177,25 @@ export function HeroBannerCarousel() {
     return () => window.clearInterval(id);
   }, [banners.length]);
 
+  // Auto-detect brand from banner title — drives both colors and product image
+  const brand = useMemo(() => detectBrand(current.data.title), [current.data.title]);
   const fallbackPalette = BANNER_PALETTES[PALETTE_KEYS[active % PALETTE_KEYS.length]];
   const selectedPalette = current.data.color_preset
     ? BANNER_PALETTES[current.data.color_preset] ?? fallbackPalette
     : fallbackPalette;
 
-  const bg = current.data.bg_color || selectedPalette.bg;
-  const accent = current.data.accent_color || selectedPalette.accent;
-  const glow = current.data.glow_color || selectedPalette.glow;
+  // Priority: explicit custom color > detected brand > preset > fallback
+  const bg = current.data.bg_color || brand?.bg || selectedPalette.bg;
+  const accent = current.data.accent_color || brand?.accent || selectedPalette.accent;
+  const glow = current.data.glow_color || brand?.glow || selectedPalette.glow;
   const style: BgStyle = current.data.bg_style || "spotlight";
   const intensity: OverlayIntensity = current.data.overlay_intensity || "medium";
 
+  // Resolve image: explicit URL > product's image by brand slug
+  const resolvedImage = current.data.image_url || (brand?.slug ? productMap[brand.slug] : undefined);
+
   const intensityMul = intensity === "low" ? 0.65 : intensity === "high" ? 1.35 : 1;
+
 
   // Cinematic layered background — multiple radial glows + linear depth
   const background = useMemo(() => {
