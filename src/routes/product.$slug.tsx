@@ -156,7 +156,7 @@ function ProductPage() {
           <div className="mt-2 flex items-center gap-2 text-sm">
             <div className="flex">
               {[1,2,3,4,5].map((i) => (
-                <Star key={i} className="w-4 h-4 fill-red-500 text-red-500" />
+                <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
               ))}
             </div>
             <span className="text-slate-500">12 reviews</span>
