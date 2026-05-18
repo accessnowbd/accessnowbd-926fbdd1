@@ -10,6 +10,7 @@ import { getProduct } from "@/lib/products.functions";
 import { ProductMarkdown } from "@/components/ProductMarkdown";
 import { SiteFooter } from "@/components/SiteFooter";
 import { GlassCard } from "@/components/ui-glass/GlassCard";
+import { GlassButton } from "@/components/ui-glass/GlassButton";
 
 const parsePrice = (p: unknown) => {
   if (typeof p === "number") return Number.isFinite(p) ? p : 0;
