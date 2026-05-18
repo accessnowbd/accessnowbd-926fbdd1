@@ -477,6 +477,77 @@ export function HeroBannerCarousel() {
                         style={{ filter: `drop-shadow(0 18px 40px ${hexAlpha(accent, 0.45)})` }}
                       />
                     </div>
+                  ) : isEid ? (
+                    <div className="relative grid h-full w-full place-items-center px-6 py-6 text-center">
+                      {/* Soft radial glow behind card */}
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0"
+                        style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(glow, 0.25)} 0%, transparent 65%)` }}
+                      />
+                      {/* Crescent + star mark */}
+                      <div className="relative flex flex-col items-center gap-3">
+                        <svg width="64" height="64" viewBox="0 0 100 100" className="drop-shadow-[0_0_24px_rgba(212,175,55,0.65)]">
+                          <defs>
+                            <radialGradient id="eidCrescent" cx="35%" cy="35%" r="70%">
+                              <stop offset="0%" stopColor="#fde68a" />
+                              <stop offset="60%" stopColor={accent} />
+                              <stop offset="100%" stopColor={mix(accent, "#000", 0.45)} />
+                            </radialGradient>
+                          </defs>
+                          <path d="M50 8 a42 42 0 1 0 30 71 a32 32 0 1 1 0 -62 a42 42 0 0 0 -30 -9 z" fill="url(#eidCrescent)" />
+                          <polygon points="86,30 89,38 97,38 90,43 93,51 86,46 79,51 82,43 75,38 83,38" fill={accent} opacity="0.95" />
+                        </svg>
+
+                        {/* Eid Mubarak greeting */}
+                        <div
+                          className="font-extrabold tracking-tight"
+                          style={{
+                            fontFamily: "var(--font-display)",
+                            fontSize: "clamp(28px, 3.4vw, 42px)",
+                            lineHeight: 1.05,
+                            background: `linear-gradient(135deg, #fde68a 0%, ${accent} 55%, ${glow} 100%)`,
+                            WebkitBackgroundClip: "text",
+                            backgroundClip: "text",
+                            color: "transparent",
+                            textShadow: `0 0 30px ${hexAlpha(accent, 0.3)}`,
+                          }}
+                        >
+                          Eid Mubarak
+                        </div>
+                        <div className="text-sm md:text-base font-semibold text-white/85" style={{ fontFamily: "var(--font-display)" }}>
+                          ঈদুল আযহার শুভেচ্ছা
+                        </div>
+                        <div className="max-w-[260px] text-[11px] md:text-xs text-white/65 leading-relaxed">
+                          AccessNow BD পরিবারের পক্ষ থেকে সকল গ্রাহককে জানাই কোরবানির ঈদের অগ্রিম শুভেচ্ছা।
+                        </div>
+
+                        {/* Discount + coupon badge */}
+                        <div className="mt-2 flex items-center gap-2">
+                          <div
+                            className="rounded-xl px-3 py-2 text-center"
+                            style={{
+                              background: `linear-gradient(135deg, ${accent}, ${mix(accent, "#000", 0.25)})`,
+                              boxShadow: `0 14px 30px -10px ${hexAlpha(accent, 0.7)}, inset 0 1px 0 ${hexAlpha("#fff", 0.35)}`,
+                            }}
+                          >
+                            <div className="text-[9px] font-bold uppercase tracking-[0.18em] text-black/70">UP TO</div>
+                            <div className="text-lg font-black leading-none text-black">৳১৫০ OFF</div>
+                          </div>
+                          <div
+                            className="rounded-xl border px-3 py-2 backdrop-blur-md"
+                            style={{
+                              borderColor: hexAlpha(accent, 0.5),
+                              background: hexAlpha("#000", 0.35),
+                              boxShadow: `0 0 20px -4px ${hexAlpha(accent, 0.6)}`,
+                            }}
+                          >
+                            <div className="text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: glow }}>Coupon</div>
+                            <div className="text-base font-black leading-none text-white tracking-wider">ACCESSEID25</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   ) : (
                     <div className="grid h-full w-full place-items-center px-10 text-center">
                       <div
