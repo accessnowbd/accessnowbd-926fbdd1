@@ -188,7 +188,17 @@ function DashboardPage() {
             ))}
           </nav>
 
-          <div className="p-3 border-t border-[var(--glass-border)]">
+          <div className="p-3 border-t border-[var(--glass-border)] space-y-2">
+            {isAdmin && (
+              <Link
+                to="/admin"
+                onClick={() => setSidebarOpen(false)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-white shadow-[0_10px_24px_-10px_rgba(124,58,237,0.55)]"
+                style={{ background: "var(--gradient-aurora)" }}
+              >
+                <Shield className="w-4 h-4" /> Admin Panel
+              </Link>
+            )}
             <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-red-300 hover:bg-red-500/10 transition">
               <LogOut className="w-4 h-4" /> Logout
             </button>
