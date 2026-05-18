@@ -103,24 +103,25 @@ serve(async (req) => {
                 modalities: ["image", "text"],
               }),
             });
-          if (gw.status === 429) return json({ error: "Rate limited, please retry shortly." }, 429, corsHeaders);
-          if (gw.status === 402) return json({ error: "AI credits exhausted. Add credits in Lovable workspace." }, 402, corsHeaders);
-          if (gw.ok) {
-            const gd = await gw.json();
-            const msg = gd?.choices?.[0]?.message ?? {};
-            const url: string | undefined =
-              msg?.images?.[0]?.image_url?.url ||
-              msg?.images?.[0]?.url ||
-              (Array.isArray(msg?.content)
-                ? msg.content.find((c: any) => c?.image_url?.url)?.image_url?.url
-                : undefined);
-            if (url) return json({ image: url }, 200, corsHeaders);
-            console.error("gateway returned no image", JSON.stringify(gd).slice(0, 400));
-          } else {
-            console.error("gateway image error", gw.status, (await gw.text()).slice(0, 200));
+            if (gw.status === 429) return json({ error: "Rate limited, please retry shortly." }, 429, corsHeaders);
+            if (gw.status === 402) return json({ error: "AI credits exhausted. Add credits in Lovable workspace." }, 402, corsHeaders);
+            if (gw.ok) {
+              const gd = await gw.json();
+              const msg = gd?.choices?.[0]?.message ?? {};
+              const url: string | undefined =
+                msg?.images?.[0]?.image_url?.url ||
+                msg?.images?.[0]?.url ||
+                (Array.isArray(msg?.content)
+                  ? msg.content.find((c: any) => c?.image_url?.url)?.image_url?.url
+                  : undefined);
+              if (url) return json({ image: url }, 200, corsHeaders);
+              console.error(`gateway ${model} returned no image`, JSON.stringify(gd).slice(0, 400));
+            } else {
+              console.error(`gateway ${model} error`, gw.status, (await gw.text()).slice(0, 200));
+            }
+          } catch (e) {
+            console.error(`gateway ${model} exception`, e);
           }
-        } catch (e) {
-          console.error("gateway image exception", e);
         }
       }
 
