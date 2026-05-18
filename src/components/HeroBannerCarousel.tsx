@@ -149,16 +149,14 @@ export function HeroBannerCarousel() {
   const gradient = useMemo(
     () =>
       [
-        // top-left soft glow
-        `radial-gradient(ellipse 60% 70% at 15% 20%, ${hexAlpha(accent, 0.55)} 0%, transparent 60%)`,
-        // bottom-right accent glow
-        `radial-gradient(ellipse 50% 60% at 90% 95%, ${hexAlpha(accent, 0.35)} 0%, transparent 65%)`,
-        // top sheen
-        `radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 70%)`,
-        // base depth: bg → mid → near-black
-        `linear-gradient(135deg, ${bg} 0%, ${mix(bg, "#000000", 0.45)} 60%, #050505 100%)`,
+        // very subtle top vignette for depth
+        `radial-gradient(ellipse 100% 60% at 50% 0%, ${mix(bg, "#ffffff", 0.08)} 0%, transparent 70%)`,
+        // bottom-edge darkening for grounding
+        `radial-gradient(ellipse 120% 50% at 50% 100%, ${mix(bg, "#000000", 0.55)} 0%, transparent 70%)`,
+        // mostly uniform deep base — single dominant tone
+        `linear-gradient(180deg, ${bg} 0%, ${mix(bg, "#000000", 0.25)} 100%)`,
       ].join(", "),
-    [accent, bg],
+    [bg],
   );
 
   const go = (dir: 1 | -1) =>
