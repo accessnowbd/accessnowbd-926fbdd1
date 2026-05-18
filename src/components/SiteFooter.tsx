@@ -102,56 +102,20 @@ const PAYMENTS = ["BKash", "Nagad", "Rocket", "Visa", "Mastercard"];
 
 export function SiteFooter() {
   return (
-    <footer
-      className="relative mt-16 overflow-hidden border-t border-white/60"
-      style={{
-        background:
-          "linear-gradient(135deg,#eaf2ff 0%,#f4f7ff 40%,#eef4ff 70%,#e6edff 100%)",
-      }}
-    >
-      {/* Vivid color blobs behind glass */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div
-          className="absolute -top-24 -left-20 h-[420px] w-[420px] rounded-full opacity-80"
-          style={{
-            background:
-              "radial-gradient(closest-side, rgba(255,121,180,0.55), transparent 70%)",
-            filter: "blur(2px)",
-          }}
-        />
-        <div
-          className="absolute -bottom-32 -right-20 h-[460px] w-[460px] rounded-full opacity-70"
-          style={{
-            background:
-              "radial-gradient(closest-side, rgba(74,222,168,0.55), transparent 70%)",
-            filter: "blur(2px)",
-          }}
-        />
-        <div
-          className="absolute left-1/2 top-1/3 h-[360px] w-[360px] -translate-x-1/2 rounded-full opacity-60"
-          style={{
-            background:
-              "radial-gradient(closest-side, rgba(167,139,250,0.5), transparent 70%)",
-            filter: "blur(2px)",
-          }}
-        />
+    <footer className="relative mt-16 overflow-hidden border-t border-[var(--glass-border-soft)] bg-[linear-gradient(180deg,rgba(7,9,26,0.74),rgba(7,9,26,0.96))]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-aqua/55 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 opacity-80">
+        <div className="absolute left-1/2 top-0 h-36 w-[min(760px,85vw)] -translate-x-1/2 rounded-full bg-primary/16 blur-[96px]" />
+        <div className="absolute right-[8%] bottom-0 h-60 w-60 rounded-full bg-aqua/8 blur-[90px]" />
+        <div className="absolute left-[8%] bottom-8 h-60 w-60 rounded-full bg-gold/7 blur-[90px]" />
       </div>
-
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-4 pb-7 pt-10 md:px-10 md:pt-12">
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.45fr] lg:items-stretch">
-          <section
-            className="relative min-h-[360px] overflow-hidden rounded-[26px] border border-white/70 p-6 md:p-8"
-            style={{
-              background: "rgba(255,255,255,0.45)",
-              backdropFilter: "blur(28px) saturate(140%)",
-              WebkitBackdropFilter: "blur(28px) saturate(140%)",
-              boxShadow:
-                "0 20px 60px -20px rgba(31,38,135,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
-            }}
-          >
-            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+          <section className="relative min-h-[360px] overflow-hidden rounded-[26px] border border-[var(--glass-border)] bg-[linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.025)_48%,rgba(34,211,238,0.035))] p-6 shadow-[var(--shadow-glass)] md:p-8">
+            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-aqua/55 to-transparent" />
+            <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/18 blur-[90px]" />
+            <div className="pointer-events-none absolute -bottom-28 left-10 h-72 w-72 rounded-full bg-aqua/10 blur-[96px]" />
 
             <div className="relative flex h-full flex-col justify-between gap-8">
               <div>
@@ -218,7 +182,7 @@ export function SiteFooter() {
                   </span>
                 </Link>
 
-                <p className="mt-6 max-w-xl text-[14px] leading-7 text-slate-700">
+                <p className="mt-6 max-w-xl text-[14px] leading-7 text-white/72">
                   <span className="font-bold text-cyan-600">বাংলাদেশের</span> সবচেয়ে{" "}
                   <span className="font-bold text-fuchsia-700">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span>{" "}
                   — <span className="font-semibold text-emerald-700">ভেরিফাইড সাবস্ক্রিপশন</span>,{" "}
@@ -239,12 +203,12 @@ export function SiteFooter() {
                   <a
                     key={label}
                     href={href}
-                    className="group grid min-h-11 grid-cols-[2rem_1fr] items-center gap-3 rounded-2xl border border-white/70 bg-white/55 px-3 py-2 backdrop-blur-md transition-colors duration-200 hover:border-aqua/45 hover:bg-white/75"
+                    className="group grid min-h-11 grid-cols-[2rem_1fr] items-center gap-3 rounded-2xl border border-[var(--glass-border-soft)] bg-white/[0.035] px-3 py-2 transition-colors duration-200 hover:border-aqua/35 hover:bg-white/[0.055]"
                   >
                     <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-[var(--gradient-aurora)] text-white shadow-[0_10px_24px_-14px_rgba(34,211,238,0.8)]">
                       <Icon className="h-3.5 w-3.5" />
                     </span>
-                    <span className="min-w-0 truncate text-[13px] font-semibold leading-5 text-slate-700 group-hover:text-slate-900">
+                    <span className="min-w-0 truncate text-[13px] font-semibold leading-5 text-white/82 group-hover:text-white">
                       {label}
                     </span>
                   </a>
@@ -257,39 +221,36 @@ export function SiteFooter() {
             {COLUMNS.map((col) => (
               <div
                 key={col.title}
-                className="footer-glass-card group/card relative overflow-hidden rounded-[20px] border border-white/70 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-aqua/45 md:min-h-[360px] md:rounded-[24px] md:p-6"
-                style={{
-                  background: "rgba(255,255,255,0.45)",
-                  backdropFilter: "blur(22px) saturate(140%)",
-                  WebkitBackdropFilter: "blur(22px) saturate(140%)",
-                  boxShadow:
-                    "0 12px 36px -16px rgba(31,38,135,0.18), inset 0 1px 0 rgba(255,255,255,0.85)",
-                }}
+                className="footer-glass-card group/card relative overflow-hidden rounded-[20px] border border-white/15 bg-gradient-to-br from-white/[0.10] via-white/[0.05] to-white/[0.02] p-4 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl backdrop-saturate-150 transition-all duration-300 hover:-translate-y-1 hover:border-aqua/30 hover:shadow-[0_20px_48px_-12px_rgba(34,211,238,0.25),inset_0_1px_0_rgba(255,255,255,0.22)] md:min-h-[360px] md:rounded-[24px] md:p-6"
               >
-                <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
-                <span className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-fuchsia-300/40 blur-[60px] opacity-70 transition-opacity duration-300 group-hover/card:opacity-100" />
-                <span className="pointer-events-none absolute -bottom-20 -left-12 h-44 w-44 rounded-full bg-emerald-300/30 blur-[70px]" />
+                {/* Glossy top highlight */}
+                <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+                {/* Diagonal sheen */}
+                <span className="pointer-events-none absolute -top-1/2 -left-1/3 h-[200%] w-[40%] rotate-12 bg-gradient-to-r from-transparent via-white/8 to-transparent opacity-60" />
+                {/* Soft color glow */}
+                <span className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/20 blur-[60px] opacity-70 transition-opacity duration-300 group-hover/card:opacity-100" />
+                <span className="pointer-events-none absolute -bottom-20 -left-12 h-44 w-44 rounded-full bg-aqua/12 blur-[70px]" />
 
                 <div className="relative mb-4 flex items-center gap-3 md:mb-5">
-                  <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_12px_28px_-16px_rgba(34,211,238,0.6),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-white/40 md:h-10 md:w-10 md:rounded-2xl`}>
+                  <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_12px_28px_-16px_rgba(34,211,238,0.75),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-white/20 md:h-10 md:w-10 md:rounded-2xl`}>
                     <col.Icon className="h-4 w-4 md:h-5 md:w-5" />
                   </span>
                   <h4
-                    className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-slate-800 md:text-[12px]"
+                    className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/90 md:text-[12px]"
                     style={{ fontFamily: "var(--font-heading)" }}
                   >
                     {col.title}
                   </h4>
-                  <span className="ml-auto h-px flex-1 bg-gradient-to-r from-slate-300/60 to-transparent" />
+                  <span className="ml-auto h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" />
                 </div>
                 <ul className="relative grid grid-cols-2 gap-1.5 md:grid-cols-1 md:gap-2.5">
                   {col.links.map((l) => (
                     <li key={l.to + l.label}>
                       <Link
                         to={l.to}
-                        className="group flex min-h-9 items-center gap-2 rounded-full border border-white/70 bg-white/55 px-2.5 py-1.5 text-[12px] font-semibold leading-4 text-slate-700 transition-all duration-200 hover:border-aqua/45 hover:bg-white/80 hover:text-slate-900 md:rounded-xl md:border-transparent md:bg-transparent md:px-2 md:text-[13.5px] md:leading-5 md:hover:border-white/70 md:hover:bg-white/65"
+                        className="group flex min-h-9 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[12px] font-semibold leading-4 text-white/82 transition-all duration-200 hover:border-aqua/35 hover:bg-white/[0.09] hover:text-white md:rounded-xl md:border-transparent md:bg-transparent md:px-2 md:text-[13.5px] md:leading-5 md:hover:border-white/10 md:hover:bg-white/[0.07] md:hover:backdrop-blur-md"
                       >
-                        <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${col.bullet} opacity-80 shadow-[0_0_8px_rgba(34,211,238,0.5)] transition-opacity duration-200 group-hover:opacity-100`} />
+                        <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${col.bullet} opacity-80 shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-opacity duration-200 group-hover:opacity-100`} />
                         <span className="truncate">{l.label}</span>
                       </Link>
                     </li>
@@ -300,16 +261,7 @@ export function SiteFooter() {
           </section>
         </div>
 
-        <div
-          className="mt-6 grid gap-4 rounded-[24px] border border-white/70 px-4 py-4 md:grid-cols-[1fr_auto] md:items-center md:px-5"
-          style={{
-            background: "rgba(255,255,255,0.55)",
-            backdropFilter: "blur(22px) saturate(140%)",
-            WebkitBackdropFilter: "blur(22px) saturate(140%)",
-            boxShadow:
-              "0 12px 36px -18px rgba(31,38,135,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
-          }}
-        >
+        <div className="mt-6 grid gap-4 rounded-[24px] border border-[var(--glass-border-soft)] bg-foreground/[0.04] px-4 py-4 md:grid-cols-[1fr_auto] md:items-center md:px-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-2">
               {SOCIALS.map(({ Icon, href, label }) => (
@@ -317,33 +269,33 @@ export function SiteFooter() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="group relative grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/70 bg-white/60 text-slate-700 backdrop-blur-md transition-all duration-300 hover:border-[var(--gold)]/60 hover:bg-white/85 hover:text-[var(--gold)] hover:shadow-[0_8px_22px_-12px_rgba(212,175,55,0.55)]"
+                  className="group relative grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[var(--glass-border)] bg-foreground/[0.04] text-foreground/80 transition-all duration-300 hover:border-[var(--gold)]/50 hover:bg-foreground/[0.07] hover:text-[var(--gold)] hover:shadow-[0_8px_22px_-12px_rgba(212,175,55,0.55)]"
                 >
                   <Icon className="h-[15px] w-[15px] transition-transform duration-300 group-hover:scale-110" />
                 </a>
               ))}
             </div>
 
-            <div className="relative inline-flex items-center overflow-hidden rounded-full border border-white/70 bg-white/55 px-4 py-1.5 backdrop-blur-md shadow-[0_4px_18px_-10px_rgba(79,70,229,0.25)]">
-              <span aria-hidden className="pointer-events-none absolute inset-0 opacity-60" style={{ background: "radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.5), transparent 60%)" }} />
+            <div className="relative inline-flex items-center overflow-hidden rounded-full border border-[var(--glass-border)] bg-gradient-to-r from-primary/[0.08] via-aqua/[0.06] to-[var(--gold)]/[0.08] px-4 py-1.5 shadow-[0_4px_18px_-10px_rgba(79,70,229,0.35)]">
+              <span aria-hidden className="pointer-events-none absolute inset-0 opacity-60" style={{ background: "radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.18), transparent 60%)" }} />
               <p className="relative text-[12.5px] leading-6 tracking-[0.01em]">
                 <span className="text-rose-500">©</span>{" "}
-                <span className="font-bold text-fuchsia-600">2026</span>
-                <span className="mx-2 text-slate-400">·</span>
+                <span className="font-bold text-fuchsia-600 dark:text-fuchsia-400">2026</span>
+                <span className="mx-2 text-foreground/25">·</span>
                 <span className="font-extrabold tracking-tight text-primary">Access</span><span className="font-extrabold tracking-tight text-aqua-deep">Now</span>{" "}
                 <span className="font-extrabold tracking-tight text-[var(--gold)]">BD</span>
-                <span className="mx-2 text-slate-400">·</span>
-                <span className="font-semibold text-emerald-600">All</span>{" "}
-                <span className="font-semibold text-sky-600">Rights</span>{" "}
-                <span className="font-semibold text-violet-600">Reserved</span>
-                <span className="mx-2 text-slate-400">·</span>
-                <span className="italic text-amber-700">Designed</span>{" "}
-                <span className="italic text-slate-500">&amp;</span>{" "}
-                <span className="italic text-teal-600">Developed</span>{" "}
-                <span className="italic text-slate-500">by</span>{" "}
+                <span className="mx-2 text-foreground/25">·</span>
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400">All</span>{" "}
+                <span className="font-semibold text-sky-600 dark:text-sky-400">Rights</span>{" "}
+                <span className="font-semibold text-violet-600 dark:text-violet-400">Reserved</span>
+                <span className="mx-2 text-foreground/25">·</span>
+                <span className="italic text-amber-700 dark:text-amber-400">Designed</span>{" "}
+                <span className="italic text-foreground/55">&amp;</span>{" "}
+                <span className="italic text-teal-600 dark:text-teal-400">Developed</span>{" "}
+                <span className="italic text-foreground/55">by</span>{" "}
                 <a
                   href="/developer"
-                  className="font-extrabold tracking-tight text-violet-600 underline-offset-4 transition hover:underline hover:text-violet-700"
+                  className="font-extrabold tracking-tight text-violet-600 dark:text-violet-400 underline-offset-4 transition hover:underline hover:text-violet-700 dark:hover:text-violet-300"
                 >
                   Shahed IT
                 </a>
@@ -352,13 +304,13 @@ export function SiteFooter() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2 md:justify-end">
-            <span className="mr-1 text-[10px] uppercase tracking-[0.22em] text-slate-500">
+            <span className="mr-1 text-[10px] uppercase tracking-[0.22em] text-white/42">
               We accept
             </span>
             {PAYMENTS.map((p) => (
               <span
                 key={p}
-                className="grid h-7 place-items-center rounded-full border border-white/70 bg-white/65 px-3 text-[11px] font-bold text-slate-700 backdrop-blur-md"
+                className="grid h-7 place-items-center rounded-full border border-[var(--glass-border-soft)] bg-white/[0.04] px-3 text-[11px] font-bold text-white/78"
               >
                 {p}
               </span>
