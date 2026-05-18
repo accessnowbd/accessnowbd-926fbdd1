@@ -313,7 +313,7 @@ function HeroExperience() {
               </span>
             </h1>
 
-            <p className="text-base md:text-lg text-slate-400 max-w-xl leading-relaxed">
+            <p className="text-base md:text-lg max-w-xl leading-relaxed" style={{ color: "#94a3b8" }}>
               ভেরিফাইড লাইসেন্স · ১০ মিনিটে ডেলিভারি · ২৪/৭ লাইভ সাপোর্ট। বাংলাদেশের সবচেয়ে বিশ্বস্ত সাবস্ক্রিপশন শপ।
             </p>
 
