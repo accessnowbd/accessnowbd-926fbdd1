@@ -173,7 +173,7 @@ function ProductPage() {
           {product.plans.length > 0 && (
             <div className="mt-5">
               <div className="text-sm font-semibold text-slate-700 mb-3">মেয়াদ ও মূল্য পরিকল্পনা</div>
-              <div className="space-y-2.5">
+              <div role="radiogroup" aria-label="Plan" className="space-y-2.5">
                 {product.plans.map((p, idx) => {
                   const active = activeIdx === idx;
                   const price = parsePrice(p.price);
@@ -181,39 +181,44 @@ function ProductPage() {
                   const hasOff = original > price;
                   const off = hasOff ? Math.round(((original - price) / original) * 100) : 0;
                   return (
-                    <button
-                      key={p.period}
-                      type="button"
-                      onClick={() => setSelected(idx)}
-                      aria-pressed={active}
+                    <label
+                      key={`${idx}-${p.period}`}
                       className={[
-                        "w-full flex items-center gap-3 px-4 py-3 rounded-2xl border transition text-left",
+                        "w-full flex items-center gap-3 px-4 py-3 rounded-2xl border transition text-left cursor-pointer select-none",
                         active
                           ? "border-violet-500 bg-violet-50 ring-2 ring-violet-300/60 shadow-[0_10px_28px_-14px_rgba(124,58,237,0.45)]"
                           : "border-slate-200 bg-white hover:border-violet-300 hover:bg-violet-50/40",
                       ].join(" ")}
                     >
+                      <input
+                        type="radio"
+                        name="plan-period"
+                        className="sr-only"
+                        checked={active}
+                        onChange={() => setSelected(idx)}
+                      />
                       <span
+                        aria-hidden="true"
                         className={[
-                          "grid place-items-center w-5 h-5 rounded-full border-2 shrink-0 transition",
+                          "grid place-items-center w-5 h-5 rounded-full border-2 shrink-0 transition pointer-events-none",
                           active ? "border-violet-600 bg-violet-600" : "border-slate-300 bg-white",
                         ].join(" ")}
                       >
                         {active && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
                       </span>
-                      <span className={`flex-1 font-bold text-[15px] ${active ? "text-violet-700" : "text-slate-800"}`}>
+                      <span className={`flex-1 font-bold text-[15px] pointer-events-none ${active ? "text-violet-700" : "text-slate-800"}`}>
                         {p.period}
                       </span>
                       {hasOff && (
-                        <span className="text-slate-400 text-[13px] line-through">৳{original.toLocaleString()}</span>
+                        <span className="text-slate-400 text-[13px] line-through pointer-events-none">৳{original.toLocaleString()}</span>
                       )}
-                      <span className="text-violet-700 font-extrabold text-[15px]">৳{price.toLocaleString()}</span>
+                      <span className="text-violet-700 font-extrabold text-[15px] pointer-events-none">৳{price.toLocaleString()}</span>
                       {hasOff && (
-                        <span className="px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-600 text-[11px] font-bold">
+                        <span className="px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-600 text-[11px] font-bold pointer-events-none">
                           -{off}%
                         </span>
                       )}
-                    </button>
+                    </label>
                   );
                 })}
               </div>
