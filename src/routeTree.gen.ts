@@ -44,6 +44,7 @@ import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
 import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
@@ -224,6 +225,12 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminDescriptionTemplateRoute =
+  AdminDescriptionTemplateRouteImport.update({
+    id: '/description-template',
+    path: '/description-template',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const AdminDescriptionPreviewRoute = AdminDescriptionPreviewRouteImport.update({
   id: '/description-preview',
   path: '/description-preview',
@@ -275,6 +282,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
+  '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -315,6 +323,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
+  '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -357,6 +366,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
+  '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -400,6 +410,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/$page'
     | '/admin/description-preview'
+    | '/admin/description-template'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
@@ -440,6 +451,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/$page'
     | '/admin/description-preview'
+    | '/admin/description-template'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
@@ -481,6 +493,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/$page'
     | '/admin/description-preview'
+    | '/admin/description-template'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
@@ -773,6 +786,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrdersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/description-template': {
+      id: '/admin/description-template'
+      path: '/description-template'
+      fullPath: '/admin/description-template'
+      preLoaderRoute: typeof AdminDescriptionTemplateRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/description-preview': {
       id: '/admin/description-preview'
       path: '/description-preview'
@@ -807,6 +827,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminPageRoute: typeof AdminPageRoute
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
+  AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminPromotionsRoute: typeof AdminPromotionsRoute
@@ -818,6 +839,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminPageRoute: AdminPageRoute,
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
+  AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminPromotionsRoute: AdminPromotionsRoute,
