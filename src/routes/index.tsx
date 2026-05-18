@@ -115,7 +115,6 @@ function Index() {
 
       <div>
         <HeroBannerCarousel />
-        <HeroExperience />
 
 
         <CategoryPillBar />
