@@ -157,8 +157,8 @@ export function HeroBannerCarousel() {
   const selectedPalette = current.data.color_preset
     ? BANNER_PALETTES[current.data.color_preset] ?? fallbackPalette
     : fallbackPalette;
-  const bg = current.data.bg_color || selectedPalette.bg;
-  const accent = current.data.accent_color || selectedPalette.accent;
+  const bg = selectedPalette.bg;
+  const accent = selectedPalette.accent;
 
   const gradient = useMemo(
     () =>
