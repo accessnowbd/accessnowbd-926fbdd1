@@ -5,7 +5,7 @@ import {
   ArrowRight, Sparkles, LifeBuoy, LogOut, LayoutDashboard,
   KeyRound, Receipt, Bell, MessageSquare,
   Menu, ChevronDown, X, Plus, Download,
-  FileText, Mail, Phone, MapPin, Hash, Copy, Check, Zap,
+  FileText, Mail, Phone, MapPin, Hash, Copy, Check, Zap, Shield,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
