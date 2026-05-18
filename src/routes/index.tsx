@@ -114,7 +114,9 @@ function Index() {
     <div className="min-h-screen">
 
       <div>
+        <HeroBannerCarousel />
         <HeroExperience />
+
 
         <CategoryPillBar />
 
