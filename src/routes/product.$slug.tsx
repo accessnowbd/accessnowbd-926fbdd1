@@ -56,19 +56,6 @@ export const Route = createFileRoute("/product/$slug")({
   ),
 });
 
-const PAYMENT_METHODS = [
-  { label: "Visa", color: "#1A1F71" },
-  { label: "Mastercard", color: "#EB001B" },
-  { label: "Amex", color: "#2E77BB" },
-  { label: "bKash", color: "#E2136E" },
-  { label: "Nagad", color: "#EB1C24" },
-  { label: "Rocket", color: "#8C3494" },
-  { label: "Upay", color: "#E94E1B" },
-  { label: "Tap", color: "#1B998B" },
-  { label: "Cellfin", color: "#F7941D" },
-  { label: "DBBL", color: "#0067A5" },
-  { label: "MyCash", color: "#00A859" },
-];
 
 function ProductPage() {
   const { slug } = Route.useParams();
@@ -240,25 +227,6 @@ function ProductPage() {
             )}
           </div>
 
-          {/* Payment methods */}
-          <div className="mt-6 flex items-center gap-3 flex-wrap max-w-md">
-            <span className="text-xs text-slate-500">Pay with</span>
-            <div className="flex flex-wrap items-center gap-1.5">
-              {PAYMENT_METHODS.map((m) => (
-                <span
-                  key={m.label}
-                  title={m.label}
-                  className="inline-flex items-center justify-center h-6 px-2 rounded bg-white border border-slate-200 text-[10px] font-bold tracking-wide"
-                  style={{ color: m.color }}
-                >
-                  {m.label}
-                </span>
-              ))}
-              <span className="inline-flex items-center gap-1 h-6 px-2 rounded bg-white border border-slate-200 text-[10px] font-bold text-slate-500">
-                verified by <span className="text-red-600">EPS</span>
-              </span>
-            </div>
-          </div>
         </div>
       </section>
 
