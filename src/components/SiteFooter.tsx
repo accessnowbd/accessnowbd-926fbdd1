@@ -218,7 +218,7 @@ export function SiteFooter() {
             {COLUMNS.map((col) => (
               <div
                 key={col.title}
-                className="footer-glass-card group/card relative min-h-[360px] overflow-hidden rounded-[24px] border border-white/15 bg-gradient-to-br from-white/[0.10] via-white/[0.05] to-white/[0.02] p-5 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl backdrop-saturate-150 transition-all duration-300 hover:-translate-y-1 hover:border-aqua/30 hover:shadow-[0_20px_48px_-12px_rgba(34,211,238,0.25),inset_0_1px_0_rgba(255,255,255,0.22)] md:p-6"
+                className="footer-glass-card group/card relative overflow-hidden rounded-[20px] border border-white/15 bg-gradient-to-br from-white/[0.10] via-white/[0.05] to-white/[0.02] p-4 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl backdrop-saturate-150 transition-all duration-300 hover:-translate-y-1 hover:border-aqua/30 hover:shadow-[0_20px_48px_-12px_rgba(34,211,238,0.25),inset_0_1px_0_rgba(255,255,255,0.22)] md:min-h-[360px] md:rounded-[24px] md:p-6"
               >
                 {/* Glossy top highlight */}
                 <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
@@ -228,25 +228,26 @@ export function SiteFooter() {
                 <span className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/20 blur-[60px] opacity-70 transition-opacity duration-300 group-hover/card:opacity-100" />
                 <span className="pointer-events-none absolute -bottom-20 -left-12 h-44 w-44 rounded-full bg-aqua/12 blur-[70px]" />
 
-                <div className="relative mb-5 flex min-h-11 items-center gap-3">
-                  <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_12px_28px_-16px_rgba(34,211,238,0.75),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-white/20`}>
-                    <col.Icon className="h-5 w-5" />
+                <div className="relative mb-4 flex items-center gap-3 md:mb-5">
+                  <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_12px_28px_-16px_rgba(34,211,238,0.75),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-white/20 md:h-10 md:w-10 md:rounded-2xl`}>
+                    <col.Icon className="h-4 w-4 md:h-5 md:w-5" />
                   </span>
                   <h4
-                    className="text-[12px] font-extrabold uppercase tracking-[0.22em] text-white/90"
+                    className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/90 md:text-[12px]"
                     style={{ fontFamily: "var(--font-heading)" }}
                   >
                     {col.title}
                   </h4>
+                  <span className="ml-auto h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" />
                 </div>
-                <ul className="relative grid gap-2.5">
+                <ul className="relative grid grid-cols-2 gap-1.5 md:grid-cols-1 md:gap-2.5">
                   {col.links.map((l) => (
-                    <li key={l.to + l.label} className="min-h-9">
+                    <li key={l.to + l.label}>
                       <Link
                         to={l.to}
-                        className="group grid min-h-9 grid-cols-[0.45rem_1fr] items-center gap-3 rounded-xl border border-transparent px-2 text-[13.5px] font-semibold leading-5 text-white/72 transition-all duration-200 hover:border-white/10 hover:bg-white/[0.07] hover:text-white hover:backdrop-blur-md"
+                        className="group flex min-h-9 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[12px] font-semibold leading-4 text-white/82 transition-all duration-200 hover:border-aqua/35 hover:bg-white/[0.09] hover:text-white md:rounded-xl md:border-transparent md:bg-transparent md:px-2 md:text-[13.5px] md:leading-5 md:hover:border-white/10 md:hover:bg-white/[0.07] md:hover:backdrop-blur-md"
                       >
-                        <span className={`h-1.5 w-1.5 rounded-full ${col.bullet} opacity-80 shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-opacity duration-200 group-hover:opacity-100`} />
+                        <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${col.bullet} opacity-80 shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-opacity duration-200 group-hover:opacity-100`} />
                         <span className="truncate">{l.label}</span>
                       </Link>
                     </li>
