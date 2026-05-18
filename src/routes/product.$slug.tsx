@@ -12,10 +12,16 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
 
-const parsePrice = (p: unknown) => {
-  if (typeof p === "number") return Number.isFinite(p) ? p : 0;
-  if (typeof p !== "string") return 0;
-  return Number(p.replace(/[^\d]/g, "")) || 0;
+const parsePrice = (p: unknown): number => {
+  try {
+    if (p == null) return 0;
+    if (typeof p === "number") return Number.isFinite(p) ? p : 0;
+    const s = typeof p === "string" ? p : String(p);
+    const n = Number(s.replace(/[^\d.]/g, ""));
+    return Number.isFinite(n) ? n : 0;
+  } catch {
+    return 0;
+  }
 };
 
 export const Route = createFileRoute("/product/$slug")({
