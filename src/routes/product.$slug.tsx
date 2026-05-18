@@ -189,57 +189,51 @@ function ProductPage() {
           {/* Quantity */}
           <div className="mt-5">
             <div className="text-xs text-slate-500 mb-2">Quantity</div>
-            <div className="inline-flex items-center border border-white/60 rounded-xl overflow-hidden backdrop-blur-md bg-white/40 shadow-[0_4px_20px_-6px_rgba(20,184,166,0.25)]">
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-10 h-10 grid place-items-center hover:bg-teal-500/20 transition-colors">
+            <div className="inline-flex items-center border border-white/60 rounded-xl overflow-hidden backdrop-blur-md bg-white/50 md:bg-white/40 shadow-[0_4px_20px_-6px_rgba(20,184,166,0.25)]">
+              <GlassButton variant="ghost" size="icon" rounded="md" onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Decrease quantity">
                 <Minus className="w-4 h-4" />
-              </button>
+              </GlassButton>
               <input
                 value={qty}
                 onChange={(e) => setQty(Math.max(1, Number(e.target.value.replace(/\D/g, "")) || 1))}
                 className="w-12 h-10 text-center text-sm bg-transparent focus:outline-none"
               />
-              <button onClick={() => setQty((q) => q + 1)} className="w-10 h-10 grid place-items-center hover:bg-teal-500/20 transition-colors">
+              <GlassButton variant="ghost" size="icon" rounded="md" onClick={() => setQty((q) => q + 1)} aria-label="Increase quantity">
                 <Plus className="w-4 h-4" />
-              </button>
+              </GlassButton>
             </div>
           </div>
 
           {/* Buy buttons */}
           <div className="mt-5 space-y-3 max-w-md">
-            <button
-              onClick={addToCart}
-              className="w-full h-11 rounded-xl backdrop-blur-md bg-white/40 border border-teal-400/50 text-teal-900 text-sm font-semibold hover:bg-white/60 hover:border-teal-400/80 shadow-[0_4px_20px_-6px_rgba(20,184,166,0.4)] transition-all"
-            >
+            <GlassButton variant="secondary" fullWidth onClick={addToCart}>
               Add to cart
-            </button>
-            <button
-              onClick={buyNow}
-              className="w-full h-11 rounded-xl backdrop-blur-md bg-gradient-to-r from-teal-500/70 to-emerald-500/70 border border-white/40 text-white text-sm font-semibold hover:from-teal-500/85 hover:to-emerald-500/85 shadow-[0_8px_28px_-6px_rgba(20,184,166,0.55)] transition-all"
-            >
+            </GlassButton>
+            <GlassButton variant="primary" fullWidth onClick={buyNow}>
               Buy it now
-            </button>
+            </GlassButton>
           </div>
 
           {/* Product Description accordion */}
           <div className="mt-6 max-w-2xl">
-            <button
+            <GlassButton
+              variant="outline"
+              fullWidth
+              rounded="xl"
               onClick={() => setDescOpen((v) => !v)}
-              className="w-full flex items-center justify-between gap-2 px-4 h-11 rounded-xl backdrop-blur-xl bg-gradient-to-br from-white/60 via-white/40 to-teal-50/50 border border-white/60 text-sm font-medium text-slate-900 hover:from-white/75 hover:via-white/55 hover:to-teal-50/65 hover:border-teal-300/60 shadow-[0_6px_24px_-10px_rgba(20,184,166,0.3)] transition-all"
+              className="justify-between !font-medium text-slate-900"
             >
               <span className="inline-flex items-center gap-2">
                 <span className="w-4 h-4 rounded-sm border border-teal-400/60 bg-teal-500/20 inline-block" /> Product Description
               </span>
               <ChevronDown className={`w-4 h-4 transition-transform ${descOpen ? "rotate-180" : ""}`} />
-            </button>
+            </GlassButton>
             {descOpen && (
-              <div className="relative mt-3 overflow-hidden rounded-2xl border border-white/60 backdrop-blur-2xl bg-gradient-to-br from-white/60 via-white/40 to-teal-50/50 shadow-[0_10px_40px_-12px_rgba(20,184,166,0.35)]">
-                <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-teal-300/30 blur-3xl" />
-                <div className="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-emerald-300/25 blur-3xl" />
-                <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/40" />
-                <div className="relative p-6 text-sm text-slate-700">
+              <GlassCard tint="teal" blur="xl" glow="lg" padding="none" rounded="2xl" orbs className="mt-3">
+                <div className="p-6 text-sm text-slate-700">
                   <ProductMarkdown source={product.description} />
                 </div>
-              </div>
+              </GlassCard>
             )}
           </div>
 
