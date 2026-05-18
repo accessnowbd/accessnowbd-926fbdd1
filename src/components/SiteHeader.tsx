@@ -52,44 +52,11 @@ const NAV: Array<{
 
 export function TopUtilityBar() {
   return (
-    <div
-      className="relative z-40 overflow-hidden"
-      style={{
-        background:
-          "linear-gradient(100deg, #05060f 0%, #0a0c1f 28%, #131736 55%, #0a0c1f 80%, #05060f 100%)",
-      }}
-    >
-      {/* Premium ambient aurora glows */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(60% 180% at 12% 50%, rgba(124,58,237,0.35) 0%, transparent 60%), radial-gradient(50% 180% at 50% 50%, rgba(6,182,212,0.22) 0%, transparent 65%), radial-gradient(55% 180% at 88% 50%, rgba(236,72,153,0.28) 0%, transparent 60%)",
-          filter: "blur(2px)",
-        }}
-      />
-      {/* Subtle noise / shimmer line */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(124,58,237,0.45), rgba(6,182,212,0.45), rgba(236,72,153,0.45), transparent)",
-        }}
-      />
+    <div className="relative z-40 overflow-hidden bg-background">
       <div
         className="relative mx-auto max-w-[1440px] px-3 sm:px-5 md:px-10 flex items-center justify-between gap-3 text-white"
         style={{
-          minHeight: "clamp(34px, 2.8vw, 42px)",
+          minHeight: "clamp(32px, 2.6vw, 40px)",
           fontSize: "clamp(10.5px, 0.78vw, 12.5px)",
         }}
       >
