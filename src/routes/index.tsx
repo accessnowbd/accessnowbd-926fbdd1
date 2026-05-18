@@ -321,7 +321,7 @@ function HeroExperience() {
 
           <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
             {/* LEFT — Content */}
-            <div className="space-y-7">
+            <div className="space-y-5">
               <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-white/70 bg-white/60 px-4 py-2 backdrop-blur-md shadow-sm">
                 <span className="flex h-2 w-2 animate-pulse rounded-full bg-indigo-600" />
                 <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-700">
