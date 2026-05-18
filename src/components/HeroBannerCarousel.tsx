@@ -455,23 +455,30 @@ export function HeroBannerCarousel() {
                 style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(accent, 0.55)} 0%, ${hexAlpha(glow, 0.25)} 45%, transparent 75%)` }}
               />
               <div
-                className="relative rounded-[24px] p-[2px] transition-transform duration-500 hover:scale-[1.015]"
+                className="relative rounded-[24px] p-[1.5px] transition-transform duration-500 hover:scale-[1.015]"
                 style={{
-                  background: `linear-gradient(135deg, ${accent} 0%, ${hexAlpha(glow, 0.5)} 50%, ${accent} 100%)`,
-                  boxShadow: `0 0 60px -12px ${hexAlpha(accent, 0.7)}, 0 30px 80px -20px rgba(0,0,0,0.7)`,
+                  background: `linear-gradient(135deg, ${hexAlpha("#ffffff", 0.5)} 0%, ${hexAlpha(accent, 0.6)} 35%, ${hexAlpha("#ffffff", 0.15)} 65%, ${hexAlpha(glow, 0.55)} 100%)`,
+                  boxShadow: `0 0 50px -10px ${hexAlpha(accent, 0.45)}, 0 20px 60px -20px ${hexAlpha(glow, 0.35)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.3)}`,
                 }}
               >
                 <div
-                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[22px] backdrop-blur-xl"
+                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[22px] backdrop-blur-2xl"
                   style={{
-                    background: `linear-gradient(135deg, ${hexAlpha("#ffffff", 0.08)}, ${hexAlpha("#000000", 0.35)}), linear-gradient(135deg, ${mix(bg, "#fff", 0.04)}, ${mix(bg, "#000", 0.3)})`,
+                    background: `linear-gradient(135deg, ${hexAlpha("#ffffff", 0.18)} 0%, ${hexAlpha("#ffffff", 0.06)} 50%, ${hexAlpha(accent, 0.1)} 100%), linear-gradient(135deg, ${hexAlpha(bg, 0.55)}, ${hexAlpha(mix(bg, accent, 0.25), 0.4)})`,
+                    boxShadow: `inset 0 1px 0 ${hexAlpha("#ffffff", 0.25)}, inset 0 0 40px ${hexAlpha("#ffffff", 0.05)}`,
                   }}
                 >
                   {/* glass top highlight */}
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute inset-x-0 top-0 h-1/3"
-                    style={{ background: `linear-gradient(180deg, ${hexAlpha("#ffffff", 0.12)}, transparent)` }}
+                    className="pointer-events-none absolute inset-x-0 top-0 h-2/5"
+                    style={{ background: `linear-gradient(180deg, ${hexAlpha("#ffffff", 0.22)} 0%, ${hexAlpha("#ffffff", 0.04)} 60%, transparent 100%)` }}
+                  />
+                  {/* diagonal glass sheen */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute -inset-px"
+                    style={{ background: `linear-gradient(115deg, transparent 35%, ${hexAlpha("#ffffff", 0.08)} 50%, transparent 65%)` }}
                   />
                   {resolvedImage ? (
                     <div className="relative flex h-full w-full items-center justify-center p-4 md:p-6">
