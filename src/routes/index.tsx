@@ -286,7 +286,7 @@ function HeroExperience() {
   const spotify = HERO_BRANDS[2];
 
   return (
-    <section className="relative overflow-hidden px-4 md:px-10 pt-8 pb-14 md:pt-12 md:pb-20">
+    <section className="relative overflow-hidden px-4 md:px-10 pt-6 pb-10 md:pt-8 md:pb-12">
       {/* Soft blue gradient base — like the reference */}
       <div
         aria-hidden
@@ -309,7 +309,7 @@ function HeroExperience() {
 
         {/* Frosted glass panel */}
         <div
-          className="relative overflow-hidden rounded-[32px] border border-white/60 px-7 pt-12 pb-10 md:px-12 md:pt-16 md:pb-14 lg:px-16 lg:pt-20 shadow-[0_30px_80px_-30px_rgba(79,70,229,0.25),inset_0_1px_0_rgba(255,255,255,0.9)]"
+          className="relative overflow-hidden rounded-[28px] border border-white/60 px-6 pt-8 pb-7 md:px-10 md:pt-10 md:pb-9 lg:px-12 lg:pt-12 shadow-[0_30px_80px_-30px_rgba(79,70,229,0.25),inset_0_1px_0_rgba(255,255,255,0.9)]"
           style={{
             background: "rgba(255,255,255,0.45)",
             backdropFilter: "blur(28px) saturate(140%)",
@@ -319,9 +319,9 @@ function HeroExperience() {
           {/* subtle inner highlight */}
           <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
 
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
             {/* LEFT — Content */}
-            <div className="space-y-7">
+            <div className="space-y-5">
               <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-white/70 bg-white/60 px-4 py-2 backdrop-blur-md shadow-sm">
                 <span className="flex h-2 w-2 animate-pulse rounded-full bg-indigo-600" />
                 <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-700">
@@ -337,7 +337,7 @@ function HeroExperience() {
 
               <h1
                 className="font-extrabold tracking-tight text-slate-900"
-                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px, 5vw, 60px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(26px, 3.6vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
               >
                 <span className="block">Premium Software</span>
                 <span
@@ -348,14 +348,14 @@ function HeroExperience() {
                 </span>
               </h1>
 
-              <p className="max-w-xl text-base md:text-lg leading-relaxed text-slate-700">
+              <p className="max-w-xl text-sm md:text-base leading-relaxed text-slate-700">
                 ভেরিফাইড লাইসেন্স · ১০ মিনিটে ডেলিভারি · ২৪/৭ লাইভ সাপোর্ট। বাংলাদেশের সবচেয়ে বিশ্বস্ত সাবস্ক্রিপশন শপ।
               </p>
 
               <div className="flex flex-wrap gap-3">
                 <Link
                   to="/products"
-                  className="group inline-flex items-center gap-2 rounded-2xl px-7 py-4 text-sm font-extrabold text-white shadow-lg shadow-indigo-200/80 transition-all hover:-translate-y-0.5 hover:shadow-indigo-300/80"
+                  className="group inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-indigo-200/80 transition-all hover:-translate-y-0.5 hover:shadow-indigo-300/80"
                   style={{ backgroundImage: "linear-gradient(90deg,#4F46E5,#7C3AED)" }}
                 >
                   সব প্রোডাক্ট দেখুন
@@ -363,20 +363,20 @@ function HeroExperience() {
                 </Link>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-white/70 bg-white/60 px-7 py-4 text-sm font-bold text-slate-800 backdrop-blur-md transition-all hover:bg-white/80"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/70 bg-white/60 px-5 py-3 text-sm font-bold text-slate-800 backdrop-blur-md transition-all hover:bg-white/80"
                 >
                   <Headphones className="h-4 w-4 text-indigo-600" /> কাস্টম অর্ডার
                 </Link>
               </div>
 
-              <div className="grid max-w-md grid-cols-3 gap-8 pt-4">
+              <div className="grid max-w-md grid-cols-3 gap-6 pt-2">
                 {[
                   ["36+", "Products"],
                   ["10 Min", "Delivery"],
                   ["24/7", "Support"],
                 ].map(([value, label]) => (
                   <div key={label} className="flex flex-col">
-                    <span className="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">{value}</span>
+                    <span className="text-lg md:text-xl font-extrabold tracking-tight text-slate-900">{value}</span>
                     <span className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">{label}</span>
                   </div>
                 ))}
@@ -384,15 +384,15 @@ function HeroExperience() {
             </div>
 
             {/* RIGHT — Glass bento brand showcase */}
-            <div className="relative grid h-[460px] grid-cols-2 gap-4 md:h-[500px]">
+            <div className="relative grid h-[340px] grid-cols-2 gap-3 md:h-[380px]">
               {[
                 { brand: netflix, sub: "Premium 4K HDR", className: "self-start" },
-                { brand: chatgpt, sub: "GPT-4 Plus", className: "mt-12" },
+                { brand: chatgpt, sub: "GPT-4 Plus", className: "mt-8" },
                 { brand: spotify, sub: "Family & Individual", className: "" },
               ].map(({ brand, sub, className }) => (
                 <div
                   key={brand.name}
-                  className={`${className} rounded-3xl border border-white/70 p-6 shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2),inset_0_1px_0_rgba(255,255,255,0.8)] transition-transform duration-500 hover:scale-[1.03]`}
+                  className={`${className} rounded-2xl border border-white/70 p-4 shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2),inset_0_1px_0_rgba(255,255,255,0.8)] transition-transform duration-500 hover:scale-[1.03]`}
                   style={{
                     background: "rgba(255,255,255,0.35)",
                     backdropFilter: "blur(22px) saturate(140%)",
@@ -400,20 +400,20 @@ function HeroExperience() {
                   }}
                 >
                   <div
-                    className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
+                    className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl shadow-lg"
                     style={{ backgroundColor: brand.color }}
                   >
-                    <img src={brandLogo(brand)} alt={brand.name} loading="lazy" width={24} height={24} className="h-6 w-6 object-contain drop-shadow" />
+                    <img src={brandLogo(brand)} alt={brand.name} loading="lazy" width={20} height={20} className="h-5 w-5 object-contain drop-shadow" />
                   </div>
-                  <h3 className="font-bold text-slate-900">{brand.name}</h3>
-                  <p className="text-xs text-slate-600">{sub}</p>
+                  <h3 className="text-sm font-bold text-slate-900">{brand.name}</h3>
+                  <p className="text-[11px] text-slate-600">{sub}</p>
                 </div>
               ))}
 
               {/* Offer card — bottom-right with gradient border */}
-              <div className="-mt-8 self-end overflow-hidden rounded-3xl p-[2px]" style={{ backgroundImage: "linear-gradient(135deg,#7C3AED,#4F46E5,#EC4899)" }}>
+              <div className="-mt-6 self-end overflow-hidden rounded-2xl p-[2px]" style={{ backgroundImage: "linear-gradient(135deg,#7C3AED,#4F46E5,#EC4899)" }}>
                 <div
-                  className="group h-full rounded-[calc(1.5rem-2px)] p-6"
+                  className="group h-full rounded-[calc(1rem-2px)] p-4"
                   style={{
                     background: "rgba(255,255,255,0.55)",
                     backdropFilter: "blur(22px) saturate(140%)",
