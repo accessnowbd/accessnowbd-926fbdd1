@@ -155,7 +155,12 @@ function ProductPage() {
             )}
             <span className="text-base font-semibold text-slate-900">Tk {plan ? parsePrice(plan.price) : 0}.00 BDT</span>
             {hasDiscount && (
-              <span className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white text-[11px] font-bold px-2 py-0.5 rounded shadow-[0_2px_8px_-2px_rgba(20,184,166,0.5)]">Sale</span>
+              <span
+                style={{ background: "linear-gradient(90deg,#14b8a6,#10b981)", color: "#fff" }}
+                className="text-[11px] font-bold px-2 py-0.5 rounded shadow-[0_2px_8px_-2px_rgba(20,184,166,0.5)]"
+              >
+                Sale
+              </span>
             )}
           </div>
 
@@ -235,7 +240,8 @@ function ProductPage() {
               <input
                 value={qty}
                 onChange={(e) => setQty(Math.max(1, Number(e.target.value.replace(/\D/g, "")) || 1))}
-                className="w-12 h-10 text-center text-sm font-bold bg-transparent focus:outline-none text-slate-900"
+                style={{ color: "#0f172a" }}
+                className="w-12 h-10 text-center text-sm font-bold bg-transparent focus:outline-none"
               />
               <button onClick={() => setQty((q) => q + 1)} aria-label="Increase" className="w-10 h-10 grid place-items-center text-violet-600 hover:bg-violet-50 transition">
                 <Plus className="w-4 h-4" />
@@ -247,22 +253,22 @@ function ProductPage() {
           <div className="mt-6 relative rounded-3xl p-3 bg-white border-2 border-sky-400/70 shadow-[0_18px_50px_-18px_rgba(56,189,248,0.55),0_0_0_4px_rgba(186,230,253,0.4)]">
             <button
               onClick={buyNow}
-              className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-2xl bg-white border border-slate-200 text-slate-900 font-bold text-[15px] hover:bg-slate-50 active:scale-[0.99] transition"
+              className="product-buy-button w-full h-12 inline-flex items-center justify-center gap-2 rounded-2xl font-bold text-[15px] hover:opacity-95 active:scale-[0.99] transition"
             >
-              <CreditCard className="w-4 h-4 text-violet-600" /> Buy Now
+              <CreditCard className="w-4 h-4" /> Buy Now
             </button>
             <div className="mt-2 grid grid-cols-2 gap-2">
               <a
                 href={plan ? waOrderUrl([{ name: product.name, planPeriod: plan.period, qty, price: parsePrice(plan.price) }]) : "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-violet-50 border border-violet-200 text-violet-700 font-bold text-[13px] hover:bg-violet-100 transition"
+                className="product-whatsapp-button h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl font-bold text-[13px] hover:opacity-95 transition"
               >
                 <MessageCircle className="w-4 h-4" /> WhatsApp
               </a>
               <button
                 onClick={addToCart}
-                className="h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-violet-50 border border-violet-200 text-violet-700 font-bold text-[13px] hover:bg-violet-100 transition"
+                className="product-cart-button h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl font-bold text-[13px] hover:opacity-95 transition"
               >
                 <ShoppingCart className="w-4 h-4" /> Cart
               </button>
