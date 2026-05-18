@@ -250,20 +250,20 @@ export function HeroBannerCarousel() {
               {/* outer accent glow halo */}
               <div
                 aria-hidden
-                className="pointer-events-none absolute -inset-4 rounded-[28px] opacity-60 blur-2xl"
-                style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(accent, 0.55)} 0%, transparent 70%)` }}
+                className="pointer-events-none absolute -inset-4 rounded-[24px] opacity-75 blur-2xl"
+                style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(accent, 0.5)} 0%, transparent 70%)` }}
               />
               {/* accent gradient border via padding wrapper */}
               <div
-                className="relative rounded-2xl p-[2px]"
+                className="relative rounded-[22px] p-[3px]"
                 style={{
-                  background: `linear-gradient(135deg, ${accent} 0%, ${hexAlpha(accent, 0.25)} 50%, ${accent} 100%)`,
-                  boxShadow: `0 0 40px -8px ${hexAlpha(accent, 0.55)}, 0 20px 60px -15px rgba(0,0,0,0.55)`,
+                  background: `linear-gradient(135deg, ${accent} 0%, ${hexAlpha(accent, 0.35)} 46%, ${accent} 100%)`,
+                  boxShadow: `0 0 46px -10px ${hexAlpha(accent, 0.65)}, 0 22px 62px -18px rgba(0,0,0,0.62)`,
                 }}
               >
                 <div
-                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[14px]"
-                  style={{ background: mix(bg, "#000000", 0.2) }}
+                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[18px]"
+                  style={{ background: `linear-gradient(135deg, ${mix(bg, "#ffffff", 0.05)}, ${mix(bg, "#000000", 0.22)})` }}
                 >
                   {current.data.image_url ? (
                     <img
@@ -273,8 +273,13 @@ export function HeroBannerCarousel() {
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="grid h-full w-full place-items-center text-white/40 text-sm">
-                      No image
+                    <div className="grid h-full w-full place-items-center px-10 text-center">
+                      <div
+                        className="flex aspect-square w-36 items-center justify-center rounded-[28px] text-5xl font-black text-white shadow-2xl md:w-44 md:text-6xl"
+                        style={{ background: accent, boxShadow: `0 20px 45px -18px ${hexAlpha(accent, 0.9)}` }}
+                      >
+                        {current.data.title?.slice(0, 1) ?? "A"}
+                      </div>
                     </div>
                   )}
                 </div>
