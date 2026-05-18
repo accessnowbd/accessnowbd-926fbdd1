@@ -45,7 +45,7 @@ const BANNER_PALETTES = {
   indigo:   { bg: "#080a3a", accent: "#facc15", glow: "#fde68a", name: "Indigo" },
   spotify:  { bg: "#02160c", accent: "#1ed760", glow: "#86efac", name: "Spotify Green" },
   canva:    { bg: "#0a0a3a", accent: "#7c5cff", glow: "#22d3ee", name: "Canva Blue/Purple" },
-  eid:      { bg: "#1b0633", accent: "#f43f95", glow: "#fbbf24", name: "Eid Festive" },
+  eid:      { bg: "#04140d", accent: "#d4af37", glow: "#10b981", name: "Eid Royal Gold" },
   sunset:   { bg: "#2a0612", accent: "#ff7a45", glow: "#fbbf24", name: "Sunset" },
 } as const;
 
