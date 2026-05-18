@@ -155,7 +155,12 @@ function ProductPage() {
             )}
             <span className="text-base font-semibold text-slate-900">Tk {plan ? parsePrice(plan.price) : 0}.00 BDT</span>
             {hasDiscount && (
-              <span className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white text-[11px] font-bold px-2 py-0.5 rounded shadow-[0_2px_8px_-2px_rgba(20,184,166,0.5)]">Sale</span>
+              <span
+                style={{ background: "linear-gradient(90deg,#14b8a6,#10b981)", color: "#fff" }}
+                className="text-[11px] font-bold px-2 py-0.5 rounded shadow-[0_2px_8px_-2px_rgba(20,184,166,0.5)]"
+              >
+                Sale
+              </span>
             )}
           </div>
 
