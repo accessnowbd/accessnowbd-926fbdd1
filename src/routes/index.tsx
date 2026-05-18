@@ -286,7 +286,7 @@ function HeroExperience() {
 
   return (
     <section className="relative px-4 md:px-10 pt-6 pb-12 md:pt-10 md:pb-16">
-      <div className="force-dark-canvas relative mx-auto max-w-[1280px] rounded-[40px] overflow-hidden border border-white/5 shadow-2xl bg-[#111420]">
+      <div className="force-dark-canvas relative mx-auto max-w-[1280px] rounded-[40px] overflow-hidden border border-white/5 shadow-2xl" style={{ backgroundColor: "#111420" }}>
         {/* Background glows */}
         <div className="pointer-events-none absolute top-[-10%] left-[-5%] w-[40%] h-[60%] bg-blue-600/20 blur-[120px] rounded-full" />
         <div className="pointer-events-none absolute bottom-[-10%] right-[-5%] w-[40%] h-[60%] bg-purple-600/25 blur-[120px] rounded-full" />
