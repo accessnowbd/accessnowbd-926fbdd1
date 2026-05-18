@@ -211,8 +211,8 @@
     --accent: oklch(0.94 0.05 280);
     --accent-foreground: oklch(0.24 0.05 280);
 
-    --aqua: oklch(0.62 0.20 250);
-    --aqua-deep: oklch(0.50 0.22 260);
+    --aqua: oklch(0.46 0.22 268);
+    --aqua-deep: oklch(0.38 0.22 270);
     --gold: oklch(0.78 0.16 88);
     --coral: oklch(0.7 0.22 18);
 
