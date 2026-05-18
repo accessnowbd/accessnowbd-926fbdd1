@@ -166,10 +166,10 @@ function ProductPage() {
                     <button
                       key={p.period}
                       onClick={() => setSelected(idx)}
-                      className={`px-4 h-9 rounded-md text-sm font-medium border transition-colors ${
+                      className={`px-4 h-9 rounded-xl text-sm font-medium backdrop-blur-md border transition-all ${
                         active
-                          ? "bg-slate-900 text-white border-slate-900"
-                          : "bg-white text-slate-900 border-slate-300 hover:border-slate-500"
+                          ? "bg-teal-500/30 text-teal-900 border-teal-400/60 shadow-[0_4px_20px_-4px_rgba(20,184,166,0.5)]"
+                          : "bg-white/40 text-slate-800 border-white/60 hover:bg-white/60 hover:border-teal-300/60"
                       }`}
                     >
                       {p.period}
