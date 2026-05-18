@@ -355,7 +355,7 @@ function HeroExperience() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   to="/products"
-                  className="group inline-flex items-center gap-2 rounded-2xl px-7 py-4 text-sm font-extrabold text-white shadow-lg shadow-indigo-200/80 transition-all hover:-translate-y-0.5 hover:shadow-indigo-300/80"
+                  className="group inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-indigo-200/80 transition-all hover:-translate-y-0.5 hover:shadow-indigo-300/80"
                   style={{ backgroundImage: "linear-gradient(90deg,#4F46E5,#7C3AED)" }}
                 >
                   সব প্রোডাক্ট দেখুন
@@ -363,7 +363,7 @@ function HeroExperience() {
                 </Link>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-white/70 bg-white/60 px-7 py-4 text-sm font-bold text-slate-800 backdrop-blur-md transition-all hover:bg-white/80"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/70 bg-white/60 px-5 py-3 text-sm font-bold text-slate-800 backdrop-blur-md transition-all hover:bg-white/80"
                 >
                   <Headphones className="h-4 w-4 text-indigo-600" /> কাস্টম অর্ডার
                 </Link>
