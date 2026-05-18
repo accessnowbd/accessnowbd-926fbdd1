@@ -110,7 +110,7 @@ function ProductPage() {
 
   const hasDiscount = !!plan?.original && parsePrice(plan.original) > parsePrice(plan.price);
 
-  const faqs = buildFaqs(product.name);
+  const faqs = buildFaqs(product);
 
   return (
     <div key={product.slug} className="min-h-screen bg-white text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both]">
