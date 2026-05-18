@@ -79,28 +79,30 @@ serve(async (req) => {
     if (mode === "image") {
       const styleId: CardStyle = (style as CardStyle) || "premium-pastel";
       const styleText = STYLE_PROMPTS[styleId] ?? STYLE_PROMPTS["premium-pastel"];
-      const isPremium = styleId === "premium-pastel" || styleId === "premium-dark";
+      const isPremium = styleId !== "glassmorphism";
       const subjectLine = `Subject / product being showcased: "${product.name}"${product.category ? ` (${product.category})` : ""}.`;
       const userExtra = imagePrompt?.trim() ? ` Additional direction: ${imagePrompt.trim()}.` : "";
       const prompt = isPremium
         ? `${styleText} ${subjectLine}${userExtra} Render exactly the small text shown (brand pill, product pill, website www.accessnowbd.com, phone +880 1580-607614). Do NOT add any other text or watermark. Ultra high detail, 1:1 square.`
         : (imagePrompt?.trim() || `${styleText}. ${subjectLine} Branded for ${SHOP_BRAND}. 1:1 square, ultra high detail, no text, no watermark.`);
 
-      // ---- Path A: Lovable AI Gateway (preferred) ----
+      // ---- Path A: Lovable AI Gateway (preferred) — Nano Banana 2 with fallback ----
       if (apiKey) {
-        try {
-          const gw = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${apiKey}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              model: "google/gemini-2.5-flash-image-preview",
-              messages: [{ role: "user", content: prompt }],
-              modalities: ["image", "text"],
-            }),
-          });
+        const models = ["google/gemini-3.1-flash-image-preview", "google/gemini-2.5-flash-image-preview"];
+        for (const model of models) {
+          try {
+            const gw = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                model,
+                messages: [{ role: "user", content: prompt }],
+                modalities: ["image", "text"],
+              }),
+            });
           if (gw.status === 429) return json({ error: "Rate limited, please retry shortly." }, 429, corsHeaders);
           if (gw.status === 402) return json({ error: "AI credits exhausted. Add credits in Lovable workspace." }, 402, corsHeaders);
           if (gw.ok) {
