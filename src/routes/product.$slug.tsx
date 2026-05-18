@@ -234,9 +234,14 @@ function ProductPage() {
           {/* Quantity */}
           <div className="mt-5">
             <div className="text-sm font-semibold text-slate-700 mb-2">Quantity</div>
-            <div className="inline-flex items-center border border-slate-200 rounded-xl overflow-hidden bg-white">
-              <button onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Decrease" className="w-10 h-10 grid place-items-center text-violet-600 hover:bg-violet-50 transition">
-                <Minus className="w-4 h-4" />
+            <div className="inline-flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white">
+              <button
+                onClick={() => setQty((q) => Math.max(1, q - 1))}
+                aria-label="Decrease"
+                className="w-10 h-10 grid place-items-center transition"
+                style={{ color: "#7c3aed", background: "#f5f3ff" }}
+              >
+                <Minus className="w-5 h-5" style={{ color: "#7c3aed" }} strokeWidth={2.5} />
               </button>
               <input
                 value={qty}
@@ -244,8 +249,13 @@ function ProductPage() {
                 style={{ color: "#0f172a" }}
                 className="w-12 h-10 text-center text-sm font-bold bg-transparent focus:outline-none"
               />
-              <button onClick={() => setQty((q) => q + 1)} aria-label="Increase" className="w-10 h-10 grid place-items-center text-violet-600 hover:bg-violet-50 transition">
-                <Plus className="w-4 h-4" />
+              <button
+                onClick={() => setQty((q) => q + 1)}
+                aria-label="Increase"
+                className="w-10 h-10 grid place-items-center transition"
+                style={{ color: "#7c3aed", background: "#f5f3ff" }}
+              >
+                <Plus className="w-5 h-5" style={{ color: "#7c3aed" }} strokeWidth={2.5} />
               </button>
             </div>
           </div>
