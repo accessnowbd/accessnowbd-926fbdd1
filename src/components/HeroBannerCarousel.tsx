@@ -51,6 +51,38 @@ const BANNER_PALETTES = {
 
 const PALETTE_KEYS = Object.keys(BANNER_PALETTES) as BannerPaletteKey[];
 
+// Brand auto-detection — match keywords in banner title to a brand palette + product slug.
+// Each brand has its own real signature color so the background takes on the product's identity.
+type BrandDef = { keywords: string[]; slug?: string; bg: string; accent: string; glow: string };
+const BRANDS: BrandDef[] = [
+  { keywords: ["netflix"],            slug: "netflix-premium",      bg: "#1a0408", accent: "#e50914", glow: "#ff4d6a" },
+  { keywords: ["spotify"],            slug: "spotify-premium",      bg: "#03160c", accent: "#1ed760", glow: "#86efac" },
+  { keywords: ["youtube"],            slug: "youtube-premium",      bg: "#1a0606", accent: "#ff0033", glow: "#ff7a90" },
+  { keywords: ["prime video", "amazon"], slug: "amazon-prime-video", bg: "#03152a", accent: "#00a8e1", glow: "#7dd3fc" },
+  { keywords: ["canva"],              slug: "canva-pro",            bg: "#0a0a3a", accent: "#7c5cff", glow: "#22d3ee" },
+  { keywords: ["chatgpt", "openai"],  slug: "chatgpt-plus",         bg: "#04201a", accent: "#10a37f", glow: "#5eead4" },
+  { keywords: ["perplexity"],         slug: "perplexity-pro",       bg: "#021820", accent: "#20b8cd", glow: "#67e8f9" },
+  { keywords: ["adobe", "creative cloud"], slug: "adobe-creative-cloud", bg: "#1a0303", accent: "#fa0f00", glow: "#ff6b6b" },
+  { keywords: ["grammarly"],          slug: "grammarly-premium",    bg: "#04241c", accent: "#15c39a", glow: "#86efac" },
+  { keywords: ["quillbot"],           slug: "quillbot-premium",     bg: "#04201c", accent: "#11a683", glow: "#5eead4" },
+  { keywords: ["capcut"],             slug: "capcut-pro",           bg: "#0a0118", accent: "#ff3b5c", glow: "#a78bfa" },
+  { keywords: ["coursera"],           slug: "coursera-plus",        bg: "#020e2a", accent: "#0056d3", glow: "#60a5fa" },
+  { keywords: ["nordvpn", "nord"],    slug: "nordvpn",              bg: "#020a24", accent: "#4687ff", glow: "#93c5fd" },
+  { keywords: ["surfshark"],          slug: "surfshark-vpn",        bg: "#020a24", accent: "#1ee696", glow: "#86efac" },
+  { keywords: ["expressvpn", "express"], slug: "expressvpn",        bg: "#1a0408", accent: "#da3940", glow: "#ff8080" },
+  { keywords: ["windows 11", "windows 10", "windows"], slug: "windows-11-pro", bg: "#03102a", accent: "#0078d4", glow: "#7dd3fc" },
+  { keywords: ["office 365", "office", "microsoft"], slug: "office-365", bg: "#1a0808", accent: "#d83b01", glow: "#fb923c" },
+  { keywords: ["apple", "itunes", "app store"], slug: "itunes-giftcard", bg: "#0a0a0a", accent: "#a3a3a3", glow: "#e5e5e5" },
+  { keywords: ["eid", "ঈদ"],                                          bg: "#1b0633", accent: "#f43f95", glow: "#fbbf24" },
+];
+
+function detectBrand(title?: string): BrandDef | null {
+  if (!title) return null;
+  const t = title.toLowerCase();
+  for (const b of BRANDS) if (b.keywords.some((k) => t.includes(k))) return b;
+  return null;
+}
+
 const FALLBACK: BannerRow[] = [
   {
     id: "fallback-netflix", is_active: true, sort_order: 0,
