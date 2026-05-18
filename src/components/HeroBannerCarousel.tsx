@@ -8,6 +8,7 @@ type BannerData = {
   title?: string;
   subtitle?: string;
   price_text?: string;
+  color_preset?: BannerPaletteKey;
   cta?: string;
   link?: string;
   secondary_cta?: string;
@@ -27,12 +28,26 @@ type BannerRow = {
   data: BannerData;
 };
 
+type BannerPaletteKey = keyof typeof BANNER_PALETTES;
+
+const BANNER_PALETTES = {
+  ruby: { bg: "#31070b", accent: "#ffcc00", name: "Ruby Gold" },
+  ocean: { bg: "#061f3d", accent: "#ff6b35", name: "Ocean Orange" },
+  violet: { bg: "#210b46", accent: "#00f5d4", name: "Violet Mint" },
+  emerald: { bg: "#063326", accent: "#ff4d8d", name: "Emerald Pink" },
+  graphite: { bg: "#111318", accent: "#38bdf8", name: "Graphite Sky" },
+  indigo: { bg: "#10124a", accent: "#facc15", name: "Indigo Yellow" },
+} as const;
+
+const PALETTE_KEYS = Object.keys(BANNER_PALETTES) as BannerPaletteKey[];
+
 const FALLBACK: BannerRow[] = [
   {
     id: "fallback-netflix",
     is_active: true,
     sort_order: 0,
     data: {
+      color_preset: "ruby",
       category: "STREAMING · DIGITAL",
       title: "Netflix Premium Subscription",
       subtitle: "অ্যাড-ফ্রি স্ট্রিমিং উপভোগ করুন — মাত্র ৳350 থেকে",
@@ -41,8 +56,6 @@ const FALLBACK: BannerRow[] = [
       secondary_cta: "Details",
       secondary_link: "/streaming",
       image_url: "",
-      bg_color: "#4a0d12",
-      accent_color: "#ff1f3a",
       delivery_text: "Instant",
       support_text: "24/7",
       rating_text: "4.9 ★",
@@ -53,6 +66,7 @@ const FALLBACK: BannerRow[] = [
     is_active: true,
     sort_order: 1,
     data: {
+      color_preset: "ocean",
       category: "SOFTWARE · DIGITAL",
       title: "Windows 10/11 Pro — Upgrade Now",
       subtitle: "সেরা দামে অরিজিনাল Windows 11 Pro কিনুন — মাত্র ৳450",
@@ -61,8 +75,6 @@ const FALLBACK: BannerRow[] = [
       secondary_cta: "Details",
       secondary_link: "/products",
       image_url: "",
-      bg_color: "#0b1d4a",
-      accent_color: "#3b9dff",
       delivery_text: "Instant",
       support_text: "24/7",
       rating_text: "4.9 ★",
@@ -73,6 +85,7 @@ const FALLBACK: BannerRow[] = [
     is_active: true,
     sort_order: 2,
     data: {
+      color_preset: "violet",
       category: "PREMIUM · DIGITAL",
       title: "Eid Digital Subscription ৫০-১০০৳ Discount RxBEiD001",
       subtitle: "RxB Premium Store ঈদ স্পেশাল অফার",
@@ -81,8 +94,6 @@ const FALLBACK: BannerRow[] = [
       secondary_cta: "Details",
       secondary_link: "/products",
       image_url: "",
-      bg_color: "#2a0f5c",
-      accent_color: "#a855f7",
       delivery_text: "Instant",
       support_text: "24/7",
       rating_text: "4.9 ★",
@@ -93,6 +104,7 @@ const FALLBACK: BannerRow[] = [
     is_active: true,
     sort_order: 3,
     data: {
+      color_preset: "emerald",
       category: "AI TOOLS · DIGITAL",
       title: "ChatGPT Plus & Claude Pro",
       subtitle: "সেরা AI সাবস্ক্রিপশন এক জায়গায় — মাত্র ৳800 থেকে",
@@ -101,8 +113,6 @@ const FALLBACK: BannerRow[] = [
       secondary_cta: "Details",
       secondary_link: "/ai-tools",
       image_url: "",
-      bg_color: "#063b34",
-      accent_color: "#14e8a4",
       delivery_text: "Instant",
       support_text: "24/7",
       rating_text: "4.9 ★",
@@ -143,20 +153,21 @@ export function HeroBannerCarousel() {
     return () => window.clearInterval(id);
   }, [banners.length]);
 
-  const accent = current.data.accent_color || "#e50914";
-  const bg = current.data.bg_color || "#3a0a0a";
+  const fallbackPalette = BANNER_PALETTES[PALETTE_KEYS[active % PALETTE_KEYS.length]];
+  const selectedPalette = current.data.color_preset
+    ? BANNER_PALETTES[current.data.color_preset] ?? fallbackPalette
+    : fallbackPalette;
+  const bg = selectedPalette.bg;
+  const accent = selectedPalette.accent;
 
   const gradient = useMemo(
     () =>
       [
-        // very subtle top vignette for depth
-        `radial-gradient(ellipse 100% 60% at 50% 0%, ${mix(bg, "#ffffff", 0.08)} 0%, transparent 70%)`,
-        // bottom-edge darkening for grounding
-        `radial-gradient(ellipse 120% 50% at 50% 100%, ${mix(bg, "#000000", 0.55)} 0%, transparent 70%)`,
-        // mostly uniform deep base — single dominant tone
-        `linear-gradient(180deg, ${bg} 0%, ${mix(bg, "#000000", 0.25)} 100%)`,
+        `radial-gradient(ellipse 110% 55% at 50% 0%, ${mix(bg, "#ffffff", 0.1)} 0%, transparent 72%)`,
+        `radial-gradient(ellipse 90% 60% at 85% 50%, ${hexAlpha(accent, 0.18)} 0%, transparent 68%)`,
+        `linear-gradient(180deg, ${bg} 0%, ${mix(bg, "#000000", 0.18)} 100%)`,
       ].join(", "),
-    [bg],
+    [accent, bg],
   );
 
   const go = (dir: 1 | -1) =>
@@ -166,10 +177,10 @@ export function HeroBannerCarousel() {
     <section className="px-4 md:px-10 pt-6 pb-4">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className="relative overflow-hidden rounded-[32px] border border-white/10 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.5)]"
-          style={{ background: gradient, minHeight: 440 }}
+          className="relative overflow-hidden rounded-[28px] border border-white/10 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.5)] transition-colors duration-700"
+          style={{ background: gradient, minHeight: 410 }}
         >
-          <div className="grid items-center gap-8 px-6 py-10 md:grid-cols-2 md:gap-10 md:px-12 md:py-14">
+          <div className="grid items-center gap-7 px-5 py-9 md:grid-cols-2 md:gap-10 md:px-11 md:py-12">
             {/* LEFT */}
             <div className="space-y-5 text-white">
               {current.data.category && (
@@ -239,20 +250,20 @@ export function HeroBannerCarousel() {
               {/* outer accent glow halo */}
               <div
                 aria-hidden
-                className="pointer-events-none absolute -inset-4 rounded-[28px] opacity-60 blur-2xl"
-                style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(accent, 0.55)} 0%, transparent 70%)` }}
+                className="pointer-events-none absolute -inset-4 rounded-[24px] opacity-75 blur-2xl"
+                style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(accent, 0.5)} 0%, transparent 70%)` }}
               />
               {/* accent gradient border via padding wrapper */}
               <div
-                className="relative rounded-2xl p-[2px]"
+                className="relative rounded-[22px] p-[3px]"
                 style={{
-                  background: `linear-gradient(135deg, ${accent} 0%, ${hexAlpha(accent, 0.25)} 50%, ${accent} 100%)`,
-                  boxShadow: `0 0 40px -8px ${hexAlpha(accent, 0.55)}, 0 20px 60px -15px rgba(0,0,0,0.55)`,
+                  background: `linear-gradient(135deg, ${accent} 0%, ${hexAlpha(accent, 0.35)} 46%, ${accent} 100%)`,
+                  boxShadow: `0 0 46px -10px ${hexAlpha(accent, 0.65)}, 0 22px 62px -18px rgba(0,0,0,0.62)`,
                 }}
               >
                 <div
-                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[14px]"
-                  style={{ background: mix(bg, "#000000", 0.2) }}
+                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[18px]"
+                  style={{ background: `linear-gradient(135deg, ${mix(bg, "#ffffff", 0.05)}, ${mix(bg, "#000000", 0.22)})` }}
                 >
                   {current.data.image_url ? (
                     <img
@@ -262,8 +273,13 @@ export function HeroBannerCarousel() {
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="grid h-full w-full place-items-center text-white/40 text-sm">
-                      No image
+                    <div className="grid h-full w-full place-items-center px-10 text-center">
+                      <div
+                        className="flex aspect-square w-36 items-center justify-center rounded-[28px] text-5xl font-black text-white shadow-2xl md:w-44 md:text-6xl"
+                        style={{ background: accent, boxShadow: `0 20px 45px -18px ${hexAlpha(accent, 0.9)}` }}
+                      >
+                        {current.data.title?.slice(0, 1) ?? "A"}
+                      </div>
                     </div>
                   )}
                 </div>
