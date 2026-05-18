@@ -106,10 +106,15 @@ function ProductPage() {
   const faqs = buildFaqs(product);
 
   return (
-    <div key={product.slug} className="min-h-screen bg-white text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both]">
+    <div key={product.slug} className="relative min-h-screen text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both] overflow-hidden bg-gradient-to-br from-teal-50 via-white to-emerald-50">
       <style>{`@keyframes product-in {0%{opacity:0;transform:translateY(14px);filter:blur(4px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}`}</style>
 
-      <div className="mx-auto max-w-[1200px] px-4 md:px-8 pt-6">
+      {/* Ambient glow orbs */}
+      <div className="pointer-events-none absolute -top-32 -left-20 h-[420px] w-[420px] rounded-full bg-teal-300/30 blur-[120px]" />
+      <div className="pointer-events-none absolute top-40 -right-32 h-[480px] w-[480px] rounded-full bg-emerald-300/25 blur-[140px]" />
+      <div className="pointer-events-none absolute bottom-0 left-1/3 h-[380px] w-[380px] rounded-full bg-cyan-200/25 blur-[130px]" />
+
+      <div className="relative mx-auto max-w-[1200px] px-4 md:px-8 pt-6">
         <nav className="text-sm text-slate-500 flex items-center gap-2">
           <Link to="/" className="hover:text-slate-900 inline-flex items-center gap-1">
             <ArrowLeft className="w-3.5 h-3.5" /> Back
