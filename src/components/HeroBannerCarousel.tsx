@@ -41,8 +41,8 @@ const FALLBACK: BannerRow[] = [
       secondary_cta: "Details",
       secondary_link: "/streaming",
       image_url: "",
-      bg_color: "#3a0a0a",
-      accent_color: "#e50914",
+      bg_color: "#4a0d12",
+      accent_color: "#ff1f3a",
       delivery_text: "Instant",
       support_text: "24/7",
       rating_text: "4.9 ★",
@@ -61,8 +61,8 @@ const FALLBACK: BannerRow[] = [
       secondary_cta: "Details",
       secondary_link: "/products",
       image_url: "",
-      bg_color: "#0a1a3a",
-      accent_color: "#1e88ff",
+      bg_color: "#0b1d4a",
+      accent_color: "#3b9dff",
       delivery_text: "Instant",
       support_text: "24/7",
       rating_text: "4.9 ★",
@@ -81,8 +81,8 @@ const FALLBACK: BannerRow[] = [
       secondary_cta: "Details",
       secondary_link: "/products",
       image_url: "",
-      bg_color: "#1a0a3a",
-      accent_color: "#8b5cf6",
+      bg_color: "#2a0f5c",
+      accent_color: "#a855f7",
       delivery_text: "Instant",
       support_text: "24/7",
       rating_text: "4.9 ★",
@@ -101,8 +101,8 @@ const FALLBACK: BannerRow[] = [
       secondary_cta: "Details",
       secondary_link: "/ai-tools",
       image_url: "",
-      bg_color: "#0a2a1f",
-      accent_color: "#10b981",
+      bg_color: "#063b34",
+      accent_color: "#14e8a4",
       delivery_text: "Instant",
       support_text: "24/7",
       rating_text: "4.9 ★",
@@ -148,7 +148,16 @@ export function HeroBannerCarousel() {
 
   const gradient = useMemo(
     () =>
-      `radial-gradient(ellipse at 20% 30%, ${hexAlpha(accent, 0.35)} 0%, transparent 55%), linear-gradient(135deg, ${bg} 0%, #0a0a0a 100%)`,
+      [
+        // top-left soft glow
+        `radial-gradient(ellipse 60% 70% at 15% 20%, ${hexAlpha(accent, 0.55)} 0%, transparent 60%)`,
+        // bottom-right accent glow
+        `radial-gradient(ellipse 50% 60% at 90% 95%, ${hexAlpha(accent, 0.35)} 0%, transparent 65%)`,
+        // top sheen
+        `radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 70%)`,
+        // base depth: bg → mid → near-black
+        `linear-gradient(135deg, ${bg} 0%, ${mix(bg, "#000000", 0.45)} 60%, #050505 100%)`,
+      ].join(", "),
     [accent, bg],
   );
 
@@ -316,4 +325,23 @@ function hexAlpha(hex: string, alpha: number) {
   const b = parseInt(full.slice(4, 6), 16);
   if ([r, g, b].some(Number.isNaN)) return `rgba(229,9,20,${alpha})`;
   return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function parseHex(hex: string): [number, number, number] | null {
+  const h = hex.replace("#", "");
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  if ([r, g, b].some(Number.isNaN)) return null;
+  return [r, g, b];
+}
+
+function mix(a: string, b: string, t: number) {
+  const A = parseHex(a) ?? [0, 0, 0];
+  const B = parseHex(b) ?? [0, 0, 0];
+  const r = Math.round(A[0] + (B[0] - A[0]) * t);
+  const g = Math.round(A[1] + (B[1] - A[1]) * t);
+  const bl = Math.round(A[2] + (B[2] - A[2]) * t);
+  return `rgb(${r},${g},${bl})`;
 }
