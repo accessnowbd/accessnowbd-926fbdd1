@@ -138,7 +138,9 @@ function ProductPage() {
             <span className="text-muted-foreground">4.9 · 2,431 sold</span>
           </div>
 
-          <p className="mt-6 text-sm text-foreground leading-relaxed">{product.description}</p>
+          <div className="mt-6 prose prose-sm max-w-none text-foreground prose-headings:font-semibold prose-headings:text-foreground prose-h2:text-lg prose-h2:mt-6 prose-h2:mb-2 prose-h3:text-base prose-h3:mt-4 prose-h3:mb-1 prose-ul:my-2 prose-li:my-0.5 prose-strong:text-foreground prose-p:leading-relaxed">
+            <ProductMarkdown source={product.description} />
+          </div>
 
           {/* Plan selector */}
           <div className="mt-7">
