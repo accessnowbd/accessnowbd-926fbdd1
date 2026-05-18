@@ -95,11 +95,14 @@ function DashboardPage() {
     const profileP = supabase.from("profiles").select("display_name, phone").eq("id", user.id).maybeSingle()
       .then((r) => { mark("profile fetch", tProfile); return r; });
 
-    Promise.all([ordersP, profileP])
-      .then(([o, p]) => {
+    const roleP = supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
+
+    Promise.all([ordersP, profileP, roleP])
+      .then(([o, p, r]) => {
         if (cancelled) return;
         setOrders(((o.data as unknown) as Order[]) || []);
         setProfile((p.data as { display_name?: string | null; phone?: string | null } | null) || null);
+        setIsAdmin(!!r.data);
       })
       .catch((err) => {
         console.error("[dashboard-perf] ❌ load failed after", Math.round(performance.now() - t0), "ms", err);
