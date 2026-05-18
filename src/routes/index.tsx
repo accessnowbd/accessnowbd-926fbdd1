@@ -286,7 +286,7 @@ function HeroExperience() {
   const spotify = HERO_BRANDS[2];
 
   return (
-    <section className="relative overflow-hidden px-4 md:px-10 pt-8 pb-14 md:pt-12 md:pb-20">
+    <section className="relative overflow-hidden px-4 md:px-10 pt-6 pb-10 md:pt-8 md:pb-12">
       {/* Soft blue gradient base — like the reference */}
       <div
         aria-hidden
