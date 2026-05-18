@@ -423,12 +423,12 @@ export function SiteHeader() {
                       key={label}
                       to={to}
                       onClick={() => setOpen(false)}
-                      className="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-white/25 hover:bg-white/[0.07] transition active:scale-95"
+                      className="group flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-white border border-violet-200/70 hover:border-violet-400 hover:bg-violet-50 transition active:scale-95 shadow-[0_4px_14px_-8px_rgba(124,58,237,0.25)]"
                     >
-                      <span className={`grid place-items-center w-10 h-10 rounded-xl bg-gradient-to-br ${grad} text-white shadow-[0_8px_18px_-8px_rgba(0,0,0,0.6)] ring-1 ring-white/25`}>
+                      <span className={`grid place-items-center w-10 h-10 rounded-xl bg-gradient-to-br ${grad} text-white shadow-[0_8px_18px_-8px_rgba(124,58,237,0.45)] ring-1 ring-white/40`}>
                         <Icon className="w-4 h-4" />
                       </span>
-                      <span className="text-[11px] font-bold text-white/85">{label}</span>
+                      <span className="text-[11px] font-bold text-slate-700">{label}</span>
                     </Link>
                   ))}
                 </div>
