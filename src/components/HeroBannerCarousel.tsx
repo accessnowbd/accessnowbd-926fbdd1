@@ -153,20 +153,21 @@ export function HeroBannerCarousel() {
     return () => window.clearInterval(id);
   }, [banners.length]);
 
-  const accent = current.data.accent_color || "#e50914";
-  const bg = current.data.bg_color || "#3a0a0a";
+  const fallbackPalette = BANNER_PALETTES[PALETTE_KEYS[active % PALETTE_KEYS.length]];
+  const selectedPalette = current.data.color_preset
+    ? BANNER_PALETTES[current.data.color_preset] ?? fallbackPalette
+    : fallbackPalette;
+  const bg = current.data.bg_color || selectedPalette.bg;
+  const accent = current.data.accent_color || selectedPalette.accent;
 
   const gradient = useMemo(
     () =>
       [
-        // very subtle top vignette for depth
-        `radial-gradient(ellipse 100% 60% at 50% 0%, ${mix(bg, "#ffffff", 0.08)} 0%, transparent 70%)`,
-        // bottom-edge darkening for grounding
-        `radial-gradient(ellipse 120% 50% at 50% 100%, ${mix(bg, "#000000", 0.55)} 0%, transparent 70%)`,
-        // mostly uniform deep base — single dominant tone
-        `linear-gradient(180deg, ${bg} 0%, ${mix(bg, "#000000", 0.25)} 100%)`,
+        `radial-gradient(ellipse 110% 55% at 50% 0%, ${mix(bg, "#ffffff", 0.1)} 0%, transparent 72%)`,
+        `radial-gradient(ellipse 90% 60% at 85% 50%, ${hexAlpha(accent, 0.18)} 0%, transparent 68%)`,
+        `linear-gradient(180deg, ${bg} 0%, ${mix(bg, "#000000", 0.18)} 100%)`,
       ].join(", "),
-    [bg],
+    [accent, bg],
   );
 
   const go = (dir: 1 | -1) =>
@@ -176,10 +177,10 @@ export function HeroBannerCarousel() {
     <section className="px-4 md:px-10 pt-6 pb-4">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className="relative overflow-hidden rounded-[32px] border border-white/10 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.5)]"
-          style={{ background: gradient, minHeight: 440 }}
+          className="relative overflow-hidden rounded-[28px] border border-white/10 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.5)] transition-colors duration-700"
+          style={{ background: gradient, minHeight: 410 }}
         >
-          <div className="grid items-center gap-8 px-6 py-10 md:grid-cols-2 md:gap-10 md:px-12 md:py-14">
+          <div className="grid items-center gap-7 px-5 py-9 md:grid-cols-2 md:gap-10 md:px-11 md:py-12">
             {/* LEFT */}
             <div className="space-y-5 text-white">
               {current.data.category && (
