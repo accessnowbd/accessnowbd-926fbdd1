@@ -98,7 +98,23 @@ function ProductPage() {
   const safeSelected = Math.min(selected, Math.max(product.plans.length - 1, 0));
   const activeIdx = selected === 0 && popularIdx > 0 ? popularIdx : safeSelected;
   const plan = product.plans[activeIdx];
-  const related = products.filter((p) => p.slug !== product.slug).slice(0, 8);
+  const RELATED_COUNT = 8;
+  const featuresOf = (p: typeof product) =>
+    new Set(((p.features as unknown as string[] | undefined) || []).map((f) => String(f).toLowerCase().trim()));
+  const myFeatures = featuresOf(product);
+  const scored = products
+    .filter((p) => p.slug !== product.slug)
+    .map((p) => {
+      const sameCat = p.category && product.category && p.category === product.category ? 1 : 0;
+      const pf = featuresOf(p);
+      let overlap = 0;
+      pf.forEach((f) => { if (myFeatures.has(f)) overlap++; });
+      const score = sameCat * 100 + overlap * 10;
+      return { p, score };
+    })
+    .sort((a, b) => b.score - a.score || a.p.name.localeCompare(b.p.name))
+    .map((x) => x.p);
+  const related = scored.slice(0, RELATED_COUNT);
 
   const addToCart = () => {
     if (!plan) return;
