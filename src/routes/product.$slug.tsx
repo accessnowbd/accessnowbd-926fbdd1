@@ -8,6 +8,7 @@ import { ProductBanner } from "@/components/ProductBanner";
 import { useShopConfig } from "@/hooks/useShopConfig";
 import { getProduct } from "@/lib/products.functions";
 import { ProductMarkdown } from "@/components/ProductMarkdown";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const parsePrice = (p: unknown) => {
   if (typeof p === "number") return Number.isFinite(p) ? p : 0;
