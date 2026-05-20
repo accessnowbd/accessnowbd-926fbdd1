@@ -12,6 +12,8 @@
  * All logs prefixed with `[perf]` for easy filtering.
  */
 
+import { perfStore } from "./perfStore";
+
 type FrameSample = { t: number; dt: number };
 
 const PREFIX = "[perf]";
