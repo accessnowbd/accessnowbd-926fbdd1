@@ -79,7 +79,7 @@ function CheckoutPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
   const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
-  const { data: dynamicMethods } = usePaymentMethods();
+  const { data: dynamicMethods } = usePaymentMethods("checkout");
   const methods: PayMethod[] = useMemo(() => {
     const list = (dynamicMethods ?? []).map((m) => ({
       id: (m.id || m.name || "").toLowerCase().replace(/\s+/g, "-") || m.name,
@@ -87,6 +87,9 @@ function CheckoutPage() {
       number: m.number,
       color: m.color || COLOR_BY_NAME[m.name?.toLowerCase()] || "bg-slate-700",
       instructions: m.instructions,
+      logo_url: m.logo_url,
+      brand_color: m.brand_color,
+      send_money_label: m.send_money_label,
     }));
     return list.length > 0 ? list : FALLBACK_METHODS;
   }, [dynamicMethods]);
