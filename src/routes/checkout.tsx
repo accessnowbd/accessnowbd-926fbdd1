@@ -638,10 +638,10 @@ function PillField({
 }) {
   return (
     <div>
-      <label className="text-[12px] text-muted-foreground ml-3">{label}</label>
+      <label className="text-[12px] font-medium text-foreground/70 ml-3">{label}</label>
       <div
-        className={`mt-1 flex items-center rounded-full border bg-background/40 px-4 h-11 transition ${
-          error ? "border-destructive/60" : "border-[var(--glass-border-soft)] focus-within:border-primary/50"
+        className={`mt-1 flex items-center rounded-full border bg-white px-4 h-11 transition shadow-sm ${
+          error ? "border-destructive/60" : "border-slate-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
         }`}
       >
         <input
@@ -651,12 +651,13 @@ function PillField({
           onChange={(e) => onChange(e.target.value)}
           onBlur={onBlur}
           placeholder={placeholder}
-          className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground/60"
+          className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-400"
         />
       </div>
       {error && <p className="text-[11px] text-destructive mt-1 ml-3">{error}</p>}
     </div>
   );
 }
+
 
 
