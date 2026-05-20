@@ -139,6 +139,8 @@ function RootComponent() {
 
   useEffect(() => {
     installErrorLogger();
+    const stopPerf = startScrollPerfMonitor();
+    return () => stopPerf();
   }, []);
 
   return (
