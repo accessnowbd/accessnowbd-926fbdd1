@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { installErrorLogger } from "@/lib/error-logger";
 import { startScrollPerfMonitor } from "@/lib/scrollPerfMonitor";
+import { installScrollUnlock } from "@/lib/scrollUnlock";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -139,8 +140,12 @@ function RootComponent() {
 
   useEffect(() => {
     installErrorLogger();
+    const stopScrollUnlock = installScrollUnlock();
     const stopPerf = startScrollPerfMonitor();
-    return () => stopPerf();
+    return () => {
+      stopScrollUnlock();
+      stopPerf();
+    };
   }, []);
 
   return (
