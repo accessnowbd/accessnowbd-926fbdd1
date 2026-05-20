@@ -117,7 +117,7 @@ function AdminLayout() {
     if (loading) return;
     if (!user) {
       try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch {}
-      navigate({ to: "/auth" });
+      navigate({ to: "/login" });
       return;
     }
     let cancelled = false;
@@ -214,7 +214,7 @@ function AdminLayout() {
                   onClick={async () => {
                     try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch {}
                     await signOut();
-                    navigate({ to: "/auth" });
+                    navigate({ to: "/login" });
                   }}
                   className="h-10 px-4 inline-flex items-center gap-1 rounded-full bg-slate-900 text-white text-sm font-semibold"
                 >
@@ -235,7 +235,7 @@ function AdminLayout() {
       onSignOut={async () => {
         try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
         await signOut();
-        navigate({ to: "/auth" });
+        navigate({ to: "/login" });
       }}
     >
       <AdminShell user={user} signOut={signOut} navigate={navigate} />
@@ -382,7 +382,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           </div>
           {!collapsed && (
             <button
-              onClick={async () => { await signOut(); navigate({ to: "/auth" }); }}
+              onClick={async () => { await signOut(); navigate({ to: "/login" }); }}
               className="w-full h-9 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700"
             >
               <LogOut className="w-3.5 h-3.5" /> Logout

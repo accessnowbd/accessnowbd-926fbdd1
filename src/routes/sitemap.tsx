@@ -43,7 +43,7 @@ const sections: Section[] = [
     title: "Account",
     bn: "অ্যাকাউন্ট",
     links: [
-      { to: "/auth", label: "Login / Sign up", bn: "লগইন / সাইন আপ" },
+      { to: "/login", label: "Login / Sign up", bn: "লগইন / সাইন আপ" },
       { to: "/profile", label: "My Profile", bn: "আমার প্রোফাইল" },
       { to: "/orders", label: "My Orders", bn: "আমার অর্ডার" },
       { to: "/cart", label: "Cart", bn: "কার্ট" },

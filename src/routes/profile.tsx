@@ -33,7 +33,7 @@ function ProfilePage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate({ to: "/auth" });
+      navigate({ to: "/login" });
       return;
     }
     if (user) {

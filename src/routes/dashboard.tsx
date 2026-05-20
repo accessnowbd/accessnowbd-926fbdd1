@@ -76,7 +76,7 @@ function DashboardPage() {
 
   useEffect(() => {
     if (authLoading) return;
-    if (!user) { navigate({ to: "/auth" }); return; }
+    if (!user) { navigate({ to: "/login" }); return; }
     let cancelled = false;
     setLoading(true);
     const t0 = performance.now();

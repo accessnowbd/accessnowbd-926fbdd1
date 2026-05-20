@@ -58,7 +58,7 @@ function ResetPasswordPage() {
     <div className="min-h-screen bg-background">
 
       <div className="mx-auto max-w-md px-4 py-10">
-        <Link to="/auth" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
+        <Link to="/login" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
           <ArrowLeft className="w-3.5 h-3.5" /> Back to login
         </Link>
 
@@ -72,7 +72,7 @@ function ResetPasswordPage() {
 
           {ready && !hasSession ? (
             <p className="mt-5 text-sm text-destructive">
-              This reset link is invalid or has expired. <Link to="/auth" className="underline">Request a new one</Link>.
+              This reset link is invalid or has expired. <Link to="/login" className="underline">Request a new one</Link>.
             </p>
           ) : (
             <form onSubmit={submit} className="mt-5 space-y-3">
