@@ -1476,7 +1476,7 @@ html, body {
   overflow-x: hidden;
   overflow-y: auto !important;
   overscroll-behavior-y: auto;
-  touch-action: pan-y;
+  touch-action: auto;
 }
 
 #main-content,
