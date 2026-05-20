@@ -234,12 +234,17 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
     kind: "payment_method",
     mode: "list",
     fields: [
-      { name: "name", label: "Method name", type: "text", required: true, primary: true },
-      { name: "number", label: "Account number", type: "text" },
-      { name: "instructions", label: "Instructions", type: "textarea" },
-      { name: "logo_url", label: "Logo URL", type: "image" },
+      { name: "name", label: "Method name (e.g. bKash, Nagad)", type: "text", required: true, primary: true },
+      { name: "number", label: "Account / personal number", type: "text" },
+      { name: "send_money_label", label: "Action label (e.g. Send Money, Cash In)", type: "text" },
+      { name: "logo_url", label: "Logo image", type: "image" },
+      { name: "brand_color", label: "Brand colour (hex, e.g. #E2136E)", type: "text" },
+      { name: "instructions", label: "Step-by-step instructions (one per line)", type: "textarea" },
+      { name: "enable_checkout", label: "Available at checkout", type: "boolean" },
+      { name: "enable_wallet", label: "Available for wallet top-up", type: "boolean" },
     ],
   },
+
   "account-delivery": {
     kind: "account_delivery",
     mode: "list",
