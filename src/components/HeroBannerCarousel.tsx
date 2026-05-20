@@ -495,7 +495,7 @@ export function HeroBannerCarousel() {
                       />
                       {/* Crescent + star mark */}
                       <div className="relative flex flex-col items-center gap-2">
-                        <svg width="48" height="48" viewBox="0 0 100 100" className="drop-shadow-[0_0_24px_rgba(212,175,55,0.65)] md:h-14 md:w-14">
+                        <svg width="48" height="48" viewBox="0 0 100 100" className="md:h-14 md:w-14">
                           <defs>
                             <radialGradient id="eidCrescent" cx="35%" cy="35%" r="70%">
                               <stop offset="0%" stopColor="#fde68a" />
@@ -543,7 +543,7 @@ export function HeroBannerCarousel() {
                             <div className="text-lg font-black leading-none text-black">৳১৫০ OFF</div>
                           </div>
                           <div
-                            className="rounded-xl border px-3 py-2 backdrop-blur-md"
+                            className="rounded-xl border px-3 py-2"
                             style={{
                               borderColor: hexAlpha(accent, 0.5),
                               background: hexAlpha("#000", 0.35),
@@ -610,13 +610,13 @@ export function HeroBannerCarousel() {
             <div className="absolute bottom-4 right-4 z-10 flex items-center gap-2 md:right-8">
               <button
                 type="button" onClick={() => go(-1)} aria-label="Previous"
-                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition hover:bg-white/15 hover:scale-105"
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/15"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 type="button" onClick={() => go(1)} aria-label="Next"
-                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition hover:bg-white/15 hover:scale-105"
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/15"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
