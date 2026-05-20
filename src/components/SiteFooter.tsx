@@ -26,7 +26,7 @@ type LinkTo =
   | "/orders"
   | "/profile"
   | "/login"
-  | "/login"
+
   | "/register"
   | "/forgot-password"
   | "/cart"
