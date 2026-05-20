@@ -117,18 +117,14 @@ function CheckoutPage() {
   const step1Valid = !errors.name && !errors.email && !errors.phone;
   const step2Valid = !errors.senderNumber && !errors.trxId;
 
-  // Guard direct deep links: if user lands on step 2/3 without prior steps valid, bounce back.
+  // Guard direct deep links: if user lands on step 2 without step 1 valid, bounce back.
   useEffect(() => {
-    if ((step === 2 || step === 3) && !step1Valid) {
+    if (step === 2 && !step1Valid) {
       setTouched((t) => ({ ...t, name: true, email: true, phone: true }));
       navigate({ to: "/checkout", search: { step: 1, coupon }, replace: true });
-      return;
     }
-    if (step === 3 && !step2Valid) {
-      setTouched((t) => ({ ...t, senderNumber: true, trxId: true }));
-      navigate({ to: "/checkout", search: { step: 2, coupon }, replace: true });
-    }
-  }, [step, step1Valid, step2Valid, navigate, coupon]);
+  }, [step, step1Valid, navigate, coupon]);
+
 
   const applied = useMemo(() => applyCoupon(coupon, total), [coupon, total]);
   const grandTotal = Math.max(0, total - applied.discount);
