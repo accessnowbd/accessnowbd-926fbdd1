@@ -306,7 +306,7 @@ function CheckoutPage() {
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                     placeholder="SAVE20"
-                    className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-400"
+                    className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-500"
                   />
                 </div>
                 <button
@@ -654,7 +654,7 @@ function PillField({
           onChange={(e) => onChange(e.target.value)}
           onBlur={onBlur}
           placeholder={placeholder}
-          className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-400"
+          className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-500"
         />
       </div>
       {error && <p className="text-[11px] text-destructive mt-1 ml-3">{error}</p>}
