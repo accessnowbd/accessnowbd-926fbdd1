@@ -21,7 +21,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { listProducts } from "@/lib/products.functions";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
-import { LazyMount } from "@/components/LazyMount";
+
 import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
 import type { Product } from "@/data/products";
 
