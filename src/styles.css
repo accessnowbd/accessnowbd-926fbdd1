@@ -2010,3 +2010,31 @@ html.theme-white .home-scroll-optimized .product-card-v2 {
 html.theme-white .home-scroll-optimized .product-card-v2:hover {
   transform: none !important;
 }
+
+/* ============================================================
+   GLOBAL backdrop-filter KILL SWITCH
+   ------------------------------------------------------------
+   backdrop-filter forces per-frame pixel re-sampling of layers
+   beneath the element. With dozens of glass cards / headers /
+   modals on a page, this causes visible "jumping" (লাফালাফি),
+   white flashes and scroll lag on every device — especially
+   mid-tier mobile + integrated GPUs.
+
+   We disable backdrop-filter EVERYWHERE and keep the glass look
+   via the already-defined translucent backgrounds + borders.
+   ============================================================ */
+*,
+*::before,
+*::after,
+[class*="backdrop-blur"],
+[class*="backdrop-saturate"],
+[style*="backdrop-filter"],
+.glass,
+.glass-strong,
+.glass-soft,
+.gradient-border-soft,
+.product-card-v2,
+.footer-glass-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
