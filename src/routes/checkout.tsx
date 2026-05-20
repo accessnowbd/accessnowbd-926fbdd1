@@ -298,7 +298,7 @@ function CheckoutPage() {
 
             {/* Coupon */}
             <div>
-              <label className="text-[12px] font-medium text-foreground/70 ml-3">কুপন কোড (ঐচ্ছিক)</label>
+              <label className="text-[12px] font-medium text-slate-700 ml-3">কুপন কোড (ঐচ্ছিক)</label>
               <div className="mt-1 flex items-center gap-2">
                 <div className="flex-1 flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 h-11 shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition">
                   <Tag className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -641,7 +641,7 @@ function PillField({
 }) {
   return (
     <div>
-      <label className="text-[12px] font-medium text-foreground/70 ml-3">{label}</label>
+      <label className="text-[12px] font-medium text-slate-700 ml-3">{label}</label>
       <div
         className={`mt-1 flex items-center rounded-full border bg-white px-4 h-11 transition shadow-sm ${
           error ? "border-destructive/60" : "border-slate-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
