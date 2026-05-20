@@ -21,6 +21,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { listProducts } from "@/lib/products.functions";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
+import { ProgressiveSection } from "@/components/ProgressiveSection";
 
 import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
 import type { Product } from "@/data/products";
@@ -124,8 +125,16 @@ function Index() {
           ? RAIL_PLACEHOLDER_TITLES.map((title) => (
               <ProductRail key={title} title={title} items={[]} isLoading />
             ))
-          : byCategory.map((section) => (
-              <ProductRail key={section.category} title={section.category} items={section.items} />
+          : byCategory.map((section, idx) => (
+              <ProgressiveSection
+                key={section.category}
+                /* First two rails mount eagerly so the user sees real
+                   content immediately on initial paint. */
+                eager={idx < 2}
+                fallback={<ProductRail title={section.category} items={[]} isLoading />}
+              >
+                <ProductRail title={section.category} items={section.items} />
+              </ProgressiveSection>
             ))}
       </div>
       <SiteFooter />
