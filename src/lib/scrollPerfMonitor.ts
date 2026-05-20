@@ -54,6 +54,33 @@ export function startScrollPerfMonitor(): () => void {
   let worstFrame = 0;
   let droppedFrames = 0;
 
+  // Running totals across all scroll sessions — feed the report panel.
+  let totalScrollMs = 0;
+  let totalFrameMs = 0;
+  let totalFrameCount = 0;
+  let allTimeWorstFrame = 0;
+  let allTimeDroppedFrames = 0;
+  let longTaskCount = 0;
+  let longTaskTotalMs = 0;
+  let worstLongTaskMs = 0;
+  let worstInpMs = 0;
+  let clsValue = 0;
+
+  const pushStore = () => {
+    const avgFps = totalFrameCount > 0 ? Math.round(1000 / (totalFrameMs / totalFrameCount)) : 0;
+    perfStore.patch({
+      avgFps,
+      worstFrameMs: allTimeWorstFrame,
+      droppedFrames: allTimeDroppedFrames,
+      scrollTimeMs: totalScrollMs,
+      longTaskCount,
+      longTaskTotalMs,
+      worstLongTaskMs,
+      worstInpMs,
+      cls: clsValue,
+    });
+  };
+
   console.log(
     `%c${PREFIX} monitor armed — scroll the page to see FPS / dropped frames / input delay`,
     "color:#8b5cf6;font-weight:bold",
