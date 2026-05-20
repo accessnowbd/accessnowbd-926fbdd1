@@ -15,7 +15,7 @@ export type PaymentMethod = {
   instructions?: string;
 };
 
-const DEFAULT: ShopConfig = {
+export const DEFAULT_SHOP_CONFIG: ShopConfig = {
   whatsapp_number: "8801580607614",
   shop_name: "AccessNow BD",
   support_hours: "9 AM – 12 AM",
@@ -33,8 +33,8 @@ export function useShopConfig() {
         .order("sort_order")
         .limit(1)
         .maybeSingle();
-      if (error || !data) return DEFAULT;
-      return { ...DEFAULT, ...((data.data as Partial<ShopConfig>) || {}) };
+      if (error || !data) return DEFAULT_SHOP_CONFIG;
+      return { ...DEFAULT_SHOP_CONFIG, ...((data.data as Partial<ShopConfig>) || {}) };
     },
     staleTime: 10 * 60_000,
     gcTime: 60 * 60_000,
