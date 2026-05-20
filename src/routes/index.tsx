@@ -531,7 +531,7 @@ function FeaturedProducts({ items, isLoading }: { items: Product[]; isLoading?: 
 function ProductRail({ title, items, isLoading }: { title: string; items: Product[]; isLoading?: boolean }) {
   const showSkeleton = isLoading || items.length === 0;
   return (
-    <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-10">
+    <section className="home-rail mx-auto max-w-[1440px] px-4 md:px-10 py-10">
       <SectionTitle eyebrow="Collection" title={title} compact />
       <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
         {showSkeleton
