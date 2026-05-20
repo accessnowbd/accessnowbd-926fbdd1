@@ -84,6 +84,8 @@ function CheckoutPage() {
   const [agree, setAgree] = useState(false);
   const [copied, setCopied] = useState(false);
   const [couponInput, setCouponInput] = useState(coupon || "");
+  const [screenshotUrl, setScreenshotUrl] = useState<string>("");
+  const [uploading, setUploading] = useState(false);
 
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
