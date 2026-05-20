@@ -235,9 +235,10 @@ function CheckoutPage() {
               <div className={`w-10 h-10 shrink-0 rounded-xl bg-gradient-to-br ${firstItem.gradient} grid place-items-center text-lg`}>
                 {firstItem.emoji}
               </div>
-              <h1 className="text-[15px] font-semibold truncate" style={{ fontFamily: "var(--font-heading)" }}>
+              <h1 className="text-[15px] font-semibold text-slate-900 truncate" style={{ fontFamily: "var(--font-heading)" }}>
                 {title}
               </h1>
+
             </div>
             <button
               onClick={() => navigate({ to: "/cart" })}
@@ -254,9 +255,10 @@ function CheckoutPage() {
           <div className="flex items-center justify-between px-5 pt-4">
             <div className="flex items-center gap-2.5">
               <span className="grid place-items-center w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold">১</span>
-              <h2 className="text-[15px] font-semibold" style={{ fontFamily: "var(--font-heading)" }}>
+              <h2 className="text-[15px] font-semibold text-slate-900" style={{ fontFamily: "var(--font-heading)" }}>
                 আপনার তথ্য দিন
               </h2>
+
             </div>
             {user && (
               <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-primary/10 text-primary inline-flex items-center gap-1">
@@ -296,7 +298,7 @@ function CheckoutPage() {
 
             {/* Coupon */}
             <div>
-              <label className="text-[12px] font-medium text-foreground/70 ml-3">কুপন কোড (ঐচ্ছিক)</label>
+              <label className="text-[12px] font-medium text-slate-700 ml-3">কুপন কোড (ঐচ্ছিক)</label>
               <div className="mt-1 flex items-center gap-2">
                 <div className="flex-1 flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 h-11 shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition">
                   <Tag className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -304,7 +306,7 @@ function CheckoutPage() {
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                     placeholder="SAVE20"
-                    className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-400"
+                    className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-500"
                   />
                 </div>
                 <button
@@ -639,7 +641,7 @@ function PillField({
 }) {
   return (
     <div>
-      <label className="text-[12px] font-medium text-foreground/70 ml-3">{label}</label>
+      <label className="text-[12px] font-medium text-slate-700 ml-3">{label}</label>
       <div
         className={`mt-1 flex items-center rounded-full border bg-white px-4 h-11 transition shadow-sm ${
           error ? "border-destructive/60" : "border-slate-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
@@ -652,7 +654,7 @@ function PillField({
           onChange={(e) => onChange(e.target.value)}
           onBlur={onBlur}
           placeholder={placeholder}
-          className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-400"
+          className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-500"
         />
       </div>
       {error && <p className="text-[11px] text-destructive mt-1 ml-3">{error}</p>}
