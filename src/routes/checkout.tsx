@@ -60,7 +60,7 @@ function CheckoutPage() {
   const navigate = useNavigate();
 
   const { step, coupon } = Route.useSearch();
-  const setStep = (n: 1 | 2 | 3) =>
+  const setStep = (n: 1 | 2) =>
     navigate({ to: "/checkout", search: { step: n, coupon }, replace: false });
 
   // Scroll to top whenever the active step changes (incl. browser back/forward).
