@@ -169,10 +169,13 @@ export function startScrollPerfMonitor(): () => void {
   // Proxy for INP responsiveness during scroll.
   const measureInputDelay = (label: string) => (e: Event) => {
     const start = performance.now();
-    // Use event timestamp when available — more accurate.
     const eventTime = (e as Event & { timeStamp: number }).timeStamp || start;
     requestAnimationFrame((frameTime) => {
       const delay = frameTime - eventTime;
+      if (delay > worstInpMs) {
+        worstInpMs = delay;
+        pushStore();
+      }
       if (delay > 100) {
         console.log(
           `%c${PREFIX} input delay (${label}) ${delay.toFixed(0)}ms`,
@@ -196,12 +199,16 @@ export function startScrollPerfMonitor(): () => void {
         for (const entry of list.getEntries()) {
           const dur = entry.duration;
           if (dur < 50) continue;
+          longTaskCount += 1;
+          longTaskTotalMs += dur;
+          if (dur > worstLongTaskMs) worstLongTaskMs = dur;
           console.log(
             `%c${PREFIX} long task ${dur.toFixed(0)}ms%c  @${(entry.startTime / 1000).toFixed(1)}s${scrolling ? " (during scroll)" : ""}`,
             dur > 200 ? COLOR_BAD : COLOR_WARN,
             "color:#94a3b8",
           );
         }
+        pushStore();
       });
       longTaskObserver.observe({ entryTypes: ["longtask"] });
     }
@@ -215,10 +222,13 @@ export function startScrollPerfMonitor(): () => void {
     if ("PerformanceObserver" in window && PerformanceObserver.supportedEntryTypes?.includes("event")) {
       eventObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          // Cast: PerformanceEventTiming has interactionId + duration.
           const ev = entry as PerformanceEntry & { interactionId?: number; name: string };
           const dur = entry.duration;
           if (!ev.interactionId || dur < 100) continue;
+          if (dur > worstInpMs) {
+            worstInpMs = dur;
+            pushStore();
+          }
           console.log(
             `%c${PREFIX} slow interaction "${ev.name}" ${dur.toFixed(0)}ms (INP candidate)`,
             dur > 200 ? COLOR_BAD : COLOR_WARN,
@@ -226,6 +236,24 @@ export function startScrollPerfMonitor(): () => void {
         }
       });
       eventObserver.observe({ type: "event", buffered: true, durationThreshold: 100 } as PerformanceObserverInit);
+    }
+  } catch {
+    /* not supported */
+  }
+
+  // CLS via layout-shift entries.
+  let clsObserver: PerformanceObserver | null = null;
+  try {
+    if ("PerformanceObserver" in window && PerformanceObserver.supportedEntryTypes?.includes("layout-shift")) {
+      clsObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const ls = entry as PerformanceEntry & { value: number; hadRecentInput: boolean };
+          if (ls.hadRecentInput) continue;
+          clsValue += ls.value;
+        }
+        pushStore();
+      });
+      clsObserver.observe({ type: "layout-shift", buffered: true } as PerformanceObserverInit);
     }
   } catch {
     /* not supported */
@@ -240,5 +268,6 @@ export function startScrollPerfMonitor(): () => void {
     window.removeEventListener("pointerdown", pointerHandler);
     longTaskObserver?.disconnect();
     eventObserver?.disconnect();
+    clsObserver?.disconnect();
   };
 }
