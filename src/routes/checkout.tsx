@@ -296,15 +296,15 @@ function CheckoutPage() {
 
             {/* Coupon */}
             <div>
-              <label className="text-[12px] text-muted-foreground ml-3">কুপন কোড (ঐচ্ছিক)</label>
+              <label className="text-[12px] font-medium text-foreground/70 ml-3">কুপন কোড (ঐচ্ছিক)</label>
               <div className="mt-1 flex items-center gap-2">
-                <div className="flex-1 flex items-center gap-2 rounded-full border border-[var(--glass-border-soft)] bg-background/40 px-4 h-11">
-                  <Tag className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                <div className="flex-1 flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 h-11 shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition">
+                  <Tag className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                   <input
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                     placeholder="SAVE20"
-                    className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground/60"
+                    className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-400"
                   />
                 </div>
                 <button
@@ -315,7 +315,7 @@ function CheckoutPage() {
                 </button>
               </div>
               {coupon && (
-                <p className={`text-[11px] mt-1.5 ml-3 ${applied.valid ? "text-aqua-deep" : "text-destructive"}`}>
+                <p className={`text-[11px] mt-1.5 ml-3 ${applied.valid ? "text-emerald-600" : "text-destructive"}`}>
                   {applied.valid ? `প্রয়োগ হয়েছে: ${applied.label}` : "কুপন কোডটি সঠিক নয়"}
                 </p>
               )}
@@ -323,24 +323,25 @@ function CheckoutPage() {
           </div>
 
           {/* Totals */}
-          <div className="mx-5 mt-5 rounded-2xl border border-[var(--glass-border-soft)] overflow-hidden">
+          <div className="mx-5 mt-5 rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
             <div className="flex items-center justify-between px-4 py-2.5 text-sm">
-              <span className="text-muted-foreground">মূল্য</span>
-              <span>৳{total.toLocaleString()}</span>
+              <span className="text-slate-500">মূল্য</span>
+              <span className="text-slate-900 font-medium">৳{total.toLocaleString()}</span>
             </div>
             {applied.discount > 0 && (
-              <div className="flex items-center justify-between px-4 py-2.5 text-sm border-t border-[var(--glass-border-soft)]">
-                <span className="text-aqua-deep">ছাড় ({applied.code})</span>
-                <span className="text-aqua-deep">−৳{applied.discount.toLocaleString()}</span>
+              <div className="flex items-center justify-between px-4 py-2.5 text-sm border-t border-slate-100">
+                <span className="text-emerald-600">ছাড় ({applied.code})</span>
+                <span className="text-emerald-600 font-medium">−৳{applied.discount.toLocaleString()}</span>
               </div>
             )}
-            <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--glass-border-soft)] bg-foreground/[0.02]">
-              <span className="text-[15px] font-semibold">মোট</span>
-              <span className="text-xl font-bold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>
+            <div className="flex items-center justify-between px-4 py-3 border-t border-slate-100 bg-slate-50">
+              <span className="text-[15px] font-semibold text-slate-900">মোট</span>
+              <span className="text-xl font-bold text-primary" style={{ fontFamily: "var(--font-heading)" }}>
                 ৳{grandTotal.toLocaleString()}
               </span>
             </div>
           </div>
+
 
           {/* CTA */}
           <div className="px-5 py-5">
