@@ -2,9 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { ShoppingCart, Star, MessageCircle } from "lucide-react";
 import { memo } from "react";
 import { useCart } from "@/context/CartContext";
+import { useShopConfigValue } from "@/context/ShopConfigContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { ProductBanner } from "@/components/ProductBanner";
-import { DEFAULT_SHOP_CONFIG } from "@/hooks/useShopConfig";
 import { waAskUrl } from "@/lib/whatsapp";
 import type { Product } from "@/data/products";
 
@@ -24,6 +24,7 @@ function ratingFor(slug: string): { rating: string; reviews: number } {
 
 function ProductCardImpl({ product }: { product: Product }) {
   const { add } = useCart();
+  const shopConfig = useShopConfigValue();
 
   const plan = product.plans[0];
   const hasOptions = product.plans.length > 1;
@@ -125,7 +126,7 @@ function ProductCardImpl({ product }: { product: Product }) {
                 e.preventDefault();
                 e.stopPropagation();
                 window.open(
-                  waAskUrl(product.name, { number: DEFAULT_SHOP_CONFIG.whatsapp_number }),
+                  waAskUrl(product.name, { number: shopConfig.whatsapp_number }),
                   "_blank",
                   "noopener,noreferrer"
                 );
