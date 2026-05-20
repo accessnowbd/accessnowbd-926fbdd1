@@ -30,6 +30,40 @@ export function installScrollUnlock(): () => void {
     });
   };
 
+  let lastTouchY = 0;
+  const onTouchStart = (event: TouchEvent) => {
+    lastTouchY = event.touches[0]?.clientY ?? 0;
+  };
+
+  const onTouchMove = (event: TouchEvent) => {
+    const touchY = event.touches[0]?.clientY ?? lastTouchY;
+    const deltaY = lastTouchY - touchY;
+    lastTouchY = touchY;
+    if (Math.abs(deltaY) < 2 || event.defaultPrevented || hasScrollableParent(event.target, deltaY)) return;
+    const before = readScrollY();
+    requestAnimationFrame(() => {
+      if (Math.abs(readScrollY() - before) > 1) return;
+      window.scrollBy({ top: deltaY, behavior: "auto" });
+    });
+  };
+
+  const onKeyDown = (event: KeyboardEvent) => {
+    if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+    const tag = event.target instanceof HTMLElement ? event.target.tagName : "";
+    if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;
+    const amount = event.key === "PageDown" ? window.innerHeight * 0.85 : event.key === "PageUp" ? -window.innerHeight * 0.85 : 0;
+    if (amount === 0) return;
+    requestAnimationFrame(() => window.scrollBy({ top: amount, behavior: "auto" }));
+  };
+
   window.addEventListener("wheel", onWheel, { capture: true, passive: true });
-  return () => window.removeEventListener("wheel", onWheel, { capture: true });
+  window.addEventListener("touchstart", onTouchStart, { capture: true, passive: true });
+  window.addEventListener("touchmove", onTouchMove, { capture: true, passive: true });
+  window.addEventListener("keydown", onKeyDown, { capture: true });
+  return () => {
+    window.removeEventListener("wheel", onWheel, { capture: true });
+    window.removeEventListener("touchstart", onTouchStart, { capture: true });
+    window.removeEventListener("touchmove", onTouchMove, { capture: true });
+    window.removeEventListener("keydown", onKeyDown, { capture: true });
+  };
 }
