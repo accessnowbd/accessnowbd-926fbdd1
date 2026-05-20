@@ -22,6 +22,7 @@ import { listProducts } from "@/lib/products.functions";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ProgressiveSection } from "@/components/ProgressiveSection";
+import { PerfReportSection, ProfiledSection } from "@/components/PerfReportSection";
 
 import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
 import type { Product } from "@/data/products";
@@ -115,12 +116,18 @@ function Index() {
     <div className="home-scroll-optimized min-h-screen">
 
       <div>
-        <HeroBannerCarousel />
+        <ProfiledSection id="HeroBannerCarousel">
+          <HeroBannerCarousel />
+        </ProfiledSection>
 
 
-        <CategoryPillBar />
+        <ProfiledSection id="CategoryPillBar">
+          <CategoryPillBar />
+        </ProfiledSection>
 
-        <FeaturedProducts items={top} isLoading={isLoading} />
+        <ProfiledSection id="FeaturedProducts">
+          <FeaturedProducts items={top} isLoading={isLoading} />
+        </ProfiledSection>
         {isLoading && byCategory.length === 0
           ? RAIL_PLACEHOLDER_TITLES.map((title) => (
               <ProductRail key={title} title={title} items={[]} isLoading />
@@ -133,9 +140,12 @@ function Index() {
                 eager={idx < 2}
                 fallback={<ProductRail title={section.category} items={[]} isLoading />}
               >
-                <ProductRail title={section.category} items={section.items} />
+                <ProfiledSection id={`ProductRail: ${section.category}`}>
+                  <ProductRail title={section.category} items={section.items} />
+                </ProfiledSection>
               </ProgressiveSection>
             ))}
+        <PerfReportSection />
       </div>
       <SiteFooter />
     </div>

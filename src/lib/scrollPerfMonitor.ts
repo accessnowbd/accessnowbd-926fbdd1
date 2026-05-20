@@ -12,6 +12,8 @@
  * All logs prefixed with `[perf]` for easy filtering.
  */
 
+import { perfStore } from "./perfStore";
+
 type FrameSample = { t: number; dt: number };
 
 const PREFIX = "[perf]";
@@ -25,7 +27,7 @@ function styleFor(fps: number) {
   return COLOR_BAD;
 }
 
-function shouldEnable(): boolean {
+export function isPerfEnabled(): boolean {
   if (typeof window === "undefined") return false;
   if (import.meta.env.DEV) return true;
   try {
@@ -39,7 +41,7 @@ function shouldEnable(): boolean {
 }
 
 export function startScrollPerfMonitor(): () => void {
-  if (!shouldEnable()) return () => {};
+  if (!isPerfEnabled()) return () => {};
 
   let rafId = 0;
   let lastFrame = performance.now();
@@ -51,6 +53,33 @@ export function startScrollPerfMonitor(): () => void {
   let scrollStart = 0;
   let worstFrame = 0;
   let droppedFrames = 0;
+
+  // Running totals across all scroll sessions — feed the report panel.
+  let totalScrollMs = 0;
+  let totalFrameMs = 0;
+  let totalFrameCount = 0;
+  let allTimeWorstFrame = 0;
+  let allTimeDroppedFrames = 0;
+  let longTaskCount = 0;
+  let longTaskTotalMs = 0;
+  let worstLongTaskMs = 0;
+  let worstInpMs = 0;
+  let clsValue = 0;
+
+  const pushStore = () => {
+    const avgFps = totalFrameCount > 0 ? Math.round(1000 / (totalFrameMs / totalFrameCount)) : 0;
+    perfStore.patch({
+      avgFps,
+      worstFrameMs: allTimeWorstFrame,
+      droppedFrames: allTimeDroppedFrames,
+      scrollTimeMs: totalScrollMs,
+      longTaskCount,
+      longTaskTotalMs,
+      worstLongTaskMs,
+      worstInpMs,
+      cls: clsValue,
+    });
+  };
 
   console.log(
     `%c${PREFIX} monitor armed — scroll the page to see FPS / dropped frames / input delay`,
@@ -66,7 +95,13 @@ export function startScrollPerfMonitor(): () => void {
       secondBuffer.push(dt);
       frames.push({ t: now, dt });
       if (dt > worstFrame) worstFrame = dt;
-      if (dt > 32) droppedFrames++; // missed a 60fps frame
+      if (dt > allTimeWorstFrame) allTimeWorstFrame = dt;
+      if (dt > 32) {
+        droppedFrames++;
+        allTimeDroppedFrames++;
+      }
+      totalFrameMs += dt;
+      totalFrameCount += 1;
 
       if (now - lastSecondLog >= 1000) {
         const avg = secondBuffer.reduce((a, b) => a + b, 0) / secondBuffer.length;
@@ -76,6 +111,8 @@ export function startScrollPerfMonitor(): () => void {
           styleFor(fps),
           "color:#94a3b8",
         );
+        perfStore.patch({ liveFps: fps });
+        pushStore();
         secondBuffer = [];
         lastSecondLog = now;
       }
@@ -88,6 +125,7 @@ export function startScrollPerfMonitor(): () => void {
     if (!scrolling) return;
     scrolling = false;
     const duration = performance.now() - scrollStart;
+    perfStore.patch({ liveFps: 0 });
     if (duration < 200 || frames.length === 0) {
       frames = [];
       secondBuffer = [];
@@ -95,6 +133,7 @@ export function startScrollPerfMonitor(): () => void {
       droppedFrames = 0;
       return;
     }
+    totalScrollMs += duration;
     const avgDt = frames.reduce((a, b) => a + b.dt, 0) / frames.length;
     const avgFps = Math.round(1000 / avgDt);
     console.log(
@@ -102,6 +141,7 @@ export function startScrollPerfMonitor(): () => void {
       styleFor(avgFps),
       "color:#94a3b8",
     );
+    pushStore();
     frames = [];
     secondBuffer = [];
     worstFrame = 0;
@@ -129,10 +169,13 @@ export function startScrollPerfMonitor(): () => void {
   // Proxy for INP responsiveness during scroll.
   const measureInputDelay = (label: string) => (e: Event) => {
     const start = performance.now();
-    // Use event timestamp when available — more accurate.
     const eventTime = (e as Event & { timeStamp: number }).timeStamp || start;
     requestAnimationFrame((frameTime) => {
       const delay = frameTime - eventTime;
+      if (delay > worstInpMs) {
+        worstInpMs = delay;
+        pushStore();
+      }
       if (delay > 100) {
         console.log(
           `%c${PREFIX} input delay (${label}) ${delay.toFixed(0)}ms`,
@@ -156,12 +199,16 @@ export function startScrollPerfMonitor(): () => void {
         for (const entry of list.getEntries()) {
           const dur = entry.duration;
           if (dur < 50) continue;
+          longTaskCount += 1;
+          longTaskTotalMs += dur;
+          if (dur > worstLongTaskMs) worstLongTaskMs = dur;
           console.log(
             `%c${PREFIX} long task ${dur.toFixed(0)}ms%c  @${(entry.startTime / 1000).toFixed(1)}s${scrolling ? " (during scroll)" : ""}`,
             dur > 200 ? COLOR_BAD : COLOR_WARN,
             "color:#94a3b8",
           );
         }
+        pushStore();
       });
       longTaskObserver.observe({ entryTypes: ["longtask"] });
     }
@@ -175,10 +222,13 @@ export function startScrollPerfMonitor(): () => void {
     if ("PerformanceObserver" in window && PerformanceObserver.supportedEntryTypes?.includes("event")) {
       eventObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          // Cast: PerformanceEventTiming has interactionId + duration.
           const ev = entry as PerformanceEntry & { interactionId?: number; name: string };
           const dur = entry.duration;
           if (!ev.interactionId || dur < 100) continue;
+          if (dur > worstInpMs) {
+            worstInpMs = dur;
+            pushStore();
+          }
           console.log(
             `%c${PREFIX} slow interaction "${ev.name}" ${dur.toFixed(0)}ms (INP candidate)`,
             dur > 200 ? COLOR_BAD : COLOR_WARN,
@@ -186,6 +236,24 @@ export function startScrollPerfMonitor(): () => void {
         }
       });
       eventObserver.observe({ type: "event", buffered: true, durationThreshold: 100 } as PerformanceObserverInit);
+    }
+  } catch {
+    /* not supported */
+  }
+
+  // CLS via layout-shift entries.
+  let clsObserver: PerformanceObserver | null = null;
+  try {
+    if ("PerformanceObserver" in window && PerformanceObserver.supportedEntryTypes?.includes("layout-shift")) {
+      clsObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const ls = entry as PerformanceEntry & { value: number; hadRecentInput: boolean };
+          if (ls.hadRecentInput) continue;
+          clsValue += ls.value;
+        }
+        pushStore();
+      });
+      clsObserver.observe({ type: "layout-shift", buffered: true } as PerformanceObserverInit);
     }
   } catch {
     /* not supported */
@@ -200,5 +268,6 @@ export function startScrollPerfMonitor(): () => void {
     window.removeEventListener("pointerdown", pointerHandler);
     longTaskObserver?.disconnect();
     eventObserver?.disconnect();
+    clsObserver?.disconnect();
   };
 }
