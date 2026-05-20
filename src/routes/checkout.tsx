@@ -350,10 +350,12 @@ function CheckoutPage() {
             <button
               onClick={goNext}
               disabled={!step1Valid}
-              className="w-full h-12 rounded-full bg-foreground text-background text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-90 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="w-full h-12 rounded-full text-white text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-lg shadow-primary/25"
+              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)" }}
             >
               পেমেন্টে যান <ChevronRight className="w-4 h-4" />
             </button>
+
           </div>
         </GlassCard>
       </div>
