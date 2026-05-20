@@ -13,6 +13,11 @@ export type PaymentMethod = {
   number: string;
   color: string;
   instructions?: string;
+  logo_url?: string;
+  brand_color?: string;
+  send_money_label?: string;
+  enable_checkout?: boolean;
+  enable_wallet?: boolean;
 };
 
 export const DEFAULT_SHOP_CONFIG: ShopConfig = {
@@ -42,9 +47,9 @@ export function useShopConfig() {
   });
 }
 
-export function usePaymentMethods() {
+export function usePaymentMethods(audience?: "checkout" | "wallet") {
   return useQuery({
-    queryKey: ["payment-methods"],
+    queryKey: ["payment-methods", audience ?? "all"],
     queryFn: async (): Promise<PaymentMethod[]> => {
       const { data, error } = await supabase
         .from("admin_records")
@@ -53,10 +58,17 @@ export function usePaymentMethods() {
         .eq("is_active", true)
         .order("sort_order");
       if (error || !data) return [];
-      return data.map((r) => r.data as PaymentMethod);
+      const all = data.map((r) => r.data as PaymentMethod);
+      if (!audience) return all;
+      return all.filter((m) => {
+        if (audience === "checkout") return m.enable_checkout !== false;
+        if (audience === "wallet") return m.enable_wallet === true;
+        return true;
+      });
     },
     staleTime: 10 * 60_000,
     gcTime: 60 * 60_000,
     refetchOnWindowFocus: false,
   });
 }
+
