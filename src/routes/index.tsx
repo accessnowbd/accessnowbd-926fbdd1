@@ -22,6 +22,7 @@ import { listProducts } from "@/lib/products.functions";
 import { ProductCard } from "@/components/ProductCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ProgressiveSection } from "@/components/ProgressiveSection";
+import { PerfReportSection, ProfiledSection } from "@/components/PerfReportSection";
 
 import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
 import type { Product } from "@/data/products";
