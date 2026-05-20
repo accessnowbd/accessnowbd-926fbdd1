@@ -1984,6 +1984,14 @@ html.theme-white .home-scroll-optimized [class*="backdrop-blur"] {
   contain: layout paint style;
 }
 
+/* Skip rendering work for off-screen sections.
+   Browser auto-skips paint+layout when out of viewport, restoring smooth
+   scroll/wheel responsiveness without unmounting (no layout jump). */
+.home-rail {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 520px;
+}
+
 html.theme-white .home-scroll-optimized .glass,
 html.theme-white .home-scroll-optimized .glass-strong,
 html.theme-white .home-scroll-optimized .glass-soft {
