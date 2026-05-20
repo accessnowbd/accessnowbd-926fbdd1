@@ -167,6 +167,7 @@ function CheckoutPage() {
           phone: form.phone,
           payment_method: method,
           transaction_id: form.trxId,
+          payment_screenshot_url: screenshotUrl || null,
           items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
           total: grandTotal,
         })
