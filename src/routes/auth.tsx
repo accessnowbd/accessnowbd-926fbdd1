@@ -42,14 +42,31 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
   const [forgotErr, setForgotErr] = useState<string | null>(null);
   const [forgotBusy, setForgotBusy] = useState(false);
 
+  // Capture where the user came from so we can return them there after login.
+  // Falls back to "/" if there's no usable referrer (direct visit, external link, or an auth-related page).
+  const [returnTo] = useState<string>(() => {
+    if (typeof window === "undefined") return "/";
+    try {
+      const ref = document.referrer;
+      if (!ref) return "/";
+      const url = new URL(ref);
+      if (url.origin !== window.location.origin) return "/";
+      const authPaths = ["/auth", "/login", "/register", "/forgot-password", "/reset-password"];
+      if (authPaths.some((p) => url.pathname.startsWith(p))) return "/";
+      return url.pathname + url.search + url.hash;
+    } catch {
+      return "/";
+    }
+  });
+
   useEffect(() => {
     setMode(initialMode);
     setErr(null);
   }, [initialMode]);
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: "/dashboard" });
-  }, [user, loading, navigate]);
+    if (!loading && user) navigate({ to: returnTo as string });
+  }, [user, loading, navigate, returnTo]);
 
   const update = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -58,13 +75,14 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: { redirectTo: `${window.location.origin}/dashboard` },
+        options: { redirectTo: `${window.location.origin}${returnTo}` },
       });
       if (error) throw error;
     } catch (e: unknown) {
       setErr(e instanceof Error ? e.message : "Social sign-in failed");
     }
   };
+
 
   const sendReset = async () => {
     setForgotErr(null);
