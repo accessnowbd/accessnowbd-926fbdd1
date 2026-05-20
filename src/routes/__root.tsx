@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { installErrorLogger } from "@/lib/error-logger";
+import { startScrollPerfMonitor } from "@/lib/scrollPerfMonitor";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -138,6 +139,8 @@ function RootComponent() {
 
   useEffect(() => {
     installErrorLogger();
+    const stopPerf = startScrollPerfMonitor();
+    return () => stopPerf();
   }, []);
 
   return (
