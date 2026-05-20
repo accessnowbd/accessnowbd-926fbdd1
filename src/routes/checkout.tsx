@@ -408,24 +408,24 @@ function CheckoutPage() {
             <div className={`w-10 h-10 shrink-0 rounded-xl bg-gradient-to-br ${firstItem.gradient} grid place-items-center text-lg`}>
               {firstItem.emoji}
             </div>
-            <h1 className="text-[15px] font-semibold truncate" style={{ fontFamily: "var(--font-heading)" }}>
+            <h1 className="text-[15px] font-semibold text-slate-900 truncate" style={{ fontFamily: "var(--font-heading)" }}>
               {cardTitle}
             </h1>
           </div>
-          <button onClick={() => navigate({ to: "/cart" })} aria-label="Close" className="p-1.5 rounded-full hover:bg-foreground/5 text-muted-foreground">
+          <button onClick={() => navigate({ to: "/cart" })} aria-label="Close" className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500">
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="h-px bg-[var(--glass-border-soft)] mx-5" />
+        <div className="h-px bg-slate-200 mx-5" />
 
         {/* Step header */}
         <div className="flex items-center justify-between px-5 pt-4">
           <div className="flex items-center gap-2.5">
             <span className="grid place-items-center w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold">২</span>
-            <h2 className="text-[15px] font-semibold" style={{ fontFamily: "var(--font-heading)" }}>পেমেন্ট করুন</h2>
+            <h2 className="text-[15px] font-semibold text-slate-900" style={{ fontFamily: "var(--font-heading)" }}>পেমেন্ট করুন</h2>
           </div>
-          <button onClick={() => setStep(1)} className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
+          <button onClick={() => setStep(1)} className="text-xs text-primary hover:text-primary/80 inline-flex items-center gap-1 font-medium">
             ← পিছনে
           </button>
         </div>
@@ -440,8 +440,8 @@ function CheckoutPage() {
                 onClick={() => setMethod(m.id)}
                 role="radio"
                 aria-checked={active}
-                className={`relative rounded-2xl border bg-background/40 px-3 py-3 flex flex-col items-center gap-1.5 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                  active ? "border-foreground shadow-sm" : "border-[var(--glass-border-soft)] hover:border-foreground/40"
+                className={`relative rounded-2xl border-2 bg-white px-3 py-3 flex flex-col items-center gap-1.5 transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                  active ? "border-primary ring-2 ring-primary/20" : "border-slate-200 hover:border-primary/40"
                 }`}
               >
                 <div className="w-12 h-12 grid place-items-center">
@@ -453,7 +453,7 @@ function CheckoutPage() {
                     </div>
                   )}
                 </div>
-                <div className="text-[12px] font-medium text-center leading-tight">{m.name}</div>
+                <div className="text-[12px] font-semibold text-slate-900 text-center leading-tight">{m.name}</div>
               </button>
             );
           })}
@@ -461,13 +461,13 @@ function CheckoutPage() {
 
         {/* Brand instruction card */}
         <div
-          className="mx-5 mt-5 rounded-2xl border border-[var(--glass-border-soft)] overflow-hidden"
-          style={{ background: `${brand}10` }}
+          className="mx-5 mt-5 rounded-2xl border overflow-hidden"
+          style={{ background: `${brand}0d`, borderColor: `${brand}33` }}
         >
           {/* Header strip */}
           <div className="flex items-center justify-between px-4 pt-4 pb-2">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-9 h-9 rounded-lg grid place-items-center bg-background/70 shrink-0">
+              <div className="w-9 h-9 rounded-lg grid place-items-center bg-white shrink-0 shadow-sm">
                 {selectedMethod.logo_url ? (
                   <img src={selectedMethod.logo_url} alt="" className="max-w-full max-h-full object-contain" />
                 ) : (
@@ -476,18 +476,18 @@ function CheckoutPage() {
               </div>
               <div className="min-w-0">
                 <div className="text-[14px] font-bold leading-tight" style={{ color: brand }}>{selectedMethod.name}</div>
-                <div className="text-[11px] text-muted-foreground">{sendLabel}</div>
+                <div className="text-[11px] text-slate-600">{sendLabel}</div>
               </div>
             </div>
             <div className="text-right">
-              <div className="text-[10px] text-muted-foreground">মোট পাঠান</div>
+              <div className="text-[10px] text-slate-600">মোট পাঠান</div>
               <div className="text-[16px] font-bold" style={{ color: brand }}>৳{grandTotal.toLocaleString()}</div>
             </div>
           </div>
 
           {/* Number + copy */}
           <div className="px-4 py-3 text-center">
-            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{sendLabel} নম্বর</div>
+            <div className="text-[10px] uppercase tracking-wider text-slate-600 font-semibold">{sendLabel} নম্বর</div>
             <div className="mt-1 flex items-center justify-center gap-3 flex-wrap">
               <button
                 onClick={copyNumber}
@@ -499,18 +499,18 @@ function CheckoutPage() {
               </button>
               <button
                 onClick={copyNumber}
-                className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full text-white text-[12px] font-medium"
+                className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full text-white text-[12px] font-medium shadow-sm"
                 style={{ background: brand }}
               >
                 {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                 {copied ? "কপি হয়েছে" : "কপি করুন"}
               </button>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">👆 নম্বরে ক্লিক করলেই কপি হবে</p>
+            <p className="text-[10px] text-slate-600 mt-2">👆 নম্বরে ক্লিক করলেই কপি হবে</p>
           </div>
 
           {/* Numbered steps */}
-          <div className="mx-3 mb-3 rounded-xl bg-background/60 border border-[var(--glass-border-soft)] p-3">
+          <div className="mx-3 mb-3 rounded-xl bg-white border border-slate-200 p-3 shadow-sm">
             <p className="text-[12px] font-semibold mb-2 inline-flex items-center gap-1.5" style={{ color: brand }}>
               📱 পেমেন্ট করার নিয়ম
             </p>
@@ -523,7 +523,7 @@ function CheckoutPage() {
                   >
                     {i + 1}
                   </span>
-                  <span className="text-foreground/85">{s}</span>
+                  <span className="text-slate-800">{s}</span>
                 </li>
               ))}
             </ol>
@@ -532,12 +532,12 @@ function CheckoutPage() {
 
         {/* TrxID input */}
         <div className="px-5 mt-5">
-          <label className="text-[12px] text-muted-foreground">
+          <label className="text-[12px] font-medium text-slate-700">
             Transaction ID (TrxID) <span className="text-destructive">*</span>
           </label>
           <div
-            className={`mt-1 flex items-center rounded-full border bg-background/40 px-4 h-11 transition ${
-              touched.trxId && errors.trxId ? "border-destructive/60" : "border-[var(--glass-border-soft)] focus-within:border-primary/50"
+            className={`mt-1 flex items-center rounded-full border bg-white px-4 h-11 shadow-sm transition ${
+              touched.trxId && errors.trxId ? "border-destructive/60" : "border-slate-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
             }`}
           >
             <input
@@ -545,7 +545,7 @@ function CheckoutPage() {
               onChange={(e) => update("trxId", e.target.value.toUpperCase())}
               onBlur={() => blur("trxId")}
               placeholder="যেমন: 8F3K2P9X"
-              className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground/60 tracking-wide"
+              className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-500 tracking-wide"
             />
           </div>
           {touched.trxId && errors.trxId && (
@@ -556,11 +556,11 @@ function CheckoutPage() {
         {/* Screenshot upload */}
         <div className="px-5 mt-4">
           <div className="flex items-baseline justify-between">
-            <label className="text-[13px] font-medium">📷 পেমেন্ট স্ক্রিনশট</label>
-            <span className="text-[11px] text-muted-foreground">(ঐচ্ছিক)</span>
+            <label className="text-[13px] font-semibold text-slate-800">📷 পেমেন্ট স্ক্রিনশট</label>
+            <span className="text-[11px] text-slate-500">(ঐচ্ছিক)</span>
           </div>
-          <p className="text-[11px] text-muted-foreground mt-0.5">পেমেন্ট প্রমাণ হিসেবে স্ক্রিনশট দিলে দ্রুত ভেরিফাই হবে</p>
-          <label className="mt-2 block rounded-2xl border border-dashed border-[var(--glass-border-soft)] bg-background/30 py-5 px-4 text-center cursor-pointer hover:bg-background/50 transition">
+          <p className="text-[11px] text-slate-600 mt-0.5">পেমেন্ট প্রমাণ হিসেবে স্ক্রিনশট দিলে দ্রুত ভেরিফাই হবে</p>
+          <label className="mt-2 block rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 py-5 px-4 text-center cursor-pointer hover:bg-slate-100 hover:border-primary/40 transition">
             <input
               type="file"
               accept="image/png,image/jpeg,image/jpg"
@@ -571,17 +571,17 @@ function CheckoutPage() {
               }}
             />
             {uploading ? (
-              <span className="inline-flex items-center gap-2 text-[13px] text-muted-foreground">
+              <span className="inline-flex items-center gap-2 text-[13px] text-slate-700">
                 <Loader2 className="w-4 h-4 animate-spin" /> আপলোড হচ্ছে…
               </span>
             ) : screenshotUrl ? (
-              <span className="inline-flex items-center gap-2 text-[13px] text-aqua-deep">
+              <span className="inline-flex items-center gap-2 text-[13px] text-emerald-600 font-medium">
                 <Check className="w-4 h-4" /> স্ক্রিনশট আপলোড হয়েছে — পরিবর্তন করতে ক্লিক করুন
               </span>
             ) : (
               <>
-                <div className="text-[13px] font-medium">↑ স্ক্রিনশট সিলেক্ট করুন</div>
-                <div className="text-[10px] text-muted-foreground mt-0.5">JPG, PNG • সর্বোচ্চ ৫MB</div>
+                <div className="text-[13px] font-semibold text-slate-800">↑ স্ক্রিনশট সিলেক্ট করুন</div>
+                <div className="text-[10px] text-slate-500 mt-0.5">JPG, PNG • সর্বোচ্চ ৫MB</div>
               </>
             )}
           </label>
@@ -589,9 +589,9 @@ function CheckoutPage() {
 
         {/* Total */}
         <div className="px-5 mt-5">
-          <div className="flex items-center justify-between rounded-2xl border border-[var(--glass-border-soft)] bg-background/40 px-4 py-3">
-            <span className="text-[14px] font-medium">পেমেন্ট মোট</span>
-            <span className="text-[20px] font-bold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <span className="text-[14px] font-semibold text-slate-900">পেমেন্ট মোট</span>
+            <span className="text-[20px] font-bold text-primary" style={{ fontFamily: "var(--font-heading)" }}>
               ৳{grandTotal.toLocaleString()}
             </span>
           </div>
@@ -604,13 +604,13 @@ function CheckoutPage() {
           <button
             onClick={handleSubmit}
             disabled={busy || !!errors.trxId || !form.trxId}
-            className="w-full h-12 rounded-full text-white text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="w-full h-12 rounded-full text-white text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-lg shadow-primary/25"
             style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)" }}
           >
             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
             {busy ? "অর্ডার তৈরি হচ্ছে…" : `অর্ডার কনফার্ম করুন  ৳${grandTotal.toLocaleString()}`}
           </button>
-          <p className="text-[11px] text-muted-foreground text-center mt-3">
+          <p className="text-[11px] text-slate-600 text-center mt-3">
             🔒 নিরাপদ পেমেন্ট — আপনার তথ্য সুরক্ষিত
           </p>
         </div>
@@ -618,6 +618,7 @@ function CheckoutPage() {
     </div>
   );
 }
+
 
 
 function PillField({
