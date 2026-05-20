@@ -41,7 +41,7 @@ export function isPerfEnabled(): boolean {
 }
 
 export function startScrollPerfMonitor(): () => void {
-  if (!shouldEnable()) return () => {};
+  if (!isPerfEnabled()) return () => {};
 
   let rafId = 0;
   let lastFrame = performance.now();
