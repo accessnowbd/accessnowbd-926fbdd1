@@ -1468,12 +1468,20 @@
 html { background-color: #06051a; }
 html.theme-white { background-color: #ffffff; }
 
-/* 3. Belt-and-braces overflow guard. `overflow-x: clip` is already on html/body,
-      but some legacy browsers ignore it on <body>; add hidden as fallback and
-      prevent the iOS rubber-band white gap at the bottom. */
+/* 3. Scroll unlock guard. Keep horizontal overflow contained, but never lock
+      vertical wheel/touch scrolling on the storefront. */
 html, body {
+  height: auto !important;
+  min-height: 100%;
   overflow-x: hidden;
-  overscroll-behavior-y: none;
+  overflow-y: auto !important;
+  overscroll-behavior-y: auto;
+  touch-action: auto;
+}
+
+#main-content,
+main {
+  overflow: visible !important;
 }
 
 /* 4. Paint containment on big repeating sections — limits the area the browser
@@ -1481,7 +1489,7 @@ html, body {
       cards from triggering full-page repaints on hover. */
 main > section,
 .product-card-v2 {
-  contain: layout paint style;
+  contain: none;
 }
 
 /* 5. Skeleton loaders: replace the default opacity pulse (which fights the
@@ -1980,16 +1988,10 @@ html.theme-white .home-scroll-optimized [class*="backdrop-blur"] {
 }
 
 .home-scroll-optimized > div > section,
-.home-scroll-optimized .product-card-v2 {
-  contain: layout paint style;
-}
-
-/* Skip rendering work for off-screen sections.
-   Browser auto-skips paint+layout when out of viewport, restoring smooth
-   scroll/wheel responsiveness without unmounting (no layout jump). */
+.home-scroll-optimized .product-card-v2,
 .home-rail {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 520px;
+  contain: none !important;
+  content-visibility: visible !important;
 }
 
 html.theme-white .home-scroll-optimized .glass,
