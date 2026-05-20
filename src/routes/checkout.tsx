@@ -208,6 +208,145 @@ function CheckoutPage() {
   };
   const goBack = () => { if (step > 1) setStep((step - 1) as 1 | 2); };
 
+  // Compact single-card layout for Step 1 (matches reference design)
+  if (step === 1) {
+    const firstItem = items[0];
+    const title = items.length === 1 ? firstItem.name : `${items.length} items`;
+    const applyCouponNow = () => {
+      const code = couponInput.trim().toUpperCase();
+      navigate({ to: "/checkout", search: { step: 1, coupon: code }, replace: true });
+    };
+    return (
+      <div className="min-h-screen grid place-items-center px-4 py-10">
+        <GlassCard className="w-full max-w-[480px] !p-0 overflow-hidden rounded-3xl">
+          {/* Header */}
+          <div className="flex items-center justify-between px-5 pt-5 pb-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className={`w-10 h-10 shrink-0 rounded-xl bg-gradient-to-br ${firstItem.gradient} grid place-items-center text-lg`}>
+                {firstItem.emoji}
+              </div>
+              <h1 className="text-[15px] font-semibold truncate" style={{ fontFamily: "var(--font-heading)" }}>
+                {title}
+              </h1>
+            </div>
+            <button
+              onClick={() => navigate({ to: "/cart" })}
+              aria-label="Close"
+              className="p-1.5 rounded-full hover:bg-foreground/5 text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="h-px bg-[var(--glass-border-soft)] mx-5" />
+
+          {/* Step header */}
+          <div className="flex items-center justify-between px-5 pt-4">
+            <div className="flex items-center gap-2.5">
+              <span className="grid place-items-center w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold">১</span>
+              <h2 className="text-[15px] font-semibold" style={{ fontFamily: "var(--font-heading)" }}>
+                আপনার তথ্য দিন
+              </h2>
+            </div>
+            {user && (
+              <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-primary/10 text-primary inline-flex items-center gap-1">
+                লগইন আছে <Check className="w-3 h-3" />
+              </span>
+            )}
+          </div>
+
+          {/* Fields */}
+          <div className="px-5 mt-4 space-y-3">
+            <PillField
+              label="পুরো নাম"
+              value={form.name}
+              onChange={(v) => update("name", v)}
+              onBlur={() => blur("name")}
+              error={touched.name ? errors.name : null}
+              placeholder="আপনার নাম"
+            />
+            <PillField
+              label="ইমেইল"
+              type="email"
+              value={form.email}
+              onChange={(v) => update("email", v)}
+              onBlur={() => blur("email")}
+              error={touched.email ? errors.email : null}
+              placeholder="you@email.com"
+            />
+            <PillField
+              label="ফোন নম্বর"
+              value={form.phone}
+              onChange={(v) => update("phone", v)}
+              onBlur={() => blur("phone")}
+              error={touched.phone ? errors.phone : null}
+              placeholder="01XXXXXXXXX"
+              inputMode="numeric"
+            />
+
+            {/* Coupon */}
+            <div>
+              <label className="text-[12px] text-muted-foreground ml-3">কুপন কোড (ঐচ্ছিক)</label>
+              <div className="mt-1 flex items-center gap-2">
+                <div className="flex-1 flex items-center gap-2 rounded-full border border-[var(--glass-border-soft)] bg-background/40 px-4 h-11">
+                  <Tag className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                  <input
+                    value={couponInput}
+                    onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                    placeholder="SAVE20"
+                    className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground/60"
+                  />
+                </div>
+                <button
+                  onClick={applyCouponNow}
+                  className="h-11 px-5 rounded-full border border-primary/40 text-primary text-sm font-medium hover:bg-primary/5 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  Apply
+                </button>
+              </div>
+              {coupon && (
+                <p className={`text-[11px] mt-1.5 ml-3 ${applied.valid ? "text-aqua-deep" : "text-destructive"}`}>
+                  {applied.valid ? `প্রয়োগ হয়েছে: ${applied.label}` : "কুপন কোডটি সঠিক নয়"}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Totals */}
+          <div className="mx-5 mt-5 rounded-2xl border border-[var(--glass-border-soft)] overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2.5 text-sm">
+              <span className="text-muted-foreground">মূল্য</span>
+              <span>৳{total.toLocaleString()}</span>
+            </div>
+            {applied.discount > 0 && (
+              <div className="flex items-center justify-between px-4 py-2.5 text-sm border-t border-[var(--glass-border-soft)]">
+                <span className="text-aqua-deep">ছাড় ({applied.code})</span>
+                <span className="text-aqua-deep">−৳{applied.discount.toLocaleString()}</span>
+              </div>
+            )}
+            <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--glass-border-soft)] bg-foreground/[0.02]">
+              <span className="text-[15px] font-semibold">মোট</span>
+              <span className="text-xl font-bold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>
+                ৳{grandTotal.toLocaleString()}
+              </span>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="px-5 py-5">
+            <button
+              onClick={goNext}
+              disabled={!step1Valid}
+              className="w-full h-12 rounded-full bg-foreground text-background text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-90 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              পেমেন্টে যান <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </GlassCard>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <div className="mx-auto max-w-[1100px] px-4 md:px-10 py-8">
@@ -222,47 +361,7 @@ function CheckoutPage() {
 
         <div className="mt-6 grid lg:grid-cols-[1fr_360px] gap-8">
           <div className="space-y-6">
-            {/* Step 1 */}
-            {step === 1 && (
-              <GlassCard>
-                <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>Contact details</h2>
-                <p className="text-xs text-muted-foreground mt-1">We'll send order updates here.</p>
-                <div className="mt-4 grid sm:grid-cols-2 gap-4">
-                  <GlassField
-                    label="Full name"
-                    required
-                    value={form.name}
-                    onChange={(e) => update("name", e.target.value)}
-                    onBlur={() => blur("name")}
-                    error={touched.name ? errors.name : null}
-                    placeholder="Mohammad Karim"
-                  />
-                  <GlassField
-                    label="Email"
-                    type="email"
-                    required
-                    value={form.email}
-                    onChange={(e) => update("email", e.target.value)}
-                    onBlur={() => blur("email")}
-                    error={touched.email ? errors.email : null}
-                    placeholder="you@email.com"
-                  />
-                  <GlassField
-                    label="WhatsApp number"
-                    required
-                    value={form.phone}
-                    onChange={(e) => update("phone", e.target.value)}
-                    onBlur={() => blur("phone")}
-                    error={touched.phone ? errors.phone : null}
-                    placeholder="01XXXXXXXXX"
-                    inputMode="numeric"
-                  />
-                </div>
-                <div className="mt-6 flex justify-end">
-                  <GlassButton onClick={goNext} size="lg" disabled={!step1Valid}>Continue to Payment</GlassButton>
-                </div>
-              </GlassCard>
-            )}
+
 
             {/* Step 2 */}
             {step === 2 && (
