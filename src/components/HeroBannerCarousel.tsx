@@ -250,23 +250,23 @@ export function HeroBannerCarousel() {
     <section className="px-4 md:px-10 pt-6 pb-4">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className="force-dark-canvas group/banner relative overflow-hidden rounded-[28px] border border-white/20 backdrop-blur-2xl transition-all duration-700"
+          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[28px] border border-white/20 transition-colors duration-500"
           style={{
             background,
             minHeight: 430,
             boxShadow: `0 30px 80px -30px ${hexAlpha(accent, 0.45)}, 0 8px 32px -8px ${hexAlpha(glow, 0.25)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.18)}, inset 0 0 0 1px ${hexAlpha("#ffffff", 0.05)}`,
           }}
         >
-          {/* Floating blur orbs for depth */}
+          {/* Static soft glows for depth */}
           <div
             aria-hidden
-            className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-60 blur-3xl animate-pulse"
-            style={{ background: hexAlpha(accent, 0.45 * intensityMul), animationDuration: "6s" }}
+            className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-50 blur-2xl"
+            style={{ background: hexAlpha(accent, 0.35 * intensityMul) }}
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-32 -bottom-32 h-96 w-96 rounded-full opacity-55 blur-3xl animate-pulse"
-            style={{ background: hexAlpha(glow, 0.4 * intensityMul), animationDuration: "8s", animationDelay: "1.5s" }}
+            className="pointer-events-none absolute -right-32 -bottom-32 h-96 w-96 rounded-full opacity-45 blur-2xl"
+            style={{ background: hexAlpha(glow, 0.3 * intensityMul) }}
           />
 
           {/* Subtle grid / noise overlay */}
@@ -382,7 +382,7 @@ export function HeroBannerCarousel() {
             <div className="space-y-5 text-white">
               {current.data.category && (
                 <div
-                  className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 backdrop-blur-md"
+                  className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5"
                   style={{
                     borderColor: hexAlpha(accent, 0.4),
                     background: `linear-gradient(135deg, ${hexAlpha(accent, 0.18)}, ${hexAlpha("#ffffff", 0.05)})`,
@@ -433,7 +433,7 @@ export function HeroBannerCarousel() {
                 {current.data.secondary_cta && (
                   <Link
                     to={(current.data.secondary_link || "/products") as string}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/5 px-5 py-3 text-sm font-bold text-white backdrop-blur-md transition-all hover:bg-white/15 hover:border-white/40"
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-white/15 hover:border-white/40"
                   >
                     {current.data.secondary_cta}
                   </Link>
