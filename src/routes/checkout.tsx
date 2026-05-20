@@ -20,9 +20,10 @@ import { applyCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
 
 const checkoutSearchSchema = z.object({
-  step: fallback(z.union([z.literal(1), z.literal(2), z.literal(3)]), 1).default(1),
+  step: fallback(z.union([z.literal(1), z.literal(2)]), 1).default(1),
   coupon: fallback(z.string(), "").default(""),
 });
+
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
