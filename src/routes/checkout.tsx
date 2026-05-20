@@ -47,8 +47,8 @@ const COLOR_BY_NAME: Record<string, string> = {
 const steps = [
   { label: "Contact" },
   { label: "Payment" },
-  { label: "Review" },
 ];
+
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const bdPhoneRe = /^01[3-9]\d{8}$/;
