@@ -250,23 +250,23 @@ export function HeroBannerCarousel() {
     <section className="px-4 md:px-10 pt-6 pb-4">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className="force-dark-canvas group/banner relative overflow-hidden rounded-[28px] border border-white/20 backdrop-blur-2xl transition-all duration-700"
+          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[28px] border border-white/20 transition-colors duration-500"
           style={{
             background,
             minHeight: 430,
             boxShadow: `0 30px 80px -30px ${hexAlpha(accent, 0.45)}, 0 8px 32px -8px ${hexAlpha(glow, 0.25)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.18)}, inset 0 0 0 1px ${hexAlpha("#ffffff", 0.05)}`,
           }}
         >
-          {/* Floating blur orbs for depth */}
+          {/* Static soft glows for depth */}
           <div
             aria-hidden
-            className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-60 blur-3xl animate-pulse"
-            style={{ background: hexAlpha(accent, 0.45 * intensityMul), animationDuration: "6s" }}
+            className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-50 blur-2xl"
+            style={{ background: hexAlpha(accent, 0.35 * intensityMul) }}
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-32 -bottom-32 h-96 w-96 rounded-full opacity-55 blur-3xl animate-pulse"
-            style={{ background: hexAlpha(glow, 0.4 * intensityMul), animationDuration: "8s", animationDelay: "1.5s" }}
+            className="pointer-events-none absolute -right-32 -bottom-32 h-96 w-96 rounded-full opacity-45 blur-2xl"
+            style={{ background: hexAlpha(glow, 0.3 * intensityMul) }}
           />
 
           {/* Subtle grid / noise overlay */}
@@ -382,7 +382,7 @@ export function HeroBannerCarousel() {
             <div className="space-y-5 text-white">
               {current.data.category && (
                 <div
-                  className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 backdrop-blur-md"
+                  className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5"
                   style={{
                     borderColor: hexAlpha(accent, 0.4),
                     background: `linear-gradient(135deg, ${hexAlpha(accent, 0.18)}, ${hexAlpha("#ffffff", 0.05)})`,
@@ -433,7 +433,7 @@ export function HeroBannerCarousel() {
                 {current.data.secondary_cta && (
                   <Link
                     to={(current.data.secondary_link || "/products") as string}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/5 px-5 py-3 text-sm font-bold text-white backdrop-blur-md transition-all hover:bg-white/15 hover:border-white/40"
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-white/15 hover:border-white/40"
                   >
                     {current.data.secondary_cta}
                   </Link>
@@ -451,18 +451,18 @@ export function HeroBannerCarousel() {
             <div className="relative">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -inset-6 rounded-[28px] opacity-80 blur-3xl"
+                className="pointer-events-none absolute -inset-6 rounded-[28px] opacity-55 blur-2xl"
                 style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(accent, 0.55)} 0%, ${hexAlpha(glow, 0.25)} 45%, transparent 75%)` }}
               />
               <div
-                className="relative rounded-[24px] p-[1.5px] transition-transform duration-500 hover:scale-[1.015]"
+                className="relative rounded-[24px] p-[1.5px] transition-shadow duration-300"
                 style={{
                   background: `linear-gradient(135deg, ${hexAlpha("#ffffff", 0.5)} 0%, ${hexAlpha(accent, 0.6)} 35%, ${hexAlpha("#ffffff", 0.15)} 65%, ${hexAlpha(glow, 0.55)} 100%)`,
                   boxShadow: `0 0 50px -10px ${hexAlpha(accent, 0.45)}, 0 20px 60px -20px ${hexAlpha(glow, 0.35)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.3)}`,
                 }}
               >
                 <div
-                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[22px] backdrop-blur-2xl"
+                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[22px]"
                   style={{
                     background: `linear-gradient(135deg, ${hexAlpha("#ffffff", 0.18)} 0%, ${hexAlpha("#ffffff", 0.06)} 50%, ${hexAlpha(accent, 0.1)} 100%), linear-gradient(135deg, ${hexAlpha(bg, 0.55)}, ${hexAlpha(mix(bg, accent, 0.25), 0.4)})`,
                     boxShadow: `inset 0 1px 0 ${hexAlpha("#ffffff", 0.25)}, inset 0 0 40px ${hexAlpha("#ffffff", 0.05)}`,
@@ -475,19 +475,14 @@ export function HeroBannerCarousel() {
                     style={{ background: `linear-gradient(180deg, ${hexAlpha("#ffffff", 0.22)} 0%, ${hexAlpha("#ffffff", 0.04)} 60%, transparent 100%)` }}
                   />
                   {/* diagonal glass sheen */}
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -inset-px"
-                    style={{ background: `linear-gradient(115deg, transparent 35%, ${hexAlpha("#ffffff", 0.08)} 50%, transparent 65%)` }}
-                  />
+                  <div aria-hidden className="pointer-events-none absolute -inset-px bg-white/[0.03]" />
                   {resolvedImage ? (
                     <div className="relative flex h-full w-full items-center justify-center p-4 md:p-6">
                       <img
                         src={resolvedImage}
                         alt={current.data.title ?? "banner"}
                         loading="eager"
-                        className="max-h-full max-w-full object-contain drop-shadow-2xl"
-                        style={{ filter: `drop-shadow(0 18px 40px ${hexAlpha(accent, 0.45)})` }}
+                        className="max-h-full max-w-full object-contain"
                       />
                     </div>
                   ) : isEid ? (
@@ -500,7 +495,7 @@ export function HeroBannerCarousel() {
                       />
                       {/* Crescent + star mark */}
                       <div className="relative flex flex-col items-center gap-2">
-                        <svg width="48" height="48" viewBox="0 0 100 100" className="drop-shadow-[0_0_24px_rgba(212,175,55,0.65)] md:h-14 md:w-14">
+                        <svg width="48" height="48" viewBox="0 0 100 100" className="md:h-14 md:w-14">
                           <defs>
                             <radialGradient id="eidCrescent" cx="35%" cy="35%" r="70%">
                               <stop offset="0%" stopColor="#fde68a" />
@@ -548,7 +543,7 @@ export function HeroBannerCarousel() {
                             <div className="text-lg font-black leading-none text-black">৳১৫০ OFF</div>
                           </div>
                           <div
-                            className="rounded-xl border px-3 py-2 backdrop-blur-md"
+                            className="rounded-xl border px-3 py-2"
                             style={{
                               borderColor: hexAlpha(accent, 0.5),
                               background: hexAlpha("#000", 0.35),
@@ -615,13 +610,13 @@ export function HeroBannerCarousel() {
             <div className="absolute bottom-4 right-4 z-10 flex items-center gap-2 md:right-8">
               <button
                 type="button" onClick={() => go(-1)} aria-label="Previous"
-                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition hover:bg-white/15 hover:scale-105"
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/15"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 type="button" onClick={() => go(1)} aria-label="Next"
-                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition hover:bg-white/15 hover:scale-105"
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/15"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>

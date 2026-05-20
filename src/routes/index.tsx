@@ -111,7 +111,7 @@ function Index() {
   }, [products]);
 
   return (
-    <div className="min-h-screen">
+    <div className="home-scroll-optimized min-h-screen">
 
       <div>
         <HeroBannerCarousel />
@@ -184,14 +184,14 @@ function CategoryPillBar() {
           type="button"
           onClick={() => scrollBy(-1)}
           aria-label="Scroll categories left"
-          className={`hidden md:grid place-items-center absolute left-0 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-background/90 backdrop-blur border border-border shadow-md hover:bg-primary hover:text-primary-foreground transition ${canLeft ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            className={`hidden md:grid place-items-center absolute left-0 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-background/95 border border-border shadow-md hover:bg-primary hover:text-primary-foreground transition ${canLeft ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
 
         {/* Edge fade hints — soft white blur */}
-        <div className={`pointer-events-none absolute left-0 top-0 bottom-0 w-14 z-10 transition-opacity backdrop-blur-md [mask-image:linear-gradient(to_right,black,transparent)] bg-gradient-to-r from-white/70 via-white/30 to-transparent dark:from-white/15 dark:via-white/5 ${canLeft ? "opacity-100" : "opacity-0"}`} />
-        <div className={`pointer-events-none absolute right-0 top-0 bottom-0 w-14 z-10 transition-opacity backdrop-blur-md [mask-image:linear-gradient(to_left,black,transparent)] bg-gradient-to-l from-white/70 via-white/30 to-transparent dark:from-white/15 dark:via-white/5 ${canRight ? "opacity-100" : "opacity-0"}`} />
+        <div className={`pointer-events-none absolute left-0 top-0 bottom-0 w-14 z-10 transition-opacity [mask-image:linear-gradient(to_right,black,transparent)] bg-gradient-to-r from-background via-background/70 to-transparent ${canLeft ? "opacity-100" : "opacity-0"}`} />
+        <div className={`pointer-events-none absolute right-0 top-0 bottom-0 w-14 z-10 transition-opacity [mask-image:linear-gradient(to_left,black,transparent)] bg-gradient-to-l from-background via-background/70 to-transparent ${canRight ? "opacity-100" : "opacity-0"}`} />
 
         <div
           ref={scrollerRef}
@@ -238,7 +238,7 @@ function CategoryPillBar() {
           type="button"
           onClick={() => scrollBy(1)}
           aria-label="Scroll categories right"
-          className={`hidden md:grid place-items-center absolute right-0 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-background/90 backdrop-blur border border-border shadow-md hover:bg-primary hover:text-primary-foreground transition ${canRight ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            className={`hidden md:grid place-items-center absolute right-0 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-background/95 border border-border shadow-md hover:bg-primary hover:text-primary-foreground transition ${canRight ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
           <ChevronRight className="w-4 h-4" />
         </button>

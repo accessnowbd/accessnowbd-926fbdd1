@@ -3,6 +3,7 @@ import { installErrorLogger } from "@/lib/error-logger";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { ShopConfigProvider } from "@/context/ShopConfigContext";
 import { SupportWidget } from "@/components/SupportWidget";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WelcomePopup } from "@/components/WelcomePopup";
@@ -144,18 +145,20 @@ function RootComponent() {
       <ThemeProvider>
         <AuthProvider>
           <CartProvider>
-            <a
-              href="#main-content"
-              className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:shadow-lg"
-            >
-              মূল কন্টেন্টে যান
-            </a>
-            {!isAdmin && <SiteHeader />}
-            <main id="main-content">
-              <Outlet />
-            </main>
-            {!isAdmin && <SupportWidget />}
-            {!isAdmin && <WelcomePopup />}
+            <ShopConfigProvider>
+              <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:shadow-lg"
+              >
+                মূল কন্টেন্টে যান
+              </a>
+              {!isAdmin && <SiteHeader />}
+              <main id="main-content">
+                <Outlet />
+              </main>
+              {!isAdmin && <SupportWidget />}
+              {!isAdmin && <WelcomePopup />}
+            </ShopConfigProvider>
           </CartProvider>
         </AuthProvider>
       </ThemeProvider>

@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { ShoppingCart, Star, MessageCircle } from "lucide-react";
-import { memo, useRef } from "react";
+import { memo } from "react";
 import { useCart } from "@/context/CartContext";
+import { useShopConfigValue } from "@/context/ShopConfigContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { ProductBanner } from "@/components/ProductBanner";
-import { useShopConfig } from "@/hooks/useShopConfig";
 import { waAskUrl } from "@/lib/whatsapp";
 import type { Product } from "@/data/products";
 
@@ -24,8 +24,7 @@ function ratingFor(slug: string): { rating: string; reviews: number } {
 
 function ProductCardImpl({ product }: { product: Product }) {
   const { add } = useCart();
-  const { data: shopConfig } = useShopConfig();
-  const cardRef = useRef<HTMLAnchorElement | null>(null);
+  const shopConfig = useShopConfigValue();
 
   const plan = product.plans[0];
   const hasOptions = product.plans.length > 1;
@@ -51,7 +50,6 @@ function ProductCardImpl({ product }: { product: Product }) {
 
   return (
     <Link
-      ref={cardRef}
       to="/product/$slug"
       params={{ slug: product.slug }}
       preload="intent"
@@ -128,7 +126,7 @@ function ProductCardImpl({ product }: { product: Product }) {
                 e.preventDefault();
                 e.stopPropagation();
                 window.open(
-                  waAskUrl(product.name, { number: shopConfig?.whatsapp_number }),
+                  waAskUrl(product.name, { number: shopConfig.whatsapp_number }),
                   "_blank",
                   "noopener,noreferrer"
                 );
