@@ -31,12 +31,21 @@ export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — AccessNow BD" }] }),
 });
 
-type PayMethod = { id: string; name: string; number: string; color: string; instructions?: string };
+type PayMethod = {
+  id: string;
+  name: string;
+  number: string;
+  color: string;
+  instructions?: string;
+  logo_url?: string;
+  brand_color?: string;
+  send_money_label?: string;
+};
 
 const FALLBACK_METHODS: PayMethod[] = [
-  { id: "bkash", name: "BKash", number: "01711-123456", color: "bg-[#E2136E]" },
-  { id: "nagad", name: "Nagad", number: "01911-654321", color: "bg-[#EC1C24]" },
-  { id: "rocket", name: "Rocket", number: "01511-987654", color: "bg-[#8C3494]" },
+  { id: "bkash", name: "bKash", number: "01711-123456", color: "bg-[#E2136E]", brand_color: "#E2136E", send_money_label: "Send Money" },
+  { id: "nagad", name: "Nagad", number: "01911-654321", color: "bg-[#EC1C24]", brand_color: "#EC1C24", send_money_label: "Send Money" },
+  { id: "rocket", name: "Rocket", number: "01511-987654", color: "bg-[#8C3494]", brand_color: "#8C3494", send_money_label: "Send Money" },
 ];
 
 const COLOR_BY_NAME: Record<string, string> = {
@@ -44,6 +53,7 @@ const COLOR_BY_NAME: Record<string, string> = {
   nagad: "bg-[#EC1C24]",
   rocket: "bg-[#8C3494]",
 };
+
 
 const steps = [
   { label: "Contact" },
