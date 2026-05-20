@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Loader2, Eye, EyeOff, X, CheckCircle2 } from "lucide-react";
 import { z } from "zod";
@@ -6,14 +6,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import accessNowLogo from "@/assets/logo.webp";
 
-export const Route = createFileRoute("/auth")({
-  component: () => <AuthPage initialMode="login" />,
-  head: () => ({ meta: [{ title: "Login or Sign up — AccessNow BD" }] }),
-});
-
 export function AuthPageEntry({ initialMode, openForgot }: { initialMode: "login" | "signup"; openForgot?: boolean }) {
   return <AuthPage initialMode={initialMode} openForgot={openForgot} />;
 }
+
 
 const signupSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(80),
