@@ -499,8 +499,8 @@ export function HeroBannerCarousel() {
                         style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(glow, 0.25)} 0%, transparent 65%)` }}
                       />
                       {/* Crescent + star mark */}
-                      <div className="relative flex flex-col items-center gap-3">
-                        <svg width="64" height="64" viewBox="0 0 100 100" className="drop-shadow-[0_0_24px_rgba(212,175,55,0.65)]">
+                      <div className="relative flex flex-col items-center gap-2">
+                        <svg width="48" height="48" viewBox="0 0 100 100" className="drop-shadow-[0_0_24px_rgba(212,175,55,0.65)] md:h-14 md:w-14">
                           <defs>
                             <radialGradient id="eidCrescent" cx="35%" cy="35%" r="70%">
                               <stop offset="0%" stopColor="#fde68a" />
@@ -517,7 +517,7 @@ export function HeroBannerCarousel() {
                           className="font-extrabold tracking-tight"
                           style={{
                             fontFamily: "var(--font-display)",
-                            fontSize: "clamp(28px, 3.4vw, 42px)",
+                            fontSize: "clamp(20px, 2.6vw, 32px)",
                             lineHeight: 1.05,
                             background: `linear-gradient(135deg, #fde68a 0%, ${accent} 55%, ${glow} 100%)`,
                             WebkitBackgroundClip: "text",
@@ -528,10 +528,10 @@ export function HeroBannerCarousel() {
                         >
                           Eid Mubarak
                         </div>
-                        <div className="text-sm md:text-base font-semibold text-white/85" style={{ fontFamily: "var(--font-display)" }}>
+                        <div className="text-xs md:text-sm font-semibold text-white/85" style={{ fontFamily: "var(--font-display)" }}>
                           ঈদুল আযহার শুভেচ্ছা
                         </div>
-                        <div className="max-w-[260px] text-[11px] md:text-xs text-white/65 leading-relaxed">
+                        <div className="hidden md:block max-w-[260px] text-[11px] text-white/65 leading-relaxed">
                           AccessNow BD পরিবারের পক্ষ থেকে সকল গ্রাহককে জানাই কোরবানির ঈদের অগ্রিম শুভেচ্ছা।
                         </div>
 
