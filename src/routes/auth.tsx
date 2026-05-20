@@ -65,7 +65,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
   }, [initialMode]);
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: returnTo });
+    if (!loading && user) navigate({ to: returnTo as string });
   }, [user, loading, navigate, returnTo]);
 
   const update = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
