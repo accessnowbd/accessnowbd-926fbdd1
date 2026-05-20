@@ -519,3 +519,46 @@ function CheckoutPage() {
   );
 }
 
+function PillField({
+  label,
+  value,
+  onChange,
+  onBlur,
+  error,
+  placeholder,
+  type = "text",
+  inputMode,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  onBlur?: () => void;
+  error?: string | null;
+  placeholder?: string;
+  type?: string;
+  inputMode?: "numeric" | "text" | "email" | "tel";
+}) {
+  return (
+    <div>
+      <label className="text-[12px] text-muted-foreground ml-3">{label}</label>
+      <div
+        className={`mt-1 flex items-center rounded-full border bg-background/40 px-4 h-11 transition ${
+          error ? "border-destructive/60" : "border-[var(--glass-border-soft)] focus-within:border-primary/50"
+        }`}
+      >
+        <input
+          type={type}
+          inputMode={inputMode}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          placeholder={placeholder}
+          className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground/60"
+        />
+      </div>
+      {error && <p className="text-[11px] text-destructive mt-1 ml-3">{error}</p>}
+    </div>
+  );
+}
+
+
