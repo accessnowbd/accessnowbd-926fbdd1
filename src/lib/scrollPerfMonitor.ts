@@ -27,7 +27,7 @@ function styleFor(fps: number) {
   return COLOR_BAD;
 }
 
-function shouldEnable(): boolean {
+export function isPerfEnabled(): boolean {
   if (typeof window === "undefined") return false;
   if (import.meta.env.DEV) return true;
   try {
