@@ -82,6 +82,7 @@ function CheckoutPage() {
   const [method, setMethod] = useState<string>("bkash");
   const [agree, setAgree] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [couponInput, setCouponInput] = useState(coupon || "");
 
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
