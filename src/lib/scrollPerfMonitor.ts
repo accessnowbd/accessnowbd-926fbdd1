@@ -29,7 +29,9 @@ function styleFor(fps: number) {
 
 export function isPerfEnabled(): boolean {
   if (typeof window === "undefined") return false;
-  if (import.meta.env.DEV) return true;
+  // Opt-in only — instrumentation itself has cost (rAF loop, Profiler,
+  // store-driven re-renders), so we never auto-enable, even in dev.
+  // Enable with ?perf=1 in the URL, or `localStorage.perfMonitor = "1"`.
   try {
     const url = new URL(window.location.href);
     if (url.searchParams.get("perf") === "1") return true;
