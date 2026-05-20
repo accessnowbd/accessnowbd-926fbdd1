@@ -255,9 +255,10 @@ function CheckoutPage() {
           <div className="flex items-center justify-between px-5 pt-4">
             <div className="flex items-center gap-2.5">
               <span className="grid place-items-center w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold">১</span>
-              <h2 className="text-[15px] font-semibold" style={{ fontFamily: "var(--font-heading)" }}>
+              <h2 className="text-[15px] font-semibold text-slate-900" style={{ fontFamily: "var(--font-heading)" }}>
                 আপনার তথ্য দিন
               </h2>
+
             </div>
             {user && (
               <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-primary/10 text-primary inline-flex items-center gap-1">
