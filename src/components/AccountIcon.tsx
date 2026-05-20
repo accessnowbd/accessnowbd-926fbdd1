@@ -14,7 +14,7 @@ export function AccountIcon() {
   return (
     <div className="flex items-center gap-1.5">
       <Link
-        to={user ? "/dashboard" : "/auth"}
+        to={user ? "/dashboard" : "/login"}
         className="grid place-items-center w-10 h-10 rounded-full glass-strong text-primary hover:scale-105 transition-transform"
         aria-label={user ? "My dashboard" : "Login"}
         title={user ? "My dashboard" : "Login"}
