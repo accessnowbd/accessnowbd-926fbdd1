@@ -95,7 +95,13 @@ export function startScrollPerfMonitor(): () => void {
       secondBuffer.push(dt);
       frames.push({ t: now, dt });
       if (dt > worstFrame) worstFrame = dt;
-      if (dt > 32) droppedFrames++; // missed a 60fps frame
+      if (dt > allTimeWorstFrame) allTimeWorstFrame = dt;
+      if (dt > 32) {
+        droppedFrames++;
+        allTimeDroppedFrames++;
+      }
+      totalFrameMs += dt;
+      totalFrameCount += 1;
 
       if (now - lastSecondLog >= 1000) {
         const avg = secondBuffer.reduce((a, b) => a + b, 0) / secondBuffer.length;
@@ -105,6 +111,8 @@ export function startScrollPerfMonitor(): () => void {
           styleFor(fps),
           "color:#94a3b8",
         );
+        perfStore.patch({ liveFps: fps });
+        pushStore();
         secondBuffer = [];
         lastSecondLog = now;
       }
@@ -117,6 +125,7 @@ export function startScrollPerfMonitor(): () => void {
     if (!scrolling) return;
     scrolling = false;
     const duration = performance.now() - scrollStart;
+    perfStore.patch({ liveFps: 0 });
     if (duration < 200 || frames.length === 0) {
       frames = [];
       secondBuffer = [];
@@ -124,6 +133,7 @@ export function startScrollPerfMonitor(): () => void {
       droppedFrames = 0;
       return;
     }
+    totalScrollMs += duration;
     const avgDt = frames.reduce((a, b) => a + b.dt, 0) / frames.length;
     const avgFps = Math.round(1000 / avgDt);
     console.log(
@@ -131,6 +141,7 @@ export function startScrollPerfMonitor(): () => void {
       styleFor(avgFps),
       "color:#94a3b8",
     );
+    pushStore();
     frames = [];
     secondBuffer = [];
     worstFrame = 0;
