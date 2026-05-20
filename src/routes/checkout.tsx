@@ -198,9 +198,6 @@ function CheckoutPage() {
     if (step === 1) {
       setTouched({ name: true, email: true, phone: true });
       if (step1Valid) setStep(2);
-    } else if (step === 2) {
-      setTouched((t) => ({ ...t, senderNumber: true, trxId: true }));
-      if (step2Valid) setStep(3);
     }
   };
   const goBack = () => { if (step > 1) setStep((step - 1) as 1 | 2); };
