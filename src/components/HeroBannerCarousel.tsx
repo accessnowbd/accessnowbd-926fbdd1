@@ -491,7 +491,7 @@ export function HeroBannerCarousel() {
                       />
                     </div>
                   ) : isEid ? (
-                    <div className="relative grid h-full w-full place-items-center px-6 py-6 text-center">
+                    <div className="absolute inset-0 grid place-items-center overflow-hidden px-4 py-3 text-center md:px-6 md:py-4">
                       {/* Soft radial glow behind card */}
                       <div
                         aria-hidden
