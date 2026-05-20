@@ -235,9 +235,10 @@ function CheckoutPage() {
               <div className={`w-10 h-10 shrink-0 rounded-xl bg-gradient-to-br ${firstItem.gradient} grid place-items-center text-lg`}>
                 {firstItem.emoji}
               </div>
-              <h1 className="text-[15px] font-semibold truncate" style={{ fontFamily: "var(--font-heading)" }}>
+              <h1 className="text-[15px] font-semibold text-slate-900 truncate" style={{ fontFamily: "var(--font-heading)" }}>
                 {title}
               </h1>
+
             </div>
             <button
               onClick={() => navigate({ to: "/cart" })}
