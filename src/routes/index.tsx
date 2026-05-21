@@ -578,3 +578,68 @@ function SectionTitle({ eyebrow, title, subtitle, action, to, compact = false }:
     </div>
   );
 }
+
+const CUSTOMER_REVIEWS = [
+  { name: "তাহসিন কবির", city: "ঢাকা", product: "ChatGPT Plus", rating: 5, text: "মাত্র ৭ মিনিটে ডেলিভারি পেয়েছি। অরিজিনাল অ্যাক্সেস, কোনো ঝামেলা নেই। AccessNow BD-এর সার্ভিস সত্যিই অসাধারণ!", avatarColor: "#7C3AED" },
+  { name: "মালিহা রহমান", city: "চট্টগ্রাম", product: "Canva Pro", rating: 5, text: "এক বছরের Canva Pro নিয়েছি, পুরো একদম স্মুথ কাজ করছে। সাপোর্ট টিম খুবই হেল্পফুল ছিল।", avatarColor: "#EC4899" },
+  { name: "রাকিব হাসান", city: "সিলেট", product: "Netflix Premium", rating: 5, text: "৪টা স্ক্রিন একসাথে চলছে, 4K কোয়ালিটি পারফেক্ট। দামও সবচেয়ে কম পেয়েছি এখানে।", avatarColor: "#E50914" },
+  { name: "সাজিদ ইসলাম", city: "রাজশাহী", product: "Windows 11 Pro", rating: 5, text: "জেনুইন লাইসেন্স কী পেয়েছি, Microsoft অ্যাকাউন্টে অ্যাক্টিভ হয়েছে সাথে সাথে। হাইলি রেকমেন্ডেড।", avatarColor: "#0078D4" },
+  { name: "নুসরাত জাহান", city: "ঢাকা", product: "Adobe Creative Cloud", rating: 5, text: "ফ্রিল্যান্সিং-এর জন্য Adobe CC কিনেছি। Photoshop, Illustrator সব ঠিকঠাক চলছে। ভালো সার্ভিস।", avatarColor: "#FF0000" },
+  { name: "ইমরান হোসেন", city: "খুলনা", product: "Spotify Premium", rating: 5, text: "১ বছরের প্ল্যান নিয়েছি, পরিবারের সবাই use করতে পারছি। কাস্টমার সাপোর্ট রেসপন্সিভ।", avatarColor: "#1DB954" },
+  { name: "ফারিয়া আক্তার", city: "বরিশাল", product: "Grammarly Premium", rating: 4, text: "Thesis লেখার জন্য Grammarly নিয়েছি, পারফেক্ট কাজ করছে। দ্রুত ডেলিভারি দিয়েছে।", avatarColor: "#27AE60" },
+  { name: "আরিফ মাহমুদ", city: "ময়মনসিংহ", product: "NordVPN", rating: 5, text: "২ বছরের সাবস্ক্রিপশন, সব ডিভাইসে চলছে। অরিজিনাল অ্যাকাউন্ট, কোনো ব্যান নেই।", avatarColor: "#4687FF" },
+  { name: "সুমাইয়া তাবাসসুম", city: "ঢাকা", product: "YouTube Premium", rating: 5, text: "Ad-free YouTube এবং YouTube Music একসাথে। দামে সাশ্রয়ী, সার্ভিসে সেরা।", avatarColor: "#FF0000" },
+];
+
+function CustomerReviews() {
+  return (
+    <section className="mx-auto max-w-[1280px] px-4 md:px-10 py-12 md:py-16">
+      <div className="text-center mb-10">
+        <span className="inline-flex rounded-full glass-soft px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-primary">Customer Reviews</span>
+        <h2 className="mt-3 text-2xl md:text-4xl font-extrabold text-slate-900" style={{ fontFamily: "var(--font-display)", lineHeight: 1.08 }}>
+          আমাদের গ্রাহকরা যা বলছেন
+        </h2>
+        <p className="mt-2 max-w-2xl mx-auto text-sm md:text-base text-slate-600">
+          ১২,০০০+ সন্তুষ্ট গ্রাহকের আস্থা — সত্যিকারের রিভিউ, সত্যিকারের অভিজ্ঞতা।
+        </p>
+        <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/70 px-4 py-2 shadow-sm backdrop-blur">
+          <div className="flex">
+            {[0,1,2,3,4].map(i => <Star key={i} className="h-4 w-4 fill-amber-500 text-amber-500" />)}
+          </div>
+          <span className="text-sm font-bold text-slate-800">4.9 / 5</span>
+          <span className="text-xs text-slate-500">· 12,000+ রিভিউ</span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {CUSTOMER_REVIEWS.map((r, idx) => (
+          <div
+            key={idx}
+            className="relative rounded-2xl border border-white/60 bg-white/70 p-6 shadow-[0_10px_30px_-15px_rgba(79,70,229,0.25)] backdrop-blur-md transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(79,70,229,0.35)]"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div
+                className="grid h-11 w-11 place-items-center rounded-full text-white font-extrabold text-sm shadow-md"
+                style={{ background: `linear-gradient(135deg, ${r.avatarColor}, ${r.avatarColor}cc)` }}
+              >
+                {r.name.charAt(0)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-bold text-slate-900 text-sm truncate">{r.name}</div>
+                <div className="text-xs text-slate-500">{r.city} · ভেরিফায়েড ক্রেতা</div>
+              </div>
+              <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
+            </div>
+            <div className="flex items-center gap-1 mb-2">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className={`h-4 w-4 ${i < r.rating ? "fill-amber-500 text-amber-500" : "text-slate-300"}`} />
+              ))}
+              <span className="ml-2 text-[11px] font-semibold text-indigo-600">{r.product}</span>
+            </div>
+            <p className="text-sm leading-relaxed text-slate-700">{r.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
