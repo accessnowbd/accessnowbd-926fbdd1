@@ -261,8 +261,8 @@ export function SiteFooter() {
           </section>
         </div>
 
-        <div className="mt-6 grid gap-4 rounded-[24px] border border-[var(--glass-border-soft)] bg-foreground/[0.04] px-4 py-4 md:grid-cols-[1fr_auto] md:items-center md:px-5">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="mt-6 flex flex-col gap-4 rounded-[24px] border border-[var(--glass-border-soft)] bg-foreground/[0.04] px-4 py-4 lg:grid lg:grid-cols-[1fr_auto] lg:items-center lg:gap-4 lg:px-5">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center lg:justify-start">
             <div className="flex items-center gap-2">
               {SOCIALS.map(({ Icon, href, label }) => (
                 <a
