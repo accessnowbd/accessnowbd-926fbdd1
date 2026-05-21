@@ -146,6 +146,7 @@ function Index() {
               </ProgressiveSection>
             ))}
         <PerfReportSection />
+        <CustomerReviews />
       </div>
       <SiteFooter />
     </div>
