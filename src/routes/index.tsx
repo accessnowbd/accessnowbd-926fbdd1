@@ -592,9 +592,13 @@ const CUSTOMER_REVIEWS = [
 ];
 
 function CustomerReviews() {
+  const half = Math.ceil(CUSTOMER_REVIEWS.length / 2);
+  const row1 = CUSTOMER_REVIEWS.slice(0, half);
+  const row2 = CUSTOMER_REVIEWS.slice(half);
+
   return (
-    <section className="mx-auto max-w-[1280px] px-4 md:px-10 py-12 md:py-16">
-      <div className="text-center mb-10">
+    <section className="relative overflow-hidden py-12 md:py-16">
+      <div className="mx-auto max-w-[1280px] px-4 md:px-10 text-center mb-10">
         <span className="inline-flex rounded-full glass-soft px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-primary">Customer Reviews</span>
         <h2 className="mt-3 text-2xl md:text-4xl font-extrabold text-slate-900" style={{ fontFamily: "var(--font-display)", lineHeight: 1.08 }}>
           আমাদের গ্রাহকরা যা বলছেন
@@ -611,11 +615,32 @@ function CustomerReviews() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {CUSTOMER_REVIEWS.map((r, idx) => (
+      <div className="relative space-y-5">
+        {/* Edge fade masks */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 md:w-32 bg-gradient-to-r from-background to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 md:w-32 bg-gradient-to-l from-background to-transparent" />
+
+        <ReviewMarquee items={row1} direction="left" duration={50} />
+        <ReviewMarquee items={row2} direction="right" duration={55} />
+      </div>
+    </section>
+  );
+}
+
+function ReviewMarquee({ items, direction, duration }: { items: typeof CUSTOMER_REVIEWS; direction: "left" | "right"; duration: number }) {
+  const loop = [...items, ...items];
+  return (
+    <div className="group overflow-hidden">
+      <div
+        className="flex gap-5 w-max"
+        style={{
+          animation: `${direction === "left" ? "reviewScrollLeft" : "reviewScrollRight"} ${duration}s linear infinite`,
+        }}
+      >
+        {loop.map((r, idx) => (
           <div
             key={idx}
-            className="relative rounded-2xl border border-white/60 bg-white/70 p-6 shadow-[0_10px_30px_-15px_rgba(79,70,229,0.25)] backdrop-blur-md transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(79,70,229,0.35)]"
+            className="w-[340px] md:w-[380px] shrink-0 rounded-2xl border border-white/60 bg-white/70 p-6 shadow-[0_10px_30px_-15px_rgba(79,70,229,0.25)] backdrop-blur-md"
           >
             <div className="flex items-center gap-3 mb-3">
               <div
@@ -636,10 +661,21 @@ function CustomerReviews() {
               ))}
               <span className="ml-2 text-[11px] font-semibold text-indigo-600">{r.product}</span>
             </div>
-            <p className="text-sm leading-relaxed text-slate-700">{r.text}</p>
+            <p className="text-sm leading-relaxed text-slate-700 line-clamp-3">{r.text}</p>
           </div>
         ))}
       </div>
-    </section>
+      <style>{`
+        @keyframes reviewScrollLeft {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @keyframes reviewScrollRight {
+          from { transform: translateX(-50%); }
+          to { transform: translateX(0); }
+        }
+        .group:hover > div { animation-play-state: paused; }
+      `}</style>
+    </div>
   );
 }
