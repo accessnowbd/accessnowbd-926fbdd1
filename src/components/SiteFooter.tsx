@@ -303,7 +303,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 md:justify-end">
+          <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-end">
             <span className="mr-1 text-[10px] uppercase tracking-[0.22em] text-white/42">
               We accept
             </span>
