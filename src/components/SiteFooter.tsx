@@ -261,8 +261,8 @@ export function SiteFooter() {
           </section>
         </div>
 
-        <div className="mt-6 grid gap-4 rounded-[24px] border border-[var(--glass-border-soft)] bg-foreground/[0.04] px-4 py-4 md:grid-cols-[1fr_auto] md:items-center md:px-5">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="mt-6 flex flex-col gap-4 rounded-[24px] border border-[var(--glass-border-soft)] bg-foreground/[0.04] px-4 py-4 lg:grid lg:grid-cols-[1fr_auto] lg:items-center lg:gap-4 lg:px-5">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center lg:justify-start">
             <div className="flex items-center gap-2">
               {SOCIALS.map(({ Icon, href, label }) => (
                 <a
@@ -276,9 +276,9 @@ export function SiteFooter() {
               ))}
             </div>
 
-            <div className="relative inline-flex max-w-full items-center overflow-hidden rounded-2xl border border-[var(--glass-border)] bg-gradient-to-r from-primary/[0.08] via-aqua/[0.06] to-[var(--gold)]/[0.08] px-4 py-2 shadow-[0_4px_18px_-10px_rgba(79,70,229,0.35)]">
+            <div className="relative inline-flex max-w-full items-center overflow-x-auto rounded-full border border-[var(--glass-border)] bg-gradient-to-r from-primary/[0.08] via-aqua/[0.06] to-[var(--gold)]/[0.08] px-4 py-1.5 shadow-[0_4px_18px_-10px_rgba(79,70,229,0.35)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <span aria-hidden className="pointer-events-none absolute inset-0 opacity-60" style={{ background: "radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.18), transparent 60%)" }} />
-              <p className="relative text-[11.5px] md:text-[12.5px] leading-6 tracking-[0.01em] whitespace-normal text-center md:text-left">
+              <p className="relative whitespace-nowrap text-[12px] md:text-[12.5px] leading-6 tracking-[0.01em]">
                 <span className="text-rose-500">©</span>{" "}
                 <span className="font-bold text-fuchsia-600 dark:text-fuchsia-400">2026</span>
                 <span className="mx-2 text-foreground/25">·</span>
@@ -303,7 +303,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 md:justify-end">
+          <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-end">
             <span className="mr-1 text-[10px] uppercase tracking-[0.22em] text-white/42">
               We accept
             </span>
