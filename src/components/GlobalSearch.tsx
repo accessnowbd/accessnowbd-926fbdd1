@@ -280,7 +280,7 @@ export function GlobalSearch({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="p-0 gap-0 max-w-[720px] border border-white/40 bg-white/70 backdrop-blur-2xl overflow-hidden rounded-3xl shadow-[0_32px_64px_-16px_rgba(15,23,42,0.25)] text-slate-800"
+        className="p-0 gap-0 max-w-[760px] border border-slate-200 bg-white overflow-hidden rounded-2xl shadow-[0_32px_64px_-16px_rgba(15,23,42,0.25)] text-slate-800"
       >
         <DialogTitle className="sr-only">Search</DialogTitle>
 
