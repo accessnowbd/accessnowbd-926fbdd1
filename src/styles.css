@@ -2304,12 +2304,11 @@ html.theme-white .admin-shell svg.text-white {
   color: #ffffff !important;
   stroke: #ffffff !important;
 }
-/* Restore real chip backgrounds inside admin (the global rule on line 1545+
-   was tinting cyan/teal/sky to violet — keep them brand-correct in admin) */
-html.theme-white .admin-shell [class*="bg-sky-5"] { background-color: #0ea5e9 !important; }
-html.theme-white .admin-shell [class*="bg-sky-6"] { background-color: #0284c7 !important; }
-html.theme-white .admin-shell [class*="bg-cyan-5"] { background-color: #06b6d4 !important; }
-html.theme-white .admin-shell [class*="bg-teal-5"] { background-color: #14b8a6 !important; }
+/* Keep admin accent chips neutral slate rather than inheriting global aurora tones. */
+html.theme-white .admin-shell [class*="bg-sky-5"],
+html.theme-white .admin-shell [class*="bg-sky-6"],
+html.theme-white .admin-shell [class*="bg-cyan-5"],
+html.theme-white .admin-shell [class*="bg-teal-5"] { background-color: #f1f5f9 !important; }
 /* SVGs in tinted-text utilities should follow that color, not get re-tinted */
 html.theme-white .admin-shell [class*="text-cyan-"] svg,
 html.theme-white .admin-shell [class*="text-teal-"] svg,
