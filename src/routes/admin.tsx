@@ -566,18 +566,18 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
       activeOptions={{ exact: item.exact }}
       title={collapsed ? label : undefined}
       className={[
-        "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all relative",
+        "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all duration-200 relative hover:-translate-y-0.5",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-slate-900 text-white shadow-sm"
-          : "text-slate-700 hover:bg-slate-50",
+          ? "bg-slate-900 text-white shadow-[0_12px_24px_-16px_rgba(15,23,42,0.8)]"
+          : "text-slate-700 hover:bg-slate-50 hover:shadow-sm",
       ].join(" ")}
     >
       <span
         className={[
-          "shrink-0 w-9 h-9 rounded-full grid place-items-center text-white",
-          "bg-gradient-to-br shadow-sm ring-1 ring-white/40",
-          item.grad,
+          "admin-menu-icon shrink-0 w-9 h-9 rounded-full grid place-items-center",
+          "bg-slate-100 text-slate-700 shadow-sm ring-1 ring-slate-200 transition-all duration-200",
+          active ? "bg-white/10 text-white ring-white/20" : "group-hover:bg-white group-hover:ring-slate-300",
         ].join(" ")}
       >
         {item.icon}
