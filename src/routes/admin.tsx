@@ -317,8 +317,8 @@ function AdminShell({ user, signOut, navigate }: any) {
         className={[
           "shrink-0 transition-transform duration-200 flex flex-col h-screen",
           "bg-white border-r border-slate-200/80",
-          // Desktop: permanently locked/fixed sidebar
-          "lg:fixed lg:top-0 lg:left-0 lg:translate-x-0 lg:z-30",
+          // Desktop: sticky locked sidebar
+          "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
           collapsed ? "lg:w-[72px]" : "lg:w-[280px]",
           // Mobile: fixed drawer that slides in
           "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-xl lg:shadow-none",
