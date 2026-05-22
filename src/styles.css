@@ -2077,6 +2077,42 @@ html.theme-white .admin-shell .text-gray-400 { color: #9ca3af !important; }
 html.theme-white .admin-shell .text-gray-500 { color: #6b7280 !important; }
 html.theme-white .admin-shell .text-foreground { color: #0f172a !important; }
 
+html.theme-white .admin-shell .admin-sidebar-premium {
+  box-shadow: 10px 0 30px -28px rgba(15, 23, 42, 0.5);
+}
+
+html.theme-white .admin-shell .admin-topbar-premium {
+  box-shadow: 0 10px 32px -30px rgba(15, 23, 42, 0.55);
+}
+
+html.theme-white .admin-shell .admin-menu-icon {
+  transform: translateZ(0);
+}
+
+html.theme-white .admin-shell a:hover .admin-menu-icon {
+  transform: scale(1.06);
+}
+
+html.theme-white .admin-shell main,
+html.theme-white .admin-shell [data-admin-content] {
+  animation: admin-premium-rise 240ms ease-out both;
+}
+
+@keyframes admin-premium-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-white .admin-shell *,
+  html.theme-white .admin-shell *::before,
+  html.theme-white .admin-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Buttons on dark backgrounds inside admin need real white text */
 html.theme-white .admin-shell .bg-slate-900,
 html.theme-white .admin-shell .bg-slate-800,
