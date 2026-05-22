@@ -297,10 +297,9 @@ html.theme-white .admin-shell div {
 }
 
 /* -------------------------------------------------------------------------
-   11) Sidebar menu icon badges — allow full Tailwind color palette.
-   The neutralization rules above are scoped to admin chrome; the colored
-   icon circles in the left navigation must keep their gradient swatches
-   exactly as the design screenshot specifies.
+   11) Sidebar menu icon badges — keep screenshot-style colored dots.
+    Purple/lavender families are still forced to warm red/orange here so
+    accidental old menu gradients cannot leak back into the admin sidebar.
    ------------------------------------------------------------------------- */
 html.theme-white .admin-shell .admin-menu-icon {
   background-color: transparent !important;
