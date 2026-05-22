@@ -67,8 +67,8 @@ function AdminLayout() {
   // Wipe historical splash/admin flags immediately on mount so a stale client
   // flag can never leave the route on an empty gradient screen.
   useEffect(() => { purgeLegacySplashFlags(); }, []);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [verified, setVerified] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => readCachedAdmin());
+  const [verified, setVerified] = useState<boolean>(() => readCachedAdmin());
   const [roleError, setRoleError] = useState<{
     message: string;
     code?: string;
