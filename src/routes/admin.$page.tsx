@@ -27,6 +27,7 @@ function AdminFeaturePage() {
  const item = findAdminPage(`/admin/${page}`);
  const group = ADMIN_MENU.find((g) => g.items.some((i) => i.to === `/admin/${page}`));
  const cfg = getFeatureConfig(page);
+ const { t } = useAdminLang();
 
  if (cfg?.kind === "_redirect_products") return <Navigate to="/admin/products" />;
  if (cfg?.kind === "_redirect_users") return <Navigate to="/admin/users" />;
@@ -37,13 +38,16 @@ function AdminFeaturePage() {
  <div className="mx-auto w-14 h-14 rounded-full bg-slate-100 grid place-items-center text-slate-500 mb-4">
  <Construction className="w-6 h-6" />
  </div>
- <h1 className="text-xl font-bold text-slate-900">Page not found</h1>
+ <h1 className="text-xl font-bold text-slate-900">{t("Page not found", "পেজ পাওয়া যায়নি")}</h1>
  <Link to="/admin" className="mt-5 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-slate-900 text-white text-sm font-semibold">
- <ArrowLeft className="w-4 h-4" /> Back to dashboard
+ <ArrowLeft className="w-4 h-4" /> {t("Back to dashboard", "ড্যাশবোর্ডে ফিরুন")}
  </Link>
  </div>
  );
  }
+
+ const itemLabel = (item as any).labelBn ? t(item.label, (item as any).labelBn) : item.label;
+ const groupTitle = group ? ((group as any).titleBn ? t(group.title, (group as any).titleBn) : group.title) : "";
 
  return (
  <div className="space-y-5">
@@ -53,9 +57,9 @@ function AdminFeaturePage() {
  {item.icon}
  </div>
  <div className="flex-1 min-w-0">
- <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{group?.title}</div>
- <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">{item.label}</h1>
- <p className="text-sm text-slate-500 mt-1">{cfg?.description ?? `Manage ${item.label.toLowerCase()}.`}</p>
+ <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{groupTitle}</div>
+ <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">{itemLabel}</h1>
+ <p className="text-sm text-slate-500 mt-1">{cfg?.description ?? t(`Manage ${item.label.toLowerCase()}.`, `${itemLabel} পরিচালনা করুন।`)}</p>
  </div>
  </div>
  </div>
@@ -68,7 +72,7 @@ function AdminFeaturePage() {
  )
  ) : (
  <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm">
- <p className="text-sm text-slate-500">No editor configured for this module yet.</p>
+ <p className="text-sm text-slate-500">{t("No editor configured for this module yet.", "এই মডিউলের জন্য এডিটর কনফিগার করা হয়নি।")}</p>
  </div>
  )}
  </div>
