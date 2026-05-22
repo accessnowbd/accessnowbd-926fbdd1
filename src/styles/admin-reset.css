@@ -295,3 +295,124 @@ html.theme-white .admin-shell a,
 html.theme-white .admin-shell div {
   text-shadow: none !important;
 }
+
+/* -------------------------------------------------------------------------
+   11) Sidebar menu icon badges — allow full Tailwind color palette.
+   The neutralization rules above are scoped to admin chrome; the colored
+   icon circles in the left navigation must keep their gradient swatches
+   exactly as the design screenshot specifies.
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell .admin-menu-icon {
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-violet-"],
+html.theme-white .admin-shell .admin-menu-icon[class*="from-purple-"] {
+  --tw-gradient-from: #8b5cf6 !important;
+  --tw-gradient-to:   #7c3aed !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-purple-600"] {
+  --tw-gradient-to:   #7c3aed !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-fuchsia-"] {
+  --tw-gradient-to:   #d946ef !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-fuchsia-"] {
+  --tw-gradient-from: #e879f9 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-pink-"] {
+  --tw-gradient-from: #ec4899 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-pink-"] {
+  --tw-gradient-to:   #db2777 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-indigo-"] {
+  --tw-gradient-from: #6366f1 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-indigo-"] {
+  --tw-gradient-to:   #4f46e5 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-rose-"] {
+  --tw-gradient-from: #f43f5e !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-rose-"] {
+  --tw-gradient-to:   #e11d48 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-red-"] {
+  --tw-gradient-from: #ef4444 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-red-"] {
+  --tw-gradient-to:   #dc2626 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-orange-"] {
+  --tw-gradient-from: #f97316 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-orange-"] {
+  --tw-gradient-to:   #ea580c !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-amber-"] {
+  --tw-gradient-from: #f59e0b !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-amber-"] {
+  --tw-gradient-to:   #d97706 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-yellow-"] {
+  --tw-gradient-from: #eab308 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-yellow-"] {
+  --tw-gradient-to:   #ca8a04 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-emerald-"] {
+  --tw-gradient-from: #10b981 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-emerald-"] {
+  --tw-gradient-to:   #059669 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-green-"] {
+  --tw-gradient-from: #22c55e !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-green-"] {
+  --tw-gradient-to:   #16a34a !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-teal-"] {
+  --tw-gradient-from: #14b8a6 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-teal-"] {
+  --tw-gradient-to:   #0d9488 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-cyan-"] {
+  --tw-gradient-from: #06b6d4 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-cyan-"] {
+  --tw-gradient-to:   #0891b2 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-sky-"] {
+  --tw-gradient-from: #0ea5e9 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-sky-"] {
+  --tw-gradient-to:   #0284c7 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-blue-"] {
+  --tw-gradient-from: #3b82f6 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-blue-"] {
+  --tw-gradient-to:   #1d4ed8 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-slate-5"] {
+  --tw-gradient-from: #64748b !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-slate-6"] {
+  --tw-gradient-from: #475569 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-slate-7"] {
+  --tw-gradient-from: #334155 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-slate-7"] {
+  --tw-gradient-to:   #334155 !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-slate-8"] {
+  --tw-gradient-to:   #1e293b !important;
+}
+html.theme-white .admin-shell .admin-menu-icon[class*="to-slate-9"] {
+  --tw-gradient-to:   #0f172a !important;
+}
