@@ -567,30 +567,30 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
       activeOptions={{ exact: item.exact }}
       title={collapsed ? label : undefined}
       className={[
-        "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all duration-200 relative hover:-translate-y-0.5",
+        "group flex items-center gap-1.5 rounded-md px-0.5 py-0.5 text-[8px] transition-all duration-150 relative",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-slate-100 text-slate-950 ring-1 ring-slate-200 shadow-[0_10px_24px_-16px_rgba(15,23,42,0.18)]"
-          : "text-slate-700 hover:bg-slate-50 hover:shadow-sm",
+          ? "bg-slate-100 text-slate-950 ring-1 ring-slate-200"
+          : "text-slate-700 hover:bg-slate-50",
       ].join(" ")}
     >
       <span
         className={[
-          "admin-menu-icon shrink-0 w-9 h-9 rounded-full grid place-items-center text-white shadow-sm transition-all duration-200",
+          "admin-menu-icon shrink-0 w-[11px] h-[11px] rounded-full grid place-items-center text-white shadow-sm transition-all duration-150 [&_svg]:w-[7px] [&_svg]:h-[7px]",
           "bg-gradient-to-br",
           item.grad,
-          active ? "ring-2 ring-white shadow-[0_8px_20px_-8px_rgba(15,23,42,0.35)]" : "ring-1 ring-white/60 group-hover:scale-[1.04]",
+          active ? "ring-1 ring-white shadow-[0_4px_10px_-6px_rgba(15,23,42,0.35)]" : "ring-1 ring-white/60 group-hover:scale-[1.03]",
         ].join(" ")}
       >
         {item.icon}
       </span>
-      {!collapsed && <span className="font-semibold truncate flex-1 text-[14px]">{label}</span>}
+      {!collapsed && <span className="font-semibold truncate flex-1 leading-tight">{label}</span>}
       {!collapsed && active && (
-        <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" aria-hidden />
+        <span className="w-1 h-1 rounded-full bg-slate-900 shrink-0" aria-hidden />
       )}
       {!collapsed && !active && (
         <Pin
-          className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+          className="w-2 h-2 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
           aria-hidden
         />
       )}
