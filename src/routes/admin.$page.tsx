@@ -141,7 +141,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  toast.error(err.message);
  load();
  } else {
- toast.success("Order saved");
+ toast.success(t("Order saved", "ক্রম সংরক্ষিত হয়েছে"));
  }
  };
 
