@@ -34,6 +34,7 @@ import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import { GlobalSearch, useGlobalSearch } from "@/components/GlobalSearch";
+import { SearchTrigger } from "@/components/SearchBar";
 
 const NAV: Array<{
   label: string;
@@ -279,18 +280,12 @@ export function SiteHeader() {
 
             {/* Actions */}
             <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
-              <button
-                type="button"
+              <SearchTrigger
                 onClick={() => setSearchOpen(true)}
-                aria-label="Open search"
-                className="hidden md:flex items-center gap-2 w-[260px] lg:w-[320px] xl:w-[360px] h-11 pl-4 pr-1.5 rounded-full bg-white border border-slate-200 shadow-[0_4px_14px_-8px_rgba(15,23,42,0.18)] hover:border-violet-400 hover:shadow-[0_6px_18px_-8px_rgba(124,58,237,0.35)] transition text-left"
-              >
-                <Search className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="flex-1 text-sm text-slate-400 truncate">প্রোডাক্ট সার্চ করুন...</span>
-                <kbd className="hidden lg:inline-flex items-center h-6 px-1.5 rounded-md text-[10px] font-mono bg-slate-100 text-slate-500 border border-slate-200">
-                  ⌘K
-                </kbd>
-              </button>
+                className="hidden md:block w-[260px] lg:w-[320px] xl:w-[360px]"
+                placeholder="প্রোডাক্ট সার্চ করুন..."
+              />
+
 
               <button
                 type="button"
