@@ -9,6 +9,7 @@ import {
  Globe, MessageSquare, UserCheck, ShieldCheck,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdminLang } from "@/context/AdminLangContext";
 
 
 export const Route = createFileRoute("/admin/")({

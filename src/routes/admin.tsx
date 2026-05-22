@@ -460,7 +460,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               onClick={toggle}
               aria-label={t("Switch to Bangla", "ইংরেজিতে পরিবর্তন")}
               title={lang === "en" ? "বাংলায় দেখুন" : "Show in English"}
-              className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-indigo-300 bg-white transition"
+              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-indigo-300 bg-white transition shrink-0"
             >
               <Globe className="w-3.5 h-3.5" /> {lang === "en" ? "বাং" : "EN"}
             </button>
