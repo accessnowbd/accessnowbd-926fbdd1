@@ -2077,6 +2077,55 @@ html.theme-white .admin-shell .text-gray-400 { color: #9ca3af !important; }
 html.theme-white .admin-shell .text-gray-500 { color: #6b7280 !important; }
 html.theme-white .admin-shell .text-foreground { color: #0f172a !important; }
 
+/* Hard reset admin surfaces after global marketing glass overrides. */
+html.theme-white .admin-shell [class*="bg-white"] {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: inherit;
+}
+
+html.theme-white .min-h-screen .admin-shell.admin-shell [class*="bg-white"][class*="bg-white"] {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(226, 232, 240, 0.92) !important;
+  box-shadow: 0 12px 30px -22px rgba(15, 23, 42, 0.22) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.theme-white .admin-shell [class*="bg-slate-50"] { background: #f8fafc !important; }
+html.theme-white .admin-shell [class*="bg-slate-100"] { background: #f1f5f9 !important; }
+html.theme-white .admin-shell [class*="bg-slate-200"] { background: #e2e8f0 !important; }
+
+html.theme-white .admin-shell button[class*="bg-slate-900"],
+html.theme-white .admin-shell a[class*="bg-slate-900"],
+html.theme-white .admin-shell [class*="bg-slate-900"] {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
+  box-shadow: 0 12px 24px -14px rgba(15, 23, 42, 0.65) !important;
+}
+
+html.theme-white .admin-shell button[class*="bg-slate-800"],
+html.theme-white .admin-shell a[class*="bg-slate-800"],
+html.theme-white .admin-shell [class*="bg-slate-800"] {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  border-color: #1e293b !important;
+}
+
+html.theme-white .admin-shell .bg-gradient-to-br:not([class*="from-"]),
+html.theme-white .admin-shell .bg-gradient-to-r:not([class*="from-"]) {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+}
+
+html.theme-white .min-h-screen .admin-shell.admin-shell button[class*="bg-white"]:hover,
+html.theme-white .min-h-screen .admin-shell.admin-shell a[class*="bg-white"]:hover {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  box-shadow: 0 8px 18px -14px rgba(15, 23, 42, 0.35) !important;
+}
+
 html.theme-white .admin-shell .admin-sidebar-premium {
   box-shadow: 10px 0 30px -28px rgba(15, 23, 42, 0.5);
 }
