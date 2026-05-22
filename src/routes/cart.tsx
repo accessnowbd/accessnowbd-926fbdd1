@@ -10,7 +10,7 @@ import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary } from "@/components/ui-glass/OrderSummary";
-import { applyCoupon } from "@/lib/coupons";
+import { applyCouponWith, useActiveCoupons } from "@/lib/coupons";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { useShopConfig } from "@/hooks/useShopConfig";
 
@@ -30,7 +30,8 @@ function CartPage() {
   const { coupon } = Route.useSearch();
   const { data: shopConfig } = useShopConfig();
 
-  const applied = useMemo(() => applyCoupon(coupon, total), [coupon, total]);
+  const coupons = useActiveCoupons();
+  const applied = useMemo(() => applyCouponWith(coupons, coupon, total), [coupons, coupon, total]);
   const [input, setInput] = useState(coupon);
   useEffect(() => { setInput(coupon); }, [coupon]);
 
@@ -137,9 +138,9 @@ function CartPage() {
                         <Check className="w-3 h-3" /> {applied.label} applied
                       </span>
                     ) : coupon ? (
-                      <span className="text-destructive">Invalid coupon code</span>
+                      <span className="text-destructive">{applied.reason || "Invalid coupon code"}</span>
                     ) : (
-                      <span className="text-muted-foreground">Try SAVE10, SAVE100, or WELCOME50</span>
+                      <span className="text-muted-foreground">Have a code? Enter it above.</span>
                     )}
                   </p>
                 </form>
