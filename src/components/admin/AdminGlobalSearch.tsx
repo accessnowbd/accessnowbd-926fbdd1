@@ -317,7 +317,7 @@ export function AdminGlobalSearch({
                           }`}
                         >
                           <div
-                            className={`grid place-items-center w-9 h-9 rounded-lg text-base bg-gradient-to-br ${p.gradient} text-white shadow-sm`}
+                            className="grid place-items-center w-9 h-9 rounded-lg text-base bg-slate-100 text-slate-700 ring-1 ring-slate-200 shadow-sm"
                           >
                             {p.emoji}
                           </div>
