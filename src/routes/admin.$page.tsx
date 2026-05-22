@@ -333,6 +333,7 @@ function RecordForm({
  const [saving, setSaving] = useState(false);
  const [errors, setErrors] = useState<{ [k: string]: string }>({});
  const [touched, setTouched] = useState<{ [k: string]: boolean }>({});
+ const { t } = useAdminLang();
 
  const setField = (name: string, value: unknown) => {
  setData((d) => ({ ...d, [name]: value }));
@@ -352,7 +353,7 @@ function RecordForm({
  if (Object.keys(next).length) {
  setErrors(next);
  setTouched(Object.fromEntries(fields.map((f) => [f.name, true])));
- toast.error("Please fix the highlighted fields");
+ toast.error(t("Please fix the highlighted fields", "চিহ্নিত ফিল্ডগুলো ঠিক করুন"));
  return;
  }
  setSaving(true);
@@ -363,7 +364,7 @@ function RecordForm({
  const { error } = await op;
  setSaving(false);
  if (error) return toast.error(error.message);
- toast.success(record ? "Updated" : "Created");
+ toast.success(record ? t("Updated", "আপডেট হয়েছে") : t("Created", "তৈরি হয়েছে"));
  onSaved();
  };
 
@@ -371,7 +372,7 @@ function RecordForm({
  <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900/40 backdrop-blur-sm p-4" onClick={onClose}>
  <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
  <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
- <h2 className="text-lg font-bold text-slate-900">{record ? "Edit entry" : "New entry"}</h2>
+ <h2 className="text-lg font-bold text-slate-900">{record ? t("Edit entry", "এন্ট্রি এডিট") : t("New entry", "নতুন এন্ট্রি")}</h2>
  <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100"><X className="w-4 h-4" /></button>
  </div>
  <div className="px-6 py-5 space-y-4 overflow-y-auto">
@@ -387,10 +388,10 @@ function RecordForm({
  ))}
  </div>
  <div className="px-6 py-4 border-t border-slate-200 flex justify-end gap-2">
- <button onClick={onClose} className="h-10 px-4 rounded-full border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
- <button onClick={save} disabled={saving} className="h-10 px-5 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 text-white text-sm font-semibold shadow inline-flex items-center gap-1.5 disabled:opacity-60">
+ <button onClick={onClose} className="h-10 px-4 rounded-full border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">{t("Cancel", "বাতিল")}</button>
+ <button onClick={save} disabled={saving} className="h-10 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow inline-flex items-center gap-1.5 disabled:opacity-60 transition">
  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
- Save
+ {t("Save", "সংরক্ষণ")}
  </button>
  </div>
  </div>
