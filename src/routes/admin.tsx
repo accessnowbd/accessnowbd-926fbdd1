@@ -242,16 +242,18 @@ function AdminLayout() {
 
   // MFA gate: requires Authenticator code OR email OTP fallback before admin shell renders.
   return (
-    <AdminMfaGate
-      userEmail={user?.email}
-      onSignOut={async () => {
-        try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
-        await signOut();
-        navigate({ to: "/login" });
-      }}
-    >
-      <AdminShell user={user} signOut={signOut} navigate={navigate} />
-    </AdminMfaGate>
+    <AdminLangProvider>
+      <AdminMfaGate
+        userEmail={user?.email}
+        onSignOut={async () => {
+          try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
+          await signOut();
+          navigate({ to: "/login" });
+        }}
+      >
+        <AdminShell user={user} signOut={signOut} navigate={navigate} />
+      </AdminMfaGate>
+    </AdminLangProvider>
   );
 }
 
