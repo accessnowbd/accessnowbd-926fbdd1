@@ -4,9 +4,8 @@ import { cn } from "@/lib/utils";
 type Size = "sm" | "md" | "lg";
 
 /**
- * Unified search input — "Glow gradient ring" design.
- * Used site-wide (public + admin). Mirrors the trigger button style in
- * SiteHeader and the admin top/side bars.
+ * Unified search input — clean, flat design (no gradient ring).
+ * Used site-wide (public + admin).
  */
 export function SearchBar({
   value,
@@ -33,71 +32,67 @@ export function SearchBar({
 }) {
   const heights: Record<Size, string> = { sm: "h-9", md: "h-11", lg: "h-12" };
   const iconSizes: Record<Size, string> = { sm: "w-4 h-4", md: "w-4 h-4", lg: "w-5 h-5" };
-  const btnSizes: Record<Size, string> = { sm: "w-7 h-7", md: "w-8 h-8", lg: "w-9 h-9" };
-  const padLeft: Record<Size, string> = { sm: "pl-3", md: "pl-4", lg: "pl-5" };
+  const btnSizes: Record<Size, string> = { sm: "h-7 px-3", md: "h-8 px-3.5", lg: "h-9 px-4" };
+  const padLeft: Record<Size, string> = { sm: "pl-9", md: "pl-10", lg: "pl-11" };
+  const iconLeft: Record<Size, string> = { sm: "left-3", md: "left-3.5", lg: "left-4" };
   const textSizes: Record<Size, string> = { sm: "text-xs", md: "text-sm", lg: "text-sm" };
 
   return (
-    <div className={cn("relative group", className)}>
-      {/* Ambient outer glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -inset-1 rounded-full bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#22d3ee] opacity-15 blur-xl transition-opacity duration-500 group-hover:opacity-30 group-focus-within:opacity-40"
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit?.(value);
+      }}
+      role="search"
+      className={cn("relative w-full", className)}
+    >
+      <Search
+        className={cn(
+          "absolute top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none",
+          iconLeft[size],
+          iconSizes[size],
+        )}
+        strokeWidth={2}
       />
-      {/* Gradient ring */}
-      <div className="relative rounded-full bg-gradient-to-r from-[#6366f1] via-[#8b5cf6] to-[#22d3ee] p-[1.5px] shadow-[0_10px_30px_-15px_rgba(99,102,241,0.45)]">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSubmit?.(value);
-          }}
-          role="search"
-          style={{ backgroundColor: "#ffffff" }}
+      <input
+        type="search"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        autoFocus={autoFocus}
+        aria-label={ariaLabel}
+        autoComplete="off"
+        spellCheck={false}
+        className={cn(
+          "w-full rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring",
+          "transition-colors",
+          heights[size],
+          padLeft[size],
+          showSubmit ? "pr-24" : "pr-3",
+          textSizes[size],
+          inputClassName,
+        )}
+      />
+      {showSubmit && (
+        <button
+          type="submit"
+          aria-label="Submit search"
           className={cn(
-            "glow-search-inner flex items-center gap-2 rounded-full pr-1.5 transition-colors",
-            padLeft[size],
-            heights[size],
+            "absolute top-1/2 -translate-y-1/2 right-1.5 inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 active:scale-[0.98] transition font-medium",
+            btnSizes[size],
+            textSizes[size],
           )}
         >
-          <Search className={cn("text-indigo-500 shrink-0", iconSizes[size])} strokeWidth={2.5} />
-          <input
-            type="search"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={placeholder}
-            autoFocus={autoFocus}
-            aria-label={ariaLabel}
-            className={cn(
-              "flex-1 min-w-0 bg-transparent border-0 outline-none placeholder:text-slate-400 text-slate-800 font-medium",
-              "focus:outline-none focus-visible:outline-none focus:ring-0",
-              textSizes[size],
-              inputClassName,
-            )}
-            style={{ outline: "none" }}
-            autoComplete="off"
-            spellCheck={false}
-          />
-          {showSubmit && (
-            <button
-              type="submit"
-              aria-label="Submit search"
-              className={cn(
-                "grid place-items-center rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 text-white shadow-[0_4px_12px_-4px_rgba(124,58,237,0.55)] hover:brightness-110 active:scale-95 transition shrink-0",
-                btnSizes[size],
-              )}
-            >
-              <Search className={iconSizes[size]} strokeWidth={2.5} />
-            </button>
-          )}
-        </form>
-      </div>
-    </div>
+          Search
+        </button>
+      )}
+    </form>
   );
 }
 
 /**
- * Trigger button — same gradient ring, but rendered as a passive button that
- * opens a command-palette dialog (e.g. SiteHeader / Admin layout).
+ * Trigger button — flat search-shaped button that opens the command palette.
  */
 export function SearchTrigger({
   onClick,
@@ -113,39 +108,46 @@ export function SearchTrigger({
   showShortcut?: boolean;
 }) {
   const heights: Record<Size, string> = { sm: "h-9", md: "h-11", lg: "h-12" };
-  const padLeft: Record<Size, string> = { sm: "pl-3", md: "pl-4", lg: "pl-5" };
+  const padLeft: Record<Size, string> = { sm: "pl-9", md: "pl-10", lg: "pl-11" };
+  const iconLeft: Record<Size, string> = { sm: "left-3", md: "left-3.5", lg: "left-4" };
   const textSizes: Record<Size, string> = { sm: "text-xs", md: "text-sm", lg: "text-sm" };
-  const iconSizes: Record<Size, string> = { sm: "w-3.5 h-3.5", md: "w-4 h-4", lg: "w-5 h-5" };
+  const iconSizes: Record<Size, string> = { sm: "w-4 h-4", md: "w-4 h-4", lg: "w-5 h-5" };
 
   return (
-    <div className={cn("relative group", className)}>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -inset-1 rounded-full bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#22d3ee] opacity-15 blur-xl transition-opacity duration-500 group-hover:opacity-30"
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label="Open search"
+      className={cn(
+        "relative w-full rounded-md border border-input bg-background text-left",
+        "hover:border-ring/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "transition-colors",
+        heights[size],
+        className,
+      )}
+    >
+      <Search
+        className={cn(
+          "absolute top-1/2 -translate-y-1/2 text-muted-foreground",
+          iconLeft[size],
+          iconSizes[size],
+        )}
+        strokeWidth={2}
       />
-      <div className="relative rounded-full bg-gradient-to-r from-[#6366f1] via-[#8b5cf6] to-[#22d3ee] p-[1.5px] shadow-[0_10px_30px_-15px_rgba(99,102,241,0.45)]">
-        <button
-          type="button"
-          onClick={onClick}
-          aria-label="Open search"
-          style={{ backgroundColor: "#ffffff" }}
-          className={cn(
-            "glow-search-inner w-full flex items-center gap-2 rounded-full pr-1.5 text-left transition-colors",
-            padLeft[size],
-            heights[size],
-          )}
-        >
-          <Search className={cn("text-indigo-500 shrink-0", iconSizes[size])} strokeWidth={2.5} />
-          <span className={cn("flex-1 truncate text-slate-400 font-medium", textSizes[size])}>
-            {placeholder}
-          </span>
-          {showShortcut && (
-            <kbd className="hidden lg:inline-flex items-center gap-0.5 h-6 px-1.5 rounded-md text-[10px] font-bold bg-slate-50 text-slate-500 border border-slate-200/70">
-              <span className="text-slate-400">⌘</span>K
-            </kbd>
-          )}
-        </button>
-      </div>
-    </div>
+      <span
+        className={cn(
+          "block truncate text-muted-foreground pr-14",
+          padLeft[size],
+          textSizes[size],
+        )}
+      >
+        {placeholder}
+      </span>
+      {showShortcut && (
+        <kbd className="hidden lg:inline-flex absolute top-1/2 -translate-y-1/2 right-2 items-center gap-0.5 h-6 px-1.5 rounded text-[10px] font-semibold bg-muted text-muted-foreground border border-border">
+          <span className="opacity-70">⌘</span>K
+        </kbd>
+      )}
+    </button>
   );
 }
