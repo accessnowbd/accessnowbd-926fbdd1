@@ -107,6 +107,10 @@ function AdminLayout() {
         }
         const ok = data === true;
         setIsAdmin(ok);
+        try {
+          if (ok) localStorage.setItem(ADMIN_CACHE_KEY, "1");
+          else localStorage.removeItem(ADMIN_CACHE_KEY);
+        } catch { /* ignore */ }
       } catch (e: any) {
         setCheckedAt(new Date().toISOString());
         setRoleError({
@@ -114,6 +118,7 @@ function AdminLayout() {
           raw: e,
         });
         setIsAdmin(false);
+        try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
       }
     },
     [],
