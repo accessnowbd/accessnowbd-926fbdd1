@@ -2052,6 +2052,24 @@ html.theme-white .admin-shell * {
   text-shadow: none !important;
 }
 
+html.theme-white .admin-shell {
+  --admin-surface: #ffffff;
+  --admin-surface-soft: #f8fafc;
+  --admin-border: #e2e8f0;
+  --admin-ink: #0f172a;
+  --admin-muted: #64748b;
+}
+
+/* Admin must never inherit the site's aurora/purple theme treatment. */
+html.theme-white .admin-shell header,
+html.theme-white .admin-shell aside,
+html.theme-white .admin-shell nav,
+html.theme-white .admin-shell [data-admin-content],
+html.theme-white .admin-shell [role="search"],
+html.theme-white .admin-shell [role="search"] * {
+  color: var(--admin-ink) !important;
+}
+
 /* Stop the indigo background tint on bg-white/* utilities inside admin */
 html.theme-white .admin-shell [class*="bg-white\/"] {
   background-color: rgba(255, 255, 255, 0.9) !important;
@@ -2077,6 +2095,11 @@ html.theme-white .admin-shell .text-gray-400 { color: #9ca3af !important; }
 html.theme-white .admin-shell .text-gray-500 { color: #6b7280 !important; }
 html.theme-white .admin-shell .text-foreground { color: #0f172a !important; }
 
+html.theme-white .admin-shell .text-white,
+html.theme-white .admin-shell .text-white * {
+  color: #ffffff !important;
+}
+
 /* Hard reset admin surfaces after global marketing glass overrides. */
 html.theme-white .admin-shell [class*="bg-white"] {
   background: rgba(255, 255, 255, 0.94) !important;
@@ -2091,6 +2114,10 @@ html.theme-white .min-h-screen .admin-shell.admin-shell [class*="bg-white"][clas
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
+
+html.theme-white .admin-shell .bg-white\/10 { background: rgba(255, 255, 255, 0.10) !important; }
+html.theme-white .admin-shell .bg-white\/20 { background: rgba(255, 255, 255, 0.20) !important; }
+html.theme-white .admin-shell .ring-white\/20 { --tw-ring-color: rgba(255, 255, 255, 0.20) !important; }
 
 html.theme-white .admin-shell [class*="bg-slate-50"] { background: #f8fafc !important; }
 html.theme-white .admin-shell [class*="bg-slate-100"] { background: #f1f5f9 !important; }
@@ -2169,6 +2196,20 @@ html.theme-white .admin-shell [class*="bg-slate-9"] { color: #ffffff; }
 html.theme-white .admin-shell .bg-slate-900 *,
 html.theme-white .admin-shell .bg-slate-800 * { color: inherit; }
 
+html.theme-white .admin-shell [class*="from-cyan-"],
+html.theme-white .admin-shell [class*="from-teal-"],
+html.theme-white .admin-shell [class*="from-sky-"],
+html.theme-white .admin-shell [class*="via-cyan-"],
+html.theme-white .admin-shell [class*="via-teal-"],
+html.theme-white .admin-shell [class*="via-sky-"],
+html.theme-white .admin-shell [class*="to-cyan-"],
+html.theme-white .admin-shell [class*="to-teal-"],
+html.theme-white .admin-shell [class*="to-sky-"] {
+  --tw-gradient-from: #f1f5f9 var(--tw-gradient-from-position) !important;
+  --tw-gradient-via: #e2e8f0 var(--tw-gradient-via-position) !important;
+  --tw-gradient-to: #cbd5e1 var(--tw-gradient-to-position) !important;
+}
+
 /* Neutralize any leftover violet/indigo/fuchsia/purple/pink gradient icons in
    the admin sidebar — turn every gradient-icon swatch into a silver chip so
    the panel reads as clean white/silver. */
@@ -2202,6 +2243,14 @@ html.theme-white .admin-shell [class*="bg-indigo-"],
 html.theme-white .admin-shell [class*="bg-pink-"] {
   background-color: #f1f5f9 !important; /* slate-100 */
   color: #334155 !important;
+}
+html.theme-white .admin-shell [class*="bg-blue-"],
+html.theme-white .admin-shell [class*="bg-cyan-"],
+html.theme-white .admin-shell [class*="bg-teal-"],
+html.theme-white .admin-shell [class*="bg-sky-"] {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
 }
 html.theme-white .admin-shell [class*="text-violet-"],
 html.theme-white .admin-shell [class*="text-purple-"],
@@ -2259,16 +2308,59 @@ html.theme-white .admin-shell svg.text-white {
   color: #ffffff !important;
   stroke: #ffffff !important;
 }
-/* Restore real chip backgrounds inside admin (the global rule on line 1545+
-   was tinting cyan/teal/sky to violet — keep them brand-correct in admin) */
-html.theme-white .admin-shell [class*="bg-sky-5"] { background-color: #0ea5e9 !important; }
-html.theme-white .admin-shell [class*="bg-sky-6"] { background-color: #0284c7 !important; }
-html.theme-white .admin-shell [class*="bg-cyan-5"] { background-color: #06b6d4 !important; }
-html.theme-white .admin-shell [class*="bg-teal-5"] { background-color: #14b8a6 !important; }
+/* Keep admin accent chips neutral slate rather than inheriting global aurora tones. */
+html.theme-white .admin-shell [class*="bg-sky-5"],
+html.theme-white .admin-shell [class*="bg-sky-6"],
+html.theme-white .admin-shell [class*="bg-cyan-5"],
+html.theme-white .admin-shell [class*="bg-teal-5"] { background-color: #f1f5f9 !important; }
 /* SVGs in tinted-text utilities should follow that color, not get re-tinted */
 html.theme-white .admin-shell [class*="text-cyan-"] svg,
 html.theme-white .admin-shell [class*="text-teal-"] svg,
 html.theme-white .admin-shell [class*="text-sky-"] svg {
   color: inherit !important;
   stroke: inherit !important;
+}
+
+/* Final admin guardrail: regardless of the active site theme, admin stays
+   white / silver / slate. This prevents global marketing gradients from
+   leaking into the sidebar, topbar, search, or primary action buttons. */
+.admin-shell [class*="bg-slate-900"],
+.admin-shell [class*="bg-slate-800"] {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
+  box-shadow: 0 12px 24px -14px rgba(15, 23, 42, 0.65) !important;
+}
+.admin-shell [class*="bg-slate-900"] *,
+.admin-shell [class*="bg-slate-800"] * {
+  color: inherit !important;
+  stroke: currentColor !important;
+}
+.admin-shell [class*="bg-violet-"],
+.admin-shell [class*="bg-purple-"],
+.admin-shell [class*="bg-fuchsia-"],
+.admin-shell [class*="bg-indigo-"],
+.admin-shell [class*="bg-pink-"],
+.admin-shell [class*="bg-blue-"] {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+}
+.admin-shell [class*="text-violet-"],
+.admin-shell [class*="text-purple-"],
+.admin-shell [class*="text-fuchsia-"],
+.admin-shell [class*="text-indigo-"],
+.admin-shell [class*="text-pink-"] {
+  color: #475569 !important;
+}
+.admin-shell [class*="border-violet-"],
+.admin-shell [class*="border-purple-"],
+.admin-shell [class*="border-fuchsia-"],
+.admin-shell [class*="border-indigo-"],
+.admin-shell [class*="ring-violet-"],
+.admin-shell [class*="ring-purple-"],
+.admin-shell [class*="ring-fuchsia-"],
+.admin-shell [class*="ring-indigo-"] {
+  border-color: #cbd5e1 !important;
+  --tw-ring-color: #cbd5e1 !important;
 }
