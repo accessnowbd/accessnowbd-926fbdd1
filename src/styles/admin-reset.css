@@ -49,6 +49,14 @@ html.theme-white .admin-shell .text-slate-700 { color: #334155 !important; }
 html.theme-white .admin-shell .text-slate-800 { color: #1e293b !important; }
 html.theme-white .admin-shell .text-slate-900 { color: #0f172a !important; }
 
+html.theme-white .admin-shell [class*="text-violet-"],
+html.theme-white .admin-shell [class*="text-purple-"],
+html.theme-white .admin-shell [class*="text-fuchsia-"],
+html.theme-white .admin-shell [class*="text-indigo-"],
+html.theme-white .admin-shell [class*="text-pink-"] {
+  color: #475569 !important;
+}
+
 /* Strip purple aurora gradient text inside admin */
 html.theme-white .admin-shell .text-aurora,
 html.theme-white .admin-shell .text-aurora-strong,
@@ -83,6 +91,15 @@ html.theme-white .admin-shell .bg-popover    { background-color: #ffffff !import
 html.theme-white .admin-shell .bg-background { background-color: #ffffff !important; }
 html.theme-white .admin-shell .bg-muted      { background-color: #f1f5f9 !important; }
 html.theme-white .admin-shell .bg-secondary  { background-color: #f1f5f9 !important; color: #0f172a !important; }
+
+html.theme-white .admin-shell [class*="bg-violet-"],
+html.theme-white .admin-shell [class*="bg-purple-"],
+html.theme-white .admin-shell [class*="bg-fuchsia-"],
+html.theme-white .admin-shell [class*="bg-indigo-"],
+html.theme-white .admin-shell [class*="bg-pink-"] {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
 
 /* Dark slate / black backgrounds globally re-tinted by theme-white — restore */
 html.theme-white .admin-shell [class*="bg-slate-9"],
@@ -239,6 +256,17 @@ html.theme-white .admin-shell .gradient-border-card::after,
 html.theme-white .admin-shell .gradient-border-soft::before {
   background: transparent !important;
   display: none !important;
+}
+
+html.theme-white .admin-shell header.admin-topbar-premium,
+html.theme-white .admin-shell header.admin-topbar-premium > div {
+  background: rgba(250, 250, 250, 0.92) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: none !important;
+}
+
+html.theme-white .admin-shell header.admin-topbar-premium svg {
+  color: currentColor !important;
 }
 
 /* -------------------------------------------------------------------------
