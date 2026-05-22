@@ -327,13 +327,13 @@ function AdminShell({ user, signOut, navigate }: any) {
       >
         {/* Brand */}
         <div className={[
-          "border-b border-slate-200/80",
+          "relative border-b border-slate-200/80",
           collapsed
-            ? "flex flex-col items-center justify-center gap-1.5 py-3 px-2"
-            : "h-16 flex items-center justify-between px-4",
+            ? "flex flex-col items-center justify-center gap-2 py-3 px-2"
+            : "h-16 flex items-center px-4 pr-12",
         ].join(" ")}>
-          <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "justify-center" : ""}`}>
-            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-full overflow-hidden ring-1 ring-white/30 shadow-[0_6px_18px_-6px_rgba(47,109,255,0.6)] bg-[radial-gradient(120%_120%_at_30%_20%,rgba(255,255,255,0.95)_0%,rgba(225,236,255,0.9)_55%,rgba(196,218,255,0.88)_100%)]">
+          <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 flex-1 ${collapsed ? "justify-center" : ""}`}>
+            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-full overflow-hidden ring-1 ring-slate-200 bg-white">
               <img
                 src={accessNowLogo}
                 alt="AccessNow BD"
@@ -342,18 +342,18 @@ function AdminShell({ user, signOut, navigate }: any) {
               />
             </span>
             {!collapsed && (
-              <span className="leading-[1.05] min-w-0">
+              <span className="leading-[1.05] min-w-0 overflow-hidden">
                 <span className="flex items-baseline gap-1 whitespace-nowrap">
                   <span className="font-extrabold tracking-tight text-[14px] text-slate-900">Access</span>
                   <span className="font-extrabold tracking-tight text-[14px] text-slate-900">Now</span>
                   <span className="font-extrabold tracking-tight text-[14px] text-slate-900">BD</span>
                 </span>
-                <span className="mt-0.5 flex items-center gap-1">
-                  <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Fast</span>
+                <span className="mt-0.5 flex items-center gap-1 whitespace-nowrap">
+                  <span className="text-[8px] uppercase tracking-[0.18em] font-bold text-slate-500">Fast</span>
                   <span className="w-[3px] h-[3px] rounded-full bg-slate-400" />
-                  <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Secure</span>
+                  <span className="text-[8px] uppercase tracking-[0.18em] font-bold text-slate-500">Secure</span>
                   <span className="w-[3px] h-[3px] rounded-full bg-slate-400" />
-                  <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Reliable</span>
+                  <span className="text-[8px] uppercase tracking-[0.18em] font-bold text-slate-500">Reliable</span>
                 </span>
               </span>
             )}
@@ -361,24 +361,25 @@ function AdminShell({ user, signOut, navigate }: any) {
           {/* Mobile close */}
           <button
             onClick={() => setMobileOpen(false)}
-            className="lg:hidden p-1.5 rounded-lg hover:bg-slate-100 text-slate-600"
+            className="lg:hidden absolute top-1/2 -translate-y-1/2 right-3 h-8 w-8 grid place-items-center rounded-lg bg-white ring-1 ring-slate-200 hover:bg-slate-50 text-slate-600"
             aria-label="Close menu"
           >
             <X className="w-4 h-4" />
           </button>
-          {/* Desktop collapse / expand toggle */}
+          {/* Desktop collapse / expand toggle — always at top-right edge */}
           <button
             onClick={() => setCollapsed((v) => !v)}
             className={[
-              "hidden lg:inline-flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition",
+              "hidden lg:inline-flex items-center justify-center h-7 w-7 rounded-md",
+              "bg-white ring-1 ring-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-50 shadow-sm transition",
               collapsed
-                ? "w-9 h-9 ring-1 ring-slate-200 bg-white shadow-sm"
-                : "p-1.5",
+                ? "mt-1"
+                : "absolute top-1/2 -translate-y-1/2 right-3",
             ].join(" ")}
             aria-label={collapsed ? t("Expand sidebar", "সাইডবার বড় করুন") : t("Collapse sidebar", "সাইডবার ছোট করুন")}
             title={collapsed ? t("Expand sidebar", "সাইডবার বড় করুন") : t("Collapse sidebar", "সাইডবার ছোট করুন")}
           >
-            {collapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+            {collapsed ? <PanelLeftOpen className="w-3.5 h-3.5" /> : <PanelLeftClose className="w-3.5 h-3.5" />}
           </button>
         </div>
 
