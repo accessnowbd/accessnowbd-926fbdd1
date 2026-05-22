@@ -85,7 +85,7 @@ function DescriptionPreviewPage() {
             value={source}
             onChange={(e) => setSource(e.target.value)}
             spellCheck={false}
-            className="w-full min-h-[70vh] font-mono text-sm p-4 rounded-lg border border-border bg-background resize-y focus:outline-none focus:ring-2 focus:ring-primary/40"
+            className="w-full min-h-[70vh] font-mono text-sm p-4 rounded-lg border border-border bg-background resize-y focus:outline-none focus:ring-2 focus:ring-slate-300"
           />
         </div>
 
