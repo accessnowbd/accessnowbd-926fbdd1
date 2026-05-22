@@ -446,6 +446,20 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
       { name: "hours", label: "Working hours", type: "text" },
     ],
   },
+  "support-widget": {
+    kind: "support_widget",
+    mode: "single",
+    description: "Floating support chat bubble — colors, glow & icon styling.",
+    fields: [
+      { name: "orb_from", label: "Orb gradient – top color", type: "color" },
+      { name: "orb_via", label: "Orb gradient – middle color", type: "color" },
+      { name: "orb_to", label: "Orb gradient – bottom color", type: "color" },
+      { name: "ring_color", label: "Pulsing outer glow color", type: "color" },
+      { name: "spin_color_1", label: "Spinning ring color A", type: "color" },
+      { name: "spin_color_2", label: "Spinning ring color B", type: "color" },
+      { name: "icon_color", label: "Icon color", type: "color" },
+    ],
+  },
   "pages": {
     kind: "page",
     mode: "list",
