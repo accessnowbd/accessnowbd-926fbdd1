@@ -326,8 +326,13 @@ function AdminShell({ user, signOut, navigate }: any) {
         ].join(" ")}
       >
         {/* Brand */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200/80">
-          <Link to="/admin" className="flex items-center gap-2.5 min-w-0">
+        <div className={[
+          "border-b border-slate-200/80",
+          collapsed
+            ? "flex flex-col items-center justify-center gap-1.5 py-3 px-2"
+            : "h-16 flex items-center justify-between px-4",
+        ].join(" ")}>
+          <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "justify-center" : ""}`}>
             <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-full overflow-hidden ring-1 ring-white/30 shadow-[0_6px_18px_-6px_rgba(47,109,255,0.6)] bg-[radial-gradient(120%_120%_at_30%_20%,rgba(255,255,255,0.95)_0%,rgba(225,236,255,0.9)_55%,rgba(196,218,255,0.88)_100%)]">
               <img
                 src={accessNowLogo}
@@ -361,11 +366,17 @@ function AdminShell({ user, signOut, navigate }: any) {
           >
             <X className="w-4 h-4" />
           </button>
-          {/* Desktop collapse */}
+          {/* Desktop collapse / expand toggle */}
           <button
             onClick={() => setCollapsed((v) => !v)}
-            className="hidden lg:block p-1.5 rounded-lg hover:bg-slate-100 text-slate-600"
-            aria-label="Collapse sidebar"
+            className={[
+              "hidden lg:inline-flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition",
+              collapsed
+                ? "w-9 h-9 ring-1 ring-slate-200 bg-white shadow-sm"
+                : "p-1.5",
+            ].join(" ")}
+            aria-label={collapsed ? t("Expand sidebar", "সাইডবার বড় করুন") : t("Collapse sidebar", "সাইডবার ছোট করুন")}
+            title={collapsed ? t("Expand sidebar", "সাইডবার বড় করুন") : t("Collapse sidebar", "সাইডবার ছোট করুন")}
           >
             {collapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
           </button>
