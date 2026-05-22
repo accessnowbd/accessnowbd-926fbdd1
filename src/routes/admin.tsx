@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
 import { AdminMfaGate } from "@/components/admin/AdminMfaGate";
+import { AdminLangProvider, useAdminLang } from "@/context/AdminLangContext";
 import accessNowLogo from "@/assets/accessnow-bd-mark.webp";
 
 export const Route = createFileRoute("/admin")({
@@ -241,16 +242,18 @@ function AdminLayout() {
 
   // MFA gate: requires Authenticator code OR email OTP fallback before admin shell renders.
   return (
-    <AdminMfaGate
-      userEmail={user?.email}
-      onSignOut={async () => {
-        try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
-        await signOut();
-        navigate({ to: "/login" });
-      }}
-    >
-      <AdminShell user={user} signOut={signOut} navigate={navigate} />
-    </AdminMfaGate>
+    <AdminLangProvider>
+      <AdminMfaGate
+        userEmail={user?.email}
+        onSignOut={async () => {
+          try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
+          await signOut();
+          navigate({ to: "/login" });
+        }}
+      >
+        <AdminShell user={user} signOut={signOut} navigate={navigate} />
+      </AdminMfaGate>
+    </AdminLangProvider>
   );
 }
 
@@ -272,6 +275,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   const [search, setSearch] = useState("");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { open: globalOpen, setOpen: setGlobalOpen } = useAdminGlobalSearch();
+  const { lang, toggle, t } = useAdminLang();
 
   // Close mobile drawer on route change
   useEffect(() => { setMobileOpen(false); }, [pathname]);
@@ -281,7 +285,11 @@ function AdminShell({ user, signOut, navigate }: any) {
     const q = search.toLowerCase();
     return ADMIN_MENU.map((g) => ({
       ...g,
-      items: g.items.filter((i) => i.label.toLowerCase().includes(q)),
+      items: g.items.filter(
+        (i) =>
+          i.label.toLowerCase().includes(q) ||
+          (i.labelBn ?? "").toLowerCase().includes(q),
+      ),
     })).filter((g) => g.items.length > 0);
   }, [search]);
 
@@ -372,7 +380,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               className="w-full h-9 flex items-center gap-2 px-3 rounded-lg bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-white transition text-left"
             >
               <Search className="w-3.5 h-3.5 text-slate-400" />
-              <span className="flex-1 text-xs text-slate-500 truncate">Search anything…</span>
+              <span className="flex-1 text-xs text-slate-500 truncate">{t("Search anything…", "যেকোনো কিছু খুঁজুন…")}</span>
               <kbd className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white border border-slate-200 text-slate-500">⌘K</kbd>
             </button>
           </div>
@@ -393,7 +401,7 @@ function AdminShell({ user, signOut, navigate }: any) {
             </div>
             {!collapsed && (
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold truncate text-slate-900">Admin</div>
+                <div className="text-sm font-semibold truncate text-slate-900">{t("Admin", "অ্যাডমিন")}</div>
                 <div className="text-[11px] truncate text-slate-500">{user?.email}</div>
               </div>
             )}
@@ -403,7 +411,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               onClick={async () => { await signOut(); navigate({ to: "/login" }); }}
               className="w-full h-9 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700"
             >
-              <LogOut className="w-3.5 h-3.5" /> Logout
+              <LogOut className="w-3.5 h-3.5" /> {t("Logout", "লগআউট")}
             </button>
           )}
         </div>
@@ -425,22 +433,36 @@ function AdminShell({ user, signOut, navigate }: any) {
             <div className="hidden md:flex items-center gap-2 text-sm text-slate-600">
               <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-slate-100 text-slate-700">
                 {currentPage?.group.icon ?? ADMIN_MENU[0].icon}
-                <span className="font-medium">{currentPage?.group.title ?? "Product Management"}</span>
+                <span className="font-medium">
+                  {currentPage
+                    ? t(currentPage.group.title, currentPage.group.titleBn)
+                    : t(ADMIN_MENU[0].title, ADMIN_MENU[0].titleBn)}
+                </span>
               </span>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
               <span className="font-semibold text-slate-900">
-                {currentPage?.item.label ?? "Dashboard"}
+                {currentPage
+                  ? t(currentPage.item.label, currentPage.item.labelBn)
+                  : t("Dashboard", "ড্যাশবোর্ড")}
               </span>
             </div>
 
             <div className="md:hidden flex-1 min-w-0 font-semibold text-sm truncate text-slate-900">
-              {currentPage?.item.label ?? "Dashboard"}
+              {currentPage
+                ? t(currentPage.item.label, currentPage.item.labelBn)
+                : t("Dashboard", "ড্যাশবোর্ড")}
             </div>
 
             <div className="hidden md:block flex-1" />
 
-            <button className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white">
-              <Globe className="w-3.5 h-3.5" /> বাং
+            <button
+              type="button"
+              onClick={toggle}
+              aria-label={t("Switch to Bangla", "ইংরেজিতে পরিবর্তন")}
+              title={lang === "en" ? "বাংলায় দেখুন" : "Show in English"}
+              className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-indigo-300 bg-white transition"
+            >
+              <Globe className="w-3.5 h-3.5" /> {lang === "en" ? "বাং" : "EN"}
             </button>
             <button
               type="button"
@@ -448,11 +470,11 @@ function AdminShell({ user, signOut, navigate }: any) {
               className="hidden xl:flex items-center gap-2 h-9 w-64 px-3 rounded-lg bg-white border border-slate-200 hover:border-indigo-300 transition text-left"
             >
               <Search className="w-3.5 h-3.5 text-slate-400" />
-              <span className="flex-1 text-xs text-slate-500 truncate">Search…</span>
+              <span className="flex-1 text-xs text-slate-500 truncate">{t("Search…", "খুঁজুন…")}</span>
               <kbd className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-50 border border-slate-200 text-slate-500">⌘K</kbd>
             </button>
             <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
-              <ExternalLink className="w-3.5 h-3.5" /> View store
+              <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
             </Link>
           </div>
         </header>
@@ -476,6 +498,7 @@ function AdminShell({ user, signOut, navigate }: any) {
 
 function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collapsed: boolean; dark: boolean; pathname: string }) {
   const [open, setOpen] = useState<boolean>(true);
+  const { t } = useAdminLang();
 
   if (collapsed) {
     // collapsed: just stack icons
@@ -496,7 +519,7 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
       >
         <span className="inline-flex items-center gap-2">
           <span className="text-slate-500">{group.icon}</span>
-          {group.title}
+          {t(group.title, group.titleBn)}
         </span>
         <ChevronDown className={`w-3.5 h-3.5 transition-transform text-slate-400 ${open ? "" : "-rotate-90"}`} />
       </button>
@@ -512,11 +535,13 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
 }
 
 function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenuItem; collapsed?: boolean; dark: boolean; active: boolean }) {
+  const { t } = useAdminLang();
+  const label = t(item.label, item.labelBn);
   return (
     <Link
       to={item.to}
       activeOptions={{ exact: item.exact }}
-      title={collapsed ? item.label : undefined}
+      title={collapsed ? label : undefined}
       className={[
         "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all relative",
         collapsed ? "justify-center" : "",
@@ -534,7 +559,7 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
       >
         {item.icon}
       </span>
-      {!collapsed && <span className="font-semibold truncate flex-1 text-[14px]">{item.label}</span>}
+      {!collapsed && <span className="font-semibold truncate flex-1 text-[14px]">{label}</span>}
       {!collapsed && active && (
         <span className="w-1.5 h-1.5 rounded-full bg-slate-700 shrink-0" aria-hidden />
       )}
