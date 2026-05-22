@@ -408,6 +408,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
  const [saving, setSaving] = useState(false);
  const [errors, setErrors] = useState<{ [k: string]: string }>({});
  const [touched, setTouched] = useState<{ [k: string]: boolean }>({});
+ const { t } = useAdminLang();
 
  useEffect(() => {
  (async () => {
@@ -436,7 +437,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
  if (Object.keys(next).length) {
  setErrors(next);
  setTouched(Object.fromEntries(fields.map((f) => [f.name, true])));
- toast.error("Please fix the highlighted fields");
+ toast.error(t("Please fix the highlighted fields", "চিহ্নিত ফিল্ডগুলো ঠিক করুন"));
  return;
  }
  setSaving(true);
@@ -447,7 +448,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
  setSaving(false);
  if (error) return toast.error(error.message);
  if (out) setRecordId(out.id);
- toast.success("Saved");
+ toast.success(t("Saved", "সংরক্ষিত হয়েছে"));
  };
 
  if (loading) return null;
@@ -468,9 +469,9 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
  ))}
  </div>
  <div className="pt-4 border-t border-slate-100 flex justify-end">
- <button onClick={save} disabled={saving} className="h-10 px-5 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 text-white text-sm font-semibold shadow inline-flex items-center gap-1.5 disabled:opacity-60">
+ <button onClick={save} disabled={saving} className="h-10 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow inline-flex items-center gap-1.5 disabled:opacity-60 transition">
  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
- Save settings
+ {t("Save settings", "সেটিংস সংরক্ষণ")}
  </button>
  </div>
  </div>
