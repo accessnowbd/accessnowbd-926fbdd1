@@ -46,6 +46,7 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
+import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminBulkUpdateRouteImport } from './routes/admin.bulk-update'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
 import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
@@ -237,6 +238,11 @@ const AdminDescriptionPreviewRoute = AdminDescriptionPreviewRouteImport.update({
   path: '/description-preview',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCouponsRoute = AdminCouponsRouteImport.update({
+  id: '/coupons',
+  path: '/coupons',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBulkUpdateRoute = AdminBulkUpdateRouteImport.update({
   id: '/bulk-update',
   path: '/bulk-update',
@@ -287,6 +293,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
+  '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -329,6 +336,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
+  '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -373,6 +381,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
+  '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -418,6 +427,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/$page'
     | '/admin/bulk-update'
+    | '/admin/coupons'
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/orders'
@@ -460,6 +470,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/$page'
     | '/admin/bulk-update'
+    | '/admin/coupons'
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/orders'
@@ -503,6 +514,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/$page'
     | '/admin/bulk-update'
+    | '/admin/coupons'
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/orders'
@@ -811,6 +823,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDescriptionPreviewRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/coupons': {
+      id: '/admin/coupons'
+      path: '/coupons'
+      fullPath: '/admin/coupons'
+      preLoaderRoute: typeof AdminCouponsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/bulk-update': {
       id: '/admin/bulk-update'
       path: '/bulk-update'
@@ -845,6 +864,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminPageRoute: typeof AdminPageRoute
   AdminBulkUpdateRoute: typeof AdminBulkUpdateRoute
+  AdminCouponsRoute: typeof AdminCouponsRoute
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
@@ -859,6 +879,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminPageRoute: AdminPageRoute,
   AdminBulkUpdateRoute: AdminBulkUpdateRoute,
+  AdminCouponsRoute: AdminCouponsRoute,
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminOrdersRoute: AdminOrdersRoute,
