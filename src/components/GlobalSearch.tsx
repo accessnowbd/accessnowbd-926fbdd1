@@ -498,29 +498,31 @@ export function GlobalSearch({
                 </section>
               )}
 
-              {/* জনপ্রিয় সার্চ */}
-              <section>
-                <div className="flex items-center gap-2 mb-3 px-1">
-                  <TrendingUp className="w-4 h-4 text-indigo-500" />
-                  <h3 className="text-sm font-semibold text-slate-500">
-                    জনপ্রিয় সার্চ
-                  </h3>
-                </div>
-                <div className="space-y-1">
-                  {["Windows 11", "Office 365", "Netflix", "Adobe", "Antivirus", "VPN", "Spotify", "Canva Pro"].map((t) => (
-                    <button
-                      key={t}
-                      onClick={() => setQ(t)}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition text-left"
-                    >
-                      <TrendingUp className="w-4 h-4 text-indigo-400 shrink-0" />
-                      <span className="flex-1 text-sm font-semibold text-slate-800 truncate">
-                        {t}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </section>
+              {/* জনপ্রিয় সার্চ — real trending products */}
+              {products.length > 0 && (
+                <section>
+                  <div className="flex items-center gap-2 mb-3 px-1">
+                    <TrendingUp className="w-4 h-4 text-indigo-500" />
+                    <h3 className="text-sm font-semibold text-slate-500">
+                      জনপ্রিয় সার্চ
+                    </h3>
+                  </div>
+                  <div className="space-y-1">
+                    {products.slice(0, 8).map((p) => (
+                      <button
+                        key={`pop-${p.slug}`}
+                        onClick={() => setQ(p.name)}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#f8fafc] transition text-left"
+                      >
+                        <TrendingUp className="w-4 h-4 text-indigo-400 shrink-0" />
+                        <span className="flex-1 text-sm font-semibold text-slate-800 truncate">
+                          {p.name}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )}
 
               {/* ট্রেন্ডিং প্রোডাক্ট */}
               {products.length > 0 && (
