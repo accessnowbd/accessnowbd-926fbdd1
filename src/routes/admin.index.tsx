@@ -557,7 +557,7 @@ function AdminDashboard() {
  <div className="flex-1 min-w-0">
  <div className="text-sm font-semibold text-slate-900 truncate">{it.name}</div>
  <div className="mt-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
- <div className="h-full rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200" style={{ width: `${pct}%` }} />
+  <div className="h-full rounded-full bg-slate-500" style={{ width: `${pct}%` }} />
  </div>
  </div>
  <div className="text-right shrink-0">
@@ -851,7 +851,7 @@ function AdminDashboard() {
  <div className="divide-y divide-slate-100">
  {orders.slice(0, 6).map((o) => (
  <Link key={o.id} to="/admin/orders" className="flex items-center gap-3 py-3 px-1 hover:bg-slate-50 rounded-lg transition">
- <div className="w-9 h-9 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 grid place-items-center text-slate-600 font-bold text-xs shrink-0">
+  <div className="w-9 h-9 rounded-full bg-slate-100 ring-1 ring-slate-200 grid place-items-center text-slate-600 font-bold text-xs shrink-0">
  {(o.full_name || o.email || "?").slice(0, 2).toUpperCase()}
  </div>
  <div className="flex-1 min-w-0">
@@ -882,7 +882,7 @@ function AdminDashboard() {
  <Link to="/admin/inventory" className="text-xs font-semibold text-slate-700 hover:text-slate-900">View</Link>
  </div>
 
- <div className="bg-white/70 backdrop-blur-md ring-1 ring-slate-200 border border-slate-200 rounded-xl p-4 mb-4 flex items-center gap-3">
+  <div className="bg-slate-50 ring-1 ring-slate-200 border border-slate-200 rounded-xl p-4 mb-4 flex items-center gap-3">
  <div className="w-10 h-10 rounded-xl bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center shadow"><Box className="w-5 h-5" /></div>
  <div>
  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-700">Out of stock</div>
