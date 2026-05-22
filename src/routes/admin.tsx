@@ -432,9 +432,9 @@ function AdminShell({ user, signOut, navigate }: any) {
             </button>
 
             <div className="hidden md:flex items-center gap-2 text-sm text-slate-600">
-              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-slate-100 text-slate-700">
+              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-violet-50 text-violet-700 ring-1 ring-violet-100">
                 {currentPage?.group.icon ?? ADMIN_MENU[0].icon}
-                <span className="font-medium">
+                <span className="font-semibold">
                   {currentPage
                     ? t(currentPage.group.title, currentPage.group.titleBn)
                     : t(ADMIN_MENU[0].title, ADMIN_MENU[0].titleBn)}
