@@ -483,7 +483,7 @@ function AdminDashboard() {
  </div>
 
  {/* Quick actions */}
- <div className="rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
+  <div className="rounded-2xl p-5 ring-1 ring-slate-200/80 bg-white shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.24)]">
  <div className="flex items-center justify-between mb-4">
  <div className="font-extrabold text-slate-900">Quick actions</div>
  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Shortcuts</span>
@@ -497,7 +497,7 @@ function AdminDashboard() {
  to={a.to}
  className="group flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white/80 ring-1 ring-white/70 hover:ring-slate-200 hover:shadow-md transition-all"
  >
- <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${a.grad} text-white grid place-items-center shadow-md group-hover:scale-110 transition`}>
+  <div className="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 ring-1 ring-slate-200 grid place-items-center shadow-sm group-hover:scale-110 group-hover:bg-white transition">
  <Icon className="w-4 h-4" />
  </div>
  <div className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{a.label}</div>
@@ -510,7 +510,7 @@ function AdminDashboard() {
  {/* Pending highlight + Top products + Stock */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
  {/* Pending action card */}
- <div className="bg-white/70 backdrop-blur-md ring-1 ring-slate-200 border border-slate-200 rounded-2xl p-5 shadow-sm">
+  <div className="bg-white ring-1 ring-slate-200 border border-slate-200 rounded-2xl p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
  <div className="flex items-center gap-3">
  <div className="w-11 h-11 rounded-2xl bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center shadow-md">
  <Clock className="w-5 h-5" />
@@ -601,9 +601,9 @@ function AdminDashboard() {
  const Icon = c.icon;
  return (
  <div key={c.label} className="group relative bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden">
- <div className={`pointer-events-none absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${c.grad} opacity-10 blur-2xl group-hover:opacity-25 transition`} />
+  <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80" />
  <div className="flex items-start justify-between relative">
- <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${c.grad} text-white grid place-items-center shadow-md`}>
+  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 ring-1 ring-slate-200 grid place-items-center shadow-sm">
  <Icon className="w-5 h-5" />
  </div>
  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${c.chip}`}>LIVE</span>
@@ -761,7 +761,7 @@ function AdminDashboard() {
  const Icon = n.icon;
  return (
  <div key={i} className="flex items-start gap-3 p-2 rounded-xl hover:bg-slate-50 transition animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
- <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${n.color} text-white grid place-items-center shrink-0 shadow-sm`}>
+  <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 ring-1 ring-slate-200 grid place-items-center shrink-0 shadow-sm">
  <Icon className="w-4 h-4" />
  </div>
  <div className="flex-1 min-w-0">
@@ -796,14 +796,14 @@ function AdminDashboard() {
  return (
  <div key={d.label}>
  <div className="flex items-center gap-2 mb-1.5">
- <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${d.color} text-white grid place-items-center shadow-sm`}>
+  <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 ring-1 ring-slate-200 grid place-items-center shadow-sm">
  <Icon className="w-3.5 h-3.5" />
  </div>
  <span className="text-sm font-semibold text-slate-700 flex-1">{d.label}</span>
  <span className="text-sm font-extrabold text-slate-900 tabular-nums">{d.val}%</span>
  </div>
  <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
- <div className={`h-full rounded-full bg-gradient-to-r ${d.color} transition-all`} style={{ width: `${d.val}%` }} />
+  <div className="h-full rounded-full bg-slate-500 transition-all" style={{ width: `${d.val}%` }} />
  </div>
  </div>
  );
