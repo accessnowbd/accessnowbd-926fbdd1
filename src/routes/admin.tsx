@@ -559,7 +559,7 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
       >
         {item.icon}
       </span>
-      {!collapsed && <span className="font-semibold truncate flex-1 text-[14px]">{item.label}</span>}
+      {!collapsed && <span className="font-semibold truncate flex-1 text-[14px]">{label}</span>}
       {!collapsed && active && (
         <span className="w-1.5 h-1.5 rounded-full bg-slate-700 shrink-0" aria-hidden />
       )}
