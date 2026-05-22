@@ -322,9 +322,9 @@ function AdminShell({ user, signOut, navigate }: any) {
           "bg-white border-r border-slate-200/80",
           // Desktop: sticky sidebar with collapse width
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
-          collapsed ? "lg:w-[72px]" : "lg:w-[300px]",
+          collapsed ? "lg:w-[72px]" : "lg:w-[280px]",
           // Mobile: fixed drawer that slides in
-          "fixed top-0 left-0 z-50 w-[300px] max-w-[88vw] shadow-xl lg:shadow-none",
+          "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-xl lg:shadow-none",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         ].join(" ")}
       >
@@ -388,7 +388,7 @@ function AdminShell({ user, signOut, navigate }: any) {
         )}
 
         {/* Menu */}
-        <nav className="flex-1 overflow-y-auto px-3 pb-4 admin-scroll">
+        <nav className="flex-1 overflow-y-auto px-2 pb-4 admin-scroll">
           {filteredMenu.map((group) => (
             <SidebarGroup key={group.id} group={group} collapsed={collapsed} dark={dark} pathname={pathname} />
           ))}
@@ -536,19 +536,19 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
   }
 
   return (
-    <div className="mt-3 admin-sidebar-card overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-[0_1px_4px_rgba(15,23,42,0.04)]">
+    <div className="mt-3">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-2 rounded-t-xl border-b border-slate-100 text-[9px] font-extrabold uppercase text-slate-900 hover:bg-slate-50"
+        className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-50"
       >
-        <span className="inline-flex items-center gap-1.5 min-w-0 truncate">
-          <span className="text-slate-500 shrink-0 [&_svg]:w-3 [&_svg]:h-3">{group.icon}</span>
+        <span className="inline-flex items-center gap-2">
+          <span className="text-slate-500">{group.icon}</span>
           {t(group.title, group.titleBn)}
         </span>
-        <ChevronDown className={`w-3 h-3 transition-transform text-slate-400 ${open ? "" : "-rotate-90"}`} />
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform text-slate-400 ${open ? "" : "-rotate-90"}`} />
       </button>
       {open && (
-        <div className="space-y-0.5 px-2 py-2">
+        <div className="space-y-1 mt-1">
           {group.items.map((item: AdminMenuItem) => (
             <SidebarItem key={item.to} item={item} dark={dark} active={pathname === item.to} />
           ))}
@@ -567,30 +567,30 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
       activeOptions={{ exact: item.exact }}
       title={collapsed ? label : undefined}
       className={[
-        "group flex items-center gap-1.5 rounded-md px-0.5 py-0.5 text-[8px] transition-all duration-150 relative",
+        "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all duration-200 relative hover:-translate-y-0.5",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-slate-100 text-slate-950 ring-1 ring-slate-200"
-          : "text-slate-700 hover:bg-slate-50",
+          ? "bg-slate-100 text-slate-950 ring-1 ring-slate-200 shadow-[0_10px_24px_-16px_rgba(15,23,42,0.18)]"
+          : "text-slate-700 hover:bg-slate-50 hover:shadow-sm",
       ].join(" ")}
     >
       <span
         className={[
-          "admin-menu-icon shrink-0 w-[11px] h-[11px] rounded-full grid place-items-center text-white shadow-sm transition-all duration-150 [&_svg]:w-[7px] [&_svg]:h-[7px]",
+          "admin-menu-icon shrink-0 w-9 h-9 rounded-full grid place-items-center text-white shadow-sm transition-all duration-200",
           "bg-gradient-to-br",
           item.grad,
-          active ? "ring-1 ring-white shadow-[0_4px_10px_-6px_rgba(15,23,42,0.35)]" : "ring-1 ring-white/60 group-hover:scale-[1.03]",
+          active ? "ring-2 ring-white shadow-[0_8px_20px_-8px_rgba(15,23,42,0.35)]" : "ring-1 ring-white/60 group-hover:scale-[1.04]",
         ].join(" ")}
       >
         {item.icon}
       </span>
-      {!collapsed && <span className="font-semibold truncate flex-1 leading-tight">{label}</span>}
+      {!collapsed && <span className="font-semibold truncate flex-1 text-[14px]">{label}</span>}
       {!collapsed && active && (
-        <span className="w-1 h-1 rounded-full bg-slate-900 shrink-0" aria-hidden />
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" aria-hidden />
       )}
       {!collapsed && !active && (
         <Pin
-          className="w-2 h-2 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+          className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
           aria-hidden
         />
       )}
