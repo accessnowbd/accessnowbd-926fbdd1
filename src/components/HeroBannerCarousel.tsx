@@ -254,7 +254,7 @@ export function HeroBannerCarousel() {
           className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[28px] border border-white/20 transition-colors duration-500"
           style={{
             background,
-            minHeight: 430,
+            minHeight: Math.max(240, Math.min(900, Number(current.data.min_height) || 430)),
             boxShadow: `0 30px 80px -30px ${hexAlpha(accent, 0.45)}, 0 8px 32px -8px ${hexAlpha(glow, 0.25)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.18)}, inset 0 0 0 1px ${hexAlpha("#ffffff", 0.05)}`,
           }}
         >
