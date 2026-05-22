@@ -317,8 +317,8 @@ function AdminShell({ user, signOut, navigate }: any) {
         className={[
           "shrink-0 transition-transform duration-200 flex flex-col h-screen",
           "bg-white border-r border-slate-200/80",
-          // Desktop: permanently locked/fixed sidebar
-          "lg:fixed lg:top-0 lg:left-0 lg:translate-x-0 lg:z-30",
+          // Desktop: sticky locked sidebar
+          "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
           collapsed ? "lg:w-[72px]" : "lg:w-[280px]",
           // Mobile: fixed drawer that slides in
           "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-xl lg:shadow-none",
@@ -429,7 +429,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       </aside>
 
       {/* MAIN */}
-      <div className={`flex-1 min-w-0 flex flex-col ${collapsed ? "lg:ml-[72px]" : "lg:ml-[280px]"}`}>
+      <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar */}
         <header className="h-16 sticky top-0 z-20 bg-[#fafafa]/90 backdrop-blur-xl border-b border-slate-200/80">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
