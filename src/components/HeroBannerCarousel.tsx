@@ -98,18 +98,6 @@ const FALLBACK: BannerRow[] = [
     },
   },
   {
-    id: "fallback-spotify", is_active: true, sort_order: 1,
-    data: {
-      color_preset: "spotify", bg_style: "aurora",
-      category: "MUSIC · DIGITAL",
-      title: "Spotify Premium Family",
-      subtitle: "অ্যাড-ফ্রি মিউজিক ৬ জন ব্যবহারকারীর জন্য — মাত্র ৳299",
-      cta: "এখনই কিনুন", link: "/products",
-      secondary_cta: "Details", secondary_link: "/products",
-      delivery_text: "Instant", support_text: "24/7", rating_text: "4.9 ★",
-    },
-  },
-  {
     id: "fallback-eid", is_active: true, sort_order: 2,
     data: {
       color_preset: "eid", bg_style: "nebula", overlay_intensity: "high",
@@ -121,18 +109,7 @@ const FALLBACK: BannerRow[] = [
       delivery_text: "Instant", support_text: "24/7", rating_text: "4.9 ★",
     },
   },
-  {
-    id: "fallback-canva", is_active: true, sort_order: 3,
-    data: {
-      color_preset: "canva", bg_style: "mesh",
-      category: "DESIGN · DIGITAL",
-      title: "Canva Pro Subscription",
-      subtitle: "প্রিমিয়াম ডিজাইন টুলস — মাত্র ৳450 থেকে",
-      cta: "এখনই কিনুন", link: "/products",
-      secondary_cta: "Details", secondary_link: "/products",
-      delivery_text: "Instant", support_text: "24/7", rating_text: "4.9 ★",
-    },
-  },
+
 ];
 
 export function HeroBannerCarousel() {
