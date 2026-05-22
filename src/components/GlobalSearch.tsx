@@ -280,7 +280,7 @@ export function GlobalSearch({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="p-0 gap-0 max-w-[720px] border border-white/40 bg-white/70 backdrop-blur-2xl overflow-hidden rounded-3xl shadow-[0_32px_64px_-16px_rgba(15,23,42,0.25)] text-slate-800"
+        className="p-0 gap-0 max-w-[760px] border border-slate-200 bg-white overflow-hidden rounded-2xl shadow-[0_32px_64px_-16px_rgba(15,23,42,0.25)] text-slate-800"
       >
         <DialogTitle className="sr-only">Search</DialogTitle>
 
@@ -445,14 +445,14 @@ export function GlobalSearch({
             </>
           ) : (
             <>
-              {/* Recent searches */}
+              {/* সাম্প্রতিক সার্চ */}
               {recent.length > 0 && (
                 <section>
-                  <div className="flex items-center justify-between mb-4 px-1">
+                  <div className="flex items-center justify-between mb-3 px-1">
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4 text-slate-400" />
-                      <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
-                        Recent / সাম্প্রতিক
+                      <h3 className="text-sm font-semibold text-slate-500">
+                        সাম্প্রতিক সার্চ
                       </h3>
                     </div>
                     <button
@@ -460,96 +460,136 @@ export function GlobalSearch({
                         localStorage.removeItem(RECENT_KEY);
                         setRecent([]);
                       }}
-                      className="text-[10px] font-bold text-slate-400 hover:text-slate-700 uppercase tracking-wider"
+                      className="text-sm font-medium text-indigo-500 hover:text-indigo-700"
                     >
-                      Clear
+                      সব মুছুন
                     </button>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="space-y-1">
                     {recent.map((r) => (
-                      <button
+                      <div
                         key={r}
+                        className="group flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition cursor-pointer"
                         onClick={() => setQ(r)}
-                        className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium text-slate-600 bg-slate-500/10 border border-slate-500/20 hover:bg-slate-500/20 transition-colors"
                       >
-                        <Search className="w-3 h-3" />
-                        {r}
-                      </button>
+                        <Clock className="w-4 h-4 text-slate-400 shrink-0" />
+                        <span className="flex-1 text-sm font-semibold text-slate-800 truncate">
+                          {r}
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const next = recent.filter((x) => x !== r);
+                            setRecent(next);
+                            try {
+                              localStorage.setItem(RECENT_KEY, JSON.stringify(next));
+                            } catch {
+                              /* ignore */
+                            }
+                          }}
+                          className="grid place-items-center w-6 h-6 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/70 transition"
+                          aria-label="Remove"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     ))}
                   </div>
                 </section>
               )}
 
-              {/* Trending */}
+              {/* জনপ্রিয় সার্চ */}
               <section>
-                <div className="flex items-center gap-2 mb-4 px-1">
+                <div className="flex items-center gap-2 mb-3 px-1">
                   <TrendingUp className="w-4 h-4 text-indigo-500" />
-                  <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
-                    Trending / ট্রেন্ডিং
+                  <h3 className="text-sm font-semibold text-slate-500">
+                    জনপ্রিয় সার্চ
                   </h3>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {TRENDING.map((t, i) => {
-                    const palettes = [
-                      "bg-indigo-500/10 border-indigo-500/20 text-indigo-600 hover:bg-indigo-500/20",
-                      "bg-violet-500/10 border-violet-500/20 text-violet-600 hover:bg-violet-500/20",
-                      "bg-cyan-500/10 border-cyan-500/20 text-cyan-600 hover:bg-cyan-500/20",
-                      "bg-fuchsia-500/10 border-fuchsia-500/20 text-fuchsia-600 hover:bg-fuchsia-500/20",
-                      "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/20",
-                      "bg-sky-500/10 border-sky-500/20 text-sky-600 hover:bg-sky-500/20",
-                    ];
-                    return (
-                      <button
-                        key={t}
-                        onClick={() => setQ(t)}
-                        className={`px-4 py-1.5 rounded-full border text-sm font-medium transition-colors cursor-pointer ${palettes[i % palettes.length]}`}
-                      >
+                <div className="space-y-1">
+                  {["Windows 11", "Office 365", "Netflix", "Adobe", "Antivirus", "VPN", "Spotify", "Canva Pro"].map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setQ(t)}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition text-left"
+                    >
+                      <TrendingUp className="w-4 h-4 text-indigo-400 shrink-0" />
+                      <span className="flex-1 text-sm font-semibold text-slate-800 truncate">
                         {t}
-                      </button>
-                    );
-                  })}
+                      </span>
+                    </button>
+                  ))}
                 </div>
               </section>
 
-              {/* Quick links */}
-              <section>
-                <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-1">
-                  Quick Links / দ্রুত লিঙ্ক
-                </h3>
-                <div className="space-y-2">
-                  {QUICK_LINKS.map((l) => {
-                    const Icon = l.icon;
-                    return (
-                      <Link
-                        key={l.to}
-                        to={l.to}
-                        onClick={() => onOpenChange(false)}
-                        className="group flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 hover:bg-white/80 hover:shadow-sm cursor-pointer border border-transparent hover:border-white"
-                      >
-                        <div
-                          className={`w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br ${l.gradient} text-white shadow-lg ${l.shadow}`}
-                        >
-                          <Icon className="w-5 h-5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold text-slate-700 truncate">
-                              {l.label}
-                            </span>
-                            <span className="text-sm text-slate-400 font-medium truncate">
-                              / {l.bn}
-                            </span>
-                          </div>
-                          <p className="text-sm text-slate-500 truncate">{l.hint}</p>
-                        </div>
-                        <ChevronRight
-                          className={`w-5 h-5 text-slate-300 transition-colors ${l.hoverText}`}
-                        />
-                      </Link>
-                    );
-                  })}
-                </div>
-              </section>
+              {/* ট্রেন্ডিং প্রোডাক্ট */}
+              {products.length > 0 && (
+                <section>
+                  <div className="flex items-center gap-2 mb-3 px-1">
+                    <Sparkles className="w-4 h-4 text-fuchsia-500" />
+                    <h3 className="text-sm font-semibold text-slate-500">
+                      ট্রেন্ডিং প্রোডাক্ট
+                    </h3>
+                  </div>
+                  <div className="space-y-2">
+                    {products
+                      .slice(0, 3)
+                      .map((p) => {
+                        const plan = p.plans?.[0];
+                        return (
+                          <Link
+                            key={p.slug}
+                            to="/product/$slug"
+                            params={{ slug: p.slug }}
+                            onClick={() => onOpenChange(false)}
+                            className="group flex items-center gap-3 p-3 rounded-2xl border border-slate-100 hover:border-slate-200 hover:bg-slate-50 transition"
+                          >
+                            <div
+                              className={`w-12 h-12 grid place-items-center rounded-xl text-xl bg-gradient-to-br ${p.gradient} text-white shadow-md shrink-0 overflow-hidden`}
+                            >
+                              {p.imageUrl ? (
+                                <img
+                                  src={p.imageUrl}
+                                  alt={p.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <span>{p.emoji}</span>
+                              )}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2 mb-0.5">
+                                <span className="text-sm font-bold text-slate-900 truncate">
+                                  {p.name}
+                                </span>
+                                {p.badge && (
+                                  <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded">
+                                    {p.badge}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-xs text-slate-500 truncate">
+                                {p.tagline || p.category}
+                              </p>
+                            </div>
+                            {plan?.price && (
+                              <div className="text-right shrink-0">
+                                <div className="text-sm font-bold text-indigo-600">
+                                  ৳{plan.price}
+                                </div>
+                                {plan.original && (
+                                  <div className="text-[11px] text-slate-400 line-through">
+                                    ৳{plan.original}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </Link>
+                        );
+                      })}
+                  </div>
+                </section>
+              )}
             </>
           )}
         </div>
@@ -564,25 +604,25 @@ export function GlobalSearch({
               <kbd className="flex items-center justify-center w-5 h-5 rounded bg-white border border-slate-200 text-slate-500 shadow-sm">
                 ↓
               </kbd>
-              <span className="ml-1">navigate</span>
+              <span className="ml-1">নেভিগেট</span>
             </div>
             <div className="flex items-center gap-1.5">
               <kbd className="flex items-center justify-center px-1.5 h-5 rounded bg-white border border-slate-200 text-slate-500 shadow-sm uppercase text-[10px]">
                 Enter
               </kbd>
-              <span className="ml-1">select</span>
+              <span className="ml-1">সিলেক্ট</span>
             </div>
             <div className="hidden sm:flex items-center gap-1.5">
               <kbd className="flex items-center justify-center px-1.5 h-5 rounded bg-white border border-slate-200 text-slate-500 shadow-sm uppercase text-[10px]">
                 Esc
               </kbd>
-              <span className="ml-1">close</span>
+              <span className="ml-1">বন্ধ</span>
             </div>
           </div>
-          <div className="flex items-center gap-1">
-            <span>Powered by</span>
-            <span className="bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent font-bold tracking-tight">
-              AccessNow BD
+          <div className="flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+            <span className="font-semibold bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">
+              Google-style Search
             </span>
           </div>
         </div>
