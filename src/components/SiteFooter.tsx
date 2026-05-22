@@ -205,8 +205,8 @@ export function SiteFooter() {
                     href={href}
                     className="group grid min-h-11 grid-cols-[2rem_1fr] items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2 shadow-sm transition-colors duration-200 hover:border-indigo-300 hover:bg-indigo-50/40"
                   >
-                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl text-white shadow-md" style={{ background: "linear-gradient(135deg,#4F46E5,#7C3AED)" }}>
-                      <Icon className="h-4 w-4" />
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl shadow-md" style={{ background: "linear-gradient(135deg,#4F46E5,#7C3AED)" }}>
+                      <Icon className="h-4 w-4" color="#ffffff" strokeWidth={2.25} />
                     </span>
                     <span className="min-w-0 truncate text-[13px] font-semibold leading-5 text-slate-800 group-hover:text-indigo-700">
                       {label}
