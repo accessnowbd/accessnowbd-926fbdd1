@@ -8,9 +8,9 @@
    restoring neutral slate-based surfaces so Tailwind utilities behave as
    their default tokens describe.
 
-   Rule of thumb: if you see violet / lavender / aurora leaking into the
-   admin panel, add the offending selector to this file — do NOT patch it
-   inside src/styles.css.
+   Rule of thumb: purple / violet / lavender / aurora must not appear in the
+   admin panel. Add any leaked selector here — do NOT patch it inside
+   src/styles.css.
    ========================================================================= */
 
 /* -------------------------------------------------------------------------
@@ -116,10 +116,25 @@ html.theme-white .admin-shell [class*="to-black"] {
   --tw-gradient-to:   #0f172a !important;
 }
 
-/* NOTE: violet / purple / fuchsia / indigo / pink gradients & accents are
-   intentionally allowed inside .admin-shell (sidebar icon circles, group
-   labels, active state, breadcrumb pill). Do NOT neutralize them — the
-   admin design uses them as the primary accent system. */
+html.theme-white .admin-shell [class*="from-violet-"],
+html.theme-white .admin-shell [class*="via-violet-"],
+html.theme-white .admin-shell [class*="to-violet-"],
+html.theme-white .admin-shell [class*="from-purple-"],
+html.theme-white .admin-shell [class*="via-purple-"],
+html.theme-white .admin-shell [class*="to-purple-"],
+html.theme-white .admin-shell [class*="from-fuchsia-"],
+html.theme-white .admin-shell [class*="via-fuchsia-"],
+html.theme-white .admin-shell [class*="to-fuchsia-"],
+html.theme-white .admin-shell [class*="from-indigo-"],
+html.theme-white .admin-shell [class*="via-indigo-"],
+html.theme-white .admin-shell [class*="to-indigo-"],
+html.theme-white .admin-shell [class*="from-pink-"],
+html.theme-white .admin-shell [class*="via-pink-"],
+html.theme-white .admin-shell [class*="to-pink-"] {
+  --tw-gradient-from: #0f172a !important;
+  --tw-gradient-via:  #334155 !important;
+  --tw-gradient-to:   #0f172a !important;
+}
 
 /* -------------------------------------------------------------------------
    4) Borders, rings, dividers — neutralise violet tint only on white-ish
