@@ -89,8 +89,14 @@ const COLUMNS: {
 ];
 
 const SOCIALS = [
+  { Icon: Facebook, href: "https://facebook.com/accessnowbd", label: "Facebook" },
+  { Icon: MessageCircle, href: "https://m.me/accessnowbd", label: "Messenger" },
+  { Icon: Instagram, href: "https://instagram.com/accessnowbd", label: "Instagram" },
+  { Icon: Youtube, href: "https://youtube.com/@accessnowbd", label: "YouTube" },
+  { Icon: Send, href: "https://t.me/accessnowbd", label: "Telegram" },
   { Icon: MessageCircle, href: "https://wa.me/8801580607614", label: "WhatsApp" },
 ];
+
 
 
 const PAYMENTS = ["BKash", "Nagad", "Rocket", "Visa", "Mastercard"];
