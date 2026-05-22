@@ -98,6 +98,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/tickets", label: "Tickets", labelBn: "টিকেট", icon: ic(LifeBuoy), grad: "from-emerald-500 to-green-600" },
       { to: "/admin/help-center", label: "Help Center", labelBn: "হেল্প সেন্টার", icon: ic(BookOpen), grad: "from-emerald-500 to-teal-600" },
       { to: "/admin/support-channels", label: "Support Channels", labelBn: "সাপোর্ট চ্যানেল", icon: ic(Headphones), grad: "from-emerald-500 to-green-600" },
+      { to: "/admin/support-widget", label: "Support Widget", labelBn: "সাপোর্ট উইজেট", icon: ic(MessageCircle), grad: "from-violet-500 to-fuchsia-600" },
     ],
   },
   {
