@@ -241,7 +241,7 @@ function AdminDashboard() {
  { label: "This month", value: fmtBDT(stats.monthRev), sub: `${stats.monthCount} orders`, Icon: BarChart3 },
  { label: "Customers", value: counts.users.toLocaleString("en-IN"), sub: `${counts.products} products`, Icon: Users },
  ].map(({ label, value, sub, Icon }) => (
- <div key={label} className="rounded-3xl bg-white ring-1 ring-slate-200/70 p-5 shadow-[0_8px_24px_-18px_rgba(100,116,139,0.18)]">
+  <div key={label} className="group rounded-3xl bg-white ring-1 ring-slate-200/70 p-5 shadow-[0_8px_24px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.28)]">
  <div className="flex items-start justify-between gap-3">
  <div className="text-sm text-slate-500 font-medium">{label}</div>
  <span className="w-9 h-9 rounded-full bg-slate-100 text-slate-500 grid place-items-center">
@@ -305,7 +305,7 @@ function AdminDashboard() {
 
  {/* Sales Report + Traffic Sources */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
- <div className="lg:col-span-2 rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
+  <div className="lg:col-span-2 rounded-2xl p-5 ring-1 ring-slate-200/80 bg-white shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.24)]">
  <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
  <div className="font-extrabold text-slate-900">Sales Report</div>
  <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100/70">
@@ -313,7 +313,7 @@ function AdminDashboard() {
  <button key={t} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg ${i===0?"bg-white shadow-sm text-slate-900":"text-slate-500 hover:text-slate-700"}`}>{t}</button>
  ))}
  </div>
- <button className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-white ring-1 ring-slate-200 text-slate-700 hover:bg-slate-50">
+  <button className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-slate-900 ring-1 ring-slate-900 text-white hover:bg-slate-800 transition-all duration-200 hover:-translate-y-0.5">
  <FileText className="w-3.5 h-3.5" /> EXPORT PDF
  </button>
  </div>
@@ -343,7 +343,7 @@ function AdminDashboard() {
  })()}
  </div>
 
- <div className="rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
+  <div className="rounded-2xl p-5 ring-1 ring-slate-200/80 bg-white shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.24)]">
  <div className="flex items-center justify-between mb-5">
  <div className="font-extrabold text-slate-900">Traffic Sources</div>
  <button className="text-[11px] font-bold text-slate-500 inline-flex items-center gap-1">LAST 7 DAYS</button>
@@ -367,7 +367,7 @@ function AdminDashboard() {
  {/* Orders Breakdown (donut) + Recent Customers — matches reference */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
  {/* Donut */}
- <div className="rounded-3xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
+  <div className="rounded-3xl p-5 ring-1 ring-slate-200/80 bg-white shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.24)]">
  <div className="flex items-center justify-between mb-4">
  <div className="font-extrabold text-slate-900">Orders Breakdown</div>
  <button className="text-slate-500 hover:text-slate-700">⋮</button>
@@ -423,7 +423,7 @@ function AdminDashboard() {
  </div>
 
  {/* Recent Customers table */}
- <div className="lg:col-span-2 rounded-3xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
+  <div className="lg:col-span-2 rounded-3xl p-5 ring-1 ring-slate-200/80 bg-white shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.24)]">
  <div className="flex items-center justify-between mb-4">
  <div className="font-extrabold text-slate-900">Recent Customers</div>
  <Link to="/admin/orders" className="text-xs font-bold text-slate-600 inline-flex items-center gap-1 hover:underline">
