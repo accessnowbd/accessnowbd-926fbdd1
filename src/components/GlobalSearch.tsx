@@ -298,7 +298,7 @@ export function GlobalSearch({
               onChange={(e) => setQ(e.target.value)}
               onKeyDown={onKeyDown}
               placeholder="প্রোডাক্ট সার্চ করুন..."
-              className="flex-1 bg-transparent outline-none text-base font-medium text-slate-800 placeholder:text-slate-400"
+              className="flex-1 bg-transparent outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:shadow-none text-base font-medium text-slate-800 placeholder:text-slate-400"
               autoComplete="off"
               spellCheck={false}
             />

@@ -65,7 +65,7 @@ export function SearchBar({
         spellCheck={false}
         className={cn(
           "w-full rounded-full border border-slate-200 bg-white text-slate-800 placeholder:text-slate-400 shadow-sm",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:border-indigo-300",
+          "outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:shadow-sm",
           "transition-colors",
           heights[size],
           padLeft[size],
@@ -129,7 +129,7 @@ export function SearchTrigger({
       aria-label="Open search"
       className={cn(
         "relative w-full rounded-full border border-slate-200 bg-white text-left shadow-sm",
-        "hover:border-indigo-300/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300",
+        "hover:border-indigo-300/70 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0",
         "transition-colors",
         heights[size],
         className,
