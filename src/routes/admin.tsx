@@ -262,7 +262,7 @@ function AdminBlankState() {
   return (
     <div className="min-h-screen grid place-items-center bg-[#fafafa]" role="status" aria-label="Loading admin panel">
       <div className="flex flex-col items-center gap-3 text-slate-500">
-        <div className="w-7 h-7 rounded-full border-2 border-slate-200 border-t-indigo-500 animate-spin" />
+        <div className="w-7 h-7 rounded-full border-2 border-slate-200 border-t-slate-900 animate-spin" />
         <span className="text-xs font-medium tracking-wide">Loading admin…</span>
       </div>
     </div>
@@ -317,7 +317,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* SIDEBAR */}
       <aside
         className={[
-          "shrink-0 transition-transform duration-200 flex flex-col h-screen",
+          "admin-sidebar-premium shrink-0 transition-transform duration-300 flex flex-col h-screen",
           "bg-white border-r border-slate-200/80",
           // Desktop: sticky sidebar with collapse width
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
@@ -377,7 +377,7 @@ function AdminShell({ user, signOut, navigate }: any) {
             <button
               type="button"
               onClick={() => setGlobalOpen(true)}
-              className="w-full h-9 flex items-center gap-2 px-3 rounded-lg bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-white transition text-left"
+              className="w-full h-9 flex items-center gap-2 px-3 rounded-lg bg-slate-50 border border-slate-200 hover:border-slate-400 hover:bg-white hover:shadow-sm transition-all duration-200 text-left"
             >
               <Search className="w-3.5 h-3.5 text-slate-400" />
               <span className="flex-1 text-xs text-slate-500 truncate">{t("Search anything…", "যেকোনো কিছু খুঁজুন…")}</span>
@@ -420,7 +420,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* MAIN */}
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar */}
-        <header className="h-16 sticky top-0 z-20 bg-[#fafafa]/90 backdrop-blur-xl border-b border-slate-200/80">
+        <header className="admin-topbar-premium h-16 sticky top-0 z-20 bg-[#fafafa]/90 backdrop-blur-xl border-b border-slate-200/80">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
             <button
               onClick={() => setMobileOpen(true)}
@@ -460,7 +460,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               onClick={toggle}
               aria-label={t("Switch to Bangla", "ইংরেজিতে পরিবর্তন")}
               title={lang === "en" ? "বাংলায় দেখুন" : "Show in English"}
-              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-indigo-300 bg-white transition shrink-0"
+              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-400 hover:-translate-y-0.5 hover:shadow-sm bg-white transition-all duration-200 shrink-0"
             >
               <Globe className="w-3.5 h-3.5" /> {lang === "en" ? "বাং" : "EN"}
             </button>
@@ -468,14 +468,14 @@ function AdminShell({ user, signOut, navigate }: any) {
               type="button"
               aria-label="Toggle dark mode"
               title="Dark mode"
-              className="inline-flex h-9 w-9 rounded-lg items-center justify-center border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-indigo-300 bg-white transition shrink-0"
+              className="inline-flex h-9 w-9 rounded-lg items-center justify-center border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-400 hover:-translate-y-0.5 hover:shadow-sm bg-white transition-all duration-200 shrink-0"
             >
               <Moon className="w-4 h-4" />
             </button>
             <button
               type="button"
               onClick={() => setGlobalOpen(true)}
-              className="hidden xl:flex items-center gap-2 h-9 w-64 px-3 rounded-lg bg-white border border-slate-200 hover:border-indigo-300 transition text-left"
+              className="hidden xl:flex items-center gap-2 h-9 w-64 px-3 rounded-lg bg-white border border-slate-200 hover:border-slate-400 hover:shadow-sm transition-all duration-200 text-left"
             >
               <Search className="w-3.5 h-3.5 text-slate-400" />
               <span className="flex-1 text-xs text-slate-500 truncate">{t("Search", "খুঁজুন")}</span>
@@ -483,7 +483,7 @@ function AdminShell({ user, signOut, navigate }: any) {
             </button>
             <button
               type="button"
-              className="hidden sm:inline-flex h-9 px-3.5 rounded-lg text-xs font-semibold items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white transition shrink-0"
+              className="hidden sm:inline-flex h-9 px-3.5 rounded-lg text-xs font-semibold items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-12px_rgba(15,23,42,0.55)] shrink-0"
             >
               <Plus className="w-3.5 h-3.5" /> {t("Create", "তৈরি")}
               <ChevronDown className="w-3.5 h-3.5 opacity-70" />
@@ -491,18 +491,18 @@ function AdminShell({ user, signOut, navigate }: any) {
             <button
               type="button"
               aria-label="Notifications"
-              className="relative inline-flex h-9 w-9 rounded-lg items-center justify-center border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white transition shrink-0"
+              className="relative inline-flex h-9 w-9 rounded-lg items-center justify-center border border-slate-200 text-slate-700 hover:bg-slate-50 hover:-translate-y-0.5 hover:shadow-sm bg-white transition-all duration-200 shrink-0"
             >
               <Bell className="w-4 h-4" />
               <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold grid place-items-center ring-2 ring-[#fafafa]">21</span>
             </button>
-            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-slate-900 text-white hover:bg-slate-800">
+            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-slate-900 text-white hover:bg-slate-800 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-12px_rgba(15,23,42,0.55)]">
               <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
             </Link>
           </div>
         </header>
 
-        <div className={`flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden ${dark ? "text-slate-100" : "text-slate-900"}`}>
+        <div data-admin-content className={`flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden ${dark ? "text-slate-100" : "text-slate-900"}`}>
           <div className="mx-auto max-w-[1400px]">
             <Outlet />
           </div>
@@ -566,18 +566,18 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
       activeOptions={{ exact: item.exact }}
       title={collapsed ? label : undefined}
       className={[
-        "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all relative",
+        "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all duration-200 relative hover:-translate-y-0.5",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-slate-900 text-white shadow-sm"
-          : "text-slate-700 hover:bg-slate-50",
+          ? "bg-slate-900 text-white shadow-[0_12px_24px_-16px_rgba(15,23,42,0.8)]"
+          : "text-slate-700 hover:bg-slate-50 hover:shadow-sm",
       ].join(" ")}
     >
       <span
         className={[
-          "shrink-0 w-9 h-9 rounded-full grid place-items-center text-white",
-          "bg-gradient-to-br shadow-sm ring-1 ring-white/40",
-          item.grad,
+          "admin-menu-icon shrink-0 w-9 h-9 rounded-full grid place-items-center",
+          "bg-slate-100 text-slate-700 shadow-sm ring-1 ring-slate-200 transition-all duration-200",
+          active ? "bg-white/10 text-white ring-white/20" : "group-hover:bg-white group-hover:ring-slate-300",
         ].join(" ")}
       >
         {item.icon}

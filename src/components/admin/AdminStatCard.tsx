@@ -1,14 +1,13 @@
 import { TrendingDown, TrendingUp } from "lucide-react";
 
-export type AdminStatTone = "indigo" | "rose" | "emerald" | "amber" | "sky" | "violet";
+export type AdminStatTone = "slate" | "rose" | "emerald" | "amber" | "sky";
 
 const TONES: Record<AdminStatTone, { tint: string; stroke: string; fill: string }> = {
-  indigo:  { tint: "from-indigo-100/80 via-violet-50 to-white",   stroke: "#6366f1", fill: "rgba(99,102,241,0.18)" },
-  rose:    { tint: "from-rose-100/80 via-pink-50 to-white",       stroke: "#f43f5e", fill: "rgba(244,63,94,0.18)" },
+  slate:   { tint: "from-slate-100/90 via-slate-50 to-white",     stroke: "#334155", fill: "rgba(51,65,85,0.16)" },
+  rose:    { tint: "from-rose-100/80 via-red-50 to-white",        stroke: "#f43f5e", fill: "rgba(244,63,94,0.18)" },
   emerald: { tint: "from-emerald-100/80 via-teal-50 to-white",    stroke: "#10b981", fill: "rgba(16,185,129,0.18)" },
   amber:   { tint: "from-amber-100/80 via-orange-50 to-white",    stroke: "#f59e0b", fill: "rgba(245,158,11,0.18)" },
   sky:     { tint: "from-sky-100/80 via-cyan-50 to-white",        stroke: "#0ea5e9", fill: "rgba(14,165,233,0.18)" },
-  violet:  { tint: "from-violet-100/80 via-fuchsia-50 to-white",  stroke: "#8b5cf6", fill: "rgba(139,92,246,0.18)" },
 };
 
 function sparkPath(vals: number[], w = 200, h = 60) {
@@ -42,7 +41,7 @@ export function AdminStatCard({
   value,
   delta,
   deltaLabel = "vs last month",
-  tone = "indigo",
+  tone = "slate",
   series,
   loading,
 }: AdminStatCardProps) {
@@ -54,8 +53,9 @@ export function AdminStatCard({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl p-5 ring-1 ring-white/60 bg-gradient-to-br ${t.tint} shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)]`}
+      className={`group relative overflow-hidden rounded-2xl p-5 ring-1 ring-white/60 bg-gradient-to-br ${t.tint} shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_42px_-18px_rgba(15,23,42,0.28)]`}
     >
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80" />
       <div className="flex items-start justify-between">
         <div className="text-sm font-semibold text-slate-700">{label}</div>
         <button className="text-slate-400 hover:text-slate-700 leading-none">⋮</button>

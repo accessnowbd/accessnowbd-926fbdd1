@@ -80,10 +80,10 @@ function AdminUsers() {
  </div>
 
  <AdminStatGrid>
- <AdminStatCard label="Total Users" value={rows.length.toLocaleString("en-IN")} delta={12} tone="indigo" loading={loading} />
+ <AdminStatCard label="Total Users" value={rows.length.toLocaleString("en-IN")} delta={12} tone="slate" loading={loading} />
  <AdminStatCard label="New This Month" value={newThisMonth.toLocaleString("en-IN")} delta={36} tone="emerald" loading={loading} />
  <AdminStatCard label="New This Week" value={newThisWeek.toLocaleString("en-IN")} delta={8} tone="sky" loading={loading} />
- <AdminStatCard label="Admins" value={adminCount.toLocaleString("en-IN")} tone="violet" loading={loading} />
+ <AdminStatCard label="Admins" value={adminCount.toLocaleString("en-IN")} tone="slate" loading={loading} />
  </AdminStatGrid>
 
  <AdminGlassCard className="overflow-hidden p-0">
