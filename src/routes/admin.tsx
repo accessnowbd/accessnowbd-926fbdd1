@@ -255,7 +255,14 @@ function AdminLayout() {
 }
 
 function AdminBlankState() {
-  return <div className="min-h-screen bg-white" aria-hidden="true" />;
+  return (
+    <div className="min-h-screen grid place-items-center bg-[#fafafa]" role="status" aria-label="Loading admin panel">
+      <div className="flex flex-col items-center gap-3 text-slate-500">
+        <div className="w-7 h-7 rounded-full border-2 border-slate-200 border-t-indigo-500 animate-spin" />
+        <span className="text-xs font-medium tracking-wide">Loading admin…</span>
+      </div>
+    </div>
+  );
 }
 
 function AdminShell({ user, signOut, navigate }: any) {
