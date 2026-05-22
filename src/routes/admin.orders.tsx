@@ -198,7 +198,7 @@ function FilterChip({ label, active, onClick }: { label: string; active: boolean
  return (
  <button
  onClick={onClick}
- className={`px-3 h-8 rounded-full text-xs font-semibold capitalize transition ${active ? "bg-primary text-primary-foreground" : "bg-white border border-border text-muted-foreground hover:text-foreground"}`}
+ className={`px-3 h-8 rounded-full text-xs font-semibold capitalize transition ${active ? "bg-slate-900 text-white" : "bg-white border border-border text-muted-foreground hover:text-foreground"}`}
  >
  {label}
  </button>
@@ -286,7 +286,7 @@ function OrderDetail({ order, onClose, onStatusChange }: { order: Order; onClose
  <button
  key={s}
  onClick={() => onStatusChange(s)}
- className={`px-3 h-8 rounded-full text-xs font-semibold capitalize ${order.status === s ? statusColor(s) + " ring-2 ring-primary" : "bg-secondary text-muted-foreground hover:text-foreground"}`}
+ className={`px-3 h-8 rounded-full text-xs font-semibold capitalize ${order.status === s ? statusColor(s) + " ring-2 ring-slate-300" : "bg-secondary text-muted-foreground hover:text-foreground"}`}
  >
  {s}
  </button>
@@ -300,7 +300,7 @@ function OrderDetail({ order, onClose, onStatusChange }: { order: Order; onClose
  <button
  onClick={downloadReceipt}
  disabled={downloading}
- className="h-10 px-5 rounded-full bg-primary text-primary-foreground text-sm font-semibold inline-flex items-center gap-2 disabled:opacity-60"
+ className="h-10 px-5 rounded-full bg-slate-900 text-white hover:bg-slate-800 text-sm font-semibold inline-flex items-center gap-2 disabled:opacity-60 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-12px_rgba(15,23,42,0.55)]"
  >
  {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
  Download receipt
