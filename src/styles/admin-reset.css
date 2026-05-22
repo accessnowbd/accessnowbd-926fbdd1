@@ -216,6 +216,18 @@ html.theme-white .admin-shell .bg-aurora {
   box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.35) !important;
 }
 
+html.theme-white [data-radix-dialog-content].admin-search-dialog,
+html.theme-white [data-radix-dialog-content].admin-search-dialog * {
+  --tw-ring-color: #cbd5e1 !important;
+  text-shadow: none !important;
+}
+
+html.theme-white [data-radix-dialog-content].admin-search-dialog {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 30px 80px -20px rgba(15, 23, 42, 0.30) !important;
+}
+
 html.theme-white .admin-shell .neon-border,
 html.theme-white .admin-shell .gradient-border-card,
 html.theme-white .admin-shell .gradient-border-soft {
