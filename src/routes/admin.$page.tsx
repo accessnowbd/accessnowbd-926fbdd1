@@ -183,14 +183,18 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  <div className="space-y-4">
  <div className="flex flex-wrap items-center gap-3 justify-between">
  <div className="text-sm text-slate-500">
- {filtering ? `${visibleRows.length} of ${rows.length}` : `${rows.length}`} {rows.length === 1 ? "entry" : "entries"}
- {!filtering && <> · drag <GripVertical className="w-3 h-3 inline" /> to reorder</>}
+ {filtering
+   ? t(`${visibleRows.length} of ${rows.length} ${rows.length === 1 ? "entry" : "entries"}`,
+       `${rows.length} টির মধ্যে ${visibleRows.length} টি এন্ট্রি`)
+   : t(`${rows.length} ${rows.length === 1 ? "entry" : "entries"}`,
+       `${rows.length} টি এন্ট্রি`)}
+ {!filtering && <> · {t("drag", "টেনে")} <GripVertical className="w-3 h-3 inline" /> {t("to reorder", "ক্রম বদলান")}</>}
  </div>
  <button
  onClick={() => { setEditing(null); setShowForm(true); }}
- className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 text-white text-sm font-semibold shadow"
+ className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow transition"
  >
- <Plus className="w-4 h-4" /> Add new
+ <Plus className="w-4 h-4" /> {t("Add new", "নতুন যোগ করুন")}
  </button>
  </div>
 
@@ -199,7 +203,10 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  <SearchBar
  value={query}
  onChange={setQuery}
- placeholder={`Search ${[primary, ...secondary].filter(Boolean).map((f) => f!.label.toLowerCase()).join(", ")}…`}
+ placeholder={t(
+   `Search ${[primary, ...secondary].filter(Boolean).map((f) => f!.label.toLowerCase()).join(", ")}…`,
+   "খুঁজুন…"
+ )}
  size="md"
  className="w-full"
  />
@@ -213,7 +220,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  statusFilter === s ? "bg-slate-900 text-white" : "text-slate-600 hover:text-slate-900"
  }`}
  >
- {s}
+ {t(s, s === "all" ? "সব" : s === "active" ? "সক্রিয়" : "নিষ্ক্রিয়")}
  </button>
  ))}
  </div>
@@ -222,17 +229,19 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
  {loading ? null : visibleRows.length === 0 ? (
  <div className="p-10 text-center text-slate-500">
- {rows.length === 0 ? `No entries yet. Click "Add new" to create the first one.` : "No matches for your search."}
+ {rows.length === 0
+   ? t(`No entries yet. Click "Add new" to create the first one.`, `এখনো কোনো এন্ট্রি নেই। "নতুন যোগ করুন" ক্লিক করে শুরু করুন।`)
+   : t("No matches for your search.", "আপনার অনুসন্ধানের সাথে কিছু মেলেনি।")}
  </div>
  ) : (
  <table className="w-full text-sm">
  <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
  <tr>
  <th className="w-8"></th>
- <th className="text-left px-4 py-3">{primary?.label ?? "Item"}</th>
+ <th className="text-left px-4 py-3">{primary?.label ?? t("Item", "আইটেম")}</th>
  {secondary.map((f) => <th key={f.name} className="text-left px-4 py-3">{f.label}</th>)}
- <th className="text-left px-4 py-3">Status</th>
- <th className="text-right px-4 py-3">Actions</th>
+ <th className="text-left px-4 py-3">{t("Status", "স্ট্যাটাস")}</th>
+ <th className="text-right px-4 py-3">{t("Actions", "অ্যাকশন")}</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-100">
