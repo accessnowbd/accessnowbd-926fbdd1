@@ -466,14 +466,37 @@ function AdminShell({ user, signOut, navigate }: any) {
             </button>
             <button
               type="button"
+              aria-label="Toggle dark mode"
+              title="Dark mode"
+              className="inline-flex h-9 w-9 rounded-lg items-center justify-center border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-indigo-300 bg-white transition shrink-0"
+            >
+              <Moon className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
               onClick={() => setGlobalOpen(true)}
               className="hidden xl:flex items-center gap-2 h-9 w-64 px-3 rounded-lg bg-white border border-slate-200 hover:border-indigo-300 transition text-left"
             >
               <Search className="w-3.5 h-3.5 text-slate-400" />
-              <span className="flex-1 text-xs text-slate-500 truncate">{t("Search…", "খুঁজুন…")}</span>
+              <span className="flex-1 text-xs text-slate-500 truncate">{t("Search", "খুঁজুন")}</span>
               <kbd className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-50 border border-slate-200 text-slate-500">⌘K</kbd>
             </button>
-            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
+            <button
+              type="button"
+              className="hidden sm:inline-flex h-9 px-3.5 rounded-lg text-xs font-semibold items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white transition shrink-0"
+            >
+              <Plus className="w-3.5 h-3.5" /> {t("Create", "তৈরি")}
+              <ChevronDown className="w-3.5 h-3.5 opacity-70" />
+            </button>
+            <button
+              type="button"
+              aria-label="Notifications"
+              className="relative inline-flex h-9 w-9 rounded-lg items-center justify-center border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white transition shrink-0"
+            >
+              <Bell className="w-4 h-4" />
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold grid place-items-center ring-2 ring-[#fafafa]">21</span>
+            </button>
+            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-slate-900 text-white hover:bg-slate-800">
               <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
             </Link>
           </div>
