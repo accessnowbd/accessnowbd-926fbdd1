@@ -1,13 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import {
-  
-  Facebook,
-  Instagram,
-  Youtube,
   MessageCircle,
-  Send,
   Mail,
-  MapPin,
   PhoneCall,
   Package,
   Info,
@@ -91,12 +85,9 @@ const COLUMNS: {
 ];
 
 const SOCIALS = [
-  { Icon: Facebook, href: "#", label: "Facebook" },
   { Icon: MessageCircle, href: "https://wa.me/8801580607614", label: "WhatsApp" },
-  { Icon: Instagram, href: "#", label: "Instagram" },
-  { Icon: Youtube, href: "#", label: "YouTube" },
-  { Icon: Send, href: "#", label: "Telegram" },
 ];
+
 
 const PAYMENTS = ["BKash", "Nagad", "Rocket", "Visa", "Mastercard"];
 
@@ -198,7 +189,6 @@ export function SiteFooter() {
                 {[
                   { Icon: PhoneCall, label: "+880 1580-607614", href: "tel:+8801580607614" },
                   { Icon: Mail, label: "support@accessnowbd.com", href: "mailto:support@accessnowbd.com" },
-                  { Icon: MapPin, label: "Dhaka, Bangladesh", href: "#" },
                 ].map(({ Icon, label, href }) => (
                   <a
                     key={label}

@@ -2,10 +2,6 @@ import { Link } from "@tanstack/react-router";
 import accessNowLogo from "@/assets/accessnow-bd-mark.webp";
 import {
   Crown,
-  Facebook,
-  Instagram,
-  Youtube,
-  Twitter,
   Search,
   Menu,
   X,
@@ -92,19 +88,8 @@ export function TopUtilityBar() {
 
         {/* RIGHT — socials, phone, status */}
         <div className="flex items-center" style={{ gap: "clamp(6px, 0.8vw, 16px)" }}>
-          <div className="hidden sm:flex items-center gap-1">
-            {[Facebook, Instagram, Youtube, Twitter].map((Icon, i) => (
-              <a
-                key={i}
-                href="#"
-                aria-label="social"
-                className="grid place-items-center w-6 h-6 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition"
-              >
-                <Icon className="w-3 h-3" strokeWidth={2.2} />
-              </a>
-            ))}
-          </div>
-          <span className="hidden sm:block w-px h-3.5 bg-white/15" />
+          {/* Social icon placeholders removed — no real accounts wired yet */}
+
           <a
             href="tel:+8801580607614"
             className="hidden md:inline-flex items-center gap-1.5 text-white/85 hover:text-white transition font-semibold"
