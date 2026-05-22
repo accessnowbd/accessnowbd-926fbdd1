@@ -269,7 +269,8 @@ function AdminBlankState() {
 }
 
 function AdminShell({ user, signOut, navigate }: any) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, _setCollapsed] = useState(false); // Sidebar locked open
+  void _setCollapsed;
   const [mobileOpen, setMobileOpen] = useState(false);
   const dark = false;
   const [search, setSearch] = useState("");
