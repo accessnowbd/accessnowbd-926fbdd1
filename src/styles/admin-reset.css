@@ -8,9 +8,9 @@
    restoring neutral slate-based surfaces so Tailwind utilities behave as
    their default tokens describe.
 
-   Rule of thumb: purple / violet / lavender / aurora must not appear in the
-   admin panel. Add any leaked selector here — do NOT patch it inside
-   src/styles.css.
+   Rule of thumb: if you see violet / lavender / aurora leaking into the
+   admin panel, add the offending selector to this file — do NOT patch it
+   inside src/styles.css.
    ========================================================================= */
 
 /* -------------------------------------------------------------------------
@@ -49,14 +49,6 @@ html.theme-white .admin-shell .text-slate-700 { color: #334155 !important; }
 html.theme-white .admin-shell .text-slate-800 { color: #1e293b !important; }
 html.theme-white .admin-shell .text-slate-900 { color: #0f172a !important; }
 
-html.theme-white .admin-shell [class*="text-violet-"],
-html.theme-white .admin-shell [class*="text-purple-"],
-html.theme-white .admin-shell [class*="text-fuchsia-"],
-html.theme-white .admin-shell [class*="text-indigo-"],
-html.theme-white .admin-shell [class*="text-pink-"] {
-  color: #475569 !important;
-}
-
 /* Strip purple aurora gradient text inside admin */
 html.theme-white .admin-shell .text-aurora,
 html.theme-white .admin-shell .text-aurora-strong,
@@ -91,15 +83,6 @@ html.theme-white .admin-shell .bg-popover    { background-color: #ffffff !import
 html.theme-white .admin-shell .bg-background { background-color: #ffffff !important; }
 html.theme-white .admin-shell .bg-muted      { background-color: #f1f5f9 !important; }
 html.theme-white .admin-shell .bg-secondary  { background-color: #f1f5f9 !important; color: #0f172a !important; }
-
-html.theme-white .admin-shell [class*="bg-violet-"],
-html.theme-white .admin-shell [class*="bg-purple-"],
-html.theme-white .admin-shell [class*="bg-fuchsia-"],
-html.theme-white .admin-shell [class*="bg-indigo-"],
-html.theme-white .admin-shell [class*="bg-pink-"] {
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
-}
 
 /* Dark slate / black backgrounds globally re-tinted by theme-white — restore */
 html.theme-white .admin-shell [class*="bg-slate-9"],
@@ -148,17 +131,19 @@ html.theme-white .admin-shell [class*="to-indigo-"],
 html.theme-white .admin-shell [class*="from-pink-"],
 html.theme-white .admin-shell [class*="via-pink-"],
 html.theme-white .admin-shell [class*="to-pink-"] {
-  --tw-gradient-from: #0f172a !important;
-  --tw-gradient-via:  #334155 !important;
-  --tw-gradient-to:   #0f172a !important;
+  --tw-gradient-from: #f1f5f9 !important;
+  --tw-gradient-via:  #e2e8f0 !important;
+  --tw-gradient-to:   #cbd5e1 !important;
 }
 
 /* -------------------------------------------------------------------------
-   4) Borders, rings, dividers — remove purple/violet/pink tint.
+   4) Borders, rings, dividers — neutralise violet tint
    ------------------------------------------------------------------------- */
 html.theme-white .admin-shell [class*="border-white\\/"],
 html.theme-white .admin-shell [class*="border-slate-7"],
-html.theme-white .admin-shell [class*="border-slate-8"],
+html.theme-white .admin-shell [class*="border-slate-8"] {
+  border-color: #e2e8f0 !important;
+}
 html.theme-white .admin-shell [class*="border-violet-"],
 html.theme-white .admin-shell [class*="border-purple-"],
 html.theme-white .admin-shell [class*="border-fuchsia-"],
@@ -169,8 +154,8 @@ html.theme-white .admin-shell [class*="ring-purple-"],
 html.theme-white .admin-shell [class*="ring-fuchsia-"],
 html.theme-white .admin-shell [class*="ring-indigo-"],
 html.theme-white .admin-shell [class*="ring-pink-"] {
-  border-color: #e2e8f0 !important;
-  --tw-ring-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+  --tw-ring-color: #cbd5e1 !important;
 }
 
 /* -------------------------------------------------------------------------
@@ -233,18 +218,6 @@ html.theme-white .admin-shell .bg-aurora {
   box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.35) !important;
 }
 
-html.theme-white [data-radix-dialog-content].admin-search-dialog,
-html.theme-white [data-radix-dialog-content].admin-search-dialog * {
-  --tw-ring-color: #cbd5e1 !important;
-  text-shadow: none !important;
-}
-
-html.theme-white [data-radix-dialog-content].admin-search-dialog {
-  background: #ffffff !important;
-  border-color: #e2e8f0 !important;
-  box-shadow: 0 30px 80px -20px rgba(15, 23, 42, 0.30) !important;
-}
-
 html.theme-white .admin-shell .neon-border,
 html.theme-white .admin-shell .gradient-border-card,
 html.theme-white .admin-shell .gradient-border-soft {
@@ -256,17 +229,6 @@ html.theme-white .admin-shell .gradient-border-card::after,
 html.theme-white .admin-shell .gradient-border-soft::before {
   background: transparent !important;
   display: none !important;
-}
-
-html.theme-white .admin-shell header.admin-topbar-premium,
-html.theme-white .admin-shell header.admin-topbar-premium > div {
-  background: rgba(250, 250, 250, 0.92) !important;
-  border-color: #e2e8f0 !important;
-  box-shadow: none !important;
-}
-
-html.theme-white .admin-shell header.admin-topbar-premium svg {
-  color: currentColor !important;
 }
 
 /* -------------------------------------------------------------------------
@@ -294,124 +256,4 @@ html.theme-white .admin-shell span,
 html.theme-white .admin-shell a,
 html.theme-white .admin-shell div {
   text-shadow: none !important;
-}
-
-/* -------------------------------------------------------------------------
-   11) Sidebar menu icon badges — allow screenshot-specified colors only here.
-    These rules are scoped to the left menu icon circles so the rest of admin
-    stays isolated from global purple/lavender theme leaks.
-   ------------------------------------------------------------------------- */
-html.theme-white .admin-shell .admin-menu-icon {
-  background-color: transparent !important;
-  color: #ffffff !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-violet-"],
-html.theme-white .admin-shell .admin-menu-icon[class*="from-purple-"] {
-  --tw-gradient-from: #8b5cf6 !important;
-  --tw-gradient-to:   #7c3aed !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-purple-600"] {
-  --tw-gradient-to:   #7c3aed !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-fuchsia-"] {
-  --tw-gradient-to:   #d946ef !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-fuchsia-"] {
-  --tw-gradient-from: #e879f9 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-pink-"] {
-  --tw-gradient-from: #ec4899 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-pink-"] {
-  --tw-gradient-to:   #db2777 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-indigo-"] {
-  --tw-gradient-from: #6366f1 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-indigo-"] {
-  --tw-gradient-to:   #4f46e5 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-rose-"] {
-  --tw-gradient-from: #f43f5e !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-rose-"] {
-  --tw-gradient-to:   #e11d48 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-red-"] {
-  --tw-gradient-from: #ef4444 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-red-"] {
-  --tw-gradient-to:   #dc2626 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-orange-"] {
-  --tw-gradient-from: #f97316 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-orange-"] {
-  --tw-gradient-to:   #ea580c !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-amber-"] {
-  --tw-gradient-from: #f59e0b !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-amber-"] {
-  --tw-gradient-to:   #d97706 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-yellow-"] {
-  --tw-gradient-from: #eab308 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-yellow-"] {
-  --tw-gradient-to:   #ca8a04 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-emerald-"] {
-  --tw-gradient-from: #10b981 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-emerald-"] {
-  --tw-gradient-to:   #059669 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-green-"] {
-  --tw-gradient-from: #22c55e !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-green-"] {
-  --tw-gradient-to:   #16a34a !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-teal-"] {
-  --tw-gradient-from: #14b8a6 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-teal-"] {
-  --tw-gradient-to:   #0d9488 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-cyan-"] {
-  --tw-gradient-from: #06b6d4 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-cyan-"] {
-  --tw-gradient-to:   #0891b2 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-sky-"] {
-  --tw-gradient-from: #0ea5e9 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-sky-"] {
-  --tw-gradient-to:   #0284c7 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-blue-"] {
-  --tw-gradient-from: #3b82f6 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-blue-"] {
-  --tw-gradient-to:   #1d4ed8 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-slate-5"] {
-  --tw-gradient-from: #64748b !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-slate-6"] {
-  --tw-gradient-from: #475569 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-slate-7"] {
-  --tw-gradient-from: #334155 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-slate-7"] {
-  --tw-gradient-to:   #334155 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-slate-8"] {
-  --tw-gradient-to:   #1e293b !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-slate-9"] {
-  --tw-gradient-to:   #0f172a !important;
 }

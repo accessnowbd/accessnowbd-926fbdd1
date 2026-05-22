@@ -9,6 +9,7 @@ import { AdminGlobalSearch, useAdminGlobalSearch } from "@/components/admin/Admi
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
+import { AdminMfaGate } from "@/components/admin/AdminMfaGate";
 import { AdminLangProvider, useAdminLang } from "@/context/AdminLangContext";
 import accessNowLogo from "@/assets/accessnow-bd-mark.webp";
 import "@/styles/admin-reset.css";
@@ -69,9 +70,8 @@ function AdminLayout() {
   // Wipe historical splash/admin flags immediately on mount so a stale client
   // flag can never leave the route on an empty gradient screen.
   useEffect(() => { purgeLegacySplashFlags(); }, []);
-  const cachedAdmin = readCachedAdmin();
-  const [isAdmin, setIsAdmin] = useState<boolean>(() => cachedAdmin);
-  const [verified, setVerified] = useState<boolean>(() => cachedAdmin);
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => readCachedAdmin());
+  const [verified, setVerified] = useState<boolean>(() => readCachedAdmin());
   const [roleError, setRoleError] = useState<{
     message: string;
     code?: string;
@@ -143,10 +143,9 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate, verifyRole]);
 
-  // Instant admin entry: never hold the admin shell behind auth/role/MFA loading.
-  // Auth and role checks still run in the background; only unauthenticated users
-  // are redirected once the auth provider has actually finished resolving.
-  if (!loading && !user && !cachedAdmin) return <AdminBlankState />;
+  if (loading || !user || !verified) {
+    return <AdminBlankState />;
+  }
 
   if (!isAdmin && verified) {
     const hasError = !!roleError;
@@ -243,9 +242,19 @@ function AdminLayout() {
     );
   }
 
+  // MFA gate: requires Authenticator code OR email OTP fallback before admin shell renders.
   return (
     <AdminLangProvider>
-      <AdminShell user={user} signOut={signOut} navigate={navigate} />
+      <AdminMfaGate
+        userEmail={user?.email}
+        onSignOut={async () => {
+          try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
+          await signOut();
+          navigate({ to: "/login" });
+        }}
+      >
+        <AdminShell user={user} signOut={signOut} navigate={navigate} />
+      </AdminMfaGate>
     </AdminLangProvider>
   );
 }
@@ -423,9 +432,9 @@ function AdminShell({ user, signOut, navigate }: any) {
             </button>
 
             <div className="hidden md:flex items-center gap-2 text-sm text-slate-600">
-              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 ring-1 ring-slate-200">
+              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-slate-100 text-slate-700">
                 {currentPage?.group.icon ?? ADMIN_MENU[0].icon}
-                <span className="font-semibold">
+                <span className="font-medium">
                   {currentPage
                     ? t(currentPage.group.title, currentPage.group.titleBn)
                     : t(ADMIN_MENU[0].title, ADMIN_MENU[0].titleBn)}
@@ -561,23 +570,22 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
         "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all duration-200 relative hover:-translate-y-0.5",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-slate-100 text-slate-950 ring-1 ring-slate-200 shadow-[0_10px_24px_-16px_rgba(15,23,42,0.18)]"
+          ? "bg-slate-900 text-white shadow-[0_12px_24px_-16px_rgba(15,23,42,0.8)]"
           : "text-slate-700 hover:bg-slate-50 hover:shadow-sm",
       ].join(" ")}
     >
       <span
         className={[
-          "admin-menu-icon shrink-0 w-9 h-9 rounded-full grid place-items-center text-white shadow-sm transition-all duration-200",
-          "bg-gradient-to-br",
-          item.grad,
-          active ? "ring-2 ring-white shadow-[0_8px_20px_-8px_rgba(15,23,42,0.35)]" : "ring-1 ring-white/60 group-hover:scale-[1.04]",
+          "admin-menu-icon shrink-0 w-9 h-9 rounded-full grid place-items-center",
+          "bg-slate-100 text-slate-700 shadow-sm ring-1 ring-slate-200 transition-all duration-200",
+          active ? "bg-white/10 text-white ring-white/20" : "group-hover:bg-white group-hover:ring-slate-300",
         ].join(" ")}
       >
         {item.icon}
       </span>
       {!collapsed && <span className="font-semibold truncate flex-1 text-[14px]">{label}</span>}
       {!collapsed && active && (
-        <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" aria-hidden />
+        <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" aria-hidden />
       )}
       {!collapsed && !active && (
         <Pin
