@@ -282,14 +282,14 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  <button
  onClick={() => { setEditing(r); setShowForm(true); }}
  className="w-8 h-8 grid place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
- title="Edit"
+  title={t("Edit", "এডিট")}
  >
  <Pencil className="w-3.5 h-3.5" />
  </button>
  <button
  onClick={() => remove(r.id)}
  className="w-8 h-8 grid place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
- title="Delete"
+ title={t("Delete", "ডিলিট")}
  >
  <Trash2 className="w-3.5 h-3.5" />
  </button>
