@@ -2115,6 +2115,10 @@ html.theme-white .min-h-screen .admin-shell.admin-shell [class*="bg-white"][clas
   -webkit-backdrop-filter: none !important;
 }
 
+html.theme-white .admin-shell .bg-white\/10 { background: rgba(255, 255, 255, 0.10) !important; }
+html.theme-white .admin-shell .bg-white\/20 { background: rgba(255, 255, 255, 0.20) !important; }
+html.theme-white .admin-shell .ring-white\/20 { --tw-ring-color: rgba(255, 255, 255, 0.20) !important; }
+
 html.theme-white .admin-shell [class*="bg-slate-50"] { background: #f8fafc !important; }
 html.theme-white .admin-shell [class*="bg-slate-100"] { background: #f1f5f9 !important; }
 html.theme-white .admin-shell [class*="bg-slate-200"] { background: #e2e8f0 !important; }
