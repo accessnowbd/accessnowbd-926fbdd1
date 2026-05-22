@@ -36,13 +36,14 @@ async function withAdminTimeout<T>(promise: PromiseLike<T>): Promise<T> {
 // Legacy splash/loader cache keys written by earlier versions. We scrub these
 // on every admin mount so any stale "splash seen" / "boot" flag is wiped from
 // localStorage and the splash can never reappear.
+// NOTE: ADMIN_CACHE_KEY is intentionally NOT included — we keep it so the
+// shell can render optimistically while re-verifying in the background.
 const LEGACY_SPLASH_KEYS = [
   "anbd:adminSplashSeen",
   "anbd:adminBoot",
   "anbd:adminBootSplash",
   "anbd:splash",
   "anbd:bootSplash",
-  ADMIN_CACHE_KEY,
   "adminSplash",
   "admin:splash",
 ];
@@ -55,14 +56,19 @@ function purgeLegacySplashFlags() {
   }
 }
 
+function readCachedAdmin(): boolean {
+  if (typeof localStorage === "undefined") return false;
+  try { return localStorage.getItem(ADMIN_CACHE_KEY) === "1"; } catch { return false; }
+}
+
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   // Wipe historical splash/admin flags immediately on mount so a stale client
   // flag can never leave the route on an empty gradient screen.
   useEffect(() => { purgeLegacySplashFlags(); }, []);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [verified, setVerified] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => readCachedAdmin());
+  const [verified, setVerified] = useState<boolean>(() => readCachedAdmin());
   const [roleError, setRoleError] = useState<{
     message: string;
     code?: string;
@@ -101,6 +107,10 @@ function AdminLayout() {
         }
         const ok = data === true;
         setIsAdmin(ok);
+        try {
+          if (ok) localStorage.setItem(ADMIN_CACHE_KEY, "1");
+          else localStorage.removeItem(ADMIN_CACHE_KEY);
+        } catch { /* ignore */ }
       } catch (e: any) {
         setCheckedAt(new Date().toISOString());
         setRoleError({
@@ -108,6 +118,7 @@ function AdminLayout() {
           raw: e,
         });
         setIsAdmin(false);
+        try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
       }
     },
     [],
@@ -244,7 +255,14 @@ function AdminLayout() {
 }
 
 function AdminBlankState() {
-  return <div className="min-h-screen bg-white" aria-hidden="true" />;
+  return (
+    <div className="min-h-screen grid place-items-center bg-[#fafafa]" role="status" aria-label="Loading admin panel">
+      <div className="flex flex-col items-center gap-3 text-slate-500">
+        <div className="w-7 h-7 rounded-full border-2 border-slate-200 border-t-indigo-500 animate-spin" />
+        <span className="text-xs font-medium tracking-wide">Loading admin…</span>
+      </div>
+    </div>
+  );
 }
 
 function AdminShell({ user, signOut, navigate }: any) {

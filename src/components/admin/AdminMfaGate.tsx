@@ -63,18 +63,18 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
     setInfo(null);
     setMode("loading");
     try {
-      // 0. Load admin-controlled security settings. If MFA is not enforced,
-      //    skip the gate entirely.
-      const { settings: cfg } = await loadSecuritySettings();
+      // 0+1. Load admin security settings and existing grant in parallel.
+      const [settingsRes, grantRes] = await Promise.all([
+        loadSecuritySettings(),
+        checkGrant().catch((e) => ({ __error: e })) as Promise<any>,
+      ]);
+      const cfg = settingsRes.settings;
       setSettings(cfg);
       if (!cfg.mfa_enforced) {
         setMode("ok");
         return;
       }
-
-      // 1. Existing grant?
-      const grant = await checkGrant();
-      if (grant.granted) {
+      if (grantRes && !grantRes.__error && grantRes.granted) {
         setMode("ok");
         return;
       }
