@@ -137,13 +137,23 @@ html.theme-white .admin-shell [class*="to-pink-"] {
 }
 
 /* -------------------------------------------------------------------------
-   4) Borders, rings, dividers — neutralise violet tint only on white-ish
-      borders; keep explicit violet/purple/pink rings (used for accents).
+   4) Borders, rings, dividers — remove purple/violet/pink tint.
    ------------------------------------------------------------------------- */
 html.theme-white .admin-shell [class*="border-white\\/"],
 html.theme-white .admin-shell [class*="border-slate-7"],
-html.theme-white .admin-shell [class*="border-slate-8"] {
+html.theme-white .admin-shell [class*="border-slate-8"],
+html.theme-white .admin-shell [class*="border-violet-"],
+html.theme-white .admin-shell [class*="border-purple-"],
+html.theme-white .admin-shell [class*="border-fuchsia-"],
+html.theme-white .admin-shell [class*="border-indigo-"],
+html.theme-white .admin-shell [class*="border-pink-"],
+html.theme-white .admin-shell [class*="ring-violet-"],
+html.theme-white .admin-shell [class*="ring-purple-"],
+html.theme-white .admin-shell [class*="ring-fuchsia-"],
+html.theme-white .admin-shell [class*="ring-indigo-"],
+html.theme-white .admin-shell [class*="ring-pink-"] {
   border-color: #e2e8f0 !important;
+  --tw-ring-color: #e2e8f0 !important;
 }
 
 /* -------------------------------------------------------------------------
