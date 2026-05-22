@@ -232,8 +232,8 @@ export function SiteFooter() {
                 <span className="pointer-events-none absolute -bottom-20 -left-12 h-44 w-44 rounded-full bg-aqua/12 blur-[70px]" />
 
                 <div className="relative mb-4 flex items-center gap-3 md:mb-5">
-                  <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_12px_28px_-16px_rgba(34,211,238,0.75),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-white/20 md:h-10 md:w-10 md:rounded-2xl`}>
-                    <col.Icon className="h-4 w-4 md:h-5 md:w-5" />
+                  <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${col.iconBg} shadow-[0_12px_28px_-16px_rgba(34,211,238,0.75),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-white/20 md:h-10 md:w-10 md:rounded-2xl`}>
+                    <col.Icon className="h-4 w-4 md:h-5 md:w-5" color="#ffffff" strokeWidth={2.25} />
                   </span>
                   <h4
                     className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/90 md:text-[12px]"
