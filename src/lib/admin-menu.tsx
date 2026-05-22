@@ -125,6 +125,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/reports", label: "Reports", labelBn: "রিপোর্ট", icon: ic(BarChart3), grad: "from-blue-500 to-indigo-600" },
       { to: "/admin/ai-api", label: "AI API Settings", labelBn: "AI API সেটিংস", icon: ic(Bot), grad: "from-violet-500 to-fuchsia-500" },
       { to: "/admin/settings", label: "Settings", labelBn: "সেটিংস", icon: ic(Settings), grad: "from-slate-600 to-slate-800" },
+      { to: "/admin/themes", label: "Themes", labelBn: "থিম", icon: ic(Sparkles), grad: "from-violet-500 to-fuchsia-500" },
       { to: "/admin/roles", label: "Admin Roles", labelBn: "অ্যাডমিন রোল", icon: ic(ShieldCheck), grad: "from-rose-500 to-red-500" },
       { to: "/admin/security", label: "Security & MFA", labelBn: "সিকিউরিটি ও MFA", icon: ic(ShieldCheck), grad: "from-rose-600 to-red-700" },
       { to: "/admin/backup", label: "Backup", labelBn: "ব্যাকআপ", icon: ic(DatabaseBackup), grad: "from-cyan-500 to-blue-600" },

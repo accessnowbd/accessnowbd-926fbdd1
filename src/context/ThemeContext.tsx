@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { getCachedAvailability, useThemeAvailability, type ThemeAvailability } from "@/hooks/useThemeAvailability";
 
 export type ThemeId = "aurora" | "white";
 
@@ -33,12 +34,16 @@ const ALL_CLASSES = THEMES.map((t) => t.className).filter(Boolean);
 type Ctx = {
   theme: ThemeId;
   themes: ThemeMeta[];
+  availability: ThemeAvailability;
+  enabledThemes: ThemeMeta[];
   setTheme: (id: ThemeId) => void;
 };
 
 const ThemeCtx = createContext<Ctx>({
   theme: "white",
   themes: THEMES,
+  availability: { aurora: true, white: true },
+  enabledThemes: THEMES,
   setTheme: () => {},
 });
 
@@ -52,26 +57,45 @@ function applyTheme(id: ThemeId) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
+  const availability = useThemeAvailability();
   const [theme, setThemeState] = useState<ThemeId>("white");
 
+  // Initial mount: load stored theme, but downgrade to white if disabled.
   useEffect(() => {
     let stored: ThemeId = "white";
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as ThemeId | null;
       if (saved && THEMES.some((t) => t.id === saved)) stored = saved;
     } catch { /* ignore */ }
+    const initialAvail = getCachedAvailability();
+    if (!initialAvail[stored]) stored = "white";
     applyTheme(stored);
     setThemeState(stored);
   }, []);
 
+  // When availability changes (admin toggled), force fallback if needed.
+  useEffect(() => {
+    if (!availability[theme]) {
+      applyTheme("white");
+      setThemeState("white");
+      try { localStorage.setItem(STORAGE_KEY, "white"); } catch { /* ignore */ }
+    }
+  }, [availability, theme]);
+
   const setTheme = useCallback((id: ThemeId) => {
     if (!THEMES.some((t) => t.id === id)) return;
+    if (!availability[id]) return; // blocked
     applyTheme(id);
     setThemeState(id);
     try { localStorage.setItem(STORAGE_KEY, id); } catch { /* ignore */ }
-  }, []);
+  }, [availability]);
 
-  const value = useMemo(() => ({ theme, themes: THEMES, setTheme }), [theme, setTheme]);
+  const enabledThemes = useMemo(() => THEMES.filter((t) => availability[t.id]), [availability]);
+
+  const value = useMemo(
+    () => ({ theme, themes: THEMES, availability, enabledThemes, setTheme }),
+    [theme, availability, enabledThemes, setTheme],
+  );
   return <ThemeCtx.Provider value={value}>{children}</ThemeCtx.Provider>;
 }
 

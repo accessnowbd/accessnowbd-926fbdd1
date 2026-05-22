@@ -3,7 +3,7 @@ import { Palette, Check } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 
 export function ThemeSwitcher() {
-  const { theme, themes, setTheme } = useTheme();
+  const { theme, enabledThemes, setTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -21,7 +21,10 @@ export function ThemeSwitcher() {
     };
   }, [open]);
 
-  const active = themes.find((t) => t.id === theme) ?? themes[0];
+  // Hide entirely when there is no real choice (≤1 theme enabled).
+  if (enabledThemes.length <= 1) return null;
+
+  const active = enabledThemes.find((t) => t.id === theme) ?? enabledThemes[0];
 
   return (
     <div className="relative" ref={ref}>
@@ -46,7 +49,7 @@ export function ThemeSwitcher() {
             <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-white/70">Theme</div>
           </div>
           <div className="space-y-1">
-            {themes.map((t) => {
+            {enabledThemes.map((t) => {
               const isActive = t.id === theme;
               return (
                 <button
