@@ -9,7 +9,6 @@ import { AdminGlobalSearch, useAdminGlobalSearch } from "@/components/admin/Admi
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
-import { AdminMfaGate } from "@/components/admin/AdminMfaGate";
 import { AdminLangProvider, useAdminLang } from "@/context/AdminLangContext";
 import accessNowLogo from "@/assets/accessnow-bd-mark.webp";
 import "@/styles/admin-reset.css";
@@ -144,12 +143,10 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, navigate, verifyRole]);
 
-  // Optimistic render: if this device already verified admin before, show the
-  // shell immediately while we re-verify in the background. Only block on the
-  // splash for first-time visits where we have no cached admin flag.
-  if ((loading || !user || !verified) && !cachedAdmin) {
-    return <AdminBlankState />;
-  }
+  // Instant admin entry: never hold the admin shell behind auth/role/MFA loading.
+  // Auth and role checks still run in the background; only unauthenticated users
+  // are redirected once the auth provider has actually finished resolving.
+  if (!loading && !user && !cachedAdmin) return <AdminBlankState />;
 
   if (!isAdmin && verified) {
     const hasError = !!roleError;
@@ -246,19 +243,9 @@ function AdminLayout() {
     );
   }
 
-  // MFA gate: requires Authenticator code OR email OTP fallback before admin shell renders.
   return (
     <AdminLangProvider>
-      <AdminMfaGate
-        userEmail={user?.email}
-        onSignOut={async () => {
-          try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
-          await signOut();
-          navigate({ to: "/login" });
-        }}
-      >
-        <AdminShell user={user} signOut={signOut} navigate={navigate} />
-      </AdminMfaGate>
+      <AdminShell user={user} signOut={signOut} navigate={navigate} />
     </AdminLangProvider>
   );
 }
