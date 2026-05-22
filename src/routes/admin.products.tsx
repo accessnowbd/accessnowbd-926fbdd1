@@ -337,7 +337,7 @@ function AdminProducts() {
 
  {/* Stat cards */}
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
- <PremiumStatCard label="মোট পণ্য" value={stats.total} delta={12} tone="indigo" />
+ <PremiumStatCard label="মোট পণ্য" value={stats.total} delta={12} tone="slate" />
  <PremiumStatCard label="স্টকে আছে" value={stats.inStock} delta={8} tone="emerald" />
  <PremiumStatCard label="স্টক শেষ" value={stats.outOfStock} delta={stats.outOfStock > 0 ? -5 : 0} tone="rose" />
  <PremiumStatCard label="প্রি-অর্ডার" value={stats.preorder} delta={3} tone="amber" />
@@ -1139,10 +1139,10 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
           <div className="mt-3 grid grid-cols-2 gap-2">
             {([
-              { id: "premium-pastel", label: "Pastel Glass", emoji: "🌸", bg: "linear-gradient(135deg,#a78bfa 0%,#ec4899 50%,#f97316 100%)", shadow: "rgba(168,85,247,0.45)" },
-              { id: "premium-dark", label: "Dark Luxe", emoji: "🌌", bg: "linear-gradient(135deg,#0f172a 0%,#4c1d95 60%,#9333ea 100%)", shadow: "rgba(30,41,59,0.7)" },
-              { id: "soft-aurora", label: "Soft Aurora", emoji: "🌅", bg: "linear-gradient(135deg,#10b981 0%,#06b6d4 50%,#8b5cf6 100%)", shadow: "rgba(16,185,129,0.45)" },
-              { id: "dark-neon", label: "Neon Edge", emoji: "⚡", bg: "linear-gradient(135deg,#0ea5e9 0%,#6366f1 50%,#ec4899 100%)", shadow: "rgba(99,102,241,0.5)" },
+              { id: "premium-pastel", label: "Pastel Glass", emoji: "🌸", bg: "linear-gradient(135deg,#f8fafc 0%,#e2e8f0 52%,#f97316 100%)", shadow: "rgba(100,116,139,0.32)" },
+              { id: "premium-dark", label: "Dark Luxe", emoji: "🌌", bg: "linear-gradient(135deg,#020617 0%,#0f172a 58%,#334155 100%)", shadow: "rgba(15,23,42,0.72)" },
+              { id: "soft-aurora", label: "Soft Aurora", emoji: "🌅", bg: "linear-gradient(135deg,#10b981 0%,#06b6d4 55%,#0f172a 100%)", shadow: "rgba(16,185,129,0.38)" },
+              { id: "dark-neon", label: "Neon Edge", emoji: "⚡", bg: "linear-gradient(135deg,#0ea5e9 0%,#334155 52%,#ef4444 100%)", shadow: "rgba(51,65,85,0.48)" },
             ] as { id: AiCardStyle; label: string; emoji: string; bg: string; shadow: string }[]).map((s) => (
               <button
                 key={s.id}
