@@ -130,19 +130,14 @@ export function SiteHeader() {
   const navigate = useNavigate();
   const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
   const [displayName, setDisplayName] = useState<string | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    if (!user) { setDisplayName(null); setIsAdmin(false); return; }
+    if (!user) { setDisplayName(null); return; }
     let cancelled = false;
     (async () => {
-      const [p, r] = await Promise.all([
-        supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle(),
-        supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle(),
-      ]);
+      const p = await supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle();
       if (cancelled) return;
       setDisplayName((p.data as { display_name?: string | null } | null)?.display_name || null);
-      setIsAdmin(!!r.data);
     })();
     return () => { cancelled = true; };
   }, [user]);
@@ -302,18 +297,30 @@ export function SiteHeader() {
                 <CartIcon />
 
                 {user ? (
-                  <Link
-                    to={isAdmin ? "/admin" : "/dashboard"}
-                    className="inline-flex items-center gap-1.5 sm:gap-2 h-10 sm:h-11 px-3 sm:px-0 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition whitespace-nowrap"
-                    style={{
-                      paddingLeft: "clamp(10px, 1vw, 18px)",
-                      paddingRight: "clamp(10px, 1vw, 18px)",
-                      fontSize: "clamp(11.5px, 0.9vw, 14px)",
-                    }}
-                  >
-                    {isAdmin ? <ShieldCheck className="w-4 h-4" /> : <UserCircle2 className="w-4 h-4" />}
-                    <span className="hidden sm:inline max-w-[120px] truncate">{isAdmin ? "Admin" : "Dashboard"}</span>
-                  </Link>
+                  <>
+                    <Link
+                      to="/dashboard"
+                      className="inline-flex items-center gap-1.5 sm:gap-2 h-10 sm:h-11 rounded-full bg-gradient-to-r from-primary via-violet-500 to-aqua text-primary-foreground font-bold shadow-[0_12px_30px_-10px_rgba(124,58,237,0.7)] hover:scale-[1.03] transition whitespace-nowrap"
+                      style={{
+                        paddingLeft: "clamp(10px, 1vw, 18px)",
+                        paddingRight: "clamp(10px, 1vw, 18px)",
+                        fontSize: "clamp(11.5px, 0.9vw, 14px)",
+                      }}
+                      title={friendlyName}
+                    >
+                      <UserCircle2 className="w-4 h-4" />
+                      <span className="hidden sm:inline max-w-[120px] truncate">Dashboard</span>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      aria-label="Logout"
+                      title="Logout"
+                      className="grid place-items-center w-10 h-10 sm:w-11 sm:h-11 rounded-full glass-soft border border-white/10 text-white hover:bg-white/10 transition"
+                    >
+                      <LogOut className="w-4 h-4" />
+                    </button>
+                  </>
                 ) : (
                   <Link
                     to="/login"
@@ -403,7 +410,7 @@ export function SiteHeader() {
                       </div>
                       {user && (
                         <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full bg-white/25 border border-white/40 text-[10px] font-bold text-white">
-                          <Crown className="w-3 h-3 text-gold" /> {isAdmin ? "Admin" : "Verified Buyer"}
+                          <Crown className="w-3 h-3 text-gold" /> Verified Buyer
                         </span>
                       )}
                     </div>
@@ -532,11 +539,11 @@ export function SiteHeader() {
                   {user ? (
                     <div className="grid grid-cols-2 gap-2">
                       <Link
-                        to={isAdmin ? "/admin" : "/dashboard"}
+                        to="/dashboard"
                         onClick={() => setOpen(false)}
                         className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white text-[13px] font-extrabold shadow-[0_14px_30px_-12px_rgba(168,85,247,0.5)] active:scale-[0.98] transition"
                       >
-                        {isAdmin ? <ShieldCheck className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />} {isAdmin ? "Admin" : "Dashboard"}
+                        <Sparkles className="w-4 h-4" /> Dashboard
                       </Link>
                       <button
                         onClick={async () => {
