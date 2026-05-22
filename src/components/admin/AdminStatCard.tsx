@@ -1,15 +1,13 @@
 import { TrendingDown, TrendingUp } from "lucide-react";
 
-export type AdminStatTone = "slate" | "rose" | "emerald" | "amber" | "sky" | "indigo" | "violet";
+export type AdminStatTone = "slate" | "rose" | "emerald" | "amber" | "sky";
 
 const TONES: Record<AdminStatTone, { tint: string; stroke: string; fill: string }> = {
   slate:   { tint: "from-slate-100/90 via-slate-50 to-white",     stroke: "#334155", fill: "rgba(51,65,85,0.16)" },
-  indigo:  { tint: "from-slate-100/90 via-slate-50 to-white",     stroke: "#334155", fill: "rgba(51,65,85,0.16)" },
   rose:    { tint: "from-rose-100/80 via-red-50 to-white",        stroke: "#f43f5e", fill: "rgba(244,63,94,0.18)" },
   emerald: { tint: "from-emerald-100/80 via-teal-50 to-white",    stroke: "#10b981", fill: "rgba(16,185,129,0.18)" },
   amber:   { tint: "from-amber-100/80 via-orange-50 to-white",    stroke: "#f59e0b", fill: "rgba(245,158,11,0.18)" },
   sky:     { tint: "from-sky-100/80 via-cyan-50 to-white",        stroke: "#0ea5e9", fill: "rgba(14,165,233,0.18)" },
-  violet:  { tint: "from-slate-100/90 via-slate-50 to-white",     stroke: "#334155", fill: "rgba(51,65,85,0.16)" },
 };
 
 function sparkPath(vals: number[], w = 200, h = 60) {
