@@ -410,7 +410,7 @@ export function SiteHeader() {
                       </div>
                       {user && (
                         <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full bg-white/25 border border-white/40 text-[10px] font-bold text-white">
-                          <Crown className="w-3 h-3 text-gold" /> {isAdmin ? "Admin" : "Verified Buyer"}
+                          <Crown className="w-3 h-3 text-gold" /> Verified Buyer
                         </span>
                       )}
                     </div>
