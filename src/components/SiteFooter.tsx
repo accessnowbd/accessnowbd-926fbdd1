@@ -205,8 +205,8 @@ export function SiteFooter() {
                     href={href}
                     className="group grid min-h-11 grid-cols-[2rem_1fr] items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2 shadow-sm transition-colors duration-200 hover:border-indigo-300 hover:bg-indigo-50/40"
                   >
-                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl shadow-md" style={{ background: "linear-gradient(135deg,#4F46E5,#7C3AED)" }}>
-                      <Icon className="h-4 w-4" color="#ffffff" strokeWidth={2.25} />
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl text-white shadow-md" style={{ background: "linear-gradient(135deg,#4F46E5,#7C3AED)" }}>
+                      <Icon className="h-4 w-4" />
                     </span>
                     <span className="min-w-0 truncate text-[13px] font-semibold leading-5 text-slate-800 group-hover:text-indigo-700">
                       {label}
@@ -232,8 +232,8 @@ export function SiteFooter() {
                 <span className="pointer-events-none absolute -bottom-20 -left-12 h-44 w-44 rounded-full bg-aqua/12 blur-[70px]" />
 
                 <div className="relative mb-4 flex items-center gap-3 md:mb-5">
-                  <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${col.iconBg} shadow-[0_12px_28px_-16px_rgba(34,211,238,0.75),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-white/20 md:h-10 md:w-10 md:rounded-2xl`}>
-                    <col.Icon className="h-4 w-4 md:h-5 md:w-5" color="#ffffff" strokeWidth={2.25} />
+                  <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${col.iconBg} text-white shadow-[0_12px_28px_-16px_rgba(34,211,238,0.75),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-white/20 md:h-10 md:w-10 md:rounded-2xl`}>
+                    <col.Icon className="h-4 w-4 md:h-5 md:w-5" />
                   </span>
                   <h4
                     className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/90 md:text-[12px]"

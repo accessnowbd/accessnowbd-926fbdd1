@@ -254,7 +254,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  onDragLeave={() => { if (overId === r.id) setOverId(null); }}
  onDrop={(e) => { e.preventDefault(); onDrop(r.id); }}
  onDragEnd={() => { setDragId(null); setOverId(null); }}
-  className={`hover:bg-slate-50/60 ${dragId === r.id ? "opacity-40" : ""} ${overId === r.id && dragId !== r.id ? "bg-slate-50 outline outline-1 outline-slate-300" : ""}`}
+ className={`hover:bg-slate-50/60 ${dragId === r.id ? "opacity-40" : ""} ${overId === r.id && dragId !== r.id ? "bg-slate-50 outline outline-1 outline-violet-300" : ""}`}
  >
  <td className="px-2 py-3 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500">
  <GripVertical className="w-4 h-4" />

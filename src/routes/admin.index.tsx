@@ -241,7 +241,7 @@ function AdminDashboard() {
  { label: "This month", value: fmtBDT(stats.monthRev), sub: `${stats.monthCount} orders`, Icon: BarChart3 },
  { label: "Customers", value: counts.users.toLocaleString("en-IN"), sub: `${counts.products} products`, Icon: Users },
  ].map(({ label, value, sub, Icon }) => (
-  <div key={label} className="group rounded-3xl bg-white ring-1 ring-slate-200/70 p-5 shadow-[0_8px_24px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.28)]">
+ <div key={label} className="rounded-3xl bg-white ring-1 ring-slate-200/70 p-5 shadow-[0_8px_24px_-18px_rgba(100,116,139,0.18)]">
  <div className="flex items-start justify-between gap-3">
  <div className="text-sm text-slate-500 font-medium">{label}</div>
  <span className="w-9 h-9 rounded-full bg-slate-100 text-slate-500 grid place-items-center">
@@ -305,7 +305,7 @@ function AdminDashboard() {
 
  {/* Sales Report + Traffic Sources */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-  <div className="lg:col-span-2 rounded-2xl p-5 ring-1 ring-slate-200/80 bg-white shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.24)]">
+ <div className="lg:col-span-2 rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
  <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
  <div className="font-extrabold text-slate-900">Sales Report</div>
  <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100/70">
@@ -313,7 +313,7 @@ function AdminDashboard() {
  <button key={t} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg ${i===0?"bg-white shadow-sm text-slate-900":"text-slate-500 hover:text-slate-700"}`}>{t}</button>
  ))}
  </div>
-  <button className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-slate-900 ring-1 ring-slate-900 text-white hover:bg-slate-800 transition-all duration-200 hover:-translate-y-0.5">
+ <button className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-white ring-1 ring-slate-200 text-slate-700 hover:bg-slate-50">
  <FileText className="w-3.5 h-3.5" /> EXPORT PDF
  </button>
  </div>
@@ -343,7 +343,7 @@ function AdminDashboard() {
  })()}
  </div>
 
-  <div className="rounded-2xl p-5 ring-1 ring-slate-200/80 bg-white shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.24)]">
+ <div className="rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
  <div className="flex items-center justify-between mb-5">
  <div className="font-extrabold text-slate-900">Traffic Sources</div>
  <button className="text-[11px] font-bold text-slate-500 inline-flex items-center gap-1">LAST 7 DAYS</button>
@@ -367,7 +367,7 @@ function AdminDashboard() {
  {/* Orders Breakdown (donut) + Recent Customers — matches reference */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
  {/* Donut */}
-  <div className="rounded-3xl p-5 ring-1 ring-slate-200/80 bg-white shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.24)]">
+ <div className="rounded-3xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
  <div className="flex items-center justify-between mb-4">
  <div className="font-extrabold text-slate-900">Orders Breakdown</div>
  <button className="text-slate-500 hover:text-slate-700">⋮</button>
@@ -423,7 +423,7 @@ function AdminDashboard() {
  </div>
 
  {/* Recent Customers table */}
-  <div className="lg:col-span-2 rounded-3xl p-5 ring-1 ring-slate-200/80 bg-white shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.24)]">
+ <div className="lg:col-span-2 rounded-3xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
  <div className="flex items-center justify-between mb-4">
  <div className="font-extrabold text-slate-900">Recent Customers</div>
  <Link to="/admin/orders" className="text-xs font-bold text-slate-600 inline-flex items-center gap-1 hover:underline">
@@ -483,7 +483,7 @@ function AdminDashboard() {
  </div>
 
  {/* Quick actions */}
-  <div className="rounded-2xl p-5 ring-1 ring-slate-200/80 bg-white shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-24px_rgba(15,23,42,0.24)]">
+ <div className="rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
  <div className="flex items-center justify-between mb-4">
  <div className="font-extrabold text-slate-900">Quick actions</div>
  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Shortcuts</span>
@@ -495,9 +495,9 @@ function AdminDashboard() {
  <Link
  key={a.to}
  to={a.to}
-  className="group flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:shadow-md transition-all"
+ className="group flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white/80 ring-1 ring-white/70 hover:ring-slate-200 hover:shadow-md transition-all"
  >
-  <div className="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 ring-1 ring-slate-200 grid place-items-center shadow-sm group-hover:scale-110 group-hover:bg-white transition">
+ <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${a.grad} text-white grid place-items-center shadow-md group-hover:scale-110 transition`}>
  <Icon className="w-4 h-4" />
  </div>
  <div className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{a.label}</div>
@@ -510,7 +510,7 @@ function AdminDashboard() {
  {/* Pending highlight + Top products + Stock */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
  {/* Pending action card */}
-  <div className="bg-white ring-1 ring-slate-200 border border-slate-200 rounded-2xl p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+ <div className="bg-white/70 backdrop-blur-md ring-1 ring-slate-200 border border-slate-200 rounded-2xl p-5 shadow-sm">
  <div className="flex items-center gap-3">
  <div className="w-11 h-11 rounded-2xl bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center shadow-md">
  <Clock className="w-5 h-5" />
@@ -557,7 +557,7 @@ function AdminDashboard() {
  <div className="flex-1 min-w-0">
  <div className="text-sm font-semibold text-slate-900 truncate">{it.name}</div>
  <div className="mt-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-  <div className="h-full rounded-full bg-slate-500" style={{ width: `${pct}%` }} />
+ <div className="h-full rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200" style={{ width: `${pct}%` }} />
  </div>
  </div>
  <div className="text-right shrink-0">
@@ -601,9 +601,9 @@ function AdminDashboard() {
  const Icon = c.icon;
  return (
  <div key={c.label} className="group relative bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden">
-  <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80" />
+ <div className={`pointer-events-none absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${c.grad} opacity-10 blur-2xl group-hover:opacity-25 transition`} />
  <div className="flex items-start justify-between relative">
-  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 ring-1 ring-slate-200 grid place-items-center shadow-sm">
+ <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${c.grad} text-white grid place-items-center shadow-md`}>
  <Icon className="w-5 h-5" />
  </div>
  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${c.chip}`}>LIVE</span>
@@ -761,7 +761,7 @@ function AdminDashboard() {
  const Icon = n.icon;
  return (
  <div key={i} className="flex items-start gap-3 p-2 rounded-xl hover:bg-slate-50 transition animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
-  <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 ring-1 ring-slate-200 grid place-items-center shrink-0 shadow-sm">
+ <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${n.color} text-white grid place-items-center shrink-0 shadow-sm`}>
  <Icon className="w-4 h-4" />
  </div>
  <div className="flex-1 min-w-0">
@@ -796,14 +796,14 @@ function AdminDashboard() {
  return (
  <div key={d.label}>
  <div className="flex items-center gap-2 mb-1.5">
-  <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 ring-1 ring-slate-200 grid place-items-center shadow-sm">
+ <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${d.color} text-white grid place-items-center shadow-sm`}>
  <Icon className="w-3.5 h-3.5" />
  </div>
  <span className="text-sm font-semibold text-slate-700 flex-1">{d.label}</span>
  <span className="text-sm font-extrabold text-slate-900 tabular-nums">{d.val}%</span>
  </div>
  <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-  <div className="h-full rounded-full bg-slate-500 transition-all" style={{ width: `${d.val}%` }} />
+ <div className={`h-full rounded-full bg-gradient-to-r ${d.color} transition-all`} style={{ width: `${d.val}%` }} />
  </div>
  </div>
  );
@@ -851,7 +851,7 @@ function AdminDashboard() {
  <div className="divide-y divide-slate-100">
  {orders.slice(0, 6).map((o) => (
  <Link key={o.id} to="/admin/orders" className="flex items-center gap-3 py-3 px-1 hover:bg-slate-50 rounded-lg transition">
-  <div className="w-9 h-9 rounded-full bg-slate-100 ring-1 ring-slate-200 grid place-items-center text-slate-600 font-bold text-xs shrink-0">
+ <div className="w-9 h-9 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 grid place-items-center text-slate-600 font-bold text-xs shrink-0">
  {(o.full_name || o.email || "?").slice(0, 2).toUpperCase()}
  </div>
  <div className="flex-1 min-w-0">
@@ -882,7 +882,7 @@ function AdminDashboard() {
  <Link to="/admin/inventory" className="text-xs font-semibold text-slate-700 hover:text-slate-900">View</Link>
  </div>
 
-  <div className="bg-slate-50 ring-1 ring-slate-200 border border-slate-200 rounded-xl p-4 mb-4 flex items-center gap-3">
+ <div className="bg-white/70 backdrop-blur-md ring-1 ring-slate-200 border border-slate-200 rounded-xl p-4 mb-4 flex items-center gap-3">
  <div className="w-10 h-10 rounded-xl bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center shadow"><Box className="w-5 h-5" /></div>
  <div>
  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-700">Out of stock</div>

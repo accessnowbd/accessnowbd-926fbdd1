@@ -37,7 +37,7 @@ export function SearchBar({
         onSubmit?.(value);
       }}
       className={cn(
-        "flex items-center gap-2 rounded-full bg-white border border-slate-200 shadow-[0_4px_14px_-8px_rgba(15,23,42,0.18)] focus-within:border-slate-400 focus-within:shadow-[0_8px_20px_-12px_rgba(15,23,42,0.35)] transition pr-1.5",
+        "flex items-center gap-2 rounded-full bg-white border border-slate-200 shadow-[0_4px_14px_-8px_rgba(15,23,42,0.18)] focus-within:border-violet-400 focus-within:shadow-[0_6px_18px_-8px_rgba(124,58,237,0.35)] transition pr-1.5",
         padLeft[size],
         heights[size],
         className,
@@ -66,7 +66,7 @@ export function SearchBar({
         type="submit"
         aria-label="Submit search"
         className={cn(
-          "grid place-items-center rounded-full bg-slate-900 text-white hover:bg-slate-800 active:scale-95 transition shrink-0",
+          "grid place-items-center rounded-full bg-violet-50 text-violet-600 hover:bg-violet-100 hover:text-violet-700 active:scale-95 transition shrink-0",
           btnSizes[size],
         )}
       >

@@ -91,7 +91,7 @@ function DescriptionTemplatePage() {
           <div className="text-xs text-muted-foreground mb-1">
             <Link to="/admin" className="hover:underline">Admin</Link> / Description Template
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
             Product Description Template
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -109,7 +109,7 @@ function DescriptionTemplatePage() {
           <button
             onClick={save}
             disabled={!dirty || saving || loading}
-            className="text-sm px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold disabled:opacity-50 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-12px_rgba(15,23,42,0.55)]"
+            className="text-sm px-4 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white font-semibold disabled:opacity-50"
           >
             {saving ? "Saving…" : "Save template"}
           </button>
@@ -137,7 +137,7 @@ function DescriptionTemplatePage() {
             onChange={(e) => setTemplate(e.target.value)}
             spellCheck={false}
             disabled={loading}
-            className="w-full min-h-[70vh] font-mono text-sm p-4 rounded-lg border border-border bg-background resize-y focus:outline-none focus:ring-2 focus:ring-slate-300"
+            className="w-full min-h-[70vh] font-mono text-sm p-4 rounded-lg border border-border bg-background resize-y focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
           <p className="text-xs text-muted-foreground mt-2">
             Use placeholders like <code>{"{Product Name}"}</code>, <code>{"{Brand}"}</code>, <code>{"{Plan 1}"}</code>. The AI replaces them per product.

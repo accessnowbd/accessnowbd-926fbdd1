@@ -125,9 +125,9 @@ function AdminPromotions() {
  </div>
 
  <AdminStatGrid>
- <AdminStatCard label="Total Campaigns" value={items.length} delta={10} tone="slate" loading={loading} />
+ <AdminStatCard label="Total Campaigns" value={items.length} delta={10} tone="indigo" loading={loading} />
  <AdminStatCard label="Active" value={activeCount} delta={5} tone="emerald" loading={loading} />
- <AdminStatCard label="With Code" value={withCode} tone="slate" loading={loading} />
+ <AdminStatCard label="With Code" value={withCode} tone="violet" loading={loading} />
  <AdminStatCard label="Avg Discount" value={`${avgDiscount}%`} delta={avgDiscount > 20 ? 8 : -3} tone="rose" loading={loading} />
  </AdminStatGrid>
 

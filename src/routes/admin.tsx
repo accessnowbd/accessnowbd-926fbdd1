@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ShieldAlert, LogOut, Bell, Globe, Search,
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X, Pin,
-  Moon, Plus,
 } from "lucide-react";
 import { AdminGlobalSearch, useAdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
 import { useAuth } from "@/context/AuthContext";
@@ -12,7 +11,6 @@ import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
 import { AdminMfaGate } from "@/components/admin/AdminMfaGate";
 import { AdminLangProvider, useAdminLang } from "@/context/AdminLangContext";
 import accessNowLogo from "@/assets/accessnow-bd-mark.webp";
-import "@/styles/admin-reset.css";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
@@ -263,7 +261,7 @@ function AdminBlankState() {
   return (
     <div className="min-h-screen grid place-items-center bg-[#fafafa]" role="status" aria-label="Loading admin panel">
       <div className="flex flex-col items-center gap-3 text-slate-500">
-        <div className="w-7 h-7 rounded-full border-2 border-slate-200 border-t-slate-900 animate-spin" />
+        <div className="w-7 h-7 rounded-full border-2 border-slate-200 border-t-indigo-500 animate-spin" />
         <span className="text-xs font-medium tracking-wide">Loading admin…</span>
       </div>
     </div>
@@ -271,8 +269,7 @@ function AdminBlankState() {
 }
 
 function AdminShell({ user, signOut, navigate }: any) {
-  const [collapsed, _setCollapsed] = useState(false); // Sidebar locked open
-  void _setCollapsed;
+  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dark = false;
   const [search, setSearch] = useState("");
@@ -306,7 +303,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="admin-shell min-h-screen flex relative bg-[#fafafa]">
+    <div className="min-h-screen flex relative bg-[#fafafa]">
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
@@ -318,7 +315,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* SIDEBAR */}
       <aside
         className={[
-          "admin-sidebar-premium shrink-0 transition-transform duration-300 flex flex-col h-screen",
+          "shrink-0 transition-transform duration-200 flex flex-col h-screen",
           "bg-white border-r border-slate-200/80",
           // Desktop: sticky sidebar with collapse width
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
@@ -330,13 +327,13 @@ function AdminShell({ user, signOut, navigate }: any) {
       >
         {/* Brand */}
         <div className={[
-          "relative border-b border-slate-200/80",
+          "border-b border-slate-200/80",
           collapsed
-            ? "flex flex-col items-center justify-center gap-2 py-3 px-2"
-            : "h-16 flex items-center px-4 pr-12",
+            ? "flex flex-col items-center justify-center gap-1.5 py-3 px-2"
+            : "h-16 flex items-center justify-between px-4",
         ].join(" ")}>
-          <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 flex-1 ${collapsed ? "justify-center" : ""}`}>
-            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-full overflow-hidden ring-1 ring-slate-200 bg-white">
+          <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "justify-center" : ""}`}>
+            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-full overflow-hidden ring-1 ring-white/30 shadow-[0_6px_18px_-6px_rgba(47,109,255,0.6)] bg-[radial-gradient(120%_120%_at_30%_20%,rgba(255,255,255,0.95)_0%,rgba(225,236,255,0.9)_55%,rgba(196,218,255,0.88)_100%)]">
               <img
                 src={accessNowLogo}
                 alt="AccessNow BD"
@@ -345,18 +342,18 @@ function AdminShell({ user, signOut, navigate }: any) {
               />
             </span>
             {!collapsed && (
-              <span className="leading-[1.05] min-w-0 overflow-hidden">
+              <span className="leading-[1.05] min-w-0">
                 <span className="flex items-baseline gap-1 whitespace-nowrap">
                   <span className="font-extrabold tracking-tight text-[14px] text-slate-900">Access</span>
                   <span className="font-extrabold tracking-tight text-[14px] text-slate-900">Now</span>
                   <span className="font-extrabold tracking-tight text-[14px] text-slate-900">BD</span>
                 </span>
-                <span className="mt-0.5 flex items-center gap-1 whitespace-nowrap">
-                  <span className="text-[8px] uppercase tracking-[0.18em] font-bold text-slate-500">Fast</span>
+                <span className="mt-0.5 flex items-center gap-1">
+                  <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Fast</span>
                   <span className="w-[3px] h-[3px] rounded-full bg-slate-400" />
-                  <span className="text-[8px] uppercase tracking-[0.18em] font-bold text-slate-500">Secure</span>
+                  <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Secure</span>
                   <span className="w-[3px] h-[3px] rounded-full bg-slate-400" />
-                  <span className="text-[8px] uppercase tracking-[0.18em] font-bold text-slate-500">Reliable</span>
+                  <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-500">Reliable</span>
                 </span>
               </span>
             )}
@@ -364,12 +361,25 @@ function AdminShell({ user, signOut, navigate }: any) {
           {/* Mobile close */}
           <button
             onClick={() => setMobileOpen(false)}
-            className="lg:hidden absolute top-1/2 -translate-y-1/2 right-3 h-8 w-8 grid place-items-center rounded-lg bg-white ring-1 ring-slate-200 hover:bg-slate-50 text-slate-600"
+            className="lg:hidden p-1.5 rounded-lg hover:bg-slate-100 text-slate-600"
             aria-label="Close menu"
           >
             <X className="w-4 h-4" />
           </button>
-          {/* Sidebar locked open — collapse toggle intentionally removed */}
+          {/* Desktop collapse / expand toggle */}
+          <button
+            onClick={() => setCollapsed((v) => !v)}
+            className={[
+              "hidden lg:inline-flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition",
+              collapsed
+                ? "w-9 h-9 ring-1 ring-slate-200 bg-white shadow-sm"
+                : "p-1.5",
+            ].join(" ")}
+            aria-label={collapsed ? t("Expand sidebar", "সাইডবার বড় করুন") : t("Collapse sidebar", "সাইডবার ছোট করুন")}
+            title={collapsed ? t("Expand sidebar", "সাইডবার বড় করুন") : t("Collapse sidebar", "সাইডবার ছোট করুন")}
+          >
+            {collapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+          </button>
         </div>
 
         {/* Search */}
@@ -378,7 +388,7 @@ function AdminShell({ user, signOut, navigate }: any) {
             <button
               type="button"
               onClick={() => setGlobalOpen(true)}
-              className="w-full h-9 flex items-center gap-2 px-3 rounded-lg bg-slate-50 border border-slate-200 hover:border-slate-400 hover:bg-white hover:shadow-sm transition-all duration-200 text-left"
+              className="w-full h-9 flex items-center gap-2 px-3 rounded-lg bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-white transition text-left"
             >
               <Search className="w-3.5 h-3.5 text-slate-400" />
               <span className="flex-1 text-xs text-slate-500 truncate">{t("Search anything…", "যেকোনো কিছু খুঁজুন…")}</span>
@@ -421,7 +431,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* MAIN */}
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar */}
-        <header className="admin-topbar-premium h-16 sticky top-0 z-20 bg-[#fafafa]/90 backdrop-blur-xl border-b border-slate-200/80">
+        <header className="h-16 sticky top-0 z-20 bg-[#fafafa]/90 backdrop-blur-xl border-b border-slate-200/80">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
             <button
               onClick={() => setMobileOpen(true)}
@@ -461,49 +471,26 @@ function AdminShell({ user, signOut, navigate }: any) {
               onClick={toggle}
               aria-label={t("Switch to Bangla", "ইংরেজিতে পরিবর্তন")}
               title={lang === "en" ? "বাংলায় দেখুন" : "Show in English"}
-              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-400 hover:-translate-y-0.5 hover:shadow-sm bg-white transition-all duration-200 shrink-0"
+              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-semibold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-indigo-300 bg-white transition shrink-0"
             >
               <Globe className="w-3.5 h-3.5" /> {lang === "en" ? "বাং" : "EN"}
             </button>
             <button
               type="button"
-              aria-label="Toggle dark mode"
-              title="Dark mode"
-              className="inline-flex h-9 w-9 rounded-lg items-center justify-center border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-400 hover:-translate-y-0.5 hover:shadow-sm bg-white transition-all duration-200 shrink-0"
-            >
-              <Moon className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
               onClick={() => setGlobalOpen(true)}
-              className="hidden xl:flex items-center gap-2 h-9 w-64 px-3 rounded-lg bg-white border border-slate-200 hover:border-slate-400 hover:shadow-sm transition-all duration-200 text-left"
+              className="hidden xl:flex items-center gap-2 h-9 w-64 px-3 rounded-lg bg-white border border-slate-200 hover:border-indigo-300 transition text-left"
             >
               <Search className="w-3.5 h-3.5 text-slate-400" />
-              <span className="flex-1 text-xs text-slate-500 truncate">{t("Search", "খুঁজুন")}</span>
+              <span className="flex-1 text-xs text-slate-500 truncate">{t("Search…", "খুঁজুন…")}</span>
               <kbd className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-50 border border-slate-200 text-slate-500">⌘K</kbd>
             </button>
-            <button
-              type="button"
-              className="hidden sm:inline-flex h-9 px-3.5 rounded-lg text-xs font-semibold items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-12px_rgba(15,23,42,0.55)] shrink-0"
-            >
-              <Plus className="w-3.5 h-3.5" /> {t("Create", "তৈরি")}
-              <ChevronDown className="w-3.5 h-3.5 opacity-70" />
-            </button>
-            <button
-              type="button"
-              aria-label="Notifications"
-              className="relative inline-flex h-9 w-9 rounded-lg items-center justify-center border border-slate-200 text-slate-700 hover:bg-slate-50 hover:-translate-y-0.5 hover:shadow-sm bg-white transition-all duration-200 shrink-0"
-            >
-              <Bell className="w-4 h-4" />
-              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold grid place-items-center ring-2 ring-[#fafafa]">21</span>
-            </button>
-            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-slate-900 text-white hover:bg-slate-800 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-12px_rgba(15,23,42,0.55)]">
+            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
               <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
             </Link>
           </div>
         </header>
 
-        <div data-admin-content className={`flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden ${dark ? "text-slate-100" : "text-slate-900"}`}>
+        <div className={`flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden ${dark ? "text-slate-100" : "text-slate-900"}`}>
           <div className="mx-auto max-w-[1400px]">
             <Outlet />
           </div>
@@ -567,25 +554,25 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
       activeOptions={{ exact: item.exact }}
       title={collapsed ? label : undefined}
       className={[
-        "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all duration-200 relative hover:-translate-y-0.5",
+        "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all relative",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-slate-900 text-white shadow-[0_12px_24px_-16px_rgba(15,23,42,0.8)]"
-          : "text-slate-700 hover:bg-slate-50 hover:shadow-sm",
+          ? "bg-slate-100 text-slate-900"
+          : "text-slate-700 hover:bg-slate-50",
       ].join(" ")}
     >
       <span
         className={[
-          "admin-menu-icon shrink-0 w-9 h-9 rounded-full grid place-items-center",
-          "bg-slate-100 text-slate-700 shadow-sm ring-1 ring-slate-200 transition-all duration-200",
-          active ? "bg-white/10 text-white ring-white/20" : "group-hover:bg-white group-hover:ring-slate-300",
+          "shrink-0 w-9 h-9 rounded-full grid place-items-center text-white",
+          "bg-gradient-to-br shadow-sm ring-1 ring-white/40",
+          item.grad,
         ].join(" ")}
       >
         {item.icon}
       </span>
       {!collapsed && <span className="font-semibold truncate flex-1 text-[14px]">{label}</span>}
       {!collapsed && active && (
-        <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" aria-hidden />
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-700 shrink-0" aria-hidden />
       )}
       {!collapsed && !active && (
         <Pin
