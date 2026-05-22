@@ -10,6 +10,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AdminStatCard as PremiumStatCard } from "@/components/admin/AdminStatCard";
+import { SearchBar } from "@/components/SearchBar";
 
 export const Route = createFileRoute("/admin/products")({
  component: AdminProducts,
@@ -345,14 +346,15 @@ function AdminProducts() {
 
  {/* Filters */}
  <div className="flex flex-wrap items-center gap-2 mb-4">
- <div className="relative flex-1 min-w-[220px]">
- <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
- <input
- value={query} onChange={(e) => setQuery(e.target.value)}
- placeholder="পণ্য খুঁজুন…"
- className="w-full h-10 pl-9 pr-3 rounded-xl border border-border bg-white text-sm outline-none focus:border-primary"
+ <SearchBar
+   value={query}
+   onChange={setQuery}
+   placeholder="পণ্য খুঁজুন…"
+   size="md"
+   showSubmit={false}
+   className="flex-1 min-w-[220px]"
  />
- </div>
+
  <select value={catFilter} onChange={(e) => setCatFilter(e.target.value)} className="h-10 px-3 rounded-xl border border-border bg-white text-sm">
  {categories.map((c) => <option key={c} value={c}>{c === "all" ? "সব ক্যাটাগরি" : c}</option>)}
  </select>

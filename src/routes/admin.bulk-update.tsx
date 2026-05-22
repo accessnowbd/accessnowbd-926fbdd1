@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { SearchBar } from "@/components/SearchBar";
 
 type Plan = { period: string; price: string; original?: string; popular?: boolean };
 type Product = {
@@ -317,12 +318,15 @@ function BulkUpdatePage() {
       {/* Selector */}
       <section className="rounded-xl border bg-card">
         <div className="flex flex-wrap items-center gap-3 p-3 border-b">
-          <input
+          <SearchBar
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={setFilter}
             placeholder="Search products…"
-            className="flex-1 min-w-[200px] rounded border px-3 py-1.5 text-sm"
+            size="sm"
+            showSubmit={false}
+            className="flex-1 min-w-[200px]"
           />
+
           <button onClick={toggleAll} className="text-sm rounded border px-3 py-1.5 hover:bg-muted">
             {selected.size === filtered.length && filtered.length > 0 ? "Clear" : "Select all"}
           </button>

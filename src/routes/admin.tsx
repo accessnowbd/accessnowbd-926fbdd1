@@ -5,6 +5,7 @@ import {
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X, Pin,
 } from "lucide-react";
 import { AdminGlobalSearch, useAdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
+import { SearchTrigger } from "@/components/SearchBar";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
@@ -385,17 +386,14 @@ function AdminShell({ user, signOut, navigate }: any) {
         {/* Search */}
         {!collapsed && (
           <div className="px-3 pt-3 pb-1">
-            <button
-              type="button"
+            <SearchTrigger
+              size="sm"
               onClick={() => setGlobalOpen(true)}
-              className="w-full h-9 flex items-center gap-2 px-3 rounded-lg bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-white transition text-left"
-            >
-              <Search className="w-3.5 h-3.5 text-slate-400" />
-              <span className="flex-1 text-xs text-slate-500 truncate">{t("Search anything…", "যেকোনো কিছু খুঁজুন…")}</span>
-              <kbd className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white border border-slate-200 text-slate-500">⌘K</kbd>
-            </button>
+              placeholder={t("Search anything…", "যেকোনো কিছু খুঁজুন…")}
+            />
           </div>
         )}
+
 
         {/* Menu */}
         <nav className="flex-1 overflow-y-auto px-2 pb-4 admin-scroll">
@@ -475,15 +473,13 @@ function AdminShell({ user, signOut, navigate }: any) {
             >
               <Globe className="w-3.5 h-3.5" /> {lang === "en" ? "বাং" : "EN"}
             </button>
-            <button
-              type="button"
+            <SearchTrigger
+              size="sm"
               onClick={() => setGlobalOpen(true)}
-              className="hidden xl:flex items-center gap-2 h-9 w-64 px-3 rounded-lg bg-white border border-slate-200 hover:border-indigo-300 transition text-left"
-            >
-              <Search className="w-3.5 h-3.5 text-slate-400" />
-              <span className="flex-1 text-xs text-slate-500 truncate">{t("Search…", "খুঁজুন…")}</span>
-              <kbd className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-50 border border-slate-200 text-slate-500">⌘K</kbd>
-            </button>
+              placeholder={t("Search…", "খুঁজুন…")}
+              className="hidden xl:block w-64"
+            />
+
             <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-semibold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">
               <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
             </Link>
