@@ -539,13 +539,13 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
     <div className="mt-3">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-50"
+        className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider text-violet-700 hover:bg-violet-50/60"
       >
         <span className="inline-flex items-center gap-2">
-          <span className="text-slate-500">{group.icon}</span>
+          <span className="text-violet-500">{group.icon}</span>
           {t(group.title, group.titleBn)}
         </span>
-        <ChevronDown className={`w-3.5 h-3.5 transition-transform text-slate-400 ${open ? "" : "-rotate-90"}`} />
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform text-violet-400 ${open ? "" : "-rotate-90"}`} />
       </button>
       {open && (
         <div className="space-y-1 mt-1">
