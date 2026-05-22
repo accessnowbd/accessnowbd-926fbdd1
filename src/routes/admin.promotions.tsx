@@ -118,7 +118,7 @@ function AdminPromotions() {
  </div>
  <button
  onClick={() => { setEditing({ ...empty }); setIsNew(true); }}
- className="px-4 h-10 rounded-xl bg-white/70 backdrop-blur-md ring-1 ring-slate-200 text-white text-sm font-semibold inline-flex items-center gap-1.5 shadow-[0_8px_22px_-8px_rgba(100,116,139,0.7)] hover:opacity-95"
+ className="px-4 h-10 rounded-xl bg-slate-900 ring-1 ring-slate-800 text-white text-sm font-semibold inline-flex items-center gap-1.5 shadow-[0_8px_22px_-8px_rgba(100,116,139,0.7)] hover:opacity-95"
  >
  <Plus className="w-4 h-4" /> New promotion
  </button>
@@ -214,7 +214,7 @@ function AdminPromotions() {
  </div>
  <div className="mt-5 flex justify-end gap-2">
  <button onClick={() => setEditing(null)} className="px-4 h-9 rounded-full ring-1 ring-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50">Cancel</button>
- <button onClick={save} className="px-4 h-9 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 text-white text-xs font-semibold inline-flex items-center gap-1.5 shadow-[0_8px_22px_-8px_rgba(100,116,139,0.7)]"><Save className="w-3.5 h-3.5" /> Save</button>
+ <button onClick={save} className="px-4 h-9 rounded-full bg-slate-900 ring-1 ring-slate-800 text-white text-xs font-semibold inline-flex items-center gap-1.5 shadow-[0_8px_22px_-8px_rgba(100,116,139,0.7)]"><Save className="w-3.5 h-3.5" /> Save</button>
  </div>
  </div>
  </div>
