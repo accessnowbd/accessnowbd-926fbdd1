@@ -2320,3 +2320,47 @@ html.theme-white .admin-shell [class*="text-sky-"] svg {
   color: inherit !important;
   stroke: inherit !important;
 }
+
+/* Final admin guardrail: regardless of the active site theme, admin stays
+   white / silver / slate. This prevents global marketing gradients from
+   leaking into the sidebar, topbar, search, or primary action buttons. */
+.admin-shell [class*="bg-slate-900"],
+.admin-shell [class*="bg-slate-800"] {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
+  box-shadow: 0 12px 24px -14px rgba(15, 23, 42, 0.65) !important;
+}
+.admin-shell [class*="bg-slate-900"] *,
+.admin-shell [class*="bg-slate-800"] * {
+  color: inherit !important;
+  stroke: currentColor !important;
+}
+.admin-shell [class*="bg-violet-"],
+.admin-shell [class*="bg-purple-"],
+.admin-shell [class*="bg-fuchsia-"],
+.admin-shell [class*="bg-indigo-"],
+.admin-shell [class*="bg-pink-"],
+.admin-shell [class*="bg-blue-"] {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+}
+.admin-shell [class*="text-violet-"],
+.admin-shell [class*="text-purple-"],
+.admin-shell [class*="text-fuchsia-"],
+.admin-shell [class*="text-indigo-"],
+.admin-shell [class*="text-pink-"] {
+  color: #475569 !important;
+}
+.admin-shell [class*="border-violet-"],
+.admin-shell [class*="border-purple-"],
+.admin-shell [class*="border-fuchsia-"],
+.admin-shell [class*="border-indigo-"],
+.admin-shell [class*="ring-violet-"],
+.admin-shell [class*="ring-purple-"],
+.admin-shell [class*="ring-fuchsia-"],
+.admin-shell [class*="ring-indigo-"] {
+  border-color: #cbd5e1 !important;
+  --tw-ring-color: #cbd5e1 !important;
+}
