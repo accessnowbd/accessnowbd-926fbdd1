@@ -76,7 +76,7 @@ type Product = {
 };
 
 const empty: Product = {
- slug: "", name: "", emoji: "📦", gradient: "from-primary to-primary",
+ slug: "", name: "", emoji: "📦", gradient: "from-slate-700 to-slate-900",
  category: "", badge: null, tagline: "", description: "",
  short_description: "",
  delivery_time: "Instant / 24 hours", warranty: "",
@@ -350,7 +350,7 @@ function AdminProducts() {
  <input
  value={query} onChange={(e) => setQuery(e.target.value)}
  placeholder="পণ্য খুঁজুন…"
- className="w-full h-10 pl-9 pr-3 rounded-xl border border-border bg-white text-sm outline-none focus:border-primary"
+ className="w-full h-10 pl-9 pr-3 rounded-xl border border-border bg-white text-sm outline-none focus:border-slate-400"
  />
  </div>
  <select value={catFilter} onChange={(e) => setCatFilter(e.target.value)} className="h-10 px-3 rounded-xl border border-border bg-white text-sm">
@@ -399,7 +399,7 @@ function AdminProducts() {
  const price = lowestPrice(p);
  const stock = STOCK_LABELS[p.stock_status] ?? STOCK_LABELS.in_stock;
  return (
- <tr key={p.slug} className={`border-t border-border hover:bg-slate-50/60 ${checked ? "bg-primary/5" : ""}`}>
+  <tr key={p.slug} className={`border-t border-border hover:bg-slate-50/60 ${checked ? "bg-slate-100/70" : ""}`}>
  <td className="px-3 py-3">
  <input type="checkbox" checked={checked} onChange={() => toggleOne(p.slug)} />
  </td>
