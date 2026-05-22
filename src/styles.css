@@ -2052,6 +2052,24 @@ html.theme-white .admin-shell * {
   text-shadow: none !important;
 }
 
+html.theme-white .admin-shell {
+  --admin-surface: #ffffff;
+  --admin-surface-soft: #f8fafc;
+  --admin-border: #e2e8f0;
+  --admin-ink: #0f172a;
+  --admin-muted: #64748b;
+}
+
+/* Admin must never inherit the site's aurora/purple theme treatment. */
+html.theme-white .admin-shell header,
+html.theme-white .admin-shell aside,
+html.theme-white .admin-shell nav,
+html.theme-white .admin-shell [data-admin-content],
+html.theme-white .admin-shell [role="search"],
+html.theme-white .admin-shell [role="search"] * {
+  color: var(--admin-ink) !important;
+}
+
 /* Stop the indigo background tint on bg-white/* utilities inside admin */
 html.theme-white .admin-shell [class*="bg-white\/"] {
   background-color: rgba(255, 255, 255, 0.9) !important;
@@ -2076,6 +2094,11 @@ html.theme-white .admin-shell .text-gray-300 { color: #d1d5db !important; }
 html.theme-white .admin-shell .text-gray-400 { color: #9ca3af !important; }
 html.theme-white .admin-shell .text-gray-500 { color: #6b7280 !important; }
 html.theme-white .admin-shell .text-foreground { color: #0f172a !important; }
+
+html.theme-white .admin-shell .text-white,
+html.theme-white .admin-shell .text-white * {
+  color: #ffffff !important;
+}
 
 /* Hard reset admin surfaces after global marketing glass overrides. */
 html.theme-white .admin-shell [class*="bg-white"] {
