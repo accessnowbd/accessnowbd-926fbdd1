@@ -322,9 +322,9 @@ function AdminShell({ user, signOut, navigate }: any) {
           "bg-white border-r border-slate-200/80",
           // Desktop: sticky sidebar with collapse width
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
-          collapsed ? "lg:w-[72px]" : "lg:w-[300px]",
+          collapsed ? "lg:w-[72px]" : "lg:w-[280px]",
           // Mobile: fixed drawer that slides in
-          "fixed top-0 left-0 z-50 w-[300px] max-w-[88vw] shadow-xl lg:shadow-none",
+          "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-xl lg:shadow-none",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         ].join(" ")}
       >
@@ -388,7 +388,7 @@ function AdminShell({ user, signOut, navigate }: any) {
         )}
 
         {/* Menu */}
-        <nav className="flex-1 overflow-y-auto px-3 pb-4 admin-scroll">
+        <nav className="flex-1 overflow-y-auto px-2 pb-4 admin-scroll">
           {filteredMenu.map((group) => (
             <SidebarGroup key={group.id} group={group} collapsed={collapsed} dark={dark} pathname={pathname} />
           ))}
