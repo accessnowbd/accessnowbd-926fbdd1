@@ -109,9 +109,9 @@ export default function RoleDebugPanel() {
       aria-labelledby="role-debug-heading"
       className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"
     >
-      <header className="flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-200 bg-gradient-to-r from-indigo-50 to-violet-50">
+      <header className="flex items-center justify-between gap-3 px-5 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 grid place-items-center text-white shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-slate-900 grid place-items-center text-white shadow-sm">
             <ShieldCheck className="w-5 h-5" aria-hidden="true" />
           </div>
           <div>
@@ -251,7 +251,7 @@ export default function RoleDebugPanel() {
                       <td className="px-3 py-2 font-mono text-slate-900">
                         {g.grantee}
                         {required && (
-                          <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200">
+                          <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-slate-100 text-slate-700 ring-1 ring-slate-200">
                             required
                           </span>
                         )}
@@ -317,7 +317,7 @@ export default function RoleDebugPanel() {
                   <td className="px-3 py-2 font-mono text-slate-900">{c.resource}</td>
                   <td className="px-3 py-2 text-slate-700">{c.actions}</td>
                   <td className="px-3 py-2 hidden sm:table-cell">
-                    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200">
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-100 text-slate-700 ring-1 ring-slate-200">
                       {c.requires}
                     </span>
                   </td>
