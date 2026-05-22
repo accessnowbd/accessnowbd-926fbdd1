@@ -495,7 +495,7 @@ function AdminDashboard() {
  <Link
  key={a.to}
  to={a.to}
- className="group flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white/80 ring-1 ring-white/70 hover:ring-slate-200 hover:shadow-md transition-all"
+  className="group flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:shadow-md transition-all"
  >
   <div className="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 ring-1 ring-slate-200 grid place-items-center shadow-sm group-hover:scale-110 group-hover:bg-white transition">
  <Icon className="w-4 h-4" />
