@@ -498,6 +498,7 @@ function AdminShell({ user, signOut, navigate }: any) {
 
 function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collapsed: boolean; dark: boolean; pathname: string }) {
   const [open, setOpen] = useState<boolean>(true);
+  const { t } = useAdminLang();
 
   if (collapsed) {
     // collapsed: just stack icons
@@ -518,7 +519,7 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
       >
         <span className="inline-flex items-center gap-2">
           <span className="text-slate-500">{group.icon}</span>
-          {group.title}
+          {t(group.title, group.titleBn)}
         </span>
         <ChevronDown className={`w-3.5 h-3.5 transition-transform text-slate-400 ${open ? "" : "-rotate-90"}`} />
       </button>
@@ -534,11 +535,13 @@ function SidebarGroup({ group, collapsed, dark, pathname }: { group: any; collap
 }
 
 function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenuItem; collapsed?: boolean; dark: boolean; active: boolean }) {
+  const { t } = useAdminLang();
+  const label = t(item.label, item.labelBn);
   return (
     <Link
       to={item.to}
       activeOptions={{ exact: item.exact }}
-      title={collapsed ? item.label : undefined}
+      title={collapsed ? label : undefined}
       className={[
         "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all relative",
         collapsed ? "justify-center" : "",
