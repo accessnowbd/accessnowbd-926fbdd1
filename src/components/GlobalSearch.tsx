@@ -6,11 +6,15 @@ import {
   Loader2,
   Clock,
   TrendingUp,
+  ChevronRight,
   CornerDownLeft,
-  ArrowUp,
-  ArrowDown,
-  Sparkles,
   Tag,
+  LayoutGrid,
+  Play,
+  Sparkles,
+  GraduationCap,
+  HelpCircle,
+  MessageCircle,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useProducts } from "@/hooks/useProducts";
@@ -19,13 +23,78 @@ import type { Product } from "@/data/products";
 const RECENT_KEY = "globalSearch:recent";
 const TRENDING = ["Netflix", "ChatGPT", "Spotify", "Canva", "YouTube", "Coursera"];
 
-const QUICK_LINKS: Array<{ label: string; to: "/products" | "/streaming" | "/ai-tools" | "/education" | "/faq" | "/contact"; hint: string }> = [
-  { label: "All Subscriptions", to: "/products", hint: "Browse the full catalog" },
-  { label: "Streaming", to: "/streaming", hint: "Netflix, Prime, Disney+ & more" },
-  { label: "AI Tools", to: "/ai-tools", hint: "ChatGPT, Claude, Midjourney…" },
-  { label: "Education", to: "/education", hint: "Coursera, Udemy, Skillshare" },
-  { label: "FAQ", to: "/faq", hint: "Common questions" },
-  { label: "Contact", to: "/contact", hint: "Talk to support" },
+type QuickLink = {
+  label: string;
+  bn: string;
+  to: "/products" | "/streaming" | "/ai-tools" | "/education" | "/faq" | "/contact";
+  hint: string;
+  icon: React.ComponentType<{ className?: string }>;
+  gradient: string;
+  shadow: string;
+  hoverText: string;
+};
+
+const QUICK_LINKS: QuickLink[] = [
+  {
+    label: "All Subscriptions",
+    bn: "সব সাবস্ক্রিপশন",
+    to: "/products",
+    hint: "Browse the full catalog",
+    icon: LayoutGrid,
+    gradient: "from-indigo-500 to-violet-500",
+    shadow: "shadow-indigo-200/60",
+    hoverText: "group-hover:text-indigo-500",
+  },
+  {
+    label: "Streaming",
+    bn: "স্ট্রিমিং",
+    to: "/streaming",
+    hint: "Netflix, Prime, Disney+ & more",
+    icon: Play,
+    gradient: "from-violet-500 to-fuchsia-500",
+    shadow: "shadow-violet-200/60",
+    hoverText: "group-hover:text-violet-500",
+  },
+  {
+    label: "AI Tools",
+    bn: "এআই টুলস",
+    to: "/ai-tools",
+    hint: "ChatGPT, Claude, Midjourney…",
+    icon: Sparkles,
+    gradient: "from-fuchsia-500 to-cyan-500",
+    shadow: "shadow-fuchsia-200/60",
+    hoverText: "group-hover:text-fuchsia-500",
+  },
+  {
+    label: "Education",
+    bn: "শিক্ষা",
+    to: "/education",
+    hint: "Coursera, Udemy, Skillshare",
+    icon: GraduationCap,
+    gradient: "from-cyan-400 to-indigo-500",
+    shadow: "shadow-cyan-200/60",
+    hoverText: "group-hover:text-cyan-500",
+  },
+  {
+    label: "FAQ",
+    bn: "সাধারণ প্রশ্ন",
+    to: "/faq",
+    hint: "Common questions",
+    icon: HelpCircle,
+    gradient: "from-sky-400 to-indigo-500",
+    shadow: "shadow-sky-200/60",
+    hoverText: "group-hover:text-sky-500",
+  },
+  {
+    label: "Contact",
+    bn: "যোগাযোগ",
+    to: "/contact",
+    hint: "Talk to support",
+    icon: MessageCircle,
+    gradient: "from-emerald-400 to-cyan-500",
+    shadow: "shadow-emerald-200/60",
+    hoverText: "group-hover:text-emerald-500",
+  },
 ];
 
 function loadRecent(): string[] {
@@ -63,7 +132,10 @@ function highlight(text: string, needle: string) {
     <>
       {parts.map((part, i) =>
         lowerSet.has(part.toLowerCase()) ? (
-          <mark key={i} className="bg-aqua/25 text-white rounded px-0.5">
+          <mark
+            key={i}
+            className="bg-indigo-100 text-indigo-700 rounded px-0.5"
+          >
             {part}
           </mark>
         ) : (
@@ -74,7 +146,6 @@ function highlight(text: string, needle: string) {
   );
 }
 
-// Lightweight fuzzy: returns true if all chars of `n` appear in order within `hay`.
 function fuzzyIncludes(hay: string, n: string): boolean {
   if (!n) return true;
   let i = 0;
@@ -95,7 +166,6 @@ function scoreProduct(p: Product, needle: string): number {
   const features = (p.features ?? []).join(" ").toLowerCase();
   const hay = `${name} ${tag} ${cat} ${badge} ${desc} ${features}`;
 
-  // Multi-token: every token must hit somewhere (AND semantics)
   const tokens = raw.split(/\s+/).filter(Boolean);
   let score = 0;
   for (const t of tokens) {
@@ -109,9 +179,9 @@ function scoreProduct(p: Product, needle: string): number {
     else if (badge.includes(t)) s = 220;
     else if (desc.includes(t)) s = 160;
     else if (features.includes(t)) s = 140;
-    else if (fuzzyIncludes(name, t)) s = 90; // typo tolerance
+    else if (fuzzyIncludes(name, t)) s = 90;
     else if (fuzzyIncludes(hay, t)) s = 40;
-    else return 0; // token missing → exclude
+    else return 0;
     score += s;
   }
   return score;
@@ -162,7 +232,6 @@ export function GlobalSearch({
     return Array.from(set).slice(0, 4);
   }, [products, needle]);
 
-  // Flat list of selectable items (for keyboard nav)
   const flatItems = useMemo(() => {
     const list: Array<{ kind: "product" | "category" | "submit"; value: string; product?: Product }> = [];
     if (needle) {
@@ -211,113 +280,119 @@ export function GlobalSearch({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="p-0 gap-0 max-w-2xl border-white/10 bg-[#0a0c1e]/95 backdrop-blur-2xl overflow-hidden rounded-3xl shadow-[0_30px_120px_-20px_rgba(124,58,237,0.5)]"
+        className="p-0 gap-0 max-w-[720px] border border-white/40 bg-white/70 backdrop-blur-2xl overflow-hidden rounded-3xl shadow-[0_32px_64px_-16px_rgba(15,23,42,0.25)] text-slate-800"
       >
         <DialogTitle className="sr-only">Search</DialogTitle>
 
-        {/* Aurora glow */}
-        <div className="pointer-events-none absolute -top-32 -left-20 w-[420px] h-[420px] rounded-full bg-primary/30 blur-[140px]" />
-        <div className="pointer-events-none absolute -bottom-32 -right-20 w-[420px] h-[420px] rounded-full bg-aqua/25 blur-[140px]" />
-
         {/* Input row */}
-        <div className="relative flex items-center gap-3 px-5 h-16 border-b border-white/10">
+        <div className="flex items-center gap-4 px-6 py-5 border-b border-black/5">
           {isLoading ? (
-            <Loader2 className="w-4 h-4 text-white/80 animate-spin shrink-0" />
+            <Loader2 className="w-5 h-5 text-slate-400 animate-spin shrink-0" />
           ) : (
-            <Search className="w-4 h-4 text-white/80 shrink-0" />
+            <Search className="w-5 h-5 text-slate-400 shrink-0" />
           )}
           <input
             ref={inputRef}
             value={q}
             onChange={(e) => setQ(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Search Netflix, ChatGPT, Spotify, Canva…"
-            className="flex-1 bg-transparent outline-none text-[15px] text-white placeholder:text-white/65"
+            placeholder="Search Netflix, ChatGPT, Spotify… / সার্চ করুন…"
+            className="flex-1 bg-transparent outline-none text-lg font-medium text-slate-800 placeholder:text-slate-400"
             autoComplete="off"
             spellCheck={false}
           />
           {q && (
             <button
               onClick={() => setQ("")}
-              className="grid place-items-center w-8 h-8 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition"
+              className="grid place-items-center w-8 h-8 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition"
               aria-label="Clear"
             >
               <X className="w-4 h-4" />
             </button>
           )}
-          <kbd className="hidden sm:inline-flex items-center h-6 px-2 rounded-md text-[10px] font-mono bg-white/10 text-white/70 border border-white/10">
-            ESC
+          <kbd className="hidden sm:inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase bg-slate-200/60 text-slate-500 border border-slate-300/50">
+            Esc
           </kbd>
         </div>
 
         {/* Body */}
-        <div className="relative max-h-[60vh] overflow-y-auto p-3">
+        <div className="max-h-[60vh] overflow-y-auto p-6 space-y-8">
           {needle ? (
             <>
               {/* Direct search action */}
               <button
                 onClick={() => go({ kind: "submit", value: needle })}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${
-                  active === 0 ? "bg-white/10 ring-1 ring-aqua/40" : "hover:bg-white/5"
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-left transition ${
+                  active === 0
+                    ? "bg-white/90 shadow-sm border border-white"
+                    : "hover:bg-white/80 border border-transparent hover:border-white"
                 }`}
               >
-                <Search className="w-4 h-4 text-aqua shrink-0" />
-                <span className="flex-1 text-sm text-white truncate">
-                  Search for "<span className="font-semibold">{needle}</span>" in all products
+                <div className="w-10 h-10 grid place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-white shadow-lg shadow-indigo-200/60">
+                  <Search className="w-5 h-5" />
+                </div>
+                <span className="flex-1 text-sm text-slate-700 truncate">
+                  Search for "<span className="font-semibold text-slate-900">{needle}</span>" in all products
                 </span>
-                <CornerDownLeft className="w-3.5 h-3.5 text-white/65" />
+                <CornerDownLeft className="w-4 h-4 text-slate-400" />
               </button>
 
               {/* Product matches */}
               {matches.length > 0 && (
-                <div className="mt-3">
-                  <div className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">
-                    Products
-                  </div>
-                  <div className="space-y-1">
+                <section>
+                  <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-1">
+                    Products / প্রোডাক্টস
+                  </h3>
+                  <div className="space-y-2">
                     {matches.map((p, i) => {
-                      const idx = i + 1; // +1 because submit is at 0
+                      const idx = i + 1;
                       const isActive = active === idx;
                       return (
                         <button
                           key={p.slug}
                           onClick={() => go({ kind: "product", value: p.slug, product: p })}
                           onMouseEnter={() => setActive(idx)}
-                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${
-                            isActive ? "bg-white/10 ring-1 ring-aqua/40" : "hover:bg-white/5"
+                          className={`group w-full flex items-center gap-4 p-4 rounded-2xl text-left transition-all duration-200 border ${
+                            isActive
+                              ? "bg-white/90 shadow-sm border-white"
+                              : "border-transparent hover:bg-white/80 hover:shadow-sm hover:border-white"
                           }`}
                         >
                           <div
-                            className={`grid place-items-center w-10 h-10 rounded-xl text-lg bg-gradient-to-br ${p.gradient} shadow-[0_6px_18px_-6px_rgba(0,0,0,0.6)]`}
+                            className={`w-10 h-10 grid place-items-center rounded-xl text-lg bg-gradient-to-br ${p.gradient} text-white shadow-lg`}
                           >
                             {p.emoji}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <div className="text-sm font-semibold text-white truncate">
+                            <div className="text-sm font-semibold text-slate-700 truncate">
                               {highlight(p.name, needle)}
                             </div>
-                            <div className="text-xs text-white/70 truncate">
+                            <div className="text-xs text-slate-500 truncate">
                               {p.tagline || p.category}
                             </div>
                           </div>
-                          <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-white/70 px-2 py-1 rounded-full bg-white/5 border border-white/10">
+                          <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 py-1 rounded-full bg-slate-100 border border-slate-200">
                             {p.category}
                           </span>
-                          <CornerDownLeft className="w-3.5 h-3.5 text-white/65 shrink-0" />
+                          <ChevronRight
+                            className={`w-5 h-5 text-slate-300 transition-colors ${
+                              isActive ? "text-indigo-500" : "group-hover:text-indigo-500"
+                            }`}
+                          />
                         </button>
                       );
                     })}
                   </div>
-                </div>
+                </section>
               )}
 
               {/* Category matches */}
               {categoryMatches.length > 0 && (
-                <div className="mt-3">
-                  <div className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">
-                    Categories
-                  </div>
-                  <div className="space-y-1">
+                <section>
+                  <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-1">
+                    Categories / ক্যাটাগরি
+                  </h3>
+                  <div className="space-y-2">
                     {categoryMatches.map((c, i) => {
                       const idx = 1 + matches.length + i;
                       const isActive = active === idx;
@@ -326,29 +401,35 @@ export function GlobalSearch({
                           key={c}
                           onClick={() => go({ kind: "category", value: c })}
                           onMouseEnter={() => setActive(idx)}
-                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${
-                            isActive ? "bg-white/10 ring-1 ring-aqua/40" : "hover:bg-white/5"
+                          className={`group w-full flex items-center gap-4 p-4 rounded-2xl text-left transition-all duration-200 border ${
+                            isActive
+                              ? "bg-white/90 shadow-sm border-white"
+                              : "border-transparent hover:bg-white/80 hover:shadow-sm hover:border-white"
                           }`}
                         >
-                          <Tag className="w-4 h-4 text-violet-300 shrink-0" />
-                          <span className="flex-1 text-sm text-white truncate">
+                          <div className="w-10 h-10 grid place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-200/60">
+                            <Tag className="w-5 h-5" />
+                          </div>
+                          <span className="flex-1 text-sm font-semibold text-slate-700 truncate">
                             {highlight(c, needle)}
                           </span>
-                          <span className="text-[10px] text-white/65">Category</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                            Category
+                          </span>
                         </button>
                       );
                     })}
                   </div>
-                </div>
+                </section>
               )}
 
               {matches.length === 0 && categoryMatches.length === 0 && !isLoading && (
                 <div className="px-4 py-10 text-center">
                   <div className="text-3xl mb-2">🔍</div>
-                  <div className="text-sm text-white/70">
-                    No matches for "<span className="font-semibold text-white">{needle}</span>"
+                  <div className="text-sm text-slate-700">
+                    No matches for "<span className="font-semibold text-slate-900">{needle}</span>"
                   </div>
-                  <div className="text-xs text-white/70 mt-1">
+                  <div className="text-xs text-slate-500 mt-1">
                     Press Enter to browse all products.
                   </div>
                 </div>
@@ -358,110 +439,144 @@ export function GlobalSearch({
             <>
               {/* Recent searches */}
               {recent.length > 0 && (
-                <div className="mb-2">
-                  <div className="flex items-center justify-between px-3 pb-1.5">
-                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/70 flex items-center gap-1.5">
-                      <Clock className="w-3 h-3" /> Recent
+                <section>
+                  <div className="flex items-center justify-between mb-4 px-1">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-slate-400" />
+                      <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                        Recent / সাম্প্রতিক
+                      </h3>
                     </div>
                     <button
                       onClick={() => {
                         localStorage.removeItem(RECENT_KEY);
                         setRecent([]);
                       }}
-                      className="text-[10px] text-white/70 hover:text-white"
+                      className="text-[10px] font-bold text-slate-400 hover:text-slate-700 uppercase tracking-wider"
                     >
                       Clear
                     </button>
                   </div>
-                  <div className="flex flex-wrap gap-1.5 px-3">
+                  <div className="flex flex-wrap gap-2">
                     {recent.map((r) => (
                       <button
                         key={r}
                         onClick={() => setQ(r)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-white/80 bg-white/5 border border-white/10 hover:border-aqua/40 hover:text-white transition"
+                        className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium text-slate-600 bg-slate-500/10 border border-slate-500/20 hover:bg-slate-500/20 transition-colors"
                       >
-                        <Search className="w-3 h-3 text-white/70" />
+                        <Search className="w-3 h-3" />
                         {r}
                       </button>
                     ))}
                   </div>
-                </div>
+                </section>
               )}
 
               {/* Trending */}
-              <div className="mt-2">
-                <div className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70 flex items-center gap-1.5">
-                  <TrendingUp className="w-3 h-3" /> Trending
+              <section>
+                <div className="flex items-center gap-2 mb-4 px-1">
+                  <TrendingUp className="w-4 h-4 text-indigo-500" />
+                  <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                    Trending / ট্রেন্ডিং
+                  </h3>
                 </div>
-                <div className="flex flex-wrap gap-1.5 px-3">
-                  {TRENDING.map((t) => (
-                    <button
-                      key={t}
-                      onClick={() => setQ(t)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white bg-gradient-to-r from-primary/25 to-aqua/25 border border-white/10 hover:from-primary/40 hover:to-aqua/40 transition"
-                    >
-                      {t}
-                    </button>
-                  ))}
+                <div className="flex flex-wrap gap-2">
+                  {TRENDING.map((t, i) => {
+                    const palettes = [
+                      "bg-indigo-500/10 border-indigo-500/20 text-indigo-600 hover:bg-indigo-500/20",
+                      "bg-violet-500/10 border-violet-500/20 text-violet-600 hover:bg-violet-500/20",
+                      "bg-cyan-500/10 border-cyan-500/20 text-cyan-600 hover:bg-cyan-500/20",
+                      "bg-fuchsia-500/10 border-fuchsia-500/20 text-fuchsia-600 hover:bg-fuchsia-500/20",
+                      "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/20",
+                      "bg-sky-500/10 border-sky-500/20 text-sky-600 hover:bg-sky-500/20",
+                    ];
+                    return (
+                      <button
+                        key={t}
+                        onClick={() => setQ(t)}
+                        className={`px-4 py-1.5 rounded-full border text-sm font-medium transition-colors cursor-pointer ${palettes[i % palettes.length]}`}
+                      >
+                        {t}
+                      </button>
+                    );
+                  })}
                 </div>
-              </div>
+              </section>
 
               {/* Quick links */}
-              <div className="mt-4">
-                <div className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">
-                  Quick Links
+              <section>
+                <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-1">
+                  Quick Links / দ্রুত লিঙ্ক
+                </h3>
+                <div className="space-y-2">
+                  {QUICK_LINKS.map((l) => {
+                    const Icon = l.icon;
+                    return (
+                      <Link
+                        key={l.to}
+                        to={l.to}
+                        onClick={() => onOpenChange(false)}
+                        className="group flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 hover:bg-white/80 hover:shadow-sm cursor-pointer border border-transparent hover:border-white"
+                      >
+                        <div
+                          className={`w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br ${l.gradient} text-white shadow-lg ${l.shadow}`}
+                        >
+                          <Icon className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-slate-700 truncate">
+                              {l.label}
+                            </span>
+                            <span className="text-sm text-slate-400 font-medium truncate">
+                              / {l.bn}
+                            </span>
+                          </div>
+                          <p className="text-sm text-slate-500 truncate">{l.hint}</p>
+                        </div>
+                        <ChevronRight
+                          className={`w-5 h-5 text-slate-300 transition-colors ${l.hoverText}`}
+                        />
+                      </Link>
+                    );
+                  })}
                 </div>
-                <div className="space-y-1">
-                  {QUICK_LINKS.map((l) => (
-                    <Link
-                      key={l.to}
-                      to={l.to}
-                      onClick={() => onOpenChange(false)}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition group"
-                    >
-                      <div className="grid place-items-center w-8 h-8 rounded-lg bg-white/5 border border-white/10 group-hover:border-aqua/40 transition">
-                        <CornerDownLeft className="w-3.5 h-3.5 text-white/70 group-hover:text-aqua" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-sm font-semibold text-white truncate">{l.label}</div>
-                        <div className="text-xs text-white/70 truncate">{l.hint}</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              </section>
             </>
           )}
         </div>
 
         {/* Footer hints */}
-        <div className="relative border-t border-white/10 bg-black/30 px-4 py-2.5 flex items-center justify-between text-[10px] text-white/70">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1">
-              <kbd className="inline-flex items-center justify-center w-5 h-5 rounded bg-white/10 border border-white/10">
-                <ArrowUp className="w-2.5 h-2.5" />
+        <div className="px-6 py-4 bg-slate-50/60 border-t border-black/5 flex items-center justify-between text-[11px] font-medium text-slate-400">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-1.5">
+              <kbd className="flex items-center justify-center w-5 h-5 rounded bg-white border border-slate-200 text-slate-500 shadow-sm">
+                ↑
               </kbd>
-              <kbd className="inline-flex items-center justify-center w-5 h-5 rounded bg-white/10 border border-white/10">
-                <ArrowDown className="w-2.5 h-2.5" />
+              <kbd className="flex items-center justify-center w-5 h-5 rounded bg-white border border-slate-200 text-slate-500 shadow-sm">
+                ↓
               </kbd>
-              navigate
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <kbd className="inline-flex items-center justify-center h-5 px-1.5 rounded bg-white/10 border border-white/10 font-mono">
-                ↵
+              <span className="ml-1">navigate</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <kbd className="flex items-center justify-center px-1.5 h-5 rounded bg-white border border-slate-200 text-slate-500 shadow-sm uppercase text-[10px]">
+                Enter
               </kbd>
-              select
-            </span>
-            <span className="hidden sm:inline-flex items-center gap-1">
-              <kbd className="inline-flex items-center justify-center h-5 px-1.5 rounded bg-white/10 border border-white/10 font-mono">
-                esc
+              <span className="ml-1">select</span>
+            </div>
+            <div className="hidden sm:flex items-center gap-1.5">
+              <kbd className="flex items-center justify-center px-1.5 h-5 rounded bg-white border border-slate-200 text-slate-500 shadow-sm uppercase text-[10px]">
+                Esc
               </kbd>
-              close
+              <span className="ml-1">close</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1">
+            <span>Powered by</span>
+            <span className="bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent font-bold tracking-tight">
+              AccessNow BD
             </span>
           </div>
-          <span className="hidden sm:inline">
-            Powered by <span className="text-white/80 font-semibold">AccessNow BD</span>
-          </span>
         </div>
       </DialogContent>
     </Dialog>
