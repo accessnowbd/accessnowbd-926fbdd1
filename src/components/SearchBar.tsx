@@ -52,8 +52,9 @@ export function SearchBar({
             onSubmit?.(value);
           }}
           role="search"
+          style={{ backgroundColor: "#ffffff" }}
           className={cn(
-            "flex items-center gap-2 rounded-full pr-1.5 transition-colors !bg-white",
+            "flex items-center gap-2 rounded-full pr-1.5 transition-colors",
             padLeft[size],
             heights[size],
           )}
@@ -127,8 +128,9 @@ export function SearchTrigger({
           type="button"
           onClick={onClick}
           aria-label="Open search"
+          style={{ backgroundColor: "#ffffff" }}
           className={cn(
-            "w-full flex items-center gap-2 rounded-full pr-1.5 text-left transition-colors !bg-white hover:!bg-slate-50",
+            "w-full flex items-center gap-2 rounded-full pr-1.5 text-left transition-colors hover:!bg-slate-50",
             padLeft[size],
             heights[size],
           )}
