@@ -86,6 +86,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  const [loading, setLoading] = useState(true);
  const [editing, setEditing] = useState<Record | null>(null);
  const [showForm, setShowForm] = useState(false);
+ const { t } = useAdminLang();
 
  const primary = useMemo(() => fields.find((f) => f.primary) ?? fields[0], [fields]);
  const secondary = useMemo(() => fields.filter((f) => f !== primary).slice(0, 2), [fields, primary]);
