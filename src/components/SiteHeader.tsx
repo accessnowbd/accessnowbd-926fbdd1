@@ -539,11 +539,11 @@ export function SiteHeader() {
                   {user ? (
                     <div className="grid grid-cols-2 gap-2">
                       <Link
-                        to={isAdmin ? "/admin" : "/dashboard"}
+                        to="/dashboard"
                         onClick={() => setOpen(false)}
                         className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white text-[13px] font-extrabold shadow-[0_14px_30px_-12px_rgba(168,85,247,0.5)] active:scale-[0.98] transition"
                       >
-                        {isAdmin ? <ShieldCheck className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />} {isAdmin ? "Admin" : "Dashboard"}
+                        <Sparkles className="w-4 h-4" /> Dashboard
                       </Link>
                       <button
                         onClick={async () => {
