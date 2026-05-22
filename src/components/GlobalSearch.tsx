@@ -604,25 +604,25 @@ export function GlobalSearch({
               <kbd className="flex items-center justify-center w-5 h-5 rounded bg-white border border-slate-200 text-slate-500 shadow-sm">
                 ↓
               </kbd>
-              <span className="ml-1">navigate</span>
+              <span className="ml-1">নেভিগেট</span>
             </div>
             <div className="flex items-center gap-1.5">
               <kbd className="flex items-center justify-center px-1.5 h-5 rounded bg-white border border-slate-200 text-slate-500 shadow-sm uppercase text-[10px]">
                 Enter
               </kbd>
-              <span className="ml-1">select</span>
+              <span className="ml-1">সিলেক্ট</span>
             </div>
             <div className="hidden sm:flex items-center gap-1.5">
               <kbd className="flex items-center justify-center px-1.5 h-5 rounded bg-white border border-slate-200 text-slate-500 shadow-sm uppercase text-[10px]">
                 Esc
               </kbd>
-              <span className="ml-1">close</span>
+              <span className="ml-1">বন্ধ</span>
             </div>
           </div>
-          <div className="flex items-center gap-1">
-            <span>Powered by</span>
-            <span className="bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent font-bold tracking-tight">
-              AccessNow BD
+          <div className="flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+            <span className="font-semibold bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">
+              Google-style Search
             </span>
           </div>
         </div>
