@@ -137,7 +137,7 @@ function DescriptionTemplatePage() {
             onChange={(e) => setTemplate(e.target.value)}
             spellCheck={false}
             disabled={loading}
-            className="w-full min-h-[70vh] font-mono text-sm p-4 rounded-lg border border-border bg-background resize-y focus:outline-none focus:ring-2 focus:ring-primary/40"
+            className="w-full min-h-[70vh] font-mono text-sm p-4 rounded-lg border border-border bg-background resize-y focus:outline-none focus:ring-2 focus:ring-slate-300"
           />
           <p className="text-xs text-muted-foreground mt-2">
             Use placeholders like <code>{"{Product Name}"}</code>, <code>{"{Brand}"}</code>, <code>{"{Plan 1}"}</code>. The AI replaces them per product.
