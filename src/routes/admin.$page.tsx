@@ -107,10 +107,10 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  useEffect(() => { load(); }, [load]);
 
  const remove = async (id: string) => {
- if (!confirm("Delete this entry?")) return;
+ if (!confirm(t("Delete this entry?", "এই এন্ট্রি মুছে ফেলবেন?"))) return;
  const { error } = await supabase.from("admin_records").delete().eq("id", id);
  if (error) return toast.error(error.message);
- toast.success("Deleted");
+ toast.success(t("Deleted", "মুছে ফেলা হয়েছে"));
  load();
  };
 
