@@ -49,7 +49,7 @@ export function ThemeSwitcher() {
             <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-white/70">Theme</div>
           </div>
           <div className="space-y-1">
-            {themes.map((t) => {
+            {enabledThemes.map((t) => {
               const isActive = t.id === theme;
               return (
                 <button
