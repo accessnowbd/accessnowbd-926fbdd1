@@ -285,34 +285,42 @@ export function GlobalSearch({
         <DialogTitle className="sr-only">Search</DialogTitle>
 
         {/* Input row */}
-        <div className="flex items-center gap-4 px-6 py-5 border-b border-black/5">
-          {isLoading ? (
-            <Loader2 className="w-5 h-5 text-slate-400 animate-spin shrink-0" />
-          ) : (
-            <Search className="w-5 h-5 text-slate-400 shrink-0" />
-          )}
-          <input
-            ref={inputRef}
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            onKeyDown={onKeyDown}
-            placeholder="Search Netflix, ChatGPT, Spotify… / সার্চ করুন…"
-            className="flex-1 bg-transparent outline-none text-lg font-medium text-slate-800 placeholder:text-slate-400"
-            autoComplete="off"
-            spellCheck={false}
-          />
-          {q && (
+        <div className="px-6 pt-5 pb-4 border-b border-black/5">
+          <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white shadow-sm pl-4 pr-1.5 h-12">
+            {isLoading ? (
+              <Loader2 className="w-5 h-5 text-slate-400 animate-spin shrink-0" />
+            ) : (
+              <Search className="w-5 h-5 text-slate-400 shrink-0" />
+            )}
+            <input
+              ref={inputRef}
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              onKeyDown={onKeyDown}
+              placeholder="প্রোডাক্ট সার্চ করুন..."
+              className="flex-1 bg-transparent outline-none text-base font-medium text-slate-800 placeholder:text-slate-400"
+              autoComplete="off"
+              spellCheck={false}
+            />
+            {q && (
+              <button
+                onClick={() => setQ("")}
+                className="grid place-items-center w-8 h-8 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition"
+                aria-label="Clear"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+            <div className="h-6 w-px bg-slate-200" />
             <button
-              onClick={() => setQ("")}
-              className="grid place-items-center w-8 h-8 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 transition"
-              aria-label="Clear"
+              type="button"
+              onClick={() => needle && go({ kind: "submit", value: needle })}
+              className="grid place-items-center w-9 h-9 rounded-full text-primary hover:bg-primary/10 transition shrink-0"
+              aria-label="Search"
             >
-              <X className="w-4 h-4" />
+              <Search className="w-5 h-5" />
             </button>
-          )}
-          <kbd className="hidden sm:inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase bg-slate-200/60 text-slate-500 border border-slate-300/50">
-            Esc
-          </kbd>
+          </div>
         </div>
 
         {/* Body */}
