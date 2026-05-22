@@ -307,30 +307,18 @@ html.theme-white .admin-shell .admin-menu-icon {
   color: #ffffff !important;
 }
 html.theme-white .admin-shell .admin-menu-icon[class*="from-violet-"],
-html.theme-white .admin-shell .admin-menu-icon[class*="from-purple-"] {
-  --tw-gradient-from: #8b5cf6 !important;
-  --tw-gradient-to:   #7c3aed !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-purple-600"] {
-  --tw-gradient-to:   #7c3aed !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-fuchsia-"] {
-  --tw-gradient-to:   #d946ef !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-fuchsia-"] {
-  --tw-gradient-from: #e879f9 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="from-pink-"] {
-  --tw-gradient-from: #ec4899 !important;
-}
-html.theme-white .admin-shell .admin-menu-icon[class*="to-pink-"] {
-  --tw-gradient-to:   #db2777 !important;
-}
+html.theme-white .admin-shell .admin-menu-icon[class*="from-purple-"],
+html.theme-white .admin-shell .admin-menu-icon[class*="from-fuchsia-"],
+html.theme-white .admin-shell .admin-menu-icon[class*="from-pink-"],
 html.theme-white .admin-shell .admin-menu-icon[class*="from-indigo-"] {
-  --tw-gradient-from: #6366f1 !important;
+  --tw-gradient-from: #ef4444 !important;
 }
+html.theme-white .admin-shell .admin-menu-icon[class*="to-violet-"],
+html.theme-white .admin-shell .admin-menu-icon[class*="to-purple-"],
+html.theme-white .admin-shell .admin-menu-icon[class*="to-fuchsia-"],
+html.theme-white .admin-shell .admin-menu-icon[class*="to-pink-"],
 html.theme-white .admin-shell .admin-menu-icon[class*="to-indigo-"] {
-  --tw-gradient-to:   #4f46e5 !important;
+  --tw-gradient-to:   #f97316 !important;
 }
 html.theme-white .admin-shell .admin-menu-icon[class*="from-rose-"] {
   --tw-gradient-from: #f43f5e !important;
