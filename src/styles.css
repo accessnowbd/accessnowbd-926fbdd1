@@ -2040,3 +2040,101 @@ html.theme-white .home-scroll-optimized .product-card-v2:hover {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
+
+/* =========================================================================
+   ADMIN SHELL RESET — neutral white/silver/slate, no purple overrides.
+   The global theme-white rules (above) tint white/* utilities indigo and
+   recolor text-white & text-slate-* to violet for marketing pages. The
+   admin panel is functional UI and must stay neutral & legible.
+   ========================================================================= */
+html.theme-white .admin-shell,
+html.theme-white .admin-shell * {
+  text-shadow: none !important;
+}
+
+/* Stop the indigo background tint on bg-white/* utilities inside admin */
+html.theme-white .admin-shell [class*="bg-white\/"] {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+html.theme-white .admin-shell [class*="border-white\/"] {
+  border-color: rgba(226, 232, 240, 0.9) !important; /* slate-200 */
+}
+
+/* Restore actual text colors for slate / gray / white utilities inside admin */
+html.theme-white .admin-shell .text-white { color: #ffffff !important; }
+html.theme-white .admin-shell .text-slate-50  { color: #f8fafc !important; }
+html.theme-white .admin-shell .text-slate-100 { color: #f1f5f9 !important; }
+html.theme-white .admin-shell .text-slate-200 { color: #e2e8f0 !important; }
+html.theme-white .admin-shell .text-slate-300 { color: #cbd5e1 !important; }
+html.theme-white .admin-shell .text-slate-400 { color: #94a3b8 !important; }
+html.theme-white .admin-shell .text-slate-500 { color: #64748b !important; }
+html.theme-white .admin-shell .text-slate-600 { color: #475569 !important; }
+html.theme-white .admin-shell .text-slate-700 { color: #334155 !important; }
+html.theme-white .admin-shell .text-slate-800 { color: #1e293b !important; }
+html.theme-white .admin-shell .text-slate-900 { color: #0f172a !important; }
+html.theme-white .admin-shell .text-gray-300 { color: #d1d5db !important; }
+html.theme-white .admin-shell .text-gray-400 { color: #9ca3af !important; }
+html.theme-white .admin-shell .text-gray-500 { color: #6b7280 !important; }
+html.theme-white .admin-shell .text-foreground { color: #0f172a !important; }
+
+/* Buttons on dark backgrounds inside admin need real white text */
+html.theme-white .admin-shell .bg-slate-900,
+html.theme-white .admin-shell .bg-slate-800,
+html.theme-white .admin-shell [class*="bg-slate-9"] { color: #ffffff; }
+html.theme-white .admin-shell .bg-slate-900 *,
+html.theme-white .admin-shell .bg-slate-800 * { color: inherit; }
+
+/* Neutralize any leftover violet/indigo/fuchsia/purple/pink gradient icons in
+   the admin sidebar — turn every gradient-icon swatch into a silver chip so
+   the panel reads as clean white/silver. */
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="from-violet-"],
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="from-purple-"],
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="from-fuchsia-"],
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="from-indigo-"],
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="from-pink-"],
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="to-violet-"],
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="to-purple-"],
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="to-fuchsia-"],
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="to-indigo-"],
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="to-pink-"] {
+  background-image: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%) !important;
+  color: #475569 !important;
+}
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="from-violet-"] svg,
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="from-purple-"] svg,
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="from-fuchsia-"] svg,
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="from-indigo-"] svg,
+html.theme-white .admin-shell [class*="bg-gradient-to-"][class*="from-pink-"] svg {
+  color: #475569 !important;
+  stroke: #475569 !important;
+}
+
+/* Catch single-color violet/indigo/fuchsia/purple/pink backgrounds too */
+html.theme-white .admin-shell [class*="bg-violet-"],
+html.theme-white .admin-shell [class*="bg-purple-"],
+html.theme-white .admin-shell [class*="bg-fuchsia-"],
+html.theme-white .admin-shell [class*="bg-indigo-"],
+html.theme-white .admin-shell [class*="bg-pink-"] {
+  background-color: #f1f5f9 !important; /* slate-100 */
+  color: #334155 !important;
+}
+html.theme-white .admin-shell [class*="text-violet-"],
+html.theme-white .admin-shell [class*="text-purple-"],
+html.theme-white .admin-shell [class*="text-fuchsia-"],
+html.theme-white .admin-shell [class*="text-indigo-"],
+html.theme-white .admin-shell [class*="text-pink-"] {
+  color: #475569 !important; /* slate-600 */
+}
+html.theme-white .admin-shell [class*="ring-violet-"],
+html.theme-white .admin-shell [class*="ring-purple-"],
+html.theme-white .admin-shell [class*="ring-fuchsia-"],
+html.theme-white .admin-shell [class*="ring-indigo-"],
+html.theme-white .admin-shell [class*="ring-pink-"],
+html.theme-white .admin-shell [class*="border-violet-"],
+html.theme-white .admin-shell [class*="border-purple-"],
+html.theme-white .admin-shell [class*="border-fuchsia-"],
+html.theme-white .admin-shell [class*="border-indigo-"],
+html.theme-white .admin-shell [class*="border-pink-"] {
+  --tw-ring-color: #cbd5e1 !important;
+  border-color: #cbd5e1 !important; /* slate-300 */
+}
