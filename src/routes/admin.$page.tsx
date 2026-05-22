@@ -274,7 +274,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  : "bg-slate-100 text-slate-500 border-slate-200"
  }`}
  >
- {r.is_active ? "Active" : "Inactive"}
+ {r.is_active ? t("Active", "সক্রিয়") : t("Inactive", "নিষ্ক্রিয়")}
  </button>
  </td>
  <td className="px-4 py-3 text-right">
