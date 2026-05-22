@@ -429,7 +429,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       </aside>
 
       {/* MAIN */}
-      <div className={`flex-1 min-w-0 flex flex-col ${collapsed ? "lg:ml-[72px]" : "lg:ml-[280px]"}`}>
+      <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar */}
         <header className="h-16 sticky top-0 z-20 bg-[#fafafa]/90 backdrop-blur-xl border-b border-slate-200/80">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
