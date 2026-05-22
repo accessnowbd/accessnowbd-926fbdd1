@@ -104,7 +104,7 @@ function AdminOrders() {
  </div>
 
  <AdminStatGrid>
- <AdminStatCard label="Total Revenue" value={"৳" + Math.round(totalRev).toLocaleString("en-IN")} delta={12} tone="indigo" loading={loading} />
+ <AdminStatCard label="Total Revenue" value={"৳" + Math.round(totalRev).toLocaleString("en-IN")} delta={12} tone="slate" loading={loading} />
  <AdminStatCard label="Total Orders" value={orders.length.toLocaleString("en-IN")} delta={8} tone="emerald" loading={loading} />
  <AdminStatCard label="Pending" value={pendingCount} delta={pendingCount > 0 ? -5 : 0} tone="amber" loading={loading} />
  <AdminStatCard label="Cancelled" value={cancelled} delta={cancelled > 0 ? 3 : 0} tone="rose" loading={loading} />
