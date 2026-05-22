@@ -36,13 +36,14 @@ async function withAdminTimeout<T>(promise: PromiseLike<T>): Promise<T> {
 // Legacy splash/loader cache keys written by earlier versions. We scrub these
 // on every admin mount so any stale "splash seen" / "boot" flag is wiped from
 // localStorage and the splash can never reappear.
+// NOTE: ADMIN_CACHE_KEY is intentionally NOT included — we keep it so the
+// shell can render optimistically while re-verifying in the background.
 const LEGACY_SPLASH_KEYS = [
   "anbd:adminSplashSeen",
   "anbd:adminBoot",
   "anbd:adminBootSplash",
   "anbd:splash",
   "anbd:bootSplash",
-  ADMIN_CACHE_KEY,
   "adminSplash",
   "admin:splash",
 ];
@@ -53,6 +54,11 @@ function purgeLegacySplashFlags() {
     try { localStorage.removeItem(k); } catch { /* ignore */ }
     try { sessionStorage.removeItem(k); } catch { /* ignore */ }
   }
+}
+
+function readCachedAdmin(): boolean {
+  if (typeof localStorage === "undefined") return false;
+  try { return localStorage.getItem(ADMIN_CACHE_KEY) === "1"; } catch { return false; }
 }
 
 function AdminLayout() {
