@@ -55,8 +55,10 @@ export function AdminStatCard({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl p-5 ring-1 ring-white/60 bg-gradient-to-br ${t.tint} shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)]`}
+      className={`group relative overflow-hidden rounded-2xl p-5 ring-1 ring-white/60 bg-gradient-to-br ${t.tint} shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_42px_-18px_rgba(15,23,42,0.28)]`}
     >
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80" />
+      <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/45 blur-2xl transition-transform duration-500 group-hover:scale-125" />
       <div className="flex items-start justify-between">
         <div className="text-sm font-semibold text-slate-700">{label}</div>
         <button className="text-slate-400 hover:text-slate-700 leading-none">⋮</button>
