@@ -116,46 +116,19 @@ html.theme-white .admin-shell [class*="to-black"] {
   --tw-gradient-to:   #0f172a !important;
 }
 
-html.theme-white .admin-shell [class*="from-violet-"],
-html.theme-white .admin-shell [class*="via-violet-"],
-html.theme-white .admin-shell [class*="to-violet-"],
-html.theme-white .admin-shell [class*="from-purple-"],
-html.theme-white .admin-shell [class*="via-purple-"],
-html.theme-white .admin-shell [class*="to-purple-"],
-html.theme-white .admin-shell [class*="from-fuchsia-"],
-html.theme-white .admin-shell [class*="via-fuchsia-"],
-html.theme-white .admin-shell [class*="to-fuchsia-"],
-html.theme-white .admin-shell [class*="from-indigo-"],
-html.theme-white .admin-shell [class*="via-indigo-"],
-html.theme-white .admin-shell [class*="to-indigo-"],
-html.theme-white .admin-shell [class*="from-pink-"],
-html.theme-white .admin-shell [class*="via-pink-"],
-html.theme-white .admin-shell [class*="to-pink-"] {
-  --tw-gradient-from: #f1f5f9 !important;
-  --tw-gradient-via:  #e2e8f0 !important;
-  --tw-gradient-to:   #cbd5e1 !important;
-}
+/* NOTE: violet / purple / fuchsia / indigo / pink gradients & accents are
+   intentionally allowed inside .admin-shell (sidebar icon circles, group
+   labels, active state, breadcrumb pill). Do NOT neutralize them — the
+   admin design uses them as the primary accent system. */
 
 /* -------------------------------------------------------------------------
-   4) Borders, rings, dividers — neutralise violet tint
+   4) Borders, rings, dividers — neutralise violet tint only on white-ish
+      borders; keep explicit violet/purple/pink rings (used for accents).
    ------------------------------------------------------------------------- */
 html.theme-white .admin-shell [class*="border-white\\/"],
 html.theme-white .admin-shell [class*="border-slate-7"],
 html.theme-white .admin-shell [class*="border-slate-8"] {
   border-color: #e2e8f0 !important;
-}
-html.theme-white .admin-shell [class*="border-violet-"],
-html.theme-white .admin-shell [class*="border-purple-"],
-html.theme-white .admin-shell [class*="border-fuchsia-"],
-html.theme-white .admin-shell [class*="border-indigo-"],
-html.theme-white .admin-shell [class*="border-pink-"],
-html.theme-white .admin-shell [class*="ring-violet-"],
-html.theme-white .admin-shell [class*="ring-purple-"],
-html.theme-white .admin-shell [class*="ring-fuchsia-"],
-html.theme-white .admin-shell [class*="ring-indigo-"],
-html.theme-white .admin-shell [class*="ring-pink-"] {
-  border-color: #cbd5e1 !important;
-  --tw-ring-color: #cbd5e1 !important;
 }
 
 /* -------------------------------------------------------------------------
