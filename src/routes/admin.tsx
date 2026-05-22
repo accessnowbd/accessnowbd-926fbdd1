@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ShieldAlert, LogOut, Bell, Globe, Search,
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X, Pin,
+  Moon, Plus,
 } from "lucide-react";
 import { AdminGlobalSearch, useAdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
 import { useAuth } from "@/context/AuthContext";
