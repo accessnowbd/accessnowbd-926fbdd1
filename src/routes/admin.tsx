@@ -401,7 +401,7 @@ function AdminShell({ user, signOut, navigate }: any) {
             </div>
             {!collapsed && (
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold truncate text-slate-900">Admin</div>
+                <div className="text-sm font-semibold truncate text-slate-900">{t("Admin", "অ্যাডমিন")}</div>
                 <div className="text-[11px] truncate text-slate-500">{user?.email}</div>
               </div>
             )}
@@ -411,7 +411,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               onClick={async () => { await signOut(); navigate({ to: "/login" }); }}
               className="w-full h-9 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700"
             >
-              <LogOut className="w-3.5 h-3.5" /> Logout
+              <LogOut className="w-3.5 h-3.5" /> {t("Logout", "লগআউট")}
             </button>
           )}
         </div>
