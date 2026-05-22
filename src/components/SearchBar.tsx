@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 type Size = "sm" | "md" | "lg";
 
 /**
- * Unified search input — clean, flat design (no gradient ring).
- * Used site-wide (public + admin).
+ * Unified search input — rounded pill with left magnifier and a divider + colored
+ * search icon button on the right (matches the global command palette style).
  */
 export function SearchBar({
   value,
@@ -30,12 +30,12 @@ export function SearchBar({
   ariaLabel?: string;
   showSubmit?: boolean;
 }) {
-  const heights: Record<Size, string> = { sm: "h-9", md: "h-11", lg: "h-12" };
-  const iconSizes: Record<Size, string> = { sm: "w-4 h-4", md: "w-4 h-4", lg: "w-5 h-5" };
-  const btnSizes: Record<Size, string> = { sm: "h-7 px-3", md: "h-8 px-3.5", lg: "h-9 px-4" };
-  const padLeft: Record<Size, string> = { sm: "pl-9", md: "pl-10", lg: "pl-11" };
-  const iconLeft: Record<Size, string> = { sm: "left-3", md: "left-3.5", lg: "left-4" };
-  const textSizes: Record<Size, string> = { sm: "text-xs", md: "text-sm", lg: "text-sm" };
+  const heights: Record<Size, string> = { sm: "h-10", md: "h-12", lg: "h-14" };
+  const iconSizes: Record<Size, string> = { sm: "w-4 h-4", md: "w-[18px] h-[18px]", lg: "w-5 h-5" };
+  const padLeft: Record<Size, string> = { sm: "pl-10", md: "pl-12", lg: "pl-14" };
+  const iconLeft: Record<Size, string> = { sm: "left-3.5", md: "left-4", lg: "left-5" };
+  const textSizes: Record<Size, string> = { sm: "text-sm", md: "text-[15px]", lg: "text-base" };
+  const btnSizes: Record<Size, string> = { sm: "w-9", md: "w-11", lg: "w-12" };
 
   return (
     <form
@@ -48,7 +48,7 @@ export function SearchBar({
     >
       <Search
         className={cn(
-          "absolute top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none",
+          "absolute top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none",
           iconLeft[size],
           iconSizes[size],
         )}
@@ -64,35 +64,43 @@ export function SearchBar({
         autoComplete="off"
         spellCheck={false}
         className={cn(
-          "w-full rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring",
+          "w-full rounded-full border border-slate-200 bg-white text-slate-800 placeholder:text-slate-400 shadow-sm",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:border-indigo-300",
           "transition-colors",
           heights[size],
           padLeft[size],
-          showSubmit ? "pr-24" : "pr-3",
+          showSubmit ? "pr-14" : "pr-5",
           textSizes[size],
           inputClassName,
         )}
       />
       {showSubmit && (
-        <button
-          type="submit"
-          aria-label="Submit search"
-          className={cn(
-            "absolute top-1/2 -translate-y-1/2 right-1.5 inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 active:scale-[0.98] transition font-medium",
-            btnSizes[size],
-            textSizes[size],
-          )}
-        >
-          Search
-        </button>
+        <>
+          <span
+            aria-hidden
+            className={cn(
+              "absolute top-1/2 -translate-y-1/2 w-px bg-slate-200",
+              size === "sm" ? "right-9 h-5" : size === "md" ? "right-11 h-6" : "right-12 h-7",
+            )}
+          />
+          <button
+            type="submit"
+            aria-label="Submit search"
+            className={cn(
+              "absolute top-0 right-0 h-full inline-flex items-center justify-center text-indigo-500 hover:text-indigo-600 transition",
+              btnSizes[size],
+            )}
+          >
+            <Search className={iconSizes[size]} strokeWidth={2.25} />
+          </button>
+        </>
       )}
     </form>
   );
 }
 
 /**
- * Trigger button — flat search-shaped button that opens the command palette.
+ * Trigger button — same pill shape, opens the command palette.
  */
 export function SearchTrigger({
   onClick,
@@ -107,11 +115,12 @@ export function SearchTrigger({
   size?: Size;
   showShortcut?: boolean;
 }) {
-  const heights: Record<Size, string> = { sm: "h-9", md: "h-11", lg: "h-12" };
-  const padLeft: Record<Size, string> = { sm: "pl-9", md: "pl-10", lg: "pl-11" };
-  const iconLeft: Record<Size, string> = { sm: "left-3", md: "left-3.5", lg: "left-4" };
-  const textSizes: Record<Size, string> = { sm: "text-xs", md: "text-sm", lg: "text-sm" };
-  const iconSizes: Record<Size, string> = { sm: "w-4 h-4", md: "w-4 h-4", lg: "w-5 h-5" };
+  const heights: Record<Size, string> = { sm: "h-10", md: "h-12", lg: "h-14" };
+  const padLeft: Record<Size, string> = { sm: "pl-10", md: "pl-12", lg: "pl-14" };
+  const iconLeft: Record<Size, string> = { sm: "left-3.5", md: "left-4", lg: "left-5" };
+  const textSizes: Record<Size, string> = { sm: "text-sm", md: "text-[15px]", lg: "text-base" };
+  const iconSizes: Record<Size, string> = { sm: "w-4 h-4", md: "w-[18px] h-[18px]", lg: "w-5 h-5" };
+  const btnSizes: Record<Size, string> = { sm: "w-9", md: "w-11", lg: "w-12" };
 
   return (
     <button
@@ -119,8 +128,8 @@ export function SearchTrigger({
       onClick={onClick}
       aria-label="Open search"
       className={cn(
-        "relative w-full rounded-md border border-input bg-background text-left",
-        "hover:border-ring/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "relative w-full rounded-full border border-slate-200 bg-white text-left shadow-sm",
+        "hover:border-indigo-300/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300",
         "transition-colors",
         heights[size],
         className,
@@ -128,7 +137,7 @@ export function SearchTrigger({
     >
       <Search
         className={cn(
-          "absolute top-1/2 -translate-y-1/2 text-muted-foreground",
+          "absolute top-1/2 -translate-y-1/2 text-slate-400",
           iconLeft[size],
           iconSizes[size],
         )}
@@ -136,7 +145,7 @@ export function SearchTrigger({
       />
       <span
         className={cn(
-          "block truncate text-muted-foreground pr-14",
+          "block truncate text-slate-400 pr-16",
           padLeft[size],
           textSizes[size],
         )}
@@ -144,10 +153,25 @@ export function SearchTrigger({
         {placeholder}
       </span>
       {showShortcut && (
-        <kbd className="hidden lg:inline-flex absolute top-1/2 -translate-y-1/2 right-2 items-center gap-0.5 h-6 px-1.5 rounded text-[10px] font-semibold bg-muted text-muted-foreground border border-border">
+        <kbd className="hidden lg:inline-flex absolute top-1/2 -translate-y-1/2 right-14 items-center gap-0.5 h-6 px-1.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-500 border border-slate-200">
           <span className="opacity-70">⌘</span>K
         </kbd>
       )}
+      <span
+        aria-hidden
+        className={cn(
+          "absolute top-1/2 -translate-y-1/2 w-px bg-slate-200",
+          size === "sm" ? "right-9 h-5" : size === "md" ? "right-11 h-6" : "right-12 h-7",
+        )}
+      />
+      <span
+        className={cn(
+          "absolute top-0 right-0 h-full inline-flex items-center justify-center text-indigo-500",
+          btnSizes[size],
+        )}
+      >
+        <Search className={iconSizes[size]} strokeWidth={2.25} />
+      </span>
     </button>
   );
 }
