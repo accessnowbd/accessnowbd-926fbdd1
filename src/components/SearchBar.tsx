@@ -53,7 +53,7 @@ export function SearchBar({
           }}
           role="search"
           className={cn(
-            "flex items-center gap-2 rounded-full bg-white pr-1.5 transition-colors",
+            "flex items-center gap-2 rounded-full pr-1.5 transition-colors !bg-white",
             padLeft[size],
             heights[size],
           )}
@@ -128,7 +128,7 @@ export function SearchTrigger({
           onClick={onClick}
           aria-label="Open search"
           className={cn(
-            "w-full flex items-center gap-2 rounded-full bg-white pr-1.5 text-left transition-colors hover:bg-slate-50",
+            "w-full flex items-center gap-2 rounded-full pr-1.5 text-left transition-colors !bg-white hover:!bg-slate-50",
             padLeft[size],
             heights[size],
           )}
