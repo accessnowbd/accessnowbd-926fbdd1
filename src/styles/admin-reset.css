@@ -1,0 +1,259 @@
+/* =========================================================================
+   Admin Theme Reset
+   -------------------------------------------------------------------------
+   Hard-isolates the admin scope (.admin-shell) from the global
+   html.theme-white overrides defined in src/styles.css. Every selector below
+   targets `.admin-shell` descendants and beats the global rules on
+   specificity (html.theme-white .admin-shell ... > html.theme-white ...),
+   restoring neutral slate-based surfaces so Tailwind utilities behave as
+   their default tokens describe.
+
+   Rule of thumb: if you see violet / lavender / aurora leaking into the
+   admin panel, add the offending selector to this file — do NOT patch it
+   inside src/styles.css.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1) Neutralize text-white* overrides — keep Tailwind defaults
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell .text-white,
+html.theme-white .admin-shell [class*="text-white\\/"],
+html.theme-white .admin-shell .text-white\\/90,
+html.theme-white .admin-shell .text-white\\/85,
+html.theme-white .admin-shell .text-white\\/80,
+html.theme-white .admin-shell .text-white\\/75,
+html.theme-white .admin-shell .text-white\\/70,
+html.theme-white .admin-shell .text-white\\/65,
+html.theme-white .admin-shell .text-white\\/60,
+html.theme-white .admin-shell .text-white\\/55,
+html.theme-white .admin-shell .text-white\\/50,
+html.theme-white .admin-shell .text-white\\/40 {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+html.theme-white .admin-shell .text-foreground,
+html.theme-white .admin-shell [class*="text-foreground\\/"] {
+  color: #0f172a !important;
+}
+
+/* Slate / neutral text — restore Tailwind values */
+html.theme-white .admin-shell .text-slate-50  { color: #f8fafc !important; }
+html.theme-white .admin-shell .text-slate-100 { color: #f1f5f9 !important; }
+html.theme-white .admin-shell .text-slate-200 { color: #e2e8f0 !important; }
+html.theme-white .admin-shell .text-slate-300 { color: #cbd5e1 !important; }
+html.theme-white .admin-shell .text-slate-400 { color: #94a3b8 !important; }
+html.theme-white .admin-shell .text-slate-500 { color: #64748b !important; }
+html.theme-white .admin-shell .text-slate-600 { color: #475569 !important; }
+html.theme-white .admin-shell .text-slate-700 { color: #334155 !important; }
+html.theme-white .admin-shell .text-slate-800 { color: #1e293b !important; }
+html.theme-white .admin-shell .text-slate-900 { color: #0f172a !important; }
+
+/* Strip purple aurora gradient text inside admin */
+html.theme-white .admin-shell .text-aurora,
+html.theme-white .admin-shell .text-aurora-strong,
+html.theme-white .admin-shell .text-neon,
+html.theme-white .admin-shell .text-sunset {
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: #0f172a !important;
+}
+
+/* -------------------------------------------------------------------------
+   2) Backgrounds — restore Tailwind slate / white defaults
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell [class*="bg-white\\/"] {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html.theme-white .admin-shell .bg-white { background-color: #ffffff !important; }
+
+html.theme-white .admin-shell .bg-slate-50  { background-color: #f8fafc !important; }
+html.theme-white .admin-shell .bg-slate-100 { background-color: #f1f5f9 !important; }
+html.theme-white .admin-shell .bg-slate-200 { background-color: #e2e8f0 !important; }
+html.theme-white .admin-shell .bg-slate-300 { background-color: #cbd5e1 !important; }
+html.theme-white .admin-shell .bg-slate-700 { background-color: #334155 !important; color: #ffffff !important; }
+html.theme-white .admin-shell .bg-slate-800 { background-color: #1e293b !important; color: #ffffff !important; }
+html.theme-white .admin-shell .bg-slate-900 { background-color: #0f172a !important; color: #ffffff !important; }
+
+html.theme-white .admin-shell .bg-card       { background-color: #ffffff !important; }
+html.theme-white .admin-shell .bg-popover    { background-color: #ffffff !important; }
+html.theme-white .admin-shell .bg-background { background-color: #ffffff !important; }
+html.theme-white .admin-shell .bg-muted      { background-color: #f1f5f9 !important; }
+html.theme-white .admin-shell .bg-secondary  { background-color: #f1f5f9 !important; color: #0f172a !important; }
+
+/* Dark slate / black backgrounds globally re-tinted by theme-white — restore */
+html.theme-white .admin-shell [class*="bg-slate-9"],
+html.theme-white .admin-shell [class*="bg-slate-8"],
+html.theme-white .admin-shell [class*="bg-zinc-9"],
+html.theme-white .admin-shell [class*="bg-zinc-8"],
+html.theme-white .admin-shell [class*="bg-neutral-9"],
+html.theme-white .admin-shell [class*="bg-neutral-8"],
+html.theme-white .admin-shell [class*="bg-gray-9"],
+html.theme-white .admin-shell [class*="bg-gray-8"],
+html.theme-white .admin-shell [class*="bg-black"] {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+
+/* -------------------------------------------------------------------------
+   3) Gradients — kill purple/lavender gradient injections
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell [class*="from-slate-9"],
+html.theme-white .admin-shell [class*="from-zinc-9"],
+html.theme-white .admin-shell [class*="from-neutral-9"],
+html.theme-white .admin-shell [class*="from-gray-9"],
+html.theme-white .admin-shell [class*="from-black"],
+html.theme-white .admin-shell [class*="via-slate-9"],
+html.theme-white .admin-shell [class*="via-zinc-9"],
+html.theme-white .admin-shell [class*="to-slate-9"],
+html.theme-white .admin-shell [class*="to-zinc-9"],
+html.theme-white .admin-shell [class*="to-black"] {
+  --tw-gradient-from: #0f172a !important;
+  --tw-gradient-via:  #1e293b !important;
+  --tw-gradient-to:   #0f172a !important;
+}
+
+html.theme-white .admin-shell [class*="from-violet-"],
+html.theme-white .admin-shell [class*="via-violet-"],
+html.theme-white .admin-shell [class*="to-violet-"],
+html.theme-white .admin-shell [class*="from-purple-"],
+html.theme-white .admin-shell [class*="via-purple-"],
+html.theme-white .admin-shell [class*="to-purple-"],
+html.theme-white .admin-shell [class*="from-fuchsia-"],
+html.theme-white .admin-shell [class*="via-fuchsia-"],
+html.theme-white .admin-shell [class*="to-fuchsia-"],
+html.theme-white .admin-shell [class*="from-indigo-"],
+html.theme-white .admin-shell [class*="via-indigo-"],
+html.theme-white .admin-shell [class*="to-indigo-"],
+html.theme-white .admin-shell [class*="from-pink-"],
+html.theme-white .admin-shell [class*="via-pink-"],
+html.theme-white .admin-shell [class*="to-pink-"] {
+  --tw-gradient-from: #f1f5f9 !important;
+  --tw-gradient-via:  #e2e8f0 !important;
+  --tw-gradient-to:   #cbd5e1 !important;
+}
+
+/* -------------------------------------------------------------------------
+   4) Borders, rings, dividers — neutralise violet tint
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell [class*="border-white\\/"],
+html.theme-white .admin-shell [class*="border-slate-7"],
+html.theme-white .admin-shell [class*="border-slate-8"] {
+  border-color: #e2e8f0 !important;
+}
+html.theme-white .admin-shell [class*="border-violet-"],
+html.theme-white .admin-shell [class*="border-purple-"],
+html.theme-white .admin-shell [class*="border-fuchsia-"],
+html.theme-white .admin-shell [class*="border-indigo-"],
+html.theme-white .admin-shell [class*="border-pink-"],
+html.theme-white .admin-shell [class*="ring-violet-"],
+html.theme-white .admin-shell [class*="ring-purple-"],
+html.theme-white .admin-shell [class*="ring-fuchsia-"],
+html.theme-white .admin-shell [class*="ring-indigo-"],
+html.theme-white .admin-shell [class*="ring-pink-"] {
+  border-color: #cbd5e1 !important;
+  --tw-ring-color: #cbd5e1 !important;
+}
+
+/* -------------------------------------------------------------------------
+   5) Buttons — undo global "make any dark button violet"
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell button[class*="bg-slate-"],
+html.theme-white .admin-shell button[class*="bg-zinc-"],
+html.theme-white .admin-shell button[class*="bg-neutral-"],
+html.theme-white .admin-shell button[class*="bg-black"] {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+html.theme-white .admin-shell button[class*="bg-white"] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* -------------------------------------------------------------------------
+   6) Inputs / form fields — clean white
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell input,
+html.theme-white .admin-shell textarea,
+html.theme-white .admin-shell select {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+html.theme-white .admin-shell input::placeholder,
+html.theme-white .admin-shell textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* -------------------------------------------------------------------------
+   7) Tables
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell table  { color: #0f172a !important; }
+html.theme-white .admin-shell thead  { background: #f8fafc !important; }
+html.theme-white .admin-shell tbody tr { border-color: #e2e8f0 !important; }
+html.theme-white .admin-shell tbody tr:hover { background: #f1f5f9 !important; }
+
+/* -------------------------------------------------------------------------
+   8) Glass / aurora primitives — convert to clean neutral surfaces
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell .glass,
+html.theme-white .admin-shell .glass-strong,
+html.theme-white .admin-shell .glass-soft {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 12px -6px rgba(15, 23, 42, 0.08) !important;
+}
+
+html.theme-white .admin-shell .btn-aurora,
+html.theme-white .admin-shell .bg-aurora {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
+  box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.35) !important;
+}
+
+html.theme-white .admin-shell .neon-border,
+html.theme-white .admin-shell .gradient-border-card,
+html.theme-white .admin-shell .gradient-border-soft {
+  border-color: #e2e8f0 !important;
+  background: #ffffff !important;
+}
+html.theme-white .admin-shell .gradient-border-card::before,
+html.theme-white .admin-shell .gradient-border-card::after,
+html.theme-white .admin-shell .gradient-border-soft::before {
+  background: transparent !important;
+  display: none !important;
+}
+
+/* -------------------------------------------------------------------------
+   9) Scrollbar — neutral slate inside admin
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell {
+  scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
+}
+html.theme-white .admin-shell ::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.45);
+}
+html.theme-white .admin-shell ::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.65);
+}
+
+/* -------------------------------------------------------------------------
+   10) Headings keep clean dark ink without theme-white text-shadow tweaks
+   ------------------------------------------------------------------------- */
+html.theme-white .admin-shell h1,
+html.theme-white .admin-shell h2,
+html.theme-white .admin-shell h3,
+html.theme-white .admin-shell h4,
+html.theme-white .admin-shell p,
+html.theme-white .admin-shell span,
+html.theme-white .admin-shell a,
+html.theme-white .admin-shell div {
+  text-shadow: none !important;
+}
