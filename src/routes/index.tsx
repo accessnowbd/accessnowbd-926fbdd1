@@ -204,7 +204,7 @@ function CategoryPillBar() {
           type="button"
           onClick={() => scrollBy(-1)}
           aria-label="Scroll categories left"
-            className={`hidden md:grid place-items-center absolute left-0 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-background/95 border border-border shadow-md hover:bg-primary hover:text-primary-foreground transition ${canLeft ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            className={`hidden md:grid place-items-center absolute left-0 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-white/70 backdrop-blur-md border border-white/60 text-slate-800 shadow-md hover:bg-white/90 transition ${canLeft ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -258,7 +258,7 @@ function CategoryPillBar() {
           type="button"
           onClick={() => scrollBy(1)}
           aria-label="Scroll categories right"
-            className={`hidden md:grid place-items-center absolute right-0 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-background/95 border border-border shadow-md hover:bg-primary hover:text-primary-foreground transition ${canRight ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            className={`hidden md:grid place-items-center absolute right-0 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-white/70 backdrop-blur-md border border-white/60 text-slate-800 shadow-md hover:bg-white/90 transition ${canRight ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
           <ChevronRight className="w-4 h-4" />
         </button>
