@@ -532,11 +532,10 @@ export function GlobalSearch({
                     </h3>
                   </div>
                   <div className="space-y-2">
-                    {[...products]
-                      .sort((a, b) => (b.views ?? 0) - (a.views ?? 0))
+                    {products
                       .slice(0, 3)
                       .map((p) => {
-                        const plan = p.plans?.[0] as { price?: number; original_price?: number } | undefined;
+                        const plan = p.plans?.[0];
                         return (
                           <Link
                             key={p.slug}
@@ -546,13 +545,13 @@ export function GlobalSearch({
                             className="group flex items-center gap-3 p-3 rounded-2xl border border-slate-100 hover:border-slate-200 hover:bg-slate-50 transition"
                           >
                             <div
-                              className={`w-12 h-12 grid place-items-center rounded-xl text-xl bg-gradient-to-br ${p.gradient} text-white shadow-md shrink-0`}
+                              className={`w-12 h-12 grid place-items-center rounded-xl text-xl bg-gradient-to-br ${p.gradient} text-white shadow-md shrink-0 overflow-hidden`}
                             >
-                              {p.image_url ? (
+                              {p.imageUrl ? (
                                 <img
-                                  src={p.image_url}
+                                  src={p.imageUrl}
                                   alt={p.name}
-                                  className="w-full h-full object-cover rounded-xl"
+                                  className="w-full h-full object-cover"
                                 />
                               ) : (
                                 <span>{p.emoji}</span>
@@ -570,17 +569,17 @@ export function GlobalSearch({
                                 )}
                               </div>
                               <p className="text-xs text-slate-500 truncate">
-                                {p.short_description || p.tagline || p.category}
+                                {p.tagline || p.category}
                               </p>
                             </div>
-                            {plan?.price !== undefined && (
+                            {plan?.price && (
                               <div className="text-right shrink-0">
                                 <div className="text-sm font-bold text-indigo-600">
-                                  ৳{plan.price.toLocaleString()}
+                                  ৳{plan.price}
                                 </div>
-                                {plan.original_price && plan.original_price > plan.price && (
+                                {plan.original && (
                                   <div className="text-[11px] text-slate-400 line-through">
-                                    ৳{plan.original_price.toLocaleString()}
+                                    ৳{plan.original}
                                   </div>
                                 )}
                               </div>
