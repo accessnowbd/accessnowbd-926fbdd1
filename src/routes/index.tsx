@@ -566,7 +566,7 @@ function SectionTitle({ eyebrow, title, subtitle, action, to, compact = false }:
   return (
     <div className={`flex flex-wrap items-end justify-between gap-3 ${compact ? "" : ""}`}>
       <div>
-        <span className="inline-flex rounded-full glass-soft px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-primary">{eyebrow}</span>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-primary via-fuchsia-500 to-amber-400 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-white shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)] ring-1 ring-white/25"><span className="h-1.5 w-1.5 rounded-full bg-white/90 shadow-[0_0_8px_rgba(255,255,255,0.9)]" />{eyebrow}</span>
         <h2 className="mt-3 text-2xl md:text-4xl font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)", lineHeight: 1.08 }}>{title}</h2>
         {subtitle && <p className="mt-2 max-w-2xl text-sm md:text-base text-muted-foreground">{subtitle}</p>}
       </div>
