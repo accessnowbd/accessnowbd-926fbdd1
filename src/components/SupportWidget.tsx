@@ -63,7 +63,10 @@ const FAQS: { q: string; a: string }[] = [
   },
 ];
 
+import { useSupportWidgetConfig } from "@/hooks/useSupportWidgetConfig";
+
 export function SupportWidget() {
+  const { data: cfg } = useSupportWidgetConfig();
   const [open, setOpen] = useState(false);
   const [chooser, setChooser] = useState(false);
   const [tab, setTab] = useState<Tab>("home");
@@ -235,48 +238,44 @@ export function SupportWidget() {
             {/* Ripple ping waves (only when idle) */}
             {!open && !chooser && (
               <>
-                <span className="absolute inset-0 rounded-full bg-violet-500/40 animate-ping" />
-                <span className="absolute inset-0 rounded-full bg-aqua/30 animate-ping [animation-delay:0.6s]" />
+                <span className="absolute inset-0 rounded-full animate-ping" style={{ backgroundColor: `${cfg?.ring_color ?? "#7c3aed"}66` }} />
+                <span className="absolute inset-0 rounded-full animate-ping [animation-delay:0.6s]" style={{ backgroundColor: `${cfg?.spin_color_2 ?? "#00e5ff"}4d` }} />
               </>
             )}
 
             {/* Soft ambient glow */}
-            <span className="absolute -inset-4 rounded-full bg-gradient-to-br from-violet-500/40 via-primary/40 to-aqua/40 opacity-60 blur-2xl group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
+            <span
+              className="absolute -inset-4 rounded-full opacity-60 blur-2xl group-hover:opacity-100 transition-opacity duration-500 animate-pulse"
+              style={{
+                background: `linear-gradient(135deg, ${cfg?.ring_color ?? "#7c3aed"}66, ${cfg?.spin_color_1 ?? "#7c3aed"}66, ${cfg?.spin_color_2 ?? "#00e5ff"}66)`,
+              }}
+            />
 
             {/* Spinning conic ring */}
             <span
               className="absolute -inset-[3px] rounded-full opacity-90 animate-[spin_6s_linear_infinite]"
               style={{
-                background:
-                  "conic-gradient(from 0deg, rgba(124,58,237,0.95), rgba(0,229,255,0.95), rgba(168,85,247,0.95), rgba(0,229,255,0.95), rgba(124,58,237,0.95))",
+                background: `conic-gradient(from 0deg, ${cfg?.spin_color_1 ?? "#7c3aed"}f2, ${cfg?.spin_color_2 ?? "#00e5ff"}f2, ${cfg?.spin_color_1 ?? "#7c3aed"}f2, ${cfg?.spin_color_2 ?? "#00e5ff"}f2, ${cfg?.spin_color_1 ?? "#7c3aed"}f2)`,
                 filter: "blur(2px)",
               }}
             />
 
             {/* Main orb */}
-            <span className="relative grid place-items-center h-16 w-16 rounded-full bg-gradient-to-br from-[#1a1240] via-[#2a1a5e] to-[#0d1b3d] text-white shadow-[0_22px_50px_-12px_rgba(124,58,237,0.65)] ring-1 ring-white/20 overflow-hidden">
+            <span
+              className="relative grid place-items-center h-16 w-16 rounded-full text-white shadow-[0_22px_50px_-12px_rgba(124,58,237,0.65)] ring-1 ring-white/20 overflow-hidden"
+              style={{ background: `linear-gradient(135deg, ${cfg?.orb_from ?? "#1a1240"}, ${cfg?.orb_via ?? "#2a1a5e"}, ${cfg?.orb_to ?? "#0d1b3d"})` }}
+            >
               <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/20 blur-[3px]" />
-              <span className="absolute -bottom-4 inset-x-3 h-6 rounded-full bg-aqua/40 blur-xl" />
+              <span className="absolute -bottom-4 inset-x-3 h-6 rounded-full blur-xl" style={{ backgroundColor: `${cfg?.spin_color_2 ?? "#00e5ff"}66` }} />
 
               {(chooser || open) ? (
-                <X className="h-7 w-7 relative text-white drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]" strokeWidth={2.6} />
+                <X className="h-7 w-7 relative drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]" strokeWidth={2.6} style={{ color: cfg?.icon_color ?? "#ffffff" }} />
               ) : (
-                <>
-                  <MessageCircleMore
-                    className="h-8 w-8 relative drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]"
-                    strokeWidth={2.4}
-                    style={{ stroke: "url(#supportIconGrad)" }}
-                  />
-                  <svg width="0" height="0" className="absolute">
-                    <defs>
-                      <linearGradient id="supportIconGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stopColor="#ffffff" />
-                        <stop offset="55%" stopColor="#bdf6ff" />
-                        <stop offset="100%" stopColor="#a78bfa" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </>
+                <MessageCircleMore
+                  className="h-8 w-8 relative drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]"
+                  strokeWidth={2.4}
+                  style={{ color: cfg?.icon_color ?? "#ffffff" }}
+                />
               )}
             </span>
           </button>
