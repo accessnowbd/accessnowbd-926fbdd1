@@ -303,7 +303,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen flex relative bg-[#fafafa]">
+    <div className="admin-shell min-h-screen flex relative bg-[#fafafa]">
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
