@@ -25,6 +25,7 @@ type BannerData = {
   delivery_text?: string;
   support_text?: string;
   rating_text?: string;
+  min_height?: number;
 };
 
 type BannerRow = {
