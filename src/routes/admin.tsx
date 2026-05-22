@@ -275,6 +275,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   const [search, setSearch] = useState("");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { open: globalOpen, setOpen: setGlobalOpen } = useAdminGlobalSearch();
+  const { lang, toggle, t } = useAdminLang();
 
   // Close mobile drawer on route change
   useEffect(() => { setMobileOpen(false); }, [pathname]);
@@ -284,7 +285,11 @@ function AdminShell({ user, signOut, navigate }: any) {
     const q = search.toLowerCase();
     return ADMIN_MENU.map((g) => ({
       ...g,
-      items: g.items.filter((i) => i.label.toLowerCase().includes(q)),
+      items: g.items.filter(
+        (i) =>
+          i.label.toLowerCase().includes(q) ||
+          (i.labelBn ?? "").toLowerCase().includes(q),
+      ),
     })).filter((g) => g.items.length > 0);
   }, [search]);
 
