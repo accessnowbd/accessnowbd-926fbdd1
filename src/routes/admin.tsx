@@ -269,7 +269,8 @@ function AdminBlankState() {
 }
 
 function AdminShell({ user, signOut, navigate }: any) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, _setCollapsed] = useState(false); // Sidebar locked open
+  void _setCollapsed;
   const [mobileOpen, setMobileOpen] = useState(false);
   const dark = false;
   const [search, setSearch] = useState("");
@@ -366,21 +367,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           >
             <X className="w-4 h-4" />
           </button>
-          {/* Desktop collapse / expand toggle — always at top-right edge */}
-          <button
-            onClick={() => setCollapsed((v) => !v)}
-            className={[
-              "hidden lg:inline-flex items-center justify-center h-7 w-7 rounded-md",
-              "bg-white ring-1 ring-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-50 shadow-sm transition",
-              collapsed
-                ? "mt-1"
-                : "absolute top-1/2 -translate-y-1/2 right-3",
-            ].join(" ")}
-            aria-label={collapsed ? t("Expand sidebar", "সাইডবার বড় করুন") : t("Collapse sidebar", "সাইডবার ছোট করুন")}
-            title={collapsed ? t("Expand sidebar", "সাইডবার বড় করুন") : t("Collapse sidebar", "সাইডবার ছোট করুন")}
-          >
-            {collapsed ? <PanelLeftOpen className="w-3.5 h-3.5" /> : <PanelLeftClose className="w-3.5 h-3.5" />}
-          </button>
+          {/* Sidebar locked open — collapse toggle intentionally removed */}
         </div>
 
         {/* Search */}
