@@ -2138,3 +2138,52 @@ html.theme-white .admin-shell [class*="border-pink-"] {
   --tw-ring-color: #cbd5e1 !important;
   border-color: #cbd5e1 !important; /* slate-300 */
 }
+
+/* =========================================================================
+   ADMIN SHELL — Lucide icon visibility fix
+   Force all SVG icons inside admin to inherit color from their parent
+   (currentColor) so global theme-white overrides don't paint them
+   invisible (white on white). Restore correct colors on colored chips.
+   ========================================================================= */
+html.theme-white .admin-shell svg {
+  color: currentColor !important;
+  stroke: currentColor !important;
+  fill: none !important;
+}
+/* Icons that intentionally use fill (e.g. badge dots) keep their fill */
+html.theme-white .admin-shell svg[fill]:not([fill="none"]):not([fill="currentColor"]) {
+  fill: currentColor !important;
+}
+/* On any colored chip (rose/amber/emerald/sky/orange/red/green/blue/yellow/cyan/teal/lime/violet/purple/indigo/fuchsia/pink) with text-white, ensure the SVG renders white */
+html.theme-white .admin-shell [class*="bg-rose-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-amber-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-orange-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-red-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-emerald-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-green-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-sky-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-blue-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-cyan-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-teal-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-yellow-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-lime-"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-slate-9"][class*="text-white"] svg,
+html.theme-white .admin-shell [class*="bg-slate-8"][class*="text-white"] svg,
+html.theme-white .admin-shell .text-white svg,
+html.theme-white .admin-shell svg.text-white {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+/* Restore real chip backgrounds inside admin (the global rule on line 1545+
+   was tinting cyan/teal/sky to violet — keep them brand-correct in admin) */
+html.theme-white .admin-shell [class*="bg-sky-5"] { background-color: #0ea5e9 !important; }
+html.theme-white .admin-shell [class*="bg-sky-6"] { background-color: #0284c7 !important; }
+html.theme-white .admin-shell [class*="bg-cyan-5"] { background-color: #06b6d4 !important; }
+html.theme-white .admin-shell [class*="bg-teal-5"] { background-color: #14b8a6 !important; }
+/* SVGs in tinted-text utilities should follow that color, not get re-tinted */
+html.theme-white .admin-shell [class*="text-cyan-"] svg,
+html.theme-white .admin-shell [class*="text-teal-"] svg,
+html.theme-white .admin-shell [class*="text-sky-"] svg {
+  color: inherit !important;
+  stroke: inherit !important;
+}
