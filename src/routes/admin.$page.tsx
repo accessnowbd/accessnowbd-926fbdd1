@@ -6,6 +6,7 @@ import { findAdminPage, ADMIN_MENU } from "@/lib/admin-menu";
 import { getFeatureConfig, validateField, type AdminField } from "@/lib/admin-fields";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAdminLang } from "@/context/AdminLangContext";
 
 export const Route = createFileRoute("/admin/$page")({
  component: AdminFeaturePage,
@@ -26,6 +27,7 @@ function AdminFeaturePage() {
  const item = findAdminPage(`/admin/${page}`);
  const group = ADMIN_MENU.find((g) => g.items.some((i) => i.to === `/admin/${page}`));
  const cfg = getFeatureConfig(page);
+ const { t } = useAdminLang();
 
  if (cfg?.kind === "_redirect_products") return <Navigate to="/admin/products" />;
  if (cfg?.kind === "_redirect_users") return <Navigate to="/admin/users" />;
@@ -36,13 +38,16 @@ function AdminFeaturePage() {
  <div className="mx-auto w-14 h-14 rounded-full bg-slate-100 grid place-items-center text-slate-500 mb-4">
  <Construction className="w-6 h-6" />
  </div>
- <h1 className="text-xl font-bold text-slate-900">Page not found</h1>
+ <h1 className="text-xl font-bold text-slate-900">{t("Page not found", "পেজ পাওয়া যায়নি")}</h1>
  <Link to="/admin" className="mt-5 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-slate-900 text-white text-sm font-semibold">
- <ArrowLeft className="w-4 h-4" /> Back to dashboard
+ <ArrowLeft className="w-4 h-4" /> {t("Back to dashboard", "ড্যাশবোর্ডে ফিরুন")}
  </Link>
  </div>
  );
  }
+
+ const itemLabel = (item as any).labelBn ? t(item.label, (item as any).labelBn) : item.label;
+ const groupTitle = group ? ((group as any).titleBn ? t(group.title, (group as any).titleBn) : group.title) : "";
 
  return (
  <div className="space-y-5">
@@ -52,9 +57,9 @@ function AdminFeaturePage() {
  {item.icon}
  </div>
  <div className="flex-1 min-w-0">
- <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{group?.title}</div>
- <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">{item.label}</h1>
- <p className="text-sm text-slate-500 mt-1">{cfg?.description ?? `Manage ${item.label.toLowerCase()}.`}</p>
+ <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{groupTitle}</div>
+ <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">{itemLabel}</h1>
+ <p className="text-sm text-slate-500 mt-1">{cfg?.description ?? t(`Manage ${item.label.toLowerCase()}.`, `${itemLabel} পরিচালনা করুন।`)}</p>
  </div>
  </div>
  </div>
@@ -67,7 +72,7 @@ function AdminFeaturePage() {
  )
  ) : (
  <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm">
- <p className="text-sm text-slate-500">No editor configured for this module yet.</p>
+ <p className="text-sm text-slate-500">{t("No editor configured for this module yet.", "এই মডিউলের জন্য এডিটর কনফিগার করা হয়নি।")}</p>
  </div>
  )}
  </div>
@@ -81,6 +86,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  const [loading, setLoading] = useState(true);
  const [editing, setEditing] = useState<Record | null>(null);
  const [showForm, setShowForm] = useState(false);
+ const { t } = useAdminLang();
 
  const primary = useMemo(() => fields.find((f) => f.primary) ?? fields[0], [fields]);
  const secondary = useMemo(() => fields.filter((f) => f !== primary).slice(0, 2), [fields, primary]);
@@ -101,10 +107,10 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  useEffect(() => { load(); }, [load]);
 
  const remove = async (id: string) => {
- if (!confirm("Delete this entry?")) return;
+ if (!confirm(t("Delete this entry?", "এই এন্ট্রি মুছে ফেলবেন?"))) return;
  const { error } = await supabase.from("admin_records").delete().eq("id", id);
  if (error) return toast.error(error.message);
- toast.success("Deleted");
+ toast.success(t("Deleted", "মুছে ফেলা হয়েছে"));
  load();
  };
 
@@ -135,7 +141,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  toast.error(err.message);
  load();
  } else {
- toast.success("Order saved");
+ toast.success(t("Order saved", "ক্রম সংরক্ষিত হয়েছে"));
  }
  };
 
@@ -177,14 +183,18 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  <div className="space-y-4">
  <div className="flex flex-wrap items-center gap-3 justify-between">
  <div className="text-sm text-slate-500">
- {filtering ? `${visibleRows.length} of ${rows.length}` : `${rows.length}`} {rows.length === 1 ? "entry" : "entries"}
- {!filtering && <> · drag <GripVertical className="w-3 h-3 inline" /> to reorder</>}
+ {filtering
+   ? t(`${visibleRows.length} of ${rows.length} ${rows.length === 1 ? "entry" : "entries"}`,
+       `${rows.length} টির মধ্যে ${visibleRows.length} টি এন্ট্রি`)
+   : t(`${rows.length} ${rows.length === 1 ? "entry" : "entries"}`,
+       `${rows.length} টি এন্ট্রি`)}
+ {!filtering && <> · {t("drag", "টেনে")} <GripVertical className="w-3 h-3 inline" /> {t("to reorder", "ক্রম বদলান")}</>}
  </div>
  <button
  onClick={() => { setEditing(null); setShowForm(true); }}
- className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 text-white text-sm font-semibold shadow"
+ className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow transition"
  >
- <Plus className="w-4 h-4" /> Add new
+ <Plus className="w-4 h-4" /> {t("Add new", "নতুন যোগ করুন")}
  </button>
  </div>
 
@@ -193,7 +203,10 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  <SearchBar
  value={query}
  onChange={setQuery}
- placeholder={`Search ${[primary, ...secondary].filter(Boolean).map((f) => f!.label.toLowerCase()).join(", ")}…`}
+ placeholder={t(
+   `Search ${[primary, ...secondary].filter(Boolean).map((f) => f!.label.toLowerCase()).join(", ")}…`,
+   "খুঁজুন…"
+ )}
  size="md"
  className="w-full"
  />
@@ -207,7 +220,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  statusFilter === s ? "bg-slate-900 text-white" : "text-slate-600 hover:text-slate-900"
  }`}
  >
- {s}
+ {t(s, s === "all" ? "সব" : s === "active" ? "সক্রিয়" : "নিষ্ক্রিয়")}
  </button>
  ))}
  </div>
@@ -216,17 +229,19 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
  {loading ? null : visibleRows.length === 0 ? (
  <div className="p-10 text-center text-slate-500">
- {rows.length === 0 ? `No entries yet. Click "Add new" to create the first one.` : "No matches for your search."}
+ {rows.length === 0
+   ? t(`No entries yet. Click "Add new" to create the first one.`, `এখনো কোনো এন্ট্রি নেই। "নতুন যোগ করুন" ক্লিক করে শুরু করুন।`)
+   : t("No matches for your search.", "আপনার অনুসন্ধানের সাথে কিছু মেলেনি।")}
  </div>
  ) : (
  <table className="w-full text-sm">
  <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
  <tr>
  <th className="w-8"></th>
- <th className="text-left px-4 py-3">{primary?.label ?? "Item"}</th>
+ <th className="text-left px-4 py-3">{primary?.label ?? t("Item", "আইটেম")}</th>
  {secondary.map((f) => <th key={f.name} className="text-left px-4 py-3">{f.label}</th>)}
- <th className="text-left px-4 py-3">Status</th>
- <th className="text-right px-4 py-3">Actions</th>
+ <th className="text-left px-4 py-3">{t("Status", "স্ট্যাটাস")}</th>
+ <th className="text-right px-4 py-3">{t("Actions", "অ্যাকশন")}</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-100">
@@ -259,7 +274,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  : "bg-slate-100 text-slate-500 border-slate-200"
  }`}
  >
- {r.is_active ? "Active" : "Inactive"}
+ {r.is_active ? t("Active", "সক্রিয়") : t("Inactive", "নিষ্ক্রিয়")}
  </button>
  </td>
  <td className="px-4 py-3 text-right">
@@ -267,14 +282,14 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  <button
  onClick={() => { setEditing(r); setShowForm(true); }}
  className="w-8 h-8 grid place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
- title="Edit"
+  title={t("Edit", "এডিট")}
  >
  <Pencil className="w-3.5 h-3.5" />
  </button>
  <button
  onClick={() => remove(r.id)}
  className="w-8 h-8 grid place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
- title="Delete"
+ title={t("Delete", "ডিলিট")}
  >
  <Trash2 className="w-3.5 h-3.5" />
  </button>
@@ -318,6 +333,7 @@ function RecordForm({
  const [saving, setSaving] = useState(false);
  const [errors, setErrors] = useState<{ [k: string]: string }>({});
  const [touched, setTouched] = useState<{ [k: string]: boolean }>({});
+ const { t } = useAdminLang();
 
  const setField = (name: string, value: unknown) => {
  setData((d) => ({ ...d, [name]: value }));
@@ -337,7 +353,7 @@ function RecordForm({
  if (Object.keys(next).length) {
  setErrors(next);
  setTouched(Object.fromEntries(fields.map((f) => [f.name, true])));
- toast.error("Please fix the highlighted fields");
+ toast.error(t("Please fix the highlighted fields", "চিহ্নিত ফিল্ডগুলো ঠিক করুন"));
  return;
  }
  setSaving(true);
@@ -348,7 +364,7 @@ function RecordForm({
  const { error } = await op;
  setSaving(false);
  if (error) return toast.error(error.message);
- toast.success(record ? "Updated" : "Created");
+ toast.success(record ? t("Updated", "আপডেট হয়েছে") : t("Created", "তৈরি হয়েছে"));
  onSaved();
  };
 
@@ -356,7 +372,7 @@ function RecordForm({
  <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900/40 backdrop-blur-sm p-4" onClick={onClose}>
  <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
  <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
- <h2 className="text-lg font-bold text-slate-900">{record ? "Edit entry" : "New entry"}</h2>
+ <h2 className="text-lg font-bold text-slate-900">{record ? t("Edit entry", "এন্ট্রি এডিট") : t("New entry", "নতুন এন্ট্রি")}</h2>
  <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100"><X className="w-4 h-4" /></button>
  </div>
  <div className="px-6 py-5 space-y-4 overflow-y-auto">
@@ -372,10 +388,10 @@ function RecordForm({
  ))}
  </div>
  <div className="px-6 py-4 border-t border-slate-200 flex justify-end gap-2">
- <button onClick={onClose} className="h-10 px-4 rounded-full border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
- <button onClick={save} disabled={saving} className="h-10 px-5 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 text-white text-sm font-semibold shadow inline-flex items-center gap-1.5 disabled:opacity-60">
+ <button onClick={onClose} className="h-10 px-4 rounded-full border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">{t("Cancel", "বাতিল")}</button>
+ <button onClick={save} disabled={saving} className="h-10 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow inline-flex items-center gap-1.5 disabled:opacity-60 transition">
  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
- Save
+ {t("Save", "সংরক্ষণ")}
  </button>
  </div>
  </div>
@@ -392,6 +408,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
  const [saving, setSaving] = useState(false);
  const [errors, setErrors] = useState<{ [k: string]: string }>({});
  const [touched, setTouched] = useState<{ [k: string]: boolean }>({});
+ const { t } = useAdminLang();
 
  useEffect(() => {
  (async () => {
@@ -420,7 +437,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
  if (Object.keys(next).length) {
  setErrors(next);
  setTouched(Object.fromEntries(fields.map((f) => [f.name, true])));
- toast.error("Please fix the highlighted fields");
+ toast.error(t("Please fix the highlighted fields", "চিহ্নিত ফিল্ডগুলো ঠিক করুন"));
  return;
  }
  setSaving(true);
@@ -431,7 +448,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
  setSaving(false);
  if (error) return toast.error(error.message);
  if (out) setRecordId(out.id);
- toast.success("Saved");
+ toast.success(t("Saved", "সংরক্ষিত হয়েছে"));
  };
 
  if (loading) return null;
@@ -452,9 +469,9 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
  ))}
  </div>
  <div className="pt-4 border-t border-slate-100 flex justify-end">
- <button onClick={save} disabled={saving} className="h-10 px-5 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 text-white text-sm font-semibold shadow inline-flex items-center gap-1.5 disabled:opacity-60">
+ <button onClick={save} disabled={saving} className="h-10 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow inline-flex items-center gap-1.5 disabled:opacity-60 transition">
  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
- Save settings
+ {t("Save settings", "সেটিংস সংরক্ষণ")}
  </button>
  </div>
  </div>

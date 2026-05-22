@@ -106,7 +106,7 @@ function AdminUsers() {
  <tr key={r.id} className="hover:bg-white/60">
  <td className="px-4 py-3">
  <div className="flex items-center gap-2.5">
- <div className="w-8 h-8 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 grid place-items-center text-xs font-bold text-white">
+ <div className="w-8 h-8 rounded-full bg-slate-100 ring-1 ring-slate-200 grid place-items-center text-xs font-bold text-slate-600">
  {(r.display_name || "U").slice(0, 1).toUpperCase()}
  </div>
  <div>
