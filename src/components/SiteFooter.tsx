@@ -1,13 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import {
-  
-  Facebook,
-  Instagram,
-  Youtube,
   MessageCircle,
-  Send,
   Mail,
-  MapPin,
   PhoneCall,
   Package,
   Info,
