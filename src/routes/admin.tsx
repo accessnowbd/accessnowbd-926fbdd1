@@ -569,7 +569,7 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
         "group flex items-center gap-3 rounded-2xl px-2.5 py-2 text-sm transition-all relative",
         collapsed ? "justify-center" : "",
         active
-          ? "bg-slate-100 text-slate-900"
+          ? "bg-slate-900 text-white shadow-sm"
           : "text-slate-700 hover:bg-slate-50",
       ].join(" ")}
     >
@@ -584,7 +584,7 @@ function SidebarItem({ item, collapsed, dark: _dark, active }: { item: AdminMenu
       </span>
       {!collapsed && <span className="font-semibold truncate flex-1 text-[14px]">{label}</span>}
       {!collapsed && active && (
-        <span className="w-1.5 h-1.5 rounded-full bg-slate-700 shrink-0" aria-hidden />
+        <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" aria-hidden />
       )}
       {!collapsed && !active && (
         <Pin
