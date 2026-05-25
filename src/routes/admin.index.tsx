@@ -332,9 +332,16 @@ function AdminDashboard() {
  return d;
  };
  return (
- <svg viewBox={`0 0 ${W} ${H+30}`} className="w-full h-56">
- <path d={toPath(seriesA)} fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" />
- <path d={toPath(seriesB)} fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" />
+  <svg viewBox={`0 0 ${W} ${H+30}`} className="w-full h-56">
+ <defs>
+   <linearGradient id="salesGradA" x1="0" y1="0" x2="0" y2="1">
+     <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.25" />
+     <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+   </linearGradient>
+ </defs>
+ <path d={`${toPath(seriesA)} L ${W},${H} L 0,${H} Z`} fill="url(#salesGradA)" />
+ <path d={toPath(seriesA)} fill="none" stroke="#3b82f6" strokeWidth="3" strokeLinecap="round" />
+ <path d={toPath(seriesB)} fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="5 5" />
  {salesMonths.map((m,i)=>(
  <text key={m} x={i*step} y={H+22} textAnchor="middle" className="fill-slate-400" style={{fontSize:11,fontWeight:600}}>{m}</text>
  ))}
