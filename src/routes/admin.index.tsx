@@ -356,14 +356,14 @@ function AdminDashboard() {
  <button className="text-[11px] font-bold text-slate-500 inline-flex items-center gap-1">LAST 7 DAYS</button>
  </div>
  <div className="space-y-4">
- {trafficSources.map((t)=>(
+  {trafficSources.map((t)=>(
  <div key={t.label}>
  <div className="flex items-center justify-between text-xs mb-1.5">
  <span className="text-slate-700 font-semibold">{t.label}</span>
  <span className="text-slate-900 font-bold tabular-nums">{t.val.toLocaleString("en-IN")}</span>
  </div>
- <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
- <div className="h-full rounded-full bg-slate-500" style={{ width: `${t.pct}%` }} />
+ <div className="h-1.5 rounded-full bg-white/60 overflow-hidden">
+ <div className={`h-full rounded-full bg-gradient-to-r ${t.grad}`} style={{ width: `${t.pct}%` }} />
  </div>
  </div>
  ))}
