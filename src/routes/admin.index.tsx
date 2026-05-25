@@ -224,10 +224,10 @@ function AdminDashboard() {
  <p className="text-sm text-slate-500 mt-1.5">Here's what's happening with your store today.</p>
  </div>
  <div className="flex items-center gap-2.5">
- <Link to="/admin/add-product" className="h-12 px-5 rounded-2xl bg-white ring-1 ring-slate-200 text-sm font-semibold text-slate-900 inline-flex items-center gap-2 hover:bg-slate-50 transition">
+  <Link to="/admin/add-product" className="h-12 px-5 rounded-2xl bg-white/60 backdrop-blur-md ring-1 ring-white/70 text-sm font-semibold text-slate-900 inline-flex items-center gap-2 hover:bg-white transition">
  <Plus className="w-4 h-4" /> Add product
  </Link>
- <Link to="/admin/orders" className="h-12 px-5 rounded-2xl bg-slate-900 text-white text-sm font-semibold inline-flex items-center gap-2 hover:bg-slate-800 transition">
+ <Link to="/admin/orders" className="h-12 px-5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold inline-flex items-center gap-2 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/30 transition">
  <ShoppingBag className="w-4 h-4" /> View orders
  </Link>
  </div>
