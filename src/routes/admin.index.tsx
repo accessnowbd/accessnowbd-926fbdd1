@@ -387,8 +387,8 @@ function AdminDashboard() {
  return (
  <>
  <div className="relative w-44 h-44 mx-auto">
- <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
- <circle cx="18" cy="18" r={R} fill="transparent" stroke="#94a3b8" strokeWidth="5" />
+  <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90 drop-shadow-md">
+ <circle cx="18" cy="18" r={R} fill="transparent" stroke="rgba(148,163,184,0.2)" strokeWidth="5" />
  {orderStatusBreakdown.map((s) => {
  if (s.pct <= 0) return null;
  const dash = `${s.pct} ${100 - s.pct}`;
