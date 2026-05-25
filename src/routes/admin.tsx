@@ -301,7 +301,13 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f7f8fb] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
+    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f3f4ff] font-['Manrope',ui-sans-serif,system-ui] text-slate-800 overflow-hidden">
+      {/* Aurora background blobs */}
+      <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full bg-purple-300/40 blur-[120px] -z-0" />
+      <div aria-hidden className="pointer-events-none absolute top-1/3 -right-24 w-[600px] h-[600px] rounded-full bg-pink-200/40 blur-[130px] -z-0" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-32 left-1/4 w-[450px] h-[450px] rounded-full bg-blue-300/30 blur-[110px] -z-0" />
+      <div aria-hidden className="pointer-events-none absolute bottom-10 right-1/4 w-[400px] h-[400px] rounded-full bg-emerald-200/30 blur-[100px] -z-0" />
+
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
@@ -313,8 +319,8 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* SIDEBAR */}
       <aside
         className={[
-          "shrink-0 transition-all duration-200 flex flex-col h-screen",
-          "bg-white border-r border-slate-200/70",
+          "shrink-0 transition-all duration-200 flex flex-col h-screen relative z-10",
+          "bg-white/60 backdrop-blur-2xl border-r border-white/60",
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
           collapsed ? "lg:w-[76px]" : "lg:w-[268px]",
           "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-2xl lg:shadow-none",
@@ -407,9 +413,9 @@ function AdminShell({ user, signOut, navigate }: any) {
       </aside>
 
       {/* MAIN */}
-      <div className="flex-1 min-w-0 flex flex-col lg:h-screen lg:overflow-y-auto">
+      <div className="flex-1 min-w-0 flex flex-col lg:h-screen lg:overflow-y-auto relative z-10">
         {/* Top bar */}
-        <header className="h-[68px] sticky top-0 z-20 bg-white/85 backdrop-blur-xl border-b border-slate-200/70">
+        <header className="h-[68px] sticky top-0 z-20 bg-white/50 backdrop-blur-xl border-b border-white/60">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
             <button
               onClick={() => setMobileOpen(true)}
@@ -533,22 +539,19 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
       activeOptions={{ exact: item.exact }}
       title={collapsed ? label : undefined}
       className={[
-        "group relative flex items-center gap-3 rounded-lg text-sm transition-all",
-        collapsed ? "justify-center px-2 py-2 mx-1 my-0.5" : "px-2.5 py-2",
+        "group relative flex items-center gap-3 text-sm transition-all",
+        collapsed ? "justify-center px-2 py-2 mx-1 my-0.5 rounded-2xl" : "px-3 py-2.5 rounded-2xl",
         active
-          ? "bg-blue-50 text-blue-700"
-          : "text-slate-700 hover:bg-slate-50 hover:text-slate-900",
+          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25"
+          : "text-slate-600 hover:bg-white/60 hover:text-slate-900",
       ].join(" ")}
     >
-      {active && !collapsed && (
-        <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-blue-600" aria-hidden />
-      )}
       <span
         className={[
-          "shrink-0 w-8 h-8 rounded-lg grid place-items-center transition-colors",
+          "shrink-0 w-8 h-8 rounded-xl grid place-items-center transition-colors",
           active
-            ? "bg-blue-600 text-white shadow-[0_4px_12px_-4px_rgba(59,130,246,0.6)]"
-            : "bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-700",
+            ? "bg-white/20 text-white"
+            : "bg-white/40 text-slate-600 group-hover:bg-white group-hover:text-blue-700 ring-1 ring-white/60",
         ].join(" ")}
       >
         {item.icon}
