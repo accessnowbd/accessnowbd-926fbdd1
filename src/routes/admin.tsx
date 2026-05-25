@@ -539,22 +539,19 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
       activeOptions={{ exact: item.exact }}
       title={collapsed ? label : undefined}
       className={[
-        "group relative flex items-center gap-3 rounded-lg text-sm transition-all",
-        collapsed ? "justify-center px-2 py-2 mx-1 my-0.5" : "px-2.5 py-2",
+        "group relative flex items-center gap-3 text-sm transition-all",
+        collapsed ? "justify-center px-2 py-2 mx-1 my-0.5 rounded-2xl" : "px-3 py-2.5 rounded-2xl",
         active
-          ? "bg-blue-50 text-blue-700"
-          : "text-slate-700 hover:bg-slate-50 hover:text-slate-900",
+          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25"
+          : "text-slate-600 hover:bg-white/60 hover:text-slate-900",
       ].join(" ")}
     >
-      {active && !collapsed && (
-        <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-blue-600" aria-hidden />
-      )}
       <span
         className={[
-          "shrink-0 w-8 h-8 rounded-lg grid place-items-center transition-colors",
+          "shrink-0 w-8 h-8 rounded-xl grid place-items-center transition-colors",
           active
-            ? "bg-blue-600 text-white shadow-[0_4px_12px_-4px_rgba(59,130,246,0.6)]"
-            : "bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-700",
+            ? "bg-white/20 text-white"
+            : "bg-white/40 text-slate-600 group-hover:bg-white group-hover:text-blue-700 ring-1 ring-white/60",
         ].join(" ")}
       >
         {item.icon}
