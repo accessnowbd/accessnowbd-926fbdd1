@@ -413,9 +413,9 @@ function AdminShell({ user, signOut, navigate }: any) {
       </aside>
 
       {/* MAIN */}
-      <div className="flex-1 min-w-0 flex flex-col lg:h-screen lg:overflow-y-auto">
+      <div className="flex-1 min-w-0 flex flex-col lg:h-screen lg:overflow-y-auto relative z-10">
         {/* Top bar */}
-        <header className="h-[68px] sticky top-0 z-20 bg-white/85 backdrop-blur-xl border-b border-slate-200/70">
+        <header className="h-[68px] sticky top-0 z-20 bg-white/50 backdrop-blur-xl border-b border-white/60">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
             <button
               onClick={() => setMobileOpen(true)}
