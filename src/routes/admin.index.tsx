@@ -157,10 +157,10 @@ function AdminDashboard() {
 
  const statusChip = (s: string) => {
  const k = (s || "").toLowerCase();
- if (k === "completed" || k === "paid") return "bg-slate-50 text-slate-700 ring-slate-200";
- if (k === "pending") return "bg-slate-50 text-slate-700 ring-slate-200";
- if (k === "processing") return "bg-slate-50 text-slate-700 ring-slate-200";
- if (k === "cancelled" || k === "failed") return "bg-slate-50 text-slate-700 ring-slate-200";
+ if (k === "completed" || k === "paid") return "bg-emerald-100 text-emerald-700 ring-emerald-200";
+ if (k === "pending") return "bg-rose-100 text-rose-600 ring-rose-200";
+ if (k === "processing") return "bg-blue-100 text-blue-700 ring-blue-200";
+ if (k === "cancelled" || k === "failed") return "bg-slate-100 text-slate-600 ring-slate-200";
  return "bg-slate-100 text-slate-700 ring-slate-200";
  };
 
@@ -169,11 +169,11 @@ function AdminDashboard() {
  const seriesA = [220,260,300,250,330,290,340,420,380,460,500,560];
  const seriesB = [120,140,170,150,200,180,220,260,240,300,340,380];
  const trafficSources = [
- { label: "Direct", val: 143382, pct: 92 },
- { label: "Referral", val: 87974, pct: 66 },
- { label: "Social Media", val: 45211, pct: 42 },
- { label: "Twitter", val: 21893, pct: 22 },
- { label: "Facebook", val: 21893, pct: 22 },
+ { label: "Direct", val: 143382, pct: 92, grad: "from-blue-400 to-blue-600" },
+ { label: "Referral", val: 87974, pct: 66, grad: "from-orange-400 to-orange-600" },
+ { label: "Social Media", val: 45211, pct: 42, grad: "from-indigo-400 to-indigo-600" },
+ { label: "Twitter", val: 21893, pct: 22, grad: "from-sky-400 to-sky-500" },
+ { label: "Facebook", val: 21893, pct: 22, grad: "from-blue-500 to-blue-700" },
  ];
 
  // Order status breakdown (real)
@@ -185,10 +185,10 @@ function AdminDashboard() {
  });
  const total = Object.values(buckets).reduce((a, b) => a + b, 0) || 1;
  return [
- { label: "Completed", val: buckets.completed, color: "#94a3b8", soft: "bg-slate-400" },
- { label: "Processing", val: buckets.processing, color: "#94a3b8", soft: "bg-slate-400" },
- { label: "Pending", val: buckets.pending, color: "#94a3b8", soft: "bg-slate-400" },
- { label: "Cancelled", val: buckets.cancelled, color: "#94a3b8", soft: "bg-slate-400" },
+ { label: "Completed", val: buckets.completed, color: "#3b82f6", soft: "bg-blue-500" },
+ { label: "Processing", val: buckets.processing, color: "#fbbf24", soft: "bg-amber-400" },
+ { label: "Pending", val: buckets.pending, color: "#f97316", soft: "bg-orange-500" },
+ { label: "Cancelled", val: buckets.cancelled, color: "#f43f5e", soft: "bg-rose-500" },
  ].map((s) => ({ ...s, pct: (s.val / total) * 100, total }));
  }, [orders]);
 
