@@ -157,10 +157,10 @@ function AdminDashboard() {
 
  const statusChip = (s: string) => {
  const k = (s || "").toLowerCase();
- if (k === "completed" || k === "paid") return "bg-emerald-100 text-emerald-700 ring-emerald-200";
- if (k === "pending") return "bg-rose-100 text-rose-600 ring-rose-200";
- if (k === "processing") return "bg-blue-100 text-blue-700 ring-blue-200";
- if (k === "cancelled" || k === "failed") return "bg-slate-100 text-slate-600 ring-slate-200";
+ if (k === "completed" || k === "paid") return "bg-slate-50 text-slate-700 ring-slate-200";
+ if (k === "pending") return "bg-slate-50 text-slate-700 ring-slate-200";
+ if (k === "processing") return "bg-slate-50 text-slate-700 ring-slate-200";
+ if (k === "cancelled" || k === "failed") return "bg-slate-50 text-slate-700 ring-slate-200";
  return "bg-slate-100 text-slate-700 ring-slate-200";
  };
 
@@ -169,11 +169,11 @@ function AdminDashboard() {
  const seriesA = [220,260,300,250,330,290,340,420,380,460,500,560];
  const seriesB = [120,140,170,150,200,180,220,260,240,300,340,380];
  const trafficSources = [
- { label: "Direct", val: 143382, pct: 92, grad: "from-blue-400 to-blue-600" },
- { label: "Referral", val: 87974, pct: 66, grad: "from-orange-400 to-orange-600" },
- { label: "Social Media", val: 45211, pct: 42, grad: "from-indigo-400 to-indigo-600" },
- { label: "Twitter", val: 21893, pct: 22, grad: "from-sky-400 to-sky-500" },
- { label: "Facebook", val: 21893, pct: 22, grad: "from-blue-500 to-blue-700" },
+ { label: "Direct", val: 143382, pct: 92 },
+ { label: "Referral", val: 87974, pct: 66 },
+ { label: "Social Media", val: 45211, pct: 42 },
+ { label: "Twitter", val: 21893, pct: 22 },
+ { label: "Facebook", val: 21893, pct: 22 },
  ];
 
  // Order status breakdown (real)
@@ -185,10 +185,10 @@ function AdminDashboard() {
  });
  const total = Object.values(buckets).reduce((a, b) => a + b, 0) || 1;
  return [
- { label: "Completed", val: buckets.completed, color: "#3b82f6", soft: "bg-blue-500" },
- { label: "Processing", val: buckets.processing, color: "#fbbf24", soft: "bg-amber-400" },
- { label: "Pending", val: buckets.pending, color: "#f97316", soft: "bg-orange-500" },
- { label: "Cancelled", val: buckets.cancelled, color: "#f43f5e", soft: "bg-rose-500" },
+ { label: "Completed", val: buckets.completed, color: "#94a3b8", soft: "bg-slate-400" },
+ { label: "Processing", val: buckets.processing, color: "#94a3b8", soft: "bg-slate-400" },
+ { label: "Pending", val: buckets.pending, color: "#94a3b8", soft: "bg-slate-400" },
+ { label: "Cancelled", val: buckets.cancelled, color: "#94a3b8", soft: "bg-slate-400" },
  ].map((s) => ({ ...s, pct: (s.val / total) * 100, total }));
  }, [orders]);
 
@@ -224,10 +224,10 @@ function AdminDashboard() {
  <p className="text-sm text-slate-500 mt-1.5">Here's what's happening with your store today.</p>
  </div>
  <div className="flex items-center gap-2.5">
-  <Link to="/admin/add-product" className="h-12 px-5 rounded-2xl bg-white/60 backdrop-blur-md ring-1 ring-white/70 text-sm font-semibold text-slate-900 inline-flex items-center gap-2 hover:bg-white transition">
+ <Link to="/admin/add-product" className="h-12 px-5 rounded-2xl bg-white ring-1 ring-slate-200 text-sm font-semibold text-slate-900 inline-flex items-center gap-2 hover:bg-slate-50 transition">
  <Plus className="w-4 h-4" /> Add product
  </Link>
- <Link to="/admin/orders" className="h-12 px-5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold inline-flex items-center gap-2 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/30 transition">
+ <Link to="/admin/orders" className="h-12 px-5 rounded-2xl bg-slate-900 text-white text-sm font-semibold inline-flex items-center gap-2 hover:bg-slate-800 transition">
  <ShoppingBag className="w-4 h-4" /> View orders
  </Link>
  </div>
@@ -332,16 +332,9 @@ function AdminDashboard() {
  return d;
  };
  return (
-  <svg viewBox={`0 0 ${W} ${H+30}`} className="w-full h-56">
- <defs>
-   <linearGradient id="salesGradA" x1="0" y1="0" x2="0" y2="1">
-     <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.25" />
-     <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-   </linearGradient>
- </defs>
- <path d={`${toPath(seriesA)} L ${W},${H} L 0,${H} Z`} fill="url(#salesGradA)" />
- <path d={toPath(seriesA)} fill="none" stroke="#3b82f6" strokeWidth="3" strokeLinecap="round" />
- <path d={toPath(seriesB)} fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="5 5" />
+ <svg viewBox={`0 0 ${W} ${H+30}`} className="w-full h-56">
+ <path d={toPath(seriesA)} fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" />
+ <path d={toPath(seriesB)} fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" />
  {salesMonths.map((m,i)=>(
  <text key={m} x={i*step} y={H+22} textAnchor="middle" className="fill-slate-400" style={{fontSize:11,fontWeight:600}}>{m}</text>
  ))}
@@ -356,14 +349,14 @@ function AdminDashboard() {
  <button className="text-[11px] font-bold text-slate-500 inline-flex items-center gap-1">LAST 7 DAYS</button>
  </div>
  <div className="space-y-4">
-  {trafficSources.map((t)=>(
+ {trafficSources.map((t)=>(
  <div key={t.label}>
  <div className="flex items-center justify-between text-xs mb-1.5">
  <span className="text-slate-700 font-semibold">{t.label}</span>
  <span className="text-slate-900 font-bold tabular-nums">{t.val.toLocaleString("en-IN")}</span>
  </div>
- <div className="h-1.5 rounded-full bg-white/60 overflow-hidden">
- <div className={`h-full rounded-full bg-gradient-to-r ${t.grad}`} style={{ width: `${t.pct}%` }} />
+ <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
+ <div className="h-full rounded-full bg-slate-500" style={{ width: `${t.pct}%` }} />
  </div>
  </div>
  ))}
@@ -387,8 +380,8 @@ function AdminDashboard() {
  return (
  <>
  <div className="relative w-44 h-44 mx-auto">
-  <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90 drop-shadow-md">
- <circle cx="18" cy="18" r={R} fill="transparent" stroke="rgba(148,163,184,0.2)" strokeWidth="5" />
+ <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+ <circle cx="18" cy="18" r={R} fill="transparent" stroke="#94a3b8" strokeWidth="5" />
  {orderStatusBreakdown.map((s) => {
  if (s.pct <= 0) return null;
  const dash = `${s.pct} ${100 - s.pct}`;
