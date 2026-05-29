@@ -472,7 +472,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           </div>
         </header>
 
-        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800">
+        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800 admin-glass-scope">
           <div className="mx-auto max-w-[1400px]">
             <Outlet />
           </div>
@@ -485,6 +485,47 @@ function AdminShell({ user, signOut, navigate }: any) {
         .admin-scroll::-webkit-scrollbar { width: 6px; }
         .admin-scroll::-webkit-scrollbar-thumb { background: rgba(100,116,139,.22); border-radius: 999px; }
         .admin-scroll::-webkit-scrollbar-thumb:hover { background: rgba(59,130,246,.35); }
+
+        /* Aurora glass cascade across ALL admin sub-pages — frosted cards on the pastel canvas */
+        .admin-glass-scope .bg-white:not(input):not(textarea):not(select):not(.keep-solid) {
+          background-color: rgba(255,255,255,0.65) !important;
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+        }
+        .admin-glass-scope .bg-slate-50,
+        .admin-glass-scope .bg-gray-50,
+        .admin-glass-scope .bg-neutral-50 {
+          background-color: rgba(255,255,255,0.45) !important;
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+        }
+        .admin-glass-scope [class*="ring-slate-200"],
+        .admin-glass-scope [class*="ring-slate-100"],
+        .admin-glass-scope [class*="border-slate-200"],
+        .admin-glass-scope [class*="border-slate-100"] {
+          --tw-ring-color: rgba(255,255,255,0.7) !important;
+          border-color: rgba(255,255,255,0.6) !important;
+        }
+        .admin-glass-scope .shadow-sm,
+        .admin-glass-scope .shadow {
+          box-shadow: 0 8px 24px -16px rgba(79,70,229,0.18) !important;
+        }
+        /* Keep form inputs readable & solid */
+        .admin-glass-scope input,
+        .admin-glass-scope textarea,
+        .admin-glass-scope select {
+          background-color: rgba(255,255,255,0.9) !important;
+          backdrop-filter: none !important;
+        }
+        /* Soften default table row stripes */
+        .admin-glass-scope tbody tr.bg-white {
+          background-color: rgba(255,255,255,0.55) !important;
+        }
+        /* Active-pill helper for inner nav-style buttons (matches sidebar pill) */
+        .admin-glass-scope .bg-blue-600,
+        .admin-glass-scope .bg-indigo-600 {
+          box-shadow: 0 10px 24px -10px rgba(59,130,246,0.45);
+        }
       `}</style>
     </div>
   );
