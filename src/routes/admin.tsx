@@ -416,19 +416,19 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* MAIN */}
       <div className="flex-1 min-w-0 flex flex-col lg:h-screen lg:overflow-y-auto">
         {/* Top bar */}
-        <header className="h-[68px] sticky top-0 z-20 bg-white/85 backdrop-blur-xl border-b border-slate-200/70">
+        <header className="h-[68px] sticky top-0 z-20 bg-white/55 backdrop-blur-2xl border-b border-white/60 shadow-[0_4px_24px_-12px_rgba(167,139,250,0.25)]">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
             <button
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden h-9 w-9 rounded-lg grid place-items-center border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white"
+              className="lg:hidden h-9 w-9 rounded-lg grid place-items-center border border-white/70 text-slate-700 hover:bg-white/60 bg-white/50 backdrop-blur-md"
               aria-label="Open menu"
             >
               <Menu className="w-4 h-4" />
             </button>
 
             <div className="hidden md:flex items-center gap-2 text-sm min-w-0">
-              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 ring-1 ring-blue-100">
-                <span className="text-blue-600">{currentPage?.group.icon ?? ADMIN_MENU[0].icon}</span>
+              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-violet-100/70 text-violet-700 ring-1 ring-violet-200/70 backdrop-blur">
+                <span className="text-violet-600">{currentPage?.group.icon ?? ADMIN_MENU[0].icon}</span>
                 <span className="font-semibold text-[12px]">
                   {currentPage
                     ? t(currentPage.group.title, currentPage.group.titleBn)
@@ -456,7 +456,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               onClick={toggle}
               aria-label={t("Switch to Bangla", "ইংরেজিতে পরিবর্তন")}
               title={lang === "en" ? "বাংলায় দেখুন" : "Show in English"}
-              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-bold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 bg-white transition shrink-0"
+              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-bold items-center gap-1.5 border border-white/70 text-slate-700 hover:bg-violet-50/80 hover:border-violet-300 hover:text-violet-700 bg-white/50 backdrop-blur-md transition shrink-0"
             >
               <Globe className="w-3.5 h-3.5" /> {lang === "en" ? "বাং" : "EN"}
             </button>
@@ -467,11 +467,12 @@ function AdminShell({ user, signOut, navigate }: any) {
               className="hidden xl:block w-64"
             />
 
-            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition">
+            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white/50 backdrop-blur-md border border-white/70 text-slate-700 hover:bg-violet-50/80 hover:border-violet-300 hover:text-violet-700 transition">
               <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
             </Link>
           </div>
         </header>
+
 
         <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800">
           <div className="mx-auto max-w-[1400px]">
