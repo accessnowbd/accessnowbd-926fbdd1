@@ -445,9 +445,20 @@ function AdminProducts() {
  <td className="px-3 py-3">
  <button
  onClick={() => toggleActive(p)}
- className={`inline-flex items-center gap-1 px-2 h-6 rounded-full text-xs border ${p.is_active ? "bg-slate-50 text-slate-700 border-slate-200" : "bg-slate-100 text-slate-500 border-slate-200"}`}
+ title={p.is_active ? "ক্লিক করে বন্ধ করুন (ওয়েবসাইটে দেখাবে না)" : "ক্লিক করে চালু করুন (ওয়েবসাইটে দেখাবে)"}
+ aria-pressed={p.is_active}
+ className={`inline-flex items-center gap-2 select-none transition-colors`}
  >
- {p.is_active ? "সক্রিয়" : "নিষ্ক্রিয়"}
+ <span
+ className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${p.is_active ? "bg-emerald-500" : "bg-slate-300"}`}
+ >
+ <span
+ className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${p.is_active ? "translate-x-4" : "translate-x-0.5"}`}
+ />
+ </span>
+ <span className={`text-xs font-medium ${p.is_active ? "text-emerald-700" : "text-slate-500"}`}>
+ {p.is_active ? "On" : "Off"}
+ </span>
  </button>
  </td>
  <td className="px-3 py-3">
