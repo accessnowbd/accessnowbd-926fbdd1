@@ -301,11 +301,18 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f7f8fb] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
+    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative font-['Manrope',ui-sans-serif,system-ui] text-slate-800 bg-gradient-to-br from-[#fde7f3] via-[#e9e6fb] to-[#dceefc]">
+      {/* Decorative glass orbs */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden z-0">
+        <div className="absolute -top-32 -left-24 w-[420px] h-[420px] rounded-full bg-pink-300/40 blur-3xl" />
+        <div className="absolute top-1/3 -right-32 w-[460px] h-[460px] rounded-full bg-violet-300/40 blur-3xl" />
+        <div className="absolute -bottom-32 left-1/3 w-[480px] h-[480px] rounded-full bg-sky-300/40 blur-3xl" />
+      </div>
+
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm"
+          className="lg:hidden fixed inset-0 z-40 bg-slate-950/30 backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -313,11 +320,11 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* SIDEBAR */}
       <aside
         className={[
-          "shrink-0 transition-all duration-200 flex flex-col h-screen",
-          "bg-white border-r border-slate-200/70",
-          "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
+          "shrink-0 transition-all duration-200 flex flex-col h-screen relative z-10",
+          "bg-white/50 backdrop-blur-2xl border-r border-white/60 shadow-[0_8px_32px_-12px_rgba(139,92,246,0.18)]",
+          "lg:sticky lg:top-0 lg:translate-x-0",
           collapsed ? "lg:w-[76px]" : "lg:w-[268px]",
-          "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-2xl lg:shadow-none",
+          "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-2xl lg:shadow-[0_8px_32px_-12px_rgba(139,92,246,0.18)]",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         ].join(" ")}
       >
