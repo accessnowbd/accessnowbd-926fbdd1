@@ -301,18 +301,11 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative font-['Manrope',ui-sans-serif,system-ui] text-slate-800 bg-gradient-to-br from-[#fde7f3] via-[#e9e6fb] to-[#dceefc]">
-      {/* Decorative glass orbs */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden z-0">
-        <div className="absolute -top-32 -left-24 w-[420px] h-[420px] rounded-full bg-pink-300/40 blur-3xl" />
-        <div className="absolute top-1/3 -right-32 w-[460px] h-[460px] rounded-full bg-violet-300/40 blur-3xl" />
-        <div className="absolute -bottom-32 left-1/3 w-[480px] h-[480px] rounded-full bg-sky-300/40 blur-3xl" />
-      </div>
-
+    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f7f8fb] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-40 bg-slate-950/30 backdrop-blur-sm"
+          className="lg:hidden fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -320,23 +313,23 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* SIDEBAR */}
       <aside
         className={[
-          "shrink-0 transition-all duration-200 flex flex-col h-screen relative z-10",
-          "bg-white/50 backdrop-blur-2xl border-r border-white/60 shadow-[0_8px_32px_-12px_rgba(139,92,246,0.18)]",
-          "lg:sticky lg:top-0 lg:translate-x-0",
+          "shrink-0 transition-all duration-200 flex flex-col h-screen",
+          "bg-white border-r border-slate-200/70",
+          "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
           collapsed ? "lg:w-[76px]" : "lg:w-[268px]",
-          "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-2xl lg:shadow-[0_8px_32px_-12px_rgba(139,92,246,0.18)]",
+          "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-2xl lg:shadow-none",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         ].join(" ")}
       >
         {/* Brand */}
         <div className={[
-          "border-b border-white/60",
+          "border-b border-slate-200/70",
           collapsed
             ? "flex flex-col items-center justify-center gap-1.5 py-3 px-2"
             : "h-[68px] flex items-center justify-between px-4",
         ].join(" ")}>
           <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "justify-center" : ""}`}>
-            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-xl overflow-hidden ring-1 ring-white/80 shadow-[0_4px_14px_-6px_rgba(167,139,250,0.6)] bg-gradient-to-br from-white to-violet-50">
+            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-xl overflow-hidden ring-1 ring-slate-200 shadow-[0_4px_14px_-6px_rgba(59,130,246,0.4)] bg-white">
               <img
                 src={accessNowLogo}
                 alt="AccessNow BD"
@@ -346,8 +339,8 @@ function AdminShell({ user, signOut, navigate }: any) {
             </span>
             {!collapsed && (
               <span className="leading-tight min-w-0 font-['Sora',ui-sans-serif,system-ui]">
-                <span className="block text-[15px] font-bold tracking-tight bg-gradient-to-r from-violet-700 via-fuchsia-600 to-pink-600 bg-clip-text text-transparent">AccessNow BD</span>
-                <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-600 mt-0.5">Admin Console</span>
+                <span className="block text-[15px] font-bold tracking-tight text-slate-900">AccessNow BD</span>
+                <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-blue-600 mt-0.5">Admin Console</span>
               </span>
             )}
           </Link>
@@ -390,9 +383,9 @@ function AdminShell({ user, signOut, navigate }: any) {
         </nav>
 
         {/* User */}
-        <div className="border-t border-white/60 p-3 space-y-2 bg-white/30 backdrop-blur-xl">
+        <div className="border-t border-slate-200/70 p-3 space-y-2 bg-gradient-to-b from-white to-slate-50/60">
           <div className={`flex items-center gap-2.5 ${collapsed ? "justify-center" : ""}`}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 text-white grid place-items-center text-xs font-bold shrink-0 shadow-[0_4px_12px_-4px_rgba(167,139,250,0.7)] font-['Sora']">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 text-white grid place-items-center text-xs font-bold shrink-0 shadow-[0_4px_12px_-4px_rgba(59,130,246,0.6)] font-['Sora']">
               {(user?.email ?? "A").slice(0, 1).toUpperCase()}
             </div>
             {!collapsed && (
@@ -405,7 +398,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           {!collapsed && (
             <button
               onClick={async () => { await signOut(); navigate({ to: "/login" }); }}
-              className="w-full h-9 rounded-lg text-xs font-bold inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white transition shadow-[0_4px_12px_-4px_rgba(167,139,250,0.6)]"
+              className="w-full h-9 rounded-lg text-xs font-bold inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white transition"
             >
               <LogOut className="w-3.5 h-3.5" /> {t("Logout", "লগআউট")}
             </button>
@@ -416,19 +409,19 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* MAIN */}
       <div className="flex-1 min-w-0 flex flex-col lg:h-screen lg:overflow-y-auto">
         {/* Top bar */}
-        <header className="h-[68px] sticky top-0 z-20 bg-white/55 backdrop-blur-2xl border-b border-white/60 shadow-[0_4px_24px_-12px_rgba(167,139,250,0.25)]">
+        <header className="h-[68px] sticky top-0 z-20 bg-white/85 backdrop-blur-xl border-b border-slate-200/70">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
             <button
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden h-9 w-9 rounded-lg grid place-items-center border border-white/70 text-slate-700 hover:bg-white/60 bg-white/50 backdrop-blur-md"
+              className="lg:hidden h-9 w-9 rounded-lg grid place-items-center border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white"
               aria-label="Open menu"
             >
               <Menu className="w-4 h-4" />
             </button>
 
             <div className="hidden md:flex items-center gap-2 text-sm min-w-0">
-              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-violet-100/70 text-violet-700 ring-1 ring-violet-200/70 backdrop-blur">
-                <span className="text-violet-600">{currentPage?.group.icon ?? ADMIN_MENU[0].icon}</span>
+              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 ring-1 ring-blue-100">
+                <span className="text-blue-600">{currentPage?.group.icon ?? ADMIN_MENU[0].icon}</span>
                 <span className="font-semibold text-[12px]">
                   {currentPage
                     ? t(currentPage.group.title, currentPage.group.titleBn)
@@ -456,7 +449,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               onClick={toggle}
               aria-label={t("Switch to Bangla", "ইংরেজিতে পরিবর্তন")}
               title={lang === "en" ? "বাংলায় দেখুন" : "Show in English"}
-              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-bold items-center gap-1.5 border border-white/70 text-slate-700 hover:bg-violet-50/80 hover:border-violet-300 hover:text-violet-700 bg-white/50 backdrop-blur-md transition shrink-0"
+              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-bold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 bg-white transition shrink-0"
             >
               <Globe className="w-3.5 h-3.5" /> {lang === "en" ? "বাং" : "EN"}
             </button>
@@ -467,12 +460,11 @@ function AdminShell({ user, signOut, navigate }: any) {
               className="hidden xl:block w-64"
             />
 
-            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white/50 backdrop-blur-md border border-white/70 text-slate-700 hover:bg-violet-50/80 hover:border-violet-300 hover:text-violet-700 transition">
+            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition">
               <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
             </Link>
           </div>
         </header>
-
 
         <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800">
           <div className="mx-auto max-w-[1400px]">
@@ -513,7 +505,7 @@ function SidebarGroup({ group, collapsed, pathname }: { group: any; collapsed: b
     <div className="mt-3">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500 hover:text-violet-700 hover:bg-white/40 transition font-['Sora']"
+        className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition font-['Sora']"
       >
         <span className="inline-flex items-center gap-2">
           <span className="text-slate-400">{group.icon}</span>
@@ -541,22 +533,22 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
       activeOptions={{ exact: item.exact }}
       title={collapsed ? label : undefined}
       className={[
-        "group relative flex items-center gap-3 rounded-xl text-sm transition-all",
+        "group relative flex items-center gap-3 rounded-lg text-sm transition-all",
         collapsed ? "justify-center px-2 py-2 mx-1 my-0.5" : "px-2.5 py-2",
         active
-          ? "bg-white/70 backdrop-blur-md text-violet-700 shadow-[0_4px_16px_-8px_rgba(167,139,250,0.5)] ring-1 ring-white/80"
-          : "text-slate-700 hover:bg-white/50 hover:text-slate-900",
+          ? "bg-blue-50 text-blue-700"
+          : "text-slate-700 hover:bg-slate-50 hover:text-slate-900",
       ].join(" ")}
     >
       {active && !collapsed && (
-        <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-gradient-to-b from-violet-500 to-fuchsia-500" aria-hidden />
+        <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-blue-600" aria-hidden />
       )}
       <span
         className={[
           "shrink-0 w-8 h-8 rounded-lg grid place-items-center transition-colors",
           active
-            ? "bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-[0_4px_12px_-4px_rgba(167,139,250,0.7)]"
-            : "bg-white/60 text-slate-600 group-hover:bg-violet-100 group-hover:text-violet-700",
+            ? "bg-blue-600 text-white shadow-[0_4px_12px_-4px_rgba(59,130,246,0.6)]"
+            : "bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-700",
         ].join(" ")}
       >
         {item.icon}
