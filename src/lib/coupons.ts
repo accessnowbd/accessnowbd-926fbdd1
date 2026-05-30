@@ -77,18 +77,8 @@ export function useActiveCoupons() {
   return list;
 }
 
-/** Increment used_count for a successfully redeemed coupon. */
+/** Increment used_count for a successfully redeemed coupon via secure RPC. */
 export async function redeemCoupon(code: string) {
   const normalized = code.trim().toUpperCase();
-  const { data } = await supabase
-    .from("coupons")
-    .select("id, used_count")
-    .eq("code", normalized)
-    .eq("is_active", true)
-    .maybeSingle();
-  if (!data) return;
-  await supabase
-    .from("coupons")
-    .update({ used_count: (data.used_count ?? 0) + 1 })
-    .eq("id", data.id);
+  await supabase.rpc("redeem_coupon" as never, { _code: normalized } as never);
 }
