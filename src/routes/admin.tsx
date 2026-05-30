@@ -330,13 +330,13 @@ function AdminShell({ user, signOut, navigate }: any) {
       >
         {/* Brand */}
         <div className={[
-          "border-b border-slate-200/70",
+          "border-b border-white/60",
           collapsed
             ? "flex flex-col items-center justify-center gap-1.5 py-3 px-2"
             : "h-[68px] flex items-center justify-between px-4",
         ].join(" ")}>
           <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "justify-center" : ""}`}>
-            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-xl overflow-hidden ring-1 ring-slate-200 shadow-[0_4px_14px_-6px_rgba(59,130,246,0.4)] bg-white">
+            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-xl overflow-hidden ring-1 ring-white/80 shadow-[0_4px_14px_-6px_rgba(167,139,250,0.6)] bg-gradient-to-br from-white to-violet-50">
               <img
                 src={accessNowLogo}
                 alt="AccessNow BD"
@@ -346,8 +346,8 @@ function AdminShell({ user, signOut, navigate }: any) {
             </span>
             {!collapsed && (
               <span className="leading-tight min-w-0 font-['Sora',ui-sans-serif,system-ui]">
-                <span className="block text-[15px] font-bold tracking-tight text-slate-900">AccessNow BD</span>
-                <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-blue-600 mt-0.5">Admin Console</span>
+                <span className="block text-[15px] font-bold tracking-tight bg-gradient-to-r from-violet-700 via-fuchsia-600 to-pink-600 bg-clip-text text-transparent">AccessNow BD</span>
+                <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-600 mt-0.5">Admin Console</span>
               </span>
             )}
           </Link>
