@@ -390,9 +390,9 @@ function AdminShell({ user, signOut, navigate }: any) {
         </nav>
 
         {/* User */}
-        <div className="border-t border-slate-200/70 p-3 space-y-2 bg-gradient-to-b from-white to-slate-50/60">
+        <div className="border-t border-white/60 p-3 space-y-2 bg-white/30 backdrop-blur-xl">
           <div className={`flex items-center gap-2.5 ${collapsed ? "justify-center" : ""}`}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 text-white grid place-items-center text-xs font-bold shrink-0 shadow-[0_4px_12px_-4px_rgba(59,130,246,0.6)] font-['Sora']">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 text-white grid place-items-center text-xs font-bold shrink-0 shadow-[0_4px_12px_-4px_rgba(167,139,250,0.7)] font-['Sora']">
               {(user?.email ?? "A").slice(0, 1).toUpperCase()}
             </div>
             {!collapsed && (
@@ -405,7 +405,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           {!collapsed && (
             <button
               onClick={async () => { await signOut(); navigate({ to: "/login" }); }}
-              className="w-full h-9 rounded-lg text-xs font-bold inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white transition"
+              className="w-full h-9 rounded-lg text-xs font-bold inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white transition shadow-[0_4px_12px_-4px_rgba(167,139,250,0.6)]"
             >
               <LogOut className="w-3.5 h-3.5" /> {t("Logout", "লগআউট")}
             </button>
