@@ -25,6 +25,7 @@ import { ProgressiveSection } from "@/components/ProgressiveSection";
 import { PerfReportSection, ProfiledSection } from "@/components/PerfReportSection";
 
 import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
+import { RecentlyViewedSection } from "@/components/RecentlyViewedSection";
 import type { Product } from "@/data/products";
 
 export const Route = createFileRoute("/")({
@@ -127,6 +128,9 @@ function Index() {
 
         <ProfiledSection id="FeaturedProducts">
           <FeaturedProducts items={top} isLoading={isLoading} />
+        </ProfiledSection>
+        <ProfiledSection id="RecentlyViewed">
+          <RecentlyViewedSection />
         </ProfiledSection>
         {isLoading && byCategory.length === 0
           ? RAIL_PLACEHOLDER_TITLES.map((title) => (

@@ -2,7 +2,8 @@ import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-ro
 import { Minus, Plus, Star, ArrowLeft, Loader2, CreditCard, MessageCircle, ShoppingCart, Check } from "lucide-react";
 import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { recordRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { useCart } from "@/context/CartContext";
 import { ProductBanner } from "@/components/ProductBanner";
 import { useShopConfig } from "@/hooks/useShopConfig";
@@ -85,6 +86,10 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (product?.slug) recordRecentlyViewed(product.slug);
+  }, [product?.slug]);
 
   if (isLoading) return <ProductSkeleton />;
   if (!product) {
