@@ -128,6 +128,9 @@ function Index() {
         <ProfiledSection id="FeaturedProducts">
           <FeaturedProducts items={top} isLoading={isLoading} />
         </ProfiledSection>
+        <ProfiledSection id="RecentlyViewed">
+          <RecentlyViewedSection />
+        </ProfiledSection>
         {isLoading && byCategory.length === 0
           ? RAIL_PLACEHOLDER_TITLES.map((title) => (
               <ProductRail key={title} title={title} items={[]} isLoading />
