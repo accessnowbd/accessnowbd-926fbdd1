@@ -214,8 +214,8 @@ function CategoryPillBar() {
         </button>
 
         {/* Edge fade hints — soft white blur */}
-        <div className={`pointer-events-none absolute left-0 top-0 bottom-0 w-14 z-10 transition-opacity [mask-image:linear-gradient(to_right,black,transparent)] bg-gradient-to-r from-background via-background/70 to-transparent ${canLeft ? "opacity-100" : "opacity-0"}`} />
-        <div className={`pointer-events-none absolute right-0 top-0 bottom-0 w-14 z-10 transition-opacity [mask-image:linear-gradient(to_left,black,transparent)] bg-gradient-to-l from-background via-background/70 to-transparent ${canRight ? "opacity-100" : "opacity-0"}`} />
+        <div className={`pointer-events-none absolute left-0 top-0 bottom-0 w-14 z-10 transition-opacity bg-gradient-to-r from-white via-white/80 to-transparent ${canLeft ? "opacity-100" : "opacity-0"}`} />
+        <div className={`pointer-events-none absolute right-0 top-0 bottom-0 w-14 z-10 transition-opacity bg-gradient-to-l from-white via-white/80 to-transparent ${canRight ? "opacity-100" : "opacity-0"}`} />
 
         <div
           ref={scrollerRef}
