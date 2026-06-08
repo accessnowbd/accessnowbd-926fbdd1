@@ -30,8 +30,7 @@ function CartPage() {
   const { coupon } = Route.useSearch();
   const { data: shopConfig } = useShopConfig();
 
-  const coupons = useActiveCoupons();
-  const applied = useMemo(() => applyCouponWith(coupons, coupon, total), [coupons, coupon, total]);
+  const applied = useAppliedCoupon(coupon, total);
   const [input, setInput] = useState(coupon);
   useEffect(() => { setInput(coupon); }, [coupon]);
 
