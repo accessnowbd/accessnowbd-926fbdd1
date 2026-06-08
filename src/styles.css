@@ -5,8 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /* AccessNow BD — Premium DARK Glassmorphism Theme
-   Deep midnight blue canvas, frosted dark glass cards, neon cyan/violet glows. */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+   Deep midnight blue canvas, frosted dark glass cards, neon cyan/violet glows.
+   Fonts are loaded via <link> tags in src/routes/__root.tsx (Lightning CSS cannot resolve remote @import). */
+
 
 @theme inline {
   --font-display: 'Poppins', 'Hind Siliguri', system-ui, sans-serif;
