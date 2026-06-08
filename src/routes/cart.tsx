@@ -10,7 +10,7 @@ import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary } from "@/components/ui-glass/OrderSummary";
-import { applyCouponWith, useActiveCoupons } from "@/lib/coupons";
+import { useAppliedCoupon } from "@/lib/coupons";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { useShopConfig } from "@/hooks/useShopConfig";
 
