@@ -87,6 +87,10 @@ function ProductPage() {
   
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
+  useEffect(() => {
+    if (product?.slug) recordRecentlyViewed(product.slug);
+  }, [product?.slug]);
+
   if (isLoading) return <ProductSkeleton />;
   if (!product) {
     return (
