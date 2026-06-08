@@ -16,7 +16,7 @@ import { Stepper } from "@/components/ui-glass/Stepper";
 import { RadioCard } from "@/components/ui-glass/RadioCard";
 import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary, SummaryRow } from "@/components/ui-glass/OrderSummary";
-import { applyCouponWith, useActiveCoupons, redeemCoupon } from "@/lib/coupons";
+import { useAppliedCoupon, redeemCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
 
 const checkoutSearchSchema = z.object({
