@@ -25,6 +25,7 @@ import { ProgressiveSection } from "@/components/ProgressiveSection";
 import { PerfReportSection, ProfiledSection } from "@/components/PerfReportSection";
 
 import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
+import { RecentlyViewedSection } from "@/components/RecentlyViewedSection";
 import type { Product } from "@/data/products";
 
 export const Route = createFileRoute("/")({
