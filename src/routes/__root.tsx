@@ -9,6 +9,7 @@ import { ShopConfigProvider } from "@/context/ShopConfigContext";
 import { SupportWidget } from "@/components/SupportWidget";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WelcomePopup } from "@/components/WelcomePopup";
+import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -172,6 +173,7 @@ function RootComponent() {
               </main>
               {!isAdmin && <SupportWidget />}
               {!isAdmin && <WelcomePopup />}
+              {!isAdmin && <InstallAppPrompt />}
             </ShopConfigProvider>
           </CartProvider>
         </AuthProvider>
