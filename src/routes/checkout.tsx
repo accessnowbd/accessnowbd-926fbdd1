@@ -16,7 +16,7 @@ import { Stepper } from "@/components/ui-glass/Stepper";
 import { RadioCard } from "@/components/ui-glass/RadioCard";
 import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary, SummaryRow } from "@/components/ui-glass/OrderSummary";
-import { applyCouponWith, useActiveCoupons, redeemCoupon } from "@/lib/coupons";
+import { useAppliedCoupon, redeemCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
 
 const checkoutSearchSchema = z.object({
@@ -141,8 +141,7 @@ function CheckoutPage() {
   }, [step, step1Valid, navigate, coupon]);
 
 
-  const coupons = useActiveCoupons();
-  const applied = useMemo(() => applyCouponWith(coupons, coupon, total), [coupons, coupon, total]);
+  const applied = useAppliedCoupon(coupon, total);
   const grandTotal = Math.max(0, total - applied.discount);
 
   const copyNumber = async () => {

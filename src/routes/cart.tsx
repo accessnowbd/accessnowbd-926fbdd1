@@ -10,7 +10,7 @@ import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary } from "@/components/ui-glass/OrderSummary";
-import { applyCouponWith, useActiveCoupons } from "@/lib/coupons";
+import { useAppliedCoupon } from "@/lib/coupons";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { useShopConfig } from "@/hooks/useShopConfig";
 
@@ -30,8 +30,7 @@ function CartPage() {
   const { coupon } = Route.useSearch();
   const { data: shopConfig } = useShopConfig();
 
-  const coupons = useActiveCoupons();
-  const applied = useMemo(() => applyCouponWith(coupons, coupon, total), [coupons, coupon, total]);
+  const applied = useAppliedCoupon(coupon, total);
   const [input, setInput] = useState(coupon);
   useEffect(() => { setInput(coupon); }, [coupon]);
 

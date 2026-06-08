@@ -1,20 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-
-export type Coupon = {
-  id: string;
-  code: string;
-  description: string;
-  type: "percent" | "flat";
-  value: number;
-  min_subtotal: number;
-  max_discount: number | null;
-  usage_limit: number | null;
-  used_count: number;
-  starts_at: string | null;
-  ends_at: string | null;
-  is_active: boolean;
-};
 
 export type AppliedCoupon = {
   code: string;
@@ -24,57 +9,50 @@ export type AppliedCoupon = {
   reason?: string;
 };
 
-/** Validate a code against a loaded list of coupons & compute discount. */
-export function applyCouponWith(
-  list: Coupon[],
+const EMPTY: AppliedCoupon = { code: "", valid: false, discount: 0, label: "" };
+
+/** Validate a single code server-side without exposing the coupon catalogue. */
+export async function validateCoupon(
   code: string | undefined,
   subtotal: number,
-): AppliedCoupon {
-  if (!code) return { code: "", valid: false, discount: 0, label: "" };
+): Promise<AppliedCoupon> {
+  if (!code || !code.trim()) return EMPTY;
   const normalized = code.trim().toUpperCase();
-  const c = list.find((x) => x.code === normalized);
-  if (!c) return { code: normalized, valid: false, discount: 0, label: "", reason: "Invalid code" };
-
-  const now = Date.now();
-  if (!c.is_active) return { code: c.code, valid: false, discount: 0, label: c.description, reason: "Inactive" };
-  if (c.starts_at && new Date(c.starts_at).getTime() > now)
-    return { code: c.code, valid: false, discount: 0, label: c.description, reason: "Not started yet" };
-  if (c.ends_at && new Date(c.ends_at).getTime() < now)
-    return { code: c.code, valid: false, discount: 0, label: c.description, reason: "Expired" };
-  if (c.usage_limit != null && c.used_count >= c.usage_limit)
-    return { code: c.code, valid: false, discount: 0, label: c.description, reason: "Usage limit reached" };
-  if (subtotal < (c.min_subtotal ?? 0))
-    return {
-      code: c.code, valid: false, discount: 0, label: c.description,
-      reason: `Minimum order ৳${c.min_subtotal}`,
-    };
-
-  let discount =
-    c.type === "percent"
-      ? Math.round((subtotal * Number(c.value)) / 100)
-      : Math.min(Number(c.value), subtotal);
-  if (c.max_discount != null) discount = Math.min(discount, Number(c.max_discount));
-  discount = Math.min(discount, subtotal);
-
-  return { code: c.code, valid: true, discount, label: c.description || c.code };
+  const { data, error } = await supabase.rpc(
+    "validate_coupon" as never,
+    { _code: normalized, _subtotal: subtotal } as never,
+  );
+  if (error || !data) {
+    return { code: normalized, valid: false, discount: 0, label: "", reason: "Invalid code" };
+  }
+  const row = Array.isArray(data) ? (data[0] as Record<string, unknown> | undefined) : (data as Record<string, unknown>);
+  if (!row) return { code: normalized, valid: false, discount: 0, label: "", reason: "Invalid code" };
+  return {
+    code: String(row.code ?? normalized),
+    valid: Boolean(row.valid),
+    discount: Number(row.discount ?? 0),
+    label: String(row.label ?? ""),
+    reason: (row.reason as string | null) ?? undefined,
+  };
 }
 
-/** Hook: load all active coupons from the DB. */
-export function useActiveCoupons() {
-  const [list, setList] = useState<Coupon[]>([]);
+/** Hook: debounced server-side coupon validation. */
+export function useAppliedCoupon(code: string | undefined, subtotal: number): AppliedCoupon {
+  const [applied, setApplied] = useState<AppliedCoupon>(EMPTY);
+  const seq = useRef(0);
   useEffect(() => {
-    let mounted = true;
-    supabase
-      .from("coupons")
-      .select("id, code, description, type, value, min_subtotal, max_discount, usage_limit, used_count, starts_at, ends_at, is_active")
-      .eq("is_active", true)
-      .then(({ data }) => {
-        if (!mounted) return;
-        setList((data ?? []) as Coupon[]);
-      });
-    return () => { mounted = false; };
-  }, []);
-  return list;
+    if (!code || !code.trim()) {
+      setApplied(EMPTY);
+      return;
+    }
+    const my = ++seq.current;
+    const t = setTimeout(async () => {
+      const result = await validateCoupon(code, subtotal);
+      if (seq.current === my) setApplied(result);
+    }, 300);
+    return () => clearTimeout(t);
+  }, [code, subtotal]);
+  return applied;
 }
 
 /** Increment used_count for a successfully redeemed coupon via secure RPC. */
