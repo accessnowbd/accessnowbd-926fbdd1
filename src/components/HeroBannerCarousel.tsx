@@ -110,18 +110,6 @@ const FALLBACK: BannerRow[] = [
     },
   },
   {
-    id: "fallback-eid", is_active: true, sort_order: 2,
-    data: {
-      color_preset: "eid", bg_style: "nebula", overlay_intensity: "high",
-      category: "কোরবানির ঈদ · প্রিমিয়াম অফার",
-      title: "Qurbani Eid Mega Offer ৳৫০–৳১৫০ Discount",
-      subtitle: "AccessNow BD–এর কোরবানির ঈদ স্পেশাল — কুপন কোড: ACCESSEID25 ব্যবহার করে যেকোনো প্রিমিয়াম সাবস্ক্রিপশনে পান এক্সক্লুসিভ ছাড়।",
-      cta: "অর্ডার করুন", link: "/products",
-      secondary_cta: "Details", secondary_link: "/products",
-      delivery_text: "Instant", support_text: "24/7", rating_text: "4.9 ★",
-    },
-  },
-  {
     id: "fallback-canva", is_active: true, sort_order: 3,
     data: {
       color_preset: "canva", bg_style: "mesh",
