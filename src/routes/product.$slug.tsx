@@ -120,7 +120,7 @@ function ProductPage() {
   const faqs = buildFaqs(product);
 
   return (
-    <div key={product.slug} className="relative min-h-screen text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both] overflow-hidden bg-gradient-to-br from-teal-50 via-white to-emerald-50">
+    <div key={product.slug} className="product-page-shell relative min-h-screen text-foreground animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both] overflow-hidden">
       <style>{`@keyframes product-in {0%{opacity:0;transform:translateY(14px);filter:blur(4px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}`}</style>
 
       {/* Ambient glow orbs — tamer on mobile for readability */}
@@ -129,14 +129,14 @@ function ProductPage() {
       <div className="pointer-events-none hidden md:block absolute bottom-0 left-1/3 h-[380px] w-[380px] rounded-full bg-cyan-200/25 blur-[130px]" />
 
       <div className="relative mx-auto max-w-[1200px] px-4 md:px-8 pt-4 md:pt-6">
-        <nav className="text-sm text-slate-500 flex items-center gap-2">
-          <Link to="/" className="hover:text-slate-900 inline-flex items-center gap-1">
+        <nav className="text-sm text-muted-foreground flex items-center gap-2">
+          <Link to="/" className="hover:text-foreground inline-flex items-center gap-1">
             <ArrowLeft className="w-3.5 h-3.5" /> Back
           </Link>
           <span>/</span>
           <span>{product.category}</span>
           <span>/</span>
-          <span className="text-slate-900 font-medium truncate">{product.name}</span>
+          <span className="text-foreground font-medium truncate">{product.name}</span>
         </nav>
       </div>
 
@@ -152,14 +152,14 @@ function ProductPage() {
         </GlassCard>
 
         <GlassCard tint="teal" blur="lg" glow="md" padding="lg" rounded="2xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">{product.name}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">{product.name}</h1>
 
           {/* Price */}
           <div className="mt-3 flex items-center gap-2 flex-wrap">
             {hasDiscount && (
-              <span className="text-sm text-slate-400 line-through">Tk {parsePrice(plan!.original!)}.00 BDT</span>
+              <span className="text-sm text-muted-foreground line-through">Tk {parsePrice(plan!.original!)}.00 BDT</span>
             )}
-            <span className="text-base font-semibold text-slate-900">Tk {plan ? parsePrice(plan.price) : 0}.00 BDT</span>
+            <span className="text-base font-semibold text-foreground">Tk {plan ? parsePrice(plan.price) : 0}.00 BDT</span>
             {hasDiscount && (
               <span
                 style={{ background: "linear-gradient(90deg,#14b8a6,#10b981)", color: "#fff" }}
@@ -177,13 +177,13 @@ function ProductPage() {
                 <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
               ))}
             </div>
-            <span className="text-slate-500">12 reviews</span>
+            <span className="text-muted-foreground">12 reviews</span>
           </div>
 
           {/* Duration & pricing plans */}
           {product.plans.length > 0 && (
             <div className="mt-5">
-              <div className="text-sm font-semibold text-slate-700 mb-3">মেয়াদ ও মূল্য পরিকল্পনা</div>
+              <div className="text-sm font-semibold text-foreground/85 mb-3">মেয়াদ ও মূল্য পরিকল্পনা</div>
               <div role="radiogroup" aria-label="Plan" className="space-y-2.5">
                 {product.plans.map((p, idx) => {
                   const active = activeIdx === idx;
@@ -198,7 +198,7 @@ function ProductPage() {
                         "w-full flex items-center gap-3 px-4 py-3 rounded-2xl border transition text-left cursor-pointer select-none",
                         active
                           ? "border-violet-500 bg-violet-50 ring-2 ring-violet-300/60 shadow-[0_10px_28px_-14px_rgba(124,58,237,0.45)]"
-                          : "border-slate-200 bg-white hover:border-violet-300 hover:bg-violet-50/40",
+                          : "border-border bg-card hover:border-violet-300 hover:bg-violet-50/40 dark:hover:bg-violet-500/10",
                       ].join(" ")}
                     >
                       <input
@@ -212,16 +212,16 @@ function ProductPage() {
                         aria-hidden="true"
                         className={[
                           "grid place-items-center w-5 h-5 rounded-full border-2 shrink-0 transition pointer-events-none",
-                          active ? "border-violet-600 bg-violet-600" : "border-slate-300 bg-white",
+                          active ? "border-violet-600 bg-violet-600" : "border-border bg-card",
                         ].join(" ")}
                       >
                         {active && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
                       </span>
-                      <span className={`flex-1 font-bold text-[15px] pointer-events-none ${active ? "text-violet-700" : "text-slate-800"}`}>
+                      <span className={`flex-1 font-bold text-[15px] pointer-events-none ${active ? "text-violet-700" : "text-foreground"}`}>
                         {p.period}
                       </span>
                       {hasOff && (
-                        <span className="text-slate-400 text-[13px] line-through pointer-events-none">৳{original.toLocaleString()}</span>
+                        <span className="text-muted-foreground text-[13px] line-through pointer-events-none">৳{original.toLocaleString()}</span>
                       )}
                       <span className="text-violet-700 font-extrabold text-[15px] pointer-events-none">৳{price.toLocaleString()}</span>
                       {hasOff && (
@@ -238,8 +238,8 @@ function ProductPage() {
 
           {/* Quantity */}
           <div className="mt-5">
-            <div className="text-sm font-semibold text-slate-700 mb-2">Quantity</div>
-            <div className="inline-flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white">
+            <div className="text-sm font-semibold text-foreground/85 mb-2">Quantity</div>
+            <div className="inline-flex items-center border border-border rounded-xl overflow-hidden bg-card">
               <button
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
                 aria-label="Decrease"
@@ -266,7 +266,7 @@ function ProductPage() {
           </div>
 
           {/* Buy actions card */}
-          <div className="mt-6 relative rounded-3xl p-3 bg-white border-2 border-sky-400/70 shadow-[0_18px_50px_-18px_rgba(56,189,248,0.55),0_0_0_4px_rgba(186,230,253,0.4)]">
+          <div className="mt-6 relative rounded-3xl p-3 bg-card border-2 border-sky-400/70 shadow-[0_18px_50px_-18px_rgba(56,189,248,0.55),0_0_0_4px_rgba(186,230,253,0.4)]">
             <button
               onClick={buyNow}
               className="product-buy-button w-full h-12 inline-flex items-center justify-center gap-2 rounded-2xl font-bold text-[15px] hover:opacity-95 active:scale-[0.99] transition"
@@ -296,12 +296,12 @@ function ProductPage() {
 
       {/* Product Description — always visible */}
       <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 pb-2 pt-2">
-        <h2 className="flex items-center gap-3 text-xl md:text-2xl font-extrabold text-slate-900 mb-4">
+        <h2 className="flex items-center gap-3 text-xl md:text-2xl font-extrabold text-foreground mb-4">
           <span className="inline-block w-1.5 h-6 md:h-7 rounded-full bg-gradient-to-b from-violet-500 to-fuchsia-500" />
           Product Description
         </h2>
-        <div className="rounded-2xl bg-white border border-slate-200 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)]">
-          <div className="p-5 md:p-8 text-sm md:text-base text-slate-800 leading-relaxed">
+        <div className="rounded-2xl bg-card border border-border shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)]">
+          <div className="p-5 md:p-8 text-sm md:text-base text-foreground leading-relaxed">
             <ProductMarkdown source={product.description} />
           </div>
         </div>
@@ -312,7 +312,7 @@ function ProductPage() {
 
       {/* FAQ */}
       <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
-        <h2 className="text-lg font-bold text-slate-900 mb-4">FAQ</h2>
+        <h2 className="text-lg font-bold text-foreground mb-4">FAQ</h2>
         <div className="space-y-2">
           {faqs.map((f, i) => {
             const open = openFaq === i;
@@ -320,13 +320,13 @@ function ProductPage() {
               <GlassCard key={i} tint="teal" blur="lg" glow="sm" padding="none" rounded="xl">
                 <button
                   onClick={() => setOpenFaq(open ? null : i)}
-                  className="w-full flex items-center justify-between gap-3 px-4 h-11 text-left text-sm font-medium text-slate-800"
+                  className="w-full flex items-center justify-between gap-3 px-4 h-11 text-left text-sm font-medium text-foreground"
                 >
                   <span>{f.q}</span>
                   <span className="text-teal-600 text-lg leading-none">{open ? "−" : "+"}</span>
                 </button>
                 {open && (
-                  <div className="px-4 pb-4 text-sm text-slate-700 leading-relaxed">
+                  <div className="px-4 pb-4 text-sm text-foreground/85 leading-relaxed">
                     {f.a}
                   </div>
                 )}
@@ -339,7 +339,7 @@ function ProductPage() {
       {/* Related */}
       {related.length > 0 && (
         <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
-          <h2 className="text-lg font-bold text-slate-900 mb-5">Related products</h2>
+          <h2 className="text-lg font-bold text-foreground mb-5">Related products</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {related.map((p) => {
               const first = p.plans[0];
@@ -353,12 +353,12 @@ function ProductPage() {
                 >
                   <ProductBanner product={p} ratio="1/1" spheres={4} className="rounded-none" />
                   <div className="p-3">
-                    <h3 className="text-sm font-semibold text-slate-900 truncate">{p.name}</h3>
+                    <h3 className="text-sm font-semibold text-foreground truncate">{p.name}</h3>
                     <div className="mt-1.5 flex items-center gap-2 text-xs">
                       {hasOrig && (
-                        <span className="text-slate-400 line-through">Tk {parsePrice(first!.original!)}.00 BDT</span>
+                        <span className="text-muted-foreground line-through">Tk {parsePrice(first!.original!)}.00 BDT</span>
                       )}
-                      <span className="font-semibold text-slate-900">
+                      <span className="font-semibold text-foreground">
                         {p.plans.length > 1 ? "From " : ""}Tk {first ? parsePrice(first.price) : 0}.00 BDT
                       </span>
                     </div>
@@ -460,8 +460,8 @@ function ProductSkeleton() {
           <Shimmer className="h-11 w-full max-w-md" />
           <Shimmer className="h-11 w-full max-w-md" />
           <div className="flex items-center gap-2 pt-3">
-            <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
-            <span className="text-xs text-slate-500">Loading product…</span>
+            <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Loading product…</span>
           </div>
         </div>
       </section>
