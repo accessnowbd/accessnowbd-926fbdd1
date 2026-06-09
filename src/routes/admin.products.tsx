@@ -224,6 +224,52 @@ function AdminProducts() {
  if (r1.error || r2.error) { toast.error("Reorder failed"); load(); }
  };
 
+ // ===== Bulk operations =====
+ const selectedProducts = useMemo(() => products.filter((p) => selected.has(p.slug)), [products, selected]);
+
+ const bulkDelete = async () => {
+ if (selected.size === 0) return;
+ if (!confirm(`${selected.size}টি পণ্য মুছে ফেলবেন? এটা undo করা যাবে না।`)) return;
+ const slugs = Array.from(selected);
+ const { error } = await supabase.from("products").delete().in("slug", slugs);
+ if (error) return toast.error(error.message);
+ toast.success(`${slugs.length}টি পণ্য মুছে ফেলা হয়েছে`);
+ setSelected(new Set());
+ load();
+ };
+
+ const bulkSetStock = async (stock_status: StockStatus) => {
+ if (selected.size === 0) return;
+ const slugs = Array.from(selected);
+ const { error } = await supabase.from("products").update({ stock_status }).in("slug", slugs);
+ if (error) return toast.error(error.message);
+ setProducts((prev) => prev.map((x) => slugs.includes(x.slug) ? { ...x, stock_status } : x));
+ toast.success(`${slugs.length}টি পণ্যের স্টক আপডেট হয়েছে`);
+ };
+
+ const bulkSetActive = async (is_active: boolean) => {
+ if (selected.size === 0) return;
+ const slugs = Array.from(selected);
+ const { error } = await supabase.from("products").update({ is_active }).in("slug", slugs);
+ if (error) return toast.error(error.message);
+ setProducts((prev) => prev.map((x) => slugs.includes(x.slug) ? { ...x, is_active } : x));
+ toast.success(`${slugs.length}টি পণ্য ${is_active ? "চালু" : "বন্ধ"} করা হয়েছে`);
+ };
+
+ const bulkDuplicate = async () => {
+ if (selected.size === 0) return;
+ let ok = 0;
+ for (const p of selectedProducts) {
+ const newSlug = `${p.slug}-copy-${Date.now().toString(36).slice(-4)}-${ok}`;
+ const payload: Product = { ...p, slug: newSlug, name: `${p.name} (Copy)`, sort_order: (products.at(-1)?.sort_order ?? 0) + 10 + ok, views: 0 };
+ const { error } = await supabase.from("products").insert(payload as never);
+ if (!error) ok++;
+ }
+ toast.success(`${ok}টি পণ্য ডুপ্লিকেট হয়েছে`);
+ setSelected(new Set());
+ load();
+ };
+
  const runAI = async (mode: "short" | "rich") => {
  if (selected.size === 0) {
  toast.error("আগে কিছু পণ্য সিলেক্ট করুন");
