@@ -768,7 +768,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  setBusy(true);
  const features = featuresList.map((s) => s.trim()).filter(Boolean);
  const tags = tagsText.split(",").map((s) => s.trim()).filter(Boolean);
- const additional_categories = addCatsText.split(",").map((s) => s.trim()).filter(Boolean);
+ const additional_categories = addCats.map((s) => s.trim()).filter(Boolean);
  const what_you_get = whatYouGet.map((s) => s.trim()).filter(Boolean);
  const payload = {
  ...form,
