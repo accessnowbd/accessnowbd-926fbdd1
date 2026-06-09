@@ -18,11 +18,12 @@ export type ReceiptOrder = {
   }>;
 };
 
-export function downloadReceiptPdf(order: ReceiptOrder) {
+export function buildReceiptDoc(order: ReceiptOrder) {
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
   const margin = 48;
   let y = margin;
+
 
   // Header bar
   doc.setFillColor(99, 102, 241); // violet
