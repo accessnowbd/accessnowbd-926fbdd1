@@ -614,7 +614,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  const [busy, setBusy] = useState(false);
  const [featuresList, setFeaturesList] = useState<string[]>(product.features?.length ? product.features : [""]);
  const [tagsText, setTagsText] = useState((product.meta?.tags ?? []).join(", "));
- const [addCatsText, setAddCatsText] = useState((product.meta?.additional_categories ?? []).join(", "));
+ const [addCats, setAddCats] = useState<string[]>(product.meta?.additional_categories ?? []);
  const [whatYouGet, setWhatYouGet] = useState<string[]>(product.meta?.what_you_get?.length ? product.meta.what_you_get : [""]);
  const [faq, setFaq] = useState<FaqItem[]>(product.meta?.faq ?? []);
  const [customFields, setCustomFields] = useState<CustomField[]>(product.meta?.custom_fields ?? []);
@@ -622,9 +622,33 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  const [ai, setAi] = useState<AiBusy>("");
  const [imagePrompt, setImagePrompt] = useState("");
  const [autoSlug, setAutoSlug] = useState(isNew);
+ const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
  const fileRef = useRef<HTMLInputElement>(null);
  const galleryRef = useRef<HTMLInputElement>(null);
  const aiBusy = ai !== "";
+
+ // Load category options from admin_records
+ useEffect(() => {
+   let active = true;
+   (async () => {
+     const { data } = await supabase
+       .from("admin_records")
+       .select("data")
+       .eq("kind", "category")
+       .eq("is_active", true)
+       .order("sort_order", { ascending: true });
+     if (!active) return;
+     const names = (data ?? [])
+       .map((r: { data: unknown }) => {
+         const d = r.data as { name?: string } | null;
+         return d?.name?.trim() ?? "";
+       })
+       .filter(Boolean);
+     setCategoryOptions(Array.from(new Set(names)));
+   })();
+   return () => { active = false; };
+ }, []);
+
 
  const set = <K extends keyof Product>(k: K, v: Product[K]) => setForm((f) => ({ ...f, [k]: v }));
  const setMeta = <K extends keyof ProductMeta>(k: K, v: ProductMeta[K]) =>
