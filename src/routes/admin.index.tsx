@@ -752,11 +752,11 @@ function AdminDashboard() {
  </div>
  <div className="space-y-2.5">
  {[
- { type: "order", icon: ShoppingBag, color: " ", text: "New order ৳1,200 from Anika R.", time: "Just now" },
- { type: "alert", icon: AlertTriangle, color: " ", text: "Critical accessibility issue reported", time: "5 min ago" },
- { type: "user", icon: UserCheck, color: " ", text: "12 new users joined today", time: "1 hr ago" },
- { type: "ticket", icon: MessageSquare, color: " ", text: "Support ticket TKT-2841 opened", time: "2 hr ago" },
- { type: "system", icon: ShieldCheck, color: " ", text: "Backup completed successfully", time: "4 hr ago" },
+ { type: "order", icon: ShoppingBag, color: "from-emerald-500 to-teal-500", text: "New order ৳1,200 from Anika R.", time: "Just now" },
+ { type: "alert", icon: AlertTriangle, color: "from-rose-500 to-red-500", text: "Critical accessibility issue reported", time: "5 min ago" },
+ { type: "user", icon: UserCheck, color: "from-violet-500 to-fuchsia-500", text: "12 new users joined today", time: "1 hr ago" },
+ { type: "ticket", icon: MessageSquare, color: "from-sky-500 to-indigo-500", text: "Support ticket TKT-2841 opened", time: "2 hr ago" },
+ { type: "system", icon: ShieldCheck, color: "from-amber-500 to-orange-500", text: "Backup completed successfully", time: "4 hr ago" },
  ].map((n, i) => {
  const Icon = n.icon;
  return (
