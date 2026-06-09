@@ -644,7 +644,7 @@ function ReviewMarquee({ items, direction, duration }: { items: typeof CUSTOMER_
         {loop.map((r, idx) => (
           <div
             key={idx}
-            className="w-[340px] md:w-[380px] shrink-0 rounded-2xl border border-slate-200 bg-white p-6 backdrop-blur-md"
+            className="w-[340px] md:w-[380px] shrink-0 rounded-2xl border border-border bg-card/80 p-6 backdrop-blur-md shadow-sm dark:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6)] dark:ring-1 dark:ring-white/5"
           >
             <div className="flex items-center gap-3 mb-3">
               <div
@@ -654,18 +654,18 @@ function ReviewMarquee({ items, direction, duration }: { items: typeof CUSTOMER_
                 {r.name.charAt(0)}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-bold text-slate-900 text-sm truncate">{r.name}</div>
-                <div className="text-xs text-slate-500">{r.city} · ভেরিফায়েড ক্রেতা</div>
+                <div className="font-bold text-foreground text-sm truncate">{r.name}</div>
+                <div className="text-xs text-muted-foreground">{r.city} · ভেরিফায়েড ক্রেতা</div>
               </div>
               <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
             </div>
             <div className="flex items-center gap-1 mb-2">
               {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className={`h-4 w-4 ${i < r.rating ? "fill-amber-500 text-amber-500" : "text-slate-300"}`} />
+                <Star key={i} className={`h-4 w-4 ${i < r.rating ? "fill-amber-500 text-amber-500" : "text-muted-foreground/40"}`} />
               ))}
-              <span className="ml-2 text-[11px] font-semibold text-indigo-600">{r.product}</span>
+              <span className="ml-2 text-[11px] font-semibold text-primary">{r.product}</span>
             </div>
-            <p className="text-sm leading-relaxed text-slate-700 line-clamp-3">{r.text}</p>
+            <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">{r.text}</p>
           </div>
         ))}
       </div>
