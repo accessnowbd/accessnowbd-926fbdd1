@@ -178,10 +178,10 @@ function AdminReviewGenerator() {
       </AdminGlassCard>
 
       <AdminStatGrid>
-        <AdminStatCard label={t("Total reviews", "মোট রিভিউ")} value={String(stats.total)} icon={<Star className="w-4 h-4" />} grad="from-amber-400 to-orange-500" />
-        <AdminStatCard label={t("Approved", "অনুমোদিত")} value={String(stats.approved)} icon={<Check className="w-4 h-4" />} grad="from-emerald-500 to-teal-500" />
-        <AdminStatCard label={t("Avg rating", "গড় রেটিং")} value={stats.avg} icon={<Star className="w-4 h-4" />} grad="from-yellow-400 to-amber-500" />
-        <AdminStatCard label={t("Products with reviews", "রিভিউ যুক্ত প্রোডাক্ট")} value={`${stats.productsWith}/${products.length}`} icon={<Sparkles className="w-4 h-4" />} grad="from-violet-500 to-fuchsia-500" />
+        <AdminStatCard label={t("Total reviews", "মোট রিভিউ")} value={String(stats.total)} tone="amber" />
+        <AdminStatCard label={t("Approved", "অনুমোদিত")} value={String(stats.approved)} tone="emerald" />
+        <AdminStatCard label={t("Avg rating", "গড় রেটিং")} value={stats.avg} tone="amber" />
+        <AdminStatCard label={t("Products with reviews", "রিভিউ যুক্ত প্রোডাক্ট")} value={`${stats.productsWith}/${products.length}`} tone="violet" />
       </AdminStatGrid>
 
       <AdminGlassCard className="p-5">

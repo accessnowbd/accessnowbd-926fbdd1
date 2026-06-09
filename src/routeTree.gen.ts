@@ -41,6 +41,7 @@ import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
+import { Route as AdminReviewGeneratorRouteImport } from './routes/admin.review-generator'
 import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
@@ -212,6 +213,11 @@ const AdminSecurityRoute = AdminSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminReviewGeneratorRoute = AdminReviewGeneratorRouteImport.update({
+  id: '/review-generator',
+  path: '/review-generator',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPromotionsRoute = AdminPromotionsRouteImport.update({
   id: '/promotions',
   path: '/promotions',
@@ -299,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
+  '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/users': typeof AdminUsersRoute
@@ -342,6 +349,7 @@ export interface FileRoutesByTo {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
+  '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/users': typeof AdminUsersRoute
@@ -387,6 +395,7 @@ export interface FileRoutesById {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
+  '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/users': typeof AdminUsersRoute
@@ -433,6 +442,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
+    | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
     | '/admin/users'
@@ -476,6 +486,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
+    | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
     | '/admin/users'
@@ -520,6 +531,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
+    | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
     | '/admin/users'
@@ -788,6 +800,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSecurityRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/review-generator': {
+      id: '/admin/review-generator'
+      path: '/review-generator'
+      fullPath: '/admin/review-generator'
+      preLoaderRoute: typeof AdminReviewGeneratorRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/promotions': {
       id: '/admin/promotions'
       path: '/promotions'
@@ -870,6 +889,7 @@ interface AdminRouteChildren {
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminPromotionsRoute: typeof AdminPromotionsRoute
+  AdminReviewGeneratorRoute: typeof AdminReviewGeneratorRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminThemesRoute: typeof AdminThemesRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -885,6 +905,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminPromotionsRoute: AdminPromotionsRoute,
+  AdminReviewGeneratorRoute: AdminReviewGeneratorRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminThemesRoute: AdminThemesRoute,
   AdminUsersRoute: AdminUsersRoute,
