@@ -604,25 +604,25 @@ function CustomerReviews() {
     <section className="relative overflow-hidden py-12 md:py-16">
       <div className="mx-auto max-w-[1280px] px-4 md:px-10 text-center mb-10">
         <span className="inline-flex rounded-full glass-soft px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-primary">Customer Reviews</span>
-        <h2 className="mt-3 text-2xl md:text-4xl font-extrabold text-slate-900" style={{ fontFamily: "var(--font-display)", lineHeight: 1.08 }}>
+        <h2 className="mt-3 text-2xl md:text-4xl font-extrabold text-foreground" style={{ fontFamily: "var(--font-display)", lineHeight: 1.08 }}>
           আমাদের গ্রাহকরা যা বলছেন
         </h2>
-        <p className="mt-2 max-w-2xl mx-auto text-sm md:text-base text-slate-600">
+        <p className="mt-2 max-w-2xl mx-auto text-sm md:text-base text-muted-foreground">
           ১২,০০০+ সন্তুষ্ট গ্রাহকের আস্থা — সত্যিকারের রিভিউ, সত্যিকারের অভিজ্ঞতা।
         </p>
-        <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/70 px-4 py-2 shadow-sm backdrop-blur">
+        <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 shadow-sm backdrop-blur">
           <div className="flex">
             {[0,1,2,3,4].map(i => <Star key={i} className="h-4 w-4 fill-amber-500 text-amber-500" />)}
           </div>
-          <span className="text-sm font-bold text-slate-800">4.9 / 5</span>
-          <span className="text-xs text-slate-500">· 12,000+ রিভিউ</span>
+          <span className="text-sm font-bold text-foreground">4.9 / 5</span>
+          <span className="text-xs text-muted-foreground">· 12,000+ রিভিউ</span>
         </div>
       </div>
 
       <div className="relative space-y-5">
-        {/* Edge fade masks */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 md:w-28 bg-gradient-to-r from-white via-white/60 to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 md:w-28 bg-gradient-to-l from-white via-white/60 to-transparent" />
+        {/* Edge fade masks - theme-aware */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 md:w-28 bg-gradient-to-r from-background via-background/60 to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 md:w-28 bg-gradient-to-l from-background via-background/60 to-transparent" />
 
         <ReviewMarquee items={row1} direction="left" duration={50} />
         <ReviewMarquee items={row2} direction="right" duration={55} />
@@ -644,7 +644,7 @@ function ReviewMarquee({ items, direction, duration }: { items: typeof CUSTOMER_
         {loop.map((r, idx) => (
           <div
             key={idx}
-            className="w-[340px] md:w-[380px] shrink-0 rounded-2xl border border-slate-200 bg-white p-6 backdrop-blur-md"
+            className="w-[340px] md:w-[380px] shrink-0 rounded-2xl border border-border bg-card/80 p-6 backdrop-blur-md shadow-sm dark:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6)] dark:ring-1 dark:ring-white/5"
           >
             <div className="flex items-center gap-3 mb-3">
               <div
@@ -654,18 +654,18 @@ function ReviewMarquee({ items, direction, duration }: { items: typeof CUSTOMER_
                 {r.name.charAt(0)}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-bold text-slate-900 text-sm truncate">{r.name}</div>
-                <div className="text-xs text-slate-500">{r.city} · ভেরিফায়েড ক্রেতা</div>
+                <div className="font-bold text-foreground text-sm truncate">{r.name}</div>
+                <div className="text-xs text-muted-foreground">{r.city} · ভেরিফায়েড ক্রেতা</div>
               </div>
               <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
             </div>
             <div className="flex items-center gap-1 mb-2">
               {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className={`h-4 w-4 ${i < r.rating ? "fill-amber-500 text-amber-500" : "text-slate-300"}`} />
+                <Star key={i} className={`h-4 w-4 ${i < r.rating ? "fill-amber-500 text-amber-500" : "text-muted-foreground/40"}`} />
               ))}
-              <span className="ml-2 text-[11px] font-semibold text-indigo-600">{r.product}</span>
+              <span className="ml-2 text-[11px] font-semibold text-primary">{r.product}</span>
             </div>
-            <p className="text-sm leading-relaxed text-slate-700 line-clamp-3">{r.text}</p>
+            <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">{r.text}</p>
           </div>
         ))}
       </div>
