@@ -591,8 +591,10 @@ function FieldInput({
  </div>
  );
  }
- return <div>{inner}{errMsg}</div>;
+ const hintMsg = field.hint ? <p className="mt-1 text-[11px] text-slate-400">{field.hint}</p> : null;
+ return <div>{inner}{errMsg}{!hasError && hintMsg}</div>;
 }
+
 
 function ImageField({
  field, value, label, base, onChange, onBlur,
