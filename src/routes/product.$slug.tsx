@@ -198,7 +198,7 @@ function ProductPage() {
                         "w-full flex items-center gap-3 px-4 py-3 rounded-2xl border transition text-left cursor-pointer select-none",
                         active
                           ? "border-violet-500 bg-violet-50 ring-2 ring-violet-300/60 shadow-[0_10px_28px_-14px_rgba(124,58,237,0.45)]"
-                          : "border-slate-200 bg-white hover:border-violet-300 hover:bg-violet-50/40",
+                          : "border-border bg-card hover:border-violet-300 hover:bg-violet-50/40 dark:hover:bg-violet-500/10",
                       ].join(" ")}
                     >
                       <input
@@ -212,7 +212,7 @@ function ProductPage() {
                         aria-hidden="true"
                         className={[
                           "grid place-items-center w-5 h-5 rounded-full border-2 shrink-0 transition pointer-events-none",
-                          active ? "border-violet-600 bg-violet-600" : "border-slate-300 bg-white",
+                          active ? "border-violet-600 bg-violet-600" : "border-border bg-card",
                         ].join(" ")}
                       >
                         {active && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
@@ -239,7 +239,7 @@ function ProductPage() {
           {/* Quantity */}
           <div className="mt-5">
             <div className="text-sm font-semibold text-foreground/85 mb-2">Quantity</div>
-            <div className="inline-flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white">
+            <div className="inline-flex items-center border border-border rounded-xl overflow-hidden bg-card">
               <button
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
                 aria-label="Decrease"
@@ -266,7 +266,7 @@ function ProductPage() {
           </div>
 
           {/* Buy actions card */}
-          <div className="mt-6 relative rounded-3xl p-3 bg-white border-2 border-sky-400/70 shadow-[0_18px_50px_-18px_rgba(56,189,248,0.55),0_0_0_4px_rgba(186,230,253,0.4)]">
+          <div className="mt-6 relative rounded-3xl p-3 bg-card border-2 border-sky-400/70 shadow-[0_18px_50px_-18px_rgba(56,189,248,0.55),0_0_0_4px_rgba(186,230,253,0.4)]">
             <button
               onClick={buyNow}
               className="product-buy-button w-full h-12 inline-flex items-center justify-center gap-2 rounded-2xl font-bold text-[15px] hover:opacity-95 active:scale-[0.99] transition"
@@ -300,7 +300,7 @@ function ProductPage() {
           <span className="inline-block w-1.5 h-6 md:h-7 rounded-full bg-gradient-to-b from-violet-500 to-fuchsia-500" />
           Product Description
         </h2>
-        <div className="rounded-2xl bg-white border border-slate-200 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)]">
+        <div className="rounded-2xl bg-card border border-border shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)]">
           <div className="p-5 md:p-8 text-sm md:text-base text-foreground leading-relaxed">
             <ProductMarkdown source={product.description} />
           </div>
