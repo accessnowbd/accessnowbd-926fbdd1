@@ -317,7 +317,7 @@ function QuickOrderCreator() {
       const receipt = buildReceipt();
       const blob = getReceiptBlob(receipt);
       const url = await uploadInvoicePdf(blob, receiptFileName(receipt));
-      const itemsTxt = receipt.items.map((it, i) => `${i + 1}. ${it.name} — ${it.planPeriod} × ${it.qty} = ${fmt(it.price * it.qty)}`).join("\n");
+      const itemsTxt = receipt.items.map((it, i) => `${i + 1}. ${it.name} — ${it.planPeriod} × ${it.qty} = ${fmt((it.price ?? 0) * it.qty)}`).join("\n");
       const msg = [
         `🧾 *${shop?.shop_name ?? "AccessNow BD"} — Invoice*`,
         `Order #${receipt.id}`,
