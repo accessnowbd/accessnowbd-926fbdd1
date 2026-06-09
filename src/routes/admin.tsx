@@ -578,5 +578,53 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
   );
 }
 
+function AdminPageHero({ group, item, t }: { group: any; item: AdminMenuItem; t: (en: string, bn?: string) => string }) {
+  const title = t(item.label, item.labelBn);
+  const groupTitle = t(group.title, group.titleBn);
+  return (
+    <section
+      className={[
+        "relative overflow-hidden rounded-2xl",
+        "bg-gradient-to-br from-violet-100/80 via-indigo-50/70 to-fuchsia-100/60",
+        "ring-1 ring-white/60 shadow-[0_10px_40px_-20px_rgba(99,102,241,0.45)]",
+        "px-5 md:px-8 py-5 md:py-7",
+      ].join(" ")}
+    >
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-fuchsia-300/30 blur-3xl" />
+        <div className="absolute -bottom-20 right-1/3 w-80 h-80 rounded-full bg-indigo-300/25 blur-3xl" />
+        <div className="absolute top-1/2 right-6 -translate-y-1/2 hidden md:flex items-center gap-6 opacity-70">
+          <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-violet-500 ring-1 ring-white/70">{group.icon}</span>
+          <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-pink-500 ring-1 ring-white/70">{item.icon}</span>
+          <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-indigo-500 ring-1 ring-white/70">{group.icon}</span>
+        </div>
+      </div>
+
+      <div className="relative flex items-center gap-4 md:gap-5">
+        <span
+          className={[
+            "shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-2xl grid place-items-center text-white",
+            "bg-gradient-to-br", item.grad,
+            "shadow-[0_10px_30px_-10px_rgba(99,102,241,0.55)] ring-1 ring-white/40",
+          ].join(" ")}
+        >
+          <span className="[&>svg]:w-7 [&>svg]:h-7 md:[&>svg]:w-8 md:[&>svg]:h-8">{item.icon}</span>
+        </span>
+        <div className="min-w-0">
+          <h1 className="font-['Sora',ui-sans-serif,system-ui] font-extrabold tracking-tight text-[26px] md:text-[36px] leading-none bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent truncate">
+            {title}
+          </h1>
+          <p className="mt-1.5 text-[12px] md:text-[13px] font-semibold text-slate-600">
+            <span className="text-violet-600">{groupTitle}</span>
+            <span className="mx-2 text-slate-400">•</span>
+            <span>{t("Manage and configure", "ম্যানেজ ও কনফিগার")} {title.toLowerCase()}</span>
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
 
 
