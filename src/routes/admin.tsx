@@ -517,7 +517,7 @@ function SidebarGroup({ group, collapsed, pathname }: { group: any; collapsed: b
     <div className="mt-3">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition font-['Sora']"
+        className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.14em] hover:bg-slate-50 transition font-['Sora'] text-[#629aea]"
       >
         <span className="inline-flex items-center gap-2">
           <span className="text-slate-400">{group.icon}</span>
