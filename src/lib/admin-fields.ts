@@ -25,7 +25,23 @@ export type AdminField = {
   maxLength?: number;  // explicit max length for text fields
   pattern?: string;    // regex source for text fields
   patternMessage?: string;
+  hint?: string;       // small helper text below the field
+  autoFrom?: string;   // auto-derive value from another field (until user edits this one)
+  autoTransform?: "slug"; // how to derive: slugify the source value
 };
+
+export function slugify(input: string): string {
+  return String(input ?? "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/['"]+/g, "")
+    .replace(/[^a-z0-9\u0980-\u09FF]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/-{2,}/g, "-");
+}
+
 
 export function validateField(field: AdminField, value: unknown): string | null {
   const isEmpty = value == null || value === "" || (typeof value === "number" && Number.isNaN(value));
