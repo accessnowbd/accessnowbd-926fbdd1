@@ -542,28 +542,28 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
       activeOptions={{ exact: item.exact }}
       title={collapsed ? label : undefined}
       className={[
-        "group relative flex items-center gap-3 rounded-lg text-sm transition-all",
+        "group relative flex items-center gap-3 rounded-xl text-sm transition-all",
         collapsed ? "justify-center px-2 py-2 mx-1 my-0.5" : "px-2.5 py-2",
         active
-          ? "bg-blue-50 text-blue-700"
+          ? "bg-slate-100/80 text-slate-900 ring-1 ring-slate-900/80"
           : "text-slate-700 hover:bg-slate-50 hover:text-slate-900",
       ].join(" ")}
     >
-      {active && !collapsed && (
-        <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-blue-600" aria-hidden />
-      )}
       <span
         className={[
-          "shrink-0 w-8 h-8 rounded-lg grid place-items-center transition-colors",
-          active
-            ? "bg-blue-600 text-white shadow-[0_4px_12px_-4px_rgba(59,130,246,0.6)]"
-            : "bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-700",
+          "shrink-0 w-8 h-8 rounded-xl grid place-items-center text-white shadow-md transition-transform",
+          "bg-gradient-to-br",
+          item.grad,
+          "group-hover:scale-[1.05]",
         ].join(" ")}
       >
         {item.icon}
       </span>
       {!collapsed && (
-        <span className={`truncate flex-1 text-[13px] ${active ? "font-bold" : "font-semibold"}`}>{label}</span>
+        <span className={`truncate flex-1 text-[13px] ${active ? "font-bold text-slate-900" : "font-semibold"}`}>{label}</span>
+      )}
+      {!collapsed && active && (
+        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-slate-900" aria-hidden />
       )}
       {!collapsed && !active && (
         <Pin
@@ -574,5 +574,6 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
     </Link>
   );
 }
+
 
 
