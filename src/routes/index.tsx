@@ -644,7 +644,7 @@ function ReviewMarquee({ items, direction, duration }: { items: typeof CUSTOMER_
         {loop.map((r, idx) => (
           <div
             key={idx}
-            className="w-[340px] md:w-[380px] shrink-0 rounded-2xl border border-border bg-card/80 p-6 backdrop-blur-md shadow-sm dark:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6)] dark:ring-1 dark:ring-white/5"
+            className="review-card w-[340px] md:w-[380px] shrink-0 rounded-2xl border border-border bg-card p-6 backdrop-blur-md shadow-sm"
           >
             <div className="flex items-center gap-3 mb-3">
               <div
