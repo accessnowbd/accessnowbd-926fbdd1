@@ -70,6 +70,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/notifications", label: "Notifications", labelBn: "নোটিফিকেশন", icon: ic(Bell), grad: "from-rose-500 to-red-500" },
       { to: "/admin/checkout-policy", label: "Checkout Policy", labelBn: "চেকআউট পলিসি", icon: ic(FileCheck), grad: "from-blue-500 to-cyan-500" },
       { to: "/admin/custom-invoice", label: "Custom Invoice", labelBn: "কাস্টম ইনভয়েস", icon: ic(FileText), grad: "from-slate-600 to-slate-800" },
+      { to: "/admin/quick-tools", label: "Quick Tools (WhatsApp)", labelBn: "কুইক টুলস (WhatsApp)", icon: ic(Sparkles), grad: "from-green-500 to-emerald-600" },
     ],
   },
   {
