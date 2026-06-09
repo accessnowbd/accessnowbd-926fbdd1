@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import accessNowLogo from "@/assets/accessnow-bd-mark.webp";
+import accessNowLogo from "@/assets/logo-gold-a.png";
 import {
   Crown,
   Search,

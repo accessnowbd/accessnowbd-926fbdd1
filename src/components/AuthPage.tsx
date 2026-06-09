@@ -4,7 +4,7 @@ import { Loader2, Eye, EyeOff, X, CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
-import accessNowLogo from "@/assets/logo.webp";
+import accessNowLogo from "@/assets/logo-gold-a.png";
 
 export function AuthPageEntry({ initialMode, openForgot }: { initialMode: "login" | "signup"; openForgot?: boolean }) {
   return <AuthPage initialMode={initialMode} openForgot={openForgot} />;
@@ -159,7 +159,6 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
               src={accessNowLogo}
               alt="AccessNow BD — Fast, Secure, Reliable"
               draggable={false}
-              style={{ mixBlendMode: "multiply" }}
               className="h-14 w-auto object-contain group-hover:scale-105 transition-transform"
             />
           </Link>

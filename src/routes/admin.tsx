@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
 import { AdminMfaGate } from "@/components/admin/AdminMfaGate";
 import { AdminLangProvider, useAdminLang } from "@/context/AdminLangContext";
-import accessNowLogo from "@/assets/accessnow-bd-mark.webp";
+import accessNowLogo from "@/assets/logo-gold-a.png";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,

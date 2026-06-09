@@ -7,7 +7,7 @@ import {
   Info,
   FileText,
 } from "lucide-react";
-import accessNowLogo from "@/assets/accessnow-bd-mark.webp";
+import accessNowLogo from "@/assets/logo-gold-a.png";
 
 type LinkTo =
   | "/"
