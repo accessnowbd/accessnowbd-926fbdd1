@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { AuthPageEntry } from "@/components/AuthPage";
 import {
   ShieldAlert, LogOut, Bell, Globe, Search,
   PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X, Pin,
@@ -130,7 +131,6 @@ function AdminLayout() {
     if (loading) return;
     if (!user) {
       try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch {}
-      navigate({ to: "/login" });
       return;
     }
     let cancelled = false;
@@ -140,11 +140,20 @@ function AdminLayout() {
       setVerified(true);
     })();
     return () => { cancelled = true; };
-  }, [user, loading, navigate, verifyRole]);
+  }, [user, loading, verifyRole]);
 
-  if (loading || !user || !verified) {
+  if (loading) {
     return <AdminBlankState />;
   }
+
+  if (!user) {
+    return <AuthPageEntry initialMode="login" />;
+  }
+
+  if (!verified) {
+    return <AdminBlankState />;
+  }
+
 
   if (!isAdmin && verified) {
     const hasError = !!roleError;
