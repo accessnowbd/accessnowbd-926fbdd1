@@ -277,7 +277,7 @@ export function SiteHeader() {
             <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
               <SearchTrigger
                 onClick={() => setSearchOpen(true)}
-                className="hidden md:block w-[260px] lg:w-[320px] xl:w-[360px]"
+                className="site-search-trigger hidden md:block w-[260px] lg:w-[320px] xl:w-[360px]"
                 placeholder="প্রোডাক্ট সার্চ করুন..."
               />
 
