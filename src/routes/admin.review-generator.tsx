@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  Sparkles, Star, Loader2, RefreshCw, Trash2, Wand2, Check, X, Search,
+  Sparkles, Star, Loader2, RefreshCw, Trash2, Wand2, X, Search,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AdminGlassCard, AdminStatCard, AdminStatGrid } from "@/components/admin/AdminStatCard";
 import { useAdminLang } from "@/context/AdminLangContext";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export const Route = createFileRoute("/admin/review-generator")({
   component: AdminReviewGenerator,
