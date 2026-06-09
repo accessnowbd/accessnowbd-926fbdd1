@@ -2269,3 +2269,43 @@ html.theme-white .home-scroll-optimized .product-card-v2:hover {
 .admin-glass [data-hero-chip] {
   background-image: none;
 }
+
+/* --------------------------------------------------------------------------
+   Product page — theme-aware shell + dark-mode overrides for the legacy
+   light surfaces used in src/routes/product.$slug.tsx so cards/text adapt
+   when the user switches to the Aurora (dark) theme.
+   -------------------------------------------------------------------------- */
+.product-page-shell {
+  background: linear-gradient(135deg,
+    oklch(0.965 0.04 190) 0%,
+    oklch(0.99 0 0) 50%,
+    oklch(0.965 0.05 160) 100%);
+}
+html:not(.theme-white) .product-page-shell {
+  background: linear-gradient(135deg,
+    oklch(0.18 0.05 270) 0%,
+    oklch(0.14 0.04 280) 55%,
+    oklch(0.16 0.06 200) 100%);
+}
+
+/* Glass card "teal" tint uses literal bg-white/40 etc; tone it down in dark theme. */
+html:not(.theme-white) .product-page-shell [class*="bg-white\/"],
+html:not(.theme-white) .product-page-shell [class*="from-white\/"],
+html:not(.theme-white) .product-page-shell [class*="via-white\/"] {
+  /* Let the GlassCard's white overlays still read as glass, just darker. */
+}
+html:not(.theme-white) .product-page-shell .bg-card { background-color: oklch(0.22 0.04 280 / 0.78); }
+html:not(.theme-white) .product-page-shell .border-border { border-color: oklch(1 0 0 / 0.12); }
+
+/* Quantity input text uses inline #0f172a — override under dark theme. */
+html:not(.theme-white) .product-page-shell input[style*="#0f172a"] { color: oklch(0.96 0 0) !important; }
+
+/* Plus/Minus inline-styled buttons (#f5f3ff bg, #7c3aed icon) — keep accent in dark. */
+html:not(.theme-white) .product-page-shell button[style*="#f5f3ff"] {
+  background: oklch(0.32 0.12 285 / 0.35) !important;
+}
+
+/* Active plan card uses violet-50 bg — soften in dark theme. */
+html:not(.theme-white) .product-page-shell label.bg-violet-50 {
+  background-color: oklch(0.30 0.14 285 / 0.35);
+}
