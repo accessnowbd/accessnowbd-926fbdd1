@@ -607,6 +607,20 @@
     box-shadow: 0 8px 30px -12px rgba(0,0,0,0.6) !important;
   }
 
+  /* Review carousel edge fade — theme-aware (white in light, dark in aurora) */
+  html.theme-white .review-fade-left {
+    background: linear-gradient(to right, #ffffff 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+  }
+  html.theme-white .review-fade-right {
+    background: linear-gradient(to left, #ffffff 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+  }
+  html:not(.theme-white) .review-fade-left {
+    background: linear-gradient(to right, #06051a 0%, rgba(6,5,26,0.6) 50%, rgba(6,5,26,0) 100%);
+  }
+  html:not(.theme-white) .review-fade-right {
+    background: linear-gradient(to left, #06051a 0%, rgba(6,5,26,0.6) 50%, rgba(6,5,26,0) 100%);
+  }
+
   html.theme-white .text-aurora,
   html.theme-white .text-aurora-strong,
   html.theme-white .text-neon,
