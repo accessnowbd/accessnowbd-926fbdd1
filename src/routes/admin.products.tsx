@@ -958,12 +958,23 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <div className="grid sm:grid-cols-2 gap-3">
  <div>
  <Label>Primary Category</Label>
- <input
- value={form.category}
- onChange={(e) => set("category", e.target.value)}
- placeholder="Select Category"
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400"
- />
+ <select
+ value={categoryOptions.includes(form.category) || !form.category ? form.category : "__custom__"}
+ onChange={(e) => {
+ const v = e.target.value;
+ if (v === "__custom__") return;
+ set("category", v);
+ }}
+ className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm bg-white outline-none focus:border-slate-400"
+ >
+ <option value="">— Select Category —</option>
+ {categoryOptions.map((c) => (
+ <option key={c} value={c}>{c}</option>
+ ))}
+ {form.category && !categoryOptions.includes(form.category) && (
+ <option value={form.category}>{form.category} (custom)</option>
+ )}
+ </select>
  </div>
  <div>
  <Label>Subcategory</Label>
@@ -978,14 +989,34 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
  <div>
  <Label>Additional Categories <span className="text-slate-500 font-normal">(একাধিক ক্যাটাগরিতে দেখাবে)</span></Label>
- <input
- value={addCatsText}
- onChange={(e) => setAddCatsText(e.target.value)}
- placeholder="Select additional categories..."
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400"
- />
- <p className="text-[11px] text-slate-500 mt-1">কমা দিয়ে আলাদা করুন</p>
+ {categoryOptions.length === 0 ? (
+ <div className="text-xs text-slate-500 px-3 py-2 rounded-xl border border-dashed border-slate-300 bg-slate-50">
+ কোনো ক্যাটাগরি পাওয়া যায়নি। Admin → Categories থেকে যোগ করুন।
  </div>
+ ) : (
+ <div className="flex flex-wrap gap-2 p-2 rounded-xl border border-slate-200 bg-white min-h-[44px]">
+ {categoryOptions.filter((c) => c !== form.category).map((c) => {
+ const active = addCats.includes(c);
+ return (
+ <button
+ type="button"
+ key={c}
+ onClick={() => setAddCats((prev) => active ? prev.filter((x) => x !== c) : [...prev, c])}
+ className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+ active
+ ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+ : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+ }`}
+ >
+ {active ? "✓ " : ""}{c}
+ </button>
+ );
+ })}
+ </div>
+ )}
+ <p className="text-[11px] text-slate-500 mt-1">ক্লিক করে সিলেক্ট/ডিসিলেক্ট করুন</p>
+ </div>
+
 
  <div className="grid sm:grid-cols-2 gap-3">
  <div>
