@@ -25,7 +25,23 @@ export type AdminField = {
   maxLength?: number;  // explicit max length for text fields
   pattern?: string;    // regex source for text fields
   patternMessage?: string;
+  hint?: string;       // small helper text below the field
+  autoFrom?: string;   // auto-derive value from another field (until user edits this one)
+  autoTransform?: "slug"; // how to derive: slugify the source value
 };
+
+export function slugify(input: string): string {
+  return String(input ?? "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/['"]+/g, "")
+    .replace(/[^a-z0-9\u0980-\u09FF]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/-{2,}/g, "-");
+}
+
 
 export function validateField(field: AdminField, value: unknown): string | null {
   const isEmpty = value == null || value === "" || (typeof value === "number" && Number.isNaN(value));
@@ -211,13 +227,15 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
   "categories": {
     kind: "category",
     mode: "list",
+    description: "Product categories. Slug is auto-generated from the name — edit only if you need a custom URL.",
     fields: [
-      { name: "name", label: "Name", type: "text", required: true, primary: true },
-      { name: "slug", label: "Slug", type: "text", required: true },
-      { name: "icon", label: "Icon (emoji)", type: "text" },
+      { name: "name", label: "Name", type: "text", required: true, primary: true, placeholder: "e.g. Vision aids" },
+      { name: "slug", label: "Slug (auto from name)", type: "text", autoFrom: "name", autoTransform: "slug", hint: "Used in the URL. Leave blank to auto-generate from the name.", pattern: "^[a-z0-9\\u0980-\\u09FF]+(?:-[a-z0-9\\u0980-\\u09FF]+)*$", patternMessage: "Use lowercase letters, numbers and hyphens only." },
+      { name: "icon", label: "Icon (emoji)", type: "text", placeholder: "👓" },
       { name: "description", label: "Description", type: "textarea" },
     ],
   },
+
   "wallet": {
     kind: "wallet_txn",
     mode: "list",
@@ -465,7 +483,7 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
     mode: "list",
     fields: [
       { name: "title", label: "Title", type: "text", required: true, primary: true },
-      { name: "slug", label: "Slug", type: "text", required: true },
+      { name: "slug", label: "Slug (auto from title)", type: "text", autoFrom: "title", autoTransform: "slug", hint: "Leave blank to auto-generate." },
       { name: "body", label: "Body (HTML/Markdown)", type: "textarea" },
       { name: "show_in_menu", label: "Show in menu", type: "boolean" },
     ],
@@ -475,7 +493,8 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
     mode: "list",
     fields: [
       { name: "title", label: "Title", type: "text", required: true, primary: true },
-      { name: "slug", label: "Slug", type: "text", required: true },
+      { name: "slug", label: "Slug (auto from title)", type: "text", autoFrom: "title", autoTransform: "slug", hint: "Leave blank to auto-generate." },
+
       { name: "excerpt", label: "Excerpt", type: "textarea" },
       { name: "cover_url", label: "Cover image URL", type: "image" },
       { name: "body", label: "Body", type: "textarea" },
