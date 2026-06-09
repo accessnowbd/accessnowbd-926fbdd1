@@ -224,6 +224,52 @@ function AdminProducts() {
  if (r1.error || r2.error) { toast.error("Reorder failed"); load(); }
  };
 
+ // ===== Bulk operations =====
+ const selectedProducts = useMemo(() => products.filter((p) => selected.has(p.slug)), [products, selected]);
+
+ const bulkDelete = async () => {
+ if (selected.size === 0) return;
+ if (!confirm(`${selected.size}টি পণ্য মুছে ফেলবেন? এটা undo করা যাবে না।`)) return;
+ const slugs = Array.from(selected);
+ const { error } = await supabase.from("products").delete().in("slug", slugs);
+ if (error) return toast.error(error.message);
+ toast.success(`${slugs.length}টি পণ্য মুছে ফেলা হয়েছে`);
+ setSelected(new Set());
+ load();
+ };
+
+ const bulkSetStock = async (stock_status: StockStatus) => {
+ if (selected.size === 0) return;
+ const slugs = Array.from(selected);
+ const { error } = await supabase.from("products").update({ stock_status }).in("slug", slugs);
+ if (error) return toast.error(error.message);
+ setProducts((prev) => prev.map((x) => slugs.includes(x.slug) ? { ...x, stock_status } : x));
+ toast.success(`${slugs.length}টি পণ্যের স্টক আপডেট হয়েছে`);
+ };
+
+ const bulkSetActive = async (is_active: boolean) => {
+ if (selected.size === 0) return;
+ const slugs = Array.from(selected);
+ const { error } = await supabase.from("products").update({ is_active }).in("slug", slugs);
+ if (error) return toast.error(error.message);
+ setProducts((prev) => prev.map((x) => slugs.includes(x.slug) ? { ...x, is_active } : x));
+ toast.success(`${slugs.length}টি পণ্য ${is_active ? "চালু" : "বন্ধ"} করা হয়েছে`);
+ };
+
+ const bulkDuplicate = async () => {
+ if (selected.size === 0) return;
+ let ok = 0;
+ for (const p of selectedProducts) {
+ const newSlug = `${p.slug}-copy-${Date.now().toString(36).slice(-4)}-${ok}`;
+ const payload: Product = { ...p, slug: newSlug, name: `${p.name} (Copy)`, sort_order: (products.at(-1)?.sort_order ?? 0) + 10 + ok, views: 0 };
+ const { error } = await supabase.from("products").insert(payload as never);
+ if (!error) ok++;
+ }
+ toast.success(`${ok}টি পণ্য ডুপ্লিকেট হয়েছে`);
+ setSelected(new Set());
+ load();
+ };
+
  const runAI = async (mode: "short" | "rich") => {
  if (selected.size === 0) {
  toast.error("আগে কিছু পণ্য সিলেক্ট করুন");
@@ -392,7 +438,7 @@ function AdminProducts() {
  <th className="text-left px-3 py-3">স্টক</th>
  <th className="text-left px-3 py-3">ভিউ</th>
  <th className="text-left px-3 py-3">স্ট্যাটাস</th>
- <th className="text-right px-3 py-3 w-44">অ্যাকশন</th>
+ 
  </tr>
  </thead>
  <tbody>
@@ -461,23 +507,12 @@ function AdminProducts() {
  </span>
  </button>
  </td>
- <td className="px-3 py-3">
- <div className="flex items-center justify-end gap-1">
- <IconBtn title="উপরে" onClick={() => move(p.slug, -1)} disabled={i === 0}><ArrowUp className="w-3.5 h-3.5" /></IconBtn>
- <IconBtn title="নিচে" onClick={() => move(p.slug, 1)} disabled={i === filtered.length - 1}><ArrowDown className="w-3.5 h-3.5" /></IconBtn>
- <IconBtn title="এডিট" onClick={() => { setEditing(p); setIsNew(false); }}><Pencil className="w-3.5 h-3.5" /></IconBtn>
- <IconBtn title="ডুপ্লিকেট" onClick={() => duplicate(p)}><Copy className="w-3.5 h-3.5" /></IconBtn>
- <a href={`/product/${p.slug}`} target="_blank" rel="noreferrer" title="দেখুন" className="w-8 h-8 grid place-items-center rounded-md border border-border hover:bg-secondary">
- <Eye className="w-3.5 h-3.5" />
- </a>
- <IconBtn title="মুছুন" onClick={() => remove(p.slug)} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
- </div>
- </td>
+ 
  </tr>
  );
  })}
  {filtered.length === 0 && (
- <tr><td colSpan={8} className="p-10 text-center text-muted-foreground">কোনো পণ্য পাওয়া যায়নি।</td></tr>
+ <tr><td colSpan={7} className="p-10 text-center text-muted-foreground">কোনো পণ্য পাওয়া যায়নি।</td></tr>
  )}
  </tbody>
  </table>
@@ -491,6 +526,22 @@ function AdminProducts() {
  isNew={isNew}
  onClose={() => setEditing(null)}
  onSaved={() => { setEditing(null); load(); }}
+ />
+ )}
+
+ {selected.size > 0 && (
+ <BulkActionToolbar
+ count={selected.size}
+ single={selected.size === 1 ? selectedProducts[0] : null}
+ onClear={() => setSelected(new Set())}
+ onEdit={() => { if (selectedProducts[0]) { setEditing(selectedProducts[0]); setIsNew(false); } }}
+ onView={() => { if (selectedProducts[0]) window.open(`/product/${selectedProducts[0].slug}`, "_blank"); }}
+ onMoveUp={() => { if (selectedProducts[0]) move(selectedProducts[0].slug, -1); }}
+ onMoveDown={() => { if (selectedProducts[0]) move(selectedProducts[0].slug, 1); }}
+ onDuplicate={bulkDuplicate}
+ onDelete={bulkDelete}
+ onStock={bulkSetStock}
+ onActive={bulkSetActive}
  />
  )}
  </div>
@@ -561,6 +612,89 @@ function IconBtn({ children, onClick, disabled, danger, title }: { children: Rea
  </button>
  );
 }
+
+function BulkActionToolbar({
+ count, single, onClear, onEdit, onView, onMoveUp, onMoveDown,
+ onDuplicate, onDelete, onStock, onActive,
+}: {
+ count: number;
+ single: Product | null;
+ onClear: () => void;
+ onEdit: () => void;
+ onView: () => void;
+ onMoveUp: () => void;
+ onMoveDown: () => void;
+ onDuplicate: () => void;
+ onDelete: () => void;
+ onStock: (s: StockStatus) => void;
+ onActive: (a: boolean) => void;
+}) {
+ const [stockOpen, setStockOpen] = useState(false);
+ const [statusOpen, setStatusOpen] = useState(false);
+ return (
+ <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+ <div className="flex items-center gap-1 px-3 py-2 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-700 backdrop-blur-md">
+ <div className="flex items-center gap-2 pr-3 mr-1 border-r border-slate-700">
+ <span className="grid place-items-center w-7 h-7 rounded-full bg-primary text-xs font-bold">{count}</span>
+ <span className="text-sm font-medium">সিলেক্টেড</span>
+ </div>
+
+ {single && (
+ <>
+ <ToolbarBtn icon={<Pencil className="w-4 h-4" />} label="এডিট" onClick={onEdit} />
+ <ToolbarBtn icon={<Eye className="w-4 h-4" />} label="দেখুন" onClick={onView} />
+ <ToolbarBtn icon={<ArrowUp className="w-4 h-4" />} label="উপরে" onClick={onMoveUp} />
+ <ToolbarBtn icon={<ArrowDown className="w-4 h-4" />} label="নিচে" onClick={onMoveDown} />
+ </>
+ )}
+
+ <ToolbarBtn icon={<Copy className="w-4 h-4" />} label="ডুপ্লিকেট" onClick={onDuplicate} />
+
+ <div className="relative">
+ <ToolbarBtn icon={<Package className="w-4 h-4" />} label="স্টক" onClick={() => { setStockOpen(v => !v); setStatusOpen(false); }} />
+ {stockOpen && (
+ <div className="absolute bottom-full mb-2 left-0 bg-white text-slate-800 rounded-xl shadow-xl border border-border min-w-[160px] py-1">
+ <button onClick={() => { onStock("in_stock"); setStockOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">✅ স্টকে আছে</button>
+ <button onClick={() => { onStock("out_of_stock"); setStockOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">❌ স্টক শেষ</button>
+ <button onClick={() => { onStock("preorder"); setStockOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">⏳ প্রি-অর্ডার</button>
+ </div>
+ )}
+ </div>
+
+ <div className="relative">
+ <ToolbarBtn icon={<EyeOff className="w-4 h-4" />} label="স্ট্যাটাস" onClick={() => { setStatusOpen(v => !v); setStockOpen(false); }} />
+ {statusOpen && (
+ <div className="absolute bottom-full mb-2 left-0 bg-white text-slate-800 rounded-xl shadow-xl border border-border min-w-[160px] py-1">
+ <button onClick={() => { onActive(true); setStatusOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">🟢 চালু (Active)</button>
+ <button onClick={() => { onActive(false); setStatusOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">⚪ বন্ধ (Inactive)</button>
+ </div>
+ )}
+ </div>
+
+ <div className="w-px h-6 bg-slate-700 mx-1" />
+ <ToolbarBtn icon={<Trash2 className="w-4 h-4" />} label="মুছুন" onClick={onDelete} danger />
+
+ <div className="w-px h-6 bg-slate-700 mx-1" />
+ <button onClick={onClear} className="p-2 rounded-lg hover:bg-slate-800 text-slate-300" title="বাতিল">
+ <X className="w-4 h-4" />
+ </button>
+ </div>
+ </div>
+ );
+}
+
+function ToolbarBtn({ icon, label, onClick, danger }: { icon: React.ReactNode; label: string; onClick: () => void; danger?: boolean }) {
+ return (
+ <button
+ onClick={onClick}
+ className={`inline-flex items-center gap-1.5 h-9 px-3 rounded-lg text-sm font-medium transition ${danger ? "text-red-300 hover:bg-red-500/20" : "hover:bg-slate-800"}`}
+ >
+ {icon}<span className="hidden sm:inline">{label}</span>
+ </button>
+ );
+}
+
+
 
 /* ============================== PRODUCT EDITOR (WordPress-style) ============================== */
 
