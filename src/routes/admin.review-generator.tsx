@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AdminGlassCard, AdminStatCard, AdminStatGrid } from "@/components/admin/AdminStatCard";
 import { useAdminLang } from "@/context/AdminLangContext";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 
 export const Route = createFileRoute("/admin/review-generator")({
   component: AdminReviewGenerator,
@@ -29,7 +29,7 @@ type GenBias = "high" | "balanced";
 const FN_URL = "https://mjclnbroetlwibeofssz.supabase.co/functions/v1/review-generator";
 
 function AdminReviewGenerator() {
-  const { lang, t } = useAdminLang();
+  const { t } = useAdminLang();
   const [products, setProducts] = useState<ProductRow[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [reviews, setReviews] = useState<ReviewRow[]>([]);
