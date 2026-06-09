@@ -141,8 +141,8 @@ function ProductPage() {
       </div>
 
       {/* Hero */}
-      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-4 md:py-6 grid md:grid-cols-2 gap-5 md:gap-12">
-        <GlassCard tint="teal" blur="lg" glow="md" padding="sm" rounded="2xl" className="relative">
+      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-4 md:py-6 grid md:grid-cols-2 gap-5 md:gap-12 md:items-start">
+        <GlassCard tint="teal" blur="lg" glow="md" padding="sm" rounded="2xl" className="relative md:self-start">
           <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-xl overflow-hidden" />
           {product.badge && (
             <span className={`absolute top-6 left-6 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>
