@@ -310,7 +310,8 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f7f8fb] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
+    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f4f1ff] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
+
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
@@ -475,11 +476,13 @@ function AdminShell({ user, signOut, navigate }: any) {
           </div>
         </header>
 
-        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800">
-          <div className="mx-auto max-w-[1400px]">
+        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800 bg-gradient-to-b from-violet-50/60 via-indigo-50/30 to-white">
+          <div className="mx-auto max-w-[1400px] space-y-4 md:space-y-6">
+            {currentPage && <AdminPageHero group={currentPage.group} item={currentPage.item} t={t} />}
             <Outlet />
           </div>
         </div>
+
       </div>
 
       <AdminGlobalSearch open={globalOpen} onOpenChange={setGlobalOpen} />
