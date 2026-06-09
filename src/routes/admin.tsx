@@ -310,7 +310,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="admin-glass lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f4f1ff] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
+    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f4f1ff] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
 
       {/* Mobile overlay */}
       {mobileOpen && (
