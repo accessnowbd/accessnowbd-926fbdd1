@@ -717,9 +717,9 @@ function AdminDashboard() {
  { id: "TKT-2838", subject: "Voice navigation not working", priority: "high", user: "Nadia I." },
  ].map((t) => {
  const pStyle: Record<string, string> = {
- urgent: "bg-slate-100 text-slate-700",
- high: "bg-slate-100 text-slate-700",
- normal: "bg-slate-100 text-slate-700",
+ urgent: "bg-rose-100 text-rose-700",
+ high: "bg-amber-100 text-amber-700",
+ normal: "bg-sky-100 text-sky-700",
  };
  return (
  <div key={t.id} className="p-3 rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-sm transition">
