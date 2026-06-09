@@ -680,10 +680,10 @@ function AdminDashboard() {
  </div>
  <div className="space-y-1.5">
  {[
- { label: "Critical", val: 8, color: "bg-slate-400" },
- { label: "In Review", val: 12, color: "bg-slate-400" },
- { label: "Pending", val: 6, color: "bg-slate-400" },
- { label: "Resolved", val: 15, color: "bg-slate-400" },
+ { label: "Critical", val: 8, color: "bg-rose-500" },
+ { label: "In Review", val: 12, color: "bg-amber-500" },
+ { label: "Pending", val: 6, color: "bg-violet-500" },
+ { label: "Resolved", val: 15, color: "bg-emerald-500" },
  ].map((s) => (
  <div key={s.label} className="flex items-center gap-2 text-xs">
  <span className={`w-2.5 h-2.5 rounded-full ${s.color}`} />
