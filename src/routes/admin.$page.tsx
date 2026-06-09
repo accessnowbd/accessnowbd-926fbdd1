@@ -322,40 +322,75 @@ function RecordForm({
  const [saving, setSaving] = useState(false);
  const [errors, setErrors] = useState<{ [k: string]: string }>({});
  const [touched, setTouched] = useState<{ [k: string]: boolean }>({});
+ // Track which derived fields the user has manually edited — once edited, stop auto-deriving.
+ const [edited, setEdited] = useState<{ [k: string]: boolean }>(() => {
+   const init: { [k: string]: boolean } = {};
+   for (const f of fields) {
+     if (f.autoFrom && record?.data && record.data[f.name] != null && record.data[f.name] !== "") {
+       init[f.name] = true;
+     }
+   }
+   return init;
+ });
  const { t } = useAdminLang();
 
+ const transform = (mode: AdminField["autoTransform"], v: unknown) => {
+   if (mode === "slug") return slugify(String(v ?? ""));
+   return v;
+ };
+
  const setField = (name: string, value: unknown) => {
- setData((d) => ({ ...d, [name]: value }));
- const f = fields.find((x) => x.name === name);
- if (f) {
- const err = validateField(f, value);
- setErrors((e) => ({ ...e, [name]: err ?? "" }));
- }
+   setData((d) => {
+     const next: Record_ = { ...d, [name]: value };
+     // auto-derive dependent fields whose source just changed and that the user hasn't manually edited
+     for (const df of fields) {
+       if (df.autoFrom === name && !edited[df.name]) {
+         next[df.name] = transform(df.autoTransform, value);
+       }
+     }
+     return next;
+   });
+   const f = fields.find((x) => x.name === name);
+   if (f) {
+     // mark a derived field as "edited" once the user types into it directly
+     if (f.autoFrom) setEdited((e) => ({ ...e, [name]: true }));
+     const err = validateField(f, value);
+     setErrors((e) => ({ ...e, [name]: err ?? "" }));
+   }
  };
 
  const save = async () => {
- const next: { [k: string]: string } = {};
- for (const f of fields) {
- const err = validateField(f, data[f.name]);
- if (err) next[f.name] = err;
- }
- if (Object.keys(next).length) {
- setErrors(next);
- setTouched(Object.fromEntries(fields.map((f) => [f.name, true])));
- toast.error(t("Please fix the highlighted fields", "চিহ্নিত ফিল্ডগুলো ঠিক করুন"));
- return;
- }
- setSaving(true);
- const payload = { kind, data: data as never, is_active: record?.is_active ?? true };
- const op = record
- ? supabase.from("admin_records").update(payload).eq("id", record.id)
- : supabase.from("admin_records").insert(payload);
- const { error } = await op;
- setSaving(false);
- if (error) return toast.error(error.message);
- toast.success(record ? t("Updated", "আপডেট হয়েছে") : t("Created", "তৈরি হয়েছে"));
- onSaved();
+   // Fill any still-empty auto-derived fields from their source before validating.
+   const filled: Record_ = { ...data };
+   for (const f of fields) {
+     if (f.autoFrom && (filled[f.name] == null || filled[f.name] === "")) {
+       filled[f.name] = transform(f.autoTransform, filled[f.autoFrom]);
+     }
+   }
+   const next: { [k: string]: string } = {};
+   for (const f of fields) {
+     const err = validateField(f, filled[f.name]);
+     if (err) next[f.name] = err;
+   }
+   if (Object.keys(next).length) {
+     setData(filled);
+     setErrors(next);
+     setTouched(Object.fromEntries(fields.map((f) => [f.name, true])));
+     toast.error(t("Please fix the highlighted fields", "চিহ্নিত ফিল্ডগুলো ঠিক করুন"));
+     return;
+   }
+   setSaving(true);
+   const payload = { kind, data: filled as never, is_active: record?.is_active ?? true };
+   const op = record
+     ? supabase.from("admin_records").update(payload).eq("id", record.id)
+     : supabase.from("admin_records").insert(payload);
+   const { error } = await op;
+   setSaving(false);
+   if (error) return toast.error(error.message);
+   toast.success(record ? t("Updated", "আপডেট হয়েছে") : t("Created", "তৈরি হয়েছে"));
+   onSaved();
  };
+
 
  return (
  <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900/40 backdrop-blur-sm p-4" onClick={onClose}>
