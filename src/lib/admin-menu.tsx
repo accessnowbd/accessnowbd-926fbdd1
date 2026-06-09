@@ -46,6 +46,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/welcome-popup", label: "Welcome Popup", labelBn: "ওয়েলকাম পপআপ", icon: ic(PartyPopper), grad: "from-pink-500 to-rose-500" },
       { to: "/admin/announcement-bar", label: "Announcement Bar", labelBn: "ঘোষণা বার", icon: ic(Megaphone), grad: "from-orange-500 to-rose-500" },
       { to: "/admin/reviews", label: "Manage Reviews", labelBn: "রিভিউ ম্যানেজ", icon: ic(Star), grad: "from-amber-400 to-orange-500" },
+      { to: "/admin/review-generator", label: "AI Review Generator", labelBn: "AI রিভিউ জেনারেটর", icon: ic(Sparkles), grad: "from-amber-500 to-orange-600" },
       { to: "/admin/biggest-discount", label: "Biggest Discount", labelBn: "সর্বোচ্চ ডিসকাউন্ট", icon: ic(Percent), grad: "from-rose-500 to-red-600" },
       { to: "/admin/whatsapp-button", label: "WhatsApp Button", labelBn: "হোয়াটসঅ্যাপ বাটন", icon: ic(MessageCircle), grad: "from-green-500 to-emerald-600" },
       { to: "/admin/media-gallery", label: "Media Gallery", labelBn: "মিডিয়া গ্যালারি", icon: ic(Images), grad: "from-blue-500 to-indigo-600" },
