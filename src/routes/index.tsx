@@ -620,9 +620,9 @@ function CustomerReviews() {
       </div>
 
       <div className="relative space-y-5">
-        {/* Edge fade masks - theme-aware */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 md:w-28 bg-gradient-to-r from-background via-background/60 to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 md:w-28 bg-gradient-to-l from-background via-background/60 to-transparent" />
+        {/* Edge fade masks - theme-aware via .review-fade-* classes in styles.css */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 md:w-28 review-fade-left" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 md:w-28 review-fade-right" />
 
         <ReviewMarquee items={row1} direction="left" duration={50} />
         <ReviewMarquee items={row2} direction="right" duration={55} />
