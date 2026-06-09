@@ -214,24 +214,6 @@ function AdminDashboard() {
 
  return (
  <div className="space-y-5 animate-fade-in">
- {/* Welcome hero card */}
- <div className="rounded-3xl bg-white ring-1 ring-slate-200/70 shadow-[0_10px_30px_-18px_rgba(100,116,139,0.18)] p-6 md:p-8 flex items-start md:items-center justify-between gap-6 flex-wrap">
- <div className="min-w-0">
- <span className="inline-flex items-center text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
- Dashboard
- </span>
- <h1 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">Welcome back</h1>
- <p className="text-sm text-slate-500 mt-1.5">Here's what's happening with your store today.</p>
- </div>
- <div className="flex items-center gap-2.5">
- <Link to="/admin/add-product" className="h-12 px-5 rounded-2xl bg-white ring-1 ring-slate-200 text-sm font-semibold text-slate-900 inline-flex items-center gap-2 hover:bg-slate-50 transition">
- <Plus className="w-4 h-4" /> Add product
- </Link>
- <Link to="/admin/orders" className="h-12 px-5 rounded-2xl bg-slate-900 text-white text-sm font-semibold inline-flex items-center gap-2 hover:bg-slate-800 transition">
- <ShoppingBag className="w-4 h-4" /> View orders
- </Link>
- </div>
- </div>
 
  {/* KPI cards — clean white */}
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
