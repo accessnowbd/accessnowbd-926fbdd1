@@ -392,7 +392,7 @@ function AdminProducts() {
  <th className="text-left px-3 py-3">স্টক</th>
  <th className="text-left px-3 py-3">ভিউ</th>
  <th className="text-left px-3 py-3">স্ট্যাটাস</th>
- <th className="text-right px-3 py-3 w-44">অ্যাকশন</th>
+ 
  </tr>
  </thead>
  <tbody>
@@ -461,23 +461,12 @@ function AdminProducts() {
  </span>
  </button>
  </td>
- <td className="px-3 py-3">
- <div className="flex items-center justify-end gap-1">
- <IconBtn title="উপরে" onClick={() => move(p.slug, -1)} disabled={i === 0}><ArrowUp className="w-3.5 h-3.5" /></IconBtn>
- <IconBtn title="নিচে" onClick={() => move(p.slug, 1)} disabled={i === filtered.length - 1}><ArrowDown className="w-3.5 h-3.5" /></IconBtn>
- <IconBtn title="এডিট" onClick={() => { setEditing(p); setIsNew(false); }}><Pencil className="w-3.5 h-3.5" /></IconBtn>
- <IconBtn title="ডুপ্লিকেট" onClick={() => duplicate(p)}><Copy className="w-3.5 h-3.5" /></IconBtn>
- <a href={`/product/${p.slug}`} target="_blank" rel="noreferrer" title="দেখুন" className="w-8 h-8 grid place-items-center rounded-md border border-border hover:bg-secondary">
- <Eye className="w-3.5 h-3.5" />
- </a>
- <IconBtn title="মুছুন" onClick={() => remove(p.slug)} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
- </div>
- </td>
+ 
  </tr>
  );
  })}
  {filtered.length === 0 && (
- <tr><td colSpan={8} className="p-10 text-center text-muted-foreground">কোনো পণ্য পাওয়া যায়নি।</td></tr>
+ <tr><td colSpan={7} className="p-10 text-center text-muted-foreground">কোনো পণ্য পাওয়া যায়নি।</td></tr>
  )}
  </tbody>
  </table>
