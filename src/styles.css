@@ -2357,3 +2357,137 @@ html:not(.theme-white) .site-search-trigger kbd {
 html:not(.theme-white) .site-search-trigger span[aria-hidden].bg-slate-200 {
   background: oklch(1 0 0 / 0.15) !important;
 }
+
+/* ============================================================
+   Product Page — Premium Editorial Typography
+   Instrument Serif headings + Work Sans body, theme-adaptive
+   gradient accents driven by semantic tokens.
+   ============================================================ */
+.product-page-shell {
+  font-family: 'Work Sans', 'Hind Siliguri', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  --pp-grad-from: var(--primary, oklch(0.55 0.22 285));
+  --pp-grad-via:  oklch(0.62 0.21 320);
+  --pp-grad-to:   oklch(0.7 0.18 200);
+  --pp-price-from: oklch(0.55 0.22 285);
+  --pp-price-to:   oklch(0.62 0.18 200);
+}
+html:not(.theme-white) .product-page-shell {
+  --pp-grad-from: oklch(0.82 0.18 290);
+  --pp-grad-via:  oklch(0.85 0.16 330);
+  --pp-grad-to:   oklch(0.88 0.14 200);
+  --pp-price-from: oklch(0.85 0.17 290);
+  --pp-price-to:   oklch(0.88 0.15 200);
+}
+
+/* H1 product title — editorial serif with gradient ink */
+.product-page-shell h1 {
+  font-family: 'Instrument Serif', 'Hind Siliguri', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  background: linear-gradient(115deg,
+    var(--pp-grad-from) 0%,
+    var(--pp-grad-via) 50%,
+    var(--pp-grad-to) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-wrap: balance;
+}
+
+/* H2 section headings — refined serif */
+.product-page-shell h2 {
+  font-family: 'Instrument Serif', 'Hind Siliguri', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+/* Section labels (মেয়াদ ও মূল্য পরিকল্পনা, Quantity) — refined uppercase mark */
+.product-page-shell .text-foreground\/85 {
+  font-family: 'Work Sans', 'Hind Siliguri', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: color-mix(in oklch, var(--foreground) 70%, transparent);
+}
+
+/* Current price — gradient accent (selected plan price in title area) */
+.product-page-shell h1 + div .text-foreground.font-semibold {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  background: linear-gradient(100deg, var(--pp-price-from), var(--pp-price-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.product-page-shell h1 + div .text-muted-foreground.line-through {
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+/* Reviews count — small italic serif */
+.product-page-shell .text-muted-foreground:where(*) {
+  font-family: 'Work Sans', 'Hind Siliguri', sans-serif;
+}
+
+/* Breadcrumb — small caps tracking */
+.product-page-shell nav.text-sm {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Plan card period text — keep readable, semibold work sans */
+.product-page-shell label .text-\[15px\] {
+  font-family: 'Work Sans', 'Hind Siliguri', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-transform: none;
+}
+
+/* Plan price digits — tabular serif accent */
+.product-page-shell label .text-violet-700 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  font-feature-settings: "tnum";
+  background: linear-gradient(100deg, var(--pp-price-from), var(--pp-price-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Description body */
+.product-page-shell .prose,
+.product-page-shell section p {
+  font-family: 'Work Sans', 'Hind Siliguri', sans-serif;
+  font-size: 0.97rem;
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+}
+
+/* FAQ question text */
+.product-page-shell button.text-sm.font-medium {
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+/* Buttons — keep work sans, refined tracking */
+.product-page-shell .product-buy-button,
+.product-page-shell .product-whatsapp-button,
+.product-page-shell .product-cart-button {
+  font-family: 'Work Sans', sans-serif;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+}
