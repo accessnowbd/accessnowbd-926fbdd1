@@ -42,6 +42,7 @@ import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminReviewGeneratorRouteImport } from './routes/admin.review-generator'
+import { Route as AdminQuickToolsRouteImport } from './routes/admin.quick-tools'
 import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
@@ -218,6 +219,11 @@ const AdminReviewGeneratorRoute = AdminReviewGeneratorRouteImport.update({
   path: '/review-generator',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminQuickToolsRoute = AdminQuickToolsRouteImport.update({
+  id: '/quick-tools',
+  path: '/quick-tools',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPromotionsRoute = AdminPromotionsRouteImport.update({
   id: '/promotions',
   path: '/promotions',
@@ -305,6 +311,7 @@ export interface FileRoutesByFullPath {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
+  '/admin/quick-tools': typeof AdminQuickToolsRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
@@ -349,6 +356,7 @@ export interface FileRoutesByTo {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
+  '/admin/quick-tools': typeof AdminQuickToolsRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
@@ -395,6 +403,7 @@ export interface FileRoutesById {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
+  '/admin/quick-tools': typeof AdminQuickToolsRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
@@ -442,6 +451,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
+    | '/admin/quick-tools'
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
@@ -486,6 +496,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
+    | '/admin/quick-tools'
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
@@ -531,6 +542,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin/promotions'
+    | '/admin/quick-tools'
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
@@ -807,6 +819,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReviewGeneratorRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/quick-tools': {
+      id: '/admin/quick-tools'
+      path: '/quick-tools'
+      fullPath: '/admin/quick-tools'
+      preLoaderRoute: typeof AdminQuickToolsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/promotions': {
       id: '/admin/promotions'
       path: '/promotions'
@@ -889,6 +908,7 @@ interface AdminRouteChildren {
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminPromotionsRoute: typeof AdminPromotionsRoute
+  AdminQuickToolsRoute: typeof AdminQuickToolsRoute
   AdminReviewGeneratorRoute: typeof AdminReviewGeneratorRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminThemesRoute: typeof AdminThemesRoute
@@ -905,6 +925,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminPromotionsRoute: AdminPromotionsRoute,
+  AdminQuickToolsRoute: AdminQuickToolsRoute,
   AdminReviewGeneratorRoute: AdminReviewGeneratorRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminThemesRoute: AdminThemesRoute,

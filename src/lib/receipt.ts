@@ -18,11 +18,12 @@ export type ReceiptOrder = {
   }>;
 };
 
-export function downloadReceiptPdf(order: ReceiptOrder) {
+export function buildReceiptDoc(order: ReceiptOrder) {
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
   const margin = 48;
   let y = margin;
+
 
   // Header bar
   doc.setFillColor(99, 102, 241); // violet
@@ -157,5 +158,21 @@ export function downloadReceiptPdf(order: ReceiptOrder) {
     { align: "center" },
   );
 
-  doc.save(`AccessNowBD-Receipt-${order.id.slice(0, 8).toUpperCase()}.pdf`);
+  return doc;
 }
+
+export function receiptFileName(order: ReceiptOrder) {
+  return `AccessNowBD-Receipt-${order.id.slice(0, 8).toUpperCase()}.pdf`;
+}
+
+export function downloadReceiptPdf(order: ReceiptOrder) {
+  const doc = buildReceiptDoc(order);
+  doc.save(receiptFileName(order));
+}
+
+export function getReceiptBlob(order: ReceiptOrder): Blob {
+  const doc = buildReceiptDoc(order);
+  return doc.output("blob");
+}
+
+
