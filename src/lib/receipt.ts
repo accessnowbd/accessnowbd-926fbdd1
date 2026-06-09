@@ -175,4 +175,4 @@ export function getReceiptBlob(order: ReceiptOrder): Blob {
   return doc.output("blob");
 }
 
-}
+
