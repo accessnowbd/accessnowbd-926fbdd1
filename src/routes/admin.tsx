@@ -271,7 +271,7 @@ function AdminBlankState() {
   return (
     <div className="min-h-screen grid place-items-center bg-[#fafafa]" role="status" aria-label="Loading admin panel">
       <div className="flex flex-col items-center gap-3 text-slate-500">
-        <div className="w-7 h-7 rounded-full border-2 border-slate-200 border-t-sky-500 animate-spin" />
+        <div className="w-7 h-7 rounded-full border-2 border-slate-200 border-t-indigo-500 animate-spin" />
         <span className="text-xs font-medium tracking-wide">Loading admin…</span>
       </div>
     </div>
@@ -310,7 +310,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#eff8ff] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
+    <div className="lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f4f1ff] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
 
       {/* Mobile overlay */}
       {mobileOpen && (
@@ -476,7 +476,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           </div>
         </header>
 
-        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800 bg-gradient-to-b from-sky-50/60 via-blue-50/30 to-white">
+        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800 bg-gradient-to-b from-violet-50/60 via-indigo-50/30 to-white">
           <div className="mx-auto max-w-[1400px] space-y-4 md:space-y-6">
             {currentPage && <AdminPageHero group={currentPage.group} item={currentPage.item} t={t} />}
             <Outlet />
@@ -585,18 +585,18 @@ function AdminPageHero({ group, item, t }: { group: any; item: AdminMenuItem; t:
     <section
       className={[
         "relative overflow-hidden rounded-2xl",
-        "bg-gradient-to-br from-sky-100/80 via-blue-50/70 to-cyan-100/60",
+        "bg-gradient-to-br from-violet-100/80 via-indigo-50/70 to-fuchsia-100/60",
         "ring-1 ring-white/60 shadow-[0_10px_40px_-20px_rgba(99,102,241,0.45)]",
         "px-5 md:px-8 py-5 md:py-7",
       ].join(" ")}
     >
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-cyan-300/30 blur-3xl" />
-        <div className="absolute -bottom-20 right-1/3 w-80 h-80 rounded-full bg-blue-300/25 blur-3xl" />
+        <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-fuchsia-300/30 blur-3xl" />
+        <div className="absolute -bottom-20 right-1/3 w-80 h-80 rounded-full bg-indigo-300/25 blur-3xl" />
         <div className="absolute top-1/2 right-6 -translate-y-1/2 hidden md:flex items-center gap-6 opacity-70">
-          <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-sky-500 ring-1 ring-white/70">{group.icon}</span>
+          <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-violet-500 ring-1 ring-white/70">{group.icon}</span>
           <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-pink-500 ring-1 ring-white/70">{item.icon}</span>
-          <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-sky-500 ring-1 ring-white/70">{group.icon}</span>
+          <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-indigo-500 ring-1 ring-white/70">{group.icon}</span>
         </div>
       </div>
 
@@ -611,11 +611,11 @@ function AdminPageHero({ group, item, t }: { group: any; item: AdminMenuItem; t:
           <span className="[&>svg]:w-7 [&>svg]:h-7 md:[&>svg]:w-8 md:[&>svg]:h-8">{item.icon}</span>
         </span>
         <div className="min-w-0">
-          <h1 className="font-['Sora',ui-sans-serif,system-ui] font-extrabold tracking-tight text-[26px] md:text-[36px] leading-none bg-gradient-to-r from-sky-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent truncate">
+          <h1 className="font-['Sora',ui-sans-serif,system-ui] font-extrabold tracking-tight text-[26px] md:text-[36px] leading-none bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent truncate">
             {title}
           </h1>
           <p className="mt-1.5 text-[12px] md:text-[13px] font-semibold text-slate-600">
-            <span className="text-sky-600">{groupTitle}</span>
+            <span className="text-violet-600">{groupTitle}</span>
             <span className="mx-2 text-slate-400">•</span>
             <span>{t("Manage and configure", "ম্যানেজ ও কনফিগার")} {title.toLowerCase()}</span>
           </p>
