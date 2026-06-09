@@ -590,6 +590,23 @@
   html.theme-white .bg-background { background-color: #ffffff !important; }
   html.theme-white .bg-muted { background-color: rgba(238, 242, 255, 0.85) !important; }
 
+  /* Customer review cards — frosted white in light theme, dark glass in aurora */
+  html.theme-white .review-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.65) 100%) !important;
+    border: 1px solid rgba(255,255,255,0.9) !important;
+    box-shadow:
+      0 12px 32px -14px rgba(79, 70, 229, 0.18),
+      0 1px 0 0 rgba(255,255,255,0.95) inset,
+      0 0 0 1px rgba(124, 58, 237, 0.06) !important;
+    backdrop-filter: blur(18px) saturate(170%);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+  }
+  html:not(.theme-white) .review-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%) !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+    box-shadow: 0 8px 30px -12px rgba(0,0,0,0.6) !important;
+  }
+
   html.theme-white .text-aurora,
   html.theme-white .text-aurora-strong,
   html.theme-white .text-neon,
