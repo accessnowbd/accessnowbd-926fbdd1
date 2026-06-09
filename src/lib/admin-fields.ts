@@ -231,10 +231,12 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
     fields: [
       { name: "name", label: "Name", type: "text", required: true, primary: true, placeholder: "e.g. Vision aids" },
       { name: "slug", label: "Slug (auto from name)", type: "text", autoFrom: "name", autoTransform: "slug", hint: "Used in the URL. Leave blank to auto-generate from the name.", pattern: "^[a-z0-9\\u0980-\\u09FF]+(?:-[a-z0-9\\u0980-\\u09FF]+)*$", patternMessage: "Use lowercase letters, numbers and hyphens only." },
-      { name: "icon", label: "Icon (emoji)", type: "text", placeholder: "👓" },
+      { name: "image_url", label: "Image", type: "image", hint: "Upload an image or paste a URL. Used as the category cover/thumbnail." },
+      { name: "icon", label: "Icon (emoji, optional)", type: "text", placeholder: "👓", hint: "Used as a small badge when no image is set." },
       { name: "description", label: "Description", type: "textarea" },
     ],
   },
+
 
   "wallet": {
     kind: "wallet_txn",
