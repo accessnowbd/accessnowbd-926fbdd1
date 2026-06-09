@@ -593,10 +593,10 @@ function AdminDashboard() {
 
  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
  {[
- { label: "Vision Issues", value: 12, sub: "+3 this week", icon: Eye, grad: " ", chip: "bg-slate-50 text-slate-700" },
- { label: "Hearing Issues", value: 4, sub: "1 critical", icon: Ear, grad: " ", chip: "bg-slate-50 text-slate-700" },
- { label: "Mobility Issues", value: 7, sub: "2 in review", icon: Accessibility, grad: " ", chip: "bg-slate-50 text-slate-700" },
- { label: "Bug Reports", value: 18, sub: "5 resolved today", icon: Bug, grad: " ", chip: "bg-slate-50 text-slate-700" },
+ { label: "Vision Issues", value: 12, sub: "+3 this week", icon: Eye, grad: "from-violet-500 to-indigo-500", chip: "bg-violet-50 text-violet-700" },
+ { label: "Hearing Issues", value: 4, sub: "1 critical", icon: Ear, grad: "from-rose-500 to-pink-500", chip: "bg-rose-50 text-rose-700" },
+ { label: "Mobility Issues", value: 7, sub: "2 in review", icon: Accessibility, grad: "from-amber-500 to-orange-500", chip: "bg-amber-50 text-amber-700" },
+ { label: "Bug Reports", value: 18, sub: "5 resolved today", icon: Bug, grad: "from-emerald-500 to-teal-500", chip: "bg-emerald-50 text-emerald-700" },
  ].map((c) => {
  const Icon = c.icon;
  return (
