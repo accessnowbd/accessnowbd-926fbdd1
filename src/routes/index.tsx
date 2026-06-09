@@ -213,9 +213,9 @@ function CategoryPillBar() {
           <ChevronLeft className="w-4 h-4" />
         </button>
 
-        {/* Edge fade hints — soft white blur */}
-        <div className={`pointer-events-none absolute left-0 top-0 bottom-0 w-14 z-10 transition-opacity bg-gradient-to-r from-white via-white/80 to-transparent ${canLeft ? "opacity-100" : "opacity-0"}`} />
-        <div className={`pointer-events-none absolute right-0 top-0 bottom-0 w-14 z-10 transition-opacity bg-gradient-to-l from-white via-white/80 to-transparent ${canRight ? "opacity-100" : "opacity-0"}`} />
+        {/* Edge fade hints — theme-aware (white in light, dark in aurora) */}
+        <div className={`pointer-events-none absolute left-0 top-0 bottom-0 w-14 z-10 transition-opacity review-fade-left ${canLeft ? "opacity-100" : "opacity-0"}`} />
+        <div className={`pointer-events-none absolute right-0 top-0 bottom-0 w-14 z-10 transition-opacity review-fade-right ${canRight ? "opacity-100" : "opacity-0"}`} />
 
         <div
           ref={scrollerRef}
