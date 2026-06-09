@@ -120,7 +120,7 @@ function ProductPage() {
   const faqs = buildFaqs(product);
 
   return (
-    <div key={product.slug} className="relative min-h-screen text-foreground animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both] overflow-hidden bg-gradient-to-br from-teal-50 via-white to-emerald-50">
+    <div key={product.slug} className="product-page-shell relative min-h-screen text-foreground animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both] overflow-hidden">
       <style>{`@keyframes product-in {0%{opacity:0;transform:translateY(14px);filter:blur(4px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}`}</style>
 
       {/* Ambient glow orbs — tamer on mobile for readability */}
