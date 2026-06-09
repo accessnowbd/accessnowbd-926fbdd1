@@ -227,13 +227,15 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
   "categories": {
     kind: "category",
     mode: "list",
+    description: "Product categories. Slug is auto-generated from the name — edit only if you need a custom URL.",
     fields: [
-      { name: "name", label: "Name", type: "text", required: true, primary: true },
-      { name: "slug", label: "Slug", type: "text", required: true },
-      { name: "icon", label: "Icon (emoji)", type: "text" },
+      { name: "name", label: "Name", type: "text", required: true, primary: true, placeholder: "e.g. Vision aids" },
+      { name: "slug", label: "Slug (auto from name)", type: "text", autoFrom: "name", autoTransform: "slug", hint: "Used in the URL. Leave blank to auto-generate from the name.", pattern: "^[a-z0-9\\u0980-\\u09FF]+(?:-[a-z0-9\\u0980-\\u09FF]+)*$", patternMessage: "Use lowercase letters, numbers and hyphens only." },
+      { name: "icon", label: "Icon (emoji)", type: "text", placeholder: "👓" },
       { name: "description", label: "Description", type: "textarea" },
     ],
   },
+
   "wallet": {
     kind: "wallet_txn",
     mode: "list",
