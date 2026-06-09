@@ -593,10 +593,10 @@ function AdminDashboard() {
 
  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
  {[
- { label: "Vision Issues", value: 12, sub: "+3 this week", icon: Eye, grad: " ", chip: "bg-slate-50 text-slate-700" },
- { label: "Hearing Issues", value: 4, sub: "1 critical", icon: Ear, grad: " ", chip: "bg-slate-50 text-slate-700" },
- { label: "Mobility Issues", value: 7, sub: "2 in review", icon: Accessibility, grad: " ", chip: "bg-slate-50 text-slate-700" },
- { label: "Bug Reports", value: 18, sub: "5 resolved today", icon: Bug, grad: " ", chip: "bg-slate-50 text-slate-700" },
+ { label: "Vision Issues", value: 12, sub: "+3 this week", icon: Eye, grad: "from-violet-500 to-indigo-500", chip: "bg-violet-50 text-violet-700" },
+ { label: "Hearing Issues", value: 4, sub: "1 critical", icon: Ear, grad: "from-rose-500 to-pink-500", chip: "bg-rose-50 text-rose-700" },
+ { label: "Mobility Issues", value: 7, sub: "2 in review", icon: Accessibility, grad: "from-amber-500 to-orange-500", chip: "bg-amber-50 text-amber-700" },
+ { label: "Bug Reports", value: 18, sub: "5 resolved today", icon: Bug, grad: "from-emerald-500 to-teal-500", chip: "bg-emerald-50 text-emerald-700" },
  ].map((c) => {
  const Icon = c.icon;
  return (
@@ -635,10 +635,10 @@ function AdminDashboard() {
  { user: "Nadia Islam", issue: "Bangla numerals not announced", type: "Vision", status: "in_review", time: "2 days ago" },
  ].map((r, i) => {
  const statusStyle: Record<string, string> = {
- critical: "bg-slate-50 text-slate-700 ring-slate-200",
- in_review: "bg-slate-50 text-slate-700 ring-slate-200",
- pending: "bg-slate-50 text-slate-700 ring-slate-200",
- resolved: "bg-slate-50 text-slate-700 ring-slate-200",
+ critical: "bg-rose-50 text-rose-700 ring-rose-200",
+ in_review: "bg-amber-50 text-amber-700 ring-amber-200",
+ pending: "bg-violet-50 text-violet-700 ring-violet-200",
+ resolved: "bg-emerald-50 text-emerald-700 ring-emerald-200",
  };
  return (
  <div key={i} className="flex items-center gap-3 py-2.5 px-2 rounded-xl hover:bg-slate-50 transition">
@@ -665,10 +665,10 @@ function AdminDashboard() {
  <div className="flex items-center justify-center mb-5">
  <div className="relative w-40 h-40">
  <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#94a3b8" strokeWidth="3.5" strokeDasharray="20 100" />
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#94a3b8" strokeWidth="3.5" strokeDasharray="30 100" strokeDashoffset="-20" />
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#94a3b8" strokeWidth="3.5" strokeDasharray="15 100" strokeDashoffset="-50" />
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#94a3b8" strokeWidth="3.5" strokeDasharray="35 100" strokeDashoffset="-65" />
+ <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#ef4444" strokeWidth="3.5" strokeDasharray="20 100" />
+ <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#f59e0b" strokeWidth="3.5" strokeDasharray="30 100" strokeDashoffset="-20" />
+ <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#8b5cf6" strokeWidth="3.5" strokeDasharray="15 100" strokeDashoffset="-50" />
+ <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#10b981" strokeWidth="3.5" strokeDasharray="35 100" strokeDashoffset="-65" />
  </svg>
  <div className="absolute inset-0 grid place-items-center">
  <div className="text-center">
@@ -680,10 +680,10 @@ function AdminDashboard() {
  </div>
  <div className="space-y-1.5">
  {[
- { label: "Critical", val: 8, color: "bg-slate-400" },
- { label: "In Review", val: 12, color: "bg-slate-400" },
- { label: "Pending", val: 6, color: "bg-slate-400" },
- { label: "Resolved", val: 15, color: "bg-slate-400" },
+ { label: "Critical", val: 8, color: "bg-rose-500" },
+ { label: "In Review", val: 12, color: "bg-amber-500" },
+ { label: "Pending", val: 6, color: "bg-violet-500" },
+ { label: "Resolved", val: 15, color: "bg-emerald-500" },
  ].map((s) => (
  <div key={s.label} className="flex items-center gap-2 text-xs">
  <span className={`w-2.5 h-2.5 rounded-full ${s.color}`} />
@@ -717,9 +717,9 @@ function AdminDashboard() {
  { id: "TKT-2838", subject: "Voice navigation not working", priority: "high", user: "Nadia I." },
  ].map((t) => {
  const pStyle: Record<string, string> = {
- urgent: "bg-slate-100 text-slate-700",
- high: "bg-slate-100 text-slate-700",
- normal: "bg-slate-100 text-slate-700",
+ urgent: "bg-rose-100 text-rose-700",
+ high: "bg-amber-100 text-amber-700",
+ normal: "bg-sky-100 text-sky-700",
  };
  return (
  <div key={t.id} className="p-3 rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-sm transition">
@@ -752,11 +752,11 @@ function AdminDashboard() {
  </div>
  <div className="space-y-2.5">
  {[
- { type: "order", icon: ShoppingBag, color: " ", text: "New order ৳1,200 from Anika R.", time: "Just now" },
- { type: "alert", icon: AlertTriangle, color: " ", text: "Critical accessibility issue reported", time: "5 min ago" },
- { type: "user", icon: UserCheck, color: " ", text: "12 new users joined today", time: "1 hr ago" },
- { type: "ticket", icon: MessageSquare, color: " ", text: "Support ticket TKT-2841 opened", time: "2 hr ago" },
- { type: "system", icon: ShieldCheck, color: " ", text: "Backup completed successfully", time: "4 hr ago" },
+ { type: "order", icon: ShoppingBag, color: "from-emerald-500 to-teal-500", text: "New order ৳1,200 from Anika R.", time: "Just now" },
+ { type: "alert", icon: AlertTriangle, color: "from-rose-500 to-red-500", text: "Critical accessibility issue reported", time: "5 min ago" },
+ { type: "user", icon: UserCheck, color: "from-violet-500 to-fuchsia-500", text: "12 new users joined today", time: "1 hr ago" },
+ { type: "ticket", icon: MessageSquare, color: "from-sky-500 to-indigo-500", text: "Support ticket TKT-2841 opened", time: "2 hr ago" },
+ { type: "system", icon: ShieldCheck, color: "from-amber-500 to-orange-500", text: "Backup completed successfully", time: "4 hr ago" },
  ].map((n, i) => {
  const Icon = n.icon;
  return (
@@ -788,9 +788,9 @@ function AdminDashboard() {
  </div>
  <div className="space-y-3.5">
  {[
- { label: "Mobile", val: 68, icon: Smartphone, color: " " },
- { label: "Desktop", val: 24, icon: Monitor, color: " " },
- { label: "Tablet", val: 8, icon: Tablet, color: " " },
+ { label: "Mobile", val: 68, icon: Smartphone, color: "from-violet-500 to-fuchsia-500" },
+ { label: "Desktop", val: 24, icon: Monitor, color: "from-sky-500 to-indigo-500" },
+ { label: "Tablet", val: 8, icon: Tablet, color: "from-emerald-500 to-teal-500" },
  ].map((d) => {
  const Icon = d.icon;
  return (
