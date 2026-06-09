@@ -635,10 +635,10 @@ function AdminDashboard() {
  { user: "Nadia Islam", issue: "Bangla numerals not announced", type: "Vision", status: "in_review", time: "2 days ago" },
  ].map((r, i) => {
  const statusStyle: Record<string, string> = {
- critical: "bg-slate-50 text-slate-700 ring-slate-200",
- in_review: "bg-slate-50 text-slate-700 ring-slate-200",
- pending: "bg-slate-50 text-slate-700 ring-slate-200",
- resolved: "bg-slate-50 text-slate-700 ring-slate-200",
+ critical: "bg-rose-50 text-rose-700 ring-rose-200",
+ in_review: "bg-amber-50 text-amber-700 ring-amber-200",
+ pending: "bg-violet-50 text-violet-700 ring-violet-200",
+ resolved: "bg-emerald-50 text-emerald-700 ring-emerald-200",
  };
  return (
  <div key={i} className="flex items-center gap-3 py-2.5 px-2 rounded-xl hover:bg-slate-50 transition">
