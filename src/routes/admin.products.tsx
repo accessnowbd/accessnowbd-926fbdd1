@@ -613,6 +613,89 @@ function IconBtn({ children, onClick, disabled, danger, title }: { children: Rea
  );
 }
 
+function BulkActionToolbar({
+ count, single, onClear, onEdit, onView, onMoveUp, onMoveDown,
+ onDuplicate, onDelete, onStock, onActive,
+}: {
+ count: number;
+ single: Product | null;
+ onClear: () => void;
+ onEdit: () => void;
+ onView: () => void;
+ onMoveUp: () => void;
+ onMoveDown: () => void;
+ onDuplicate: () => void;
+ onDelete: () => void;
+ onStock: (s: StockStatus) => void;
+ onActive: (a: boolean) => void;
+}) {
+ const [stockOpen, setStockOpen] = useState(false);
+ const [statusOpen, setStatusOpen] = useState(false);
+ return (
+ <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+ <div className="flex items-center gap-1 px-3 py-2 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-700 backdrop-blur-md">
+ <div className="flex items-center gap-2 pr-3 mr-1 border-r border-slate-700">
+ <span className="grid place-items-center w-7 h-7 rounded-full bg-primary text-xs font-bold">{count}</span>
+ <span className="text-sm font-medium">সিলেক্টেড</span>
+ </div>
+
+ {single && (
+ <>
+ <ToolbarBtn icon={<Pencil className="w-4 h-4" />} label="এডিট" onClick={onEdit} />
+ <ToolbarBtn icon={<Eye className="w-4 h-4" />} label="দেখুন" onClick={onView} />
+ <ToolbarBtn icon={<ArrowUp className="w-4 h-4" />} label="উপরে" onClick={onMoveUp} />
+ <ToolbarBtn icon={<ArrowDown className="w-4 h-4" />} label="নিচে" onClick={onMoveDown} />
+ </>
+ )}
+
+ <ToolbarBtn icon={<Copy className="w-4 h-4" />} label="ডুপ্লিকেট" onClick={onDuplicate} />
+
+ <div className="relative">
+ <ToolbarBtn icon={<Package className="w-4 h-4" />} label="স্টক" onClick={() => { setStockOpen(v => !v); setStatusOpen(false); }} />
+ {stockOpen && (
+ <div className="absolute bottom-full mb-2 left-0 bg-white text-slate-800 rounded-xl shadow-xl border border-border min-w-[160px] py-1">
+ <button onClick={() => { onStock("in_stock"); setStockOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">✅ স্টকে আছে</button>
+ <button onClick={() => { onStock("out_of_stock"); setStockOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">❌ স্টক শেষ</button>
+ <button onClick={() => { onStock("preorder"); setStockOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">⏳ প্রি-অর্ডার</button>
+ </div>
+ )}
+ </div>
+
+ <div className="relative">
+ <ToolbarBtn icon={<EyeOff className="w-4 h-4" />} label="স্ট্যাটাস" onClick={() => { setStatusOpen(v => !v); setStockOpen(false); }} />
+ {statusOpen && (
+ <div className="absolute bottom-full mb-2 left-0 bg-white text-slate-800 rounded-xl shadow-xl border border-border min-w-[160px] py-1">
+ <button onClick={() => { onActive(true); setStatusOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">🟢 চালু (Active)</button>
+ <button onClick={() => { onActive(false); setStatusOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50">⚪ বন্ধ (Inactive)</button>
+ </div>
+ )}
+ </div>
+
+ <div className="w-px h-6 bg-slate-700 mx-1" />
+ <ToolbarBtn icon={<Trash2 className="w-4 h-4" />} label="মুছুন" onClick={onDelete} danger />
+
+ <div className="w-px h-6 bg-slate-700 mx-1" />
+ <button onClick={onClear} className="p-2 rounded-lg hover:bg-slate-800 text-slate-300" title="বাতিল">
+ <X className="w-4 h-4" />
+ </button>
+ </div>
+ </div>
+ );
+}
+
+function ToolbarBtn({ icon, label, onClick, danger }: { icon: React.ReactNode; label: string; onClick: () => void; danger?: boolean }) {
+ return (
+ <button
+ onClick={onClick}
+ className={`inline-flex items-center gap-1.5 h-9 px-3 rounded-lg text-sm font-medium transition ${danger ? "text-red-300 hover:bg-red-500/20" : "hover:bg-slate-800"}`}
+ >
+ {icon}<span className="hidden sm:inline">{label}</span>
+ </button>
+ );
+}
+
+
+
 /* ============================== PRODUCT EDITOR (WordPress-style) ============================== */
 
 const slugify = (s: string) =>
