@@ -665,10 +665,10 @@ function AdminDashboard() {
  <div className="flex items-center justify-center mb-5">
  <div className="relative w-40 h-40">
  <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#94a3b8" strokeWidth="3.5" strokeDasharray="20 100" />
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#94a3b8" strokeWidth="3.5" strokeDasharray="30 100" strokeDashoffset="-20" />
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#94a3b8" strokeWidth="3.5" strokeDasharray="15 100" strokeDashoffset="-50" />
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#94a3b8" strokeWidth="3.5" strokeDasharray="35 100" strokeDashoffset="-65" />
+ <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#ef4444" strokeWidth="3.5" strokeDasharray="20 100" />
+ <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#f59e0b" strokeWidth="3.5" strokeDasharray="30 100" strokeDashoffset="-20" />
+ <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#8b5cf6" strokeWidth="3.5" strokeDasharray="15 100" strokeDashoffset="-50" />
+ <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#10b981" strokeWidth="3.5" strokeDasharray="35 100" strokeDashoffset="-65" />
  </svg>
  <div className="absolute inset-0 grid place-items-center">
  <div className="text-center">
