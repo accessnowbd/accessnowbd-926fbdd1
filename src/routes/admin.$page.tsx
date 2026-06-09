@@ -50,19 +50,8 @@ function AdminFeaturePage() {
  const groupTitle = group ? ((group as any).titleBn ? t(group.title, (group as any).titleBn) : group.title) : "";
 
  return (
- <div className="space-y-5">
- <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
- <div className="flex items-start gap-4">
- <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.grad} grid place-items-center text-white shadow-md shrink-0`}>
- {item.icon}
- </div>
- <div className="flex-1 min-w-0">
- <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{groupTitle}</div>
- <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">{itemLabel}</h1>
- <p className="text-sm text-slate-500 mt-1">{cfg?.description ?? t(`Manage ${item.label.toLowerCase()}.`, `${itemLabel} পরিচালনা করুন।`)}</p>
- </div>
- </div>
- </div>
+  <div className="space-y-5">
+
 
  {cfg ? (
  cfg.mode === "list" ? (
