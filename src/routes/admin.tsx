@@ -551,10 +551,10 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
     >
       <span
         className={[
-          "shrink-0 w-8 h-8 rounded-xl grid place-items-center text-white shadow-md transition-transform",
+          "shrink-0 w-8 h-8 rounded-full grid place-items-center text-white shadow-sm transition-transform",
           "bg-gradient-to-br",
           item.grad,
-          "group-hover:scale-[1.05]",
+          "ring-1 ring-black/5 group-hover:scale-[1.05]",
         ].join(" ")}
       >
         {item.icon}
