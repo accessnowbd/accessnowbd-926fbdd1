@@ -27,7 +27,7 @@ function StarRow({ value, size = 14, onChange }: { value: number; size?: number;
           >
             <Star
               size={size}
-              className={filled ? "fill-amber-400 text-amber-400" : "text-slate-300"}
+              className={filled ? "fill-amber-400 text-amber-400" : "text-muted-foreground/60"}
             />
           </Comp>
         );
@@ -128,18 +128,18 @@ export function ProductReviews({ slug }: { slug: string }) {
 
   return (
     <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
-      <h2 className="flex items-center gap-3 text-xl md:text-2xl font-extrabold text-slate-900 mb-4">
+      <h2 className="flex items-center gap-3 text-xl md:text-2xl font-extrabold text-foreground mb-4">
         <span className="inline-block w-1.5 h-6 md:h-7 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
         Customer Reviews
       </h2>
 
       {/* Summary */}
-      <div className="rounded-2xl bg-white border border-slate-200 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)] p-5 md:p-6 mb-5">
+      <div className="rounded-2xl bg-card border border-border shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)] p-5 md:p-6 mb-5">
         <div className="flex items-center gap-4">
-          <div className="text-4xl font-extrabold text-slate-900">{avg.toFixed(1)}</div>
+          <div className="text-4xl font-extrabold text-foreground">{avg.toFixed(1)}</div>
           <div>
             <StarRow value={Math.round(avg)} size={18} />
-            <div className="text-xs text-slate-500 mt-1">
+            <div className="text-xs text-muted-foreground mt-1">
               Based on {reviews.length} review{reviews.length === 1 ? "" : "s"}
             </div>
           </div>
@@ -147,10 +147,10 @@ export function ProductReviews({ slug }: { slug: string }) {
       </div>
 
       {/* Submit form */}
-      <div className="rounded-2xl bg-white border border-slate-200 shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)] p-5 md:p-6 mb-6">
-        <h3 className="text-base font-semibold text-slate-900 mb-3">Write a review</h3>
+      <div className="rounded-2xl bg-card border border-border shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)] p-5 md:p-6 mb-6">
+        <h3 className="text-base font-semibold text-foreground mb-3">Write a review</h3>
         {!userId ? (
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-muted-foreground">
             Please{" "}
             <a href="/login" className="text-violet-700 font-medium underline">
               sign in
@@ -164,10 +164,10 @@ export function ProductReviews({ slug }: { slug: string }) {
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 placeholder="Your name"
-                className="flex-1 h-10 px-3 rounded-lg border border-slate-300 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-400"
+                className="flex-1 h-10 px-3 rounded-lg border border-border bg-card text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-violet-400"
               />
               <div className="flex items-center gap-2">
-                <span className="text-sm text-slate-600">Rating:</span>
+                <span className="text-sm text-muted-foreground">Rating:</span>
                 <StarRow value={rating} size={22} onChange={setRating} />
               </div>
             </div>
@@ -176,7 +176,7 @@ export function ProductReviews({ slug }: { slug: string }) {
               onChange={(e) => setComment(e.target.value)}
               placeholder="Share your experience..."
               rows={3}
-              className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-400 resize-y"
+              className="w-full px-3 py-2 rounded-lg border border-border bg-card text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-violet-400 resize-y"
             />
             <button
               type="submit"
@@ -193,11 +193,11 @@ export function ProductReviews({ slug }: { slug: string }) {
 
       {/* List */}
       {loading ? (
-        <div className="flex items-center justify-center py-8 text-slate-500 text-sm">
+        <div className="flex items-center justify-center py-8 text-muted-foreground text-sm">
           <Loader2 className="w-4 h-4 animate-spin mr-2" /> Loading reviews...
         </div>
       ) : reviews.length === 0 ? (
-        <div className="text-sm text-slate-500 text-center py-8">
+        <div className="text-sm text-muted-foreground text-center py-8">
           No reviews yet. Be the first to review!
         </div>
       ) : (
@@ -205,7 +205,7 @@ export function ProductReviews({ slug }: { slug: string }) {
           {visible.map((r) => (
             <div
               key={r.id}
-              className="rounded-2xl bg-white border border-slate-200 p-4 md:p-5 shadow-[0_6px_20px_-14px_rgba(15,23,42,0.18)]"
+              className="rounded-2xl bg-card border border-border p-4 md:p-5 shadow-[0_6px_20px_-14px_rgba(15,23,42,0.18)]"
             >
               <div className="flex items-center justify-between gap-3 mb-2">
                 <div className="flex items-center gap-3">
@@ -216,8 +216,8 @@ export function ProductReviews({ slug }: { slug: string }) {
                     {r.reviewer_name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-slate-900">{r.reviewer_name}</div>
-                    <div className="text-[11px] text-slate-500">
+                    <div className="text-sm font-semibold text-foreground">{r.reviewer_name}</div>
+                    <div className="text-[11px] text-muted-foreground">
                       {new Date(r.created_at).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "short",
@@ -228,7 +228,7 @@ export function ProductReviews({ slug }: { slug: string }) {
                 </div>
                 <StarRow value={r.rating} size={14} />
               </div>
-              <p className="text-sm text-slate-700 leading-relaxed">{r.comment}</p>
+              <p className="text-sm text-foreground/85 leading-relaxed">{r.comment}</p>
             </div>
           ))}
           {reviews.length > 5 && (
