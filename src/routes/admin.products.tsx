@@ -528,6 +528,22 @@ function AdminProducts() {
  onSaved={() => { setEditing(null); load(); }}
  />
  )}
+
+ {selected.size > 0 && (
+ <BulkActionToolbar
+ count={selected.size}
+ single={selected.size === 1 ? selectedProducts[0] : null}
+ onClear={() => setSelected(new Set())}
+ onEdit={() => { if (selectedProducts[0]) { setEditing(selectedProducts[0]); setIsNew(false); } }}
+ onView={() => { if (selectedProducts[0]) window.open(`/product/${selectedProducts[0].slug}`, "_blank"); }}
+ onMoveUp={() => { if (selectedProducts[0]) move(selectedProducts[0].slug, -1); }}
+ onMoveDown={() => { if (selectedProducts[0]) move(selectedProducts[0].slug, 1); }}
+ onDuplicate={bulkDuplicate}
+ onDelete={bulkDelete}
+ onStock={bulkSetStock}
+ onActive={bulkSetActive}
+ />
+ )}
  </div>
  );
 }
