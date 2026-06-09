@@ -2309,3 +2309,51 @@ html:not(.theme-white) .product-page-shell button[style*="#f5f3ff"] {
 html:not(.theme-white) .product-page-shell label.bg-violet-50 {
   background-color: oklch(0.30 0.14 285 / 0.35);
 }
+
+/* ============================================================
+   Header nav pill + search trigger — theme-aware overrides.
+   Aurora/dark themes need dark glass surfaces because the
+   components use hardcoded white backgrounds inline.
+   ============================================================ */
+html:not(.theme-white) .site-nav-pill {
+  background: oklch(0.22 0.04 280 / 0.55) !important;
+  border-color: oklch(1 0 0 / 0.12) !important;
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+html:not(.theme-white) .site-nav-pill a {
+  color: oklch(0.96 0.01 280 / 0.85);
+}
+html:not(.theme-white) .site-nav-pill a:hover {
+  color: oklch(0.85 0.15 295);
+}
+html:not(.theme-white) .site-nav-pill a[aria-current="page"],
+html:not(.theme-white) .site-nav-pill a.text-\[\#4f46e5\] {
+  color: oklch(0.92 0.12 295) !important;
+}
+/* Sliding pill indicator behind active item */
+html:not(.theme-white) .site-nav-pill > span[aria-hidden] {
+  background: oklch(0.45 0.18 290 / 0.35) !important;
+  border-color: oklch(0.75 0.18 295 / 0.55) !important;
+}
+
+/* SearchTrigger pill — bg-white + slate borders/text */
+html:not(.theme-white) .site-search-trigger {
+  background: oklch(0.22 0.04 280 / 0.55) !important;
+  border-color: oklch(1 0 0 / 0.14) !important;
+  color: oklch(0.96 0.01 280 / 0.9) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+html:not(.theme-white) .site-search-trigger span {
+  color: oklch(0.96 0.01 280 / 0.6);
+}
+html:not(.theme-white) .site-search-trigger kbd {
+  background: oklch(1 0 0 / 0.08) !important;
+  border-color: oklch(1 0 0 / 0.12) !important;
+  color: oklch(0.96 0.01 280 / 0.7) !important;
+}
+html:not(.theme-white) .site-search-trigger span[aria-hidden].bg-slate-200 {
+  background: oklch(1 0 0 / 0.15) !important;
+}
