@@ -788,9 +788,9 @@ function AdminDashboard() {
  </div>
  <div className="space-y-3.5">
  {[
- { label: "Mobile", val: 68, icon: Smartphone, color: " " },
- { label: "Desktop", val: 24, icon: Monitor, color: " " },
- { label: "Tablet", val: 8, icon: Tablet, color: " " },
+ { label: "Mobile", val: 68, icon: Smartphone, color: "from-violet-500 to-fuchsia-500" },
+ { label: "Desktop", val: 24, icon: Monitor, color: "from-sky-500 to-indigo-500" },
+ { label: "Tablet", val: 8, icon: Tablet, color: "from-emerald-500 to-teal-500" },
  ].map((d) => {
  const Icon = d.icon;
  return (
