@@ -483,7 +483,7 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
     mode: "list",
     fields: [
       { name: "title", label: "Title", type: "text", required: true, primary: true },
-      { name: "slug", label: "Slug", type: "text", required: true },
+      { name: "slug", label: "Slug (auto from title)", type: "text", autoFrom: "title", autoTransform: "slug", hint: "Leave blank to auto-generate." },
       { name: "body", label: "Body (HTML/Markdown)", type: "textarea" },
       { name: "show_in_menu", label: "Show in menu", type: "boolean" },
     ],
@@ -493,7 +493,8 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
     mode: "list",
     fields: [
       { name: "title", label: "Title", type: "text", required: true, primary: true },
-      { name: "slug", label: "Slug", type: "text", required: true },
+      { name: "slug", label: "Slug (auto from title)", type: "text", autoFrom: "title", autoTransform: "slug", hint: "Leave blank to auto-generate." },
+
       { name: "excerpt", label: "Excerpt", type: "textarea" },
       { name: "cover_url", label: "Cover image URL", type: "image" },
       { name: "body", label: "Body", type: "textarea" },
