@@ -159,7 +159,6 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
               src={accessNowLogo}
               alt="AccessNow BD — Fast, Secure, Reliable"
               draggable={false}
-              style={{ mixBlendMode: "multiply" }}
               className="h-14 w-auto object-contain group-hover:scale-105 transition-transform"
             />
           </Link>
