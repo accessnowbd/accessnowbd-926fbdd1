@@ -664,32 +664,129 @@ function ServiceList({ kind }: { kind: "active" | "expired" }) {
   );
 }
 
-function Downloads() {
-  const files = [
-    { n: "License-NF-2026.pdf", s: "120 KB" },
-    { n: "Invoice-1284.pdf", s: "88 KB" },
-    { n: "Setup-guide.zip", s: "2.4 MB" },
-  ];
+type DownloadLink = {
+  productSlug: string;
+  productName: string;
+  productImage?: string | null;
+  label: string;
+  url: string;
+  orderId?: string;
+  orderDate?: string;
+};
+
+function extractLinksFromMeta(meta: unknown): Array<{ label: string; url: string }> {
+  const out: Array<{ label: string; url: string }> = [];
+  if (!meta || typeof meta !== "object") return out;
+  const m = meta as Record<string, unknown>;
+  const push = (label: string, url: unknown) => {
+    if (typeof url === "string" && /^https?:\/\//i.test(url)) out.push({ label, url });
+  };
+  push("Download", m.download_url);
+  push("Download", m.download_link);
+  push("Setup file", m.setup_url);
+  const arrays = [m.downloads, m.download_links, m.files];
+  for (const arr of arrays) {
+    if (Array.isArray(arr)) {
+      arr.forEach((item, i) => {
+        if (typeof item === "string") push(`File ${i + 1}`, item);
+        else if (item && typeof item === "object") {
+          const o = item as Record<string, unknown>;
+          const url = (o.url ?? o.link ?? o.href) as unknown;
+          const label = (o.label ?? o.name ?? o.title ?? `File ${i + 1}`) as string;
+          push(String(label), url);
+        }
+      });
+    }
+  }
+  return out;
+}
+
+function Downloads({ orders }: { orders: Order[] }) {
+  const [links, setLinks] = useState<DownloadLink[] | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const slugs = Array.from(new Set(orders.flatMap((o) => (o.items || []).map((it) => it.slug)).filter(Boolean)));
+      if (slugs.length === 0) { if (!cancelled) setLinks([]); return; }
+      const { data } = await supabase
+        .from("products")
+        .select("slug, name, image_url, meta")
+        .in("slug", slugs);
+      if (cancelled) return;
+      const bySlug = new Map<string, { name: string; image_url: string | null; meta: unknown }>();
+      (data || []).forEach((p) => bySlug.set(p.slug, { name: p.name, image_url: p.image_url, meta: p.meta }));
+
+      const collected: DownloadLink[] = [];
+      orders.forEach((o) => {
+        (o.items || []).forEach((it) => {
+          const p = bySlug.get(it.slug);
+          if (!p) return;
+          const linksFromMeta = extractLinksFromMeta(p.meta);
+          linksFromMeta.forEach((l) => collected.push({
+            productSlug: it.slug, productName: p.name, productImage: p.image_url,
+            label: l.label, url: l.url, orderId: o.id, orderDate: o.created_at,
+          }));
+        });
+      });
+
+      // De-duplicate by url+slug
+      const seen = new Set<string>();
+      const unique = collected.filter((l) => {
+        const k = `${l.productSlug}::${l.url}`;
+        if (seen.has(k)) return false;
+        seen.add(k); return true;
+      });
+      setLinks(unique);
+    })();
+    return () => { cancelled = true; };
+  }, [orders]);
+
+  const doCopy = (url: string) => {
+    navigator.clipboard.writeText(url);
+    setCopied(url);
+    setTimeout(() => setCopied((c) => (c === url ? null : c)), 1500);
+  };
+
   return (
     <div className="space-y-6">
-      <PageHead title="Downloads" desc="All your downloadable files" />
+      <PageHead title="ডাউনলোড লিংক" desc="আপনার কেনা প্রোডাক্টের ডাউনলোড লিংক এক জায়গায়।" />
       <Card>
-        <div className="space-y-2">
-          {files.map((f) => (
-            <div key={f.n} className="flex items-center gap-3 p-3 rounded-xl glass border border-[var(--glass-border)]">
-              <FileText className="w-5 h-5 text-primary" />
-              <div className="flex-1">
-                <div className="text-sm font-semibold">{f.n}</div>
-                <div className="text-xs text-muted-foreground">{f.s}</div>
+        {links === null ? (
+          <div className="flex items-center justify-center py-10 text-muted-foreground text-sm">
+            <Loader2 className="w-4 h-4 animate-spin mr-2" /> লোড হচ্ছে...
+          </div>
+        ) : links.length === 0 ? (
+          <Empty icon={<Download className="w-6 h-6" />} msg="আপনার অর্ডারকৃত প্রোডাক্টে এখনো কোনো ডাউনলোড লিংক যোগ করা হয়নি।" />
+        ) : (
+          <div className="space-y-2">
+            {links.map((l, i) => (
+              <div key={`${l.productSlug}-${i}`} className="flex flex-wrap items-center gap-3 p-3 rounded-xl glass border border-[var(--glass-border)]">
+                {l.productImage ? (
+                  <img src={l.productImage} alt={l.productName} loading="lazy" className="w-11 h-11 rounded-lg object-cover border border-[var(--glass-border)]" />
+                ) : (
+                  <div className="w-11 h-11 rounded-lg bg-primary/10 grid place-items-center text-primary"><FileText className="w-5 h-5" /></div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold truncate">{l.productName}</div>
+                  <div className="text-xs text-muted-foreground truncate">{l.label} • {l.url}</div>
+                </div>
+                <button onClick={() => doCopy(l.url)} className="inline-flex items-center gap-1 h-9 px-3 rounded-full text-xs font-semibold glass border border-[var(--glass-border)] hover:border-primary/40">
+                  {copied === l.url ? <><Check className="w-3.5 h-3.5" />Copied</> : <><Copy className="w-3.5 h-3.5" />Copy</>}
+                </button>
+                <a href={l.url} target="_blank" rel="noopener noreferrer" download className="inline-flex items-center gap-1 h-9 px-4 rounded-full text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90">
+                  <Download className="w-3.5 h-3.5" />Download
+                </a>
               </div>
-              <Btn variant="outline" className="!h-9 !px-4 text-xs"><Download className="w-3.5 h-3.5" />Download</Btn>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </Card>
     </div>
   );
 }
+
 
 function Licenses() {
   const keys = [
