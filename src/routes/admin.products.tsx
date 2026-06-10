@@ -571,7 +571,7 @@ const slugify = (s: string) =>
  .replace(/^-+|-+$/g, "")
  .slice(0, 80);
 
-type AiBusy = "" | "all" | "short" | "rich" | "image-gen" | "image-up";
+type AiBusy = "" | "all" | "short" | "rich" | "seo" | "image-gen" | "image-up";
 type TabId = "general" | "inventory" | "media" | "details" | "seo";
 
 const TABS: { id: TabId; label: string; icon: string }[] = [
@@ -683,7 +683,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  const removePlan = (i: number) => setForm((f) => ({ ...f, plans: f.plans.filter((_, idx) => idx !== i) }));
 
  /* ---------- AI ---------- */
- const callAi = async (mode: "short" | "rich" | "all") => {
+ const callAi = async (mode: "short" | "rich" | "all" | "seo") => {
  if (!form.name.trim()) { toast.error("আগে Product Title লিখুন"); return; }
  setAi(mode);
  try {
@@ -699,7 +699,9 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  if (typeof d.short_description === "string") next.short_description = d.short_description;
  if (typeof d.description === "string") next.description = d.description;
  if (typeof d.seo_title === "string") next.meta = { ...(next.meta ?? {}), seo_title: d.seo_title };
- if (typeof d.meta_description === "string") next.meta = { ...(next.meta ?? {}), meta_description: d.meta_description };
+ const metaDesc = typeof d.meta_description === "string" ? d.meta_description : (typeof d.seo_description === "string" ? d.seo_description : undefined);
+ if (typeof metaDesc === "string") next.meta = { ...(next.meta ?? {}), meta_description: metaDesc };
+ if (Array.isArray(d.tags)) next.meta = { ...(next.meta ?? {}), tags: d.tags as string[] };
  return next;
  });
  if (Array.isArray(d.features)) setFeaturesList(d.features as string[]);
@@ -1423,8 +1425,8 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
  {tab === "seo" && (
  <>
- <button onClick={() => callAi("rich")} disabled={aiBusy} className="w-full inline-flex items-center justify-center gap-2 h-11 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-sm font-bold hover:bg-slate-50 disabled:opacity-60">
- <Sparkles className="w-4 h-4" /> ✨ AI দিয়ে SEO Title ও Meta Description অটো-জেনারেট করুন
+ <button onClick={() => callAi("seo")} disabled={aiBusy} className="w-full inline-flex items-center justify-center gap-2 h-11 rounded-xl text-white text-sm font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 shadow-lg shadow-violet-500/30 disabled:opacity-60">
+ {ai === "seo" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} ✨ AI দিয়ে SEO Title ও Meta Description অটো-জেনারেট করুন
  </button>
 
  <div>

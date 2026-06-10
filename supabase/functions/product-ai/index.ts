@@ -25,7 +25,7 @@ function corsFor(req: Request) {
   } as Record<string, string>;
 }
 
-type Mode = "short" | "rich" | "all" | "image";
+type Mode = "short" | "rich" | "all" | "image" | "seo";
 type CardStyle = "premium-pastel" | "premium-dark" | "glassmorphism" | "soft-aurora" | "dark-neon";
 
 type Body = {
@@ -223,12 +223,25 @@ The "description" field MUST be markdown that follows EXACTLY this section order
         "You write rich, SEO-optimised Bangladeshi e-commerce product descriptions in clean English markdown for AccessNow BD. You ALWAYS follow the provided section template exactly. Output STRICT JSON only.",
       all:
         "You are an expert Bangladeshi e-commerce copywriter for AccessNow BD. You ALWAYS write the long description following the provided sectioned markdown template exactly. Output STRICT JSON only.",
+      seo:
+        "You are a senior SEO copywriter for AccessNow BD (Bangladesh's trusted digital subscription store). You craft Google-friendly, click-worthy meta tags that rank for buyer-intent keywords like 'buy {product} in Bangladesh', '{product} BD price', '{product} subscription Bangladesh'. Output STRICT JSON only — no commentary.",
     };
 
     const prompts: Record<Exclude<Mode, "image">, string> = {
       short: `Generate copy for this digital product. Keep tagline under 70 chars and short_description 2-3 short sentences. Return JSON: { "tagline": string, "short_description": string }.\n\nProduct:\n${JSON.stringify(product, null, 2)}`,
       rich: `Generate rich SEO copy. Return JSON: { "description": string, "seo_title": string (max 60 chars), "seo_description": string (max 155 chars), "tags": string[] (5-8 keywords) }.\n\nThe "description" MUST follow this template exactly:\n${DESCRIPTION_TEMPLATE}\n\nProduct:\n${JSON.stringify(product, null, 2)}`,
       all: `Generate the full listing for this product. Return JSON with: tagline (under 70 chars), short_description (2-3 sentences), description (markdown following the template below EXACTLY), features (array of 5-8 short bullet strings), seo_title (max 60 chars), seo_description (max 155 chars), tags (array of 5-8 keywords).\n\nDescription template (MANDATORY):\n${DESCRIPTION_TEMPLATE}\n\nProduct:\n${JSON.stringify(product, null, 2)}`,
+      seo: `Write Google-ranking SEO meta tags for this product page on accessnowbd.com.
+
+Rules:
+- seo_title: 50–60 chars. MUST start with the product/brand name + a buyer-intent keyword (e.g. "Buy", "Price", "Subscription"). Include "Bangladesh" or "BD". End with " | AccessNow BD". Use a power word (Cheap, Official, Premium, Genuine, Instant) when natural.
+- seo_description: 140–160 chars. Mention the product name + key benefit + price/availability cue (e.g. "best price", "instant delivery", "official subscription"). Include "Bangladesh" / "BD". End with a soft call-to-action ("Order now", "Get yours today"). Natural, no keyword stuffing.
+- tags: 6–10 lowercase long-tail keywords a Bangladeshi buyer would search (e.g. "buy {name} bangladesh", "{name} bd price", "{name} subscription bd", "cheap {name} bangladesh").
+
+Return JSON: { "seo_title": string, "seo_description": string, "tags": string[] }.
+
+Product:
+${JSON.stringify(product, null, 2)}`,
     };
 
     const tools: Record<Exclude<Mode, "image">, unknown> = {
@@ -288,6 +301,22 @@ The "description" field MUST be markdown that follows EXACTLY this section order
               "seo_description",
               "tags",
             ],
+            additionalProperties: false,
+          },
+        },
+      },
+      seo: {
+        type: "function",
+        function: {
+          name: "write_seo_meta",
+          parameters: {
+            type: "object",
+            properties: {
+              seo_title: { type: "string" },
+              seo_description: { type: "string" },
+              tags: { type: "array", items: { type: "string" } },
+            },
+            required: ["seo_title", "seo_description", "tags"],
             additionalProperties: false,
           },
         },

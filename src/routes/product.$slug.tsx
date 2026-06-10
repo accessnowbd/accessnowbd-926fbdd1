@@ -38,21 +38,72 @@ export const Route = createFileRoute("/product/$slug")({
     return { product };
   },
   component: ProductPage,
-  head: ({ loaderData }) => ({
-    meta: [
-      { title: loaderData?.product ? `${loaderData.product.name} — AccessNow BD` : "Subscription details — AccessNow BD" },
-      ...(loaderData?.product
-        ? [
-            { name: "description", content: loaderData.product.tagline ?? loaderData.product.description ?? "" },
-            { property: "og:title", content: loaderData.product.name },
-            { property: "og:description", content: loaderData.product.tagline ?? loaderData.product.description ?? "" },
-            ...(loaderData.product.imageUrl
-              ? [{ property: "og:image", content: loaderData.product.imageUrl }]
-              : []),
-          ]
-        : []),
-    ],
-  }),
+  head: ({ loaderData, params }) => {
+    const p = loaderData?.product;
+    const url = `https://accessnowbd.com/product/${params.slug}`;
+    if (!p) {
+      return {
+        meta: [
+          { title: "Subscription details — AccessNow BD" },
+          { name: "robots", content: "noindex" },
+        ],
+      };
+    }
+    const seoTitle = p.meta?.seo_title?.trim() || `${p.name} — Buy in Bangladesh | AccessNow BD`;
+    const seoDesc =
+      p.meta?.meta_description?.trim() ||
+      p.shortDescription?.trim() ||
+      p.tagline?.trim() ||
+      `Get ${p.name} subscription in Bangladesh at the best price. Instant delivery, genuine access, trusted support from AccessNow BD.`;
+    const firstPlan = p.plans?.[0];
+    const priceNum = firstPlan ? Number(String(firstPlan.price).replace(/[^\d.]/g, "")) : 0;
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: p.name,
+      description: seoDesc,
+      ...(p.imageUrl ? { image: p.imageUrl } : {}),
+      brand: { "@type": "Brand", name: p.category || "AccessNow BD" },
+      category: p.category,
+      sku: p.slug,
+      offers: {
+        "@type": "Offer",
+        url,
+        priceCurrency: "BDT",
+        price: priceNum > 0 ? priceNum.toString() : "0",
+        availability: "https://schema.org/InStock",
+        seller: { "@type": "Organization", name: "AccessNow BD" },
+      },
+    };
+    return {
+      meta: [
+        { title: seoTitle },
+        { name: "description", content: seoDesc },
+        ...(p.meta?.tags?.length ? [{ name: "keywords", content: p.meta.tags.join(", ") }] : []),
+        { property: "og:title", content: seoTitle },
+        { property: "og:description", content: seoDesc },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
+        { property: "og:site_name", content: "AccessNow BD" },
+        ...(p.imageUrl
+          ? [
+              { property: "og:image", content: p.imageUrl },
+              { name: "twitter:image", content: p.imageUrl },
+            ]
+          : []),
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: seoTitle },
+        { name: "twitter:description", content: seoDesc },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify(jsonLd),
+        },
+      ],
+    };
+  },
   errorComponent: ({ error }) => (
     <div className="min-h-screen grid place-items-center px-4">
       <div className="text-center">

@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { rowToProduct, type Product } from "@/data/products";
 
 const PRODUCT_SELECT =
-  "slug,name,emoji,gradient,category,badge,tagline,description,delivery_time,warranty,features,plans,image_url";
+  "slug,name,emoji,gradient,category,badge,tagline,description,delivery_time,warranty,features,plans,image_url,short_description,meta";
 
 function createPublicProductClient() {
   const env = typeof process !== "undefined" ? process.env : undefined;
