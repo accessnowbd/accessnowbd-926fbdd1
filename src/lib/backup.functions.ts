@@ -40,7 +40,7 @@ export type BackupPayload = {
 
 export const createBackup = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<BackupPayload> => {
+  .handler(async ({ context }): Promise<{ json: string; meta: { created_at: string; total_rows: number; counts: Record<string, number> } }> => {
     await assertAdmin(context.userId);
     const tables: Record<string, Array<Record<string, unknown>>> = {};
     const counts: Record<string, number> = {};
@@ -53,15 +53,17 @@ export const createBackup = createServerFn({ method: "POST" })
       tables[table] = data ?? [];
       counts[table] = (data ?? []).length;
     }
+    const meta = {
+      version: 1,
+      created_at: new Date().toISOString(),
+      created_by: context.userId,
+      total_rows: Object.values(counts).reduce((a, b) => a + b, 0),
+      counts,
+    };
+    const payload: BackupPayload = { meta, tables };
     return {
-      meta: {
-        version: 1,
-        created_at: new Date().toISOString(),
-        created_by: context.userId,
-        total_rows: Object.values(counts).reduce((a, b) => a + b, 0),
-        counts,
-      },
-      tables,
+      json: JSON.stringify(payload, null, 2),
+      meta: { created_at: meta.created_at, total_rows: meta.total_rows, counts: meta.counts },
     };
   });
 
