@@ -266,6 +266,21 @@ function ProductPage() {
           <header>
             <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight leading-tight">{product.name}</h1>
 
+            {product.tagline?.trim() && (
+              <p className="mt-2 text-sm md:text-base text-slate-600 leading-relaxed">{product.tagline}</p>
+            )}
+
+            {product.features && product.features.length > 0 && (
+              <ul className="mt-3 space-y-1.5">
+                {product.features.map((f, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                    <Check className="w-4 h-4 mt-0.5 text-emerald-600 shrink-0" />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
             <div className="mt-4 flex items-center gap-3 flex-wrap">
               <span className="text-2xl md:text-3xl font-bold text-slate-900">৳{plan ? parsePrice(plan.price).toLocaleString() : 0}.00 <span className="text-base font-semibold text-slate-500">BDT</span></span>
               {hasDiscount && (
