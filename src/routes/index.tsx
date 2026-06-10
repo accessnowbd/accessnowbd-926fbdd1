@@ -610,7 +610,7 @@ function CustomerReviews() {
         <p className="mt-2 max-w-2xl mx-auto text-sm md:text-base text-muted-foreground">
           ১২,০০০+ সন্তুষ্ট গ্রাহকের আস্থা — সত্যিকারের রিভিউ, সত্যিকারের অভিজ্ঞতা।
         </p>
-        <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 shadow-sm backdrop-blur">
+        <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 backdrop-blur">
           <div className="flex">
             {[0,1,2,3,4].map(i => <Star key={i} className="h-4 w-4 fill-amber-500 text-amber-500" />)}
           </div>
