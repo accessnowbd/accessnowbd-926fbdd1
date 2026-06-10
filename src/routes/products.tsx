@@ -4,6 +4,7 @@ import { CategoryPage } from "@/components/CategoryPage";
 export const Route = createFileRoute("/products")({
   validateSearch: (search: Record<string, unknown>) => ({
     q: typeof search.q === "string" ? search.q : undefined,
+    cat: typeof search.cat === "string" ? search.cat : undefined,
   }),
   component: () => (
     <CategoryPage
