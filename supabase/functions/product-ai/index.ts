@@ -25,7 +25,7 @@ function corsFor(req: Request) {
   } as Record<string, string>;
 }
 
-type Mode = "short" | "rich" | "all" | "image";
+type Mode = "short" | "rich" | "all" | "image" | "seo";
 type CardStyle = "premium-pastel" | "premium-dark" | "glassmorphism" | "soft-aurora" | "dark-neon";
 
 type Body = {
