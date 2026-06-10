@@ -117,7 +117,7 @@ function CartPage() {
                       value={input}
                       onChange={(e) => setInput(e.target.value.toUpperCase())}
                       placeholder="SAVE10"
-                      className="flex-1 glass-soft rounded-lg px-3 py-2 text-sm font-medium tracking-wider uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex-1 bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 rounded-lg px-3 py-2 text-sm font-medium tracking-wider uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
                       aria-invalid={coupon ? !applied.valid : undefined}
                       aria-describedby="coupon-status"
                     />
