@@ -1150,7 +1150,30 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <div className="text-xs font-semibold text-slate-600 mb-1.5">আসল মূল্য (৳) <span className="text-slate-500">কাটা দামে</span></div>
  <input type="number" value={p.original_price ?? ""} onChange={(e) => setPlan(i, { original_price: e.target.value ? Number(e.target.value) : undefined })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
- </div>
+  </div>
+  {(() => {
+    const sp = Number(p.price) || 0;
+    const op = Number(p.original_price) || 0;
+    if (op > sp && sp > 0) {
+      const pct = Math.round(((op - sp) / op) * 100);
+      const save = op - sp;
+      return (
+        <div className="mt-2 flex items-center gap-2 flex-wrap">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-gradient-to-r from-rose-500 to-pink-600 text-white shadow shadow-rose-500/30">
+            🔻 -{pct}% OFF
+          </span>
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
+            💰 সাশ্রয় ৳{save.toLocaleString()}
+          </span>
+          <span className="text-[11px] text-slate-500">auto-calculated</span>
+        </div>
+      );
+    }
+    if (op > 0 && sp > 0 && op <= sp) {
+      return <div className="mt-2 text-[11px] text-amber-700">⚠️ আসল মূল্য বিক্রয় মূল্যের চেয়ে বেশি হতে হবে</div>;
+    }
+    return null;
+  })()}
  </div>
  ))}
  </div>
