@@ -42,8 +42,7 @@ export function BackupRestore() {
     try {
       setBusy("backup");
       const result = await runBackup();
-      const json = JSON.stringify(result, null, 2);
-      const blob = new Blob([json], { type: "application/json" });
+      const blob = new Blob([result.json], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       const stamp = new Date().toISOString().replace(/[:.]/g, "-");
