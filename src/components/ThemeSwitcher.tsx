@@ -43,10 +43,10 @@ export function ThemeSwitcher() {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 mt-2 w-72 rounded-2xl border border-white/10 bg-[rgba(20,22,45,0.92)] backdrop-blur-xl shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)] p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+          className="absolute left-0 md:left-auto md:right-0 mt-2 w-[min(18rem,calc(100vw-1.5rem))] rounded-2xl border border-border bg-popover text-popover-foreground backdrop-blur-xl shadow-[0_24px_60px_-20px_rgba(0,0,0,0.35)] p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
         >
           <div className="px-3 py-2">
-            <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-white/70">Theme</div>
+            <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted-foreground">Theme</div>
           </div>
           <div className="space-y-1">
             {enabledThemes.map((t) => {
@@ -63,26 +63,26 @@ export function ThemeSwitcher() {
                   className={[
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition",
                     isActive
-                      ? "bg-white/[0.07] border border-white/15"
-                      : "hover:bg-white/[0.05] border border-transparent",
+                      ? "bg-accent border border-border"
+                      : "hover:bg-accent/60 border border-transparent",
                   ].join(" ")}
                 >
                   <span
                     aria-hidden
-                    className="shrink-0 w-9 h-9 rounded-lg ring-1 ring-white/15 shadow-inner"
+                    className="shrink-0 w-9 h-9 rounded-lg ring-1 ring-border shadow-inner"
                     style={{ backgroundImage: t.swatch }}
                   />
                   <span className="flex-1 min-w-0">
-                    <span className="block text-[13px] font-semibold text-white truncate">{t.name}</span>
-                    <span className="block text-[11px] text-white/70 truncate">{t.description}</span>
+                    <span className="block text-[13px] font-semibold text-foreground truncate">{t.name}</span>
+                    <span className="block text-[11px] text-muted-foreground truncate">{t.description}</span>
                   </span>
                   {isActive && <Check className="w-4 h-4 text-primary shrink-0" />}
                 </button>
               );
             })}
           </div>
-          <div className="px-3 pt-2 pb-1 mt-1 border-t border-white/5">
-            <p className="text-[10.5px] text-white/65 leading-relaxed">
+          <div className="px-3 pt-2 pb-1 mt-1 border-t border-border">
+            <p className="text-[10.5px] text-muted-foreground leading-relaxed">
               আরও theme শীঘ্রই যোগ হবে।
             </p>
           </div>
