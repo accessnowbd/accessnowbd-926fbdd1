@@ -70,9 +70,9 @@ export function BackupRestore() {
     try {
       setBusy("restore");
       const text = await file.text();
-      const payload = JSON.parse(text);
-      if (!payload?.tables || typeof payload.tables !== "object") throw new Error("Invalid backup file");
-      const res = await runRestore({ data: { payload, mode } });
+      const parsed = JSON.parse(text);
+      if (!parsed?.tables || typeof parsed.tables !== "object") throw new Error("Invalid backup file");
+      const res = await runRestore({ data: { payloadJson: text, mode } });
       const total = Object.values(res.results).reduce((a, b) => a + (b.restored || 0), 0);
       const errs = Object.entries(res.results).filter(([, v]) => v.error);
       if (errs.length) {
