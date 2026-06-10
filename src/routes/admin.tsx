@@ -467,7 +467,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               onClick={toggle}
               aria-label={t("Switch to Bangla", "ইংরেজিতে পরিবর্তন")}
               title={lang === "en" ? "বাংলায় দেখুন" : "Show in English"}
-              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-bold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 bg-white transition shrink-0"
+              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-bold items-center gap-1.5 border border-white/60 bg-white/50 backdrop-blur text-slate-700 hover:bg-white/80 hover:border-violet-300 hover:text-violet-700 transition shrink-0"
             >
               <Globe className="w-3.5 h-3.5" /> {lang === "en" ? "বাং" : "EN"}
             </button>
@@ -478,7 +478,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               className="hidden xl:block w-64"
             />
 
-            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition">
+            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white/50 backdrop-blur border border-white/60 text-slate-700 hover:bg-white/80 hover:border-violet-300 hover:text-violet-700 transition">
               <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
             </Link>
           </div>
