@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAdminLang } from "@/context/AdminLangContext";
 import { ProductMediaGallery } from "@/components/admin/ProductMediaGallery";
+import { BackupRestore } from "@/components/admin/BackupRestore";
 
 export const Route = createFileRoute("/admin/$page")({
  component: AdminFeaturePage,
@@ -54,8 +55,10 @@ function AdminFeaturePage() {
   <div className="space-y-5">
 
 
- {page === "media-gallery" ? (
+  {page === "media-gallery" ? (
  <ProductMediaGallery />
+ ) : page === "backup" ? (
+ <BackupRestore />
  ) : cfg ? (
  cfg.mode === "list" ? (
  <ListCrud kind={cfg.kind} fields={cfg.fields} />
