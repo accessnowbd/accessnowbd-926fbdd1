@@ -64,7 +64,7 @@ export function RecentlyViewedSection({ limit = 8, excludeSlug, compact = false 
         </button>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+      <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-5">
         {items.map((product) => (
           <ProductCard key={product.slug} product={product} />
         ))}
