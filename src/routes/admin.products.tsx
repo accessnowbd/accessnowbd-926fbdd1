@@ -1410,15 +1410,15 @@ function Label({ children, className = "" }: { children: React.ReactNode; classN
 }
 
 function ChipBig({ active, onClick, children }: { active?: boolean; onClick: () => void; children: React.ReactNode }) {
- return (
- <button
- onClick={onClick}
- className={`inline-flex items-center justify-center gap-1.5 h-11 px-3.5 rounded-xl text-sm font-semibold border-2 transition ${
- active ? "border-slate-500 bg-slate-50 text-slate-700" : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
- }`}
- >{children}</button>
- );
-}
+  return (
+   <button
+   onClick={onClick}
+   className={`inline-flex items-center justify-center gap-1.5 min-h-11 w-full px-2.5 py-2 rounded-xl text-[13px] leading-tight font-semibold border-2 transition text-center break-words ${
+   active ? "border-slate-500 bg-slate-50 text-slate-800" : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+   }`}
+   >{children}</button>
+  );
+ }
 
 function FlagCheck({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
  return (
