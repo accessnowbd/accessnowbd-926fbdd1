@@ -53,7 +53,7 @@ function ProductCardImpl({ product }: { product: Product }) {
       to="/product/$slug"
       params={{ slug: product.slug }}
       preload="intent"
-      className="group product-card-v2 overflow-hidden flex flex-col h-full rounded-2xl border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-shadow hover:shadow-[var(--shadow-glass)]"
+      className="group product-card-v2 overflow-hidden flex flex-col h-full rounded-lg border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-shadow hover:shadow-[var(--shadow-glass)]"
     >
       <div className="relative">
         <ProductBanner product={product} ratio="1/1" />
