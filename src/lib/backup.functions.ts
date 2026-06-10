@@ -27,14 +27,28 @@ async function assertAdmin(userId: string) {
   if (!data) throw new Error("Forbidden: admin role required");
 }
 
+export type BackupPayload = {
+  meta: {
+    version: number;
+    created_at: string;
+    created_by: string;
+    total_rows: number;
+    counts: Record<string, number>;
+  };
+  tables: Record<string, Array<Record<string, unknown>>>;
+};
+
 export const createBackup = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .handler(async ({ context }): Promise<BackupPayload> => {
     await assertAdmin(context.userId);
-    const tables: Record<string, unknown[]> = {};
+    const tables: Record<string, Array<Record<string, unknown>>> = {};
     const counts: Record<string, number> = {};
+    const admin = supabaseAdmin as unknown as {
+      from: (t: string) => { select: (s: string) => Promise<{ data: Array<Record<string, unknown>> | null; error: { message: string } | null }> };
+    };
     for (const table of Object.keys(BACKUP_TABLES)) {
-      const { data, error } = await supabaseAdmin.from(table).select("*");
+      const { data, error } = await admin.from(table).select("*");
       if (error) throw new Error(`${table}: ${error.message}`);
       tables[table] = data ?? [];
       counts[table] = (data ?? []).length;
@@ -60,15 +74,28 @@ const RestoreSchema = z.object({
   selectedTables: z.array(z.string()).optional(),
 });
 
+export type RestoreResult = {
+  ok: boolean;
+  restored_at: string;
+  results: Record<string, { restored: number; error?: string }>;
+};
+
 export const restoreBackup = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => RestoreSchema.parse(d))
-  .handler(async ({ data, context }) => {
+  .inputValidator((d: unknown) => RestoreSchema.parse(d))
+  .handler(async ({ data, context }): Promise<RestoreResult> => {
     await assertAdmin(context.userId);
     const results: Record<string, { restored: number; error?: string }> = {};
     const wanted = data.selectedTables && data.selectedTables.length
       ? data.selectedTables
       : Object.keys(data.payload.tables);
+
+    const admin = supabaseAdmin as unknown as {
+      from: (t: string) => {
+        delete: () => { not: (col: string, op: string, val: null) => Promise<{ error: { message: string } | null }> };
+        upsert: (rows: Array<Record<string, unknown>>, opts: { onConflict: string }) => Promise<{ error: { message: string } | null }>;
+      };
+    };
 
     for (const table of wanted) {
       const pk = BACKUP_TABLES[table];
@@ -77,18 +104,17 @@ export const restoreBackup = createServerFn({ method: "POST" })
       if (!rows) { results[table] = { restored: 0 }; continue; }
 
       if (data.mode === "replace") {
-        const { error: delErr } = await supabaseAdmin.from(table).delete().not(pk, "is", null);
+        const { error: delErr } = await admin.from(table).delete().not(pk, "is", null);
         if (delErr) { results[table] = { restored: 0, error: `clear: ${delErr.message}` }; continue; }
       }
       if (rows.length === 0) { results[table] = { restored: 0 }; continue; }
 
-      // chunk upsert
       let total = 0;
       const CHUNK = 200;
       let err: string | undefined;
       for (let i = 0; i < rows.length; i += CHUNK) {
         const chunk = rows.slice(i, i + CHUNK);
-        const { error } = await supabaseAdmin.from(table).upsert(chunk, { onConflict: pk });
+        const { error } = await admin.from(table).upsert(chunk, { onConflict: pk });
         if (error) { err = error.message; break; }
         total += chunk.length;
       }
@@ -96,3 +122,4 @@ export const restoreBackup = createServerFn({ method: "POST" })
     }
     return { ok: true, results, restored_at: new Date().toISOString() };
   });
+
