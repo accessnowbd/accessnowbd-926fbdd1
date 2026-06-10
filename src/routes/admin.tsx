@@ -574,7 +574,7 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
         <span className={`truncate flex-1 text-[13px] ${active ? "font-bold text-slate-900" : "font-semibold"}`}>{label}</span>
       )}
       {!collapsed && active && (
-        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-slate-900" aria-hidden />
+        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-violet-600" aria-hidden />
       )}
       {!collapsed && !active && (
         <Pin
