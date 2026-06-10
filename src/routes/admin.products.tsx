@@ -328,7 +328,7 @@ function AdminProducts() {
  onChange={(e) => { const f = e.target.files?.[0]; if (f) importBackup(f); e.target.value = ""; }}
  />
  <button
- onClick={() => { setEditing({ ...empty, sort_order: (products.at(-1)?.sort_order ?? 0) + 10 }); setIsNew(true); }}
+ onClick={() => { setEditing({ ...empty, name: " Price in Bangladesh", sort_order: (products.at(-1)?.sort_order ?? 0) + 10 }); setIsNew(true); }}
  className="h-10 px-4 inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition"
  >
  <Plus className="w-4 h-4" /> নতুন পণ্য
@@ -846,13 +846,27 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
  {/* Title */}
  <div>
- <Label>Product Title *</Label>
+ <div className="flex items-center justify-between mb-1.5">
+   <Label>Product Title *</Label>
+   <button
+     type="button"
+     onClick={() => callAi("all")}
+     disabled={!!ai || !form.name.trim()}
+     title="এক ক্লিকে Tagline, Short/Long Description, Features, SEO — সব AI দিয়ে তৈরি করুন"
+     className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-bold text-white bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 shadow-md shadow-fuchsia-200 hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
+   >
+     {ai === "all" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+     ✨ AI Auto-Fill All
+   </button>
+ </div>
  <input
  value={form.name}
  onChange={(e) => set("name", e.target.value)}
+ onFocus={(e) => { if (isNew && e.currentTarget.value === " Price in Bangladesh") e.currentTarget.setSelectionRange(0, 0); }}
  placeholder="e.g. Windows 11 Pro License Key"
  className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
  />
+ <p className="text-[11px] text-slate-500 mt-1">💡 ডিফল্টভাবে " Price in Bangladesh" বসানো আছে — প্রোডাক্ট নাম সামনে লিখুন বা পুরোটা মুছে ফেলুন।</p>
  </div>
 
  {/* Subtitle */}
