@@ -40,28 +40,23 @@ const statusColors: Record<string, string> = {
   cancelled: "bg-pink-500/15 text-pink-300 border-pink-500/30",
 };
 
-type NavItem = { id: SectionId; label: string; icon: React.ComponentType<{ className?: string }> };
-type NavGroup = { title: string; items: NavItem[] };
+type NavItem = {
+  id: SectionId;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  tint: string; // tailwind text color for icon
+  tintBg: string; // tailwind bg tint for icon tile
+};
 
-const NAV: NavGroup[] = [
-  { title: "Main", items: [
-    { id: "overview", label: "Dashboard", icon: LayoutDashboard },
-  ]},
-  { title: "Account", items: [
-    { id: "profile", label: "Profile", icon: UserIcon },
-    { id: "edit-profile", label: "Edit Profile", icon: FileText },
-  ]},
-  { title: "Orders & Services", items: [
-    { id: "orders", label: "My Orders", icon: Package },
-    { id: "active-services", label: "Active Services", icon: Zap },
-    { id: "expired", label: "Expired Services", icon: Clock },
-    { id: "downloads", label: "Downloads", icon: Download },
-    { id: "licenses", label: "License Keys", icon: KeyRound },
-  ]},
-  { title: "Support", items: [
-    { id: "open-ticket", label: "Open Ticket", icon: LifeBuoy },
-    { id: "my-tickets", label: "My Tickets", icon: MessageSquare },
-  ]},
+const NAV: NavItem[] = [
+  { id: "overview", label: "ড্যাশবোর্ড", icon: LayoutDashboard, tint: "text-indigo-500", tintBg: "bg-indigo-500/10" },
+  { id: "profile", label: "প্রোফাইল", icon: UserIcon, tint: "text-blue-500", tintBg: "bg-blue-500/10" },
+  { id: "orders", label: "আমার অর্ডার", icon: Package, tint: "text-emerald-500", tintBg: "bg-emerald-500/10" },
+  { id: "wallet", label: "ওয়ালেট", icon: Wallet, tint: "text-purple-500", tintBg: "bg-purple-500/10" },
+  { id: "address", label: "ঠিকানা", icon: MapPinned, tint: "text-amber-500", tintBg: "bg-amber-500/10" },
+  { id: "security", label: "সিকিউরিটি", icon: Shield, tint: "text-rose-500", tintBg: "bg-rose-500/10" },
+  { id: "language", label: "ভাষা", icon: Globe, tint: "text-orange-500", tintBg: "bg-orange-500/10" },
+  { id: "install-app", label: "অ্যাপ ইনস্টল", icon: Smartphone, tint: "text-teal-500", tintBg: "bg-teal-500/10" },
 ];
 
 function DashboardPage() {
