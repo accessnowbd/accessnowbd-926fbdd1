@@ -484,7 +484,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           </div>
         </header>
 
-        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800 bg-gradient-to-b from-violet-50/60 via-indigo-50/30 to-white">
+        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800">
           <div className="mx-auto max-w-[1400px] space-y-4 md:space-y-6">
             {currentPage && <AdminPageHero group={currentPage.group} item={currentPage.item} t={t} />}
             <Outlet />
