@@ -1810,16 +1810,15 @@ html.theme-white .flex button[class*="rounded"]:has(svg):not([class*="bg-gradien
   }
 }
 
-/* Product grids must never exceed five cards per row on desktop, even when
-   the browser is zoomed out and the CSS viewport becomes ultra-wide. */
-@media (min-width: 1536px) {
-  .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-4 {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-  }
-}
-@media (min-width: 1920px) {
-  .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-4 {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+/* Product grids stay at a consistent 4 cards per row on desktop, even when
+   the browser is zoomed out and the CSS viewport becomes ultra-wide. This
+   matches the intended layout shown in the design reference and prevents
+   the grid from jumping to 5/6 columns at high zoom-out levels. */
+@media (min-width: 1280px) {
+  .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-4,
+  .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-4.xl\:grid-cols-5,
+  .grid.grid-cols-2.sm\:grid-cols-3.lg\:grid-cols-4.xl\:grid-cols-5 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   }
 }
 
