@@ -792,8 +792,8 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
  /* ============================================================ RENDER */
  return (
- <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm grid place-items-start md:place-items-center p-2 md:p-4 overflow-y-auto" onClick={onClose}>
- <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[95vh] flex flex-col shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+  <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-start md:items-center justify-center p-2 md:p-4" onClick={onClose}>
+  <div className="bg-white rounded-2xl w-full max-w-3xl h-[96vh] md:h-[90vh] flex flex-col shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
  {/* Header */}
  <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
  <h2 className="font-bold text-xl text-slate-900">{isNew ? "New Product" : "Edit Product"}</h2>
