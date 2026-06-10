@@ -209,11 +209,11 @@ function ProductPage() {
       <section className="relative mx-auto max-w-6xl px-4 md:px-8 py-8 md:py-12 grid md:grid-cols-12 gap-8 md:gap-12 items-start">
         {/* Media gallery */}
         <div className="md:col-span-6 space-y-4">
-          <div className="relative aspect-[4/3] md:aspect-[16/10] md:max-h-[420px] overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200">
+          <div className="relative aspect-square overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200">
             {heroImg ? (
-              <img src={heroImg} alt={product.name} className="absolute inset-0 h-full w-full object-contain p-6 md:p-8" loading="eager" />
+              <img src={heroImg} alt={product.name} className="absolute inset-0 w-full h-full object-cover" loading="eager" />
             ) : (
-              <ProductBanner product={product} ratio="16/9" spheres={6} priority className="rounded-3xl overflow-hidden" />
+              <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-3xl overflow-hidden" />
             )}
             {product.badge && (
               <span className={`absolute top-4 left-4 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm`}>
