@@ -33,7 +33,7 @@ export function OrderSummary({
   const grandTotal = Math.max(0, total - discount);
   return (
     <GlassCard className={`h-fit lg:sticky lg:top-6 ${className ?? ""}`}>
-      <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>
+      <h3 className="text-slate-900" style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 600 }}>
         Order summary
       </h3>
 
@@ -47,12 +47,12 @@ export function OrderSummary({
                 {it.emoji}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold truncate">{it.name}</div>
-                <div className="text-xs text-muted-foreground">
+                <div className="text-sm font-semibold text-slate-900 truncate">{it.name || it.slug}</div>
+                <div className="text-xs text-slate-500">
                   {it.planPeriod} × {it.qty}
                 </div>
               </div>
-              <div className="text-sm font-semibold">
+              <div className="text-sm font-semibold text-slate-900">
                 ৳{(it.price * it.qty).toLocaleString()}
               </div>
             </div>
@@ -61,30 +61,30 @@ export function OrderSummary({
       ) : (
         <div className="mt-4 space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Subtotal</span>
-            <span>৳{total.toLocaleString()}</span>
+            <span className="text-slate-500">Subtotal</span>
+            <span className="text-slate-900 font-semibold">৳{total.toLocaleString()}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Delivery</span>
-            <span className="text-aqua-deep font-semibold">FREE</span>
+            <span className="text-slate-500">Delivery</span>
+            <span className="text-emerald-600 font-semibold">FREE</span>
           </div>
         </div>
       )}
 
       {discount > 0 && (
         <div className="mt-2 flex justify-between text-sm">
-          <span className="text-aqua-deep font-medium">
+          <span className="text-emerald-600 font-medium">
             Coupon{couponCode ? ` (${couponCode})` : ""}
           </span>
-          <span className="text-aqua-deep font-semibold">−৳{discount.toLocaleString()}</span>
+          <span className="text-emerald-600 font-semibold">−৳{discount.toLocaleString()}</span>
         </div>
       )}
 
       {extra}
 
-      <div className="border-t border-[var(--glass-border-soft)] my-4" />
+      <div className="border-t border-slate-200 my-4" />
       <div className="flex justify-between items-baseline">
-        <span className="text-sm font-semibold">Total</span>
+        <span className="text-sm font-semibold text-slate-900">Total</span>
         <span
           className="text-2xl font-semibold text-aurora"
           style={{ fontFamily: "var(--font-heading)" }}
@@ -96,7 +96,7 @@ export function OrderSummary({
       {action}
 
       {footer && (
-        <p className="text-[11px] text-muted-foreground text-center mt-3">{footer}</p>
+        <p className="text-[11px] text-slate-500 text-center mt-3">{footer}</p>
       )}
     </GlassCard>
   );
