@@ -848,7 +848,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  value={form.name}
  onChange={(e) => set("name", e.target.value)}
  placeholder="e.g. Windows 11 Pro License Key"
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100"
+ className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
  />
  </div>
 
@@ -859,7 +859,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  value={form.tagline}
  onChange={(e) => set("tagline", e.target.value)}
  placeholder="যেমন: Best quality guaranteed, Instant delivery..."
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400"
+ className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
  />
  <p className="text-[11px] text-slate-500 mt-1">প্রোডাক্ট টাইটেলের নিচে এই ছোট টেক্সটটি দেখাবে</p>
  </div>
@@ -950,7 +950,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  onChange={(e) => set("description", e.target.value)}
  rows={5}
  placeholder="Detailed product description..."
- className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100"
+ className="w-full px-3.5 py-2.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
  />
  </div>
 
@@ -988,7 +988,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  value={meta.subcategory ?? ""}
  onChange={(e) => setMeta("subcategory", e.target.value)}
  placeholder="None"
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400"
+ className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
  />
  </div>
  </div>
@@ -1059,7 +1059,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  value={tagsText}
  onChange={(e) => setTagsText(e.target.value)}
  placeholder="windows, license, digital..."
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400"
+ className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
  />
  </div>
 
@@ -1109,11 +1109,11 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <div className="grid grid-cols-2 gap-3">
  <div>
  <div className="text-xs font-semibold text-slate-600 mb-1.5">বিক্রয় মূল্য (৳) *</div>
- <input type="number" value={p.price || ""} onChange={(e) => setPlan(i, { price: Number(e.target.value) || 0 })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input type="number" value={p.price || ""} onChange={(e) => setPlan(i, { price: Number(e.target.value) || 0 })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
  <div>
  <div className="text-xs font-semibold text-slate-600 mb-1.5">আসল মূল্য (৳) <span className="text-slate-500">কাটা দামে</span></div>
- <input type="number" value={p.original_price ?? ""} onChange={(e) => setPlan(i, { original_price: e.target.value ? Number(e.target.value) : undefined })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input type="number" value={p.original_price ?? ""} onChange={(e) => setPlan(i, { original_price: e.target.value ? Number(e.target.value) : undefined })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
  </div>
  </div>
@@ -1147,7 +1147,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <div>
  <Label>SKU</Label>
  <div className="flex gap-2">
- <input value={meta.sku ?? ""} onChange={(e) => setMeta("sku", e.target.value)} placeholder="AUTO-SKU" className="flex-1 h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input value={meta.sku ?? ""} onChange={(e) => setMeta("sku", e.target.value)} placeholder="AUTO-SKU" className="flex-1 h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  <button onClick={() => setMeta("sku", `SKU-${Date.now().toString(36).toUpperCase()}`)} className="w-11 h-11 grid place-items-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50"><RefreshCw className="w-4 h-4" /></button>
  </div>
  </div>
@@ -1157,7 +1157,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  value={meta.stock_qty == null ? "" : meta.stock_qty}
  onChange={(e) => setMeta("stock_qty", e.target.value === "" ? null : Number(e.target.value))}
  placeholder="∞"
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400"
+ className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
  />
  </div>
  </div>
@@ -1184,7 +1184,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <button onClick={() => fileRef.current?.click()} className="w-full h-11 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
  {ai === "image-up" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />} Upload Image
  </button>
- <input value={form.image_url} onChange={(e) => set("image_url", e.target.value)} placeholder="or paste image URL..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input value={form.image_url} onChange={(e) => set("image_url", e.target.value)} placeholder="or paste image URL..." className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
  </div>
  <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => { onPickFile(e.target.files?.[0]); e.target.value = ""; }} />
@@ -1254,7 +1254,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
  <div>
  <Label>Video Preview URL</Label>
- <input value={meta.video_url ?? ""} onChange={(e) => setMeta("video_url", e.target.value)} placeholder="https://youtube.com/watch?v=..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input value={meta.video_url ?? ""} onChange={(e) => setMeta("video_url", e.target.value)} placeholder="https://youtube.com/watch?v=..." className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
  </>
  )}
@@ -1272,23 +1272,23 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  </div>
  <div>
  <Label>Delivery Time</Label>
- <input value={form.delivery_time} onChange={(e) => set("delivery_time", e.target.value)} placeholder="Instant / 24 hours..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input value={form.delivery_time} onChange={(e) => set("delivery_time", e.target.value)} placeholder="Instant / 24 hours..." className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
  </div>
 
  <div>
  <Label>Download Link</Label>
- <input value={meta.download_link ?? ""} onChange={(e) => setMeta("download_link", e.target.value)} placeholder="https://..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input value={meta.download_link ?? ""} onChange={(e) => setMeta("download_link", e.target.value)} placeholder="https://..." className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
 
  <div>
  <Label>Warranty / Guarantee Note</Label>
- <input value={form.warranty} onChange={(e) => set("warranty", e.target.value)} placeholder="e.g. 1 Year Genuine Warranty" className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input value={form.warranty} onChange={(e) => set("warranty", e.target.value)} placeholder="e.g. 1 Year Genuine Warranty" className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
 
  <div>
  <Label>Refund Policy Note</Label>
- <input value={meta.refund_policy ?? ""} onChange={(e) => setMeta("refund_policy", e.target.value)} placeholder="e.g. No refund after activation" className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input value={meta.refund_policy ?? ""} onChange={(e) => setMeta("refund_policy", e.target.value)} placeholder="e.g. No refund after activation" className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
 
  {/* What you get */}
@@ -1300,7 +1300,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <div className="space-y-2">
  {whatYouGet.map((item, i) => (
  <div key={i} className="flex items-center gap-2">
- <input value={item} onChange={(e) => setWhatYouGet((l) => l.map((x, idx) => (idx === i ? e.target.value : x)))} placeholder={`Item ${i + 1}`} className="flex-1 h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input value={item} onChange={(e) => setWhatYouGet((l) => l.map((x, idx) => (idx === i ? e.target.value : x)))} placeholder={`Item ${i + 1}`} className="flex-1 h-10 px-3 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  <button onClick={() => setWhatYouGet((l) => l.filter((_, idx) => idx !== i))} className="w-8 h-8 grid place-items-center rounded-lg text-slate-500 hover:text-slate-500 hover:bg-slate-50"><X className="w-4 h-4" /></button>
  </div>
  ))}
@@ -1321,7 +1321,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <button onClick={() => setFaq((l) => l.filter((_, idx) => idx !== i))} className="w-7 h-7 grid place-items-center rounded-lg text-slate-500 hover:text-slate-500 hover:bg-slate-50"><X className="w-4 h-4" /></button>
  </div>
  <input value={it.q} onChange={(e) => setFaq((l) => l.map((x, idx) => (idx === i ? { ...x, q: e.target.value } : x)))} placeholder="Question" className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400 mb-2" />
- <textarea value={it.a} onChange={(e) => setFaq((l) => l.map((x, idx) => (idx === i ? { ...x, a: e.target.value } : x)))} placeholder="Answer" rows={2} className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <textarea value={it.a} onChange={(e) => setFaq((l) => l.map((x, idx) => (idx === i ? { ...x, a: e.target.value } : x)))} placeholder="Answer" rows={2} className="w-full px-3 py-2 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
  ))}
  </div>
@@ -1371,13 +1371,13 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
  <div>
  <Label>SEO Title <span className="text-slate-500 font-normal">(max 60 chars)</span></Label>
- <input maxLength={60} value={meta.seo_title ?? ""} onChange={(e) => setMeta("seo_title", e.target.value)} placeholder="SEO title..." className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <input maxLength={60} value={meta.seo_title ?? ""} onChange={(e) => setMeta("seo_title", e.target.value)} placeholder="SEO title..." className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  <div className="text-[11px] text-slate-500 mt-1">{(meta.seo_title ?? "").length}/60</div>
  </div>
 
  <div>
  <Label>Meta Description <span className="text-slate-500 font-normal">(max 160 chars)</span></Label>
- <textarea maxLength={160} rows={3} value={meta.meta_description ?? ""} onChange={(e) => setMeta("meta_description", e.target.value)} placeholder="Meta description..." className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400" />
+ <textarea maxLength={160} rows={3} value={meta.meta_description ?? ""} onChange={(e) => setMeta("meta_description", e.target.value)} placeholder="Meta description..." className="w-full px-3.5 py-2.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  <div className="text-[11px] text-slate-500 mt-1">{(meta.meta_description ?? "").length}/160</div>
  </div>
 
