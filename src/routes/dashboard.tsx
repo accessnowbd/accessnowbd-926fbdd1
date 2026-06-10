@@ -306,10 +306,24 @@ function SectionRenderer({
     case "expired": return <ServiceList kind="expired" />;
     case "downloads": return <Downloads />;
     case "licenses": return <Licenses />;
+    case "wallet": return <ComingSoon title="ওয়ালেট" desc="ব্যালেন্স ও টপ-আপ শীঘ্রই আসছে।" />;
+    case "address": return <ComingSoon title="ঠিকানা" desc="ডেলিভারি ঠিকানা ম্যানেজ করুন।" />;
+    case "security": return <ComingSoon title="সিকিউরিটি" desc="পাসওয়ার্ড ও 2FA সেটিংস।" />;
+    case "language": return <ComingSoon title="ভাষা" desc="বাংলা / English নির্বাচন করুন।" />;
+    case "install-app": return <ComingSoon title="অ্যাপ ইনস্টল" desc="PWA হিসেবে যুক্ত করুন।" />;
     case "open-ticket": return <OpenTicket />;
     case "my-tickets": return <MyTickets />;
     default: return null;
   }
+}
+
+function ComingSoon({ title, desc }: { title: string; desc: string }) {
+  return (
+    <div className="space-y-6">
+      <PageHead title={title} desc={desc} />
+      <Card><Empty icon={<Sparkles className="w-6 h-6" />} msg="শীঘ্রই আসছে" /></Card>
+    </div>
+  );
 }
 
 /* ===================== SHARED PRIMITIVES ===================== */
