@@ -282,7 +282,7 @@ export function SiteHeader() {
             <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
               <SearchTrigger
                 onClick={() => setSearchOpen(true)}
-                className="site-search-trigger hidden md:block w-[180px] lg:w-[220px] xl:w-[260px]"
+                className="site-search-trigger hidden xl:block w-[180px] 2xl:w-[240px] min-w-0"
                 placeholder="প্রোডাক্ট সার্চ করুন..."
               />
 
@@ -290,7 +290,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="md:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
+                className="xl:hidden grid place-items-center w-10 h-10 rounded-full glass-soft border border-white/10 text-white shrink-0"
                 aria-label="Search"
               >
                 <Search className="w-4 h-4 text-aqua" />
