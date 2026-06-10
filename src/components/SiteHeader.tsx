@@ -167,11 +167,16 @@ export function SiteHeader() {
               : "bg-background/35 backdrop-blur-xl",
           ].join(" ")}
         >
-          <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-10 h-[64px] md:h-[68px] flex items-center justify-between gap-2 md:gap-5 flex-nowrap">
+          <div className="mx-auto max-w-[1440px] px-3 sm:px-4 md:px-10 h-[64px] md:h-[68px] grid grid-cols-[auto_1fr_auto] items-center gap-2 md:flex md:justify-between md:gap-5 md:flex-nowrap">
+            {/* Mobile-only: theme switcher on the left */}
+            <div className="md:hidden justify-self-start">
+              <ThemeSwitcher />
+            </div>
+
             {/* Brand */}
             <Link
               to="/"
-              className="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0"
+              className="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0 justify-self-center md:justify-self-auto"
               style={{ fontFamily: "var(--font-heading)" }}
             >
               {/* Brand logo — clean round premium badge */}
