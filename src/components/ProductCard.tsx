@@ -1,10 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { ShoppingCart, Star, MessageCircle } from "lucide-react";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { useCart } from "@/context/CartContext";
 import { useShopConfigValue } from "@/context/ShopConfigContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { ProductBanner } from "@/components/ProductBanner";
+import { useDominantColor } from "@/hooks/useDominantColor";
 import { waAskUrl } from "@/lib/whatsapp";
 import type { Product } from "@/data/products";
 
