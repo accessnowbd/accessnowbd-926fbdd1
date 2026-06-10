@@ -110,9 +110,13 @@ serve(async (req) => {
       const styleText = STYLE_PROMPTS[styleId] ?? STYLE_PROMPTS["premium-pastel"];
       const isPremium = styleId !== "glassmorphism";
       const subjectLine = `Subject / product being showcased: "${product.name}"${product.category ? ` (${product.category})` : ""}.`;
-      const userExtra = imagePrompt?.trim() ? ` Additional direction: ${imagePrompt.trim()}.` : "";
+      const featureList = (product.features ?? []).filter((f) => typeof f === "string" && f.trim()).slice(0, 3);
+      const featuresLine = featureList.length
+        ? ` Use these 3 features verbatim for the bottom feature cards (title + one short supporting line each): ${featureList.map((f, i) => `${i + 1}) ${f}`).join("  ")}.`
+        : " For the three feature cards invent 3 short premium-sounding features that genuinely fit this product (each: 2-3 word TITLE + 2-3 line description).";
+      const userExtra = imagePrompt?.trim() ? ` Additional creative direction from the operator: ${imagePrompt.trim()}.` : "";
       const prompt = isPremium
-        ? `${styleText} ${subjectLine}${userExtra} Render exactly the small text shown (brand pill, product pill, website www.accessnowbd.com, phone +880 1580-607614). Do NOT add any other text or watermark. Ultra high detail, 1:1 square.`
+        ? `${styleText}\n\n${subjectLine}${featuresLine}${userExtra}\n\nRender only the text described in the layout (brand wordmark, the 3 feature titles + descriptions, "Fast • Secure • Reliable", "accessnowbd.com", "AccessNow BD", "Premium Digital Services"). No other text, no watermark. Ultra high detail, 1:1 square.`
         : (imagePrompt?.trim() || `${styleText}. ${subjectLine} Branded for ${SHOP_BRAND}. 1:1 square, ultra high detail, no text, no watermark.`);
 
       // ---- Path A: Lovable AI Gateway (preferred) — Nano Banana 2 with fallback ----
