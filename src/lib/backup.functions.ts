@@ -67,13 +67,15 @@ export const createBackup = createServerFn({ method: "POST" })
     };
   });
 
-const RestoreSchema = z.object({
-  payload: z.object({
-    meta: z.object({ version: z.number() }).passthrough(),
-    tables: z.record(z.string(), z.array(z.record(z.string(), z.unknown()))),
-  }),
+const RestoreInputSchema = z.object({
+  payloadJson: z.string().min(2),
   mode: z.enum(["merge", "replace"]).default("merge"),
   selectedTables: z.array(z.string()).optional(),
+});
+
+const PayloadSchema = z.object({
+  meta: z.object({ version: z.number() }).passthrough(),
+  tables: z.record(z.string(), z.array(z.record(z.string(), z.unknown()))),
 });
 
 export type RestoreResult = {
@@ -84,13 +86,14 @@ export type RestoreResult = {
 
 export const restoreBackup = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => RestoreSchema.parse(d))
+  .inputValidator((d: unknown) => RestoreInputSchema.parse(d))
   .handler(async ({ data, context }): Promise<RestoreResult> => {
     await assertAdmin(context.userId);
+    const parsed = PayloadSchema.parse(JSON.parse(data.payloadJson));
     const results: Record<string, { restored: number; error?: string }> = {};
     const wanted = data.selectedTables && data.selectedTables.length
       ? data.selectedTables
-      : Object.keys(data.payload.tables);
+      : Object.keys(parsed.tables);
 
     const admin = supabaseAdmin as unknown as {
       from: (t: string) => {
