@@ -364,7 +364,7 @@ function ProductPage() {
           <div className="pt-6 space-y-3">
             <button
               onClick={buyNow}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-100 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+              className="product-buy-button w-full font-bold py-4 rounded-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-2"
             >
               <CreditCard className="w-5 h-5" />
               <span>Buy Now</span>
