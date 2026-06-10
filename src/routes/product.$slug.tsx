@@ -264,10 +264,20 @@ function ProductPage() {
         {/* Info card */}
         <div className="md:col-span-6 bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200">
           <header>
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight leading-tight">{product.name}</h1>
+            <h1
+              className="font-bold text-slate-900 tracking-tight leading-tight"
+              style={{ fontSize: "clamp(22px, 2.2vw, 40px)" }}
+            >
+              {product.name}
+            </h1>
 
             {product.tagline?.trim() && (
-              <p className="mt-2 text-sm md:text-base text-slate-600 leading-relaxed">{product.tagline}</p>
+              <p
+                className="mt-2 text-slate-600 leading-relaxed"
+                style={{ fontSize: "clamp(13px, 1.05vw, 18px)" }}
+              >
+                {product.tagline}
+              </p>
             )}
 
             {product.features && product.features.length > 0 && (
@@ -282,7 +292,7 @@ function ProductPage() {
             )}
 
             <div className="mt-4 flex items-center gap-3 flex-wrap">
-              <span className="text-2xl md:text-3xl font-bold text-slate-900">৳{plan ? parsePrice(plan.price).toLocaleString() : 0}.00 <span className="text-base font-semibold text-slate-500">BDT</span></span>
+              <span className="font-bold text-slate-900" style={{ fontSize: "clamp(22px, 2vw, 36px)" }}>৳{plan ? parsePrice(plan.price).toLocaleString() : 0}.00 <span className="text-base font-semibold text-slate-500">BDT</span></span>
               {hasDiscount && (
                 <span className="text-base md:text-lg text-slate-400 line-through font-medium">৳{parsePrice(plan!.original!).toLocaleString()}</span>
               )}
