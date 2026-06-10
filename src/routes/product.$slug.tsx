@@ -316,7 +316,7 @@ function ProductPage() {
                             active ? "border-4 border-indigo-600 bg-white" : "border border-slate-300",
                           ].join(" ")}
                         />
-                        <span className={`font-semibold ${active ? "text-slate-900" : "text-slate-700"}`}>{p.period}</span>
+                        <span className={`font-semibold ${active ? "text-slate-900" : "text-slate-700"}`}>{p.period?.trim() || "Standard Plan"}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         {hasOff && (
