@@ -97,15 +97,25 @@ export function CategoryPage({
 
   const items = useMemo(() => {
     const needle = q.trim().toLowerCase();
+    const tokens = needle.split(/\s+/).filter(Boolean);
     const list = products.filter((p) => {
       if (filter && !filter(p.category)) return false;
       if (cat && p.category !== cat) return false;
-      if (!needle) return true;
-      return (
-        p.name.toLowerCase().includes(needle) ||
-        p.tagline.toLowerCase().includes(needle) ||
-        p.category.toLowerCase().includes(needle)
-      );
+      if (tokens.length === 0) return true;
+      const hay = [
+        p.name,
+        p.tagline,
+        p.category,
+        p.badge ?? "",
+        (p as { short_description?: string }).short_description ?? "",
+        p.description ?? "",
+        (p.features ?? []).join(" "),
+        p.slug,
+      ]
+        .join(" ")
+        .toLowerCase();
+      // Every token must appear somewhere (AND match across fields)
+      return tokens.every((t) => hay.includes(t));
     });
     const sorted = [...list];
     switch (sort) {
@@ -159,7 +169,7 @@ export function CategoryPage({
         </div>
       </section>
 
-      <RecentlyViewedSection compact />
+      {!q.trim() && <RecentlyViewedSection compact />}
 
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6">
