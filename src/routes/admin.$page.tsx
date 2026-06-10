@@ -7,6 +7,7 @@ import { getFeatureConfig, validateField, slugify, type AdminField } from "@/lib
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAdminLang } from "@/context/AdminLangContext";
+import { ProductMediaGallery } from "@/components/admin/ProductMediaGallery";
 
 export const Route = createFileRoute("/admin/$page")({
  component: AdminFeaturePage,
@@ -53,7 +54,9 @@ function AdminFeaturePage() {
   <div className="space-y-5">
 
 
- {cfg ? (
+ {page === "media-gallery" ? (
+ <ProductMediaGallery />
+ ) : cfg ? (
  cfg.mode === "list" ? (
  <ListCrud kind={cfg.kind} fields={cfg.fields} />
  ) : (
