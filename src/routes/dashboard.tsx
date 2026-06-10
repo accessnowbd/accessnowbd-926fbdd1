@@ -397,76 +397,123 @@ function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
 }
 
 /* ===================== OVERVIEW ===================== */
+const STAT_TILES = [
+  { tint: "text-blue-500", tintBg: "bg-blue-500/10" },
+  { tint: "text-emerald-500", tintBg: "bg-emerald-500/10" },
+  { tint: "text-purple-500", tintBg: "bg-purple-500/10" },
+  { tint: "text-orange-500", tintBg: "bg-orange-500/10" },
+];
+
+const HUB_TILES: Array<{
+  id: SectionId | "shop";
+  label: string;
+  desc: string;
+  icon: React.ComponentType<{ className?: string }>;
+  tint: string;
+  tintBg: string;
+  surface: string;
+  to?: string;
+}> = [
+  { id: "orders", label: "আমার অর্ডার", desc: "অর্ডার ট্র্যাক ও ইতিহাস", icon: Package, tint: "text-blue-500", tintBg: "bg-blue-500/10", surface: "bg-blue-500/5 border-blue-500/15" },
+  { id: "overview", label: "উইশলিস্ট", desc: "সংরক্ষিত পণ্য", icon: Heart, tint: "text-rose-500", tintBg: "bg-rose-500/10", surface: "bg-rose-500/5 border-rose-500/15" },
+  { id: "downloads", label: "ডাউনলোডস", desc: "ডিজিটাল ফাইল", icon: Download, tint: "text-emerald-500", tintBg: "bg-emerald-500/10", surface: "bg-emerald-500/5 border-emerald-500/15" },
+  { id: "wallet", label: "ওয়ালেট", desc: "ব্যালেন্স ও টপ-আপ", icon: Wallet, tint: "text-purple-500", tintBg: "bg-purple-500/10", surface: "bg-purple-500/5 border-purple-500/15" },
+  { id: "overview", label: "অ্যাফিলিয়েট", desc: "রেফার ও আয় করুন", icon: Users, tint: "text-amber-500", tintBg: "bg-amber-500/10", surface: "bg-amber-500/5 border-amber-500/15" },
+  { id: "open-ticket", label: "সাপোর্ট", desc: "টিকিট ও চ্যাট", icon: LifeBuoy, tint: "text-cyan-500", tintBg: "bg-cyan-500/10", surface: "bg-cyan-500/5 border-cyan-500/15" },
+  { id: "overview", label: "রিফান্ড আবেদন", desc: "রিফান্ড পলিসি অনুযায়ী", icon: Receipt, tint: "text-orange-500", tintBg: "bg-orange-500/10", surface: "bg-orange-500/5 border-orange-500/15" },
+  { id: "overview", label: "অর্ডার ট্র্যাক", desc: "পাবলিক ট্র্যাকিং", icon: MapPin, tint: "text-indigo-500", tintBg: "bg-indigo-500/10", surface: "bg-indigo-500/5 border-indigo-500/15" },
+  { id: "shop", label: "শপ", desc: "সকল প্রোডাক্ট", icon: ShoppingBag, tint: "text-fuchsia-500", tintBg: "bg-fuchsia-500/10", surface: "bg-fuchsia-500/5 border-fuchsia-500/15", to: "/products" },
+  { id: "install-app", label: "অ্যাপ ইনস্টল", desc: "PWA হিসেবে যুক্ত করুন", icon: Smartphone, tint: "text-teal-500", tintBg: "bg-teal-500/10", surface: "bg-teal-500/5 border-teal-500/15" },
+];
+
 function Overview({ stats, orders, greetingName, onNavigate }: { stats: { total: number; pending: number; delivered: number; spent: number }; orders: Order[]; greetingName: string; onNavigate: (s: SectionId) => void }) {
-  const recent = orders.slice(0, 5);
+  void orders;
+  const statItems = [
+    { icon: Package, label: "অর্ডার", value: String(stats.total) },
+    { icon: Receipt, label: "মোট খরচ", value: `৳${stats.spent.toLocaleString()}` },
+    { icon: Wallet, label: "ওয়ালেট", value: "৳০" },
+    { icon: Globe, label: "ভাষা", value: "বাংলা" },
+  ];
+
   return (
     <div className="space-y-6">
-      <section className="relative overflow-hidden rounded-3xl glass-strong p-6 md:p-10 border border-[var(--glass-border)]">
-        <div className="absolute inset-0 opacity-50 pointer-events-none" style={{ background: "var(--gradient-aurora)" }} />
+      {/* Hero greeting */}
+      <section className="relative overflow-hidden rounded-3xl p-6 md:p-10 bg-slate-900 dark:bg-slate-900 text-white shadow-xl">
+        <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full blur-3xl opacity-30" style={{ background: "var(--gradient-aurora)" }} />
         <div className="relative flex flex-wrap items-start justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1 rounded-full glass text-primary-foreground/90 border border-white/15">
-              <Sparkles className="w-3.5 h-3.5" /> Welcome back
-            </div>
-            <h1 className="mt-3 text-primary-foreground" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 600, lineHeight: 1.1 }}>
-              Welcome Back, {greetingName} 👋
+            <p className="text-slate-400 text-sm font-medium">স্বাগতম ফিরে এসেছেন</p>
+            <h1 className="mt-1 flex items-center gap-3 text-4xl md:text-5xl font-bold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
+              {greetingName} <span className="text-3xl">👋</span>
             </h1>
-            <p className="mt-2 text-sm md:text-base text-primary-foreground/80 max-w-xl">
-              Manage your account, services and orders from one place.
-            </p>
+            <p className="mt-2 text-sm text-slate-400 max-w-md">আপনার অর্ডার, ওয়ালেট এবং পছন্দ এক জায়গায় কন্ট্রোল করুন।</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Link to="/products" className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-white text-primary text-sm font-semibold hover:scale-[1.02] transition shadow-[var(--shadow-glow)]">
-              <ShoppingBag className="w-4 h-4" /> Buy Service
-            </Link>
-            <button onClick={() => onNavigate("open-ticket")} className="inline-flex items-center gap-2 h-11 px-5 rounded-full glass border border-white/15 text-primary-foreground text-sm font-semibold hover:bg-white/10 transition">
-              <LifeBuoy className="w-4 h-4" /> Open Ticket
-            </button>
+          <div className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full inline-flex items-center gap-2 text-xs font-semibold">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Premium Member
+          </div>
+        </div>
+
+        <div className="relative mt-8 bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-xs font-bold uppercase tracking-widest text-slate-300">VIP প্রগ্রেস</span>
+            <span className="text-xs text-slate-300 inline-flex items-center gap-1"><Trophy className="w-3.5 h-3.5 text-amber-400" /> সর্বোচ্চ স্তর</span>
+          </div>
+          <div className="h-2.5 w-full bg-white/10 rounded-full overflow-hidden">
+            <div className="h-full rounded-full w-full" style={{ background: "linear-gradient(90deg, #6366f1, #a855f7, #fbbf24)" }} />
           </div>
         </div>
       </section>
 
+      {/* Stat cards */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-        <Stat icon={<Package className="w-5 h-5" />} label="Total Orders" value={String(stats.total)} accent="from-primary/30 to-primary/5" />
-        <Stat icon={<Zap className="w-5 h-5" />} label="Active Services" value={String(stats.pending + stats.delivered)} accent="from-cyan-400/30 to-cyan-400/5" />
-        <Stat icon={<Receipt className="w-5 h-5" />} label="Total Spent" value={`৳${stats.spent.toLocaleString()}`} accent="from-violet-400/30 to-violet-400/5" />
-        <Stat icon={<Download className="w-5 h-5" />} label="Downloads" value="—" accent="from-pink-400/30 to-pink-400/5" />
+        {statItems.map((s, i) => {
+          const t = STAT_TILES[i];
+          const Icon = s.icon;
+          return (
+            <div key={s.label} className="bg-card border border-border rounded-3xl p-5 shadow-sm">
+              <div className={`w-11 h-11 rounded-2xl grid place-items-center mb-3 ${t.tintBg}`}>
+                <Icon className={`w-5 h-5 ${t.tint}`} />
+              </div>
+              <div className="text-xs text-muted-foreground font-medium">{s.label}</div>
+              <div className="text-2xl font-bold text-foreground mt-1" style={{ fontFamily: "var(--font-heading)" }}>{s.value}</div>
+            </div>
+          );
+        })}
       </section>
 
-      <Card>
-        <header className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold" style={{ fontFamily: "var(--font-heading)" }}>Recent Orders</h2>
-          <button onClick={() => onNavigate("orders")} className="text-xs text-primary font-semibold inline-flex items-center gap-1 hover:underline">
-            View all <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </header>
-        {recent.length === 0 ? (
-          <Empty icon={<Package className="w-6 h-6" />} msg="এখনো কোন order নেই।" />
-        ) : (
-          <ul className="space-y-3">
-            {recent.map((o) => (
-              <li key={o.id}>
-                <Link to="/orders/$id" params={{ id: o.id }} className="flex items-center gap-3 p-3 rounded-2xl glass border border-[var(--glass-border)] hover:border-primary/40 hover:-translate-y-0.5 transition">
-                  <div className="w-11 h-11 rounded-xl grid place-items-center text-lg" style={{ background: "var(--gradient-violet)" }}>
-                    {o.items?.[0]?.emoji ?? "📦"}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold truncate">
-                      {o.items?.[0]?.name ?? o.items?.[0]?.slug ?? "Order"}
-                      {o.items.length > 1 && <span className="text-muted-foreground font-normal"> +{o.items.length - 1} more</span>}
-                    </div>
-                    <div className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleDateString()} · #{o.id.slice(0, 8).toUpperCase()}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-bold text-primary" style={{ fontFamily: "var(--font-heading)" }}>৳{Number(o.total).toLocaleString()}</div>
-                    <span className={`inline-block mt-1 text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border ${statusColors[o.status] || "bg-secondary/30 text-foreground border-border"}`}>{o.status}</span>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
+      {/* Control Hub */}
+      <section className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-sm">
+        <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">কন্ট্রোল হাব</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mt-1" style={{ fontFamily: "var(--font-heading)" }}>সবকিছু এক জায়গায়</h2>
+          </div>
+          <Link to="/products" className="text-sm font-semibold text-foreground hover:text-primary inline-flex items-center gap-1 transition">
+            শপিং করুন <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+          {HUB_TILES.map((tile, idx) => {
+            const Icon = tile.icon;
+            const inner = (
+              <>
+                <div className="w-10 h-10 rounded-2xl bg-card border border-border shadow-sm grid place-items-center mb-3 group-hover:scale-110 transition-transform">
+                  <Icon className={`w-5 h-5 ${tile.tint}`} />
+                </div>
+                <div className="text-sm font-bold text-foreground">{tile.label}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{tile.desc}</div>
+              </>
+            );
+            const cls = `group cursor-pointer p-5 rounded-3xl border ${tile.surface} hover:shadow-lg transition-all text-left`;
+            return tile.to ? (
+              <Link key={idx} to={tile.to} className={cls}>{inner}</Link>
+            ) : (
+              <button key={idx} onClick={() => onNavigate(tile.id as SectionId)} className={cls}>{inner}</button>
+            );
+          })}
+        </div>
+      </section>
     </div>
   );
 }
