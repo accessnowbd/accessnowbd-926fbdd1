@@ -328,7 +328,7 @@ function AdminProducts() {
  onChange={(e) => { const f = e.target.files?.[0]; if (f) importBackup(f); e.target.value = ""; }}
  />
  <button
- onClick={() => { setEditing({ ...empty, sort_order: (products.at(-1)?.sort_order ?? 0) + 10 }); setIsNew(true); }}
+ onClick={() => { setEditing({ ...empty, name: " Price in Bangladesh", sort_order: (products.at(-1)?.sort_order ?? 0) + 10 }); setIsNew(true); }}
  className="h-10 px-4 inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition"
  >
  <Plus className="w-4 h-4" /> নতুন পণ্য
