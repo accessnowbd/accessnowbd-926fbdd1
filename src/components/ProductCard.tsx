@@ -1,10 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { ShoppingCart, Star, MessageCircle } from "lucide-react";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { useCart } from "@/context/CartContext";
 import { useShopConfigValue } from "@/context/ShopConfigContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { ProductBanner } from "@/components/ProductBanner";
+import { useDominantColor } from "@/hooks/useDominantColor";
 import { waAskUrl } from "@/lib/whatsapp";
 import type { Product } from "@/data/products";
 
@@ -48,14 +49,33 @@ function ProductCardImpl({ product }: { product: Product }) {
     });
   };
 
+  const dominant = useDominantColor(product.imageUrl);
+  const accentStyle = useMemo(() => {
+    if (!dominant) return undefined;
+    return {
+      // image-area tint + glow border match the product image
+      ["--card-accent" as any]: dominant,
+      borderColor: `color-mix(in srgb, ${dominant} 55%, transparent)`,
+      boxShadow: `0 10px 30px -12px color-mix(in srgb, ${dominant} 45%, transparent), 0 0 0 1px color-mix(in srgb, ${dominant} 25%, transparent) inset`,
+    } as React.CSSProperties;
+  }, [dominant]);
+
+  const bannerStyle = useMemo(() => {
+    if (!dominant) return undefined;
+    return {
+      background: `radial-gradient(120% 90% at 50% 35%, color-mix(in srgb, ${dominant} 35%, transparent) 0%, color-mix(in srgb, ${dominant} 12%, transparent) 55%, transparent 100%)`,
+    } as React.CSSProperties;
+  }, [dominant]);
+
   return (
     <Link
       to="/product/$slug"
       params={{ slug: product.slug }}
       preload="intent"
+      style={accentStyle}
       className="group product-card-v2 overflow-hidden flex flex-col h-full rounded-lg border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-shadow hover:shadow-[var(--shadow-glass)]"
     >
-      <div className="relative">
+      <div className="relative" style={bannerStyle}>
         <ProductBanner product={product} ratio="1/1" />
         {/* Discount + badge row, bottom-left of image — like reference */}
         <div className="absolute left-3 bottom-3 flex items-center gap-1.5 z-20">
