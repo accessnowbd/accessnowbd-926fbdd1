@@ -67,23 +67,23 @@ function CartPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{it.name}</h3>
-                          <p className="text-xs text-muted-foreground mt-0.5">{it.planPeriod} · ৳{it.price.toLocaleString()}</p>
+                        <div className="min-w-0">
+                          <h3 className="text-slate-900 truncate" style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{it.name || it.slug}</h3>
+                          <p className="text-xs text-slate-500 mt-0.5">{it.planPeriod} · ৳{it.price.toLocaleString()}</p>
                         </div>
                         <button
                           onClick={() => remove(it.slug, it.planPeriod)}
-                          className="text-muted-foreground hover:text-destructive p-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="text-slate-400 hover:text-rose-600 p-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                           aria-label={`Remove ${it.name}`}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                       <div className="mt-3 flex items-center justify-between">
-                        <div className="inline-flex items-center glass-soft rounded-full" role="group" aria-label="Quantity">
-                          <button onClick={() => setQty(it.slug, it.planPeriod, it.qty - 1)} className="w-9 h-9 grid place-items-center hover:text-primary rounded-l-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Decrease quantity"><Minus className="w-3.5 h-3.5" /></button>
-                          <span className="w-8 text-center text-sm font-semibold" aria-live="polite">{it.qty}</span>
-                          <button onClick={() => setQty(it.slug, it.planPeriod, it.qty + 1)} className="w-9 h-9 grid place-items-center hover:text-primary rounded-r-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Increase quantity"><Plus className="w-3.5 h-3.5" /></button>
+                        <div className="inline-flex items-center bg-slate-100 text-slate-700 rounded-full" role="group" aria-label="Quantity">
+                          <button onClick={() => setQty(it.slug, it.planPeriod, it.qty - 1)} className="w-9 h-9 grid place-items-center hover:text-indigo-600 rounded-l-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Decrease quantity"><Minus className="w-3.5 h-3.5" /></button>
+                          <span className="w-8 text-center text-sm font-semibold text-slate-900" aria-live="polite">{it.qty}</span>
+                          <button onClick={() => setQty(it.slug, it.planPeriod, it.qty + 1)} className="w-9 h-9 grid place-items-center hover:text-indigo-600 rounded-r-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Increase quantity"><Plus className="w-3.5 h-3.5" /></button>
                         </div>
                         <span className="text-base font-semibold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>৳{lineTotal.toLocaleString()}</span>
                       </div>
