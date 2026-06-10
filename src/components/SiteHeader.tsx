@@ -277,7 +277,7 @@ export function SiteHeader() {
             <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
               <SearchTrigger
                 onClick={() => setSearchOpen(true)}
-                className="site-search-trigger hidden md:block w-[260px] lg:w-[320px] xl:w-[360px]"
+                className="site-search-trigger hidden md:block w-[180px] lg:w-[220px] xl:w-[260px]"
                 placeholder="প্রোডাক্ট সার্চ করুন..."
               />
 
@@ -655,7 +655,7 @@ function MagneticNav() {
       ref={navRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="site-nav-pill hidden lg:flex relative items-center h-14 rounded-full border border-[#e4e7ff] font-semibold shrink min-w-0 max-w-full whitespace-nowrap overflow-hidden"
+      className="site-nav-pill hidden lg:flex relative items-center h-14 rounded-full border border-[#e4e7ff] font-semibold min-w-0 whitespace-nowrap"
       style={{
         gap: "clamp(2px, 0.3vw, 6px)",
         paddingLeft: "clamp(10px, 0.9vw, 18px)",
