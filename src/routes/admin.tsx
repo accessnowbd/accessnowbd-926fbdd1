@@ -310,12 +310,18 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="admin-glass lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f4f1ff] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
+    <div className="admin-glass lg:h-screen lg:overflow-hidden min-h-screen flex relative font-['Manrope',ui-sans-serif,system-ui] text-slate-800 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-indigo-100">
+      {/* Ambient glow orbs (whole admin) */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden -z-0">
+        <div className="absolute -top-32 -left-20 w-[420px] h-[420px] rounded-full bg-violet-400/30 blur-[120px]" />
+        <div className="absolute top-1/3 -right-32 w-[480px] h-[480px] rounded-full bg-fuchsia-300/25 blur-[140px]" />
+        <div className="absolute bottom-0 left-1/3 w-[380px] h-[380px] rounded-full bg-indigo-300/25 blur-[130px]" />
+      </div>
 
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm"
+          className="lg:hidden fixed inset-0 z-40 bg-violet-950/40 backdrop-blur-md"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -323,8 +329,8 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* SIDEBAR */}
       <aside
         className={[
-          "shrink-0 transition-all duration-200 flex flex-col h-screen",
-          "bg-white border-r border-slate-200/70",
+          "shrink-0 transition-all duration-200 flex flex-col h-screen relative z-10",
+          "bg-white/55 backdrop-blur-2xl border-r border-white/60 ring-1 ring-violet-200/40 shadow-[0_20px_60px_-30px_rgba(109,40,217,0.35)]",
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
           collapsed ? "lg:w-[76px]" : "lg:w-[268px]",
           "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-2xl lg:shadow-none",
@@ -333,11 +339,12 @@ function AdminShell({ user, signOut, navigate }: any) {
       >
         {/* Brand */}
         <div className={[
-          "border-b border-slate-200/70",
+          "border-b border-white/50 bg-white/30 backdrop-blur-xl",
           collapsed
             ? "flex flex-col items-center justify-center gap-1.5 py-3 px-2"
             : "h-[68px] flex items-center justify-between px-4",
         ].join(" ")}>
+
           <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "justify-center" : ""}`}>
             <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-xl overflow-hidden ring-1 ring-slate-200 shadow-[0_4px_14px_-6px_rgba(59,130,246,0.4)] bg-white">
               <img
