@@ -305,6 +305,22 @@ ${JSON.stringify(product, null, 2)}`,
           },
         },
       },
+      seo: {
+        type: "function",
+        function: {
+          name: "write_seo_meta",
+          parameters: {
+            type: "object",
+            properties: {
+              seo_title: { type: "string" },
+              seo_description: { type: "string" },
+              tags: { type: "array", items: { type: "string" } },
+            },
+            required: ["seo_title", "seo_description", "tags"],
+            additionalProperties: false,
+          },
+        },
+      },
     };
 
     const key = mode as Exclude<Mode, "image">;
