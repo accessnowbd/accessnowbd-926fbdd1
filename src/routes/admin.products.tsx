@@ -1425,8 +1425,8 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
  {tab === "seo" && (
  <>
- <button onClick={() => callAi("rich")} disabled={aiBusy} className="w-full inline-flex items-center justify-center gap-2 h-11 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-sm font-bold hover:bg-slate-50 disabled:opacity-60">
- <Sparkles className="w-4 h-4" /> ✨ AI দিয়ে SEO Title ও Meta Description অটো-জেনারেট করুন
+ <button onClick={() => callAi("seo")} disabled={aiBusy} className="w-full inline-flex items-center justify-center gap-2 h-11 rounded-xl text-white text-sm font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 shadow-lg shadow-violet-500/30 disabled:opacity-60">
+ {ai === "seo" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} ✨ AI দিয়ে SEO Title ও Meta Description অটো-জেনারেট করুন
  </button>
 
  <div>
