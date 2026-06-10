@@ -48,10 +48,10 @@ export function RecentlyViewedSection({ limit = 8, excludeSlug, compact = false 
             className="mt-3 text-2xl md:text-3xl font-extrabold text-foreground"
             style={{ fontFamily: "var(--font-display)", lineHeight: 1.08 }}
           >
-            সম্প্রতি দেখা প্রোডাক্ট
+            Recently Viewed Products
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            আপনি যেসব প্রোডাক্ট আগে দেখেছেন — দ্রুত আবার অ্যাক্সেস করুন।
+            Products you viewed before — quickly access them again.
           </p>
         </div>
         <button
