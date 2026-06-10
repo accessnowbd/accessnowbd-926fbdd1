@@ -41,17 +41,46 @@ type Body = {
   style?: CardStyle;
 };
 
+/**
+ * Shared layout used by every premium preset. Only the colour palette /
+ * background mood changes per preset — the composition is identical so the
+ * cards look like one consistent product series.
+ *
+ * Reference: AccessNow BD "Premium Digital Services" promo cards (Gemini AI
+ * Advance / Claude Pro / Canva Pro / QuillBot Premium style).
+ */
+const SHARED_LAYOUT = `
+Build a premium 1:1 square social-media promo card with this EXACT composition:
+
+OUTER FRAME: thin glowing rounded-rectangle border in the preset accent colour, with a subtle inner double-line. Faint dark background fills with very low-opacity blurred screenshots of the actual product's real UI (web/app interface) — barely visible, used only as ambience behind the foreground.
+
+HERO ROW (top 55% of card, two columns):
+  LEFT — one large 3D rounded-square "app icon" tile (~38% of card width), glossy glass material with a soft top highlight and the preset accent-colour rim glow. Inside the tile place the OFFICIAL recognizable brand logo of the product (correct colours, crisp, centered, large), and under the logo place the brand wordmark in its real typeface. A small "Google" / publisher caption may sit under it if the brand is published by a parent company.
+  RIGHT — the product display name in MASSIVE bold sans-serif (Inter / SF Pro style), 2 lines, white for the first word and a vivid preset-accent gradient for the second word (e.g. "Claude" white + "Pro" orange-gradient, "Gemini AI" white + "Advance" violet-gradient). End the wordmark with a small 4-point sparkle glyph in the accent colour.
+
+FEATURE ROW (bottom 35%): three equal rounded-square dark glass cards side by side. Each card has the preset accent-colour rim glow, a circular icon badge at the top (line icon in accent colour — pick icons that fit the feature), a bold short feature TITLE (2-3 words, white), and a 2-3 line feature description in soft light-grey. Use the 3 features supplied; if fewer than 3 are supplied invent plausible ones that match the product.
+
+FOOTER STRIP (very bottom): centered tagline "Fast • Secure • Reliable" with two small accent-colour dots as separators, sitting above a thin divider line. Bottom-left: a dark pill containing a globe icon + the text "accessnowbd.com". Bottom-right: the AccessNow BD logomark — a stylised letter "A" in the accent colour next to the words "AccessNow" (white) with a tiny red "BD" badge under the "A", and the small caption "Premium Digital Services" under "AccessNow".
+
+QUALITY: cinematic studio render, ultra crisp, no extra text anywhere, no watermark, no Lorem Ipsum, no UI chrome outside the described frame. Render ONLY the text that is explicitly listed (brand name, feature titles + descriptions, "Fast • Secure • Reliable", "accessnowbd.com", "AccessNow BD", "Premium Digital Services"). Spell every word correctly.
+`.trim();
+
 const STYLE_PROMPTS: Record<CardStyle, string> = {
+  // Pastel Glass → bright violet / magenta neon (Canva-Pro reference)
   "premium-pastel":
-    "A premium 1:1 square social-media product card on a CLEAN WHITE BASE BACKGROUND. The background is mostly soft white / off-white with subtle premium design accents: faint pastel light leaks in the corners (lilac, peach, sky), a few delicate translucent bubble circles, and a very soft radial glow — but the dominant color stays white. In the foreground place ONE large centered frosted-glass rounded-square panel (soft white inner glow, thin light border, glass-morphism). Inside that glass panel, place a single big premium 3D rounded-square app-style icon dead-center, taking ~45% of the panel — the icon MUST be the official recognizable brand/product logo that matches the product name, rendered crisp and polished. Top-left corner of the glass panel: small pill badge with the text 'ACCESSNOW BD' in white uppercase on a translucent dark pill. Top-right corner: a clean white rounded pill badge containing the product/brand name with its small logo mark. Bottom of the glass panel: one row, small dark text, a globe icon followed by 'www.accessnowbd.com', then a phone icon followed by '+880 1580-607614'. Studio quality, ultra crisp, no extra text, no watermark.",
+    `${SHARED_LAYOUT}\n\nPRESET — "Pastel Glass": near-black background, vivid violet→magenta neon glow on the outer frame, hero tile and feature cards. Brand-name accent word uses a cyan→violet→pink gradient. Bullet dots in the footer are bright magenta.`,
+  // Dark Luxe → warm orange / amber neon (Claude-Pro reference)
   "premium-dark":
-    "A premium 1:1 square social-media product card on a CLEAN WHITE BASE BACKGROUND with subtle premium design touches: faint geometric line accents, soft cool-tone light leaks in the corners (icy blue, lavender), a few delicate translucent bubbles, and a very soft radial glow — but the background stays predominantly white. In the foreground place ONE large centered frosted-glass rounded-square panel with a slightly darker tinted glass and a crisp thin border (glass-morphism, soft shadow). Inside that glass panel, place a single big premium 3D rounded-square app-style icon dead-center, taking ~45% of the panel — the icon MUST be the official recognizable brand/product logo that matches the product name, rendered crisp and polished. Top-left corner of the glass panel: small pill badge 'ACCESSNOW BD' in white uppercase on a translucent dark pill. Top-right corner: a clean white rounded pill badge containing the product/brand name with its small logo mark. Bottom of the glass panel: one row, small dark text, a globe icon followed by 'www.accessnowbd.com', then a phone icon followed by '+880 1580-607614'. Cinematic studio quality, ultra crisp, no extra text, no watermark.",
+    `${SHARED_LAYOUT}\n\nPRESET — "Dark Luxe": deep near-black background with very subtle warm vignette, glowing amber→orange neon on the outer frame, hero tile rim and feature card rims. Brand-name accent word uses a saturated orange gradient. Bullet dots in the footer are orange.`,
+  // legacy compatibility — same as pastel
   "glassmorphism":
-    "premium glassmorphism product mockup on a clean white background with soft pastel accents, frosted glass card, subtle inner glow, ultra-clean studio lighting",
+    `${SHARED_LAYOUT}\n\nPRESET — "Pastel Glass": near-black background, vivid violet→magenta neon glow on the outer frame, hero tile and feature cards. Brand-name accent word uses a cyan→violet→pink gradient. Bullet dots in the footer are bright magenta.`,
+  // Soft Aurora → emerald / lime neon (QuillBot reference)
   "soft-aurora":
-    "A premium 1:1 square product card on a CLEAN WHITE BASE BACKGROUND with airy aurora light leaks (mint, lilac, peach) gently flowing across the corners and a very soft radial glow. Foreground: ONE large centered frosted-glass rounded-square panel with a slight aurora-tinted edge glow. Inside, place a single big premium 3D rounded-square app-style icon dead-center (~45% of panel) — it MUST be the official recognizable brand/product logo for the product name, crisp and polished. Top-left of glass panel: small dark translucent pill 'ACCESSNOW BD' in white uppercase. Top-right: clean white pill with the product/brand name and small logo mark. Bottom row inside panel: small dark text — globe icon then 'www.accessnowbd.com', then phone icon then '+880 1580-607614'. Cinematic studio quality, ultra crisp, no extra text, no watermark.",
+    `${SHARED_LAYOUT}\n\nPRESET — "Soft Aurora": near-black background with a soft emerald glow, bright lime→emerald neon on the outer frame, hero tile and feature cards. Brand-name accent word uses a green gradient (lime to deep emerald). Bullet dots in the footer are bright green.`,
+  // Neon Edge → electric blue / violet neon (Gemini reference)
   "dark-neon":
-    "A premium 1:1 square product card on a DEEP MIDNIGHT background (near-black with subtle blue/violet gradient), with thin neon rim accents (electric cyan + magenta), faint grid lines and tiny glowing particles. Foreground: ONE large centered dark frosted-glass rounded-square panel with a vivid neon edge glow (cyan→magenta). Inside, place a single big premium 3D rounded-square app-style icon dead-center (~45% of panel) — it MUST be the official recognizable brand/product logo for the product name, crisp and polished. Top-left of glass panel: small translucent pill 'ACCESSNOW BD' in white uppercase. Top-right: dark translucent pill with the product/brand name and small logo mark, white text. Bottom row inside panel: small bright text — globe icon then 'www.accessnowbd.com', then phone icon then '+880 1580-607614'. Cinematic cyberpunk studio quality, ultra crisp, no extra text, no watermark.",
+    `${SHARED_LAYOUT}\n\nPRESET — "Neon Edge": near-black background with a cool blue ambience, electric blue→violet neon on the outer frame, hero tile and feature cards, plus a faint starfield. Brand-name accent word uses a blue→violet→pink gradient. Bullet dots in the footer are blue and violet.`,
 };
 
 const SHOP_BRAND = "AccessNow BD";
@@ -81,9 +110,13 @@ serve(async (req) => {
       const styleText = STYLE_PROMPTS[styleId] ?? STYLE_PROMPTS["premium-pastel"];
       const isPremium = styleId !== "glassmorphism";
       const subjectLine = `Subject / product being showcased: "${product.name}"${product.category ? ` (${product.category})` : ""}.`;
-      const userExtra = imagePrompt?.trim() ? ` Additional direction: ${imagePrompt.trim()}.` : "";
+      const featureList = (product.features ?? []).filter((f) => typeof f === "string" && f.trim()).slice(0, 3);
+      const featuresLine = featureList.length
+        ? ` Use these 3 features verbatim for the bottom feature cards (title + one short supporting line each): ${featureList.map((f, i) => `${i + 1}) ${f}`).join("  ")}.`
+        : " For the three feature cards invent 3 short premium-sounding features that genuinely fit this product (each: 2-3 word TITLE + 2-3 line description).";
+      const userExtra = imagePrompt?.trim() ? ` Additional creative direction from the operator: ${imagePrompt.trim()}.` : "";
       const prompt = isPremium
-        ? `${styleText} ${subjectLine}${userExtra} Render exactly the small text shown (brand pill, product pill, website www.accessnowbd.com, phone +880 1580-607614). Do NOT add any other text or watermark. Ultra high detail, 1:1 square.`
+        ? `${styleText}\n\n${subjectLine}${featuresLine}${userExtra}\n\nRender only the text described in the layout (brand wordmark, the 3 feature titles + descriptions, "Fast • Secure • Reliable", "accessnowbd.com", "AccessNow BD", "Premium Digital Services"). No other text, no watermark. Ultra high detail, 1:1 square.`
         : (imagePrompt?.trim() || `${styleText}. ${subjectLine} Branded for ${SHOP_BRAND}. 1:1 square, ultra high detail, no text, no watermark.`);
 
       // ---- Path A: Lovable AI Gateway (preferred) — Nano Banana 2 with fallback ----
