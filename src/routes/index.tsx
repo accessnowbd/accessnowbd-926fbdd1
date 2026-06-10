@@ -540,7 +540,7 @@ function FeaturedProducts({ items, isLoading }: { items: Product[]; isLoading?: 
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
       <SectionTitle eyebrow="Popular Picks" title="Today's Bestselling Digital Services" subtitle="The most ordered software and subscriptions, handpicked for you." action="View All" to="/products" />
-      <div className="mt-7 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+      <div className="mt-7 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-5">
         {items.length
           ? items.map((product) => <ProductCard key={product.slug} product={product} />)
           : Array.from({ length: 8 }).map((_, i) => <ProductSkeleton key={i} />)}
@@ -557,7 +557,7 @@ function ProductRail({ title, items, isLoading }: { title: string; items: Produc
   return (
     <section className="home-rail mx-auto max-w-[1440px] px-4 md:px-10 py-10">
       <SectionTitle eyebrow="Collection" title={title} compact />
-      <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+      <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-5">
         {showSkeleton
           ? Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)
           : items.map((product) => <ProductCard key={product.slug} product={product} />)}
