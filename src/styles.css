@@ -1781,11 +1781,22 @@ html.theme-white .flex button[class*="rounded"]:has(svg):not([class*="bg-gradien
   color: #ffffff !important;
 }
 
-/* Keep native Tailwind max-widths and grid breakpoints intact so browser
-   zoom-out genuinely scales the product cards smaller instead of stretching
-   the page wider and forcing oversized columns. */
+/* Keep desktop storefront sizing tied to the real viewport, while preserving
+   normal browser zoom behavior: desktop product rows use 5 columns only when
+   the zoomed CSS viewport is wide enough, and the page never stretches past
+   the intended desktop canvas. */
 
-html, body { width: 100%; }
+html, body {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (min-width: 1280px) {
+  .home-scroll-optimized .xl\:grid-cols-5,
+  main .xl\:grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+}
 
 html.theme-white .product-action-button,
 .product-action-button,
