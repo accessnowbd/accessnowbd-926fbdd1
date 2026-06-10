@@ -880,22 +880,36 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  {/* Slug + Brand */}
  <div className="grid sm:grid-cols-2 gap-3">
  <div>
- <div className="flex items-center justify-between">
- <Label>Slug (URL) *</Label>
- {isNew && (
- <button onClick={() => setAutoSlug((v) => !v)} className="text-[11px] text-slate-600 font-bold hover:underline">
- ⟳ নাম থেকে রিজেনারেট
- </button>
- )}
- </div>
-     <input
-     value={form.slug}
-     onChange={(e) => { setAutoSlug(false); set("slug", slugify(e.target.value)); }}
-     placeholder="product-name-here"
-     disabled={!isNew}
-     className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm font-mono text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-400 disabled:bg-slate-50 disabled:text-slate-500"
-     />
-     </div>
+  <div className="flex items-center justify-between gap-2">
+  <Label>Slug (URL) *</Label>
+  <div className="flex items-center gap-2">
+   {slugUnlocked && (
+   <button type="button" onClick={() => setAutoSlug((v) => !v)} className="text-[11px] text-violet-700 font-bold hover:underline">
+   ⟳ নাম থেকে রিজেনারেট
+   </button>
+   )}
+   {!isNew && (
+   <button
+    type="button"
+    onClick={() => { setSlugUnlocked((v) => !v); if (slugUnlocked) setAutoSlug(false); }}
+    className={`text-[11px] font-bold px-2 py-0.5 rounded-full border transition ${slugUnlocked ? "bg-amber-100 text-amber-700 border-amber-300" : "bg-white/60 text-slate-600 border-slate-300 hover:border-violet-300 hover:text-violet-700"}`}
+    title={slugUnlocked ? "Lock slug" : "Unlock to edit (warning: changes URL)"}
+   >
+    {slugUnlocked ? "🔓 Unlocked" : "🔒 Edit"}
+   </button>
+   )}
+  </div>
+  </div>
+      <input
+      value={form.slug}
+      onChange={(e) => { setAutoSlug(false); set("slug", slugify(e.target.value)); }}
+      placeholder="product-name-here"
+      disabled={!slugUnlocked}
+      className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm font-mono text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200 disabled:bg-white/30 disabled:text-slate-500 disabled:cursor-not-allowed"
+      />
+      {!isNew && slugUnlocked && (
+      <p className="text-[11px] text-amber-700 mt-1">⚠️ Slug পরিবর্তন করলে পুরাতন URL আর কাজ করবে না (SEO প্রভাব)</p>
+      )}
      <div>
      <Label>Brand / Publisher</Label>
      <input
