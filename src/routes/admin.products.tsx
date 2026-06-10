@@ -910,7 +910,8 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
       {!isNew && slugUnlocked && (
       <p className="text-[11px] text-amber-700 mt-1">⚠️ Slug পরিবর্তন করলে পুরাতন URL আর কাজ করবে না (SEO প্রভাব)</p>
       )}
-     <div>
+      </div>
+      <div>
      <Label>Brand / Publisher</Label>
      <input
      value={meta.brand ?? ""}
