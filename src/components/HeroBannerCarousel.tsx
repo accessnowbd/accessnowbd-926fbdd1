@@ -389,7 +389,7 @@ export function HeroBannerCarousel() {
                 className="font-extrabold tracking-tight text-white"
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: "clamp(28px, 4.4vw, 56px)",
+                  fontSize: "clamp(28px, 5.2vw, 96px)",
                   lineHeight: 1.04,
                   letterSpacing: "-0.02em",
                   textShadow: `0 1px 2px ${hexAlpha("#000", 0.18)}, 0 0 40px ${hexAlpha(glow, 0.18)}`,
@@ -399,7 +399,10 @@ export function HeroBannerCarousel() {
               </h1>
 
               {current.data.subtitle && (
-                <p className="max-w-xl text-sm md:text-base text-white/85 leading-relaxed">
+                <p
+                  className="max-w-xl text-white/85 leading-relaxed"
+                  style={{ fontSize: "clamp(14px, 1.4vw, 22px)" }}
+                >
                   {current.data.subtitle}
                 </p>
               )}
