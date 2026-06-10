@@ -27,6 +27,19 @@ const parsePrice = (p: unknown): number => {
   }
 };
 
+function toEmbedUrl(raw?: string): string | null {
+  const url = (raw ?? "").trim();
+  if (!url) return null;
+  try {
+    const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/);
+    if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+    const vm = url.match(/vimeo\.com\/(\d+)/);
+    if (vm) return `https://player.vimeo.com/video/${vm[1]}`;
+    if (/\.(mp4|webm|ogg)(\?|$)/i.test(url)) return url;
+    return url;
+  } catch { return null; }
+}
+
 export const Route = createFileRoute("/product/$slug")({
   loader: async ({ params, context }) => {
     const product = await context.queryClient.ensureQueryData({
@@ -158,6 +171,12 @@ function ProductPage() {
   const plan = product.plans[activeIdx];
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 8);
 
+  const galleryImages = (product.meta?.gallery ?? []).filter(Boolean);
+  const allImages = [product.imageUrl, ...galleryImages].filter((u): u is string => !!u);
+  const [activeImg, setActiveImg] = useState<string | null>(null);
+  const heroImg = activeImg ?? allImages[0] ?? null;
+  const videoEmbed = toEmbedUrl(product.meta?.video_url);
+
   const addToCart = () => {
     if (!plan) return;
     for (let i = 0; i < qty; i++) {
@@ -193,14 +212,60 @@ function ProductPage() {
 
       {/* Hero */}
       <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-4 md:py-6 grid md:grid-cols-2 gap-5 md:gap-12 md:items-start">
-        <GlassCard tint="teal" blur="lg" glow="md" padding="sm" rounded="2xl" className="relative md:self-start">
-          <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-xl overflow-hidden" />
-          {product.badge && (
-            <span className={`absolute top-6 left-6 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>
-              {product.badge}
-            </span>
+        <div className="space-y-3 md:self-start">
+          <GlassCard tint="teal" blur="lg" glow="md" padding="sm" rounded="2xl" className="relative">
+            {heroImg ? (
+              <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-100">
+                <img src={heroImg} alt={product.name} className="absolute inset-0 w-full h-full object-cover" loading="eager" />
+              </div>
+            ) : (
+              <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-xl overflow-hidden" />
+            )}
+            {product.badge && (
+              <span className={`absolute top-6 left-6 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>
+                {product.badge}
+              </span>
+            )}
+          </GlassCard>
+
+          {allImages.length > 1 && (
+            <div className="grid grid-cols-5 gap-2">
+              {allImages.slice(0, 10).map((u, i) => {
+                const active = (activeImg ?? allImages[0]) === u;
+                return (
+                  <button
+                    key={`${u}-${i}`}
+                    type="button"
+                    onClick={() => setActiveImg(u)}
+                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition ${active ? "border-teal-500 ring-2 ring-teal-300/60" : "border-white/60 hover:border-teal-300"}`}
+                    aria-label={`Image ${i + 1}`}
+                  >
+                    <img src={u} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                  </button>
+                );
+              })}
+            </div>
           )}
-        </GlassCard>
+
+          {videoEmbed && (
+            <GlassCard tint="teal" blur="lg" glow="sm" padding="sm" rounded="2xl">
+              <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black">
+                {/\.(mp4|webm|ogg)(\?|$)/i.test(videoEmbed) ? (
+                  <video src={videoEmbed} controls playsInline className="absolute inset-0 w-full h-full object-cover" />
+                ) : (
+                  <iframe
+                    src={videoEmbed}
+                    title={`${product.name} preview`}
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                )}
+              </div>
+            </GlassCard>
+          )}
+        </div>
 
         <GlassCard tint="teal" blur="lg" glow="md" padding="lg" rounded="2xl">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground">{product.name}</h1>
