@@ -190,54 +190,48 @@ function ProductPage() {
   const faqs = buildFaqs(product);
 
   return (
-    <div key={product.slug} className="product-page-shell relative min-h-screen text-foreground animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both] overflow-hidden">
+    <div key={product.slug} className="product-page-shell relative min-h-screen bg-slate-50 text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both]">
       <style>{`@keyframes product-in {0%{opacity:0;transform:translateY(14px);filter:blur(4px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}`}</style>
 
-      {/* Ambient glow orbs — tamer on mobile for readability */}
-      <div className="pointer-events-none absolute -top-32 -left-20 h-[260px] w-[260px] md:h-[420px] md:w-[420px] rounded-full bg-teal-300/20 md:bg-teal-300/30 blur-[90px] md:blur-[120px]" />
-      <div className="pointer-events-none absolute top-40 -right-32 h-[300px] w-[300px] md:h-[480px] md:w-[480px] rounded-full bg-emerald-300/15 md:bg-emerald-300/25 blur-[100px] md:blur-[140px]" />
-      <div className="pointer-events-none hidden md:block absolute bottom-0 left-1/3 h-[380px] w-[380px] rounded-full bg-cyan-200/25 blur-[130px]" />
-
-      <div className="relative mx-auto max-w-[1200px] px-4 md:px-8 pt-4 md:pt-6">
-        <nav className="text-sm text-muted-foreground flex items-center gap-2">
-          <Link to="/" className="hover:text-foreground inline-flex items-center gap-1">
+      <div className="relative mx-auto max-w-6xl px-4 md:px-8 pt-6 md:pt-10">
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm font-medium text-slate-500">
+          <Link to="/" className="hover:text-slate-900 inline-flex items-center gap-1 transition-colors">
             <ArrowLeft className="w-3.5 h-3.5" /> Back
           </Link>
-          <span>/</span>
-          <span>{product.category}</span>
-          <span>/</span>
-          <span className="text-foreground font-medium truncate">{product.name}</span>
+          <span className="text-slate-300">/</span>
+          <span className="hover:text-slate-900 transition-colors">{product.category}</span>
+          <span className="text-slate-300">/</span>
+          <span className="text-slate-900 truncate">{product.name}</span>
         </nav>
       </div>
 
       {/* Hero */}
-      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-4 md:py-6 grid md:grid-cols-2 gap-5 md:gap-12 md:items-start">
-        <div className="space-y-3 md:self-start">
-          <GlassCard tint="teal" blur="lg" glow="md" padding="sm" rounded="2xl" className="relative">
+      <section className="relative mx-auto max-w-6xl px-4 md:px-8 py-8 md:py-12 grid md:grid-cols-12 gap-8 md:gap-12 items-start">
+        {/* Media gallery */}
+        <div className="md:col-span-6 space-y-4">
+          <div className="relative aspect-square overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200">
             {heroImg ? (
-              <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-100">
-                <img src={heroImg} alt={product.name} className="absolute inset-0 w-full h-full object-cover" loading="eager" />
-              </div>
+              <img src={heroImg} alt={product.name} className="absolute inset-0 w-full h-full object-cover" loading="eager" />
             ) : (
-              <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-xl overflow-hidden" />
+              <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-3xl overflow-hidden" />
             )}
             {product.badge && (
-              <span className={`absolute top-6 left-6 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-semibold shadow`}>
+              <span className={`absolute top-4 left-4 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm`}>
                 {product.badge}
               </span>
             )}
-          </GlassCard>
+          </div>
 
           {allImages.length > 1 && (
-            <div className="grid grid-cols-5 gap-2">
-              {allImages.slice(0, 10).map((u, i) => {
+            <div className="grid grid-cols-4 gap-3">
+              {allImages.slice(0, 8).map((u, i) => {
                 const active = (activeImg ?? allImages[0]) === u;
                 return (
                   <button
                     key={`${u}-${i}`}
                     type="button"
                     onClick={() => setActiveImg(u)}
-                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition ${active ? "border-teal-500 ring-2 ring-teal-300/60" : "border-white/60 hover:border-teal-300"}`}
+                    className={`relative aspect-square rounded-xl overflow-hidden border-2 transition shadow-sm ${active ? "border-slate-900" : "border-slate-200 opacity-70 hover:opacity-100"}`}
                     aria-label={`Image ${i + 1}`}
                   >
                     <img src={u} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
@@ -248,8 +242,8 @@ function ProductPage() {
           )}
 
           {videoEmbed && (
-            <GlassCard tint="teal" blur="lg" glow="sm" padding="sm" rounded="2xl">
-              <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black">
+            <div className="rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-sm p-2">
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black">
                 {/\.(mp4|webm|ogg)(\?|$)/i.test(videoEmbed) ? (
                   <video src={videoEmbed} controls playsInline className="absolute inset-0 w-full h-full object-cover" />
                 ) : (
@@ -263,44 +257,40 @@ function ProductPage() {
                   />
                 )}
               </div>
-            </GlassCard>
+            </div>
           )}
         </div>
 
-        <GlassCard tint="teal" blur="lg" glow="md" padding="lg" rounded="2xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground">{product.name}</h1>
+        {/* Info card */}
+        <div className="md:col-span-6 bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+          <header>
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight leading-tight">{product.name}</h1>
 
-          {/* Price */}
-          <div className="mt-3 flex items-center gap-2 flex-wrap">
-            {hasDiscount && (
-              <span className="text-sm text-muted-foreground line-through">Tk {parsePrice(plan!.original!)}.00 BDT</span>
-            )}
-            <span className="text-base font-semibold text-foreground">Tk {plan ? parsePrice(plan.price) : 0}.00 BDT</span>
-            {hasDiscount && (
-              <span
-                style={{ background: "linear-gradient(90deg,#14b8a6,#10b981)", color: "#fff" }}
-                className="text-[11px] font-bold px-2 py-0.5 rounded shadow-[0_2px_8px_-2px_rgba(20,184,166,0.5)]"
-              >
-                Sale
-              </span>
-            )}
-          </div>
-
-          {/* Rating */}
-          <div className="mt-2 flex items-center gap-2 text-sm">
-            <div className="flex">
-              {[1,2,3,4,5].map((i) => (
-                <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-              ))}
+            <div className="mt-4 flex items-center gap-3 flex-wrap">
+              <span className="text-2xl md:text-3xl font-bold text-slate-900">৳{plan ? parsePrice(plan.price).toLocaleString() : 0}.00 <span className="text-base font-semibold text-slate-500">BDT</span></span>
+              {hasDiscount && (
+                <span className="text-base md:text-lg text-slate-400 line-through font-medium">৳{parsePrice(plan!.original!).toLocaleString()}</span>
+              )}
+              {hasDiscount && (
+                <span className="bg-rose-100 text-rose-600 px-3 py-1 rounded-lg text-sm font-bold">Sale</span>
+              )}
             </div>
-            <span className="text-muted-foreground">12 reviews</span>
-          </div>
 
-          {/* Duration & pricing plans */}
+            <div className="mt-3 flex items-center gap-2">
+              <div className="flex text-amber-400">
+                {[1,2,3,4,5].map((i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+              <span className="text-sm text-slate-500 font-medium">12 reviews</span>
+            </div>
+          </header>
+
+          {/* Plans */}
           {product.plans.length > 0 && (
-            <div className="mt-5">
-              <div className="text-sm font-semibold text-foreground/85 mb-3">মেয়াদ ও মূল্য পরিকল্পনা</div>
-              <div role="radiogroup" aria-label="Plan" className="space-y-2.5">
+            <div className="mt-6 space-y-3">
+              <label className="text-xs font-bold text-slate-900 uppercase tracking-widest">মেয়াদ ও মূল্য পরিকল্পনা</label>
+              <div role="radiogroup" aria-label="Plan" className="space-y-2">
                 {product.plans.map((p, idx) => {
                   const active = activeIdx === idx;
                   const price = parsePrice(p.price);
@@ -311,40 +301,32 @@ function ProductPage() {
                     <label
                       key={`${idx}-${p.period}`}
                       className={[
-                        "w-full flex items-center gap-3 px-4 py-3 rounded-2xl border transition text-left cursor-pointer select-none",
+                        "group relative flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all select-none",
                         active
-                          ? "border-violet-500 bg-violet-50 ring-2 ring-violet-300/60 shadow-[0_10px_28px_-14px_rgba(124,58,237,0.45)]"
-                          : "border-border bg-card hover:border-violet-300 hover:bg-violet-50/40 dark:hover:bg-violet-500/10",
+                          ? "bg-indigo-50/50 border-2 border-indigo-600"
+                          : "bg-white border border-slate-200 hover:border-slate-300",
                       ].join(" ")}
                     >
-                      <input
-                        type="radio"
-                        name="plan-period"
-                        className="sr-only"
-                        checked={active}
-                        onChange={() => setSelected(idx)}
-                      />
-                      <span
-                        aria-hidden="true"
-                        className={[
-                          "grid place-items-center w-5 h-5 rounded-full border-2 shrink-0 transition pointer-events-none",
-                          active ? "border-violet-600 bg-violet-600" : "border-border bg-card",
-                        ].join(" ")}
-                      >
-                        {active && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
-                      </span>
-                      <span className={`flex-1 font-bold text-[15px] pointer-events-none ${active ? "text-violet-700" : "text-foreground"}`}>
-                        {p.period}
-                      </span>
-                      {hasOff && (
-                        <span className="text-muted-foreground text-[13px] line-through pointer-events-none">৳{original.toLocaleString()}</span>
-                      )}
-                      <span className="text-violet-700 font-extrabold text-[15px] pointer-events-none">৳{price.toLocaleString()}</span>
-                      {hasOff && (
-                        <span className="px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-600 text-[11px] font-bold pointer-events-none">
-                          -{off}%
-                        </span>
-                      )}
+                      <input type="radio" name="plan-period" className="sr-only" checked={active} onChange={() => setSelected(idx)} />
+                      <div className="flex items-center">
+                        <span
+                          aria-hidden="true"
+                          className={[
+                            "w-5 h-5 rounded-full mr-4 shrink-0 transition",
+                            active ? "border-4 border-indigo-600 bg-white" : "border border-slate-300",
+                          ].join(" ")}
+                        />
+                        <span className={`font-semibold ${active ? "text-slate-900" : "text-slate-700"}`}>{p.period}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {hasOff && (
+                          <span className="text-slate-400 line-through text-sm">৳{original.toLocaleString()}</span>
+                        )}
+                        <span className={active ? "font-bold text-indigo-600" : "font-bold text-slate-900"}>৳{price.toLocaleString()}</span>
+                        {hasOff && (
+                          <span className="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">-{off}%</span>
+                        )}
+                      </div>
                     </label>
                   );
                 })}
@@ -353,71 +335,70 @@ function ProductPage() {
           )}
 
           {/* Quantity */}
-          <div className="mt-5">
-            <div className="text-sm font-semibold text-foreground/85 mb-2">Quantity</div>
-            <div className="inline-flex items-center border border-border rounded-xl overflow-hidden bg-card">
+          <div className="mt-6 space-y-3">
+            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Quantity</label>
+            <div className="flex items-center w-32 bg-slate-100 rounded-xl p-1">
               <button
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
                 aria-label="Decrease"
-                className="w-10 h-10 grid place-items-center transition"
-                style={{ color: "#7c3aed", background: "#f5f3ff" }}
+                className="w-10 h-10 grid place-items-center text-slate-500 hover:text-slate-900 transition-colors"
               >
-                <Minus className="w-5 h-5" style={{ color: "#7c3aed" }} strokeWidth={2.5} />
+                <Minus className="w-4 h-4" strokeWidth={2.5} />
               </button>
               <input
                 value={qty}
                 onChange={(e) => setQty(Math.max(1, Number(e.target.value.replace(/\D/g, "")) || 1))}
-                style={{ color: "#0f172a" }}
-                className="w-12 h-10 text-center text-sm font-bold bg-transparent focus:outline-none"
+                className="w-full text-center bg-transparent font-bold text-slate-900 outline-none"
               />
               <button
                 onClick={() => setQty((q) => q + 1)}
                 aria-label="Increase"
-                className="w-10 h-10 grid place-items-center transition"
-                style={{ color: "#7c3aed", background: "#f5f3ff" }}
+                className="w-10 h-10 grid place-items-center text-slate-500 hover:text-slate-900 transition-colors"
               >
-                <Plus className="w-5 h-5" style={{ color: "#7c3aed" }} strokeWidth={2.5} />
+                <Plus className="w-4 h-4" strokeWidth={2.5} />
               </button>
             </div>
           </div>
 
-          {/* Buy actions card */}
-          <div className="mt-6 relative rounded-3xl p-3 bg-card border-2 border-sky-400/70 shadow-[0_18px_50px_-18px_rgba(56,189,248,0.55),0_0_0_4px_rgba(186,230,253,0.4)]">
+          {/* Actions */}
+          <div className="pt-6 space-y-3">
             <button
               onClick={buyNow}
-              className="product-buy-button w-full h-12 inline-flex items-center justify-center gap-2 rounded-2xl font-bold text-[15px] hover:opacity-95 active:scale-[0.99] transition"
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-100 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
             >
-              <CreditCard className="w-4 h-4" /> Buy Now
+              <CreditCard className="w-5 h-5" />
+              <span>Buy Now</span>
             </button>
-            <div className="mt-2 grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3">
               <a
                 href={plan ? waOrderUrl([{ name: product.name, planPeriod: plan.period, qty, price: parsePrice(plan.price) }]) : "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="product-whatsapp-button h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl font-bold text-[13px] hover:opacity-95 transition"
+                className="flex items-center justify-center gap-2 bg-emerald-50 text-emerald-600 font-bold py-3 rounded-2xl hover:bg-emerald-100 transition-colors border border-emerald-100"
               >
-                <MessageCircle className="w-4 h-4" /> WhatsApp
+                <MessageCircle className="w-5 h-5" />
+                <span>WhatsApp</span>
               </a>
               <button
                 onClick={addToCart}
-                className="product-cart-button h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl font-bold text-[13px] hover:opacity-95 transition"
+                className="flex items-center justify-center gap-2 bg-slate-900 text-white font-bold py-3 rounded-2xl hover:bg-slate-800 transition-colors shadow-sm"
               >
-                <ShoppingCart className="w-4 h-4" /> Cart
+                <ShoppingCart className="w-5 h-5" />
+                <span>Add to Cart</span>
               </button>
             </div>
           </div>
-
-        </GlassCard>
+        </div>
       </section>
 
-      {/* Product Description — always visible */}
-      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 pb-2 pt-2">
-        <h2 className="flex items-center gap-3 text-xl md:text-2xl font-extrabold text-foreground mb-4">
-          <span className="inline-block w-1.5 h-6 md:h-7 rounded-full bg-gradient-to-b from-violet-500 to-fuchsia-500" />
-          Product Description
-        </h2>
-        <div className="rounded-2xl bg-card border border-border shadow-[0_10px_30px_-18px_rgba(15,23,42,0.18)]">
-          <div className="p-5 md:p-8 text-sm md:text-base text-foreground leading-relaxed">
+      {/* Product Description */}
+      <section className="relative mx-auto max-w-6xl px-4 md:px-8 pb-2 pt-2">
+        <div className="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-slate-200">
+          <div className="flex items-center gap-4 mb-6 md:mb-8">
+            <div className="w-1 h-8 bg-indigo-600 rounded-full" />
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900">Product Description</h2>
+          </div>
+          <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed">
             <ProductMarkdown source={product.description} />
           </div>
         </div>
