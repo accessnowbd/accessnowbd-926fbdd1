@@ -310,12 +310,18 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="admin-glass lg:h-screen lg:overflow-hidden min-h-screen flex relative bg-[#f4f1ff] font-['Manrope',ui-sans-serif,system-ui] text-slate-800">
+    <div className="admin-glass lg:h-screen lg:overflow-hidden min-h-screen flex relative font-['Manrope',ui-sans-serif,system-ui] text-slate-800 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-indigo-100">
+      {/* Ambient glow orbs (whole admin) */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden -z-0">
+        <div className="absolute -top-32 -left-20 w-[420px] h-[420px] rounded-full bg-violet-400/30 blur-[120px]" />
+        <div className="absolute top-1/3 -right-32 w-[480px] h-[480px] rounded-full bg-fuchsia-300/25 blur-[140px]" />
+        <div className="absolute bottom-0 left-1/3 w-[380px] h-[380px] rounded-full bg-indigo-300/25 blur-[130px]" />
+      </div>
 
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm"
+          className="lg:hidden fixed inset-0 z-40 bg-violet-950/40 backdrop-blur-md"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -323,8 +329,8 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* SIDEBAR */}
       <aside
         className={[
-          "shrink-0 transition-all duration-200 flex flex-col h-screen",
-          "bg-white border-r border-slate-200/70",
+          "shrink-0 transition-all duration-200 flex flex-col h-screen relative z-10",
+          "bg-white/55 backdrop-blur-2xl border-r border-white/60 ring-1 ring-violet-200/40 shadow-[0_20px_60px_-30px_rgba(109,40,217,0.35)]",
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
           collapsed ? "lg:w-[76px]" : "lg:w-[268px]",
           "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-2xl lg:shadow-none",
@@ -333,11 +339,12 @@ function AdminShell({ user, signOut, navigate }: any) {
       >
         {/* Brand */}
         <div className={[
-          "border-b border-slate-200/70",
+          "border-b border-white/50 bg-white/30 backdrop-blur-xl",
           collapsed
             ? "flex flex-col items-center justify-center gap-1.5 py-3 px-2"
             : "h-[68px] flex items-center justify-between px-4",
         ].join(" ")}>
+
           <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "justify-center" : ""}`}>
             <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-xl overflow-hidden ring-1 ring-slate-200 shadow-[0_4px_14px_-6px_rgba(59,130,246,0.4)] bg-white">
               <img
@@ -393,9 +400,9 @@ function AdminShell({ user, signOut, navigate }: any) {
         </nav>
 
         {/* User */}
-        <div className="border-t border-slate-200/70 p-3 space-y-2 bg-gradient-to-b from-white to-slate-50/60">
+        <div className="border-t border-white/50 p-3 space-y-2 bg-white/40 backdrop-blur-xl">
           <div className={`flex items-center gap-2.5 ${collapsed ? "justify-center" : ""}`}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 text-white grid place-items-center text-xs font-bold shrink-0 shadow-[0_4px_12px_-4px_rgba(59,130,246,0.6)] font-['Sora']">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white grid place-items-center text-xs font-bold shrink-0 shadow-[0_4px_14px_-4px_rgba(139,92,246,0.7)] ring-1 ring-white/40 font-['Sora']">
               {(user?.email ?? "A").slice(0, 1).toUpperCase()}
             </div>
             {!collapsed && (
@@ -408,7 +415,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           {!collapsed && (
             <button
               onClick={async () => { await signOut(); navigate({ to: "/login" }); }}
-              className="w-full h-9 rounded-lg text-xs font-bold inline-flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white transition"
+              className="w-full h-9 rounded-lg text-xs font-bold inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white shadow-md shadow-violet-500/30 ring-1 ring-white/30 transition"
             >
               <LogOut className="w-3.5 h-3.5" /> {t("Logout", "লগআউট")}
             </button>
@@ -417,9 +424,10 @@ function AdminShell({ user, signOut, navigate }: any) {
       </aside>
 
       {/* MAIN */}
-      <div className="flex-1 min-w-0 flex flex-col lg:h-screen lg:overflow-y-auto">
+      <div className="flex-1 min-w-0 flex flex-col lg:h-screen lg:overflow-y-auto relative z-[1]">
+
         {/* Top bar */}
-        <header className="h-[68px] sticky top-0 z-20 bg-white/85 backdrop-blur-xl border-b border-slate-200/70">
+        <header className="h-[68px] sticky top-0 z-20 bg-white/40 backdrop-blur-2xl border-b border-white/50 ring-1 ring-violet-200/30 shadow-[0_8px_24px_-16px_rgba(109,40,217,0.25)]">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
             <button
               onClick={() => setMobileOpen(true)}
@@ -430,7 +438,7 @@ function AdminShell({ user, signOut, navigate }: any) {
             </button>
 
             <div className="hidden md:flex items-center gap-2 text-sm min-w-0">
-              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 ring-1 ring-blue-100">
+              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-white/60 backdrop-blur text-violet-700 ring-1 ring-violet-200/60">
                 <span className="text-blue-600">{currentPage?.group.icon ?? ADMIN_MENU[0].icon}</span>
                 <span className="font-semibold text-[12px]">
                   {currentPage
@@ -459,7 +467,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               onClick={toggle}
               aria-label={t("Switch to Bangla", "ইংরেজিতে পরিবর্তন")}
               title={lang === "en" ? "বাংলায় দেখুন" : "Show in English"}
-              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-bold items-center gap-1.5 border border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 bg-white transition shrink-0"
+              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-bold items-center gap-1.5 border border-white/60 bg-white/50 backdrop-blur text-slate-700 hover:bg-white/80 hover:border-violet-300 hover:text-violet-700 transition shrink-0"
             >
               <Globe className="w-3.5 h-3.5" /> {lang === "en" ? "বাং" : "EN"}
             </button>
@@ -470,13 +478,13 @@ function AdminShell({ user, signOut, navigate }: any) {
               className="hidden xl:block w-64"
             />
 
-            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition">
+            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white/50 backdrop-blur border border-white/60 text-slate-700 hover:bg-white/80 hover:border-violet-300 hover:text-violet-700 transition">
               <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
             </Link>
           </div>
         </header>
 
-        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800 bg-gradient-to-b from-violet-50/60 via-indigo-50/30 to-white">
+        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800">
           <div className="mx-auto max-w-[1400px] space-y-4 md:space-y-6">
             {currentPage && <AdminPageHero group={currentPage.group} item={currentPage.item} t={t} />}
             <Outlet />
@@ -548,8 +556,8 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
         "group relative flex items-center gap-3 rounded-xl text-sm transition-all",
         collapsed ? "justify-center px-2 py-2 mx-1 my-0.5" : "px-2.5 py-2",
         active
-          ? "bg-slate-100/80 text-slate-900 ring-1 ring-slate-900/80"
-          : "text-slate-700 hover:bg-slate-50 hover:text-slate-900",
+          ? "bg-gradient-to-r from-violet-500/20 to-fuchsia-500/15 backdrop-blur text-violet-900 ring-1 ring-violet-400/50 shadow-sm shadow-violet-500/20"
+          : "text-slate-700 hover:bg-white/50 hover:backdrop-blur hover:text-violet-700",
       ].join(" ")}
     >
       <span
@@ -566,7 +574,7 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
         <span className={`truncate flex-1 text-[13px] ${active ? "font-bold text-slate-900" : "font-semibold"}`}>{label}</span>
       )}
       {!collapsed && active && (
-        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-slate-900" aria-hidden />
+        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-violet-600" aria-hidden />
       )}
       {!collapsed && !active && (
         <Pin
