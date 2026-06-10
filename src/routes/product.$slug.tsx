@@ -456,7 +456,7 @@ function ProductPage() {
       {related.length > 0 && (
         <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
           <h2 className="text-lg font-bold text-foreground mb-5">Related products</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {related.map((p) => {
               const first = p.plans[0];
               const hasOrig = !!first?.original && parsePrice(first.original) > parsePrice(first.price);
