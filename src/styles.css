@@ -1793,6 +1793,16 @@ html, body {
 
 /* Removed forced max-width override — use native Tailwind max-w-[1440px]/[1280px] so banner and containers respect their intended desktop size and zoom naturally. */
 
+/* Product detail page: widen narrow containers on large desktops so the layout
+   matches the storefront width (max-w-6xl ≈ 1152px and max-w-[1200px] are too
+   narrow on big monitors). Keep original behavior below 1280px. */
+@media (min-width: 1280px) {
+  main .max-w-6xl,
+  main .max-w-\[1200px\] {
+    max-width: 1440px !important;
+  }
+}
+
 @media (min-width: 1280px) {
   .home-scroll-optimized .xl\:grid-cols-5,
   main .xl\:grid-cols-5 {
