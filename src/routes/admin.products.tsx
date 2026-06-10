@@ -1396,14 +1396,15 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  )}
  </div>
 
- {/* Footer */}
- <div className="border-t border-slate-100 px-6 py-3.5 flex items-center justify-between gap-3 bg-white">
- <button onClick={onClose} className="h-11 px-6 rounded-full border border-slate-200 text-sm font-semibold hover:bg-slate-50">Cancel</button>
- <button onClick={save} disabled={busy || aiBusy} className="h-11 px-6 rounded-full text-slate-900 text-sm font-bold inline-flex items-center gap-2 disabled:opacity-60">
- {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
- {isNew ? "Add Product" : "Save Changes"}
- </button>
- </div>
+  {/* Footer */}
+  <div className="relative border-t border-white/40 px-6 py-3.5 flex items-center justify-between gap-3 bg-white/40 backdrop-blur-xl">
+  <button onClick={onClose} className="h-11 px-6 rounded-full border border-white/60 bg-white/50 backdrop-blur text-sm font-semibold text-slate-700 hover:bg-white/80 transition">Cancel</button>
+  <button onClick={save} disabled={busy || aiBusy} className="h-11 px-6 rounded-full text-white text-sm font-bold inline-flex items-center gap-2 disabled:opacity-60 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 shadow-lg shadow-violet-500/40 border border-white/30 transition">
+  {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+  {isNew ? "Add Product" : "Save Changes"}
+  </button>
+  </div>
+
  </div>
  </div>
  );
