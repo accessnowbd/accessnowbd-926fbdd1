@@ -105,7 +105,7 @@ export const restoreBackup = createServerFn({ method: "POST" })
     for (const table of wanted) {
       const pk = BACKUP_TABLES[table];
       if (!pk) { results[table] = { restored: 0, error: "Not a backup-able table" }; continue; }
-      const rows = data.payload.tables[table];
+      const rows = parsed.tables[table];
       if (!rows) { results[table] = { restored: 0 }; continue; }
 
       if (data.mode === "replace") {
