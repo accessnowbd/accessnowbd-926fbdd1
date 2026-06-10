@@ -292,7 +292,7 @@ function ProductPage() {
             )}
 
             <div className="mt-4 flex items-center gap-3 flex-wrap">
-              <span className="text-2xl md:text-3xl font-bold text-slate-900">৳{plan ? parsePrice(plan.price).toLocaleString() : 0}.00 <span className="text-base font-semibold text-slate-500">BDT</span></span>
+              <span className="font-bold text-slate-900" style={{ fontSize: "clamp(22px, 2vw, 36px)" }}>৳{plan ? parsePrice(plan.price).toLocaleString() : 0}.00 <span className="text-base font-semibold text-slate-500">BDT</span></span>
               {hasDiscount && (
                 <span className="text-base md:text-lg text-slate-400 line-through font-medium">৳{parsePrice(plan!.original!).toLocaleString()}</span>
               )}
