@@ -53,6 +53,7 @@ const NAV: NavItem[] = [
   { id: "overview", label: "ড্যাশবোর্ড", icon: LayoutDashboard, tint: "text-indigo-500", tintBg: "bg-indigo-500/10" },
   { id: "profile", label: "প্রোফাইল", icon: UserIcon, tint: "text-blue-500", tintBg: "bg-blue-500/10" },
   { id: "orders", label: "আমার অর্ডার", icon: Package, tint: "text-emerald-500", tintBg: "bg-emerald-500/10" },
+  { id: "downloads", label: "ডাউনলোড লিংক", icon: Download, tint: "text-green-500", tintBg: "bg-green-500/10" },
   { id: "wallet", label: "ওয়ালেট", icon: Wallet, tint: "text-purple-500", tintBg: "bg-purple-500/10" },
   { id: "address", label: "ঠিকানা", icon: MapPinned, tint: "text-amber-500", tintBg: "bg-amber-500/10" },
   { id: "security", label: "সিকিউরিটি", icon: Shield, tint: "text-rose-500", tintBg: "bg-rose-500/10" },
