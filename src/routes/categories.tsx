@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CategoryPage } from "@/components/CategoryPage";
 
 export const Route = createFileRoute("/categories")({
+  validateSearch: (search: Record<string, unknown>) => ({ q: typeof search.q === "string" ? search.q : undefined }),
   head: () => ({
     meta: [
       { title: "All Categories — AccessNow BD" },

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "@/components/ProductCard";
@@ -45,13 +45,31 @@ export function CategoryPage({
 }) {
   const { products, isLoading } = useProducts();
   const navigate = useNavigate();
-  const { q = "" } = useSearch({ strict: false });
+  const { q: urlQ = "" } = useSearch({ strict: false });
   const [cat, setCat] = useState<string | null>(null);
   const [sort, setSort] = useState<SortKey>("latest");
+  const [q, setQ] = useState<string>(urlQ);
+  const lastUrlQ = useRef(urlQ);
 
-  const updateSearch = (value: string) => {
-    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, q: value.trim() || undefined }) } as never);
-  };
+  // Sync from URL when it changes externally (e.g., back/forward, header search)
+  useEffect(() => {
+    if (urlQ !== lastUrlQ.current && urlQ !== q) {
+      setQ(urlQ);
+    }
+    lastUrlQ.current = urlQ;
+  }, [urlQ]);
+
+  // Debounce URL update so typing stays smooth and doesn't lose focus
+  useEffect(() => {
+    const handle = setTimeout(() => {
+      if (q === urlQ) return;
+      lastUrlQ.current = q;
+      navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, q: q.trim() || undefined }) } as never);
+    }, 200);
+    return () => clearTimeout(handle);
+  }, [q, urlQ, navigate]);
+
+  const updateSearch = (value: string) => setQ(value);
 
   const cats = useMemo(() => {
     const map = new Map<string, number>();
@@ -117,7 +135,7 @@ export function CategoryPage({
             </h1>
           </div>
           <p className="mt-2 text-foreground/70 max-w-2xl font-medium">
-            {totalCount}টি প্রোডাক্ট পাওয়া গেছে
+            {(q.trim() ? items.length : totalCount)}টি প্রোডাক্ট পাওয়া গেছে
           </p>
           <p className="mt-1 text-foreground/60 text-sm max-w-2xl">{subtitle}</p>
           <SearchBar
