@@ -54,7 +54,9 @@ function AdminFeaturePage() {
   <div className="space-y-5">
 
 
- {cfg ? (
+ {page === "media-gallery" ? (
+ <ProductMediaGallery />
+ ) : cfg ? (
  cfg.mode === "list" ? (
  <ListCrud kind={cfg.kind} fields={cfg.fields} />
  ) : (
