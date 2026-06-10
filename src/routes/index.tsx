@@ -85,7 +85,7 @@ const RAIL_PLACEHOLDER_TITLES: string[] = [
   "Software & Productivity",
   "VPN & Security",
   "Windows",
-  "Giftcards",
+  "Subscription",
 ];
 
 function Index() {
@@ -103,7 +103,7 @@ function Index() {
       "Software & Productivity",
       "VPN & Security",
       "Windows",
-      "Giftcards",
+      "Subscription",
     ];
     return desired
       .map((category) => ({
