@@ -5,7 +5,6 @@ export type ProductMeta = {
   meta_description?: string;
   tags?: string[];
   gallery?: string[];
-  [k: string]: unknown;
 };
 
 export type Product = {
