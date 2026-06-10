@@ -364,7 +364,7 @@ function ProductPage() {
           <div className="pt-6 space-y-3">
             <button
               onClick={buyNow}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-100 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+              className="product-buy-button w-full font-bold py-4 rounded-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-2"
             >
               <CreditCard className="w-5 h-5" />
               <span>Buy Now</span>
@@ -374,14 +374,14 @@ function ProductPage() {
                 href={plan ? waOrderUrl([{ name: product.name, planPeriod: plan.period, qty, price: parsePrice(plan.price) }]) : "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 bg-emerald-50 text-emerald-600 font-bold py-3 rounded-2xl hover:bg-emerald-100 transition-colors border border-emerald-100"
+                className="product-whatsapp-button flex items-center justify-center gap-2 font-bold py-3 rounded-2xl hover:opacity-95 transition"
               >
                 <MessageCircle className="w-5 h-5" />
                 <span>WhatsApp</span>
               </a>
               <button
                 onClick={addToCart}
-                className="flex items-center justify-center gap-2 bg-slate-900 text-white font-bold py-3 rounded-2xl hover:bg-slate-800 transition-colors shadow-sm"
+                className="product-cart-button flex items-center justify-center gap-2 font-bold py-3 rounded-2xl hover:opacity-95 transition"
               >
                 <ShoppingCart className="w-5 h-5" />
                 <span>Add to Cart</span>
