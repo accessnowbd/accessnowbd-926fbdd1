@@ -130,7 +130,7 @@ function DashboardPage() {
     );
   }
 
-  const currentLabel = NAV.flatMap((g) => g.items).find((i) => i.id === section)?.label ?? "Dashboard";
+  const currentLabel = NAV.find((i) => i.id === section)?.label ?? "Dashboard";
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -139,14 +139,14 @@ function DashboardPage() {
           sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
-        <div className="h-full flex flex-col glass-strong border-r border-[var(--glass-border)]">
-          <div className="px-5 py-5 flex items-center justify-between border-b border-[var(--glass-border)]">
+        <div className="h-full flex flex-col bg-card border-r border-border">
+          <div className="px-5 py-5 flex items-center justify-between border-b border-border">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl grid place-items-center text-white font-bold" style={{ background: "var(--gradient-aurora)" }}>
+              <div className="w-9 h-9 rounded-xl grid place-items-center text-primary-foreground font-bold" style={{ background: "var(--gradient-aurora)" }}>
                 A
               </div>
               <div>
-                <div className="text-sm font-bold leading-tight" style={{ fontFamily: "var(--font-heading)" }}>AccessNow BD</div>
+                <div className="text-sm font-bold leading-tight text-foreground" style={{ fontFamily: "var(--font-heading)" }}>AccessNow BD</div>
                 <div className="text-[10px] text-muted-foreground uppercase tracking-wider">User Panel</div>
               </div>
             </Link>
@@ -155,51 +155,53 @@ function DashboardPage() {
             </button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 scrollbar-thin">
-            {NAV.map((group) => (
-              <div key={group.title}>
-                <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-foreground/60">
-                  {group.title}
-                </div>
-                <div className="space-y-1">
-                  {group.items.map((it) => {
-                    const Icon = it.icon;
-                    const active = section === it.id;
-                    return (
-                      <button
-                        key={it.id}
-                        onClick={() => { setSection(it.id); setSidebarOpen(false); }}
-                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition group ${
-                          active
-                            ? "bg-primary/15 text-primary border border-primary/40 shadow-[0_0_20px_-5px_var(--primary)]"
-                            : "text-foreground hover:text-primary hover:bg-primary/10 border border-transparent"
-                        }`}
-                      >
-                        <Icon className={`w-4 h-4 ${active ? "text-primary" : ""}`} />
-                        <span className="font-medium">{it.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </nav>
+          <div className="px-5 pt-5 pb-2">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">মেনু</span>
+          </div>
 
-          <div className="p-3 border-t border-[var(--glass-border)] space-y-2">
+          <nav className="flex-1 overflow-y-auto px-3 pb-4 space-y-1 scrollbar-thin">
+            {NAV.map((it) => {
+              const Icon = it.icon;
+              const active = section === it.id;
+              return (
+                <button
+                  key={it.id}
+                  onClick={() => { setSection(it.id); setSidebarOpen(false); }}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-sm transition group ${
+                    active
+                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                      : "text-foreground hover:bg-accent"
+                  }`}
+                >
+                  <span className="flex items-center gap-3">
+                    <span className={`w-9 h-9 rounded-xl grid place-items-center transition ${
+                      active ? "bg-primary-foreground/15" : it.tintBg
+                    }`}>
+                      <Icon className={`w-4 h-4 ${active ? "text-primary-foreground" : it.tint}`} />
+                    </span>
+                    <span className="font-semibold">{it.label}</span>
+                  </span>
+                  <ChevronRight className={`w-4 h-4 transition ${active ? "opacity-80" : "opacity-30 group-hover:opacity-70"}`} />
+                </button>
+              );
+            })}
+
+            <div className="my-3 mx-3 h-px bg-border" />
+
             {isAdmin && (
               <Link
                 to="/admin"
                 onClick={() => setSidebarOpen(false)}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-white shadow-[0_10px_24px_-10px_rgba(124,58,237,0.55)]"
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-bold text-primary-foreground shadow-[0_10px_24px_-10px_rgba(124,58,237,0.55)]"
                 style={{ background: "var(--gradient-aurora)" }}
               >
                 <Shield className="w-4 h-4" /> Admin Panel
               </Link>
             )}
-            <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-red-300 hover:bg-red-500/10 transition">
-              <LogOut className="w-4 h-4" /> Logout
+            <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-[var(--color-destructive)] hover:bg-[var(--color-destructive)]/10 transition">
+              <LogOut className="w-4 h-4" /> লগআউট
             </button>
-          </div>
+          </nav>
         </div>
       </aside>
 
