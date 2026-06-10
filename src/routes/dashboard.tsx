@@ -305,7 +305,7 @@ function SectionRenderer({
     case "orders": return <OrdersTable orders={orders} />;
     case "active-services": return <ServiceList kind="active" />;
     case "expired": return <ServiceList kind="expired" />;
-    case "downloads": return <Downloads />;
+    case "downloads": return <Downloads orders={orders} />;
     case "licenses": return <Licenses />;
     case "wallet": return <ComingSoon title="ওয়ালেট" desc="ব্যালেন্স ও টপ-আপ শীঘ্রই আসছে।" />;
     case "address": return <ComingSoon title="ঠিকানা" desc="ডেলিভারি ঠিকানা ম্যানেজ করুন।" />;
