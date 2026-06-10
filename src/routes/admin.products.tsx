@@ -881,23 +881,23 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  </button>
  )}
  </div>
- <input
- value={form.slug}
- onChange={(e) => { setAutoSlug(false); set("slug", slugify(e.target.value)); }}
- placeholder="product-name-here"
- disabled={!isNew}
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm font-mono outline-none focus:border-slate-400 disabled:bg-slate-50 disabled:text-slate-500"
- />
- </div>
- <div>
- <Label>Brand / Publisher</Label>
- <input
- value={meta.brand ?? ""}
- onChange={(e) => setMeta("brand", e.target.value)}
- placeholder="e.g. Microsoft, Adobe"
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400"
- />
- </div>
+     <input
+     value={form.slug}
+     onChange={(e) => { setAutoSlug(false); set("slug", slugify(e.target.value)); }}
+     placeholder="product-name-here"
+     disabled={!isNew}
+     className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm font-mono text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-400 disabled:bg-slate-50 disabled:text-slate-500"
+     />
+     </div>
+     <div>
+     <Label>Brand / Publisher</Label>
+     <input
+     value={meta.brand ?? ""}
+     onChange={(e) => setMeta("brand", e.target.value)}
+     placeholder="e.g. Microsoft, Adobe"
+     className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-400"
+     />
+     </div>
  </div>
 
  {/* Bullet points */}
