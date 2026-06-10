@@ -259,7 +259,7 @@ export function CategoryPage({
                 <p className="text-sm text-muted-foreground mt-2">Try a different category or search term.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-5">
                 {items.map((p) => <ProductCard key={p.slug} product={p} />)}
               </div>
             )}
