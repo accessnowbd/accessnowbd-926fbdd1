@@ -157,23 +157,32 @@ function Index() {
   );
 }
 
-const PILL_CATEGORIES = [
+const STATIC_PILLS = [
   { id: "home", label: "🏠 Home", to: "/" as const },
   { id: "shop", label: "🛍️ Shop", to: "/products" as const },
   { id: "top-picks", label: "⭐ Top Picks", to: "/products" as const },
-  { id: "ott", label: "OTT & Streaming", to: "/products" as const },
-  { id: "windows", label: "Windows", to: "/products" as const },
-  { id: "office", label: "Microsoft Office", to: "/products" as const },
-  { id: "ai", label: "AI & Education", to: "/products" as const },
-  { id: "software", label: "Software & Productivity", to: "/products" as const },
-  { id: "vpn", label: "VPN & Security", to: "/products" as const },
 ];
 
 function CategoryPillBar() {
+  const { products } = useProducts();
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const [activeId, setActiveId] = useState<string>("home");
   const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(false);
+
+  // Dynamic category pills sourced from live products — auto add/remove.
+  const dynamicPills = useMemo(() => {
+    const seen = new Set<string>();
+    const out: { id: string; label: string; cat: string }[] = [];
+    for (const p of products) {
+      const name = (p.category || "").trim();
+      if (!name || seen.has(name)) continue;
+      seen.add(name);
+      out.push({ id: `cat-${name}`, label: name, cat: name });
+    }
+    out.sort((a, b) => a.label.localeCompare(b.label));
+    return out;
+  }, [products]);
 
   const updateArrows = () => {
     const el = scrollerRef.current;
@@ -192,12 +201,50 @@ function CategoryPillBar() {
       el.removeEventListener("scroll", updateArrows);
       window.removeEventListener("resize", updateArrows);
     };
-  }, []);
+  }, [dynamicPills.length]);
 
   const scrollBy = (dir: 1 | -1) => {
     const el = scrollerRef.current;
     if (!el) return;
     el.scrollBy({ left: dir * Math.max(240, el.clientWidth * 0.7), behavior: "smooth" });
+  };
+
+  const renderPill = (
+    id: string,
+    label: string,
+    to: "/" | "/products",
+    search?: Record<string, string>,
+  ) => {
+    const isActive = activeId === id;
+    return (
+      <Link
+        key={id}
+        to={to}
+        search={search as never}
+        onClick={(e) => {
+          setActiveId(id);
+          const target = e.currentTarget;
+          const rect = target.getBoundingClientRect();
+          const ripple = document.createElement("span");
+          const size = Math.max(rect.width, rect.height);
+          ripple.style.cssText = `position:absolute;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px;width:${size}px;height:${size}px;border-radius:9999px;background:rgba(255,255,255,0.45);transform:scale(0);opacity:1;pointer-events:none;transition:transform 520ms ease-out,opacity 620ms ease-out;`;
+          target.appendChild(ripple);
+          requestAnimationFrame(() => {
+            ripple.style.transform = "scale(2.4)";
+            ripple.style.opacity = "0";
+          });
+          setTimeout(() => ripple.remove(), 700);
+        }}
+        aria-current={isActive ? "page" : undefined}
+        className={`relative overflow-hidden shrink-0 inline-flex items-center gap-1.5 h-10 px-4 rounded-full border text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 ${
+          isActive
+            ? "bg-primary text-primary-foreground border-primary shadow-[0_6px_18px_-6px_hsl(var(--primary)/0.55)] scale-[1.03]"
+            : "glass-soft border-white/10 text-foreground hover:border-primary/40 hover:bg-primary/10"
+        }`}
+      >
+        {label}
+      </Link>
+    );
   };
 
   return (
@@ -213,7 +260,7 @@ function CategoryPillBar() {
           <ChevronLeft className="w-4 h-4" />
         </button>
 
-        {/* Edge fade hints — theme-aware (white in light, dark in aurora) */}
+        {/* Edge fade hints */}
         <div className={`pointer-events-none absolute left-0 top-0 bottom-0 w-14 z-10 transition-opacity review-fade-left ${canLeft ? "opacity-100" : "opacity-0"}`} />
         <div className={`pointer-events-none absolute right-0 top-0 bottom-0 w-14 z-10 transition-opacity review-fade-right ${canRight ? "opacity-100" : "opacity-0"}`} />
 
@@ -223,39 +270,10 @@ function CategoryPillBar() {
           role="navigation"
           aria-label="Browse categories"
         >
-          {PILL_CATEGORIES.map((c) => {
-            const isActive = activeId === c.id;
-            return (
-              <Link
-                key={c.id}
-                to={c.to}
-                onClick={(e) => {
-                  setActiveId(c.id);
-                  // Ripple effect
-                  const target = e.currentTarget;
-                  const rect = target.getBoundingClientRect();
-                  const ripple = document.createElement("span");
-                  const size = Math.max(rect.width, rect.height);
-                  ripple.style.cssText = `position:absolute;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px;width:${size}px;height:${size}px;border-radius:9999px;background:rgba(255,255,255,0.45);transform:scale(0);opacity:1;pointer-events:none;transition:transform 520ms ease-out,opacity 620ms ease-out;`;
-                  target.appendChild(ripple);
-                  requestAnimationFrame(() => {
-                    ripple.style.transform = "scale(2.4)";
-                    ripple.style.opacity = "0";
-                  });
-                  setTimeout(() => ripple.remove(), 700);
-                }}
-                aria-current={isActive ? "page" : undefined}
-                className={`relative overflow-hidden shrink-0 inline-flex items-center gap-1.5 h-10 px-4 rounded-full border text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 ${
-                  isActive
-                    ? "bg-primary text-primary-foreground border-primary shadow-[0_6px_18px_-6px_hsl(var(--primary)/0.55)] scale-[1.03]"
-                    : "glass-soft border-white/10 text-foreground hover:border-primary/40 hover:bg-primary/10"
-                }`}
-              >
-                {c.label}
-              </Link>
-            );
-          })}
+          {STATIC_PILLS.map((p) => renderPill(p.id, p.label, p.to))}
+          {dynamicPills.map((p) => renderPill(p.id, p.label, "/products", { cat: p.cat }))}
         </div>
+
 
         {/* Right arrow */}
         <button
