@@ -158,6 +158,12 @@ function ProductPage() {
   const plan = product.plans[activeIdx];
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 8);
 
+  const galleryImages = (product.meta?.gallery ?? []).filter(Boolean);
+  const allImages = [product.imageUrl, ...galleryImages].filter((u): u is string => !!u);
+  const [activeImg, setActiveImg] = useState<string | null>(null);
+  const heroImg = activeImg ?? allImages[0] ?? null;
+  const videoEmbed = toEmbedUrl(product.meta?.video_url);
+
   const addToCart = () => {
     if (!plan) return;
     for (let i = 0; i < qty; i++) {
