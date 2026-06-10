@@ -5,6 +5,7 @@ export type ProductMeta = {
   meta_description?: string;
   tags?: string[];
   gallery?: string[];
+  video_url?: string;
 };
 
 export type Product = {
