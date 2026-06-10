@@ -1420,8 +1420,10 @@ function ChipBig({ active, onClick, children }: { active?: boolean; onClick: () 
   return (
    <button
    onClick={onClick}
-   className={`inline-flex items-center justify-center gap-1.5 min-h-11 w-full px-2.5 py-2 rounded-xl text-[13px] leading-tight font-semibold border-2 transition text-center break-words ${
-   active ? "border-slate-500 bg-slate-50 text-slate-800" : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+   className={`inline-flex items-center justify-center gap-1.5 min-h-11 w-full px-2.5 py-2 rounded-xl text-[13px] leading-tight font-semibold border transition text-center break-words backdrop-blur ${
+   active
+    ? "border-violet-400 bg-gradient-to-br from-violet-500/90 to-fuchsia-500/90 text-white shadow-lg shadow-violet-500/30 ring-2 ring-violet-300/50"
+    : "border-white/60 bg-white/50 text-slate-700 hover:bg-white/80 hover:border-violet-300"
    }`}
    >{children}</button>
   );
