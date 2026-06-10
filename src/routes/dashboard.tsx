@@ -31,6 +31,7 @@ type SectionId =
   | "overview"
   | "profile" | "edit-profile"
   | "orders" | "active-services" | "expired" | "downloads" | "licenses"
+  | "wallet" | "address" | "security" | "language" | "install-app"
   | "open-ticket" | "my-tickets";
 
 const statusColors: Record<string, string> = {
