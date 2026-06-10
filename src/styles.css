@@ -1781,46 +1781,9 @@ html.theme-white .flex button[class*="rounded"]:has(svg):not([class*="bg-gradien
   color: #ffffff !important;
 }
 
-/* =====================================================
-   FULL-WIDTH RESPONSIVE — Site fills the entire display
-   on any device (phone, tablet, desktop, ultra-wide).
-   Removes legacy 1440px / 1280px content caps.
-   ===================================================== */
-.max-w-\[1440px\],
-.max-w-\[1280px\],
-.max-w-7xl,
-.max-w-6xl {
-  max-width: 100% !important;
-  width: 100% !important;
-}
-
-/* Comfortable side padding that scales with viewport so content
-   never hugs the screen edges on ultra-wide monitors. */
-@media (min-width: 1440px) {
-  .px-4.md\:px-10,
-  .px-4 {
-    padding-left: clamp(1rem, 3vw, 4rem) !important;
-    padding-right: clamp(1rem, 3vw, 4rem) !important;
-  }
-}
-@media (min-width: 1920px) {
-  .px-4.md\:px-10 {
-    padding-left: clamp(2rem, 4vw, 6rem) !important;
-    padding-right: clamp(2rem, 4vw, 6rem) !important;
-  }
-}
-
-/* Product grids stay at a consistent 4 cards per row on desktop, even when
-   the browser is zoomed out and the CSS viewport becomes ultra-wide. This
-   matches the intended layout shown in the design reference and prevents
-   the grid from jumping to 5/6 columns at high zoom-out levels. */
-@media (min-width: 1280px) {
-  .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-4,
-  .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-4.xl\:grid-cols-5,
-  .grid.grid-cols-2.sm\:grid-cols-3.lg\:grid-cols-4.xl\:grid-cols-5 {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-}
+/* Keep native Tailwind max-widths and grid breakpoints intact so browser
+   zoom-out genuinely scales the product cards smaller instead of stretching
+   the page wider and forcing oversized columns. */
 
 html, body { width: 100%; }
 
