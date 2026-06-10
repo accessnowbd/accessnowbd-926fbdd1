@@ -556,8 +556,8 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
         "group relative flex items-center gap-3 rounded-xl text-sm transition-all",
         collapsed ? "justify-center px-2 py-2 mx-1 my-0.5" : "px-2.5 py-2",
         active
-          ? "bg-slate-100/80 text-slate-900 ring-1 ring-slate-900/80"
-          : "text-slate-700 hover:bg-slate-50 hover:text-slate-900",
+          ? "bg-gradient-to-r from-violet-500/20 to-fuchsia-500/15 backdrop-blur text-violet-900 ring-1 ring-violet-400/50 shadow-sm shadow-violet-500/20"
+          : "text-slate-700 hover:bg-white/50 hover:backdrop-blur hover:text-violet-700",
       ].join(" ")}
     >
       <span
