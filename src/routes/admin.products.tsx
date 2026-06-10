@@ -792,8 +792,8 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
  /* ============================================================ RENDER */
  return (
- <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm grid place-items-start md:place-items-center p-2 md:p-4 overflow-y-auto" onClick={onClose}>
- <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[95vh] flex flex-col shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+  <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-start md:items-center justify-center p-2 md:p-4" onClick={onClose}>
+  <div className="bg-white rounded-2xl w-full max-w-3xl h-[96vh] md:h-[90vh] flex flex-col shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
  {/* Header */}
  <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
  <h2 className="font-bold text-xl text-slate-900">{isNew ? "New Product" : "Edit Product"}</h2>
@@ -881,23 +881,23 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  </button>
  )}
  </div>
- <input
- value={form.slug}
- onChange={(e) => { setAutoSlug(false); set("slug", slugify(e.target.value)); }}
- placeholder="product-name-here"
- disabled={!isNew}
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm font-mono outline-none focus:border-slate-400 disabled:bg-slate-50 disabled:text-slate-500"
- />
- </div>
- <div>
- <Label>Brand / Publisher</Label>
- <input
- value={meta.brand ?? ""}
- onChange={(e) => setMeta("brand", e.target.value)}
- placeholder="e.g. Microsoft, Adobe"
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-slate-400"
- />
- </div>
+     <input
+     value={form.slug}
+     onChange={(e) => { setAutoSlug(false); set("slug", slugify(e.target.value)); }}
+     placeholder="product-name-here"
+     disabled={!isNew}
+     className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm font-mono text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-400 disabled:bg-slate-50 disabled:text-slate-500"
+     />
+     </div>
+     <div>
+     <Label>Brand / Publisher</Label>
+     <input
+     value={meta.brand ?? ""}
+     onChange={(e) => setMeta("brand", e.target.value)}
+     placeholder="e.g. Microsoft, Adobe"
+     className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-400"
+     />
+     </div>
  </div>
 
  {/* Bullet points */}
@@ -1410,15 +1410,15 @@ function Label({ children, className = "" }: { children: React.ReactNode; classN
 }
 
 function ChipBig({ active, onClick, children }: { active?: boolean; onClick: () => void; children: React.ReactNode }) {
- return (
- <button
- onClick={onClick}
- className={`inline-flex items-center justify-center gap-1.5 h-11 px-3.5 rounded-xl text-sm font-semibold border-2 transition ${
- active ? "border-slate-500 bg-slate-50 text-slate-700" : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
- }`}
- >{children}</button>
- );
-}
+  return (
+   <button
+   onClick={onClick}
+   className={`inline-flex items-center justify-center gap-1.5 min-h-11 w-full px-2.5 py-2 rounded-xl text-[13px] leading-tight font-semibold border-2 transition text-center break-words ${
+   active ? "border-slate-500 bg-slate-50 text-slate-800" : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+   }`}
+   >{children}</button>
+  );
+ }
 
 function FlagCheck({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
  return (
