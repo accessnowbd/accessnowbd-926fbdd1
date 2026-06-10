@@ -70,6 +70,15 @@ function AdminLayout() {
   // Wipe historical splash/admin flags immediately on mount so a stale client
   // flag can never leave the route on an empty gradient screen.
   useEffect(() => { purgeLegacySplashFlags(); }, []);
+  // Admin panel is always light/white themed regardless of the user-selected
+  // site theme. Force `theme-white` on <html> while mounted, then restore on unmount.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const root = document.documentElement;
+    const hadWhite = root.classList.contains("theme-white");
+    root.classList.add("theme-white");
+    return () => { if (!hadWhite) root.classList.remove("theme-white"); };
+  }, []);
   const [isAdmin, setIsAdmin] = useState<boolean>(() => readCachedAdmin());
   const [verified, setVerified] = useState<boolean>(() => readCachedAdmin());
   const [roleError, setRoleError] = useState<{
