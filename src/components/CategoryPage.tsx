@@ -45,11 +45,12 @@ export function CategoryPage({
 }) {
   const { products, isLoading } = useProducts();
   const navigate = useNavigate();
-  const { q: urlQ = "" } = useSearch({ strict: false });
-  const [cat, setCat] = useState<string | null>(null);
+  const { q: urlQ = "", cat: urlCat } = useSearch({ strict: false }) as { q?: string; cat?: string };
+  const [cat, setCat] = useState<string | null>(urlCat ?? null);
   const [sort, setSort] = useState<SortKey>("latest");
   const [q, setQ] = useState<string>(urlQ);
   const lastUrlQ = useRef(urlQ);
+  const lastUrlCat = useRef<string | undefined>(urlCat);
 
   // Sync from URL when it changes externally (e.g., back/forward, header search)
   useEffect(() => {
@@ -58,6 +59,15 @@ export function CategoryPage({
     }
     lastUrlQ.current = urlQ;
   }, [urlQ]);
+
+  // Sync category filter from URL (e.g. clicking a category pill)
+  useEffect(() => {
+    if (urlCat !== lastUrlCat.current) {
+      setCat(urlCat ?? null);
+      lastUrlCat.current = urlCat;
+    }
+  }, [urlCat]);
+
 
   // Debounce URL update so typing stays smooth and doesn't lose focus
   useEffect(() => {
