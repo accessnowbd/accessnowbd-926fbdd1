@@ -1138,18 +1138,46 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  </div>
  <div className="text-xs font-semibold text-slate-600 mb-1.5">মেয়াদ</div>
  <div className="flex flex-wrap gap-1.5 mb-3">
- {DURATION_CHIPS.map((d) => (
- <button
- key={d}
- onClick={() => setPlan(i, { duration: d, label: d })}
- className={`px-3 h-7 rounded-full text-xs font-semibold border transition ${
- p.duration === d
- ? "bg-slate-500 text-white border-slate-500"
- : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
- }`}
- >{d}</button>
- ))}
+ {DURATION_CHIPS.map((d) => {
+   const presets = DURATION_CHIPS.filter((x) => x !== "Custom");
+   const isCustomActive = d === "Custom" && !!p.duration && !presets.includes(p.duration);
+   const active = d === "Custom" ? isCustomActive : p.duration === d;
+   return (
+     <button
+       key={d}
+       onClick={() => {
+         if (d === "Custom") setPlan(i, { duration: isCustomActive ? p.duration : "", label: isCustomActive ? p.label : "" });
+         else setPlan(i, { duration: d, label: d });
+       }}
+       className={`px-3 h-7 rounded-full text-xs font-semibold border transition ${
+         active
+           ? "bg-violet-600 text-white border-violet-600"
+           : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
+       }`}
+     >{d}</button>
+   );
+ })}
  </div>
+ {(() => {
+   const presets = DURATION_CHIPS.filter((x) => x !== "Custom");
+   const showCustom = !!p.duration && !presets.includes(p.duration);
+   // also show empty input when user just clicked Custom (duration === "")
+   const isEmptyCustom = p.duration === "" && p.label === "";
+   if (!showCustom && !isEmptyCustom) return null;
+   return (
+     <div className="mb-3">
+       <div className="text-xs font-semibold text-slate-600 mb-1.5">কাস্টম মেয়াদ লিখুন</div>
+       <input
+         type="text"
+         value={p.duration ?? ""}
+         onChange={(e) => setPlan(i, { duration: e.target.value, label: e.target.value })}
+         placeholder="যেমন: 18 মাস, 6 সপ্তাহ, 45 দিন..."
+         className="w-full h-10 px-3 rounded-xl border border-violet-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
+         autoFocus
+       />
+     </div>
+   );
+ })()}
  <div className="grid grid-cols-2 gap-3">
  <div>
  <div className="text-xs font-semibold text-slate-600 mb-1.5">বিক্রয় মূল্য (৳) *</div>
