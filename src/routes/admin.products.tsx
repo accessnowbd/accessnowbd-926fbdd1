@@ -683,7 +683,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  const removePlan = (i: number) => setForm((f) => ({ ...f, plans: f.plans.filter((_, idx) => idx !== i) }));
 
  /* ---------- AI ---------- */
- const callAi = async (mode: "short" | "rich" | "all") => {
+ const callAi = async (mode: "short" | "rich" | "all" | "seo") => {
  if (!form.name.trim()) { toast.error("আগে Product Title লিখুন"); return; }
  setAi(mode);
  try {
