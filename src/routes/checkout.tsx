@@ -469,13 +469,10 @@ function CheckoutPage() {
           })}
         </div>
 
-        {/* Brand instruction card */}
-        <div
-          className="mx-5 mt-5 rounded-2xl border overflow-hidden"
-          style={{ background: `${brand}0d`, borderColor: `${brand}33` }}
-        >
+        {/* Brand instruction card — premium violet */}
+        <div className="mx-5 mt-5 rounded-3xl bg-violet-50 border border-violet-100 p-5 space-y-4">
           {/* Header strip */}
-          <div className="flex items-center justify-between px-4 pt-4 pb-2">
+          <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-9 h-9 rounded-lg grid place-items-center bg-white shrink-0 shadow-sm">
                 {selectedMethod.logo_url ? (
@@ -485,58 +482,47 @@ function CheckoutPage() {
                 )}
               </div>
               <div className="min-w-0">
-                <div className="text-[14px] font-bold leading-tight" style={{ color: brand }}>{selectedMethod.name}</div>
-                <div className="text-[11px] text-slate-600">{sendLabel}</div>
+                <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">{selectedMethod.name}</div>
+                <div className="text-[13px] font-bold text-slate-800">{sendLabel} করুন</div>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-[10px] text-slate-600">মোট পাঠান</div>
-              <div className="text-[16px] font-bold" style={{ color: brand }}>৳{grandTotal.toLocaleString()}</div>
+            <div className="text-right shrink-0">
+              <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">মোট পাঠাবেন</div>
+              <div className="text-[16px] font-bold text-violet-600">৳{grandTotal.toLocaleString()}</div>
             </div>
           </div>
 
-          {/* Number + copy */}
-          <div className="px-4 py-3 text-center">
-            <div className="text-[10px] uppercase tracking-wider text-slate-600 font-semibold">{sendLabel} নম্বর</div>
-            <div className="mt-1 flex items-center justify-center gap-3 flex-wrap">
-              <button
-                onClick={copyNumber}
-                className="text-[22px] font-bold tracking-wide tabular-nums hover:opacity-80"
-                style={{ color: brand, fontFamily: "var(--font-heading)" }}
-                title="ক্লিক করে কপি করুন"
-              >
-                {selectedMethod.number}
-              </button>
-              <button
-                onClick={copyNumber}
-                className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full text-white text-[12px] font-medium shadow-sm"
-                style={{ background: brand }}
-              >
-                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                {copied ? "কপি হয়েছে" : "কপি করুন"}
-              </button>
-            </div>
-            <p className="text-[10px] text-slate-600 mt-2">👆 নম্বরে ক্লিক করলেই কপি হবে</p>
+          {/* Number card with full-width copy CTA */}
+          <div className="bg-white rounded-2xl p-4 flex flex-col items-center border border-violet-100 shadow-sm">
+            <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">{sendLabel} নম্বর</span>
+            <button
+              onClick={copyNumber}
+              className="text-[22px] sm:text-[24px] font-black text-slate-900 tracking-wider mb-3 tabular-nums hover:text-violet-700 transition"
+              style={{ fontFamily: "var(--font-heading)" }}
+              title="ক্লিক করে কপি করুন"
+            >
+              {selectedMethod.number}
+            </button>
+            <button
+              onClick={copyNumber}
+              className="w-full bg-violet-600 hover:bg-violet-700 text-white py-2.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 transition active:scale-95 shadow-lg shadow-violet-200"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied ? "কপি হয়েছে" : "নম্বরটি কপি করুন"}
+            </button>
+            <p className="text-[10px] text-slate-400 mt-2 italic">👆 নম্বরটি ক্লিক করলেই কপি হবে</p>
           </div>
 
           {/* Numbered steps */}
-          <div className="mx-3 mb-3 rounded-xl bg-white border border-slate-200 p-3 shadow-sm">
-            <p className="text-[12px] font-semibold mb-2 inline-flex items-center gap-1.5" style={{ color: brand }}>
-              📱 পেমেন্ট করার নিয়ম
-            </p>
-            <ol className="space-y-1.5">
-              {steps2.map((s, i) => (
-                <li key={i} className="flex items-start gap-2 text-[12px]">
-                  <span
-                    className="grid place-items-center w-5 h-5 rounded-full text-white text-[10px] font-bold shrink-0 mt-0.5"
-                    style={{ background: brand }}
-                  >
-                    {i + 1}
-                  </span>
-                  <span className="text-slate-800">{s}</span>
-                </li>
-              ))}
-            </ol>
+          <div className="space-y-2 text-[12px] text-slate-700 font-medium px-1">
+            {steps2.map((s, i) => (
+              <div key={i} className="flex gap-3 items-start">
+                <span className="w-5 h-5 bg-violet-200 text-violet-700 rounded-full flex-shrink-0 grid place-items-center text-[10px] font-bold mt-0.5">
+                  {i + 1}
+                </span>
+                <p className="leading-relaxed">{s}</p>
+              </div>
+            ))}
           </div>
         </div>
 
