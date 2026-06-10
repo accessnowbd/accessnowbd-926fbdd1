@@ -1052,21 +1052,40 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <option value="draft">Draft</option>
  </select>
  </div>
- <div>
- <Label>Badge Label</Label>
- <select
- value={form.badge ?? ""}
- onChange={(e) => set("badge", e.target.value || null)}
- className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm bg-white"
- >
- <option value="">— None —</option>
- <option value="HOT">HOT</option>
- <option value="NEW">NEW</option>
- <option value="SALE">SALE</option>
- <option value="BESTSELLER">BESTSELLER</option>
- <option value="LIMITED">LIMITED</option>
- </select>
- </div>
+  <div>
+  <Label>Badge Label</Label>
+  <select
+  value={["", "🔥 Hot Deal", "✨ Just Launched", "💎 Premium Sale", "🏆 #1 Bestseller", "⏳ Limited Edition", "👑 Exclusive", "🥇 Editor's Choice", "⚡ Flash Deal", "🎁 Special Offer", "🚀 Trending Now"].includes(form.badge ?? "") ? (form.badge ?? "") : "__custom__"}
+  onChange={(e) => {
+    const v = e.target.value;
+    if (v === "__custom__") { set("badge", form.badge && !["🔥 Hot Deal","✨ Just Launched","💎 Premium Sale","🏆 #1 Bestseller","⏳ Limited Edition","👑 Exclusive","🥇 Editor's Choice","⚡ Flash Deal","🎁 Special Offer","🚀 Trending Now"].includes(form.badge) ? form.badge : "Custom Badge"); }
+    else { set("badge", v || null); }
+  }}
+  className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
+  >
+  <option value="">— None —</option>
+  <option value="🔥 Hot Deal">🔥 Hot Deal</option>
+  <option value="✨ Just Launched">✨ Just Launched</option>
+  <option value="💎 Premium Sale">💎 Premium Sale</option>
+  <option value="🏆 #1 Bestseller">🏆 #1 Bestseller</option>
+  <option value="⏳ Limited Edition">⏳ Limited Edition</option>
+  <option value="👑 Exclusive">👑 Exclusive</option>
+  <option value="🥇 Editor's Choice">🥇 Editor's Choice</option>
+  <option value="⚡ Flash Deal">⚡ Flash Deal</option>
+  <option value="🎁 Special Offer">🎁 Special Offer</option>
+  <option value="🚀 Trending Now">🚀 Trending Now</option>
+  <option value="__custom__">✏️ Custom Badge…</option>
+  </select>
+  {form.badge && !["🔥 Hot Deal","✨ Just Launched","💎 Premium Sale","🏆 #1 Bestseller","⏳ Limited Edition","👑 Exclusive","🥇 Editor's Choice","⚡ Flash Deal","🎁 Special Offer","🚀 Trending Now"].includes(form.badge) && (
+    <input
+      value={form.badge ?? ""}
+      onChange={(e) => set("badge", e.target.value || null)}
+      placeholder="Custom badge text"
+      maxLength={30}
+      className="mt-2 w-full h-10 px-3.5 rounded-xl border border-violet-300 bg-white/70 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200"
+    />
+  )}
+  </div>
  </div>
 
  <div>
