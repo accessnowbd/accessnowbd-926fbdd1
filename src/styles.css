@@ -2355,3 +2355,54 @@ html:not(.theme-white) .site-search-trigger kbd {
 html:not(.theme-white) .site-search-trigger span[aria-hidden].bg-slate-200 {
   background: oklch(1 0 0 / 0.15) !important;
 }
+
+/* =====================================================
+   Product detail page — Aurora (dark) theme adaptation
+   The product.$slug.tsx page uses hardcoded light tokens
+   (bg-white, text-slate-*, border-slate-*) for the Light
+   Aesthetic. In Aurora theme, remap them to dark glass.
+   ===================================================== */
+html:not(.theme-white) .product-page-shell {
+  background: transparent !important;
+  color: oklch(0.96 0.01 280) !important;
+}
+html:not(.theme-white) .product-page-shell .bg-white {
+  background: oklch(0.18 0.04 280 / 0.55) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+html:not(.theme-white) .product-page-shell .bg-slate-50 { background: transparent !important; }
+html:not(.theme-white) .product-page-shell .bg-slate-100 { background: oklch(1 0 0 / 0.08) !important; }
+html:not(.theme-white) .product-page-shell [class*="bg-indigo-50"] {
+  background: oklch(0.55 0.22 285 / 0.18) !important;
+}
+
+html:not(.theme-white) .product-page-shell .border-slate-200,
+html:not(.theme-white) .product-page-shell .border-slate-300 {
+  border-color: oklch(1 0 0 / 0.12) !important;
+}
+
+html:not(.theme-white) .product-page-shell .text-slate-900 { color: oklch(0.98 0.01 280) !important; }
+html:not(.theme-white) .product-page-shell .text-slate-700 { color: oklch(0.88 0.02 280) !important; }
+html:not(.theme-white) .product-page-shell .text-slate-600 { color: oklch(0.82 0.02 280) !important; }
+html:not(.theme-white) .product-page-shell .text-slate-500 { color: oklch(0.70 0.02 280) !important; }
+html:not(.theme-white) .product-page-shell .text-slate-400 { color: oklch(0.60 0.02 280) !important; }
+html:not(.theme-white) .product-page-shell .text-slate-300 { color: oklch(0.45 0.02 280) !important; }
+
+html:not(.theme-white) .product-page-shell .hover\:text-slate-900:hover { color: oklch(0.98 0.01 280) !important; }
+html:not(.theme-white) .product-page-shell .hover\:border-slate-300:hover { border-color: oklch(1 0 0 / 0.22) !important; }
+
+/* Description prose */
+html:not(.theme-white) .product-page-shell .prose,
+html:not(.theme-white) .product-page-shell .prose * { color: oklch(0.86 0.02 280) !important; }
+html:not(.theme-white) .product-page-shell .prose h1,
+html:not(.theme-white) .product-page-shell .prose h2,
+html:not(.theme-white) .product-page-shell .prose h3,
+html:not(.theme-white) .product-page-shell .prose h4,
+html:not(.theme-white) .product-page-shell .prose strong { color: oklch(0.98 0.01 280) !important; }
+html:not(.theme-white) .product-page-shell .prose a { color: oklch(0.78 0.18 285) !important; }
+
+/* Sale chip stays readable */
+html:not(.theme-white) .product-page-shell .bg-rose-100 {
+  background: oklch(0.55 0.22 20 / 0.18) !important;
+}
