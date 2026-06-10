@@ -788,7 +788,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
  /* ============================================================ RENDER */
  return (
-   <div className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-2 md:p-4 bg-gradient-to-br from-violet-950/70 via-slate-900/60 to-fuchsia-950/70 backdrop-blur-md" onClick={onClose}>
+   <div className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-2 md:p-4 bg-gradient-to-br from-violet-950/70 via-slate-900/60 to-fuchsia-950/70 backdrop-blur-md">
    <div className="relative rounded-2xl w-full max-w-3xl h-[96vh] md:h-[90vh] flex flex-col overflow-hidden bg-white/60 backdrop-blur-2xl border border-white/60 ring-1 ring-violet-300/40 shadow-[0_30px_80px_-20px_rgba(109,40,217,0.45)]" onClick={(e) => e.stopPropagation()}>
    {/* Ambient glow orbs */}
    <div className="pointer-events-none absolute -top-24 -left-20 h-72 w-72 rounded-full bg-violet-400/30 blur-3xl" />
