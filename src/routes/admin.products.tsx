@@ -792,35 +792,41 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
 
  /* ============================================================ RENDER */
  return (
-  <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-start md:items-center justify-center p-2 md:p-4" onClick={onClose}>
-  <div className="bg-white rounded-2xl w-full max-w-3xl h-[96vh] md:h-[90vh] flex flex-col shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
- {/* Header */}
- <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100">
- <h2 className="font-bold text-xl text-slate-900">{isNew ? "New Product" : "Edit Product"}</h2>
- <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100 text-slate-500"><X className="w-5 h-5" /></button>
- </div>
+   <div className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-2 md:p-4 bg-gradient-to-br from-violet-950/70 via-slate-900/60 to-fuchsia-950/70 backdrop-blur-md" onClick={onClose}>
+   <div className="relative rounded-2xl w-full max-w-3xl h-[96vh] md:h-[90vh] flex flex-col overflow-hidden bg-white/60 backdrop-blur-2xl border border-white/60 ring-1 ring-violet-300/40 shadow-[0_30px_80px_-20px_rgba(109,40,217,0.45)]" onClick={(e) => e.stopPropagation()}>
+   {/* Ambient glow orbs */}
+   <div className="pointer-events-none absolute -top-24 -left-20 h-72 w-72 rounded-full bg-violet-400/30 blur-3xl" />
+   <div className="pointer-events-none absolute -bottom-24 -right-20 h-72 w-72 rounded-full bg-fuchsia-300/30 blur-3xl" />
+   <div className="pointer-events-none absolute top-1/3 right-1/4 h-56 w-56 rounded-full bg-indigo-300/20 blur-3xl" />
 
- {/* Tabs */}
- <div className="px-6 pt-3 border-b border-slate-100">
- <div className="flex items-center gap-1 overflow-x-auto -mb-px">
- {TABS.map((t) => (
- <button
- key={t.id}
- onClick={() => setTab(t.id)}
- className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 h-10 rounded-t-lg text-sm font-semibold border-b-2 transition ${
- tab === t.id
- ? "text-slate-600 border-slate-500 bg-slate-50"
- : "text-slate-500 border-transparent hover:text-slate-700"
- }`}
- >
- <span>{t.icon}</span> {t.label}
- </button>
- ))}
- </div>
- </div>
+  {/* Header */}
+  <div className="relative px-6 py-4 flex items-center justify-between border-b border-white/40 bg-white/30 backdrop-blur-xl">
+  <h2 className="font-bold text-xl text-slate-900">{isNew ? "New Product" : "Edit Product"}</h2>
+  <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg bg-white/50 hover:bg-violet-100/70 text-violet-700 border border-white/60"><X className="w-5 h-5" /></button>
+  </div>
 
- {/* Body */}
- <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+  {/* Tabs */}
+  <div className="relative px-6 pt-3 border-b border-white/40 bg-white/20 backdrop-blur-xl">
+  <div className="flex items-center gap-1 overflow-x-auto -mb-px">
+  {TABS.map((t) => (
+  <button
+  key={t.id}
+  onClick={() => setTab(t.id)}
+  className={`shrink-0 inline-flex items-center gap-1.5 px-3.5 h-10 rounded-t-lg text-sm font-semibold border-b-2 transition ${
+  tab === t.id
+  ? "text-violet-700 border-violet-500 bg-white/70 backdrop-blur"
+  : "text-slate-600 border-transparent hover:text-violet-700 hover:bg-white/40"
+  }`}
+  >
+  <span>{t.icon}</span> {t.label}
+  </button>
+  ))}
+  </div>
+  </div>
+
+  {/* Body */}
+  <div className="relative flex-1 overflow-y-auto px-6 py-5 space-y-5">
+
  {tab === "general" && (
  <>
  {/* Product type */}
