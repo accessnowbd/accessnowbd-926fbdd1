@@ -655,7 +655,7 @@ function MagneticNav() {
       ref={navRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="site-nav-pill hidden lg:flex relative items-center h-14 rounded-full border border-[#e4e7ff] font-semibold shrink min-w-0 max-w-full whitespace-nowrap overflow-hidden"
+      className="site-nav-pill hidden lg:flex relative items-center h-14 rounded-full border border-[#e4e7ff] font-semibold min-w-0 whitespace-nowrap"
       style={{
         gap: "clamp(2px, 0.3vw, 6px)",
         paddingLeft: "clamp(10px, 0.9vw, 18px)",
