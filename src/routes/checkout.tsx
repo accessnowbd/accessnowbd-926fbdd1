@@ -410,8 +410,8 @@ function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen grid place-items-center px-4 py-10">
-      <GlassCard className="w-full max-w-[520px] !p-0 overflow-hidden rounded-3xl">
+    <div className="min-h-screen grid place-items-center px-4 py-10 bg-slate-50">
+      <GlassCard className="w-full max-w-[520px] !p-0 overflow-hidden rounded-[2.5rem] shadow-2xl border border-violet-100 bg-white">
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
           <div className="flex items-center gap-3 min-w-0">
