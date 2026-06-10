@@ -115,7 +115,7 @@ export function ProductBanner({
           width={1024}
           height={1024}
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
-          className="relative z-10 w-full h-full object-contain"
+          className="relative z-10 w-full h-full object-cover"
           onError={() => setImgFailed(true)}
         />
       ) : !allLogosFailed ? (
