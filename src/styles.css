@@ -2276,11 +2276,9 @@ html.theme-white .home-scroll-optimized .product-card-v2:hover {
    when the user switches to the Aurora (dark) theme.
    -------------------------------------------------------------------------- */
 .product-page-shell {
-  background: linear-gradient(135deg,
-    oklch(0.965 0.04 190) 0%,
-    oklch(0.99 0 0) 50%,
-    oklch(0.965 0.05 160) 100%);
+  background: oklch(0.984 0.003 247.86); /* slate-50 */
 }
+
 html:not(.theme-white) .product-page-shell {
   background: linear-gradient(135deg,
     oklch(0.18 0.05 270) 0%,
