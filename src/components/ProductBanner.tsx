@@ -103,7 +103,7 @@ export function ProductBanner({
 
   return (
     <div
-      className={`product-banner-clean relative overflow-hidden ${aspectClass} ${className} flex items-center justify-center p-2 sm:p-3`}
+      className={`product-banner-clean relative overflow-hidden ${aspectClass} ${className} flex items-center justify-center`}
     >
       {primary && !imgFailed ? (
         <img
