@@ -44,6 +44,36 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Buy verified digital products, subscriptions, software licenses, AI tools, OTT, VPN and education services in Bangladesh with fast delivery." },
       { property: "og:title", content: "AccessNow BD — Digital Products & Software" },
       { property: "og:description", content: "White glassmorphism digital marketplace for premium software, subscriptions and services." },
+      { property: "og:url", content: "https://accessnowbd.com/" },
+      { property: "og:type", content: "website" },
+    ],
+    links: [{ rel: "canonical", href: "https://accessnowbd.com/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "AccessNow BD",
+          url: "https://accessnowbd.com",
+          logo: "https://accessnowbd.com/icons/apple-touch-icon.png",
+          sameAs: ["https://accessnowbd.lovable.app"],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "AccessNow BD",
+          url: "https://accessnowbd.com",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: "https://accessnowbd.com/products?q={search_term_string}",
+            "query-input": "required name=search_term_string",
+          },
+        }),
+      },
     ],
   }),
 });

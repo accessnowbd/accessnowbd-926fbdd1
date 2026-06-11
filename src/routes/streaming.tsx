@@ -16,6 +16,8 @@ export const Route = createFileRoute("/streaming")({
       { name: "description", content: "Premium streaming subscriptions: Netflix, Prime Video, HBO Max, Disney+, Apple TV+, Hoichoi, Chorki." },
       { property: "og:title", content: "Streaming Subscriptions — AccessNow BD" },
       { property: "og:description", content: "All major streaming platforms at the best prices in Bangladesh." },
+      { property: "og:url", content: "https://accessnowbd.com/streaming" },
     ],
+    links: [{ rel: "canonical", href: "https://accessnowbd.com/streaming" }],
   }),
 });

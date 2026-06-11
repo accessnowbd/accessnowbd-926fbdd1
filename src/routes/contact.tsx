@@ -13,7 +13,9 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "Reach AccessNow BD via WhatsApp, email, or the contact form. Office hours 11 AM – 11 PM." },
       { property: "og:title", content: "Contact AccessNow BD" },
       { property: "og:description", content: "We're here to help — WhatsApp, email, or send us a message." },
+      { property: "og:url", content: "https://accessnowbd.com/contact" },
     ],
+    links: [{ rel: "canonical", href: "https://accessnowbd.com/contact" }],
   }),
 });
 
