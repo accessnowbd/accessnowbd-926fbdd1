@@ -108,7 +108,7 @@ export function ProductBanner({
       {primary && !imgFailed ? (
         <img
           src={primary}
-          alt={product.name}
+          alt={`${product.name} — ${product.category ?? "premium subscription"} available in Bangladesh`}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
           fetchPriority={priority ? "high" : "low"}
@@ -122,7 +122,7 @@ export function ProductBanner({
         <img
           key={currentLogo}
           src={currentLogo}
-          alt={product.name}
+          alt={`${product.name} logo — ${product.category ?? "digital subscription"}`}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
           fetchPriority={priority ? "high" : "low"}

@@ -355,23 +355,25 @@ function ProductPage() {
 
           {/* Quantity */}
           <div className="mt-6 space-y-3">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Quantity</label>
+            <label htmlFor="product-qty-input" className="text-xs font-bold text-slate-500 uppercase tracking-widest">Quantity</label>
             <div className="flex items-center w-32 bg-slate-100 rounded-xl p-1">
               <button
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
-                aria-label="Decrease"
+                aria-label="Decrease quantity"
                 className="w-10 h-10 grid place-items-center text-slate-500 hover:text-slate-900 transition-colors"
               >
                 <Minus className="w-4 h-4" strokeWidth={2.5} />
               </button>
               <input
+                id="product-qty-input"
+                aria-label="Quantity"
                 value={qty}
                 onChange={(e) => setQty(Math.max(1, Number(e.target.value.replace(/\D/g, "")) || 1))}
                 className="w-full text-center bg-transparent font-bold text-slate-900 outline-none"
               />
               <button
                 onClick={() => setQty((q) => q + 1)}
-                aria-label="Increase"
+                aria-label="Increase quantity"
                 className="w-10 h-10 grid place-items-center text-slate-500 hover:text-slate-900 transition-colors"
               >
                 <Plus className="w-4 h-4" strokeWidth={2.5} />
