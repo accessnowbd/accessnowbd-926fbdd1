@@ -11,6 +11,24 @@ export const Route = createFileRoute("/faq")({
       { name: "description", content: "Answers to common questions about delivery, payment, warranty and account support at AccessNow BD." },
       { property: "og:title", content: "FAQ — AccessNow BD" },
       { property: "og:description", content: "Everything you need to know about buying premium subscriptions in Bangladesh." },
+      { property: "og:url", content: "https://accessnowbd.com/faq" },
+    ],
+    links: [{ rel: "canonical", href: "https://accessnowbd.com/faq" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: SECTIONS.flatMap((s) =>
+            s.items.map((i) => ({
+              "@type": "Question",
+              name: i.q,
+              acceptedAnswer: { "@type": "Answer", text: i.a },
+            })),
+          ),
+        }),
+      },
     ],
   }),
 });
