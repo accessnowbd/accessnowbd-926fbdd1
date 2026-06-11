@@ -14,6 +14,7 @@ interface SitemapEntry {
 const STATIC_ENTRIES: SitemapEntry[] = [
   { path: "/", changefreq: "daily", priority: "1.0" },
   { path: "/products", changefreq: "daily", priority: "0.9" },
+  { path: "/categories", changefreq: "weekly", priority: "0.7" },
   { path: "/streaming", changefreq: "weekly", priority: "0.8" },
   { path: "/ai-tools", changefreq: "weekly", priority: "0.8" },
   { path: "/education", changefreq: "weekly", priority: "0.8" },
@@ -26,6 +27,7 @@ const STATIC_ENTRIES: SitemapEntry[] = [
   { path: "/order-cancellation", changefreq: "monthly", priority: "0.4" },
   { path: "/delivery-info", changefreq: "monthly", priority: "0.5" },
   { path: "/refund-request", changefreq: "monthly", priority: "0.4" },
+  { path: "/developer", changefreq: "monthly", priority: "0.4" },
   { path: "/login", changefreq: "monthly", priority: "0.3" },
 ];
 
