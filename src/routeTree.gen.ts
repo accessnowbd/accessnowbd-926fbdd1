@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as StreamingRouteImport } from './routes/streaming'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
@@ -62,6 +63,11 @@ const TermsRoute = TermsRouteImport.update({
 const StreamingRoute = StreamingRouteImport.update({
   id: '/streaming',
   path: '/streaming',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapRoute = SitemapRouteImport.update({
@@ -301,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
@@ -346,6 +353,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
@@ -393,6 +401,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap': typeof SitemapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/admin/$page': typeof AdminPageRoute
@@ -441,6 +450,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/sitemap'
+    | '/sitemap.xml'
     | '/streaming'
     | '/terms'
     | '/admin/$page'
@@ -486,6 +496,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/sitemap'
+    | '/sitemap.xml'
     | '/streaming'
     | '/terms'
     | '/admin/$page'
@@ -532,6 +543,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/sitemap'
+    | '/sitemap.xml'
     | '/streaming'
     | '/terms'
     | '/admin/$page'
@@ -579,6 +591,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapRoute: typeof SitemapRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StreamingRoute: typeof StreamingRoute
   TermsRoute: typeof TermsRoute
   ProductSlugRoute: typeof ProductSlugRoute
@@ -600,6 +613,13 @@ declare module '@tanstack/react-router' {
       path: '/streaming'
       fullPath: '/streaming'
       preLoaderRoute: typeof StreamingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap': {
@@ -971,6 +991,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapRoute: SitemapRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   StreamingRoute: StreamingRoute,
   TermsRoute: TermsRoute,
   ProductSlugRoute: ProductSlugRoute,
