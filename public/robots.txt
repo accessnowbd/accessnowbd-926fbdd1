@@ -7,5 +7,6 @@ Disallow: /orders
 Disallow: /profile
 Disallow: /reset-password
 Disallow: /forgot-password
+Disallow: /dashboard
 
 Sitemap: https://accessnowbd.com/sitemap.xml
