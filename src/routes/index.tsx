@@ -475,7 +475,7 @@ function HeroExperience() {
                     className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl shadow-lg"
                     style={{ backgroundColor: brand.color }}
                   >
-                    <img src={brandLogo(brand)} alt={brand.name} loading="lazy" width={20} height={20} className="h-5 w-5 object-contain drop-shadow" />
+                    <img src={brandLogo(brand)} alt={`${brand.name} subscription logo`} loading="lazy" width={20} height={20} className="h-5 w-5 object-contain drop-shadow" />
                   </div>
                   <h3 className="text-sm font-bold text-slate-900">{brand.name}</h3>
                   <p className="text-[11px] text-slate-600">{sub}</p>
@@ -587,7 +587,7 @@ function ProductSkeleton() {
 function FeaturedProducts({ items, isLoading }: { items: Product[]; isLoading?: boolean }) {
   return (
     <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-12">
-      <SectionTitle eyebrow="Popular Picks" title="Today's Bestselling Digital Services" subtitle="The most ordered software and subscriptions, handpicked for you." action="View All" to="/products" />
+      <SectionTitle eyebrow="Popular Picks" title="Today's Bestselling Digital Services" subtitle="The most ordered software and subscriptions, handpicked for you." action="View all digital services" to="/products" />
       <div className="mt-7 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-5">
         {items.length
           ? items.map((product) => <ProductCard key={product.slug} product={product} />)
