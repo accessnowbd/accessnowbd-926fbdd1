@@ -5,6 +5,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { findAdminPage, ADMIN_MENU } from "@/lib/admin-menu";
 import { getFeatureConfig, validateField, slugify, type AdminField } from "@/lib/admin-fields";
 import { supabase } from "@/integrations/supabase/client";
+import { fileToWebp } from "@/lib/image-to-webp";
 import { toast } from "sonner";
 import { useAdminLang } from "@/context/AdminLangContext";
 import { ProductMediaGallery } from "@/components/admin/ProductMediaGallery";
