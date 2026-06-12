@@ -1918,9 +1918,21 @@ html.theme-white .product-whatsapp-button,
 }
 
 :root:not(.theme-white) .glass,
-:root:not(.theme-white) [class*="backdrop-blur"] {
+:root:not(.theme-white) [class*="backdrop-blur"]:not(.force-light) {
   background: rgba(20, 26, 42, 0.86) !important;
   border-color: rgba(186, 200, 230, 0.10) !important;
+}
+
+/* Opt-out: pages/components that must stay light in dark theme (e.g. checkout card) */
+:root:not(.theme-white) .force-light {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgb(237 233 254) !important; /* violet-100 */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+:root:not(.theme-white) .force-light * {
+  /* let inner text-* utilities still work; only neutralize inherited white */
 }
 
 :root:not(.theme-white) .glass-strong {
