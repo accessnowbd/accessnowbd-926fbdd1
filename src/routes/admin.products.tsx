@@ -357,7 +357,7 @@ function AdminProducts() {
  const patch: Record<string, unknown> = {};
  if (imgChanged) patch.image_url = newImg;
  if (galChanged) patch.meta = { ...(p.meta ?? {}), gallery: newGallery };
- const { error } = await supabase.from("products").update(patch).eq("slug", p.slug);
+ const { error } = await supabase.from("products").update(patch as never).eq("slug", p.slug);
  if (!error) updated++;
  }
  setWebpBusy(false);
