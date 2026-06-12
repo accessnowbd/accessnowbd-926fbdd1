@@ -9,6 +9,8 @@ import {
   PieChart, UsersRound, ClipboardList, Bot, Settings, ShieldCheck, DatabaseBackup, ShoppingCart, ListChecks, Sparkles,
 } from "lucide-react";
 
+export type AdminBadge = "LIVE" | "NEW" | "BETA";
+
 export type AdminMenuItem = {
   to: string;
   label: string;
@@ -16,6 +18,8 @@ export type AdminMenuItem = {
   icon: ReactNode;
   /** Tailwind gradient classes for the round icon background */
   grad: string;
+  /** Optional small status badge (LIVE, NEW, BETA) */
+  badge?: AdminBadge;
   /** If true, render as the dashboard root */
   exact?: boolean;
 };
@@ -60,12 +64,12 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
     titleBn: "অর্ডার ও পেমেন্ট",
     icon: ic(ShoppingCart),
     items: [
-      { to: "/admin/orders", label: "Orders", labelBn: "অর্ডার", icon: ic(ShoppingBag), grad: "from-orange-500 to-amber-500" },
+      { to: "/admin/orders", label: "Orders", labelBn: "অর্ডার", icon: ic(ShoppingBag), grad: "from-orange-500 to-amber-500", badge: "LIVE" },
       { to: "/admin/users", label: "Customers", labelBn: "কাস্টমার", icon: ic(Users), grad: "from-cyan-500 to-teal-500" },
-      { to: "/admin/wallet", label: "Wallet", labelBn: "ওয়ালেট", icon: ic(Wallet), grad: "from-amber-400 to-orange-500" },
+      { to: "/admin/wallet", label: "Wallet", labelBn: "ওয়ালেট", icon: ic(Wallet), grad: "from-amber-400 to-orange-500", badge: "NEW" },
       { to: "/admin/shop-config", label: "Shop & WhatsApp", labelBn: "শপ ও হোয়াটসঅ্যাপ", icon: ic(MessageCircle), grad: "from-green-500 to-emerald-600" },
       { to: "/admin/payments", label: "Manual Payment", labelBn: "ম্যানুয়াল পেমেন্ট", icon: ic(CreditCard), grad: "from-emerald-500 to-green-600" },
-      { to: "/admin/account-delivery", label: "Account Delivery", labelBn: "অ্যাকাউন্ট ডেলিভারি", icon: ic(Truck), grad: "from-amber-500 to-yellow-500" },
+      { to: "/admin/account-delivery", label: "Account Delivery", labelBn: "অ্যাকাউন্ট ডেলিভারি", icon: ic(Truck), grad: "from-amber-500 to-yellow-500", badge: "NEW" },
       { to: "/admin/inventory", label: "Inventory", labelBn: "ইনভেন্টরি", icon: ic(Boxes), grad: "from-amber-500 to-orange-500" },
       { to: "/admin/notifications", label: "Notifications", labelBn: "নোটিফিকেশন", icon: ic(Bell), grad: "from-rose-500 to-red-500" },
       { to: "/admin/checkout-policy", label: "Checkout Policy", labelBn: "চেকআউট পলিসি", icon: ic(FileCheck), grad: "from-blue-500 to-cyan-500" },

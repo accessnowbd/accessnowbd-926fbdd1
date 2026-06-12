@@ -2,8 +2,8 @@ import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tan
 import { useEffect, useMemo, useState } from "react";
 import { AuthPageEntry } from "@/components/AuthPage";
 import {
-  ShieldAlert, LogOut, Bell, Globe, Search,
-  PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X, Pin,
+  ShieldAlert, LogOut, Globe,
+  PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X,
 } from "lucide-react";
 import { AdminGlobalSearch, useAdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
 import { SearchTrigger } from "@/components/SearchBar";
@@ -319,18 +319,11 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="admin-glass lg:h-screen lg:overflow-hidden min-h-screen flex relative font-['Manrope',ui-sans-serif,system-ui] text-slate-800 bg-gradient-to-br from-violet-100 via-fuchsia-50 to-indigo-100">
-      {/* Ambient glow orbs (whole admin) */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden -z-0">
-        <div className="absolute -top-32 -left-20 w-[420px] h-[420px] rounded-full bg-violet-400/30 blur-[120px]" />
-        <div className="absolute top-1/3 -right-32 w-[480px] h-[480px] rounded-full bg-fuchsia-300/25 blur-[140px]" />
-        <div className="absolute bottom-0 left-1/3 w-[380px] h-[380px] rounded-full bg-indigo-300/25 blur-[130px]" />
-      </div>
-
+    <div className="admin-shell lg:h-screen lg:overflow-hidden min-h-screen flex relative font-['Manrope',ui-sans-serif,system-ui] text-slate-800 bg-[#f7f8fb]">
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-40 bg-violet-950/40 backdrop-blur-md"
+          className="lg:hidden fixed inset-0 z-40 bg-slate-900/40"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -339,23 +332,23 @@ function AdminShell({ user, signOut, navigate }: any) {
       <aside
         className={[
           "shrink-0 transition-all duration-200 flex flex-col h-screen relative z-10",
-          "bg-white/55 backdrop-blur-2xl border-r border-white/60 ring-1 ring-violet-200/40 shadow-[0_20px_60px_-30px_rgba(109,40,217,0.35)]",
+          "bg-white border-r border-slate-200",
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
-          collapsed ? "lg:w-[76px]" : "lg:w-[268px]",
-          "fixed top-0 left-0 z-50 w-[280px] max-w-[85vw] shadow-2xl lg:shadow-none",
+          collapsed ? "lg:w-[76px]" : "lg:w-[260px]",
+          "fixed top-0 left-0 z-50 w-[260px] max-w-[85vw] shadow-2xl lg:shadow-none",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         ].join(" ")}
       >
         {/* Brand */}
         <div className={[
-          "border-b border-white/50 bg-white/30 backdrop-blur-xl",
+          "border-b border-slate-100",
           collapsed
             ? "flex flex-col items-center justify-center gap-1.5 py-3 px-2"
             : "h-[68px] flex items-center justify-between px-4",
         ].join(" ")}>
 
           <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "justify-center" : ""}`}>
-            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-xl overflow-hidden ring-1 ring-slate-200 shadow-[0_4px_14px_-6px_rgba(59,130,246,0.4)] bg-white">
+            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-xl overflow-hidden ring-1 ring-slate-200 bg-white">
               <img
                 src={accessNowLogo}
                 alt="AccessNow BD"
@@ -364,9 +357,9 @@ function AdminShell({ user, signOut, navigate }: any) {
               />
             </span>
             {!collapsed && (
-              <span className="leading-tight min-w-0 font-['Sora',ui-sans-serif,system-ui]">
-                <span className="block text-[15px] font-bold tracking-tight text-slate-900">AccessNow BD</span>
-                <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-blue-600 mt-0.5">Admin Console</span>
+              <span className="leading-tight min-w-0">
+                <span className="block text-[15px] font-extrabold tracking-tight bg-gradient-to-r from-orange-500 via-rose-500 to-blue-600 bg-clip-text text-transparent">AccessNow BD</span>
+                <span className="block text-[9.5px] font-bold uppercase tracking-[0.22em] text-slate-400 mt-0.5">Admin Console</span>
               </span>
             )}
           </Link>
@@ -380,8 +373,8 @@ function AdminShell({ user, signOut, navigate }: any) {
           <button
             onClick={() => setCollapsed((v) => !v)}
             className={[
-              "hidden lg:inline-flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition",
-              collapsed ? "w-9 h-9 ring-1 ring-slate-200 bg-white shadow-sm" : "w-8 h-8",
+              "hidden lg:inline-flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition",
+              collapsed ? "w-9 h-9 ring-1 ring-slate-200 bg-white" : "w-8 h-8",
             ].join(" ")}
             aria-label={collapsed ? t("Expand sidebar", "সাইডবার বড় করুন") : t("Collapse sidebar", "সাইডবার ছোট করুন")}
             title={collapsed ? t("Expand sidebar", "সাইডবার বড় করুন") : t("Collapse sidebar", "সাইডবার ছোট করুন")}
@@ -409,26 +402,28 @@ function AdminShell({ user, signOut, navigate }: any) {
         </nav>
 
         {/* User */}
-        <div className="border-t border-white/50 p-3 space-y-2 bg-white/40 backdrop-blur-xl">
+        <div className="border-t border-slate-100 p-3 bg-white">
           <div className={`flex items-center gap-2.5 ${collapsed ? "justify-center" : ""}`}>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white grid place-items-center text-xs font-bold shrink-0 shadow-[0_4px_14px_-4px_rgba(139,92,246,0.7)] ring-1 ring-white/40 font-['Sora']">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 text-slate-700 grid place-items-center text-xs font-bold shrink-0 ring-1 ring-slate-200">
               {(user?.email ?? "A").slice(0, 1).toUpperCase()}
             </div>
             {!collapsed && (
               <div className="min-w-0 flex-1">
-                <div className="text-[13px] font-bold truncate text-slate-900 font-['Sora']">{t("Admin", "অ্যাডমিন")}</div>
+                <div className="text-[13px] font-bold truncate text-slate-900">{t("Admin", "অ্যাডমিন")}</div>
                 <div className="text-[11px] truncate text-slate-500">{user?.email}</div>
               </div>
             )}
+            {!collapsed && (
+              <button
+                onClick={async () => { await signOut(); navigate({ to: "/login" }); }}
+                className="shrink-0 w-8 h-8 rounded-lg grid place-items-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                title={t("Logout", "লগআউট")}
+                aria-label={t("Logout", "লগআউট")}
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            )}
           </div>
-          {!collapsed && (
-            <button
-              onClick={async () => { await signOut(); navigate({ to: "/login" }); }}
-              className="w-full h-9 rounded-lg text-xs font-bold inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white shadow-md shadow-violet-500/30 ring-1 ring-white/30 transition"
-            >
-              <LogOut className="w-3.5 h-3.5" /> {t("Logout", "লগআউট")}
-            </button>
-          )}
         </div>
       </aside>
 
@@ -436,7 +431,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       <div className="flex-1 min-w-0 flex flex-col lg:h-screen lg:overflow-y-auto relative z-[1]">
 
         {/* Top bar */}
-        <header className="h-[68px] sticky top-0 z-20 bg-white/40 backdrop-blur-2xl border-b border-white/50 ring-1 ring-violet-200/30 shadow-[0_8px_24px_-16px_rgba(109,40,217,0.25)]">
+        <header className="h-[64px] sticky top-0 z-20 bg-white/85 backdrop-blur border-b border-slate-200">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
             <button
               onClick={() => setMobileOpen(true)}
@@ -447,23 +442,20 @@ function AdminShell({ user, signOut, navigate }: any) {
             </button>
 
             <div className="hidden md:flex items-center gap-2 text-sm min-w-0">
-              <span className="px-2.5 py-1 rounded-md inline-flex items-center gap-1.5 bg-white/60 backdrop-blur text-violet-700 ring-1 ring-violet-200/60">
-                <span className="text-blue-600">{currentPage?.group.icon ?? ADMIN_MENU[0].icon}</span>
-                <span className="font-semibold text-[12px]">
-                  {currentPage
-                    ? t(currentPage.group.title, currentPage.group.titleBn)
-                    : t(ADMIN_MENU[0].title, ADMIN_MENU[0].titleBn)}
-                </span>
+              <span className="text-[12px] font-semibold text-slate-500">
+                {currentPage
+                  ? t(currentPage.group.title, currentPage.group.titleBn)
+                  : t(ADMIN_MENU[0].title, ADMIN_MENU[0].titleBn)}
               </span>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-              <span className="font-bold text-slate-900 truncate font-['Sora']">
+              <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
+              <span className="font-bold text-slate-900 truncate">
                 {currentPage
                   ? t(currentPage.item.label, currentPage.item.labelBn)
                   : t("Dashboard", "ড্যাশবোর্ড")}
               </span>
             </div>
 
-            <div className="md:hidden flex-1 min-w-0 font-bold text-sm truncate text-slate-900 font-['Sora']">
+            <div className="md:hidden flex-1 min-w-0 font-bold text-sm truncate text-slate-900">
               {currentPage
                 ? t(currentPage.item.label, currentPage.item.labelBn)
                 : t("Dashboard", "ড্যাশবোর্ড")}
@@ -476,7 +468,7 @@ function AdminShell({ user, signOut, navigate }: any) {
               onClick={toggle}
               aria-label={t("Switch to Bangla", "ইংরেজিতে পরিবর্তন")}
               title={lang === "en" ? "বাংলায় দেখুন" : "Show in English"}
-              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-bold items-center gap-1.5 border border-white/60 bg-white/50 backdrop-blur text-slate-700 hover:bg-white/80 hover:border-violet-300 hover:text-violet-700 transition shrink-0"
+              className="inline-flex h-9 px-2.5 sm:px-3 rounded-lg text-xs font-bold items-center gap-1.5 border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition shrink-0"
             >
               <Globe className="w-3.5 h-3.5" /> {lang === "en" ? "বাং" : "EN"}
             </button>
@@ -487,15 +479,14 @@ function AdminShell({ user, signOut, navigate }: any) {
               className="hidden xl:block w-64"
             />
 
-            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white/50 backdrop-blur border border-white/60 text-slate-700 hover:bg-white/80 hover:border-violet-300 hover:text-violet-700 transition">
+            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
               <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
             </Link>
           </div>
         </header>
 
-        <div className="flex-1 p-3 md:p-6 min-w-0 overflow-x-hidden text-slate-800">
-          <div className="mx-auto max-w-[1400px] space-y-4 md:space-y-6">
-            {currentPage && <AdminPageHero group={currentPage.group} item={currentPage.item} t={t} />}
+        <div className="flex-1 p-4 md:p-8 min-w-0 overflow-x-hidden text-slate-800">
+          <div className="mx-auto max-w-[1400px]">
             <Outlet />
           </div>
         </div>
@@ -506,8 +497,8 @@ function AdminShell({ user, signOut, navigate }: any) {
 
       <style>{`
         .admin-scroll::-webkit-scrollbar { width: 6px; }
-        .admin-scroll::-webkit-scrollbar-thumb { background: rgba(100,116,139,.22); border-radius: 999px; }
-        .admin-scroll::-webkit-scrollbar-thumb:hover { background: rgba(59,130,246,.35); }
+        .admin-scroll::-webkit-scrollbar-thumb { background: rgba(100,116,139,.18); border-radius: 999px; }
+        .admin-scroll::-webkit-scrollbar-thumb:hover { background: rgba(100,116,139,.32); }
       `}</style>
     </div>
   );
@@ -531,16 +522,13 @@ function SidebarGroup({ group, collapsed, pathname }: { group: any; collapsed: b
   }
 
   return (
-    <div className="mt-3">
+    <div className="mt-4 first:mt-2">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.14em] hover:bg-slate-50 transition font-['Sora'] text-[#629aea]"
+        className="w-full flex items-center justify-between px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.16em] text-slate-400 hover:text-slate-600 transition"
       >
-        <span className="inline-flex items-center gap-2">
-          <span className="text-slate-400">{group.icon}</span>
-          {t(group.title, group.titleBn)}
-        </span>
-        <ChevronDown className={`w-3.5 h-3.5 transition-transform text-slate-400 ${open ? "" : "-rotate-90"}`} />
+        <span>{t(group.title, group.titleBn)}</span>
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "" : "-rotate-90"}`} />
       </button>
       {open && (
         <div className="space-y-0.5 mt-1">
@@ -556,91 +544,48 @@ function SidebarGroup({ group, collapsed, pathname }: { group: any; collapsed: b
 function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collapsed?: boolean; active: boolean }) {
   const { t } = useAdminLang();
   const label = t(item.label, item.labelBn);
+  const badgeClass = item.badge === "LIVE"
+    ? "bg-rose-50 text-rose-600 ring-1 ring-rose-100"
+    : item.badge === "NEW"
+      ? "bg-violet-50 text-violet-600 ring-1 ring-violet-100"
+      : "bg-amber-50 text-amber-600 ring-1 ring-amber-100";
   return (
     <Link
       to={item.to}
       activeOptions={{ exact: item.exact }}
       title={collapsed ? label : undefined}
       className={[
-        "group relative flex items-center gap-3 rounded-xl text-sm transition-all",
+        "group relative flex items-center gap-3 rounded-xl text-sm transition-colors",
         collapsed ? "justify-center px-2 py-2 mx-1 my-0.5" : "px-2.5 py-2",
         active
-          ? "bg-gradient-to-r from-violet-500/20 to-fuchsia-500/15 backdrop-blur text-violet-900 ring-1 ring-violet-400/50 shadow-sm shadow-violet-500/20"
-          : "text-slate-700 hover:bg-white/50 hover:backdrop-blur hover:text-violet-700",
+          ? "bg-orange-50 text-orange-700"
+          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
       ].join(" ")}
     >
       <span
         className={[
-          "shrink-0 w-8 h-8 rounded-full grid place-items-center text-white shadow-sm transition-transform",
+          "shrink-0 w-8 h-8 rounded-lg grid place-items-center text-white",
           "bg-gradient-to-br",
           item.grad,
-          "ring-1 ring-black/5 group-hover:scale-[1.05]",
         ].join(" ")}
       >
         {item.icon}
       </span>
       {!collapsed && (
-        <span className={`truncate flex-1 text-[13px] ${active ? "font-bold text-slate-900" : "font-semibold"}`}>{label}</span>
+        <span className={`truncate flex-1 text-[13px] ${active ? "font-bold" : "font-semibold"}`}>{label}</span>
       )}
-      {!collapsed && active && (
-        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-violet-600" aria-hidden />
+      {!collapsed && item.badge && (
+        <span className={`shrink-0 text-[9.5px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider ${badgeClass}`}>
+          {item.badge}
+        </span>
       )}
-      {!collapsed && !active && (
-        <Pin
-          className="w-3 h-3 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-          aria-hidden
-        />
+      {!collapsed && active && !item.badge && (
+        <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-orange-500" aria-hidden />
       )}
     </Link>
   );
 }
 
-function AdminPageHero({ group, item, t }: { group: any; item: AdminMenuItem; t: (en: string, bn?: string) => string }) {
-  const title = t(item.label, item.labelBn);
-  const groupTitle = t(group.title, group.titleBn);
-  return (
-    <section
-      className={[
-        "relative overflow-hidden rounded-2xl",
-        "bg-gradient-to-br from-violet-100/80 via-indigo-50/70 to-fuchsia-100/60",
-        "ring-1 ring-white/60 shadow-[0_10px_40px_-20px_rgba(99,102,241,0.45)]",
-        "px-5 md:px-8 py-5 md:py-7",
-      ].join(" ")}
-    >
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-fuchsia-300/30 blur-3xl" />
-        <div className="absolute -bottom-20 right-1/3 w-80 h-80 rounded-full bg-indigo-300/25 blur-3xl" />
-        <div className="absolute top-1/2 right-6 -translate-y-1/2 hidden md:flex items-center gap-6 opacity-70">
-          <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-violet-500 ring-1 ring-white/70">{group.icon}</span>
-          <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-pink-500 ring-1 ring-white/70">{item.icon}</span>
-          <span className="w-12 h-12 rounded-2xl bg-white/60 backdrop-blur grid place-items-center text-indigo-500 ring-1 ring-white/70">{group.icon}</span>
-        </div>
-      </div>
-
-      <div className="relative flex items-center gap-4 md:gap-5">
-        <span
-          className={[
-            "shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-2xl grid place-items-center text-white",
-            "bg-gradient-to-br", item.grad,
-            "shadow-[0_10px_30px_-10px_rgba(99,102,241,0.55)] ring-1 ring-white/40",
-          ].join(" ")}
-        >
-          <span className="[&>svg]:w-7 [&>svg]:h-7 md:[&>svg]:w-8 md:[&>svg]:h-8">{item.icon}</span>
-        </span>
-        <div className="min-w-0">
-          <h1 className="font-['Sora',ui-sans-serif,system-ui] font-extrabold tracking-tight text-[26px] md:text-[36px] leading-none bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent truncate">
-            {title}
-          </h1>
-          <p className="mt-1.5 text-[12px] md:text-[13px] font-semibold text-slate-600">
-            <span className="text-violet-600">{groupTitle}</span>
-            <span className="mx-2 text-slate-400">•</span>
-            <span>{t("Manage and configure", "ম্যানেজ ও কনফিগার")} {title.toLowerCase()}</span>
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 
 
