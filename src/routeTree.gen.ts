@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as StreamingRouteImport } from './routes/streaming'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -63,6 +64,11 @@ import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/e
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -362,6 +368,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -416,6 +423,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -472,6 +480,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -529,6 +538,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/streaming'
     | '/terms'
+    | '/unsubscribe'
     | '/admin/$page'
     | '/admin/bulk-update'
     | '/admin/coupons'
@@ -583,6 +593,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/streaming'
     | '/terms'
+    | '/unsubscribe'
     | '/admin/$page'
     | '/admin/bulk-update'
     | '/admin/coupons'
@@ -638,6 +649,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/streaming'
     | '/terms'
+    | '/unsubscribe'
     | '/admin/$page'
     | '/admin/bulk-update'
     | '/admin/coupons'
@@ -694,6 +706,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StreamingRoute: typeof StreamingRoute
   TermsRoute: typeof TermsRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
   BlogHowToBuyNetflixInBangladeshRoute: typeof BlogHowToBuyNetflixInBangladeshRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ProductSlugRoute: typeof ProductSlugRoute
@@ -709,6 +722,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -1158,6 +1178,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StreamingRoute: StreamingRoute,
   TermsRoute: TermsRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
   BlogHowToBuyNetflixInBangladeshRoute: BlogHowToBuyNetflixInBangladeshRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ProductSlugRoute: ProductSlugRoute,
