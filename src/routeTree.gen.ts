@@ -39,6 +39,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as OrdersIdRouteImport } from './routes/orders.$id'
+import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/blog.how-to-buy-netflix-in-bangladesh'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
@@ -206,6 +207,12 @@ const OrdersIdRoute = OrdersIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => OrdersRoute,
 } as any)
+const BlogHowToBuyNetflixInBangladeshRoute =
+  BlogHowToBuyNetflixInBangladeshRouteImport.update({
+    id: '/blog/how-to-buy-netflix-in-bangladesh',
+    path: '/blog/how-to-buy-netflix-in-bangladesh',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -330,6 +337,7 @@ export interface FileRoutesByFullPath {
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/users': typeof AdminUsersRoute
+  '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -377,6 +385,7 @@ export interface FileRoutesByTo {
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/users': typeof AdminUsersRoute
+  '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -426,6 +435,7 @@ export interface FileRoutesById {
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/users': typeof AdminUsersRoute
+  '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/orders/$id': typeof OrdersIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -476,6 +486,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/themes'
     | '/admin/users'
+    | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/orders/$id'
     | '/product/$slug'
     | '/admin/'
@@ -523,6 +534,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/themes'
     | '/admin/users'
+    | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/orders/$id'
     | '/product/$slug'
     | '/admin'
@@ -571,6 +583,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/themes'
     | '/admin/users'
+    | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/orders/$id'
     | '/product/$slug'
     | '/admin/'
@@ -607,6 +620,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StreamingRoute: typeof StreamingRoute
   TermsRoute: typeof TermsRoute
+  BlogHowToBuyNetflixInBangladeshRoute: typeof BlogHowToBuyNetflixInBangladeshRoute
   ProductSlugRoute: typeof ProductSlugRoute
   ApiPublicClientErrorsRoute: typeof ApiPublicClientErrorsRoute
   ApiPublicProductsRoute: typeof ApiPublicProductsRoute
@@ -825,6 +839,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrdersIdRouteImport
       parentRoute: typeof OrdersRoute
     }
+    '/blog/how-to-buy-netflix-in-bangladesh': {
+      id: '/blog/how-to-buy-netflix-in-bangladesh'
+      path: '/blog/how-to-buy-netflix-in-bangladesh'
+      fullPath: '/blog/how-to-buy-netflix-in-bangladesh'
+      preLoaderRoute: typeof BlogHowToBuyNetflixInBangladeshRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/users': {
       id: '/admin/users'
       path: '/users'
@@ -1015,6 +1036,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StreamingRoute: StreamingRoute,
   TermsRoute: TermsRoute,
+  BlogHowToBuyNetflixInBangladeshRoute: BlogHowToBuyNetflixInBangladeshRoute,
   ProductSlugRoute: ProductSlugRoute,
   ApiPublicClientErrorsRoute: ApiPublicClientErrorsRoute,
   ApiPublicProductsRoute: ApiPublicProductsRoute,

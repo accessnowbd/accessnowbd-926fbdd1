@@ -28,6 +28,7 @@ const STATIC_ENTRIES: SitemapEntry[] = [
   { path: "/delivery-info", changefreq: "monthly", priority: "0.5" },
   { path: "/refund-request", changefreq: "monthly", priority: "0.4" },
   { path: "/developer", changefreq: "monthly", priority: "0.4" },
+  { path: "/blog/how-to-buy-netflix-in-bangladesh", changefreq: "monthly", priority: "0.7" },
   { path: "/login", changefreq: "monthly", priority: "0.3" },
 ];
 
