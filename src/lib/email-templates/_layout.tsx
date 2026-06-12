@@ -88,6 +88,7 @@ export const styles = {
     padding: '14px 16px',
     margin: '16px 0',
   } as const,
+  hr: { borderColor: '#e5e7eb', margin: '20px 0 12px' } as const,
 }
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }
