@@ -400,6 +400,15 @@ function AdminProducts() {
  onChange={(e) => { const f = e.target.files?.[0]; if (f) importBackup(f); e.target.value = ""; }}
  />
  <button
+ onClick={migrateAllToWebp}
+ disabled={webpBusy}
+ className="h-10 px-4 inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
+ title="সব প্রোডাক্ট ইমেজ WebP-তে কনভার্ট করুন"
+ >
+ {webpBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
+ {webpBusy && webpProgress ? `WebP ${webpProgress.done}/${webpProgress.total}` : "WebP কনভার্ট"}
+ </button>
+ <button
  onClick={() => { setEditing({ ...empty, name: " Price in Bangladesh", sort_order: (products.at(-1)?.sort_order ?? 0) + 10 }); setIsNew(true); }}
  className="h-10 px-4 inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition"
  >
