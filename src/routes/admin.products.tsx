@@ -710,9 +710,11 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  /* ---------- Image upload ---------- */
  const uploadOne = async (file: File): Promise<string> => {
  if (file.size > 8 * 1024 * 1024) throw new Error("ফাইল 8MB-এর কম হতে হবে");
- const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+ // Auto-convert to WebP in the browser before upload (skips svg/gif/already-webp).
+ const webpFile = await fileToWebp(file, { quality: 0.85, maxDimension: 2000 });
+ const ext = webpFile.name.split(".").pop()?.toLowerCase() || "webp";
  const path = `products/${slugify(form.name) || "untitled"}-${Date.now()}.${ext}`;
- const { error } = await supabase.storage.from("admin-uploads").upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type || undefined });
+ const { error } = await supabase.storage.from("admin-uploads").upload(path, webpFile, { cacheControl: "3600", upsert: false, contentType: webpFile.type || "image/webp" });
  if (error) throw error;
  const { data } = supabase.storage.from("admin-uploads").getPublicUrl(path);
  return data.publicUrl;
