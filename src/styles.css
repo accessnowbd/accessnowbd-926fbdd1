@@ -1891,19 +1891,67 @@ html.theme-white .product-whatsapp-button,
   --shadow-glow-pink: 0 0 22px -16px rgba(99, 102, 241, 0.20);
 }
 
+/* Midnight Aurora — premium dark canvas.
+   Deep near-black base (#05060f) layered with violet/indigo aurora glows,
+   a soft top spotlight, and a vignette to focus content. */
 :root:not(.theme-white) body {
-  background-color: #07090f !important;
+  background-color: #05060f !important;
   background-image:
-    radial-gradient(70% 50% at 15% 5%, rgba(67, 56, 202, 0.16), transparent 72%),
-    radial-gradient(60% 45% at 88% 12%, rgba(14, 116, 144, 0.10), transparent 74%),
-    radial-gradient(80% 60% at 50% 105%, rgba(29, 78, 216, 0.08), transparent 78%) !important;
-  background-attachment: scroll !important;
+    /* top-left violet aurora */
+    radial-gradient(60% 45% at 12% 0%, rgba(124, 58, 237, 0.32), transparent 70%),
+    /* top-right indigo glow */
+    radial-gradient(55% 40% at 92% 6%, rgba(79, 70, 229, 0.22), transparent 72%),
+    /* mid magenta whisper */
+    radial-gradient(45% 35% at 78% 48%, rgba(168, 85, 247, 0.14), transparent 75%),
+    /* bottom-left deep violet */
+    radial-gradient(65% 50% at 8% 95%, rgba(59, 29, 110, 0.32), transparent 72%),
+    /* bottom-right blue depth */
+    radial-gradient(55% 45% at 95% 100%, rgba(67, 56, 202, 0.20), transparent 74%),
+    /* center soft halo */
+    radial-gradient(40% 30% at 50% 38%, rgba(124, 58, 237, 0.08), transparent 78%),
+    /* vignette */
+    radial-gradient(120% 85% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%) !important;
+  background-attachment: fixed !important;
 }
 
-:root:not(.theme-white) body::before,
-:root:not(.theme-white) body::after {
-  display: none !important;
+/* Subtle film-grain noise — adds premium texture without distraction */
+:root:not(.theme-white) body::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  display: block !important;
+  opacity: 0.35 !important;
+  mix-blend-mode: overlay !important;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>") !important;
 }
+
+/* Slow drifting aurora highlight — extra premium depth */
+:root:not(.theme-white) body::after {
+  content: "" !important;
+  position: fixed !important;
+  inset: -20% !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  display: block !important;
+  opacity: 0.55 !important;
+  background-image:
+    radial-gradient(35% 22% at 30% 25%, rgba(139, 92, 246, 0.22), transparent 70%),
+    radial-gradient(30% 20% at 70% 70%, rgba(99, 102, 241, 0.18), transparent 70%);
+  filter: blur(40px);
+  animation: midnight-aurora-drift 22s ease-in-out infinite alternate;
+}
+
+@keyframes midnight-aurora-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(2%, -1.5%, 0) scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not(.theme-white) body::after { animation: none !important; }
+}
+
 
 /* Kill all backdrop blur in dark mode — primary cause of jitter */
 :root:not(.theme-white) .glass,
