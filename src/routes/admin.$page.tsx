@@ -614,10 +614,12 @@ function ImageField({
  if (!file) return;
  if (file.size > 5 * 1024 * 1024) return toast.error("Max 5MB");
  setUploading(true);
- const ext = file.name.split(".").pop() || "png";
+ // Auto-convert to WebP before upload (skips svg/gif/already-webp).
+ const webpFile = await fileToWebp(file, { quality: 0.85, maxDimension: 2000 });
+ const ext = webpFile.name.split(".").pop() || "webp";
  const path = `${field.name}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
- const { error } = await supabase.storage.from("admin-uploads").upload(path, file, {
- cacheControl: "3600", upsert: false, contentType: file.type,
+ const { error } = await supabase.storage.from("admin-uploads").upload(path, webpFile, {
+ cacheControl: "3600", upsert: false, contentType: webpFile.type || "image/webp",
  });
  if (error) { setUploading(false); return toast.error(error.message); }
  const { data } = supabase.storage.from("admin-uploads").getPublicUrl(path);
