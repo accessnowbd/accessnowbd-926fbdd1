@@ -2,8 +2,8 @@ import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tan
 import { useEffect, useMemo, useState } from "react";
 import { AuthPageEntry } from "@/components/AuthPage";
 import {
-  ShieldAlert, LogOut, Bell, Globe, Search,
-  PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X, Pin,
+  ShieldAlert, LogOut, Globe,
+  PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, ExternalLink, Menu, X,
 } from "lucide-react";
 import { AdminGlobalSearch, useAdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
 import { SearchTrigger } from "@/components/SearchBar";
