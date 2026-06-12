@@ -1,47 +1,48 @@
-## Goal
+# Admin Panel Redesign — Shahed Store Style
 
-Make the admin panel look like the uploaded reference: pastel aurora background with floating blur blobs, large frosted-glass cards with soft 24px corners, big stat cards with sparkline + trend chip, a wide sales chart card, a traffic-sources card with progress bars, a donut card, and a recent customers table — all in a light glassy style.
+রেফারেন্স image অনুযায়ী admin panel-কে একটা SaaS-grade dashboard look-এ রূপান্তর করব। বর্তমান mobile-first top-bar layout-এর জায়গায় sticky left sidebar + light theme + pastel gradient cards-এর স্ট্রাকচার আসবে।
 
-## Scope
+## কী পরিবর্তন হবে
 
-This redesign only touches the **shell visuals** and the **dashboard landing page** (`/admin`). All inner sub-pages (Products, Orders, Users, etc.) keep their existing functionality untouched.
+### 1. Admin Shell (`src/routes/admin.tsx`)
+- বাঁদিকে fixed **sidebar** (260px, light gray bg, scrollable):
+  - উপরে brand logo + "AccessNow BD" wordmark
+  - তার নিচে global search bar (⌘K hint) — already `AdminGlobalSearch` আছে, reuse করব
+  - Section headers: **OVERVIEW**, **SALES**, **CATALOG**, **TOOLS**, **SETTINGS** (uppercase, muted, collapsible chevron)
+  - প্রতিটা nav item: icon + label + optional badge (`LIVE` for live orders, `NEW` for recently added pages)
+  - Active item: soft peach/orange pill background + dot indicator (image অনুযায়ী)
+  - Hover: subtle gray bg
+  - নিচে user profile card: avatar + name + email + logout icon
+- মূল content area: light `#f7f8fb` background, generous padding, max-width container
 
-Files to edit:
-- `src/routes/admin.tsx` — refine sidebar/topbar to match the reference (rounded active pill, lighter borders, softer glass).
-- `src/routes/admin.index.tsx` — restructure the landing layout into the reference's grid: 3 stat cards on top, large Sales Report + Traffic Sources side-by-side, then Donut + Recent Customers side-by-side. Reuse real Supabase data already loaded.
+### 2. Dashboard (`src/routes/admin.index.tsx`)
+- উপরে **Notifications banner** (rounded card, bell icon, count badge, "X new order(s) in last 24 hours")
+- **REVENUE OVERVIEW** section (label with left vertical accent bar):
+  - 4 KPI cards in a row: Today's Sales, This Month, This Year, Total Revenue (All)
+  - Card design: white bg, soft pastel gradient overlay top-right, circular gradient icon top-left (violet, green, orange variants), label uppercase muted, big BDT value, optional delta pill (red ↘ / green ↗)
+- **ORDER STATUS** section:
+  - 6 stat cards: Total Orders, Pending, Payment Pending, Delivered, Cancelled, Customers
+  - Same card style with color-coded gradient icons
+- **Sales Overview** chart card (replace current sparkline):
+  - Daily/Weekly/Monthly tabs
+  - Smooth area chart (Recharts) with violet gradient fill, x-axis dates, y-axis BDT
+  - Subtitle: "X% revenue growth vs last month"
+- **Best Selling Products** card (right column on desktop): numbered list (#1-#5) with sales count
+- **Conversion Stats** card below
 
-Out of scope: changing any business logic, queries, routes, or other admin sub-pages.
+### 3. Theme & Tokens
+- Admin shell force-locks to **light theme** (irrespective of site-wide aurora/white toggle) using a scoped `force-light` wrapper class — admin-এ dark theme issue আর হবে না
+- New CSS utility classes for pastel gradient backgrounds (violet, mint, peach, sky, amber)
 
-## Layout (dashboard landing)
+### 4. Mobile / Tablet
+- < 1024px: sidebar slides in as drawer (already-installed `Sheet` component), hamburger in top bar
+- KPI cards: 2-column on tablet, 1-column on mobile
+- Sales chart stacks above products
 
-```text
-┌─────────────────┬─────────────────┬─────────────────┐
-│ Today's Sales   │ Total Sales     │ Total Orders    │
-│ ৳ value + trend │ ৳ value + trend │ count + trend   │
-│ + sparkline     │ + sparkline     │ + sparkline     │
-└─────────────────┴─────────────────┴─────────────────┘
-┌───────────────────────────────────┬─────────────────┐
-│ Sales Report (12M / 6M / 30D / 7D)│ Traffic Sources │
-│ area chart                        │ progress bars   │
-└───────────────────────────────────┴─────────────────┘
-┌───────────────────┬───────────────────────────────────┐
-│ Orders by Status  │ Recent Customers (table)          │
-│ donut             │ product / id / name / date / ৳    │
-└───────────────────┴───────────────────────────────────┘
-```
+### 5. Bilingual support
+- বর্তমান `useAdminLang` toggle অপরিবর্তিত থাকবে — সব নতুন label-ও bilingual মেনে চলবে
 
-## Visual rules
-
-- Background: existing aurora pastel gradient + blur blobs (already in place).
-- Cards: `bg-white/70 backdrop-blur-xl border border-white/60 rounded-3xl shadow-[0_8px_30px_-12px_rgba(15,23,42,0.12)]`, generous padding.
-- Stat cards: tinted gradient overlay (violet / rose / amber), title in slate-500, big slate-900 number, trend chip + small inline sparkline.
-- Sales Report: existing area chart restyled with soft colors + period tabs as pill buttons.
-- Traffic Sources: rows of `label / value` with thin gradient progress bars.
-- Donut: thicker stroke, soft drop shadow, legend underneath.
-- Recent customers table: light dividers, status pills (Complete = emerald, Pending = rose).
-- Sidebar active item: filled rounded pill with subtle violet tint, white text.
-- Topbar: pill search, Add New gradient button, notification bell with badge.
-
-## Data
-
-All data already comes from existing Supabase queries in `admin.index.tsx`. No schema or query changes — only the presentation is rebuilt.
+## যা পরিবর্তন হবে না
+- Backend / data queries — same Supabase fetches reuse করব
+- অন্যান্য admin sub-pages (orders, products, users) — শুধু shell + index dashboard redesign
+- Site
