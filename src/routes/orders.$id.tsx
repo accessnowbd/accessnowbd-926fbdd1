@@ -2,12 +2,13 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
-import { ArrowLeft, Loader2, Copy, Check, Crown, Download, PartyPopper } from "lucide-react";
+import { ArrowLeft, Loader2, Copy, Check, Crown, Download, PartyPopper, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 import { downloadReceiptPdf } from "@/lib/receipt";
+import { sendInvoiceEmail } from "@/lib/email/invoice";
 import { toast } from "sonner";
 
 const orderSearchSchema = z.object({
@@ -91,6 +92,25 @@ function OrderDetailPage() {
       toast.error("Failed to generate receipt. Please try again.", { id: tId });
     } finally {
       setDownloading(false);
+    }
+  };
+
+  const [emailingInvoice, setEmailingInvoice] = useState(false);
+  const handleEmailInvoice = async () => {
+    if (!order || emailingInvoice) return;
+    setEmailingInvoice(true);
+    const tId = toast.loading("Sending invoice…");
+    try {
+      const res = await sendInvoiceEmail(order);
+      if (res.success) toast.success(`Invoice emailed to ${order.email}`, { id: tId });
+      else if (res.reason === "email_suppressed")
+        toast.error("This email has unsubscribed and cannot receive mail.", { id: tId });
+      else toast.error("Could not send invoice.", { id: tId });
+    } catch (err) {
+      console.error(err);
+      toast.error(err instanceof Error ? err.message : "Failed to send invoice.", { id: tId });
+    } finally {
+      setEmailingInvoice(false);
     }
   };
 
@@ -215,6 +235,14 @@ function OrderDetailPage() {
               >
                 {downloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
                 {downloading ? "Generating…" : "Receipt"}
+              </button>
+              <button
+                onClick={handleEmailInvoice}
+                disabled={emailingInvoice}
+                className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full glass-soft text-sm font-semibold hover:bg-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {emailingInvoice ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Mail className="w-3.5 h-3.5" />}
+                {emailingInvoice ? "Sending…" : "Email invoice"}
               </button>
               <span className={`text-[11px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full border ${statusStyles[order.status] || "bg-secondary text-foreground border-border"}`}>
                 {order.status}
