@@ -18,6 +18,7 @@ import { AuroraHeader } from "@/components/ui-glass/AuroraHeader";
 import { OrderSummary, SummaryRow } from "@/components/ui-glass/OrderSummary";
 import { useAppliedCoupon, redeemCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
+import { sendTransactionalEmail } from "@/lib/email/send";
 
 const checkoutSearchSchema = z.object({
   step: fallback(z.union([z.literal(1), z.literal(2)]), 1).default(1),
@@ -178,6 +179,27 @@ function CheckoutPage() {
       if (applied.valid && applied.code) {
         redeemCoupon(applied.code).catch(() => {});
       }
+      // Fire-and-forget: send branded order confirmation email.
+      // Failure must NOT block the user — order is already saved.
+      sendTransactionalEmail({
+        templateName: "order-confirmation",
+        recipientEmail: form.email,
+        idempotencyKey: `order-confirm-${newId}`,
+        templateData: {
+          name: form.name?.split(" ")[0],
+          orderId: `ANB-${newId.slice(0, 8).toUpperCase()}`,
+          items: items.map((it) => ({
+            name: it.name || it.slug,
+            qty: it.qty,
+            price: (it.price ?? 0) * it.qty,
+          })),
+          subtotal: total,
+          discount: applied.discount || 0,
+          total: grandTotal,
+          paymentMethod: method,
+          estimatedDelivery: "১৫–৩০ মিনিট",
+        },
+      }).catch((err) => console.warn("Order confirmation email failed", err));
       clear();
       navigate({ to: "/orders/$id", params: { id: newId }, search: { new: 1 } });
       return;
