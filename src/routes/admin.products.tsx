@@ -297,6 +297,75 @@ function AdminProducts() {
  }
  };
 
+ // Convert every existing product image (image_url + meta.gallery[]) that
+ // lives in our admin-uploads bucket to WebP. Uploads a new object, then
+ // updates the DB row to point at it. Originals are left in storage as backup.
+ const migrateAllToWebp = async () => {
+ const BUCKET_MARK = "/storage/v1/object/public/admin-uploads/";
+ const isCandidate = (u: string | undefined | null) => {
+ if (!u || typeof u !== "string") return false;
+ if (!u.includes(BUCKET_MARK)) return false;
+ const low = u.toLowerCase().split("?")[0];
+ return !low.endsWith(".webp") && !low.endsWith(".svg") && !low.endsWith(".gif");
+ };
+ const allUrls: string[] = [];
+ for (const p of products) {
+ if (isCandidate(p.image_url)) allUrls.push(p.image_url);
+ for (const g of p.meta?.gallery ?? []) if (isCandidate(g)) allUrls.push(g);
+ }
+ const uniqueUrls = Array.from(new Set(allUrls));
+ if (uniqueUrls.length === 0) { toast.success("সব ইমেজ আগে থেকেই WebP ✓"); return; }
+ if (!confirm(`${uniqueUrls.length}টি ইমেজ WebP-তে কনভার্ট হবে। চালিয়ে যাবেন?`)) return;
+ setWebpBusy(true);
+ setWebpProgress({ done: 0, total: uniqueUrls.length });
+ const urlMap = new Map<string, string>(); // old → new public URL
+ let ok = 0, fail = 0;
+ for (let i = 0; i < uniqueUrls.length; i++) {
+ const oldUrl = uniqueUrls[i];
+ try {
+ const res = await fetch(oldUrl, { cache: "no-store" });
+ if (!res.ok) throw new Error(`fetch ${res.status}`);
+ const blob = await res.blob();
+ const conv = await blobToWebp(blob, { quality: 0.85, maxDimension: 2000 });
+ if (!conv.converted) { urlMap.set(oldUrl, oldUrl); ok++; continue; }
+ const oldPath = oldUrl.split(BUCKET_MARK)[1]?.split("?")[0] ?? "";
+ const dir = oldPath.includes("/") ? oldPath.slice(0, oldPath.lastIndexOf("/")) : "products";
+ const base = (oldPath.split("/").pop() || "image").replace(/\.[^.]+$/, "");
+ const newPath = `${dir}/${base}-${Date.now()}.webp`;
+ const { error } = await supabase.storage.from("admin-uploads").upload(newPath, conv.blob, {
+ cacheControl: "3600", upsert: false, contentType: "image/webp",
+ });
+ if (error) throw error;
+ const { data } = supabase.storage.from("admin-uploads").getPublicUrl(newPath);
+ urlMap.set(oldUrl, data.publicUrl);
+ ok++;
+ } catch (e) {
+ console.error("webp migrate failed for", oldUrl, e);
+ fail++;
+ }
+ setWebpProgress({ done: i + 1, total: uniqueUrls.length });
+ }
+ // Update DB rows
+ let updated = 0;
+ for (const p of products) {
+ const newImg = p.image_url && urlMap.has(p.image_url) ? urlMap.get(p.image_url)! : p.image_url;
+ const oldGallery = p.meta?.gallery ?? [];
+ const newGallery = oldGallery.map((g) => urlMap.get(g) ?? g);
+ const imgChanged = newImg !== p.image_url;
+ const galChanged = oldGallery.some((g, i) => g !== newGallery[i]);
+ if (!imgChanged && !galChanged) continue;
+ const patch: Record<string, unknown> = {};
+ if (imgChanged) patch.image_url = newImg;
+ if (galChanged) patch.meta = { ...(p.meta ?? {}), gallery: newGallery };
+ const { error } = await supabase.from("products").update(patch).eq("slug", p.slug);
+ if (!error) updated++;
+ }
+ setWebpBusy(false);
+ setWebpProgress(null);
+ toast.success(`${ok}টি ইমেজ কনভার্ট ✓ — ${updated}টি প্রোডাক্ট আপডেট${fail ? ` • ${fail}টি ব্যর্থ` : ""}`);
+ load();
+ };
+
  return (
  <div>
  {/* Top bar — title + action buttons */}
