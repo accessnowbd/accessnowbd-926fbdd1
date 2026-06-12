@@ -225,7 +225,7 @@ function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen grid place-items-center px-4">
+      <div className="min-h-screen grid place-items-center px-4 bg-slate-50 text-slate-900">
         <GlassCard className="text-center">
           <h1 className="text-2xl font-semibold">Your cart is empty</h1>
           <Link to="/" className="text-primary underline mt-3 inline-block">Browse subscriptions</Link>
