@@ -10,6 +10,9 @@ import { template as invoice } from './invoice'
 import { template as subscriptionExpiring } from './subscription-expiring'
 import { template as subscriptionCancelled } from './subscription-cancelled'
 import { template as refundProcessed } from './refund-processed'
+import { template as orderConfirmation } from './order-confirmation'
+import { template as supportTicketReply } from './support-ticket-reply'
+import { template as securityAlert } from './security-alert'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -35,4 +38,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'subscription-expiring': subscriptionExpiring,
   'subscription-cancelled': subscriptionCancelled,
   'refund-processed': refundProcessed,
+  'order-confirmation': orderConfirmation,
+  'support-ticket-reply': supportTicketReply,
+  'security-alert': securityAlert,
 }
