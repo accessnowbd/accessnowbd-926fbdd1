@@ -118,6 +118,8 @@ function AdminProducts() {
  const [stockFilter, setStockFilter] = useState<"all" | StockStatus>("all");
  const [sortBy, setSortBy] = useState<"order" | "views" | "name">("order");
  const [aiBusy, setAiBusy] = useState(false);
+ const [webpBusy, setWebpBusy] = useState(false);
+ const [webpProgress, setWebpProgress] = useState<{ done: number; total: number } | null>(null);
  const fileRef = useRef<HTMLInputElement>(null);
 
  const load = useCallback(async () => {
