@@ -213,7 +213,7 @@ function CheckoutPage() {
   // ----- Auth/empty guards -----
   if (!authLoading && !user && items.length > 0) {
     return (
-      <div className="min-h-screen grid place-items-center px-4">
+      <div className="min-h-screen grid place-items-center px-4 bg-slate-50 text-slate-900">
         <GlassCard className="text-center max-w-sm">
           <h1 className="text-2xl font-semibold text-aurora">Login to checkout</h1>
           <p className="text-sm text-muted-foreground mt-2">Sign in or create an account to place your order and track it later.</p>
