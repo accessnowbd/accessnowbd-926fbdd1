@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AdminStatCard as PremiumStatCard } from "@/components/admin/AdminStatCard";
 import { SearchBar } from "@/components/SearchBar";
+import { fileToWebp, blobToWebp } from "@/lib/image-to-webp";
 
 export const Route = createFileRoute("/admin/products")({
  component: AdminProducts,
@@ -117,6 +118,8 @@ function AdminProducts() {
  const [stockFilter, setStockFilter] = useState<"all" | StockStatus>("all");
  const [sortBy, setSortBy] = useState<"order" | "views" | "name">("order");
  const [aiBusy, setAiBusy] = useState(false);
+ const [webpBusy, setWebpBusy] = useState(false);
+ const [webpProgress, setWebpProgress] = useState<{ done: number; total: number } | null>(null);
  const fileRef = useRef<HTMLInputElement>(null);
 
  const load = useCallback(async () => {
@@ -294,6 +297,75 @@ function AdminProducts() {
  }
  };
 
+ // Convert every existing product image (image_url + meta.gallery[]) that
+ // lives in our admin-uploads bucket to WebP. Uploads a new object, then
+ // updates the DB row to point at it. Originals are left in storage as backup.
+ const migrateAllToWebp = async () => {
+ const BUCKET_MARK = "/storage/v1/object/public/admin-uploads/";
+ const isCandidate = (u: string | undefined | null) => {
+ if (!u || typeof u !== "string") return false;
+ if (!u.includes(BUCKET_MARK)) return false;
+ const low = u.toLowerCase().split("?")[0];
+ return !low.endsWith(".webp") && !low.endsWith(".svg") && !low.endsWith(".gif");
+ };
+ const allUrls: string[] = [];
+ for (const p of products) {
+ if (isCandidate(p.image_url)) allUrls.push(p.image_url);
+ for (const g of p.meta?.gallery ?? []) if (isCandidate(g)) allUrls.push(g);
+ }
+ const uniqueUrls = Array.from(new Set(allUrls));
+ if (uniqueUrls.length === 0) { toast.success("সব ইমেজ আগে থেকেই WebP ✓"); return; }
+ if (!confirm(`${uniqueUrls.length}টি ইমেজ WebP-তে কনভার্ট হবে। চালিয়ে যাবেন?`)) return;
+ setWebpBusy(true);
+ setWebpProgress({ done: 0, total: uniqueUrls.length });
+ const urlMap = new Map<string, string>(); // old → new public URL
+ let ok = 0, fail = 0;
+ for (let i = 0; i < uniqueUrls.length; i++) {
+ const oldUrl = uniqueUrls[i];
+ try {
+ const res = await fetch(oldUrl, { cache: "no-store" });
+ if (!res.ok) throw new Error(`fetch ${res.status}`);
+ const blob = await res.blob();
+ const conv = await blobToWebp(blob, { quality: 0.85, maxDimension: 2000 });
+ if (!conv.converted) { urlMap.set(oldUrl, oldUrl); ok++; continue; }
+ const oldPath = oldUrl.split(BUCKET_MARK)[1]?.split("?")[0] ?? "";
+ const dir = oldPath.includes("/") ? oldPath.slice(0, oldPath.lastIndexOf("/")) : "products";
+ const base = (oldPath.split("/").pop() || "image").replace(/\.[^.]+$/, "");
+ const newPath = `${dir}/${base}-${Date.now()}.webp`;
+ const { error } = await supabase.storage.from("admin-uploads").upload(newPath, conv.blob, {
+ cacheControl: "3600", upsert: false, contentType: "image/webp",
+ });
+ if (error) throw error;
+ const { data } = supabase.storage.from("admin-uploads").getPublicUrl(newPath);
+ urlMap.set(oldUrl, data.publicUrl);
+ ok++;
+ } catch (e) {
+ console.error("webp migrate failed for", oldUrl, e);
+ fail++;
+ }
+ setWebpProgress({ done: i + 1, total: uniqueUrls.length });
+ }
+ // Update DB rows
+ let updated = 0;
+ for (const p of products) {
+ const newImg = p.image_url && urlMap.has(p.image_url) ? urlMap.get(p.image_url)! : p.image_url;
+ const oldGallery = p.meta?.gallery ?? [];
+ const newGallery = oldGallery.map((g) => urlMap.get(g) ?? g);
+ const imgChanged = newImg !== p.image_url;
+ const galChanged = oldGallery.some((g, i) => g !== newGallery[i]);
+ if (!imgChanged && !galChanged) continue;
+ const patch: Record<string, unknown> = {};
+ if (imgChanged) patch.image_url = newImg;
+ if (galChanged) patch.meta = { ...(p.meta ?? {}), gallery: newGallery };
+ const { error } = await supabase.from("products").update(patch as never).eq("slug", p.slug);
+ if (!error) updated++;
+ }
+ setWebpBusy(false);
+ setWebpProgress(null);
+ toast.success(`${ok}টি ইমেজ কনভার্ট ✓ — ${updated}টি প্রোডাক্ট আপডেট${fail ? ` • ${fail}টি ব্যর্থ` : ""}`);
+ load();
+ };
+
  return (
  <div>
  {/* Top bar — title + action buttons */}
@@ -327,6 +399,15 @@ function AdminProducts() {
  ref={fileRef} type="file" accept="application/json" className="hidden"
  onChange={(e) => { const f = e.target.files?.[0]; if (f) importBackup(f); e.target.value = ""; }}
  />
+ <button
+ onClick={migrateAllToWebp}
+ disabled={webpBusy}
+ className="h-10 px-4 inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
+ title="সব প্রোডাক্ট ইমেজ WebP-তে কনভার্ট করুন"
+ >
+ {webpBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
+ {webpBusy && webpProgress ? `WebP ${webpProgress.done}/${webpProgress.total}` : "WebP কনভার্ট"}
+ </button>
  <button
  onClick={() => { setEditing({ ...empty, name: " Price in Bangladesh", sort_order: (products.at(-1)?.sort_order ?? 0) + 10 }); setIsNew(true); }}
  className="h-10 px-4 inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition"
@@ -709,9 +790,11 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  /* ---------- Image upload ---------- */
  const uploadOne = async (file: File): Promise<string> => {
  if (file.size > 8 * 1024 * 1024) throw new Error("ফাইল 8MB-এর কম হতে হবে");
- const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+ // Auto-convert to WebP in the browser before upload (skips svg/gif/already-webp).
+ const webpFile = await fileToWebp(file, { quality: 0.85, maxDimension: 2000 });
+ const ext = webpFile.name.split(".").pop()?.toLowerCase() || "webp";
  const path = `products/${slugify(form.name) || "untitled"}-${Date.now()}.${ext}`;
- const { error } = await supabase.storage.from("admin-uploads").upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type || undefined });
+ const { error } = await supabase.storage.from("admin-uploads").upload(path, webpFile, { cacheControl: "3600", upsert: false, contentType: webpFile.type || "image/webp" });
  if (error) throw error;
  const { data } = supabase.storage.from("admin-uploads").getPublicUrl(path);
  return data.publicUrl;
