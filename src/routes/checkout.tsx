@@ -252,7 +252,7 @@ function CheckoutPage() {
       navigate({ to: "/checkout", search: { step: 1, coupon: code }, replace: true });
     };
     return (
-      <div className="min-h-screen grid place-items-center px-4 py-10 bg-slate-50">
+      <div className="min-h-screen grid place-items-center px-4 py-10 bg-slate-50 text-slate-900">
         <GlassCard className="w-full max-w-[480px] !p-0 overflow-hidden rounded-[2.5rem] shadow-2xl border border-violet-100 bg-white">
           {/* Header */}
           <div className="flex items-center justify-between px-5 pt-5 pb-3">
