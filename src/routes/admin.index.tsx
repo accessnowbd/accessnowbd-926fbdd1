@@ -1,900 +1,427 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
- Plus, ShoppingBag, DollarSign, BarChart3, Users, Box, Settings,
- CheckCircle2, ChevronRight, TrendingUp, TrendingDown, Sparkles,
- PackageSearch, TicketPercent, Megaphone, LifeBuoy, Bot, FileText,
- Activity, Zap, ArrowUpRight, Clock, Star,
- Eye, Ear, Accessibility, Bug, AlertTriangle, Bell, Smartphone, Monitor, Tablet,
- Globe, MessageSquare, UserCheck, ShieldCheck,
+  Plus, ShoppingBag, Users, Package, TicketPercent, Megaphone,
+  Palette, ShieldCheck, Wrench, BarChart3, AlertCircle, ArrowUpRight,
+  TrendingUp, TrendingDown, Clock, CheckCircle2, XCircle, Loader2,
+  ChevronRight, Sparkles, Eye,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminLang } from "@/context/AdminLangContext";
 
-
 export const Route = createFileRoute("/admin/")({
- component: AdminDashboard,
+  component: AdminDashboard,
 });
 
 type OrderRow = {
- id: string; created_at: string; status: string; total: number;
- full_name: string; email: string; payment_method: string; items: unknown;
+  id: string; created_at: string; status: string; total: number;
+  full_name: string; email: string; payment_method: string; items: unknown;
 };
 type ProductRow = {
- slug: string; name: string; emoji: string; image_url: string;
- category: string; is_active: boolean; created_at: string;
+  slug: string; name: string; emoji: string; image_url: string;
+  category: string; is_active: boolean; created_at: string;
 };
 
 const fmtBDT = (n: number) => "৳" + Math.round(n).toLocaleString("en-IN");
 
 function AdminDashboard() {
- const [orders, setOrders] = useState<OrderRow[]>([]);
- const [products, setProducts] = useState<ProductRow[]>([]);
- const [counts, setCounts] = useState({ products: 0, orders: 0, users: 0 });
- const [loading, setLoading] = useState(true);
+  const { t, lang } = useAdminLang();
+  const [orders, setOrders] = useState<OrderRow[]>([]);
+  const [products, setProducts] = useState<ProductRow[]>([]);
+  const [counts, setCounts] = useState({ products: 0, orders: 0, users: 0 });
+  const [loading, setLoading] = useState(true);
 
- useEffect(() => {
- (async () => {
- const [pAll, oAll, uAll, recentOrders, recentProducts] = await Promise.all([
- supabase.from("products").select("*", { count: "exact", head: true }),
- supabase.from("orders").select("*", { count: "exact", head: true }),
- supabase.from("profiles").select("*", { count: "exact", head: true }),
- supabase.from("orders").select("id,created_at,status,total,full_name,email,payment_method,items").order("created_at", { ascending: false }).limit(60),
- supabase.from("products").select("slug,name,emoji,image_url,category,is_active,created_at").order("created_at", { ascending: false }).limit(60),
- ]);
- setCounts({ products: pAll.count ?? 0, orders: oAll.count ?? 0, users: uAll.count ?? 0 });
- setOrders((recentOrders.data ?? []) as OrderRow[]);
- setProducts((recentProducts.data ?? []) as ProductRow[]);
- setLoading(false);
- })();
- }, []);
+  useEffect(() => {
+    (async () => {
+      const [pAll, oAll, uAll, recentOrders, recentProducts] = await Promise.all([
+        supabase.from("products").select("*", { count: "exact", head: true }),
+        supabase.from("orders").select("*", { count: "exact", head: true }),
+        supabase.from("profiles").select("*", { count: "exact", head: true }),
+        supabase.from("orders").select("id,created_at,status,total,full_name,email,payment_method,items").order("created_at", { ascending: false }).limit(60),
+        supabase.from("products").select("slug,name,emoji,image_url,category,is_active,created_at").order("created_at", { ascending: false }).limit(60),
+      ]);
+      setCounts({ products: pAll.count ?? 0, orders: oAll.count ?? 0, users: uAll.count ?? 0 });
+      setOrders((recentOrders.data ?? []) as OrderRow[]);
+      setProducts((recentProducts.data ?? []) as ProductRow[]);
+      setLoading(false);
+    })();
+  }, []);
 
- const stats = useMemo(() => {
- const start = new Date(); start.setHours(0, 0, 0, 0);
- const yStart = new Date(start); yStart.setDate(yStart.getDate() - 1);
- const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
- let revenue = 0, todayRev = 0, monthRev = 0, yRev = 0, todayCount = 0, monthCount = 0, pending = 0;
- orders.forEach((o) => {
- const t = Number(o.total) || 0;
- const d = new Date(o.created_at);
- const live = o.status !== "cancelled";
- if (live) revenue += t;
- if (live && d >= start) { todayRev += t; todayCount++; }
- if (live && d >= yStart && d < start) { yRev += t; }
- if (live && d >= monthStart) { monthRev += t; monthCount++; }
- if (o.status === "pending" || o.status === "processing") pending++;
- });
- const dayDelta = yRev > 0 ? Math.round(((todayRev - yRev) / yRev) * 100) : (todayRev > 0 ? 100 : 0);
- return { revenue, todayRev, monthRev, todayCount, monthCount, dayDelta, pending };
- }, [orders]);
+  const stats = useMemo(() => {
+    const start = new Date(); start.setHours(0, 0, 0, 0);
+    const yStart = new Date(start); yStart.setDate(yStart.getDate() - 1);
+    const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
+    let revenue = 0, todayRev = 0, monthRev = 0, yRev = 0, todayCount = 0, monthCount = 0, pending = 0, processing = 0;
+    orders.forEach((o) => {
+      const total = Number(o.total) || 0;
+      const d = new Date(o.created_at);
+      const live = o.status !== "cancelled";
+      if (live) revenue += total;
+      if (live && d >= start) { todayRev += total; todayCount++; }
+      if (live && d >= yStart && d < start) { yRev += total; }
+      if (live && d >= monthStart) { monthRev += total; monthCount++; }
+      if (o.status === "pending") pending++;
+      if (o.status === "processing") processing++;
+    });
+    const dayDelta = yRev > 0 ? Math.round(((todayRev - yRev) / yRev) * 100) : (todayRev > 0 ? 100 : 0);
+    return { revenue, todayRev, monthRev, todayCount, monthCount, dayDelta, pending, processing };
+  }, [orders]);
 
- // Last 7 days revenue spark
- const spark = useMemo(() => {
- const days: { d: string; v: number }[] = [];
- for (let i = 6; i >= 0; i--) {
- const day = new Date(); day.setHours(0, 0, 0, 0); day.setDate(day.getDate() - i);
- const next = new Date(day); next.setDate(day.getDate() + 1);
- let v = 0;
- orders.forEach((o) => {
- const dd = new Date(o.created_at);
- if (dd >= day && dd < next && o.status !== "cancelled") v += Number(o.total) || 0;
- });
- days.push({ d: day.toLocaleDateString("en", { weekday: "short" }), v });
- }
- return days;
- }, [orders]);
+  // Last 7 days revenue sparkline
+  const spark = useMemo(() => {
+    const days: { d: string; v: number }[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const day = new Date(); day.setHours(0, 0, 0, 0); day.setDate(day.getDate() - i);
+      const next = new Date(day); next.setDate(day.getDate() + 1);
+      let v = 0;
+      orders.forEach((o) => {
+        const dd = new Date(o.created_at);
+        if (dd >= day && dd < next && o.status !== "cancelled") v += Number(o.total) || 0;
+      });
+      days.push({ d: day.toLocaleDateString(lang === "bn" ? "bn-BD" : "en", { weekday: "short" }), v });
+    }
+    return days;
+  }, [orders, lang]);
 
- const sparkMax = Math.max(1, ...spark.map((s) => s.v));
+  const sparkMax = Math.max(1, ...spark.map((s) => s.v));
 
- const kpiCards = [
- {
- label: "Today's Sale", value: fmtBDT(stats.todayRev), delta: stats.dayDelta, deltaLabel: "vs yesterday",
- tint: " to-white", stroke: "#94a3b8", fill: "rgba(100,116,139,0.18)",
- },
- {
- label: "Total Sales", value: fmtBDT(stats.revenue), delta: -14, deltaLabel: "vs last month",
- tint: " to-white", stroke: "#94a3b8", fill: "rgba(100,116,139,0.18)",
- },
- {
- label: "Total Orders", value: counts.orders.toLocaleString("en-IN"), delta: 36, deltaLabel: "vs last month",
- tint: " to-white", stroke: "#94a3b8", fill: "rgba(100,116,139,0.18)",
- },
- ];
+  const topProducts = useMemo(() => {
+    const map = new Map<string, { name: string; image: string; emoji: string; sold: number; revenue: number }>();
+    orders.forEach((o) => {
+      if (!Array.isArray(o.items)) return;
+      (o.items as any[]).forEach((it) => {
+        const key = it.slug || it.name;
+        if (!key) return;
+        const cur = map.get(key) ?? { name: it.name ?? key, image: it.image_url ?? "", emoji: it.emoji ?? "📦", sold: 0, revenue: 0 };
+        cur.sold += Number(it.qty ?? it.quantity ?? 1);
+        cur.revenue += Number(it.price ?? 0) * Number(it.qty ?? it.quantity ?? 1);
+        map.set(key, cur);
+      });
+    });
+    return Array.from(map.values()).sort((a, b) => b.sold - a.sold).slice(0, 5);
+  }, [orders]);
 
- const quickActions: { to: string; label: string; icon: any; grad: string }[] = [
- { to: "/admin/add-product", label: "Add product", icon: Plus, grad: " " },
- { to: "/admin/orders", label: "Orders", icon: ShoppingBag, grad: " " },
- { to: "/admin/users", label: "Customers", icon: Users, grad: " " },
- { to: "/admin/products", label: "Catalog", icon: PackageSearch, grad: " " },
- { to: "/admin/coupons", label: "Coupons", icon: TicketPercent, grad: " " },
- { to: "/admin/marketing", label: "Marketing", icon: Megaphone, grad: " " },
- { to: "/admin/tickets", label: "Support", icon: LifeBuoy, grad: " " },
- { to: "/admin/ai-command", label: "AI Center", icon: Bot, grad: " " },
- { to: "/admin/reports", label: "Reports", icon: FileText, grad: " " },
- { to: "/admin/analytics", label: "Analytics", icon: Activity, grad: " " },
- { to: "/admin/settings", label: "Settings", icon: Settings, grad: " " },
- { to: "/admin/notifications", label: "Alerts", icon: Zap, grad: " " },
- ];
+  const lowStock = products.filter((p) => !p.is_active).slice(0, 5);
+  const recentOrders = orders.slice(0, 6);
+  const pendingOrders = orders.filter((o) => o.status === "pending" || o.status === "processing").length;
 
- // Sparkline path generator (smooth area)
- const sparkPath = (vals: number[], w = 200, h = 60) => {
- const max = Math.max(1, ...vals);
- const step = w / Math.max(1, vals.length - 1);
- const pts = vals.map((v, i) => [i * step, h - (v / max) * (h - 6) - 3] as [number, number]);
- let d = `M ${pts[0][0]},${pts[0][1]}`;
- for (let i = 1; i < pts.length; i++) {
- const [x1, y1] = pts[i - 1];
- const [x2, y2] = pts[i];
- const cx = (x1 + x2) / 2;
- d += ` C ${cx},${y1} ${cx},${y2} ${x2},${y2}`;
- }
- const area = `${d} L ${w},${h} L 0,${h} Z`;
- return { line: d, area };
- };
+  // Quick actions — keyboard & tap friendly. Targets are real existing routes.
+  const quickActions = [
+    { to: "/admin/products", en: "Add product", bn: "প্রোডাক্ট যোগ", icon: Plus, accent: true },
+    { to: "/admin/orders", en: "Orders", bn: "অর্ডার", icon: ShoppingBag, badge: pendingOrders },
+    { to: "/admin/products", en: "Products", bn: "প্রোডাক্ট", icon: Package },
+    { to: "/admin/users", en: "Customers", bn: "কাস্টমার", icon: Users },
+    { to: "/admin/coupons", en: "Coupons", bn: "কুপন", icon: TicketPercent },
+    { to: "/admin/promotions", en: "Promotions", bn: "প্রোমোশন", icon: Megaphone },
+    { to: "/admin/themes", en: "Themes", bn: "থিম", icon: Palette },
+    { to: "/admin/security", en: "Security", bn: "সিকিউরিটি", icon: ShieldCheck },
+    { to: "/admin/quick-tools", en: "Tools", bn: "টুলস", icon: Wrench },
+  ];
 
- const kpiSeries = [
- spark.map((s) => s.v).concat([100, 140, 110, 180, 160, 220]).slice(-12),
- [120, 140, 110, 160, 130, 175, 150, 200, 180, 230, 210, 260],
- [80, 110, 95, 130, 115, 155, 140, 180, 165, 210, 195, 245],
- ];
+  const statusMeta = (s: string) => {
+    const k = (s || "").toLowerCase();
+    if (k === "completed" || k === "paid") return { cls: "bg-emerald-50 text-emerald-700 ring-emerald-100", Icon: CheckCircle2, en: "Completed", bn: "সম্পন্ন" };
+    if (k === "processing") return { cls: "bg-blue-50 text-blue-700 ring-blue-100", Icon: Loader2, en: "Processing", bn: "প্রসেসিং" };
+    if (k === "pending") return { cls: "bg-amber-50 text-amber-700 ring-amber-100", Icon: Clock, en: "Pending", bn: "অপেক্ষমাণ" };
+    if (k === "cancelled" || k === "failed") return { cls: "bg-rose-50 text-rose-700 ring-rose-100", Icon: XCircle, en: "Cancelled", bn: "বাতিল" };
+    return { cls: "bg-slate-50 text-slate-700 ring-slate-200", Icon: Clock, en: s || "—", bn: s || "—" };
+  };
 
- const lowStock = products.filter((p) => !p.is_active);
- const topItems = useMemo(() => {
- const map = new Map<string, { name: string; image: string; sold: number; revenue: number }>();
- orders.forEach((o) => {
- if (!Array.isArray(o.items)) return;
- (o.items as any[]).forEach((it) => {
- const key = it.slug || it.name;
- if (!key) return;
- const cur = map.get(key) ?? { name: it.name ?? key, image: it.image_url ?? "", sold: 0, revenue: 0 };
- cur.sold += Number(it.quantity ?? 1);
- cur.revenue += Number(it.price ?? it.total ?? 0) * Number(it.quantity ?? 1);
- map.set(key, cur);
- });
- });
- return Array.from(map.values()).sort((a, b) => b.sold - a.sold).slice(0, 5);
- }, [orders]);
+  const kpiCards = [
+    {
+      label: t("Today's sales", "আজকের সেল"), value: fmtBDT(stats.todayRev),
+      sub: `${stats.todayCount} ${t("orders", "অর্ডার")}`,
+      delta: stats.dayDelta, Icon: TrendingUp,
+    },
+    {
+      label: t("Total revenue", "মোট আয়"), value: fmtBDT(stats.revenue),
+      sub: `${counts.orders.toLocaleString("en-IN")} ${t("orders", "অর্ডার")}`,
+      Icon: BarChart3,
+    },
+    {
+      label: t("This month", "এই মাস"), value: fmtBDT(stats.monthRev),
+      sub: `${stats.monthCount} ${t("orders", "অর্ডার")}`,
+      Icon: Sparkles,
+    },
+    {
+      label: t("Customers", "কাস্টমার"), value: counts.users.toLocaleString("en-IN"),
+      sub: `${counts.products} ${t("products", "প্রোডাক্ট")}`,
+      Icon: Users,
+    },
+  ];
 
- const statusChip = (s: string) => {
- const k = (s || "").toLowerCase();
- if (k === "completed" || k === "paid") return "bg-slate-50 text-slate-700 ring-slate-200";
- if (k === "pending") return "bg-slate-50 text-slate-700 ring-slate-200";
- if (k === "processing") return "bg-slate-50 text-slate-700 ring-slate-200";
- if (k === "cancelled" || k === "failed") return "bg-slate-50 text-slate-700 ring-slate-200";
- return "bg-slate-100 text-slate-700 ring-slate-200";
- };
+  return (
+    <div className="space-y-5 animate-fade-in pb-10">
+      {/* Welcome strip */}
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 truncate">
+            {t("Welcome back 👋", "আবার স্বাগতম 👋")}
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            {t("Here's what's happening with your store today.", "আজকে আপনার দোকানে যা হচ্ছে দেখে নিন।")}
+          </p>
+        </div>
+        <Link
+          to="/admin/orders"
+          className="shrink-0 inline-flex items-center gap-1.5 h-10 px-3 sm:px-4 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white text-xs sm:text-sm font-semibold shadow-sm transition"
+        >
+          <Eye className="w-4 h-4" />
+          <span className="hidden sm:inline">{t("View orders", "অর্ডার দেখুন")}</span>
+        </Link>
+      </div>
 
- // Sales report mock series
- const salesMonths = ["Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan"];
- const seriesA = [220,260,300,250,330,290,340,420,380,460,500,560];
- const seriesB = [120,140,170,150,200,180,220,260,240,300,340,380];
- const trafficSources = [
- { label: "Direct", val: 143382, pct: 92 },
- { label: "Referral", val: 87974, pct: 66 },
- { label: "Social Media", val: 45211, pct: 42 },
- { label: "Twitter", val: 21893, pct: 22 },
- { label: "Facebook", val: 21893, pct: 22 },
- ];
+      {/* Pending orders banner */}
+      {pendingOrders > 0 && (
+        <Link
+          to="/admin/orders"
+          className="flex items-center gap-3 rounded-2xl bg-amber-50 ring-1 ring-amber-200 px-4 py-3 hover:bg-amber-100 transition"
+        >
+          <span className="w-9 h-9 rounded-xl bg-amber-100 grid place-items-center shrink-0">
+            <AlertCircle className="w-4 h-4 text-amber-700" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <div className="text-sm font-bold text-amber-900 truncate">
+              {pendingOrders} {t("orders need your attention", "অর্ডার আপনার মনোযোগ চাইছে")}
+            </div>
+            <div className="text-xs text-amber-700/80 truncate">
+              {t("Approve payments and deliver credentials.", "পেমেন্ট অ্যাপ্রুভ করে ক্রেডেনশিয়াল পাঠান।")}
+            </div>
+          </div>
+          <ChevronRight className="w-5 h-5 text-amber-700 shrink-0" />
+        </Link>
+      )}
 
- // Order status breakdown (real)
- const orderStatusBreakdown = useMemo(() => {
- const buckets = { completed: 0, pending: 0, processing: 0, cancelled: 0 } as Record<string, number>;
- orders.forEach((o) => {
- const k = (o.status || "pending").toLowerCase();
- if (k in buckets) buckets[k]++; else buckets.pending++;
- });
- const total = Object.values(buckets).reduce((a, b) => a + b, 0) || 1;
- return [
- { label: "Completed", val: buckets.completed, color: "#94a3b8", soft: "bg-slate-400" },
- { label: "Processing", val: buckets.processing, color: "#94a3b8", soft: "bg-slate-400" },
- { label: "Pending", val: buckets.pending, color: "#94a3b8", soft: "bg-slate-400" },
- { label: "Cancelled", val: buckets.cancelled, color: "#94a3b8", soft: "bg-slate-400" },
- ].map((s) => ({ ...s, pct: (s.val / total) * 100, total }));
- }, [orders]);
+      {/* Quick actions — horizontal scroll on mobile, grid on desktop */}
+      <div>
+        <div className="flex items-center justify-between mb-2.5">
+          <h2 className="text-sm font-bold text-slate-700">{t("Quick actions", "দ্রুত অ্যাকশন")}</h2>
+        </div>
+        <div className="-mx-1 px-1 overflow-x-auto sm:overflow-visible scrollbar-none">
+          <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-9 gap-2.5 min-w-max sm:min-w-0">
+            {quickActions.map(({ to, en, bn, icon: Icon, accent, badge }) => (
+              <Link
+                key={en}
+                to={to}
+                className={`relative shrink-0 sm:shrink min-w-[112px] sm:min-w-0 flex flex-col items-center justify-center gap-2 rounded-2xl px-3 py-3.5 ring-1 transition active:scale-[0.97] ${
+                  accent
+                    ? "bg-[#3b82f6] text-white ring-[#3b82f6] hover:bg-[#2563eb] shadow-sm"
+                    : "bg-white text-slate-700 ring-[#e8ecf1] hover:bg-slate-50 hover:ring-slate-300"
+                }`}
+              >
+                <span className={`w-9 h-9 rounded-xl grid place-items-center ${accent ? "bg-white/20" : "bg-slate-50"}`}>
+                  <Icon className={`w-4.5 h-4.5 ${accent ? "text-white" : "text-slate-600"}`} />
+                </span>
+                <span className="text-[11.5px] font-semibold text-center leading-tight">{t(en, bn)}</span>
+                {badge && badge > 0 ? (
+                  <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold grid place-items-center">
+                    {badge > 99 ? "99+" : badge}
+                  </span>
+                ) : null}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
 
- // Recent customers (real, from orders) — matches reference table
- const recentCustomers = useMemo(() => {
- return orders.slice(0, 6).map((o) => {
- const item = Array.isArray(o.items) && (o.items as any[])[0];
- return {
- id: o.id,
- orderId: "#" + o.id.slice(0, 6).toUpperCase(),
- name: o.full_name || o.email || "Guest",
- date: new Date(o.created_at),
- price: Number(o.total) || 0,
- status: (o.status || "pending").toLowerCase(),
- image: item?.image_url || "",
- emoji: item?.emoji || "📦",
- product: item?.name || "Order",
- };
- });
- }, [orders]);
+      {/* KPI cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        {kpiCards.map(({ label, value, sub, delta, Icon }) => (
+          <div key={label} className="rounded-2xl bg-white ring-1 ring-[#e8ecf1] p-4 sm:p-5 shadow-[0_2px_8px_-4px_rgba(15,23,42,0.06)] hover:shadow-[0_4px_16px_-6px_rgba(15,23,42,0.1)] transition">
+            <div className="flex items-start justify-between gap-2">
+              <div className="text-[11px] sm:text-xs text-slate-500 font-medium uppercase tracking-wide">{label}</div>
+              <span className="w-8 h-8 rounded-lg bg-blue-50 text-[#3b82f6] grid place-items-center shrink-0">
+                <Icon className="w-4 h-4" />
+              </span>
+            </div>
+            <div className="mt-3 text-xl sm:text-2xl lg:text-[28px] font-extrabold text-slate-900 tracking-tight tabular-nums">
+              {loading ? <span className="inline-block w-16 h-6 bg-slate-100 rounded animate-pulse" /> : value}
+            </div>
+            <div className="mt-1 flex items-center gap-1.5 text-[11px] sm:text-xs">
+              <span className="text-slate-500 truncate">{sub}</span>
+              {typeof delta === "number" && delta !== 0 && (
+                <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full font-bold tabular-nums shrink-0 ${delta >= 0 ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
+                  {delta >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                  {Math.abs(delta)}%
+                </span>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
 
- const lowStockItems = lowStock.slice(0, 6);
+      {/* 7-day revenue chart + Top products */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+        {/* Chart */}
+        <div className="lg:col-span-2 rounded-2xl bg-white ring-1 ring-[#e8ecf1] p-4 sm:p-5">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 mb-4">
+            <div className="min-w-0">
+              <div className="font-bold text-slate-900 truncate">{t("Last 7 days revenue", "শেষ ৭ দিনের আয়")}</div>
+              <div className="text-xs text-slate-500 mt-0.5 tabular-nums">
+                {fmtBDT(spark.reduce((s, x) => s + x.v, 0))}
+              </div>
+            </div>
+            <Link to="/admin/orders" className="shrink-0 text-xs font-semibold text-[#3b82f6] hover:underline inline-flex items-center gap-0.5">
+              {t("Details", "বিস্তারিত")} <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          {(() => {
+            const W = 700, H = 180;
+            const step = W / Math.max(1, spark.length - 1);
+            const pts = spark.map((s, i) => [i * step, H - (s.v / sparkMax) * (H - 30) - 10] as [number, number]);
+            if (pts.length === 0) return null;
+            let d = `M ${pts[0][0]},${pts[0][1]}`;
+            for (let i = 1; i < pts.length; i++) {
+              const [x1, y1] = pts[i - 1], [x2, y2] = pts[i];
+              const cx = (x1 + x2) / 2;
+              d += ` C ${cx},${y1} ${cx},${y2} ${x2},${y2}`;
+            }
+            const area = `${d} L ${W},${H} L 0,${H} Z`;
+            return (
+              <svg viewBox={`0 0 ${W} ${H + 26}`} className="w-full h-48">
+                <defs>
+                  <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d={area} fill="url(#sparkGrad)" />
+                <path d={d} fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                {pts.map(([x, y], i) => (
+                  <circle key={i} cx={x} cy={y} r="3.5" fill="#fff" stroke="#3b82f6" strokeWidth="2" />
+                ))}
+                {spark.map((s, i) => (
+                  <text key={i} x={i * step} y={H + 20} textAnchor="middle" className="fill-slate-400" style={{ fontSize: 11, fontWeight: 600 }}>
+                    {s.d}
+                  </text>
+                ))}
+              </svg>
+            );
+          })()}
+        </div>
 
- return (
- <div className="space-y-5 animate-fade-in">
+        {/* Top products */}
+        <div className="rounded-2xl bg-white ring-1 ring-[#e8ecf1] p-4 sm:p-5">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 mb-4">
+            <div className="font-bold text-slate-900 truncate">{t("Top products", "টপ প্রোডাক্ট")}</div>
+            <Link to="/admin/products" className="shrink-0 text-xs font-semibold text-[#3b82f6] hover:underline">
+              {t("All", "সব")}
+            </Link>
+          </div>
+          {topProducts.length === 0 ? (
+            <div className="text-sm text-slate-500 text-center py-8">
+              {t("No sales yet", "এখনও কোনো সেল নেই")}
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              {topProducts.map((p, i) => (
+                <div key={p.name + i} className="flex items-center gap-3">
+                  <span className="w-7 h-7 rounded-lg bg-slate-50 text-slate-500 grid place-items-center text-xs font-bold shrink-0">
+                    {i + 1}
+                  </span>
+                  <div className="w-10 h-10 rounded-xl bg-slate-50 ring-1 ring-slate-100 grid place-items-center overflow-hidden shrink-0">
+                    {p.image ? <img src={p.image} alt="" className="max-w-[80%] max-h-[80%] object-contain" /> : <span>{p.emoji}</span>}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-semibold text-slate-900 truncate">{p.name}</div>
+                    <div className="text-[11px] text-slate-500 tabular-nums">
+                      {p.sold} {t("sold", "বিক্রি")} · {fmtBDT(p.revenue)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
- {/* KPI cards — clean white */}
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
- {[
- { label: "Total revenue", value: fmtBDT(stats.revenue), sub: `${counts.orders} orders`, Icon: DollarSign },
- { label: "Today's sales", value: fmtBDT(stats.todayRev), sub: `${stats.todayCount} orders`, Icon: ShoppingBag },
- { label: "This month", value: fmtBDT(stats.monthRev), sub: `${stats.monthCount} orders`, Icon: BarChart3 },
- { label: "Customers", value: counts.users.toLocaleString("en-IN"), sub: `${counts.products} products`, Icon: Users },
- ].map(({ label, value, sub, Icon }) => (
- <div key={label} className="rounded-3xl bg-white ring-1 ring-slate-200/70 p-5 shadow-[0_8px_24px_-18px_rgba(100,116,139,0.18)]">
- <div className="flex items-start justify-between gap-3">
- <div className="text-sm text-slate-500 font-medium">{label}</div>
- <span className="w-9 h-9 rounded-full bg-slate-100 text-slate-500 grid place-items-center">
- <Icon className="w-4 h-4" />
- </span>
- </div>
- <div className="mt-4 text-3xl md:text-[34px] font-extrabold text-slate-900 tracking-tight tabular-nums">
- {loading ? "—" : value}
- </div>
- <div className="mt-1.5 text-xs text-slate-500">{sub}</div>
- </div>
- ))}
- </div>
+      {/* Recent orders + Low stock */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+        {/* Recent orders */}
+        <div className="lg:col-span-2 rounded-2xl bg-white ring-1 ring-[#e8ecf1] p-4 sm:p-5">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 mb-4">
+            <div className="font-bold text-slate-900 truncate">{t("Recent orders", "সাম্প্রতিক অর্ডার")}</div>
+            <Link to="/admin/orders" className="shrink-0 text-xs font-semibold text-[#3b82f6] hover:underline inline-flex items-center gap-0.5">
+              {t("View all", "সব দেখুন")} <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          {loading ? (
+            <div className="space-y-2">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-14 bg-slate-50 rounded-xl animate-pulse" />
+              ))}
+            </div>
+          ) : recentOrders.length === 0 ? (
+            <div className="text-sm text-slate-500 text-center py-8">
+              {t("No orders yet", "এখনও কোনো অর্ডার নেই")}
+            </div>
+          ) : (
+            <div className="divide-y divide-slate-100">
+              {recentOrders.map((o) => {
+                const meta = statusMeta(o.status);
+                return (
+                  <div key={o.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-3 first:pt-0 last:pb-0">
+                    <div className="min-w-0">
+                      <div className="text-sm font-semibold text-slate-900 truncate">
+                        {o.full_name || o.email || "Guest"}
+                      </div>
+                      <div className="text-[11px] text-slate-500 truncate">
+                        #{o.id.slice(0, 6).toUpperCase()} · {new Date(o.created_at).toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { day: "numeric", month: "short" })}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                      <div className="text-sm font-bold text-slate-900 tabular-nums">{fmtBDT(Number(o.total) || 0)}</div>
+                      <span className={`inline-flex items-center gap-1 text-[10.5px] font-bold px-2 py-1 rounded-full ring-1 ${meta.cls}`}>
+                        <meta.Icon className="w-3 h-3" />
+                        <span className="hidden sm:inline">{t(meta.en, meta.bn)}</span>
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
- {/* Stock alerts */}
- <div className="rounded-3xl bg-white ring-1 ring-slate-200/70 p-5 md:p-6 shadow-[0_8px_24px_-18px_rgba(100,116,139,0.18)]">
- <div className="flex items-start justify-between gap-3 mb-4">
- <div className="flex items-center gap-3">
- <span className="w-10 h-10 rounded-2xl bg-slate-100 text-slate-600 grid place-items-center">
- <Box className="w-5 h-5" />
- </span>
- <div>
- <div className="font-extrabold text-slate-900">Stock alerts</div>
- <div className="text-xs text-slate-500">Threshold ≤ 3</div>
- </div>
- </div>
- <Link to="/admin/products" className="text-xs font-semibold text-slate-600 hover:text-slate-900 inline-flex items-center gap-1">
- <Settings className="w-3.5 h-3.5" /> View all <ChevronRight className="w-3.5 h-3.5" />
- </Link>
- </div>
- <div className="rounded-2xl bg-slate-50 ring-1 ring-slate-100 p-4 mb-3">
- <div className="text-[10px] font-bold uppercase tracking-wider text-slate-700 inline-flex items-center gap-1.5">
- <Box className="w-3.5 h-3.5" /> Low stock
- </div>
- <div className="text-3xl font-extrabold text-slate-700 mt-1 tabular-nums">{lowStockItems.length}</div>
- </div>
- <div className="space-y-2">
- {lowStockItems.length === 0 ? (
- <div className="text-sm text-slate-500 text-center py-6">All products in stock 🎉</div>
- ) : lowStockItems.map((p) => (
- <div key={p.slug} className="flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-slate-50 ring-1 ring-slate-100">
- <div className="w-10 h-10 rounded-xl bg-white grid place-items-center overflow-hidden ring-1 ring-slate-200 shrink-0">
- {p.image_url ? (
- <img src={p.image_url} alt={p.name} className="max-w-[80%] max-h-[80%] object-contain" />
- ) : (
- <span className="text-base">{p.emoji || "📦"}</span>
- )}
- </div>
- <div className="min-w-0 flex-1">
- <div className="text-sm font-bold text-slate-900 truncate">{p.name}</div>
- <div className="text-[11px] text-slate-500">Out of stock</div>
- </div>
- <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-md bg-slate-500 text-white tracking-wider">OUT</span>
- <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-50 text-slate-700 ring-1 ring-slate-200 inline-flex items-center gap-1">
- <CheckCircle2 className="w-3 h-3" /> Done
- </span>
- </div>
- ))}
- </div>
- </div>
-
- {/* Sales Report + Traffic Sources */}
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
- <div className="lg:col-span-2 rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
- <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
- <div className="font-extrabold text-slate-900">Sales Report</div>
- <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100/70">
- {["12 MONTHS","6 MONTHS","30 DAYS","7 DAYS"].map((t,i)=>(
- <button key={t} className={`text-[11px] font-bold px-3 py-1.5 rounded-lg ${i===0?"bg-white shadow-sm text-slate-900":"text-slate-500 hover:text-slate-700"}`}>{t}</button>
- ))}
- </div>
- <button className="h-9 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 bg-white ring-1 ring-slate-200 text-slate-700 hover:bg-slate-50">
- <FileText className="w-3.5 h-3.5" /> EXPORT PDF
- </button>
- </div>
- {(() => {
- const W=720, H=200;
- const max = Math.max(...seriesA, ...seriesB);
- const step = W/(seriesA.length-1);
- const toPath = (arr:number[]) => {
- const pts = arr.map((v,i)=>[i*step, H - (v/max)*(H-30) - 10] as [number,number]);
- let d = `M ${pts[0][0]},${pts[0][1]}`;
- for (let i=1;i<pts.length;i++){
- const [x1,y1]=pts[i-1],[x2,y2]=pts[i];
- const cx=(x1+x2)/2;
- d+=` C ${cx},${y1} ${cx},${y2} ${x2},${y2}`;
- }
- return d;
- };
- return (
- <svg viewBox={`0 0 ${W} ${H+30}`} className="w-full h-56">
- <path d={toPath(seriesA)} fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" />
- <path d={toPath(seriesB)} fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" />
- {salesMonths.map((m,i)=>(
- <text key={m} x={i*step} y={H+22} textAnchor="middle" className="fill-slate-400" style={{fontSize:11,fontWeight:600}}>{m}</text>
- ))}
- </svg>
- );
- })()}
- </div>
-
- <div className="rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
- <div className="flex items-center justify-between mb-5">
- <div className="font-extrabold text-slate-900">Traffic Sources</div>
- <button className="text-[11px] font-bold text-slate-500 inline-flex items-center gap-1">LAST 7 DAYS</button>
- </div>
- <div className="space-y-4">
- {trafficSources.map((t)=>(
- <div key={t.label}>
- <div className="flex items-center justify-between text-xs mb-1.5">
- <span className="text-slate-700 font-semibold">{t.label}</span>
- <span className="text-slate-900 font-bold tabular-nums">{t.val.toLocaleString("en-IN")}</span>
- </div>
- <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
- <div className="h-full rounded-full bg-slate-500" style={{ width: `${t.pct}%` }} />
- </div>
- </div>
- ))}
- </div>
- </div>
- </div>
-
- {/* Orders Breakdown (donut) + Recent Customers — matches reference */}
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
- {/* Donut */}
- <div className="rounded-3xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
- <div className="flex items-center justify-between mb-4">
- <div className="font-extrabold text-slate-900">Orders Breakdown</div>
- <button className="text-slate-500 hover:text-slate-700">⋮</button>
- </div>
- {(() => {
- const total = orderStatusBreakdown[0]?.total ?? 0;
- // build donut segments
- let acc = 0;
- const R = 15.915;
- return (
- <>
- <div className="relative w-44 h-44 mx-auto">
- <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
- <circle cx="18" cy="18" r={R} fill="transparent" stroke="#94a3b8" strokeWidth="5" />
- {orderStatusBreakdown.map((s) => {
- if (s.pct <= 0) return null;
- const dash = `${s.pct} ${100 - s.pct}`;
- const offset = -acc;
- acc += s.pct;
- return (
- <circle
- key={s.label}
- cx="18" cy="18" r={R}
- fill="transparent"
- stroke={s.color}
- strokeWidth="5"
- strokeDasharray={dash}
- strokeDashoffset={offset}
- strokeLinecap="butt"
- />
- );
- })}
- </svg>
- <div className="absolute inset-0 grid place-items-center">
- <div className="text-center">
- <div className="text-3xl font-extrabold text-slate-900 tabular-nums">{total}</div>
- <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Total</div>
- </div>
- </div>
- </div>
- <div className="mt-5 space-y-2">
- {orderStatusBreakdown.map((s) => (
- <div key={s.label} className="flex items-center gap-2 text-xs">
- <span className={`w-2.5 h-2.5 rounded-full ${s.soft}`} />
- <span className="text-slate-700 font-semibold flex-1 capitalize">{s.label}</span>
- <span className="text-slate-900 font-extrabold tabular-nums">{s.val}</span>
- </div>
- ))}
- </div>
- </>
- );
- })()}
- </div>
-
- {/* Recent Customers table */}
- <div className="lg:col-span-2 rounded-3xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
- <div className="flex items-center justify-between mb-4">
- <div className="font-extrabold text-slate-900">Recent Customers</div>
- <Link to="/admin/orders" className="text-xs font-bold text-slate-600 inline-flex items-center gap-1 hover:underline">
- View All <ArrowUpRight className="w-3.5 h-3.5" />
- </Link>
- </div>
- {loading ? (
- <div className="text-sm text-slate-500 text-center py-10">Loading…</div>
- ) : recentCustomers.length === 0 ? (
- <div className="text-sm text-slate-500 text-center py-10">No orders yet.</div>
- ) : (
- <div className="overflow-x-auto -mx-2">
- <table className="w-full text-sm">
- <thead>
- <tr className="text-[11px] uppercase tracking-wider text-slate-500 font-bold">
- <th className="text-left py-2 px-2 font-bold">Product</th>
- <th className="text-left py-2 px-2 font-bold">Order ID</th>
- <th className="text-left py-2 px-2 font-bold">Customer</th>
- <th className="text-left py-2 px-2 font-bold">Date</th>
- <th className="text-left py-2 px-2 font-bold">Price</th>
- <th className="text-left py-2 px-2 font-bold">Status</th>
- </tr>
- </thead>
- <tbody>
- {recentCustomers.map((c) => (
- <tr key={c.id} className="border-t border-slate-100/80 hover:bg-white/60 transition">
- <td className="py-2.5 px-2">
- <div className="w-9 h-9 rounded-xl bg-slate-100 grid place-items-center overflow-hidden border border-slate-200">
- {c.image ? (
- <img src={c.image} alt={c.product} className="max-h-[80%] max-w-[80%] object-contain" />
- ) : (
- <span className="text-base">{c.emoji}</span>
- )}
- </div>
- </td>
- <td className="py-2.5 px-2 text-slate-700 font-semibold tabular-nums">{c.orderId}</td>
- <td className="py-2.5 px-2 text-slate-900 font-semibold truncate max-w-[160px]">{c.name}</td>
- <td className="py-2.5 px-2 text-slate-600">
- <span className="inline-flex items-center gap-1.5">
- <Clock className="w-3.5 h-3.5 text-slate-500" />
- {c.date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "2-digit" })}
- </span>
- </td>
- <td className="py-2.5 px-2 text-slate-900 font-extrabold tabular-nums">{fmtBDT(c.price)}</td>
- <td className="py-2.5 px-2">
- <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ring-1 capitalize ${statusChip(c.status)}`}>
- {c.status}
- </span>
- </td>
- </tr>
- ))}
- </tbody>
- </table>
- </div>
- )}
- </div>
- </div>
-
- {/* Quick actions */}
- <div className="rounded-2xl p-5 ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(100,116,139,0.15)]">
- <div className="flex items-center justify-between mb-4">
- <div className="font-extrabold text-slate-900">Quick actions</div>
- <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Shortcuts</span>
- </div>
- <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2.5">
- {quickActions.map((a) => {
- const Icon = a.icon;
- return (
- <Link
- key={a.to}
- to={a.to}
- className="group flex flex-col items-center gap-1.5 p-3 rounded-xl bg-white/80 ring-1 ring-white/70 hover:ring-slate-200 hover:shadow-md transition-all"
- >
- <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${a.grad} text-white grid place-items-center shadow-md group-hover:scale-110 transition`}>
- <Icon className="w-4 h-4" />
- </div>
- <div className="text-[11px] font-semibold text-slate-700 text-center leading-tight">{a.label}</div>
- </Link>
- );
- })}
- </div>
- </div>
-
- {/* Pending highlight + Top products + Stock */}
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
- {/* Pending action card */}
- <div className="bg-white/70 backdrop-blur-md ring-1 ring-slate-200 border border-slate-200 rounded-2xl p-5 shadow-sm">
- <div className="flex items-center gap-3">
- <div className="w-11 h-11 rounded-2xl bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center shadow-md">
- <Clock className="w-5 h-5" />
- </div>
- <div>
- <div className="text-[10px] font-bold uppercase tracking-wider text-slate-700">Needs your attention</div>
- <div className="text-2xl font-extrabold text-slate-900">{stats.pending} pending</div>
- </div>
- </div>
- <p className="text-sm text-slate-900/70 mt-3">Pending or processing orders are waiting for action. Process them to keep customers happy.</p>
- <Link to="/admin/orders" className="mt-4 inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-slate-900 text-white text-xs font-bold hover:bg-slate-950 transition">
- Process orders <ChevronRight className="w-3.5 h-3.5" />
- </Link>
- </div>
-
- {/* Top products */}
- <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <div className="flex items-center gap-2">
- <div className="w-8 h-8 rounded-lg bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center"><Star className="w-4 h-4" /></div>
- <div>
- <div className="font-bold text-slate-900">Top selling products</div>
- <div className="text-xs text-slate-500">Based on recent orders</div>
- </div>
- </div>
- <Link to="/admin/products" className="text-xs font-semibold text-slate-700 inline-flex items-center gap-1 hover:text-slate-900">
- View all <ChevronRight className="w-3.5 h-3.5" />
- </Link>
- </div>
-
- {topItems.length === 0 ? (
- <div className="text-sm text-slate-500 text-center py-10">No sales data yet.</div>
- ) : (
- <div className="space-y-1.5">
- {topItems.map((it, i) => {
- const max = Math.max(1, topItems[0].sold);
- const pct = Math.round((it.sold / max) * 100);
- return (
- <div key={it.name} className="flex items-center gap-3 py-2 px-2 rounded-xl hover:bg-slate-50 transition">
- <div className="w-7 text-sm font-extrabold text-slate-300 text-center tabular-nums">{i + 1}</div>
- <div className="w-10 h-10 rounded-xl bg-slate-100 grid place-items-center overflow-hidden shrink-0 border border-slate-200">
- {it.image ? <img src={it.image} alt={it.name} className="max-h-[80%] max-w-[80%] object-contain" /> : <Box className="w-4 h-4 text-slate-500" />}
- </div>
- <div className="flex-1 min-w-0">
- <div className="text-sm font-semibold text-slate-900 truncate">{it.name}</div>
- <div className="mt-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
- <div className="h-full rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200" style={{ width: `${pct}%` }} />
- </div>
- </div>
- <div className="text-right shrink-0">
- <div className="text-sm font-extrabold text-slate-900 tabular-nums">{fmtBDT(it.revenue)}</div>
- <div className="text-[10px] text-slate-500 font-semibold">{it.sold} sold</div>
- </div>
- </div>
- );
- })}
- </div>
- )}
- </div>
- </div>
-
- {/* ───────── PREMIUM CONTROL CENTER MODULES ───────── */}
-
- {/* Accessibility Monitoring */}
- <div>
- <div className="flex items-end justify-between mb-3">
- <div className="flex items-center gap-2">
- <div className="w-9 h-9 rounded-xl bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center shadow-md">
- <Accessibility className="w-5 h-5" />
- </div>
- <div>
- <div className="text-[10px] font-bold uppercase tracking-wider text-slate-600">Accessibility Control</div>
- <div className="text-lg font-extrabold text-slate-900">Monitoring & Reports</div>
- </div>
- </div>
- <Link to="/admin/reports" className="text-xs font-semibold text-slate-700 inline-flex items-center gap-1 hover:text-slate-900">
- View all reports <ArrowUpRight className="w-3.5 h-3.5" />
- </Link>
- </div>
-
- <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
- {[
- { label: "Vision Issues", value: 12, sub: "+3 this week", icon: Eye, grad: "from-violet-500 to-indigo-500", chip: "bg-violet-50 text-violet-700" },
- { label: "Hearing Issues", value: 4, sub: "1 critical", icon: Ear, grad: "from-rose-500 to-pink-500", chip: "bg-rose-50 text-rose-700" },
- { label: "Mobility Issues", value: 7, sub: "2 in review", icon: Accessibility, grad: "from-amber-500 to-orange-500", chip: "bg-amber-50 text-amber-700" },
- { label: "Bug Reports", value: 18, sub: "5 resolved today", icon: Bug, grad: "from-emerald-500 to-teal-500", chip: "bg-emerald-50 text-emerald-700" },
- ].map((c) => {
- const Icon = c.icon;
- return (
- <div key={c.label} className="group relative bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden">
- <div className={`pointer-events-none absolute -top-10 -right-10 w-32 h-32 rounded-full bg-gradient-to-br ${c.grad} opacity-10 blur-2xl group-hover:opacity-25 transition`} />
- <div className="flex items-start justify-between relative">
- <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${c.grad} text-white grid place-items-center shadow-md`}>
- <Icon className="w-5 h-5" />
- </div>
- <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${c.chip}`}>LIVE</span>
- </div>
- <div className="text-3xl font-extrabold text-slate-900 mt-3 tracking-tight tabular-nums relative">{c.value}</div>
- <div className="text-xs text-slate-500 mt-1 font-medium relative">{c.label}</div>
- <div className="text-[11px] text-slate-500 mt-0.5 relative">{c.sub}</div>
- </div>
- );
- })}
- </div>
- </div>
-
- {/* Reports list + Status breakdown */}
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
- <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <div className="font-bold text-slate-900">Recent accessibility reports</div>
- <Link to="/admin/reports" className="text-xs font-semibold text-slate-700 hover:text-slate-900 inline-flex items-center gap-1">
- All <ChevronRight className="w-3.5 h-3.5" />
- </Link>
- </div>
- <div className="space-y-1">
- {[
- { user: "Rahim Uddin", issue: "Screen reader skips checkout step 2", type: "Vision", status: "critical", time: "12 min ago" },
- { user: "Sumi Akter", issue: "Keyboard focus lost in modal", type: "Mobility", status: "in_review", time: "1 hr ago" },
- { user: "Anonymous", issue: "Caption missing on tutorial video", type: "Hearing", status: "pending", time: "3 hr ago" },
- { user: "Karim Ahmed", issue: "Low contrast on warning badges", type: "UI", status: "resolved", time: "Yesterday" },
- { user: "Nadia Islam", issue: "Bangla numerals not announced", type: "Vision", status: "in_review", time: "2 days ago" },
- ].map((r, i) => {
- const statusStyle: Record<string, string> = {
- critical: "bg-rose-50 text-rose-700 ring-rose-200",
- in_review: "bg-amber-50 text-amber-700 ring-amber-200",
- pending: "bg-violet-50 text-violet-700 ring-violet-200",
- resolved: "bg-emerald-50 text-emerald-700 ring-emerald-200",
- };
- return (
- <div key={i} className="flex items-center gap-3 py-2.5 px-2 rounded-xl hover:bg-slate-50 transition">
- <div className="w-9 h-9 rounded-full bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center text-[11px] font-bold shrink-0">
- {r.user.slice(0, 2).toUpperCase()}
- </div>
- <div className="flex-1 min-w-0">
- <div className="text-sm font-semibold text-slate-900 truncate">{r.issue}</div>
- <div className="text-[11px] text-slate-500">{r.user} · {r.type} · {r.time}</div>
- </div>
- <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ring-1 capitalize ${statusStyle[r.status]}`}>
- {r.status.replace("_", " ")}
- </span>
- </div>
- );
- })}
- </div>
- </div>
-
- {/* Status breakdown donut */}
- <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
- <div className="font-bold text-slate-900 mb-1">Issue status breakdown</div>
- <div className="text-xs text-slate-500 mb-5">Across all accessibility reports</div>
- <div className="flex items-center justify-center mb-5">
- <div className="relative w-40 h-40">
- <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#ef4444" strokeWidth="3.5" strokeDasharray="20 100" />
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#f59e0b" strokeWidth="3.5" strokeDasharray="30 100" strokeDashoffset="-20" />
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#8b5cf6" strokeWidth="3.5" strokeDasharray="15 100" strokeDashoffset="-50" />
- <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#10b981" strokeWidth="3.5" strokeDasharray="35 100" strokeDashoffset="-65" />
- </svg>
- <div className="absolute inset-0 grid place-items-center">
- <div className="text-center">
- <div className="text-2xl font-extrabold text-slate-900">41</div>
- <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Total</div>
- </div>
- </div>
- </div>
- </div>
- <div className="space-y-1.5">
- {[
- { label: "Critical", val: 8, color: "bg-rose-500" },
- { label: "In Review", val: 12, color: "bg-amber-500" },
- { label: "Pending", val: 6, color: "bg-violet-500" },
- { label: "Resolved", val: 15, color: "bg-emerald-500" },
- ].map((s) => (
- <div key={s.label} className="flex items-center gap-2 text-xs">
- <span className={`w-2.5 h-2.5 rounded-full ${s.color}`} />
- <span className="text-slate-700 font-medium flex-1">{s.label}</span>
- <span className="text-slate-900 font-bold tabular-nums">{s.val}</span>
- </div>
- ))}
- </div>
- </div>
- </div>
-
- {/* Support Tickets + Notifications + Device Analytics */}
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
- {/* Support tickets */}
- <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <div className="flex items-center gap-2">
- <div className="w-8 h-8 rounded-lg bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center"><LifeBuoy className="w-4 h-4" /></div>
- <div>
- <div className="font-bold text-slate-900">Support tickets</div>
- <div className="text-xs text-slate-500">9 open · 3 urgent</div>
- </div>
- </div>
- <Link to="/admin/tickets" className="text-xs font-semibold text-slate-700 hover:text-slate-900">All</Link>
- </div>
- <div className="space-y-2">
- {[
- { id: "TKT-2841", subject: "Cannot reset password", priority: "urgent", user: "Rahim U." },
- { id: "TKT-2840", subject: "Subscription renewal failed", priority: "high", user: "Sumi A." },
- { id: "TKT-2839", subject: "Need invoice for ChatGPT plan", priority: "normal", user: "Karim A." },
- { id: "TKT-2838", subject: "Voice navigation not working", priority: "high", user: "Nadia I." },
- ].map((t) => {
- const pStyle: Record<string, string> = {
- urgent: "bg-rose-100 text-rose-700",
- high: "bg-amber-100 text-amber-700",
- normal: "bg-sky-100 text-sky-700",
- };
- return (
- <div key={t.id} className="p-3 rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-sm transition">
- <div className="flex items-center justify-between gap-2">
- <span className="text-[10px] font-bold text-slate-500 tabular-nums">{t.id}</span>
- <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase ${pStyle[t.priority]}`}>{t.priority}</span>
- </div>
- <div className="text-sm font-semibold text-slate-900 mt-1 truncate">{t.subject}</div>
- <div className="text-[11px] text-slate-500 mt-0.5">{t.user}</div>
- </div>
- );
- })}
- </div>
- </div>
-
- {/* Notifications feed */}
- <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <div className="flex items-center gap-2">
- <div className="w-8 h-8 rounded-lg bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center relative">
- <Bell className="w-4 h-4" />
- <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-slate-400 ring-2 ring-white" />
- </div>
- <div>
- <div className="font-bold text-slate-900">Live notifications</div>
- <div className="text-xs text-slate-500">Real-time activity</div>
- </div>
- </div>
- <Link to="/admin/notifications" className="text-xs font-semibold text-slate-700 hover:text-slate-900">All</Link>
- </div>
- <div className="space-y-2.5">
- {[
- { type: "order", icon: ShoppingBag, color: "from-emerald-500 to-teal-500", text: "New order ৳1,200 from Anika R.", time: "Just now" },
- { type: "alert", icon: AlertTriangle, color: "from-rose-500 to-red-500", text: "Critical accessibility issue reported", time: "5 min ago" },
- { type: "user", icon: UserCheck, color: "from-violet-500 to-fuchsia-500", text: "12 new users joined today", time: "1 hr ago" },
- { type: "ticket", icon: MessageSquare, color: "from-sky-500 to-indigo-500", text: "Support ticket TKT-2841 opened", time: "2 hr ago" },
- { type: "system", icon: ShieldCheck, color: "from-amber-500 to-orange-500", text: "Backup completed successfully", time: "4 hr ago" },
- ].map((n, i) => {
- const Icon = n.icon;
- return (
- <div key={i} className="flex items-start gap-3 p-2 rounded-xl hover:bg-slate-50 transition animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
- <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${n.color} text-white grid place-items-center shrink-0 shadow-sm`}>
- <Icon className="w-4 h-4" />
- </div>
- <div className="flex-1 min-w-0">
- <div className="text-sm text-slate-800 leading-snug">{n.text}</div>
- <div className="text-[11px] text-slate-500 mt-0.5">{n.time}</div>
- </div>
- </div>
- );
- })}
- </div>
- </div>
-
- {/* Device analytics */}
- <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <div className="flex items-center gap-2">
- <div className="w-8 h-8 rounded-lg bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center"><Monitor className="w-4 h-4" /></div>
- <div>
- <div className="font-bold text-slate-900">Device analytics</div>
- <div className="text-xs text-slate-500">Visitor breakdown</div>
- </div>
- </div>
- <span className="text-[10px] font-bold text-slate-600 bg-slate-50 px-2 py-0.5 rounded-full">+18%</span>
- </div>
- <div className="space-y-3.5">
- {[
- { label: "Mobile", val: 68, icon: Smartphone, color: "from-violet-500 to-fuchsia-500" },
- { label: "Desktop", val: 24, icon: Monitor, color: "from-sky-500 to-indigo-500" },
- { label: "Tablet", val: 8, icon: Tablet, color: "from-emerald-500 to-teal-500" },
- ].map((d) => {
- const Icon = d.icon;
- return (
- <div key={d.label}>
- <div className="flex items-center gap-2 mb-1.5">
- <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${d.color} text-white grid place-items-center shadow-sm`}>
- <Icon className="w-3.5 h-3.5" />
- </div>
- <span className="text-sm font-semibold text-slate-700 flex-1">{d.label}</span>
- <span className="text-sm font-extrabold text-slate-900 tabular-nums">{d.val}%</span>
- </div>
- <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
- <div className={`h-full rounded-full bg-gradient-to-r ${d.color} transition-all`} style={{ width: `${d.val}%` }} />
- </div>
- </div>
- );
- })}
- </div>
-
- <div className="mt-5 pt-5 border-t border-slate-100">
- <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2.5">Top browsers</div>
- <div className="space-y-1.5">
- {[
- { label: "Chrome", val: "62%" },
- { label: "Safari", val: "21%" },
- { label: "Firefox", val: "9%" },
- { label: "Edge", val: "8%" },
- ].map((b) => (
- <div key={b.label} className="flex items-center gap-2 text-xs">
- <Globe className="w-3 h-3 text-slate-500" />
- <span className="text-slate-600 flex-1">{b.label}</span>
- <span className="text-slate-900 font-bold tabular-nums">{b.val}</span>
- </div>
- ))}
- </div>
- </div>
- </div>
- </div>
-
- {/* Recent orders + Stock alerts */}
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
- {/* Recent orders (wider) */}
- <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <div className="flex items-center gap-2">
- <div className="w-8 h-8 rounded-lg bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center"><ShoppingBag className="w-4 h-4" /></div>
- <div className="font-bold text-slate-900">Recent orders</div>
- </div>
- <Link to="/admin/orders" className="text-xs font-semibold text-slate-700 inline-flex items-center gap-1 hover:text-slate-900">
- View all <ChevronRight className="w-3.5 h-3.5" />
- </Link>
- </div>
- {loading ? (
- <div className="text-sm text-slate-500 text-center py-10">Loading…</div>
- ) : orders.length === 0 ? (
- <div className="text-sm text-slate-500 text-center py-10">No orders yet.</div>
- ) : (
- <div className="divide-y divide-slate-100">
- {orders.slice(0, 6).map((o) => (
- <Link key={o.id} to="/admin/orders" className="flex items-center gap-3 py-3 px-1 hover:bg-slate-50 rounded-lg transition">
- <div className="w-9 h-9 rounded-full bg-white/70 backdrop-blur-md ring-1 ring-slate-200 grid place-items-center text-slate-600 font-bold text-xs shrink-0">
- {(o.full_name || o.email || "?").slice(0, 2).toUpperCase()}
- </div>
- <div className="flex-1 min-w-0">
- <div className="text-sm font-semibold text-slate-900 truncate">{o.full_name || o.email || "Guest"}</div>
- <div className="text-[11px] text-slate-500 truncate">RxB-{o.id.slice(0, 6).toUpperCase()} · {new Date(o.created_at).toLocaleDateString()}</div>
- </div>
- <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ring-1 ${statusChip(o.status)} capitalize`}>
- {o.status === "completed" && <CheckCircle2 className="inline w-3 h-3 mr-0.5" />}
- {o.status || "—"}
- </span>
- <div className="text-sm font-extrabold text-slate-900 tabular-nums w-24 text-right">{fmtBDT(Number(o.total) || 0)}</div>
- </Link>
- ))}
- </div>
- )}
- </div>
-
- {/* Stock alerts */}
- <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <div className="flex items-center gap-2">
- <div className="w-8 h-8 rounded-lg bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center"><Box className="w-4 h-4" /></div>
- <div>
- <div className="font-bold text-slate-900">Stock alerts</div>
- <div className="text-xs text-slate-500">Inactive products</div>
- </div>
- </div>
- <Link to="/admin/inventory" className="text-xs font-semibold text-slate-700 hover:text-slate-900">View</Link>
- </div>
-
- <div className="bg-white/70 backdrop-blur-md ring-1 ring-slate-200 border border-slate-200 rounded-xl p-4 mb-4 flex items-center gap-3">
- <div className="w-10 h-10 rounded-xl bg-slate-100 ring-1 ring-slate-200 text-slate-600 grid place-items-center shadow"><Box className="w-5 h-5" /></div>
- <div>
- <div className="text-[10px] font-bold uppercase tracking-wider text-slate-700">Out of stock</div>
- <div className="text-2xl font-extrabold text-slate-900">{lowStock.length}</div>
- </div>
- </div>
-
- {lowStock.length === 0 && !loading ? (
- <div className="text-sm text-slate-500 text-center py-6">All products are active 🎉</div>
- ) : (
- <div className="space-y-1.5">
- {lowStock.slice(0, 5).map((p) => (
- <Link key={p.slug} to="/admin/products" className="flex items-center gap-3 py-2 px-2 rounded-lg hover:bg-slate-50 transition">
- <div className="w-9 h-9 rounded-lg bg-slate-100 grid place-items-center overflow-hidden shrink-0 border border-slate-200">
- {p.image_url ? <img src={p.image_url} alt={p.name} className="max-h-[80%] max-w-[80%] object-contain" /> : <span>{p.emoji}</span>}
- </div>
- <div className="flex-1 min-w-0">
- <div className="text-sm font-semibold text-slate-900 truncate">{p.name}</div>
- <div className="text-[11px] text-slate-500">Inactive</div>
- </div>
- <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">OUT</span>
- </Link>
- ))}
- {lowStock.length > 5 && (
- <div className="text-center text-xs text-slate-500 pt-2">+{lowStock.length - 5} more</div>
- )}
- </div>
- )}
- </div>
- </div>
- </div>
- );
+        {/* Low stock / inactive products */}
+        <div className="rounded-2xl bg-white ring-1 ring-[#e8ecf1] p-4 sm:p-5">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 mb-4">
+            <div className="min-w-0">
+              <div className="font-bold text-slate-900 truncate">{t("Inactive products", "ইনঅ্যাক্টিভ প্রোডাক্ট")}</div>
+              <div className="text-[11px] text-slate-500">{t("Needs attention", "মনোযোগ দরকার")}</div>
+            </div>
+            <Link to="/admin/products" className="shrink-0 text-xs font-semibold text-[#3b82f6] hover:underline">
+              {t("All", "সব")}
+            </Link>
+          </div>
+          {lowStock.length === 0 ? (
+            <div className="text-sm text-slate-500 text-center py-8">
+              {t("All products active 🎉", "সব প্রোডাক্ট সক্রিয় 🎉")}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {lowStock.map((p) => (
+                <Link
+                  key={p.slug}
+                  to="/admin/products"
+                  className="flex items-center gap-3 px-2.5 py-2 rounded-xl hover:bg-slate-50 transition"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-slate-50 grid place-items-center overflow-hidden ring-1 ring-slate-100 shrink-0">
+                    {p.image_url ? <img src={p.image_url} alt="" className="max-w-[80%] max-h-[80%] object-contain" /> : <span className="text-sm">{p.emoji || "📦"}</span>}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-semibold text-slate-900 truncate">{p.name}</div>
+                    <div className="text-[11px] text-slate-500 truncate">{p.category || "—"}</div>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 ring-1 ring-rose-100 shrink-0">
+                    {t("OFF", "বন্ধ")}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
