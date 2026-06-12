@@ -9,6 +9,8 @@ import {
   PieChart, UsersRound, ClipboardList, Bot, Settings, ShieldCheck, DatabaseBackup, ShoppingCart, ListChecks, Sparkles,
 } from "lucide-react";
 
+export type AdminBadge = "LIVE" | "NEW" | "BETA";
+
 export type AdminMenuItem = {
   to: string;
   label: string;
@@ -16,6 +18,8 @@ export type AdminMenuItem = {
   icon: ReactNode;
   /** Tailwind gradient classes for the round icon background */
   grad: string;
+  /** Optional small status badge (LIVE, NEW, BETA) */
+  badge?: AdminBadge;
   /** If true, render as the dashboard root */
   exact?: boolean;
 };
