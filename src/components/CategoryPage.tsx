@@ -141,14 +141,15 @@ export function CategoryPage({
         <div className="pointer-events-none absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-primary/35 blur-[140px]" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 w-[420px] h-[420px] rounded-full bg-[var(--color-aqua)]/35 blur-[140px]" />
         <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 py-10 md:py-12">
-          <div className="inline-block">
+          <div className="inline-block max-w-full">
             <h1
-              className="text-aurora drop-shadow-[0_2px_18px_rgba(124,92,255,0.35)]"
+              className="text-aurora drop-shadow-[0_2px_18px_rgba(124,92,255,0.35)] break-words [hyphens:auto]"
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(28px, 4vw, 44px)",
+                fontSize: "clamp(22px, 5vw, 44px)",
                 fontWeight: 800,
                 letterSpacing: 0,
+                lineHeight: 1.1,
               }}
             >
               {title}
