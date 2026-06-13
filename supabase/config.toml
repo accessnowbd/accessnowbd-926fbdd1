@@ -1,7 +1,7 @@
 project_id = "mjclnbroetlwibeofssz"
 
 [functions.support-chat]
-verify_jwt = false
+verify_jwt = true
 
 [functions.product-ai]
 verify_jwt = true

@@ -30,15 +30,44 @@ type Body = {
 const json = (b: unknown, status = 200, h: Record<string, string> = {}) =>
   new Response(JSON.stringify(b), { status, headers: { ...h, "Content-Type": "application/json" } });
 
+async function requireAdmin(req: Request, cors: Record<string, string>): Promise<Response | null> {
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : "";
+  if (!token) return json({ error: "Unauthorized" }, 401, cors);
+  const supaUrl = Deno.env.get("SUPABASE_URL");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!supaUrl || !serviceKey) return json({ error: "Server misconfigured" }, 500, cors);
+  const userRes = await fetch(`${supaUrl}/auth/v1/user`, {
+    headers: { apikey: serviceKey, Authorization: `Bearer ${token}` },
+  });
+  if (!userRes.ok) return json({ error: "Unauthorized" }, 401, cors);
+  const user = await userRes.json();
+  if (!user?.id) return json({ error: "Unauthorized" }, 401, cors);
+  const roleRes = await fetch(
+    `${supaUrl}/rest/v1/user_roles?user_id=eq.${user.id}&role=eq.admin&select=role&limit=1`,
+    { headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` } },
+  );
+  if (!roleRes.ok) return json({ error: "Forbidden" }, 403, cors);
+  const rows = await roleRes.json();
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return json({ error: "Forbidden: admin role required" }, 403, cors);
+  }
+  return null;
+}
+
 serve(async (req) => {
   const cors = corsFor(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   try {
+    const denied = await requireAdmin(req, cors);
+    if (denied) return denied;
+
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
 
     const { product, count = 5, language = "mixed", ratingBias = "high" } = (await req.json()) as Body;
     if (!product?.name) throw new Error("product.name is required");
+
 
     const n = Math.max(1, Math.min(20, Number(count) || 5));
     const langText =

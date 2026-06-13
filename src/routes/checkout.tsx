@@ -417,13 +417,9 @@ function CheckoutPage() {
       const path = `${user.id}/${Date.now()}.${ext}`;
       const { error: upErr } = await supabase.storage.from("payment-screenshots").upload(path, file, { upsert: false });
       if (upErr) throw upErr;
-      // Bucket is private; store a long-lived signed URL so admins can review the screenshot.
-      const { data: signed, error: signErr } = await supabase
-        .storage
-        .from("payment-screenshots")
-        .createSignedUrl(path, 60 * 60 * 24 * 365);
-      if (signErr) throw signErr;
-      setScreenshotUrl(signed.signedUrl);
+      // Store only the storage object path. Admins generate short-lived signed URLs
+      // server-side on demand to avoid persisting long-lived signed URLs.
+      setScreenshotUrl(path);
     } catch (e) {
       setErr(e instanceof Error ? e.message : "আপলোড ব্যর্থ হয়েছে");
     } finally {
