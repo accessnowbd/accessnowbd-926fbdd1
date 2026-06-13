@@ -92,15 +92,44 @@ const json = (body: unknown, status = 200, corsHeaders: Record<string, string> =
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 
+async function requireAdmin(req: Request, corsHeaders: Record<string, string>): Promise<Response | null> {
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : "";
+  if (!token) return json({ error: "Unauthorized" }, 401, corsHeaders);
+  const supaUrl = Deno.env.get("SUPABASE_URL");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!supaUrl || !serviceKey) return json({ error: "Server misconfigured" }, 500, corsHeaders);
+  const userRes = await fetch(`${supaUrl}/auth/v1/user`, {
+    headers: { apikey: serviceKey, Authorization: `Bearer ${token}` },
+  });
+  if (!userRes.ok) return json({ error: "Unauthorized" }, 401, corsHeaders);
+  const user = await userRes.json();
+  if (!user?.id) return json({ error: "Unauthorized" }, 401, corsHeaders);
+  const roleRes = await fetch(
+    `${supaUrl}/rest/v1/user_roles?user_id=eq.${user.id}&role=eq.admin&select=role&limit=1`,
+    { headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` } },
+  );
+  if (!roleRes.ok) return json({ error: "Forbidden" }, 403, corsHeaders);
+  const rows = await roleRes.json();
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return json({ error: "Forbidden: admin role required" }, 403, corsHeaders);
+  }
+  return null;
+}
+
 serve(async (req) => {
   const corsHeaders = corsFor(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
+    const denied = await requireAdmin(req, corsHeaders);
+    if (denied) return denied;
+
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     const geminiKey = Deno.env.get("GEMINI_API_KEY");
 
     const { mode, product, imagePrompt, style } = (await req.json()) as Body;
     if (!product?.name) throw new Error("product.name is required");
+
 
     // ===== IMAGE GENERATION =====
     // Prefer Lovable AI Gateway (no extra key needed). Fallback to direct
