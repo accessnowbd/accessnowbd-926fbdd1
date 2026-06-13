@@ -59,6 +59,16 @@ export const Route = createFileRoute("/lovable/email/transactional/send")({
           return Response.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        // Authorization: non-admins may only send to their own email address.
+        // Admins may send any registered template to any recipient.
+        const { data: roleRow } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .eq('role', 'admin')
+          .maybeSingle()
+        const isAdmin = !!roleRow
+
         // Parse request body
         let templateName: string
         let recipientEmail: string

@@ -204,6 +204,13 @@ export const recordAdminTotpGrant = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const userId = context.userId;
     await assertAdmin(userId);
+    // Require the caller's session to be at AAL2 (second factor verified server-side).
+    // Without this check, an admin with a password-only (AAL1) session could call
+    // this fn directly and obtain a 12-hour grant, bypassing TOTP entirely.
+    const aal = (context.claims as any)?.aal;
+    if (aal !== "aal2") {
+      throw new Error("TOTP verification required before granting access");
+    }
     const expiresAt = new Date(Date.now() + GRANT_TTL_HOURS * 3600_000).toISOString();
     await supabaseAdmin.from("admin_mfa_grants").insert({
       user_id: userId,
