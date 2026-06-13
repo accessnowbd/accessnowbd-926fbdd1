@@ -40,7 +40,7 @@ type Ctx = {
 };
 
 const ThemeCtx = createContext<Ctx>({
-  theme: "white",
+  theme: "aurora",
   themes: THEMES,
   availability: { aurora: true, white: true },
   enabledThemes: THEMES,
@@ -58,7 +58,7 @@ function applyTheme(id: ThemeId) {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const availability = useThemeAvailability();
-  const [theme, setThemeState] = useState<ThemeId>("white");
+  const [theme, setThemeState] = useState<ThemeId>("aurora");
 
   // Initial mount: load stored theme, but downgrade to white if disabled.
   useEffect(() => {
