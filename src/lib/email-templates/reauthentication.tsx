@@ -1,58 +1,54 @@
 import * as React from 'react'
-
-import {
-  Body,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Preview,
-  Text,
-} from '@react-email/components'
+import { Hr, Section, Text } from '@react-email/components'
+import { EmailLayout, styles } from './_layout'
 
 interface ReauthenticationEmailProps {
   token: string
 }
 
 export const ReauthenticationEmail = ({ token }: ReauthenticationEmailProps) => (
-  <Html lang="en" dir="ltr">
-    <Head />
-    <Preview>Your verification code</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>Confirm reauthentication</Heading>
-        <Text style={text}>Use the code below to confirm your identity:</Text>
-        <Text style={codeStyle}>{token}</Text>
-        <Text style={footer}>
-          This code will expire shortly. If you didn't request this, you can
-          safely ignore this email.
-        </Text>
-      </Container>
-    </Body>
-  </Html>
+  <EmailLayout
+    preview="Your AccessNow BD verification code"
+    heading="Your verification code 🔐"
+  >
+    <Text style={styles.text}>
+      আপনার identity confirm করতে নিচের 6-digit code-টি ব্যবহার করুন।
+    </Text>
+
+    <Section style={codeBox}>
+      <Text style={codeStyle}>{token}</Text>
+    </Section>
+
+    <Hr style={styles.hr} />
+
+    <Text style={styles.muted}>
+      এই code কিছুক্ষণের মধ্যে expire হবে এবং শুধু একবার ব্যবহার করা যাবে।
+      নিরাপত্তার জন্য এই code কাউকে — even our support team-কেও — share করবেন
+      না।
+    </Text>
+
+    <Text style={styles.muted}>
+      আপনি যদি এই request না করে থাকেন, email-টি উপেক্ষা করুন এবং প্রয়োজনে
+      password change করুন।
+    </Text>
+  </EmailLayout>
 )
 
 export default ReauthenticationEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 20px',
-}
-const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
+const codeBox = {
+  backgroundColor: '#f8fafc',
+  border: '1px solid #e2e8f0',
+  borderRadius: '10px',
+  padding: '18px 16px',
+  textAlign: 'center' as const,
+  margin: '16px 0 8px',
 }
 const codeStyle = {
-  fontFamily: 'Courier, monospace',
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 30px',
+  fontFamily: '"Courier New", Courier, monospace',
+  fontSize: '32px',
+  fontWeight: 700 as const,
+  color: '#0f1b3d',
+  letterSpacing: '10px',
+  margin: 0,
 }
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
