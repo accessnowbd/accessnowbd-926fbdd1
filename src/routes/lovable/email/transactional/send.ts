@@ -125,6 +125,20 @@ export const Route = createFileRoute("/lovable/email/transactional/send")({
           )
         }
 
+        // Non-admins may only trigger sends to their own verified email address.
+        // This prevents abuse where any signed-up user could send branded
+        // security alerts / maintenance notices / etc. to arbitrary recipients.
+        if (!isAdmin) {
+          const callerEmail = user.email?.toLowerCase() ?? ''
+          if (effectiveRecipient.toLowerCase() !== callerEmail) {
+            return Response.json(
+              { error: 'Forbidden: you may only send emails to your own address' },
+              { status: 403 }
+            )
+          }
+        }
+
+
         // 2. Check suppression list (fail-closed: if we can't verify, don't send)
         const { data: suppressed, error: suppressionError } = await supabase
           .from('suppressed_emails')
