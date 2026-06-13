@@ -62,7 +62,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Initial mount: load stored theme, but downgrade to white if disabled.
   useEffect(() => {
-    let stored: ThemeId = "white";
+    let stored: ThemeId = "aurora";
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as ThemeId | null;
       if (saved && THEMES.some((t) => t.id === saved)) stored = saved;
