@@ -38,9 +38,12 @@ export function useRecentlyViewedSlugs(): {
   slugs: string[];
   clear: () => void;
 } {
-  const [slugs, setSlugs] = useState<string[]>(() => readStore());
+  // Start empty so SSR and client first render match — hydrate from
+  // localStorage in useEffect to avoid hydration mismatches.
+  const [slugs, setSlugs] = useState<string[]>([]);
 
   useEffect(() => {
+    setSlugs(readStore());
     const sync = () => setSlugs(readStore());
     window.addEventListener("storage", sync);
     window.addEventListener("recently-viewed:change", sync as EventListener);
@@ -49,6 +52,7 @@ export function useRecentlyViewedSlugs(): {
       window.removeEventListener("recently-viewed:change", sync as EventListener);
     };
   }, []);
+
 
   const clear = useCallback(() => {
     writeStore([]);
