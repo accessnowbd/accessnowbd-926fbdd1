@@ -717,6 +717,53 @@ export type Database = {
       }
     }
     Views: {
+      promotions_public: {
+        Row: {
+          badge: string | null
+          created_at: string | null
+          description: string | null
+          discount_percent: number | null
+          ends_at: string | null
+          id: string | null
+          is_active: boolean | null
+          product_slug: string | null
+          starts_at: string | null
+          title: string | null
+        }
+        Insert: {
+          badge?: string | null
+          created_at?: string | null
+          description?: string | null
+          discount_percent?: number | null
+          ends_at?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          product_slug?: string | null
+          starts_at?: string | null
+          title?: string | null
+        }
+        Update: {
+          badge?: string | null
+          created_at?: string | null
+          description?: string | null
+          discount_percent?: number | null
+          ends_at?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          product_slug?: string | null
+          starts_at?: string | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promotions_product_slug_fkey"
+            columns: ["product_slug"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
       v_has_role_permissions: {
         Row: {
           can_execute: boolean | null
