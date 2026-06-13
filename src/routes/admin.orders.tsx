@@ -5,6 +5,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { downloadReceiptPdf } from "@/lib/receipt";
+import { sendTransactionalEmail } from "@/lib/email/send";
 import { AdminStatCard, AdminStatGrid, AdminGlassCard } from "@/components/admin/AdminStatCard";
 
 export const Route = createFileRoute("/admin/orders")({
@@ -59,6 +60,7 @@ function AdminOrders() {
  useEffect(() => { load(); }, [load]);
 
  const updateStatus = async (id: string, status: string) => {
+ const target = orders.find((o) => o.id === id);
  const prev = orders;
  setOrders((o) => o.map((x) => x.id === id ? { ...x, status } : x));
  setSelected((s) => s && s.id === id ? { ...s, status } : s);
@@ -66,8 +68,43 @@ function AdminOrders() {
  if (error) {
  setOrders(prev);
  toast.error(error.message);
- } else {
+ return;
+ }
  toast.success(`Status updated to ${status}`);
+ // Fire-and-forget customer notification email
+ if (target && target.email && target.status !== status) {
+ const shortId = `ANB-${id.slice(0, 8).toUpperCase()}`;
+ const firstName = target.full_name?.split(" ")[0];
+ if (status === "completed") {
+ const creds = (target as unknown as { delivered_credentials?: { plan?: string; loginEmail?: string; loginPassword?: string; startsOn?: string; expiresOn?: string } }).delivered_credentials;
+ const firstItem = target.items?.[0];
+ sendTransactionalEmail({
+ templateName: "subscription-activated",
+ recipientEmail: target.email,
+ idempotencyKey: `sub-activated-${id}`,
+ templateData: {
+ name: firstName,
+ planName: creds?.plan || firstItem?.name || "Your subscription",
+ startsOn: creds?.startsOn,
+ expiresOn: creds?.expiresOn,
+ loginEmail: creds?.loginEmail,
+ loginPassword: creds?.loginPassword,
+ manageUrl: "https://accessnowbd.com/orders",
+ },
+ }).catch((err) => console.warn("Subscription email failed", err));
+ } else {
+ sendTransactionalEmail({
+ templateName: "order-status-update",
+ recipientEmail: target.email,
+ idempotencyKey: `order-status-${id}-${status}`,
+ templateData: {
+ name: firstName,
+ orderId: shortId,
+ status,
+ orderUrl: "https://accessnowbd.com/orders",
+ },
+ }).catch((err) => console.warn("Status email failed", err));
+ }
  }
  };
 

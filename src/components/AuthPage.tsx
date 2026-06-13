@@ -4,6 +4,7 @@ import { Loader2, Eye, EyeOff, X, CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { sendTransactionalEmail } from "@/lib/email/send";
 import accessNowLogo from "@/assets/logo-gold-a.png";
 
 export function AuthPageEntry({ initialMode, openForgot }: { initialMode: "login" | "signup"; openForgot?: boolean }) {
@@ -115,7 +116,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
         if (!agree) throw new Error("Please agree to the Terms & Privacy Policy");
         const parsed = signupSchema.safeParse(values);
         if (!parsed.success) throw new Error(parsed.error.issues[0].message);
-        const { error } = await supabase.auth.signUp({
+        const { data: signUpData, error } = await supabase.auth.signUp({
           email: parsed.data.email,
           password: parsed.data.password,
           options: {
@@ -124,6 +125,18 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
           },
         });
         if (error) throw error;
+        // Fire-and-forget welcome email — only if a session exists (no email confirm).
+        if (signUpData.session) {
+          sendTransactionalEmail({
+            templateName: "welcome",
+            recipientEmail: parsed.data.email,
+            idempotencyKey: `welcome-${signUpData.user?.id ?? parsed.data.email}`,
+            templateData: {
+              name: parsed.data.name?.split(" ")[0],
+              dashboardUrl: `${window.location.origin}/dashboard`,
+            },
+          }).catch((err) => console.warn("Welcome email failed", err));
+        }
       } else {
         const parsed = loginSchema.safeParse({ email: values.email, password: values.password });
         if (!parsed.success) throw new Error(parsed.error.issues[0].message);

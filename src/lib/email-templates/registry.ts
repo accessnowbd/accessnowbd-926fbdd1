@@ -1,5 +1,10 @@
 import type { ComponentType } from 'react'
 
+import { template as welcomeTemplate } from './welcome'
+import { template as orderConfirmationTemplate } from './order-confirmation'
+import { template as subscriptionActivatedTemplate } from './subscription-activated'
+import { template as orderStatusUpdateTemplate } from './order-status-update'
+
 export interface TemplateEntry {
   component: ComponentType<any>
   subject: string | ((data: Record<string, any>) => string)
@@ -10,14 +15,13 @@ export interface TemplateEntry {
 }
 
 /**
- * Template registry — maps template names to their React Email components.
- * Import and register new templates here after creating them in this directory.
- *
- * Example:
- *   import { template as welcomeTemplate } from './welcome'
- *   // then add to TEMPLATES: 'welcome': welcomeTemplate
+ * Template registry — maps template names used by the send route to
+ * their React Email component + metadata. Add new templates here after
+ * creating the .tsx file in this directory.
  */
 export const TEMPLATES: Record<string, TemplateEntry> = {
-  // Add templates here as they are created, e.g.:
-  // 'welcome': welcomeTemplate,
+  'welcome': welcomeTemplate,
+  'order-confirmation': orderConfirmationTemplate,
+  'subscription-activated': subscriptionActivatedTemplate,
+  'order-status-update': orderStatusUpdateTemplate,
 }
