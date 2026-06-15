@@ -222,7 +222,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  </div>
  </div>
 
- <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+  <div className="admin-card rounded-2xl overflow-hidden">
  {loading ? null : visibleRows.length === 0 ? (
  <div className="p-10 text-center text-slate-500">
  {rows.length === 0
@@ -231,7 +231,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  </div>
  ) : (
  <table className="w-full text-sm">
- <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
+  <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-600">
  <tr>
  <th className="w-8"></th>
  <th className="text-left px-4 py-3">{primary?.label ?? t("Item", "আইটেম")}</th>
@@ -252,7 +252,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  onDragEnd={() => { setDragId(null); setOverId(null); }}
  className={`hover:bg-slate-50/60 ${dragId === r.id ? "opacity-40" : ""} ${overId === r.id && dragId !== r.id ? "bg-slate-50 outline outline-1 outline-violet-300" : ""}`}
  >
- <td className="px-2 py-3 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500">
+  <td className="px-2 py-3 cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-700">
  <GripVertical className="w-4 h-4" />
  </td>
  <td className="px-4 py-3 font-semibold text-slate-900">{String(r.data?.[primary?.name ?? ""] ?? "—")}</td>
