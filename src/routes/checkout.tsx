@@ -508,8 +508,29 @@ function CheckoutPage() {
           })}
         </div>
 
+        {/* Wallet payment option */}
+        {walletBalance > 0 && (
+          <div className="mx-5 mt-4 rounded-2xl border border-violet-200 bg-violet-50/60 p-3.5">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" checked={useWallet} onChange={(e) => setUseWallet(e.target.checked)} className="w-4 h-4 accent-violet-600" />
+              <div className="flex-1">
+                <div className="text-[13px] font-bold text-slate-800">💳 ওয়ালেট ব্যালেন্স ব্যবহার করুন</div>
+                <div className="text-[11px] text-slate-600">Available: ৳{walletBalance.toLocaleString()}</div>
+              </div>
+              {useWallet && walletApplied > 0 && (
+                <div className="text-[13px] font-bold text-violet-700">−৳{walletApplied.toLocaleString()}</div>
+              )}
+            </label>
+            {fullyByWallet && (
+              <p className="text-[11px] text-emerald-700 font-semibold mt-2">✓ Wallet দিয়ে সম্পূর্ণ পেমেন্ট হবে — bKash/Nagad লাগবে না</p>
+            )}
+          </div>
+        )}
+
         {/* Brand instruction card — premium violet */}
+        {!fullyByWallet && (
         <div className="mx-5 mt-5 rounded-3xl bg-violet-50 border border-violet-100 p-5 space-y-4">
+
           {/* Header strip */}
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">
