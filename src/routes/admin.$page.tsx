@@ -312,7 +312,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
 }
 
 function renderCell(value: unknown, f: AdminField) {
- if (value == null || value === "") return <span className="text-slate-300">—</span>;
+  if (value == null || value === "") return <span className="font-semibold text-slate-500">—</span>;
  if (f.type === "boolean") return value ? <Check className="w-4 h-4 text-slate-600" /> : <X className="w-4 h-4 text-slate-500" />;
  if (f.type === "image") return <img src={String(value)} alt="" className="w-8 h-8 rounded object-cover" />;
  return String(value);
@@ -485,7 +485,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
  if (loading) return null;
 
  return (
- <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+  <div className="admin-card rounded-2xl p-6 space-y-5">
  <div className="grid sm:grid-cols-2 gap-4">
  {fields.map((f) => (
  <div key={f.name} className={f.type === "textarea" ? "sm:col-span-2" : ""}>
@@ -598,7 +598,7 @@ function FieldInput({
  </div>
  );
  }
- const hintMsg = field.hint ? <p className="mt-1 text-[11px] text-slate-400">{field.hint}</p> : null;
+  const hintMsg = field.hint ? <p className="mt-1 text-[11px] font-medium text-slate-500">{field.hint}</p> : null;
  return <div>{inner}{errMsg}{!hasError && hintMsg}</div>;
 }
 
