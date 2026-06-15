@@ -310,6 +310,19 @@
     color: var(--admin-muted) !important;
   }
   .admin-clarity table tbody tr:hover { background: var(--admin-hover) !important; }
+  .admin-clarity .text-muted-foreground { color: var(--admin-muted) !important; }
+  .admin-clarity .bg-secondary,
+  .admin-clarity .bg-secondary\/30,
+  .admin-clarity .bg-secondary\/50 { background-color: oklch(0.96 0.01 255) !important; }
+  .admin-clarity .border-border { border-color: var(--admin-border) !important; }
+  .admin-clarity .ring-white\/60 { --tw-ring-color: var(--admin-border) !important; }
+  .admin-clarity .bg-white\/60,
+  .admin-clarity .bg-white\/70,
+  .admin-clarity .bg-white\/85,
+  .admin-clarity .bg-white\/95 { background-color: #ffffff !important; }
+  .admin-clarity .text-slate-300 { color: oklch(0.60 0.025 255) !important; }
+  .admin-clarity .text-slate-400 { color: oklch(0.50 0.03 255) !important; }
+  .admin-clarity .text-slate-500 { color: var(--admin-muted) !important; }
   .admin-clarity input,
   .admin-clarity textarea,
   .admin-clarity select {
