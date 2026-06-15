@@ -54,13 +54,13 @@ export function AdminStatCard({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl p-5 ring-1 ring-white/60 bg-gradient-to-br ${t.tint} shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)]`}
+      className={`admin-card relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br ${t.tint}`}
     >
       <div className="flex items-start justify-between">
-        <div className="text-sm font-semibold text-slate-700">{label}</div>
-        <button className="text-slate-400 hover:text-slate-700 leading-none">⋮</button>
+        <div className="text-sm font-extrabold text-slate-700">{label}</div>
+        <button className="text-slate-500 hover:text-slate-800 leading-none">⋮</button>
       </div>
-      <div className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight tabular-nums">
+      <div className="text-3xl md:text-4xl font-black text-slate-950 mt-3 tracking-tight tabular-nums">
         {loading ? "—" : value}
       </div>
       <div className="flex items-end justify-between mt-3 gap-3">
@@ -70,7 +70,7 @@ export function AdminStatCard({
               {up ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
               {up ? "+" : ""}{delta}%
             </span>
-            <span className="text-slate-500">{deltaLabel}</span>
+            <span className="font-semibold text-slate-600">{deltaLabel}</span>
           </div>
         ) : <span />}
         <svg viewBox="0 0 200 60" className="w-[55%] h-14 -mb-1">
@@ -94,7 +94,7 @@ export function AdminStatGrid({ children }: { children: React.ReactNode }) {
 
 export function AdminGlassCard({ className = "", children }: { className?: string; children: React.ReactNode }) {
   return (
-    <div className={`rounded-2xl ring-1 ring-white/60 bg-white/70 backdrop-blur-xl shadow-[0_10px_30px_-12px_rgba(15,23,42,0.15)] ${className}`}>
+    <div className={`admin-card rounded-2xl bg-white ${className}`}>
       {children}
     </div>
   );
