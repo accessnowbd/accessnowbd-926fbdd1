@@ -271,6 +271,53 @@
   html.theme-white body::before { display: none; }
   html.theme-white body::after { display: none; }
 
+  /* Admin clarity system — high-contrast SaaS panels, readable text, premium icon blocks. */
+  .admin-clarity {
+    --admin-bg: oklch(0.973 0.006 255);
+    --admin-panel: oklch(1 0 0);
+    --admin-card: oklch(1 0 0);
+    --admin-ink: oklch(0.18 0.035 260);
+    --admin-text: oklch(0.33 0.035 260);
+    --admin-muted: oklch(0.48 0.03 260);
+    --admin-border: oklch(0.90 0.018 255);
+    --admin-hover: oklch(0.965 0.012 255);
+    --admin-active: oklch(0.965 0.035 275);
+    --admin-primary: oklch(0.50 0.22 275);
+    --admin-primary-soft: oklch(0.84 0.09 275);
+    color: var(--admin-ink);
+    background: var(--admin-bg);
+    color-scheme: light;
+  }
+  .admin-clarity .admin-card {
+    background: var(--admin-card) !important;
+    border: 1px solid var(--admin-border) !important;
+    box-shadow: 0 16px 36px -28px rgba(15, 23, 42, 0.45) !important;
+  }
+  .admin-clarity .admin-kpi-icon,
+  .admin-clarity .admin-menu-icon {
+    color: #ffffff !important;
+    box-shadow: 0 12px 26px -14px rgba(15, 23, 42, 0.65) !important;
+  }
+  .admin-clarity .admin-kpi-icon *,
+  .admin-clarity .admin-menu-icon * { color: #ffffff !important; }
+  .admin-clarity button[class*="bg-violet-"],
+  .admin-clarity button[class*="bg-indigo-"],
+  .admin-clarity button[class*="bg-emerald-"],
+  .admin-clarity button[class*="bg-rose-"],
+  .admin-clarity button[class*="bg-slate-9"] { color: #ffffff !important; }
+  .admin-clarity table thead {
+    background: oklch(0.96 0.01 255) !important;
+    color: var(--admin-muted) !important;
+  }
+  .admin-clarity table tbody tr:hover { background: var(--admin-hover) !important; }
+  .admin-clarity input,
+  .admin-clarity textarea,
+  .admin-clarity select {
+    background: #ffffff !important;
+    color: var(--admin-ink) !important;
+    border-color: var(--admin-border) !important;
+  }
+
   /* GLASS CARDS — premium frosted white over violet/indigo mesh */
   html.theme-white .glass {
     background: linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.45) 100%) !important;
