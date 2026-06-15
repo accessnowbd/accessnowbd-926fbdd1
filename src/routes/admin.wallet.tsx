@@ -329,10 +329,10 @@ function AllTransactions() {
 
 // ---- shared ----
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return <div><h2 className="text-sm font-bold text-slate-700 mb-2">{title}</h2>{children}</div>;
+  return <div><h2 className="text-sm font-extrabold text-slate-800 mb-2">{title}</h2>{children}</div>;
 }
 function Table({ children }: { children: React.ReactNode }) {
-  return <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto"><table className="w-full text-sm">{children}</table></div>;
+  return <div className="admin-card rounded-2xl overflow-x-auto"><table className="w-full text-sm">{children}</table></div>;
 }
 function Empty({ children }: { children: React.ReactNode }) {
   return <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-8 text-center text-slate-500 text-sm">{children}</div>;

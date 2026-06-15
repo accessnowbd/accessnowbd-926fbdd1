@@ -319,7 +319,7 @@ function AdminShell({ user, signOut, navigate }: any) {
   }, [pathname]);
 
   return (
-    <div className="admin-shell lg:h-screen lg:overflow-hidden min-h-screen flex relative font-['Manrope',ui-sans-serif,system-ui] text-slate-800 bg-[#f7f8fb]">
+    <div className="admin-shell admin-clarity lg:h-screen lg:overflow-hidden min-h-screen flex relative font-['Manrope',ui-sans-serif,system-ui] text-slate-900 bg-[var(--admin-bg)]">
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
@@ -332,7 +332,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       <aside
         className={[
           "shrink-0 transition-all duration-200 flex flex-col h-screen relative z-10",
-          "bg-white border-r border-slate-200",
+          "bg-[var(--admin-panel)] border-r border-[var(--admin-border)]",
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
           collapsed ? "lg:w-[76px]" : "lg:w-[260px]",
           "fixed top-0 left-0 z-50 w-[260px] max-w-[85vw] shadow-2xl lg:shadow-none",
@@ -358,8 +358,8 @@ function AdminShell({ user, signOut, navigate }: any) {
             </span>
             {!collapsed && (
               <span className="leading-tight min-w-0">
-                <span className="block text-[15px] font-extrabold tracking-tight bg-gradient-to-r from-orange-500 via-rose-500 to-blue-600 bg-clip-text text-transparent">AccessNow BD</span>
-                <span className="block text-[9.5px] font-bold uppercase tracking-[0.22em] text-slate-400 mt-0.5">Admin Console</span>
+                <span className="block text-[15px] font-extrabold tracking-tight text-[var(--admin-ink)]">AccessNow BD</span>
+                <span className="block text-[9.5px] font-bold uppercase tracking-[0.22em] text-[var(--admin-muted)] mt-0.5">Admin Console</span>
               </span>
             )}
           </Link>
@@ -402,7 +402,7 @@ function AdminShell({ user, signOut, navigate }: any) {
         </nav>
 
         {/* User */}
-        <div className="border-t border-slate-100 p-3 bg-white">
+        <div className="border-t border-[var(--admin-border)] p-3 bg-[var(--admin-panel)]">
           <div className={`flex items-center gap-2.5 ${collapsed ? "justify-center" : ""}`}>
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 text-slate-700 grid place-items-center text-xs font-bold shrink-0 ring-1 ring-slate-200">
               {(user?.email ?? "A").slice(0, 1).toUpperCase()}
@@ -431,7 +431,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       <div className="flex-1 min-w-0 flex flex-col lg:h-screen lg:overflow-y-auto relative z-[1]">
 
         {/* Top bar */}
-        <header className="h-[64px] sticky top-0 z-20 bg-white/85 backdrop-blur border-b border-slate-200">
+        <header className="h-[64px] sticky top-0 z-20 bg-[var(--admin-panel)] border-b border-[var(--admin-border)] shadow-[0_10px_30px_-24px_rgba(15,23,42,0.35)]">
           <div className="h-full px-3 md:px-6 flex items-center gap-2 md:gap-3">
             <button
               onClick={() => setMobileOpen(true)}
@@ -485,7 +485,7 @@ function AdminShell({ user, signOut, navigate }: any) {
           </div>
         </header>
 
-        <div className="flex-1 p-4 md:p-8 min-w-0 overflow-x-hidden text-slate-800">
+        <div className="flex-1 p-4 md:p-8 min-w-0 overflow-x-hidden text-[var(--admin-ink)]">
           <div className="mx-auto max-w-[1400px]">
             <Outlet />
           </div>
@@ -525,7 +525,7 @@ function SidebarGroup({ group, collapsed, pathname }: { group: any; collapsed: b
     <div className="mt-4 first:mt-2">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.16em] text-slate-400 hover:text-slate-600 transition"
+        className="w-full flex items-center justify-between px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.16em] text-[var(--admin-muted)] hover:text-[var(--admin-ink)] transition"
       >
         <span>{t(group.title, group.titleBn)}</span>
         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "" : "-rotate-90"}`} />
@@ -558,13 +558,13 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
         "group relative flex items-center gap-3 rounded-xl text-sm transition-colors",
         collapsed ? "justify-center px-2 py-2 mx-1 my-0.5" : "px-2.5 py-2",
         active
-          ? "bg-orange-50 text-orange-700"
-          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+          ? "bg-[var(--admin-active)] text-[var(--admin-primary)] ring-1 ring-[var(--admin-primary-soft)]"
+          : "text-[var(--admin-text)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-ink)]",
       ].join(" ")}
     >
       <span
         className={[
-          "shrink-0 w-8 h-8 rounded-lg grid place-items-center text-white",
+          "admin-menu-icon shrink-0 w-8 h-8 rounded-lg grid place-items-center text-white shadow-[0_8px_18px_-10px_rgba(15,23,42,0.55)]",
           "bg-gradient-to-br",
           item.grad,
         ].join(" ")}

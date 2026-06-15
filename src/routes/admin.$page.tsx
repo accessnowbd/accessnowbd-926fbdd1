@@ -222,7 +222,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  </div>
  </div>
 
- <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+  <div className="admin-card rounded-2xl overflow-hidden">
  {loading ? null : visibleRows.length === 0 ? (
  <div className="p-10 text-center text-slate-500">
  {rows.length === 0
@@ -231,7 +231,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  </div>
  ) : (
  <table className="w-full text-sm">
- <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
+  <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-600">
  <tr>
  <th className="w-8"></th>
  <th className="text-left px-4 py-3">{primary?.label ?? t("Item", "আইটেম")}</th>
@@ -252,7 +252,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
  onDragEnd={() => { setDragId(null); setOverId(null); }}
  className={`hover:bg-slate-50/60 ${dragId === r.id ? "opacity-40" : ""} ${overId === r.id && dragId !== r.id ? "bg-slate-50 outline outline-1 outline-violet-300" : ""}`}
  >
- <td className="px-2 py-3 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500">
+  <td className="px-2 py-3 cursor-grab active:cursor-grabbing text-slate-500 hover:text-slate-700">
  <GripVertical className="w-4 h-4" />
  </td>
  <td className="px-4 py-3 font-semibold text-slate-900">{String(r.data?.[primary?.name ?? ""] ?? "—")}</td>
@@ -312,7 +312,7 @@ function ListCrud({ kind, fields }: { kind: string; fields: AdminField[] }) {
 }
 
 function renderCell(value: unknown, f: AdminField) {
- if (value == null || value === "") return <span className="text-slate-300">—</span>;
+  if (value == null || value === "") return <span className="font-semibold text-slate-500">—</span>;
  if (f.type === "boolean") return value ? <Check className="w-4 h-4 text-slate-600" /> : <X className="w-4 h-4 text-slate-500" />;
  if (f.type === "image") return <img src={String(value)} alt="" className="w-8 h-8 rounded object-cover" />;
  return String(value);
@@ -485,7 +485,7 @@ function SingleSettings({ kind, fields }: { kind: string; fields: AdminField[] }
  if (loading) return null;
 
  return (
- <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+  <div className="admin-card rounded-2xl p-6 space-y-5">
  <div className="grid sm:grid-cols-2 gap-4">
  {fields.map((f) => (
  <div key={f.name} className={f.type === "textarea" ? "sm:col-span-2" : ""}>
@@ -598,7 +598,7 @@ function FieldInput({
  </div>
  );
  }
- const hintMsg = field.hint ? <p className="mt-1 text-[11px] text-slate-400">{field.hint}</p> : null;
+  const hintMsg = field.hint ? <p className="mt-1 text-[11px] font-medium text-slate-500">{field.hint}</p> : null;
  return <div>{inner}{errMsg}{!hasError && hintMsg}</div>;
 }
 

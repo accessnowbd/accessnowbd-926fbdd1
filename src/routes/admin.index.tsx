@@ -239,7 +239,7 @@ function AdminDashboard() {
       label: t("CUSTOMERS", "কাস্টমার"),
       value: counts.users.toLocaleString("en-IN"),
       Icon: UsersRound,
-      iconGrad: "from-sky-500 to-blue-600",
+      iconGrad: "from-blue-500 to-indigo-600",
       bgGrad: "from-sky-50/60 via-white to-cyan-50/30",
     },
   ];
@@ -296,7 +296,7 @@ function AdminDashboard() {
       {/* Sales Overview + Best Selling */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Sales chart */}
-        <div className="lg:col-span-2 rounded-2xl bg-white ring-1 ring-slate-200 p-5 sm:p-6">
+          <div className="lg:col-span-2 admin-card rounded-2xl p-5 sm:p-6">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 mb-1">
             <div className="min-w-0">
               <h3 className="text-[18px] font-extrabold text-slate-900">{t("Sales Overview", "সেল ওভারভিউ")}</h3>
@@ -307,7 +307,7 @@ function AdminDashboard() {
                 </div>
               )}
             </div>
-            <div className="shrink-0 inline-flex rounded-full bg-slate-100 p-1 text-[11.5px] font-bold">
+            <div className="shrink-0 inline-flex rounded-full bg-slate-100 p-1 text-[11.5px] font-bold ring-1 ring-slate-200">
               {(["daily", "weekly", "monthly"] as Period[]).map((p) => (
                 <button
                   key={p}
@@ -364,7 +364,7 @@ function AdminDashboard() {
         </div>
 
         {/* Best Selling Products */}
-        <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-5 sm:p-6">
+        <div className="admin-card rounded-2xl p-5 sm:p-6">
           <div className="flex items-start gap-2 mb-4">
             <span className="w-1 h-5 rounded-full bg-violet-500 mt-1" aria-hidden />
             <div className="min-w-0 flex-1">
@@ -380,10 +380,10 @@ function AdminDashboard() {
             <div className="space-y-3">
               {topProducts.map((p, i) => (
                 <div key={p.name + i} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 py-1.5">
-                  <span className="w-7 text-[12px] font-bold text-slate-400 tabular-nums">#{i + 1}</span>
+                  <span className="w-7 text-[12px] font-black text-slate-500 tabular-nums">#{i + 1}</span>
                   <div className="min-w-0">
                     <div className="text-[13px] font-bold text-slate-900 truncate">{p.name}</div>
-                    <div className="text-[11px] text-slate-400 tabular-nums">{p.sold} {t("sold", "বিক্রি")}</div>
+                    <div className="text-[11px] font-semibold text-slate-500 tabular-nums">{p.sold} {t("sold", "বিক্রি")}</div>
                   </div>
                   <div className="text-[12px] font-bold text-slate-900 tabular-nums shrink-0">{fmtBDT(p.revenue)}</div>
                 </div>
@@ -424,13 +424,11 @@ function SectionHeader({ title }: { title: string }) {
 function KpiCard({ kpi, loading, compact }: { kpi: any; loading: boolean; compact?: boolean }) {
   const { Icon } = kpi;
   return (
-    <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${kpi.bgGrad} ring-1 ring-slate-200/80 ${compact ? "p-4" : "p-5"} hover:ring-slate-300 transition-all`}>
-      {/* Decorative blob */}
-      <div className={`pointer-events-none absolute -top-6 -right-6 w-28 h-28 rounded-full bg-gradient-to-br ${kpi.bgGrad} blur-2xl opacity-60`} aria-hidden />
+    <div className={`admin-card relative overflow-hidden rounded-2xl ${compact ? "p-4" : "p-5"} transition-all`}>
       <div className="relative">
         <div className="flex items-start justify-between gap-2">
-          <span className={`w-11 h-11 rounded-full bg-gradient-to-br ${kpi.iconGrad} grid place-items-center text-white shadow-[0_6px_16px_-6px_rgba(99,102,241,0.55)] shrink-0`}>
-            <Icon className="w-5 h-5" />
+          <span className={`admin-kpi-icon w-11 h-11 rounded-xl bg-gradient-to-br ${kpi.iconGrad} grid place-items-center text-white shrink-0`}>
+            <Icon className="w-5 h-5" strokeWidth={2.5} />
           </span>
           {typeof kpi.delta === "number" && kpi.delta !== 0 && (
             <span className={`shrink-0 inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10.5px] font-bold ${kpi.delta >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}>
@@ -439,14 +437,14 @@ function KpiCard({ kpi, loading, compact }: { kpi: any; loading: boolean; compac
             </span>
           )}
         </div>
-        <div className={`${compact ? "mt-6" : "mt-8"} text-[10.5px] font-bold text-slate-500 tracking-[0.12em] uppercase truncate`}>
+        <div className={`${compact ? "mt-6" : "mt-8"} text-[10.5px] font-extrabold text-slate-600 tracking-[0.12em] uppercase truncate`}>
           {kpi.label}
         </div>
-        <div className={`mt-1 ${compact ? "text-[22px]" : "text-[26px] sm:text-[28px]"} font-extrabold text-slate-900 tracking-tight tabular-nums truncate`}>
+        <div className={`mt-1 ${compact ? "text-[22px]" : "text-[26px] sm:text-[28px]"} font-black text-slate-950 tracking-tight tabular-nums truncate`}>
           {loading ? <span className="inline-block w-20 h-7 bg-slate-100 rounded animate-pulse" /> : kpi.value}
         </div>
         {kpi.sub && !loading && (
-          <div className="mt-1 text-[11px] text-slate-500 truncate">{kpi.sub}</div>
+          <div className="mt-1 text-[11px] font-semibold text-slate-600 truncate">{kpi.sub}</div>
         )}
       </div>
     </div>
