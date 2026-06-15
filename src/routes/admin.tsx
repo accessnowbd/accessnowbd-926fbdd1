@@ -525,7 +525,7 @@ function SidebarGroup({ group, collapsed, pathname }: { group: any; collapsed: b
     <div className="mt-4 first:mt-2">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.16em] text-slate-400 hover:text-slate-600 transition"
+        className="w-full flex items-center justify-between px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.16em] text-[var(--admin-muted)] hover:text-[var(--admin-ink)] transition"
       >
         <span>{t(group.title, group.titleBn)}</span>
         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "" : "-rotate-90"}`} />
@@ -558,13 +558,13 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
         "group relative flex items-center gap-3 rounded-xl text-sm transition-colors",
         collapsed ? "justify-center px-2 py-2 mx-1 my-0.5" : "px-2.5 py-2",
         active
-          ? "bg-orange-50 text-orange-700"
-          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+          ? "bg-[var(--admin-active)] text-[var(--admin-primary)] ring-1 ring-[var(--admin-primary-soft)]"
+          : "text-[var(--admin-text)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-ink)]",
       ].join(" ")}
     >
       <span
         className={[
-          "admin-menu-icon shrink-0 w-8 h-8 rounded-lg grid place-items-center text-white",
+          "admin-menu-icon shrink-0 w-8 h-8 rounded-lg grid place-items-center text-white shadow-[0_8px_18px_-10px_rgba(15,23,42,0.55)]",
           "bg-gradient-to-br",
           item.grad,
         ].join(" ")}
