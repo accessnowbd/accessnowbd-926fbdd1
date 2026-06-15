@@ -675,9 +675,9 @@ const ACCOUNT_TYPES: { id: AccountType; label: string; icon: string }[] = [
 ];
 
 const DURATION_CHIPS = [
- "1 মাস", "2 মাস", "3 মাস", "4 মাস", "5 মাস", "6 মাস",
- "7 মাস", "8 মাস", "9 মাস", "10 মাস", "11 মাস", "12 মাস",
- "1 বছর", "2 বছর", "3 বছর", "Lifetime", "Custom",
+ "1 Month", "2 Months", "3 Months", "4 Months", "5 Months", "6 Months",
+ "7 Months", "8 Months", "9 Months", "10 Months", "11 Months", "12 Months",
+ "1 Year", "2 Years", "3 Years", "Lifetime", "Custom",
 ];
 
 
@@ -1205,21 +1205,21 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  {/* Packages */}
  <div className="border border-slate-200 rounded-xl p-4 bg-slate-50/40">
  <div className="flex items-center justify-between mb-3">
- <Label className="!mb-0">⏳ মেয়াদ ও মূল্য পরিকল্পনা <span className="text-slate-500 font-normal">(একাধিক প্যাকেজ)</span></Label>
+ <Label className="!mb-0">⏳ Duration & Pricing Plans <span className="text-slate-500 font-normal">(multiple packages)</span></Label>
  <button onClick={addPlan} className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">
- <Plus className="w-3 h-3" /> প্যাকেজ যোগ করুন
+ <Plus className="w-3 h-3" /> Add Package
  </button>
  </div>
  <div className="space-y-3">
  {form.plans.map((p, i) => (
  <div key={i} className="border border-slate-200 rounded-xl p-3.5 bg-white">
  <div className="flex items-center justify-between mb-2">
- <span className="text-sm font-semibold text-slate-700">প্যাকেজ #{i + 1}</span>
+ <span className="text-sm font-semibold text-slate-700">Package #{i + 1}</span>
  {form.plans.length > 1 && (
  <button onClick={() => removePlan(i)} className="w-7 h-7 grid place-items-center rounded-lg text-slate-500 hover:text-slate-500 hover:bg-slate-50"><X className="w-4 h-4" /></button>
  )}
  </div>
- <div className="text-xs font-semibold text-slate-600 mb-1.5">মেয়াদ</div>
+ <div className="text-xs font-semibold text-slate-600 mb-1.5">Duration</div>
  <div className="flex flex-wrap gap-1.5 mb-3">
  {DURATION_CHIPS.map((d) => {
    const presets = DURATION_CHIPS.filter((x) => x !== "Custom");
@@ -1249,12 +1249,12 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
    if (!showCustom && !isEmptyCustom) return null;
    return (
      <div className="mb-3">
-       <div className="text-xs font-semibold text-slate-600 mb-1.5">কাস্টম মেয়াদ লিখুন</div>
-       <input
-         type="text"
-         value={p.duration ?? ""}
-         onChange={(e) => setPlan(i, { duration: e.target.value, label: e.target.value })}
-         placeholder="যেমন: 18 মাস, 6 সপ্তাহ, 45 দিন..."
+        <div className="text-xs font-semibold text-slate-600 mb-1.5">Enter custom duration</div>
+        <input
+          type="text"
+          value={p.duration ?? ""}
+          onChange={(e) => setPlan(i, { duration: e.target.value, label: e.target.value })}
+          placeholder="e.g. 18 Months, 6 Weeks, 45 Days..."
          className="w-full h-10 px-3 rounded-xl border border-violet-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
          autoFocus
        />
@@ -1263,11 +1263,11 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  })()}
  <div className="grid grid-cols-2 gap-3">
  <div>
- <div className="text-xs font-semibold text-slate-600 mb-1.5">বিক্রয় মূল্য (৳) *</div>
+ <div className="text-xs font-semibold text-slate-600 mb-1.5">Selling Price (৳) *</div>
  <input type="number" value={p.price || ""} onChange={(e) => setPlan(i, { price: Number(e.target.value) || 0 })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
  <div>
- <div className="text-xs font-semibold text-slate-600 mb-1.5">আসল মূল্য (৳) <span className="text-slate-500">কাটা দামে</span></div>
+ <div className="text-xs font-semibold text-slate-600 mb-1.5">Original Price (৳) <span className="text-slate-500">strikethrough</span></div>
  <input type="number" value={p.original_price ?? ""} onChange={(e) => setPlan(i, { original_price: e.target.value ? Number(e.target.value) : undefined })} placeholder="0" className="w-full h-10 px-3 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
  </div>
   </div>
@@ -1283,14 +1283,14 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
             🔻 -{pct}% OFF
           </span>
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
-            💰 সাশ্রয় ৳{save.toLocaleString()}
-          </span>
-          <span className="text-[11px] text-slate-500">auto-calculated</span>
-        </div>
-      );
-    }
-    if (op > 0 && sp > 0 && op <= sp) {
-      return <div className="mt-2 text-[11px] text-amber-700">⚠️ আসল মূল্য বিক্রয় মূল্যের চেয়ে বেশি হতে হবে</div>;
+            💰 Save ৳{save.toLocaleString()}
+           </span>
+           <span className="text-[11px] text-slate-500">auto-calculated</span>
+         </div>
+       );
+     }
+     if (op > 0 && sp > 0 && op <= sp) {
+       return <div className="mt-2 text-[11px] text-amber-700">⚠️ Original price must be higher than selling price</div>;
     }
     return null;
   })()}
