@@ -585,8 +585,12 @@ function CheckoutPage() {
             ))}
           </div>
         </div>
+        )}
 
+
+        {!fullyByWallet && (<>
         {/* TrxID input */}
+
         <div className="px-5 mt-5">
           <label className="text-[12px] font-medium text-slate-700">
             Transaction ID (TrxID) <span className="text-destructive">*</span>
@@ -642,6 +646,8 @@ function CheckoutPage() {
             )}
           </label>
         </div>
+        </>)}
+
 
         {/* Total */}
         <div className="px-5 mt-5">
@@ -659,7 +665,7 @@ function CheckoutPage() {
         <div className="px-5 py-5">
           <button
             onClick={handleSubmit}
-            disabled={busy || !!errors.trxId || !form.trxId}
+            disabled={busy || (!fullyByWallet && (!!errors.trxId || !form.trxId))}
             className="w-full h-12 rounded-full text-white text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-lg shadow-primary/25"
             style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)" }}
           >

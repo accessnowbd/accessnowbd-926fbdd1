@@ -307,7 +307,7 @@ function SectionRenderer({
     case "expired": return <ServiceList kind="expired" />;
     case "downloads": return <Downloads orders={orders} />;
     case "licenses": return <Licenses />;
-    case "wallet": return <ComingSoon title="ওয়ালেট" desc="ব্যালেন্স ও টপ-আপ শীঘ্রই আসছে।" />;
+    case "wallet": return <WalletRedirect />;
     case "address": return <ComingSoon title="ঠিকানা" desc="ডেলিভারি ঠিকানা ম্যানেজ করুন।" />;
     case "security": return <ComingSoon title="সিকিউরিটি" desc="পাসওয়ার্ড ও 2FA সেটিংস।" />;
     case "language": return <ComingSoon title="ভাষা" desc="বাংলা / English নির্বাচন করুন।" />;
