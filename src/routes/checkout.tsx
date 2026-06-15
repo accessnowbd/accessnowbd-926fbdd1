@@ -155,7 +155,10 @@ function CheckoutPage() {
 
 
   const applied = useAppliedCoupon(coupon, total);
-  const grandTotal = Math.max(0, total - applied.discount);
+  const subAfterCoupon = Math.max(0, total - applied.discount);
+  const walletApplied = useWallet ? Math.min(walletBalance, subAfterCoupon) : 0;
+  const grandTotal = Math.max(0, subAfterCoupon - walletApplied);
+  const fullyByWallet = walletApplied > 0 && grandTotal === 0;
 
   const copyNumber = async () => {
     await navigator.clipboard.writeText(selectedMethod.number.replace(/-/g, ""));
@@ -178,21 +181,30 @@ function CheckoutPage() {
           full_name: form.name,
           email: form.email,
           phone: form.phone,
-          payment_method: method,
-          transaction_id: form.trxId,
+          payment_method: fullyByWallet ? "wallet" : method,
+          transaction_id: fullyByWallet ? `WALLET-${Date.now()}` : form.trxId,
           payment_screenshot_url: screenshotUrl || null,
           items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
-          total: grandTotal,
+          total: subAfterCoupon,
         })
         .select("id")
         .single();
       if (error) throw error;
       const newId = data.id as string;
+      // Deduct wallet if used. If it fails, the order still exists but mark error.
+      if (walletApplied > 0) {
+        const { error: wErr } = await supabase.rpc("spend_wallet" as any, {
+          _amount: walletApplied,
+          _ref_order: newId,
+          _reason: `Order ANB-${newId.slice(0, 8).toUpperCase()}`,
+        });
+        if (wErr) {
+          setErr(`Wallet charge failed: ${wErr.message}. Order created without wallet payment.`);
+        }
+      }
       if (applied.valid && applied.code) {
         redeemCoupon(applied.code).catch(() => {});
       }
-      // Fire-and-forget: send branded order confirmation email.
-      // Failure must NOT block the user — order is already saved.
       sendTransactionalEmail({
         templateName: "order-confirmation",
         recipientEmail: form.email,
@@ -200,15 +212,11 @@ function CheckoutPage() {
         templateData: {
           name: form.name?.split(" ")[0],
           orderId: `ANB-${newId.slice(0, 8).toUpperCase()}`,
-          items: items.map((it) => ({
-            name: it.name || it.slug,
-            qty: it.qty,
-            price: (it.price ?? 0) * it.qty,
-          })),
+          items: items.map((it) => ({ name: it.name || it.slug, qty: it.qty, price: (it.price ?? 0) * it.qty })),
           subtotal: total,
           discount: applied.discount || 0,
-          total: grandTotal,
-          paymentMethod: method,
+          total: subAfterCoupon,
+          paymentMethod: fullyByWallet ? "wallet" : method,
           estimatedDelivery: "১৫–৩০ মিনিট",
         },
       }).catch((err) => console.warn("Order confirmation email failed", err));
@@ -221,6 +229,7 @@ function CheckoutPage() {
       setBusy(false);
     }
   };
+
 
   // ----- Auth/empty guards -----
   if (!authLoading && !user && items.length > 0) {
