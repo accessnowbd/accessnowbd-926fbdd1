@@ -101,6 +101,10 @@ function CheckoutPage() {
   const [screenshotUrl, setScreenshotUrl] = useState<string>("");
   const [uploading, setUploading] = useState(false);
 
+  // Wallet
+  const [walletBalance, setWalletBalance] = useState<number>(0);
+  const [useWallet, setUseWallet] = useState(false);
+
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -108,6 +112,14 @@ function CheckoutPage() {
   useEffect(() => {
     if (user) setForm((f) => ({ ...f, email: f.email || user.email || "" }));
   }, [user]);
+
+  // Load wallet balance
+  useEffect(() => {
+    if (!user) { setWalletBalance(0); return; }
+    supabase.from("wallets").select("balance").eq("user_id", user.id).maybeSingle()
+      .then(({ data }) => setWalletBalance(Number(data?.balance ?? 0)));
+  }, [user]);
+
 
   // Ensure selected method exists in current list
   useEffect(() => {

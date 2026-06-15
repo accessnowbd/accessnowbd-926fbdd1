@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as StreamingRouteImport } from './routes/streaming'
@@ -42,6 +43,7 @@ import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/blog.how-to-buy-netflix-in-bangladesh'
+import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
@@ -64,6 +66,11 @@ import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/e
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 
+const WalletRoute = WalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UnsubscribeRoute = UnsubscribeRouteImport.update({
   id: '/unsubscribe',
   path: '/unsubscribe',
@@ -230,6 +237,11 @@ const BlogHowToBuyNetflixInBangladeshRoute =
     path: '/blog/how-to-buy-netflix-in-bangladesh',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AdminWalletRoute = AdminWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -369,6 +381,7 @@ export interface FileRoutesByFullPath {
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/wallet': typeof WalletRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -382,6 +395,7 @@ export interface FileRoutesByFullPath {
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/orders/$id': typeof OrdersIdRoute
@@ -424,6 +438,7 @@ export interface FileRoutesByTo {
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/wallet': typeof WalletRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -437,6 +452,7 @@ export interface FileRoutesByTo {
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/orders/$id': typeof OrdersIdRoute
@@ -481,6 +497,7 @@ export interface FileRoutesById {
   '/streaming': typeof StreamingRoute
   '/terms': typeof TermsRoute
   '/unsubscribe': typeof UnsubscribeRoute
+  '/wallet': typeof WalletRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -494,6 +511,7 @@ export interface FileRoutesById {
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/orders/$id': typeof OrdersIdRoute
@@ -539,6 +557,7 @@ export interface FileRouteTypes {
     | '/streaming'
     | '/terms'
     | '/unsubscribe'
+    | '/wallet'
     | '/admin/$page'
     | '/admin/bulk-update'
     | '/admin/coupons'
@@ -552,6 +571,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/themes'
     | '/admin/users'
+    | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
     | '/orders/$id'
@@ -594,6 +614,7 @@ export interface FileRouteTypes {
     | '/streaming'
     | '/terms'
     | '/unsubscribe'
+    | '/wallet'
     | '/admin/$page'
     | '/admin/bulk-update'
     | '/admin/coupons'
@@ -607,6 +628,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/themes'
     | '/admin/users'
+    | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
     | '/orders/$id'
@@ -650,6 +672,7 @@ export interface FileRouteTypes {
     | '/streaming'
     | '/terms'
     | '/unsubscribe'
+    | '/wallet'
     | '/admin/$page'
     | '/admin/bulk-update'
     | '/admin/coupons'
@@ -663,6 +686,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/themes'
     | '/admin/users'
+    | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
     | '/orders/$id'
@@ -707,6 +731,7 @@ export interface RootRouteChildren {
   StreamingRoute: typeof StreamingRoute
   TermsRoute: typeof TermsRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
+  WalletRoute: typeof WalletRoute
   BlogHowToBuyNetflixInBangladeshRoute: typeof BlogHowToBuyNetflixInBangladeshRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ProductSlugRoute: typeof ProductSlugRoute
@@ -722,6 +747,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wallet': {
+      id: '/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof WalletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/unsubscribe': {
       id: '/unsubscribe'
       path: '/unsubscribe'
@@ -953,6 +985,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogHowToBuyNetflixInBangladeshRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/wallet': {
+      id: '/admin/wallet'
+      path: '/wallet'
+      fullPath: '/admin/wallet'
+      preLoaderRoute: typeof AdminWalletRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/users': {
       id: '/admin/users'
       path: '/users'
@@ -1117,6 +1156,7 @@ interface AdminRouteChildren {
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminThemesRoute: typeof AdminThemesRoute
   AdminUsersRoute: typeof AdminUsersRoute
+  AdminWalletRoute: typeof AdminWalletRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -1134,6 +1174,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminSecurityRoute: AdminSecurityRoute,
   AdminThemesRoute: AdminThemesRoute,
   AdminUsersRoute: AdminUsersRoute,
+  AdminWalletRoute: AdminWalletRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -1179,6 +1220,7 @@ const rootRouteChildren: RootRouteChildren = {
   StreamingRoute: StreamingRoute,
   TermsRoute: TermsRoute,
   UnsubscribeRoute: UnsubscribeRoute,
+  WalletRoute: WalletRoute,
   BlogHowToBuyNetflixInBangladeshRoute: BlogHowToBuyNetflixInBangladeshRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ProductSlugRoute: ProductSlugRoute,
