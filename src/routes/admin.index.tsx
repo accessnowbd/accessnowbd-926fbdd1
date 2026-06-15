@@ -239,7 +239,7 @@ function AdminDashboard() {
       label: t("CUSTOMERS", "কাস্টমার"),
       value: counts.users.toLocaleString("en-IN"),
       Icon: UsersRound,
-      iconGrad: "from-sky-500 to-blue-600",
+      iconGrad: "from-blue-500 to-indigo-600",
       bgGrad: "from-sky-50/60 via-white to-cyan-50/30",
     },
   ];
