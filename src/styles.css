@@ -621,6 +621,14 @@
     color: oklch(0.45 0.04 285) !important;
   }
 
+  html.theme-white .admin-clarity .admin-kpi-icon,
+  html.theme-white .admin-clarity .admin-menu-icon,
+  html.theme-white .admin-clarity .admin-kpi-icon *,
+  html.theme-white .admin-clarity .admin-menu-icon * {
+    color: #ffffff !important;
+    opacity: 1 !important;
+  }
+
   html.theme-white [class*="border-white\\/"],
   html.theme-white [class*="border-slate-7"],
   html.theme-white [class*="border-slate-8"],
