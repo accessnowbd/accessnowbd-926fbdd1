@@ -307,7 +307,7 @@ function SectionRenderer({
     case "expired": return <ServiceList kind="expired" />;
     case "downloads": return <Downloads orders={orders} />;
     case "licenses": return <Licenses />;
-    case "wallet": return <ComingSoon title="ওয়ালেট" desc="ব্যালেন্স ও টপ-আপ শীঘ্রই আসছে।" />;
+    case "wallet": return <WalletRedirect />;
     case "address": return <ComingSoon title="ঠিকানা" desc="ডেলিভারি ঠিকানা ম্যানেজ করুন।" />;
     case "security": return <ComingSoon title="সিকিউরিটি" desc="পাসওয়ার্ড ও 2FA সেটিংস।" />;
     case "language": return <ComingSoon title="ভাষা" desc="বাংলা / English নির্বাচন করুন।" />;
@@ -326,6 +326,25 @@ function ComingSoon({ title, desc }: { title: string; desc: string }) {
     </div>
   );
 }
+
+function WalletRedirect() {
+  return (
+    <div className="space-y-6">
+      <PageHead title="ওয়ালেট" desc="ব্যালেন্স, টপ-আপ ও লেনদেন ইতিহাস" />
+      <Card>
+        <div className="text-center py-6">
+          <Wallet className="w-10 h-10 mx-auto text-primary mb-3" />
+          <h3 className="text-lg font-bold mb-1">My Wallet</h3>
+          <p className="text-sm text-muted-foreground mb-4">Balance দেখুন, টপ-আপ করুন এবং লেনদেন ইতিহাস ব্রাউজ করুন।</p>
+          <Link to="/wallet" className="inline-flex items-center gap-2 px-5 h-11 rounded-full text-white text-sm font-bold" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)" }}>
+            Open Wallet <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
 
 /* ===================== SHARED PRIMITIVES ===================== */
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {

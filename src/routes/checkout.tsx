@@ -101,6 +101,10 @@ function CheckoutPage() {
   const [screenshotUrl, setScreenshotUrl] = useState<string>("");
   const [uploading, setUploading] = useState(false);
 
+  // Wallet
+  const [walletBalance, setWalletBalance] = useState<number>(0);
+  const [useWallet, setUseWallet] = useState(false);
+
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -108,6 +112,14 @@ function CheckoutPage() {
   useEffect(() => {
     if (user) setForm((f) => ({ ...f, email: f.email || user.email || "" }));
   }, [user]);
+
+  // Load wallet balance
+  useEffect(() => {
+    if (!user) { setWalletBalance(0); return; }
+    supabase.from("wallets").select("balance").eq("user_id", user.id).maybeSingle()
+      .then(({ data }) => setWalletBalance(Number(data?.balance ?? 0)));
+  }, [user]);
+
 
   // Ensure selected method exists in current list
   useEffect(() => {
@@ -143,7 +155,10 @@ function CheckoutPage() {
 
 
   const applied = useAppliedCoupon(coupon, total);
-  const grandTotal = Math.max(0, total - applied.discount);
+  const subAfterCoupon = Math.max(0, total - applied.discount);
+  const walletApplied = useWallet ? Math.min(walletBalance, subAfterCoupon) : 0;
+  const grandTotal = Math.max(0, subAfterCoupon - walletApplied);
+  const fullyByWallet = walletApplied > 0 && grandTotal === 0;
 
   const copyNumber = async () => {
     await navigator.clipboard.writeText(selectedMethod.number.replace(/-/g, ""));
@@ -166,21 +181,30 @@ function CheckoutPage() {
           full_name: form.name,
           email: form.email,
           phone: form.phone,
-          payment_method: method,
-          transaction_id: form.trxId,
+          payment_method: fullyByWallet ? "wallet" : method,
+          transaction_id: fullyByWallet ? `WALLET-${Date.now()}` : form.trxId,
           payment_screenshot_url: screenshotUrl || null,
           items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
-          total: grandTotal,
+          total: subAfterCoupon,
         })
         .select("id")
         .single();
       if (error) throw error;
       const newId = data.id as string;
+      // Deduct wallet if used. If it fails, the order still exists but mark error.
+      if (walletApplied > 0) {
+        const { error: wErr } = await supabase.rpc("spend_wallet" as any, {
+          _amount: walletApplied,
+          _ref_order: newId,
+          _reason: `Order ANB-${newId.slice(0, 8).toUpperCase()}`,
+        });
+        if (wErr) {
+          setErr(`Wallet charge failed: ${wErr.message}. Order created without wallet payment.`);
+        }
+      }
       if (applied.valid && applied.code) {
         redeemCoupon(applied.code).catch(() => {});
       }
-      // Fire-and-forget: send branded order confirmation email.
-      // Failure must NOT block the user — order is already saved.
       sendTransactionalEmail({
         templateName: "order-confirmation",
         recipientEmail: form.email,
@@ -188,15 +212,11 @@ function CheckoutPage() {
         templateData: {
           name: form.name?.split(" ")[0],
           orderId: `ANB-${newId.slice(0, 8).toUpperCase()}`,
-          items: items.map((it) => ({
-            name: it.name || it.slug,
-            qty: it.qty,
-            price: (it.price ?? 0) * it.qty,
-          })),
+          items: items.map((it) => ({ name: it.name || it.slug, qty: it.qty, price: (it.price ?? 0) * it.qty })),
           subtotal: total,
           discount: applied.discount || 0,
-          total: grandTotal,
-          paymentMethod: method,
+          total: subAfterCoupon,
+          paymentMethod: fullyByWallet ? "wallet" : method,
           estimatedDelivery: "১৫–৩০ মিনিট",
         },
       }).catch((err) => console.warn("Order confirmation email failed", err));
@@ -209,6 +229,7 @@ function CheckoutPage() {
       setBusy(false);
     }
   };
+
 
   // ----- Auth/empty guards -----
   if (!authLoading && !user && items.length > 0) {
@@ -487,8 +508,29 @@ function CheckoutPage() {
           })}
         </div>
 
+        {/* Wallet payment option */}
+        {walletBalance > 0 && (
+          <div className="mx-5 mt-4 rounded-2xl border border-violet-200 bg-violet-50/60 p-3.5">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" checked={useWallet} onChange={(e) => setUseWallet(e.target.checked)} className="w-4 h-4 accent-violet-600" />
+              <div className="flex-1">
+                <div className="text-[13px] font-bold text-slate-800">💳 ওয়ালেট ব্যালেন্স ব্যবহার করুন</div>
+                <div className="text-[11px] text-slate-600">Available: ৳{walletBalance.toLocaleString()}</div>
+              </div>
+              {useWallet && walletApplied > 0 && (
+                <div className="text-[13px] font-bold text-violet-700">−৳{walletApplied.toLocaleString()}</div>
+              )}
+            </label>
+            {fullyByWallet && (
+              <p className="text-[11px] text-emerald-700 font-semibold mt-2">✓ Wallet দিয়ে সম্পূর্ণ পেমেন্ট হবে — bKash/Nagad লাগবে না</p>
+            )}
+          </div>
+        )}
+
         {/* Brand instruction card — premium violet */}
+        {!fullyByWallet && (
         <div className="mx-5 mt-5 rounded-3xl bg-violet-50 border border-violet-100 p-5 space-y-4">
+
           {/* Header strip */}
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">
@@ -543,8 +585,12 @@ function CheckoutPage() {
             ))}
           </div>
         </div>
+        )}
 
+
+        {!fullyByWallet && (<>
         {/* TrxID input */}
+
         <div className="px-5 mt-5">
           <label className="text-[12px] font-medium text-slate-700">
             Transaction ID (TrxID) <span className="text-destructive">*</span>
@@ -600,6 +646,8 @@ function CheckoutPage() {
             )}
           </label>
         </div>
+        </>)}
+
 
         {/* Total */}
         <div className="px-5 mt-5">
@@ -617,7 +665,7 @@ function CheckoutPage() {
         <div className="px-5 py-5">
           <button
             onClick={handleSubmit}
-            disabled={busy || !!errors.trxId || !form.trxId}
+            disabled={busy || (!fullyByWallet && (!!errors.trxId || !form.trxId))}
             className="w-full h-12 rounded-full text-white text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-lg shadow-primary/25"
             style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)" }}
           >

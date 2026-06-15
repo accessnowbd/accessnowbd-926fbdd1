@@ -715,6 +715,117 @@ export type Database = {
         }
         Relationships: []
       }
+      wallet_topups: {
+        Row: {
+          admin_note: string | null
+          amount: number
+          created_at: string
+          id: string
+          method: string
+          note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          screenshot_path: string | null
+          sender_number: string | null
+          status: Database["public"]["Enums"]["wallet_topup_status"]
+          txn_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          amount: number
+          created_at?: string
+          id?: string
+          method: string
+          note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          screenshot_path?: string | null
+          sender_number?: string | null
+          status?: Database["public"]["Enums"]["wallet_topup_status"]
+          txn_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          amount?: number
+          created_at?: string
+          id?: string
+          method?: string
+          note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          screenshot_path?: string | null
+          sender_number?: string | null
+          status?: Database["public"]["Enums"]["wallet_topup_status"]
+          txn_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          balance_after: number
+          created_at: string
+          created_by: string | null
+          id: string
+          reason: string | null
+          ref_order_id: string | null
+          ref_topup_id: string | null
+          type: Database["public"]["Enums"]["wallet_txn_type"]
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          balance_after: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          reason?: string | null
+          ref_order_id?: string | null
+          ref_topup_id?: string | null
+          type: Database["public"]["Enums"]["wallet_txn_type"]
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          balance_after?: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          reason?: string | null
+          ref_order_id?: string | null
+          ref_topup_id?: string | null
+          type?: Database["public"]["Enums"]["wallet_txn_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallets: {
+        Row: {
+          balance: number
+          created_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       promotions_public: {
@@ -774,6 +885,104 @@ export type Database = {
       }
     }
     Functions: {
+      _wallet_apply: {
+        Args: {
+          _created_by: string
+          _delta: number
+          _reason: string
+          _ref_order: string
+          _ref_topup: string
+          _type: Database["public"]["Enums"]["wallet_txn_type"]
+          _user_id: string
+        }
+        Returns: {
+          amount: number
+          balance_after: number
+          created_at: string
+          created_by: string | null
+          id: string
+          reason: string | null
+          ref_order_id: string | null
+          ref_topup_id: string | null
+          type: Database["public"]["Enums"]["wallet_txn_type"]
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "wallet_transactions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_adjust_wallet: {
+        Args: { _amount: number; _reason: string; _user_id: string }
+        Returns: {
+          amount: number
+          balance_after: number
+          created_at: string
+          created_by: string | null
+          id: string
+          reason: string | null
+          ref_order_id: string | null
+          ref_topup_id: string | null
+          type: Database["public"]["Enums"]["wallet_txn_type"]
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "wallet_transactions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_credit_wallet: {
+        Args: {
+          _amount: number
+          _reason: string
+          _ref_order?: string
+          _type: Database["public"]["Enums"]["wallet_txn_type"]
+          _user_id: string
+        }
+        Returns: {
+          amount: number
+          balance_after: number
+          created_at: string
+          created_by: string | null
+          id: string
+          reason: string | null
+          ref_order_id: string | null
+          ref_topup_id: string | null
+          type: Database["public"]["Enums"]["wallet_txn_type"]
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "wallet_transactions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      approve_wallet_topup: {
+        Args: { _admin_note?: string; _topup_id: string }
+        Returns: {
+          amount: number
+          balance_after: number
+          created_at: string
+          created_by: string | null
+          id: string
+          reason: string | null
+          ref_order_id: string | null
+          ref_topup_id: string | null
+          type: Database["public"]["Enums"]["wallet_txn_type"]
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "wallet_transactions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
@@ -807,6 +1016,31 @@ export type Database = {
         }[]
       }
       redeem_coupon: { Args: { _code: string }; Returns: undefined }
+      reject_wallet_topup: {
+        Args: { _admin_note?: string; _topup_id: string }
+        Returns: undefined
+      }
+      spend_wallet: {
+        Args: { _amount: number; _reason?: string; _ref_order?: string }
+        Returns: {
+          amount: number
+          balance_after: number
+          created_at: string
+          created_by: string | null
+          id: string
+          reason: string | null
+          ref_order_id: string | null
+          ref_topup_id: string | null
+          type: Database["public"]["Enums"]["wallet_txn_type"]
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "wallet_transactions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       validate_coupon: {
         Args: { _code: string; _subtotal: number }
         Returns: {
@@ -820,6 +1054,14 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      wallet_topup_status: "pending" | "approved" | "rejected"
+      wallet_txn_type:
+        | "topup"
+        | "refund"
+        | "cashback"
+        | "referral"
+        | "spend"
+        | "adjustment"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -948,6 +1190,15 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      wallet_topup_status: ["pending", "approved", "rejected"],
+      wallet_txn_type: [
+        "topup",
+        "refund",
+        "cashback",
+        "referral",
+        "spend",
+        "adjustment",
+      ],
     },
   },
 } as const
