@@ -706,6 +706,18 @@
     color: #ffffff !important;
   }
 
+  html.theme-white .admin-clarity button[class*="bg-slate-900"],
+  html.theme-white .admin-clarity button[class*="bg-slate-800"] {
+    background-color: oklch(0.20 0.035 260) !important;
+    color: #ffffff !important;
+  }
+  html.theme-white .admin-clarity button[class*="bg-white"],
+  html.theme-white .admin-clarity button[class*="bg-slate-100"],
+  html.theme-white .admin-clarity button[class*="bg-slate-50"] {
+    background-color: #ffffff !important;
+    color: var(--admin-text) !important;
+  }
+
   html.theme-white .product-action-button,
   html.theme-white .product-action-button span,
   html.theme-white .product-action-button svg {
