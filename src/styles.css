@@ -628,6 +628,20 @@
     color: #ffffff !important;
     opacity: 1 !important;
   }
+  html.theme-white .admin-clarity button[class*="bg-violet-"],
+  html.theme-white .admin-clarity button[class*="bg-indigo-"],
+  html.theme-white .admin-clarity button[class*="bg-emerald-"],
+  html.theme-white .admin-clarity button[class*="bg-rose-"],
+  html.theme-white .admin-clarity button[class*="bg-blue-"],
+  html.theme-white .admin-clarity button[class*="bg-orange-"],
+  html.theme-white .admin-clarity button[class*="bg-amber-"],
+  html.theme-white .admin-clarity button[class*="bg-violet-"] *,
+  html.theme-white .admin-clarity button[class*="bg-indigo-"] *,
+  html.theme-white .admin-clarity button[class*="bg-emerald-"] *,
+  html.theme-white .admin-clarity button[class*="bg-rose-"] * {
+    color: #ffffff !important;
+    opacity: 1 !important;
+  }
 
   html.theme-white [class*="border-white\\/"],
   html.theme-white [class*="border-slate-7"],
