@@ -296,7 +296,7 @@ function AdminDashboard() {
       {/* Sales Overview + Best Selling */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Sales chart */}
-        <div className="lg:col-span-2 rounded-2xl bg-white ring-1 ring-slate-200 p-5 sm:p-6">
+          <div className="lg:col-span-2 admin-card rounded-2xl p-5 sm:p-6">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 mb-1">
             <div className="min-w-0">
               <h3 className="text-[18px] font-extrabold text-slate-900">{t("Sales Overview", "সেল ওভারভিউ")}</h3>
@@ -307,7 +307,7 @@ function AdminDashboard() {
                 </div>
               )}
             </div>
-            <div className="shrink-0 inline-flex rounded-full bg-slate-100 p-1 text-[11.5px] font-bold">
+            <div className="shrink-0 inline-flex rounded-full bg-slate-100 p-1 text-[11.5px] font-bold ring-1 ring-slate-200">
               {(["daily", "weekly", "monthly"] as Period[]).map((p) => (
                 <button
                   key={p}
@@ -364,7 +364,7 @@ function AdminDashboard() {
         </div>
 
         {/* Best Selling Products */}
-        <div className="rounded-2xl bg-white ring-1 ring-slate-200 p-5 sm:p-6">
+        <div className="admin-card rounded-2xl p-5 sm:p-6">
           <div className="flex items-start gap-2 mb-4">
             <span className="w-1 h-5 rounded-full bg-violet-500 mt-1" aria-hidden />
             <div className="min-w-0 flex-1">
@@ -380,10 +380,10 @@ function AdminDashboard() {
             <div className="space-y-3">
               {topProducts.map((p, i) => (
                 <div key={p.name + i} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 py-1.5">
-                  <span className="w-7 text-[12px] font-bold text-slate-400 tabular-nums">#{i + 1}</span>
+                  <span className="w-7 text-[12px] font-black text-slate-500 tabular-nums">#{i + 1}</span>
                   <div className="min-w-0">
                     <div className="text-[13px] font-bold text-slate-900 truncate">{p.name}</div>
-                    <div className="text-[11px] text-slate-400 tabular-nums">{p.sold} {t("sold", "বিক্রি")}</div>
+                    <div className="text-[11px] font-semibold text-slate-500 tabular-nums">{p.sold} {t("sold", "বিক্রি")}</div>
                   </div>
                   <div className="text-[12px] font-bold text-slate-900 tabular-nums shrink-0">{fmtBDT(p.revenue)}</div>
                 </div>
