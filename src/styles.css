@@ -1885,15 +1885,41 @@ html, body {
   min-width: 0;
 }
 
-/* Removed forced max-width override — use native Tailwind max-w-[1440px]/[1280px] so banner and containers respect their intended desktop size and zoom naturally. */
-
-/* Product detail page: widen narrow containers on large desktops so the layout
-   matches the storefront width (max-w-6xl ≈ 1152px and max-w-[1200px] are too
-   narrow on big monitors). Keep original behavior below 1280px. */
+/* Ultra-wide desktop scaling: storefront container caps grow from 1440px up to
+   2560px so 1080p/1440p/4K monitors fill the screen instead of leaving large
+   side gutters. Narrow text containers (max-w-md/xl/2xl/3xl/4xl/5xl) are left
+   alone so reading columns stay comfortable. */
 @media (min-width: 1280px) {
   main .max-w-6xl,
   main .max-w-\[1200px\] {
     max-width: 1440px !important;
+  }
+}
+
+@media (min-width: 1600px) {
+  .max-w-\[1440px\],
+  main .max-w-6xl,
+  main .max-w-\[1200px\],
+  main .max-w-\[1280px\] {
+    max-width: min(1920px, 96vw) !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .max-w-\[1440px\],
+  main .max-w-6xl,
+  main .max-w-\[1200px\],
+  main .max-w-\[1280px\] {
+    max-width: min(2240px, 94vw) !important;
+  }
+}
+
+@media (min-width: 2400px) {
+  .max-w-\[1440px\],
+  main .max-w-6xl,
+  main .max-w-\[1200px\],
+  main .max-w-\[1280px\] {
+    max-width: min(2560px, 92vw) !important;
   }
 }
 
