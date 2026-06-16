@@ -194,43 +194,51 @@ export function HeroBannerCarousel() {
   const intensityMul = intensity === "low" ? 0.65 : intensity === "high" ? 1.35 : 1;
 
 
-  // Cinematic layered background — multiple radial glows + linear depth
+  // Glass + Brand Glow — deep neutral glass base with soft brand-tinted edge glows.
+  // The product card sits on top of a clean frosted surface; the brand color only
+  // breathes through the corners and an inner rim so it harmonises without overpowering.
   const background = useMemo(() => {
     const a = (n: number) => Math.min(0.95, n * intensityMul);
-    const base = `linear-gradient(135deg, ${mix(bg, "#ffffff", 0.08)} 0%, ${bg} 50%, ${mix(bg, accent, 0.18)} 100%)`;
-    switch (style) {
-      case "aurora":
-        return [
-          `radial-gradient(ellipse 70% 60% at 10% 10%, ${hexAlpha(accent, a(0.55))} 0%, transparent 55%)`,
-          `radial-gradient(ellipse 60% 55% at 90% 20%, ${hexAlpha(glow, a(0.45))} 0%, transparent 60%)`,
-          `radial-gradient(ellipse 80% 50% at 50% 110%, ${hexAlpha(accent, a(0.4))} 0%, transparent 65%)`,
-          base,
-        ].join(", ");
-      case "mesh":
-        return [
-          `radial-gradient(circle at 20% 30%, ${hexAlpha(accent, a(0.5))} 0%, transparent 40%)`,
-          `radial-gradient(circle at 80% 20%, ${hexAlpha(glow, a(0.4))} 0%, transparent 45%)`,
-          `radial-gradient(circle at 70% 90%, ${hexAlpha(accent, a(0.45))} 0%, transparent 45%)`,
-          `radial-gradient(circle at 10% 80%, ${hexAlpha(glow, a(0.35))} 0%, transparent 45%)`,
-          base,
-        ].join(", ");
-      case "nebula":
-        return [
-          `radial-gradient(ellipse 90% 70% at 30% 50%, ${hexAlpha(glow, a(0.5))} 0%, transparent 55%)`,
-          `radial-gradient(ellipse 70% 60% at 80% 70%, ${hexAlpha(accent, a(0.6))} 0%, transparent 60%)`,
-          `radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,${a(0.08)}) 0%, transparent 70%)`,
-          base,
-        ].join(", ");
-      case "spotlight":
-      default:
-        return [
-          `radial-gradient(ellipse 65% 75% at 85% 50%, ${hexAlpha(accent, a(0.55))} 0%, transparent 55%)`,
-          `radial-gradient(ellipse 50% 60% at 15% 25%, ${hexAlpha(glow, a(0.28))} 0%, transparent 60%)`,
-          `radial-gradient(ellipse 90% 30% at 50% 0%, rgba(255,255,255,${a(0.06)}) 0%, transparent 70%)`,
-          base,
-        ].join(", ");
-    }
+    // Deep glassy neutral base, very lightly tinted by the brand color
+    const deep = mix(bg, "#0a0d18", 0.55);
+    const tinted = mix(deep, accent, 0.10);
+    const base = `linear-gradient(140deg, ${mix(tinted, "#ffffff", 0.04)} 0%, ${deep} 55%, ${mix(deep, accent, 0.14)} 100%)`;
+
+    // Style-specific glow placement, but always the same calm glass recipe
+    const glowLayers = (() => {
+      switch (style) {
+        case "aurora":
+          return [
+            `radial-gradient(ellipse 55% 50% at 12% 8%, ${hexAlpha(accent, a(0.32))} 0%, transparent 60%)`,
+            `radial-gradient(ellipse 50% 45% at 88% 18%, ${hexAlpha(glow, a(0.26))} 0%, transparent 65%)`,
+            `radial-gradient(ellipse 70% 40% at 50% 115%, ${hexAlpha(accent, a(0.22))} 0%, transparent 70%)`,
+          ];
+        case "mesh":
+          return [
+            `radial-gradient(circle at 18% 28%, ${hexAlpha(accent, a(0.28))} 0%, transparent 45%)`,
+            `radial-gradient(circle at 82% 22%, ${hexAlpha(glow, a(0.24))} 0%, transparent 50%)`,
+            `radial-gradient(circle at 72% 88%, ${hexAlpha(accent, a(0.22))} 0%, transparent 50%)`,
+          ];
+        case "nebula":
+          return [
+            `radial-gradient(ellipse 75% 55% at 28% 50%, ${hexAlpha(glow, a(0.28))} 0%, transparent 60%)`,
+            `radial-gradient(ellipse 60% 50% at 82% 72%, ${hexAlpha(accent, a(0.32))} 0%, transparent 62%)`,
+          ];
+        case "spotlight":
+        default:
+          return [
+            `radial-gradient(ellipse 60% 65% at 88% 50%, ${hexAlpha(accent, a(0.30))} 0%, transparent 60%)`,
+            `radial-gradient(ellipse 45% 50% at 12% 22%, ${hexAlpha(glow, a(0.18))} 0%, transparent 65%)`,
+          ];
+      }
+    })();
+
+    // Top frosted sheen — gives the glass surface its highlight
+    const sheen = `linear-gradient(180deg, ${hexAlpha("#ffffff", 0.06)} 0%, transparent 35%, transparent 100%)`;
+
+    return [sheen, ...glowLayers, base].join(", ");
   }, [bg, accent, glow, style, intensityMul]);
+
 
   const go = (dir: 1 | -1) =>
     setActive((i) => (i + dir + banners.length) % banners.length);
@@ -239,11 +247,11 @@ export function HeroBannerCarousel() {
     <section className="px-4 md:px-10 pt-6 pb-4">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[28px] border border-white/20 transition-colors duration-500"
+          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[28px] border border-white/15 backdrop-blur-xl transition-colors duration-500"
           style={{
             background,
             minHeight: Math.max(240, Math.min(900, Number(current.data.min_height) || 430)),
-            boxShadow: `0 30px 80px -30px ${hexAlpha(accent, 0.45)}, 0 8px 32px -8px ${hexAlpha(glow, 0.25)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.18)}, inset 0 0 0 1px ${hexAlpha("#ffffff", 0.05)}`,
+            boxShadow: `0 30px 80px -30px ${hexAlpha(accent, 0.35)}, 0 8px 32px -12px ${hexAlpha(glow, 0.22)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.14)}, inset 0 0 0 1px ${hexAlpha(accent, 0.12)}, inset 0 0 60px ${hexAlpha(accent, 0.08)}`,
           }}
         >
           {/* Static soft glows for depth */}
