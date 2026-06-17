@@ -8,6 +8,7 @@ import {
   FileText, Mail, Phone, MapPin, Hash, Copy, Check, Shield,
   Heart, Users, Globe, MapPinned, Smartphone, ChevronRight, Gift,
   Lock, AtSign, BadgeCheck, Bookmark, CreditCard, Star, Edit3, Wrench,
+  Trash2, Share2, Eye, EyeOff, Send, Home,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
