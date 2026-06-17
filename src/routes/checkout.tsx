@@ -74,6 +74,13 @@ const steps = [
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const bdPhoneRe = /^01[3-9]\d{8}$/;
+const normalizeBdPhone = (value: string) => {
+  const compact = value.replace(/[\s-]/g, "");
+  if (compact.startsWith("+880")) return `0${compact.slice(4)}`;
+  if (compact.startsWith("880")) return `0${compact.slice(3)}`;
+  return compact;
+};
+const isValidBdPhone = (value: string) => bdPhoneRe.test(normalizeBdPhone(value));
 
 function CheckoutPage() {
   const { items, total, clear, ready: cartReady } = useCart();
@@ -164,8 +171,8 @@ function CheckoutPage() {
     const e: Record<string, string> = {};
     if (!form.name.trim()) e.name = "Name is required";
     if (!emailRe.test(form.email)) e.email = "Enter a valid email";
-    if (!bdPhoneRe.test(form.phone)) e.phone = "Enter a valid 11-digit BD number (01XXXXXXXXX)";
-    if (!bdPhoneRe.test(form.senderNumber)) e.senderNumber = "Enter the 11-digit number you sent from";
+    if (!isValidBdPhone(form.phone)) e.phone = "Enter a valid BD number";
+    if (!isValidBdPhone(form.senderNumber)) e.senderNumber = "Enter the number you sent from";
     if (form.trxId.trim().length < 6) e.trxId = "TrxID looks too short";
     return e;
   }, [form]);
