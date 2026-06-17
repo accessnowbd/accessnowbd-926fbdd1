@@ -566,14 +566,14 @@ export function SiteHeader() {
                     <div className="grid grid-cols-2 gap-2">
                       <Link
                         to="/register"
-                        onClick={() => setOpen(false)}
+                        onClick={() => { rememberReturnTo(); setOpen(false); }}
                         className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white text-[13px] font-extrabold shadow-[0_14px_30px_-12px_rgba(168,85,247,0.5)] active:scale-[0.98] transition"
                       >
                         <Sparkles className="w-4 h-4" /> Get Started
                       </Link>
                       <Link
                         to="/login"
-                        onClick={() => setOpen(false)}
+                        onClick={() => { rememberReturnTo(); setOpen(false); }}
                         className="inline-flex items-center justify-center gap-1.5 h-12 rounded-2xl bg-white border border-violet-300 text-violet-700 text-[13px] font-extrabold hover:bg-violet-50 transition"
                       >
                         <LogIn className="w-4 h-4" /> Login
