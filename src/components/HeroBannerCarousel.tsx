@@ -604,7 +604,7 @@ export function HeroBannerCarousel() {
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
-                  className="mx-auto max-h-[260px] w-auto-playful w-auto max-w-full object-contain drop-shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+                  className="mx-auto max-h-[260px] w-auto max-w-full object-contain drop-shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
                   onError={(e) => {
                     const img = e.currentTarget;
                     if (rawResolvedImage && img.src !== rawResolvedImage) {
