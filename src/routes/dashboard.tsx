@@ -432,8 +432,8 @@ function SectionRenderer({
     case "my-tickets": return <MyTickets />;
     default: return null;
   }
-}
-void stats; void greetingName;
+
+
 
 
 function ComingSoon({ title, desc }: { title: string; desc: string }) {
