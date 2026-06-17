@@ -70,6 +70,10 @@ function CheckoutPage() {
   const { items, total, clear, ready: cartReady } = useCart();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  if (typeof window !== "undefined") {
+    console.log("[checkout] render", { authLoading, cartReady, hasUser: !!user, itemsLen: items.length });
+  }
+
 
   const { step, coupon } = Route.useSearch();
   const setStep = (n: 1 | 2) =>
