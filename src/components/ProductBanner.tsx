@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { Product } from "@/data/products";
+import { optimizeSupabaseImage } from "@/lib/image-url";
 
 /** Brand-domain guesser → logo CDN (no API key) */
 function guessLogoUrl(name: string): string {
