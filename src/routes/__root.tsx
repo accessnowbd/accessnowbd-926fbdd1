@@ -100,16 +100,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "application-name", content: "AccessNow BD" },
       { title: "AccessNow BD | Trusted Digital Services in Bangladesh" },
       { name: "description", content: "AccessNow BD provides digital products, premium subscriptions, hosting, software, and IT services with fast support and secure access across Bangladesh." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "AccessNow BD | Trusted Digital Services in Bangladesh" },
-      { property: "og:description", content: "AccessNow BD provides digital products, premium subscriptions, hosting, software, and IT services with fast support and secure access across Bangladesh." },
+      { name: "author", content: "AccessNow BD" },
+      // Sitewide Open Graph defaults — page-specific og:title / og:description /
+      // og:image / og:url MUST be set on the leaf route. We intentionally do NOT
+      // declare og:image here: TanStack head() concatenates root meta into every
+      // match, and a root og:image would override every leaf's own preview.
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "AccessNow BD | Trusted Digital Services in Bangladesh" },
-      { name: "twitter:description", content: "AccessNow BD provides digital products, premium subscriptions, hosting, software, and IT services with fast support and secure access across Bangladesh." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2f6fecb7-74d2-4d83-bc33-a69e2c1020fa/id-preview-3b7793d1--4e9c9e20-27d9-4789-abed-a88ebc4d1cc3.lovable.app-1778524395020.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2f6fecb7-74d2-4d83-bc33-a69e2c1020fa/id-preview-3b7793d1--4e9c9e20-27d9-4789-abed-a88ebc4d1cc3.lovable.app-1778524395020.png" },
+      { property: "og:site_name", content: "AccessNow BD" },
+      { property: "og:locale", content: "bn_BD" },
+      { property: "og:locale:alternate", content: "en_US" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@accessnowbd" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
