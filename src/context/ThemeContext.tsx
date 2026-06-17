@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { getCachedAvailability, useThemeAvailability, type ThemeAvailability } from "@/hooks/useThemeAvailability";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { getCachedAvailability, getCachedDefaultTheme, useThemeAvailability, type ThemeAvailability } from "@/hooks/useThemeAvailability";
 
 export type ThemeId = "aurora" | "white";
 
@@ -35,14 +35,16 @@ type Ctx = {
   theme: ThemeId;
   themes: ThemeMeta[];
   availability: ThemeAvailability;
+  defaultTheme: ThemeId;
   enabledThemes: ThemeMeta[];
   setTheme: (id: ThemeId) => void;
 };
 
 const ThemeCtx = createContext<Ctx>({
-  theme: "aurora",
+  theme: "white",
   themes: THEMES,
   availability: { aurora: true, white: true },
+  defaultTheme: "white",
   enabledThemes: THEMES,
   setTheme: () => {},
 });
@@ -57,44 +59,65 @@ function applyTheme(id: ThemeId) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const availability = useThemeAvailability();
-  const [theme, setThemeState] = useState<ThemeId>("aurora");
+  const { availability, defaultTheme } = useThemeAvailability();
+  const [theme, setThemeState] = useState<ThemeId>("white");
+  const userPickedRef = useRef(false);
 
-  // Initial mount: load stored theme, but downgrade to white if disabled.
+  // Initial mount: load stored theme if user picked one; else use admin default.
   useEffect(() => {
-    let stored: ThemeId = "aurora";
+    let stored: ThemeId | null = null;
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as ThemeId | null;
       if (saved && THEMES.some((t) => t.id === saved)) stored = saved;
     } catch { /* ignore */ }
     const initialAvail = getCachedAvailability();
-    if (!initialAvail[stored]) stored = "white";
-    applyTheme(stored);
-    setThemeState(stored);
+    const initialDefault = getCachedDefaultTheme();
+    let initial: ThemeId;
+    if (stored && initialAvail[stored]) {
+      initial = stored;
+      userPickedRef.current = true;
+    } else {
+      initial = initialAvail[initialDefault] ? initialDefault : "white";
+    }
+    applyTheme(initial);
+    setThemeState(initial);
   }, []);
 
   // When availability changes (admin toggled), force fallback if needed.
   useEffect(() => {
     if (!availability[theme]) {
-      applyTheme("white");
-      setThemeState("white");
-      try { localStorage.setItem(STORAGE_KEY, "white"); } catch { /* ignore */ }
+      const next = availability[defaultTheme] ? defaultTheme : "white";
+      applyTheme(next);
+      setThemeState(next);
+      if (userPickedRef.current) {
+        try { localStorage.setItem(STORAGE_KEY, next); } catch { /* ignore */ }
+      }
     }
-  }, [availability, theme]);
+  }, [availability, defaultTheme, theme]);
+
+  // When the admin default changes and the user hasn't explicitly picked, follow the default.
+  useEffect(() => {
+    if (userPickedRef.current) return;
+    if (!availability[defaultTheme]) return;
+    if (theme === defaultTheme) return;
+    applyTheme(defaultTheme);
+    setThemeState(defaultTheme);
+  }, [defaultTheme, availability, theme]);
 
   const setTheme = useCallback((id: ThemeId) => {
     if (!THEMES.some((t) => t.id === id)) return;
     if (!availability[id]) return; // blocked
     applyTheme(id);
     setThemeState(id);
+    userPickedRef.current = true;
     try { localStorage.setItem(STORAGE_KEY, id); } catch { /* ignore */ }
   }, [availability]);
 
   const enabledThemes = useMemo(() => THEMES.filter((t) => availability[t.id]), [availability]);
 
   const value = useMemo(
-    () => ({ theme, themes: THEMES, availability, enabledThemes, setTheme }),
-    [theme, availability, enabledThemes, setTheme],
+    () => ({ theme, themes: THEMES, availability, defaultTheme, enabledThemes, setTheme }),
+    [theme, availability, defaultTheme, enabledThemes, setTheme],
   );
   return <ThemeCtx.Provider value={value}>{children}</ThemeCtx.Provider>;
 }
