@@ -1,12 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  Loader2, Package, Clock, Wallet, User as UserIcon, ShoppingBag,
-  ArrowRight, Sparkles, LifeBuoy, LogOut, LayoutDashboard,
+  Loader2, Package, Wallet, User as UserIcon, ShoppingBag,
+  ArrowRight, Sparkles, LifeBuoy, LogOut,
   KeyRound, Receipt, Bell, MessageSquare,
-  Menu, ChevronDown, X, Plus, Download,
-  FileText, Mail, Phone, MapPin, Hash, Copy, Check, Zap, Shield,
-  Heart, Users, Globe, MapPinned, Smartphone, ChevronRight, Trophy,
+  Menu, X, Plus, Download,
+  FileText, Mail, Phone, MapPin, Hash, Copy, Check, Shield,
+  Heart, Users, Globe, MapPinned, Smartphone, ChevronRight, Gift,
+  Lock, AtSign, Bookmark, CreditCard, Star, Edit3, Wrench,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
