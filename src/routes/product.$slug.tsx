@@ -114,6 +114,18 @@ export const Route = createFileRoute("/product/$slug")({
           type: "application/ld+json",
           children: JSON.stringify(jsonLd),
         },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://accessnowbd.com/" },
+              { "@type": "ListItem", position: 2, name: "All Subscriptions", item: "https://accessnowbd.com/products" },
+              { "@type": "ListItem", position: 3, name: p.name, item: url },
+            ],
+          }),
+        },
       ],
     };
   },
