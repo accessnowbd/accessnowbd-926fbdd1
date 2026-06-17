@@ -30,38 +30,71 @@ type Order = {
 };
 
 type SectionId =
-  | "overview"
-  | "profile" | "edit-profile"
-  | "orders" | "active-services" | "expired" | "downloads" | "licenses"
-  | "wallet" | "address" | "security" | "language" | "install-app"
-  | "open-ticket" | "my-tickets";
+  | "profile" | "edit-profile" | "addresses" | "security"
+  | "orders" | "licenses" | "downloads" | "subscriptions" | "wishlist" | "notifications"
+  | "wallet" | "points" | "referral"
+  | "language" | "install-app"
+  | "active-services" | "expired" | "open-ticket" | "my-tickets";
 
 const statusColors: Record<string, string> = {
-  pending: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30",
-  processing: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
-  delivered: "bg-violet-500/15 text-violet-200 border-violet-500/30",
-  cancelled: "bg-pink-500/15 text-pink-300 border-pink-500/30",
+  pending: "bg-amber-500/15 text-amber-600 dark:text-amber-300 border-amber-500/30",
+  processing: "bg-sky-500/15 text-sky-600 dark:text-sky-300 border-sky-500/30",
+  delivered: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30",
+  cancelled: "bg-rose-500/15 text-rose-600 dark:text-rose-300 border-rose-500/30",
 };
 
 type NavItem = {
   id: SectionId;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
-  tint: string; // tailwind text color for icon
-  tintBg: string; // tailwind bg tint for icon tile
 };
 
-const NAV: NavItem[] = [
-  { id: "overview", label: "ড্যাশবোর্ড", icon: LayoutDashboard, tint: "text-indigo-500", tintBg: "bg-indigo-500/10" },
-  { id: "profile", label: "প্রোফাইল", icon: UserIcon, tint: "text-blue-500", tintBg: "bg-blue-500/10" },
-  { id: "orders", label: "আমার অর্ডার", icon: Package, tint: "text-emerald-500", tintBg: "bg-emerald-500/10" },
-  { id: "downloads", label: "ডাউনলোড লিংক", icon: Download, tint: "text-green-500", tintBg: "bg-green-500/10" },
-  { id: "wallet", label: "ওয়ালেট", icon: Wallet, tint: "text-purple-500", tintBg: "bg-purple-500/10" },
-  { id: "address", label: "ঠিকানা", icon: MapPinned, tint: "text-amber-500", tintBg: "bg-amber-500/10" },
-  { id: "security", label: "সিকিউরিটি", icon: Shield, tint: "text-rose-500", tintBg: "bg-rose-500/10" },
-  { id: "language", label: "ভাষা", icon: Globe, tint: "text-orange-500", tintBg: "bg-orange-500/10" },
-  { id: "install-app", label: "অ্যাপ ইনস্টল", icon: Smartphone, tint: "text-teal-500", tintBg: "bg-teal-500/10" },
+type NavGroup = { title: string; items: NavItem[] };
+
+const NAV_GROUPS: NavGroup[] = [
+  {
+    title: "ACCOUNT",
+    items: [
+      { id: "profile", label: "Profile", icon: UserIcon },
+      { id: "addresses", label: "Addresses", icon: MapPinned },
+      { id: "security", label: "Security", icon: Lock },
+    ],
+  },
+  {
+    title: "ACTIVITY",
+    items: [
+      { id: "orders", label: "My Orders", icon: Package },
+      { id: "licenses", label: "My Licenses", icon: KeyRound },
+      { id: "downloads", label: "Downloads", icon: Download },
+      { id: "subscriptions", label: "Subscriptions", icon: RefreshIcon },
+      { id: "wishlist", label: "Wishlist", icon: Heart },
+      { id: "notifications", label: "Notifications", icon: Bell },
+    ],
+  },
+  {
+    title: "REWARDS",
+    items: [
+      { id: "wallet", label: "Wallet", icon: Wallet },
+      { id: "points", label: "Points", icon: Star },
+      { id: "referral", label: "Referral", icon: Share2Icon },
+    ],
+  },
+  {
+    title: "PREFERENCES",
+    items: [
+      { id: "language", label: "Language", icon: Globe },
+      { id: "install-app", label: "Install App", icon: Smartphone },
+    ],
+  },
 ];
+
+// inline icon aliases to avoid extra imports
+function RefreshIcon(props: { className?: string }) {
+  return <Bookmark {...props} />;
+}
+function Share2Icon(props: { className?: string }) {
+  return <Users {...props} />;
+}
 
 function DashboardPage() {
   const { user, loading: authLoading, signOut } = useAuth();
