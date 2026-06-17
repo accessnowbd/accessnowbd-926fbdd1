@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { recordRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { useCart } from "@/context/CartContext";
 import { ProductBanner } from "@/components/ProductBanner";
+import { optimizeSupabaseImage } from "@/lib/image-url";
 import { useShopConfig } from "@/hooks/useShopConfig";
 import { getProduct } from "@/lib/products.functions";
 import { ProductMarkdown } from "@/components/ProductMarkdown";
