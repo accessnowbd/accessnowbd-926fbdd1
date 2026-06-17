@@ -217,11 +217,6 @@ function DashboardPage() {
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-foreground">
               <Menu className="w-6 h-6" />
             </button>
-            <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
-              <Link to="/dashboard" className="hover:text-foreground">Dashboard</Link>
-              <span>/</span>
-              <span className="text-foreground font-medium">{currentLabel}</span>
-            </div>
             <div className="flex-1" />
             <button className="relative w-9 h-9 rounded-full glass border border-[var(--glass-border)] grid place-items-center hover:border-primary/40">
               <Bell className="w-4 h-4" />
