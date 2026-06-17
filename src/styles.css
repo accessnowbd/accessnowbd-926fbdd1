@@ -2788,6 +2788,36 @@ html:not(.theme-white) .checkout-card-readable :where(input, textarea, select) {
   color: oklch(0.99 0 0) !important;
 }
 
+/* Force inner panels (bg-card / bg-muted / bg-secondary) to stand out from the
+   outer checkout card so labels, totals and inputs are clearly visible. */
+html:not(.theme-white) .checkout-card-readable :where(.bg-card, .bg-background, [class*="bg-background/"]) {
+  background-color: oklch(0.22 0.04 280 / 0.92) !important;
+}
+html:not(.theme-white) .checkout-card-readable :where(.bg-muted, .bg-secondary, [class*="bg-secondary/"]) {
+  background-color: oklch(0.28 0.05 280 / 0.95) !important;
+}
+html:not(.theme-white) .checkout-card-readable :where(.border-border, [class*="border-slate-"], [class*="border-gray-"]) {
+  border-color: oklch(1 0 0 / 0.18) !important;
+}
+html:not(.theme-white) .checkout-card-readable :where(.text-foreground, .text-card-foreground) {
+  color: oklch(0.98 0.01 280) !important;
+}
+html:not(.theme-white) .checkout-card-readable :where(.text-muted-foreground) {
+  color: oklch(0.82 0.02 280) !important;
+}
+/* Info / empty-state card on /checkout (loader, login prompt, empty cart) */
+html:not(.theme-white) .checkout-info-card {
+  background: oklch(0.18 0.04 280 / 0.96) !important;
+  border-color: oklch(1 0 0 / 0.18) !important;
+  color: oklch(0.98 0.01 280) !important;
+}
+html:not(.theme-white) .checkout-info-card :where(h1, h2, h3, p, span, a, button) {
+  color: inherit !important;
+}
+html:not(.theme-white) .checkout-info-card :where(.text-primary, a.text-primary) {
+  color: oklch(0.82 0.16 295) !important;
+}
+
 /* Cart page — dark theme: light text on dark glass cards, mirror of checkout-dark. */
 html:not(.theme-white) .cart-surface .bg-white,
 html:not(.theme-white) .cart-surface .bg-slate-50,
