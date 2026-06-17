@@ -91,7 +91,10 @@ export function ProductBanner({
 }) {
   const [imgFailed, setImgFailed] = useState(false);
   const [logoIdx, setLogoIdx] = useState(0);
-  const primary = product.imageUrl;
+  const primary = useMemo(
+    () => optimizeSupabaseImage(product.imageUrl, { width: priority ? 800 : 480, quality: 72 }),
+    [product.imageUrl, priority]
+  );
   const logos = useMemo(() => logoSources(product.name), [product.name]);
   const currentLogo = logos[logoIdx];
   const allLogosFailed = logoIdx >= logos.length;
