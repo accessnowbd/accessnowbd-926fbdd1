@@ -38,12 +38,12 @@ function CartPage() {
     navigate({ to: "/cart", search: { coupon: val }, replace: true });
 
   return (
-    <div className="cart-surface min-h-screen">
+    <div className="cart-surface dark-adapt min-h-screen">
       <div className="mx-auto max-w-[1100px] px-4 md:px-10 py-8">
         <Link to="/" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
           <ArrowLeft className="w-3.5 h-3.5" /> Continue shopping
         </Link>
-        <h1 className="text-aurora" style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 600 }}>Your Cart</h1>
+        <h1 className="text-foreground" style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 600 }}>Your Cart</h1>
         <p className="text-muted-foreground mt-1">{count} {count === 1 ? "item" : "items"}</p>
 
         {items.length === 0 ? (
@@ -61,15 +61,15 @@ function CartPage() {
               {items.map((it) => {
                 const lineTotal = it.price * it.qty;
                 return (
-                  <GlassCard key={`${it.slug}-${it.planPeriod}`} className="!p-4 flex gap-4 transition hover:-translate-y-0.5">
+                    <GlassCard key={`${it.slug}-${it.planPeriod}`} className="!p-4 flex gap-4 transition hover:-translate-y-0.5 text-foreground">
                     <div className={`w-20 h-20 shrink-0 rounded-xl bg-gradient-to-br ${it.gradient} grid place-items-center text-3xl shadow-inner`}>
                       {it.emoji}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <h3 className="text-slate-900 truncate" style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{it.name || it.slug}</h3>
-                          <p className="text-xs text-slate-500 mt-0.5">{it.planPeriod} · ৳{it.price.toLocaleString()}</p>
+                          <h3 className="text-foreground truncate" style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600 }}>{it.name || it.slug}</h3>
+                          <p className="text-xs text-muted-foreground mt-0.5">{it.planPeriod} · ৳{it.price.toLocaleString()}</p>
                         </div>
                         <button
                           onClick={() => remove(it.slug, it.planPeriod)}
@@ -85,7 +85,7 @@ function CartPage() {
                           <span className="w-8 text-center text-sm font-semibold text-slate-900" aria-live="polite">{it.qty}</span>
                           <button onClick={() => setQty(it.slug, it.planPeriod, it.qty + 1)} className="w-9 h-9 grid place-items-center hover:text-indigo-600 rounded-r-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Increase quantity"><Plus className="w-3.5 h-3.5" /></button>
                         </div>
-                        <span className="text-base font-semibold text-aurora" style={{ fontFamily: "var(--font-heading)" }}>৳{lineTotal.toLocaleString()}</span>
+                        <span className="text-base font-semibold text-primary" style={{ fontFamily: "var(--font-heading)" }}>৳{lineTotal.toLocaleString()}</span>
                       </div>
                     </div>
                   </GlassCard>
