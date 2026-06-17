@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { optimizeSupabaseImage } from "@/lib/image-url";
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
   Search,
@@ -551,9 +552,14 @@ export function GlobalSearch({
                             >
                               {p.imageUrl ? (
                                 <img
-                                  src={p.imageUrl}
+                                  src={optimizeSupabaseImage(p.imageUrl, { width: 96, quality: 65 })}
                                   alt={p.name}
+                                  loading="lazy"
+                                  decoding="async"
+                                  width={48}
+                                  height={48}
                                   className="w-full h-full object-cover"
+                                  onError={(e) => { const img = e.currentTarget; if (p.imageUrl && img.src !== p.imageUrl) img.src = p.imageUrl; }}
                                 />
                               ) : (
                                 <span>{p.emoji}</span>

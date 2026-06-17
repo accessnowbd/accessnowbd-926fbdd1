@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { recordRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { useCart } from "@/context/CartContext";
 import { ProductBanner } from "@/components/ProductBanner";
+import { optimizeSupabaseImage } from "@/lib/image-url";
 import { useShopConfig } from "@/hooks/useShopConfig";
 import { getProduct } from "@/lib/products.functions";
 import { ProductMarkdown } from "@/components/ProductMarkdown";
@@ -223,7 +224,20 @@ function ProductPage() {
         <div className="md:col-span-6 space-y-4">
           <div className="relative aspect-square overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200">
             {heroImg ? (
-              <img src={heroImg} alt={product.name} className="absolute inset-0 w-full h-full object-cover" loading="eager" />
+              <img
+                src={optimizeSupabaseImage(heroImg, { width: 900, quality: 75 })}
+                alt={product.name}
+                className="absolute inset-0 w-full h-full object-cover"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                width={900}
+                height={900}
+                onError={(e) => {
+                  const img = e.currentTarget;
+                  if (img.src !== heroImg) img.src = heroImg;
+                }}
+              />
             ) : (
               <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-3xl overflow-hidden" />
             )}
@@ -246,7 +260,16 @@ function ProductPage() {
                     className={`relative aspect-square rounded-xl overflow-hidden border-2 transition shadow-sm ${active ? "border-slate-900" : "border-slate-200 opacity-70 hover:opacity-100"}`}
                     aria-label={`Image ${i + 1}`}
                   >
-                    <img src={u} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                    <img
+                      src={optimizeSupabaseImage(u, { width: 200, quality: 65 })}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      width={200}
+                      height={200}
+                      onError={(e) => { const img = e.currentTarget; if (img.src !== u) img.src = u; }}
+                    />
                   </button>
                 );
               })}
