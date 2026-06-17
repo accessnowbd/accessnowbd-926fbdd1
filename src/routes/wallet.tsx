@@ -62,7 +62,7 @@ function WalletPage() {
   }, [user]);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate({ to: "/login" });
+    if (!authLoading && !user) { rememberReturnTo(); navigate({ to: "/login" }); }
   }, [authLoading, user, navigate]);
 
   useEffect(() => { load(); }, [load]);
