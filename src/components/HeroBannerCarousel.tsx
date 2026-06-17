@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, ShoppingCart, ArrowUpRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { optimizeSupabaseImage } from "@/lib/image-url";
 
 type BgStyle = "aurora" | "spotlight" | "mesh" | "nebula";
 type OverlayIntensity = "low" | "medium" | "high";
