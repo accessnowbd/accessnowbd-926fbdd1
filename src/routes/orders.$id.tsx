@@ -57,6 +57,7 @@ function OrderDetailPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
+      rememberReturnTo();
       navigate({ to: "/login" });
       return;
     }
