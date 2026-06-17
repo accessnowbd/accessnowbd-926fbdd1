@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useAdminLang } from "@/context/AdminLangContext";
 import { ProductMediaGallery } from "@/components/admin/ProductMediaGallery";
 import { BackupRestore } from "@/components/admin/BackupRestore";
+import { AnalyticsDashboard } from "@/components/admin/AnalyticsDashboard";
 
 export const Route = createFileRoute("/admin/$page")({
  component: AdminFeaturePage,
@@ -60,6 +61,8 @@ function AdminFeaturePage() {
  <ProductMediaGallery />
  ) : page === "backup" ? (
  <BackupRestore />
+ ) : page === "analytics" ? (
+ <AnalyticsDashboard />
  ) : cfg ? (
  cfg.mode === "list" ? (
  <ListCrud kind={cfg.kind} fields={cfg.fields} />
