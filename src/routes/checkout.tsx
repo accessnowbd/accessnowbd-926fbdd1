@@ -236,7 +236,7 @@ function CheckoutPage() {
   // ----- Auth/empty guards -----
   if (!authLoading && !user && items.length > 0) {
     return (
-      <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-slate-50 text-slate-900">
+      <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-background text-foreground">
         <GlassCard className="text-center max-w-sm">
           <h1 className="text-2xl font-semibold text-aurora">Login to checkout</h1>
           <p className="text-sm text-muted-foreground mt-2">Sign in or create an account to place your order and track it later.</p>
@@ -248,10 +248,10 @@ function CheckoutPage() {
 
   if (authLoading) {
     return (
-      <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-slate-50 text-slate-900">
+      <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-background text-foreground">
         <GlassCard className="text-center max-w-sm">
           <Loader2 className="mx-auto h-5 w-5 animate-spin text-primary" />
-          <p className="mt-3 text-sm text-slate-700">Checkout loading…</p>
+          <p className="mt-3 text-sm text-foreground/80">Checkout loading…</p>
         </GlassCard>
       </div>
     );
@@ -259,7 +259,7 @@ function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-slate-50 text-slate-900">
+      <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-background text-foreground">
         <GlassCard className="text-center">
           <h1 className="text-2xl font-semibold">Your cart is empty</h1>
           <Link to="/" className="text-primary underline mt-3 inline-block">Browse subscriptions</Link>
