@@ -1610,6 +1610,13 @@ main {
   overflow: visible !important;
 }
 
+#main-content {
+  position: relative;
+  z-index: 2;
+  display: block;
+  min-height: 1px;
+}
+
 /* 4. Paint containment on big repeating sections — limits the area the browser
       has to re-rasterize when something inside changes, and prevents glass
       cards from triggering full-page repaints on hover. */
@@ -2687,7 +2694,9 @@ html:not(.theme-white) .dark-adapt .keep-light {
 /* Checkout page — dark theme must use dark surfaces, not white-on-white cards. */
 html:not(.theme-white) .checkout-dark {
   position: relative;
-  z-index: 1;
+  z-index: 5;
+  display: grid !important;
+  isolation: isolate;
   background: linear-gradient(135deg, oklch(0.12 0.04 275), oklch(0.09 0.03 280) 58%, oklch(0.14 0.05 260)) !important;
   color: oklch(0.96 0.01 280) !important;
 }
