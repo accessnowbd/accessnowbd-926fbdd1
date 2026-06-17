@@ -2840,3 +2840,74 @@ html.theme-white .checkout-info-card {
   color: oklch(0.20 0.04 280) !important;
 }
 html.theme-white .checkout-info-card a.text-primary { color: oklch(0.50 0.18 280) !important; }
+
+/* ============================================================
+   GLOBAL THEME CONTRAST SAFETY NET (Dark / Aurora theme)
+   ------------------------------------------------------------
+   Catches every hardcoded light-mode color class anywhere in
+   the site so dark text on dark bg / light text on light bg
+   problems disappear automatically. Excludes opted-out canvas
+   wrappers (.force-light-canvas) and known solid-filled
+   colored buttons/badges (bg-primary, gradients, vivid hues).
+   ============================================================ */
+
+/* --- Dark text classes → light variants in dark theme --- */
+html:not(.theme-white) :where(
+  .text-slate-900, .text-gray-900, .text-zinc-900, .text-neutral-900, .text-stone-900, .text-black
+):not(.force-light-canvas *):not([class*="bg-white"]):not([class*="bg-slate-50"]):not([class*="bg-slate-100"]) {
+  color: oklch(0.97 0.01 280) !important;
+}
+html:not(.theme-white) :where(
+  .text-slate-800, .text-gray-800, .text-zinc-800, .text-neutral-800, .text-stone-800
+):not(.force-light-canvas *) {
+  color: oklch(0.92 0.02 280) !important;
+}
+html:not(.theme-white) :where(
+  .text-slate-700, .text-gray-700, .text-zinc-700, .text-neutral-700, .text-stone-700
+):not(.force-light-canvas *) {
+  color: oklch(0.86 0.02 280) !important;
+}
+html:not(.theme-white) :where(
+  .text-slate-600, .text-gray-600, .text-zinc-600, .text-neutral-600, .text-stone-600
+):not(.force-light-canvas *) {
+  color: oklch(0.78 0.02 280) !important;
+}
+html:not(.theme-white) :where(
+  .text-slate-500, .text-gray-500, .text-zinc-500, .text-neutral-500, .text-stone-500
+):not(.force-light-canvas *) {
+  color: oklch(0.72 0.02 280) !important;
+}
+
+/* --- Light surface classes → dark equivalents in dark theme --- */
+html:not(.theme-white) :where(.bg-white, .bg-slate-50, .bg-gray-50, .bg-zinc-50, .bg-neutral-50, .bg-stone-50):not(.force-light-canvas):not(.force-light-canvas *) {
+  background-color: oklch(0.18 0.04 280 / 0.85) !important;
+}
+html:not(.theme-white) :where(.bg-slate-100, .bg-gray-100, .bg-zinc-100, .bg-neutral-100):not(.force-light-canvas):not(.force-light-canvas *) {
+  background-color: oklch(1 0 0 / 0.06) !important;
+}
+
+/* --- Light border classes → dark borders in dark theme --- */
+html:not(.theme-white) :where(
+  .border-slate-100, .border-slate-200, .border-slate-300,
+  .border-gray-100, .border-gray-200, .border-gray-300,
+  .border-zinc-100, .border-zinc-200, .border-zinc-300,
+  .border-neutral-100, .border-neutral-200, .border-neutral-300
+):not(.force-light-canvas):not(.force-light-canvas *) {
+  border-color: oklch(1 0 0 / 0.12) !important;
+}
+
+/* --- Light placeholder text → readable on dark inputs --- */
+html:not(.theme-white) :where(
+  .placeholder\:text-slate-400, .placeholder\:text-slate-500,
+  .placeholder\:text-gray-400, .placeholder\:text-gray-500
+):not(.force-light-canvas *)::placeholder {
+  color: oklch(0.68 0.02 280) !important;
+  opacity: 1;
+}
+
+/* --- Light theme extra safety: bg-slate-900/black surfaces in white theme
+       are intentional dark sections — keep them dark and force white text
+       on their descendants so the wrapper remains an island of dark canvas. */
+html.theme-white :where(.bg-slate-900, .bg-slate-950, .bg-gray-900, .bg-gray-950, .bg-zinc-900, .bg-zinc-950, .bg-neutral-900, .bg-black) {
+  /* keep as-is — these are dark accent sections, descendants get white text via existing .force-dark-canvas rules if marked */
+}
