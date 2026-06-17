@@ -1,8 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Check, Copy, Lock, Smartphone, Loader2, Pencil, X, ChevronRight, Tag } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { z } from "zod";
-import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
@@ -21,15 +19,12 @@ import { useAppliedCoupon, redeemCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
 import { sendTransactionalEmail } from "@/lib/email/send";
 
-const checkoutSearchSchema = z.object({
-  step: z.preprocess((value) => (value === "2" || value === 2 ? 2 : 1), z.union([z.literal(1), z.literal(2)])).default(1),
-  coupon: fallback(z.string(), "").default(""),
-});
-
-
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
-  validateSearch: zodValidator(checkoutSearchSchema),
+  validateSearch: (search: Record<string, unknown>) => ({
+    step: search.step === "2" || search.step === 2 ? 2 : 1,
+    coupon: typeof search.coupon === "string" ? search.coupon : "",
+  }),
   head: () => ({ meta: [{ title: "Checkout — AccessNow BD" }] }),
 });
 
