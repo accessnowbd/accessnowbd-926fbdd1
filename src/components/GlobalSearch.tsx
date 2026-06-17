@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { optimizeSupabaseImage } from "@/lib/image-url";
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
   Search,
