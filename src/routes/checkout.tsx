@@ -607,7 +607,7 @@ function CheckoutPage() {
           </label>
           <div
             className={`mt-1 flex items-center rounded-full border bg-background/60 px-4 h-11 shadow-sm transition ${
-              touched.trxId && errors.trxId ? "border-destructive/60" : "border-slate-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
+              touched.trxId && errors.trxId ? "border-destructive/60" : "border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
             }`}
           >
             <input
