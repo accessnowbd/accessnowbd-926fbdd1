@@ -368,7 +368,8 @@ export function HeroBannerCarousel() {
             </>
           )}
 
-          <div className="relative grid items-center gap-7 px-5 py-10 md:grid-cols-2 md:gap-10 md:px-12 md:py-14">
+          {/* Desktop: two-column layout */}
+          <div className="relative hidden items-center gap-7 px-5 py-10 md:grid md:grid-cols-2 md:gap-10 md:px-12 md:py-14">
             {/* LEFT */}
             <div className="space-y-5 text-white">
               {current.data.category && (
@@ -520,6 +521,46 @@ export function HeroBannerCarousel() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Mobile: simplified — product image + English name only */}
+          <div className="relative flex flex-col items-center justify-center gap-4 px-5 py-8 md:hidden">
+            {resolvedImage ? (
+              <img
+                src={resolvedImage}
+                alt={current.data.title ?? "banner"}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="mx-auto max-h-[220px] w-auto max-w-[85%] object-contain drop-shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+                onError={(e) => {
+                  const img = e.currentTarget;
+                  if (rawResolvedImage && img.src !== rawResolvedImage) {
+                    img.src = rawResolvedImage;
+                  }
+                }}
+              />
+            ) : (
+              <div
+                className="flex aspect-square w-32 items-center justify-center rounded-3xl text-4xl font-black text-white"
+                style={{
+                  background: `linear-gradient(135deg, ${accent}, ${mix(accent, glow, 0.5)})`,
+                }}
+              >
+                {current.data.title?.slice(0, 1) ?? "A"}
+              </div>
+            )}
+            <h2
+              className="text-center font-extrabold text-white text-xl sm:text-2xl"
+              style={{
+                fontFamily: "var(--font-display)",
+                lineHeight: 1.15,
+                letterSpacing: "-0.02em",
+                textShadow: `0 1px 3px ${hexAlpha("#000", 0.35)}`,
+              }}
+            >
+              {current.data.title}
+            </h2>
           </div>
 
           {/* Pagination dots */}
