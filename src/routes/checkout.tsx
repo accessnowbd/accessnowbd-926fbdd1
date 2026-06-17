@@ -308,7 +308,7 @@ function CheckoutPage() {
       navigate({ to: "/checkout", search: { step: "1", coupon: code }, replace: true });
     };
     return (
-      <div className="min-h-screen bg-background text-foreground grid place-items-center px-4 py-8 md:py-12">
+      <div className="checkout-page min-h-screen bg-background text-foreground grid place-items-center px-4 py-8 md:py-12">
         <div className="w-full max-w-[520px] rounded-[2rem] border border-border bg-card text-card-foreground shadow-2xl overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between px-5 pt-5 pb-3">
