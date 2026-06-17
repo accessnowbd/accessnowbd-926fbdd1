@@ -716,7 +716,7 @@ function PillField({
     <div>
       <label className="text-[12px] font-medium text-foreground/80 ml-3">{label}</label>
       <div
-          className={`mt-1 flex items-center rounded-full border bg-background/60 px-4 h-11 transition shadow-sm ${
+          className={`mt-1 flex items-center rounded-full border bg-card text-card-foreground px-4 h-11 transition shadow-sm ${
           error ? "border-destructive/60" : "border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
         }`}
       >
