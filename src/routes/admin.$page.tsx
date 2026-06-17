@@ -61,6 +61,8 @@ function AdminFeaturePage() {
  <ProductMediaGallery />
  ) : page === "backup" ? (
  <BackupRestore />
+ ) : page === "analytics" ? (
+ <AnalyticsDashboard />
  ) : cfg ? (
  cfg.mode === "list" ? (
  <ListCrud kind={cfg.kind} fields={cfg.fields} />
