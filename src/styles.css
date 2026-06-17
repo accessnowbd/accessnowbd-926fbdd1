@@ -2683,3 +2683,38 @@ html:not(.theme-white) .dark-adapt .keep-light {
   background-color: #ffffff !important;
   color: #0f172a !important;
 }
+
+/* Checkout page — dark theme must use dark surfaces, not white-on-white cards. */
+html:not(.theme-white) .checkout-dark {
+  background: linear-gradient(135deg, oklch(0.12 0.04 275), oklch(0.09 0.03 280) 58%, oklch(0.14 0.05 260)) !important;
+  color: oklch(0.96 0.01 280) !important;
+}
+
+html:not(.theme-white) .checkout-dark .bg-white,
+html:not(.theme-white) .checkout-dark .bg-slate-50,
+html:not(.theme-white) .checkout-dark .bg-violet-50,
+html:not(.theme-white) .checkout-dark .bg-violet-50\/60 {
+  background-color: oklch(0.18 0.04 280 / 0.92) !important;
+  background-image: none !important;
+}
+
+html:not(.theme-white) .checkout-dark .border-slate-100,
+html:not(.theme-white) .checkout-dark .border-slate-200,
+html:not(.theme-white) .checkout-dark .border-slate-300,
+html:not(.theme-white) .checkout-dark .border-violet-100,
+html:not(.theme-white) .checkout-dark .border-violet-200 {
+  border-color: oklch(1 0 0 / 0.14) !important;
+}
+
+html:not(.theme-white) .checkout-dark .text-slate-900 { color: oklch(0.98 0.01 280) !important; }
+html:not(.theme-white) .checkout-dark .text-slate-800 { color: oklch(0.93 0.02 280) !important; }
+html:not(.theme-white) .checkout-dark .text-slate-700 { color: oklch(0.86 0.02 280) !important; }
+html:not(.theme-white) .checkout-dark .text-slate-600 { color: oklch(0.78 0.02 280) !important; }
+html:not(.theme-white) .checkout-dark .text-slate-500 { color: oklch(0.70 0.02 280) !important; }
+html:not(.theme-white) .checkout-dark .text-slate-400 { color: oklch(0.62 0.02 280) !important; }
+
+html:not(.theme-white) .checkout-dark input,
+html:not(.theme-white) .checkout-dark textarea,
+html:not(.theme-white) .checkout-dark select {
+  color: oklch(0.98 0.01 280) !important;
+}
