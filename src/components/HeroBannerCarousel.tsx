@@ -184,7 +184,8 @@ export function HeroBannerCarousel() {
   const intensity: OverlayIntensity = current.data.overlay_intensity || "medium";
 
   // Resolve image: explicit URL > product's image by brand slug
-  const resolvedImage = current.data.image_url || (brand?.slug ? productMap[brand.slug] : undefined);
+  const rawResolvedImage = current.data.image_url || (brand?.slug ? productMap[brand.slug] : undefined);
+  const resolvedImage = optimizeSupabaseImage(rawResolvedImage, { width: 1000, quality: 75 });
 
   // Eid / Qurbani detection — adds festive overlay (crescent, mosque, lanterns, sparkles)
   const isEid = useMemo(() => {
