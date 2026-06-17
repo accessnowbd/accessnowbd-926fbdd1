@@ -31,6 +31,7 @@ import { AccountIcon } from "@/components/AccountIcon";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 import { useAuth } from "@/context/AuthContext";
+import { rememberReturnTo } from "@/lib/auth-return-to";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import { GlobalSearch, useGlobalSearch } from "@/components/GlobalSearch";
