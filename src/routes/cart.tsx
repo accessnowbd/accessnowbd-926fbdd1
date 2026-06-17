@@ -38,7 +38,7 @@ function CartPage() {
     navigate({ to: "/cart", search: { coupon: val }, replace: true });
 
   return (
-    <div className="min-h-screen">
+    <div className="cart-surface min-h-screen">
       <div className="mx-auto max-w-[1100px] px-4 md:px-10 py-8">
         <Link to="/" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
           <ArrowLeft className="w-3.5 h-3.5" /> Continue shopping
