@@ -73,7 +73,7 @@ function WalletPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="dark-adapt min-h-screen bg-slate-50 text-slate-900">
       <div className="max-w-3xl mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-4">
           <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900">

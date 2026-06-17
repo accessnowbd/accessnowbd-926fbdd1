@@ -35,7 +35,7 @@ export function PolicyPage({
   const { pathname } = useLocation();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white text-slate-900">
+    <div className="dark-adapt min-h-screen bg-gradient-to-b from-white via-slate-50 to-white text-slate-900">
       {/* soft ambient glows */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 overflow-hidden">
         <div className="mx-auto h-[420px] max-w-6xl bg-[radial-gradient(ellipse_at_top,rgba(124,58,237,0.10),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(236,72,153,0.08),transparent_55%)]" />

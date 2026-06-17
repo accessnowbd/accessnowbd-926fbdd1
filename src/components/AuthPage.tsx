@@ -172,7 +172,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
   const year = useMemo(() => new Date().getFullYear(), []);
 
   return (
-    <div className="min-h-screen bg-[#f4f5f7] flex flex-col items-center justify-between py-6 px-4">
+    <div className="dark-adapt min-h-screen bg-[#f4f5f7] flex flex-col items-center justify-between py-6 px-4">
       <div className="flex-1 w-full flex items-center justify-center">
         <div className="relative w-full max-w-[460px] bg-white rounded-3xl shadow-[0_8px_30px_-8px_rgba(0,0,0,0.08)] border border-slate-200/70 p-7 sm:p-9">
           {/* Close */}
