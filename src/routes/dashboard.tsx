@@ -542,46 +542,64 @@ function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
 
 /* ===================== PROFILE ===================== */
 function ProfileView({ user, profile, onNavigate }: { user: { email?: string; id?: string } | null; profile: { display_name?: string | null; phone?: string | null } | null; onNavigate: (s: SectionId) => void }) {
+  const username = (profile?.display_name || user?.email?.split("@")[0] || "user").toLowerCase().replace(/\s+/g, "");
   return (
-    <div className="space-y-6">
-      <PageHead
-        title="My Profile"
-        desc="Your personal information"
-        action={<Btn variant="primary" onClick={() => onNavigate("edit-profile")}>তথ্য এডিট করুন</Btn>}
-      />
-      <Card>
-        <div className="flex flex-wrap items-center gap-5">
-          <div className="w-20 h-20 rounded-2xl grid place-items-center text-white text-2xl font-bold" style={{ background: "var(--gradient-aurora)" }}>
-            {(profile?.display_name || user?.email || "U").charAt(0).toUpperCase()}
+    <div className="bg-card border border-border rounded-3xl p-5 md:p-7 shadow-sm">
+      {/* Section header */}
+      <div className="flex items-center justify-between gap-3 pb-5 border-b border-border">
+        <div className="flex items-center gap-3">
+          <div className="w-11 h-11 rounded-2xl grid place-items-center text-primary-foreground" style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}>
+            <UserIcon className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>{profile?.display_name || "Not set"}</div>
-            <div className="text-sm text-muted-foreground">{user?.email}</div>
-            <div className="mt-2 flex gap-2">
-              <Badge color="success">Email Verified</Badge>
-            </div>
+            <h2 className="text-xl md:text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>Profile</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Manage your personal information</p>
           </div>
         </div>
-      </Card>
+        <button
+          onClick={() => onNavigate("edit-profile")}
+          className="inline-flex items-center gap-2 h-9 px-4 rounded-full text-primary-foreground text-sm font-semibold shadow-sm"
+          style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}
+        >
+          <Edit3 className="w-3.5 h-3.5" /> Edit
+        </button>
+      </div>
 
-      <Card>
-        <h3 className="font-semibold mb-4" style={{ fontFamily: "var(--font-heading)" }}>Personal Information</h3>
-        <div className="space-y-3 text-sm">
-          <Row icon={<UserIcon className="w-4 h-4" />} label="Full Name" value={profile?.display_name || "—"} />
-          <Row icon={<Mail className="w-4 h-4" />} label="Email" value={user?.email || "—"} />
-          <Row icon={<Phone className="w-4 h-4" />} label="Phone" value={profile?.phone || "—"} />
-          <Row icon={<MapPin className="w-4 h-4" />} label="Country" value="Bangladesh" />
-          <Row icon={<Hash className="w-4 h-4" />} label="User ID" value={user?.id?.slice(0, 12) + "..." || "—"} />
-        </div>
-      </Card>
+      {/* Fields */}
+      <div className="mt-6 space-y-4">
+        <ProfileField label="FULL NAME" icon={UserIcon} value={profile?.display_name || "—"} />
+        <ProfileField label="USERNAME" icon={AtSign} value={`@${username}`} />
+        <ProfileField label="EMAIL" icon={Mail} value={user?.email || "—"} verified />
+        <ProfileField label="PHONE NUMBER" icon={Phone} value={profile?.phone || "—"} />
+        <ProfileField label="COUNTRY" icon={MapPin} value="Bangladesh" />
+        <ProfileField label="USER ID" icon={Hash} value={user?.id ? user.id.slice(0, 12) + "…" : "—"} />
+      </div>
     </div>
   );
 }
+
+function ProfileField({ label, icon: Icon, value, verified }: { label: string; icon: React.ComponentType<{ className?: string }>; value: string; verified?: boolean }) {
+  return (
+    <div>
+      <div className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground mb-1.5">{label}</div>
+      <div className="flex items-center gap-3 h-12 px-4 rounded-2xl bg-background border border-border">
+        <Icon className="w-4 h-4 text-muted-foreground shrink-0" />
+        <span className="flex-1 text-sm font-medium text-foreground truncate">{value}</span>
+        {verified && (
+          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 shrink-0">
+            <Check className="w-3 h-3" strokeWidth={3} /> Verified
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Row({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between p-3 rounded-xl glass border border-[var(--glass-border)]">
+    <div className="flex items-center justify-between p-3 rounded-xl bg-background border border-border">
       <span className="inline-flex items-center gap-2 text-muted-foreground"><span className="text-primary">{icon}</span>{label}</span>
-      <span className="font-medium">{value}</span>
+      <span className="font-medium text-foreground">{value}</span>
     </div>
   );
 }
