@@ -545,10 +545,10 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
   const { t } = useAdminLang();
   const label = t(item.label, item.labelBn);
   const badgeClass = item.badge === "LIVE"
-    ? "bg-rose-50 text-rose-600 ring-1 ring-rose-100"
+    ? "bg-rose-500 text-white shadow-[0_4px_10px_-2px_rgba(244,63,94,0.5)]"
     : item.badge === "NEW"
-      ? "bg-violet-50 text-violet-600 ring-1 ring-violet-100"
-      : "bg-amber-50 text-amber-600 ring-1 ring-amber-100";
+      ? "bg-pink-500 text-white shadow-[0_4px_10px_-2px_rgba(236,72,153,0.55)]"
+      : "bg-amber-500 text-white shadow-[0_4px_10px_-2px_rgba(245,158,11,0.5)]";
   return (
     <Link
       to={item.to}
