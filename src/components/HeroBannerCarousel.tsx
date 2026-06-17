@@ -472,7 +472,15 @@ export function HeroBannerCarousel() {
                         src={resolvedImage}
                         alt={current.data.title ?? "banner"}
                         loading="eager"
+                        fetchPriority="high"
+                        decoding="async"
                         className="max-h-full max-w-full object-contain"
+                        onError={(e) => {
+                          const img = e.currentTarget;
+                          if (rawResolvedImage && img.src !== rawResolvedImage) {
+                            img.src = rawResolvedImage;
+                          }
+                        }}
                       />
                     </div>
                   ) : isEid ? (
