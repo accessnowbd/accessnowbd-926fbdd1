@@ -284,9 +284,32 @@ function AdminLayout() {
 function AdminBlankState() {
   return (
     <div className="min-h-screen grid place-items-center bg-[#fafafa]" role="status" aria-label="Loading admin panel">
-      <div className="flex flex-col items-center gap-3 text-slate-500">
-        <div className="w-7 h-7 rounded-full border-2 border-slate-200 border-t-indigo-500 animate-spin" />
-        <span className="text-xs font-medium tracking-wide">Loading admin…</span>
+      <div className="flex flex-col items-center gap-5">
+        {/* Logo with animated gradient ring */}
+        <div className="relative w-16 h-16">
+          <div className="admin-loader-ring" />
+          <div className="absolute inset-0 grid place-items-center">
+            <img
+              src={accessNowLogo}
+              alt=""
+              className="w-10 h-10 object-contain admin-loader-logo"
+              draggable={false}
+            />
+          </div>
+        </div>
+
+        {/* Animated text */}
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-sm font-semibold text-slate-700 tracking-wide">AccessNow BD</span>
+          <span className="text-xs text-slate-400 font-medium tracking-wide">Loading admin panel</span>
+        </div>
+
+        {/* Animated progress bars */}
+        <div className="flex items-center gap-1.5">
+          <span className="admin-loader-bar" style={{ animationDelay: "0ms" }} />
+          <span className="admin-loader-bar" style={{ animationDelay: "150ms" }} />
+          <span className="admin-loader-bar" style={{ animationDelay: "300ms" }} />
+        </div>
       </div>
     </div>
   );
