@@ -3016,3 +3016,39 @@ html.theme-white .checkout-page .bg-muted {
   0%   { width: 8px; height: 8px; opacity: 0.55; }
   100% { width: 320px; height: 320px; opacity: 0; }
 }
+
+/* Admin panel loading animation */
+@keyframes adminLoaderRing {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes adminLoaderPulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+@keyframes adminLoaderBar {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+.admin-loader-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #4f46e5, #7c3aed, #06b6d4, #4f46e5);
+  animation: adminLoaderRing 1.2s linear infinite;
+  mask: radial-gradient(circle, transparent 62%, black 63%);
+  -webkit-mask: radial-gradient(circle, transparent 62%, black 63%);
+}
+.admin-loader-logo {
+  animation: adminLoaderPulse 2s ease-in-out infinite;
+}
+.admin-loader-bar {
+  display: inline-block;
+  width: 4px;
+  height: 16px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #4f46e5, #7c3aed);
+  animation: adminLoaderBar 1s ease-in-out infinite;
+  transform-origin: center;
+}
