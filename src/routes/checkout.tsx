@@ -381,18 +381,18 @@ function CheckoutPage() {
           </div>
 
           {/* Totals */}
-            <div className="mx-5 mt-5 rounded-2xl border border-border bg-background/60 overflow-hidden shadow-sm">
+            <div className="mx-5 mt-5 rounded-2xl border border-border bg-card text-card-foreground overflow-hidden shadow-sm">
             <div className="flex items-center justify-between px-4 py-2.5 text-sm">
                 <span className="text-muted-foreground">মূল্য</span>
                 <span className="text-foreground font-medium">৳{total.toLocaleString()}</span>
             </div>
             {applied.discount > 0 && (
               <div className="flex items-center justify-between px-4 py-2.5 text-sm border-t border-border">
-                <span className="text-emerald-600">ছাড় ({applied.code})</span>
-                <span className="text-emerald-600 font-medium">−৳{applied.discount.toLocaleString()}</span>
+                <span className="text-emerald-600 dark:text-emerald-400">ছাড় ({applied.code})</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-medium">−৳{applied.discount.toLocaleString()}</span>
               </div>
             )}
-              <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-secondary/50">
+              <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-muted">
                 <span className="text-[15px] font-semibold text-foreground">মোট</span>
               <span className="text-xl font-bold text-primary" style={{ fontFamily: "var(--font-heading)" }}>
                 ৳{grandTotal.toLocaleString()}
