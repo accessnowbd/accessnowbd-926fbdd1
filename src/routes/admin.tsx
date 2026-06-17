@@ -151,15 +151,20 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, verifyRole]);
 
-  if (loading) {
+  const cachedAdmin = readCachedAdmin();
+
+  // Optimistic render: if we have a cached admin flag, skip all blocking
+  // spinners and render the shell immediately. Background verification still
+  // runs and will redirect/deny if the cached flag is stale.
+  if (loading && !cachedAdmin) {
     return <AdminBlankState />;
   }
 
-  if (!user) {
+  if (!loading && !user) {
     return <AuthPageEntry initialMode="login" />;
   }
 
-  if (!verified) {
+  if (!verified && !cachedAdmin) {
     return <AdminBlankState />;
   }
 
