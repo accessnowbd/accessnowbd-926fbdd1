@@ -949,3 +949,408 @@ function MyTickets() {
     </div>
   );
 }
+
+/* ===================== WISHLIST ===================== */
+type WishItem = { slug: string; name: string; image?: string | null; price?: number };
+const WISH_KEY = "anbd:wishlist";
+function loadWish(): WishItem[] {
+  try { return JSON.parse(localStorage.getItem(WISH_KEY) || "[]"); } catch { return []; }
+}
+function saveWish(list: WishItem[]) { localStorage.setItem(WISH_KEY, JSON.stringify(list)); window.dispatchEvent(new Event("wishlist:change")); }
+function WishlistView() {
+  const [items, setItems] = useState<WishItem[]>([]);
+  useEffect(() => {
+    setItems(loadWish());
+    const h = () => setItems(loadWish());
+    window.addEventListener("wishlist:change", h);
+    window.addEventListener("storage", h);
+    return () => { window.removeEventListener("wishlist:change", h); window.removeEventListener("storage", h); };
+  }, []);
+  const remove = (slug: string) => saveWish(items.filter((i) => i.slug !== slug));
+  return (
+    <div className="space-y-6">
+      <PageHead title="My Wishlist" desc="আপনার সংরক্ষিত পণ্যসমূহ" />
+      <Card>
+        {items.length === 0 ? (
+          <Empty icon={<Heart className="w-6 h-6" />} msg="এখনো কোন পণ্য সংরক্ষণ করা হয়নি। প্রোডাক্ট পেজ থেকে ❤ আইকনে ক্লিক করে যোগ করুন।" />
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {items.map((it) => (
+              <div key={it.slug} className="rounded-2xl border border-border p-3 bg-background">
+                {it.image && <img src={it.image} alt={it.name} loading="lazy" className="w-full h-32 object-cover rounded-xl mb-2" />}
+                <div className="font-semibold text-sm truncate text-foreground">{it.name}</div>
+                {typeof it.price === "number" && <div className="text-primary font-bold text-sm mt-0.5">৳{it.price.toLocaleString()}</div>}
+                <div className="mt-3 flex gap-2">
+                  <Link to="/product/$slug" params={{ slug: it.slug }} className="flex-1 inline-flex items-center justify-center h-9 px-3 rounded-full bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90">View</Link>
+                  <button onClick={() => remove(it.slug)} aria-label="Remove" className="h-9 w-9 grid place-items-center rounded-full border border-border text-rose-500 hover:bg-rose-500/10"><Trash2 className="w-4 h-4" /></button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+/* ===================== NOTIFICATIONS ===================== */
+type Notif = { id: string; title: string; message: string | null; link: string | null; type: string | null; read_status: boolean | null; created_at: string };
+function NotificationsView() {
+  const { user } = useAuth();
+  const [rows, setRows] = useState<Notif[] | null>(null);
+  const load = async () => {
+    if (!user) return;
+    const { data } = await supabase.from("notifications").select("id,title,message,link,type,read_status,created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(50);
+    setRows((data ?? []) as Notif[]);
+  };
+  useEffect(() => { load(); /* eslint-disable-next-line */ }, [user?.id]);
+  const markRead = async (id: string) => {
+    await supabase.from("notifications").update({ read_status: true }).eq("id", id);
+    setRows((r) => r ? r.map((n) => n.id === id ? { ...n, read_status: true } : n) : r);
+  };
+  const markAll = async () => {
+    if (!user) return;
+    await supabase.from("notifications").update({ read_status: true }).eq("user_id", user.id).eq("read_status", false);
+    setRows((r) => r ? r.map((n) => ({ ...n, read_status: true })) : r);
+  };
+  return (
+    <div className="space-y-6">
+      <PageHead title="Notifications" desc="অর্ডার ও প্রমোশন আপডেট" action={<Btn variant="ghost" onClick={markAll}><Check className="w-4 h-4" />Mark all read</Btn>} />
+      <Card>
+        {rows === null ? (
+          <div className="flex justify-center py-8 text-muted-foreground text-sm"><Loader2 className="w-4 h-4 animate-spin mr-2" />লোড হচ্ছে...</div>
+        ) : rows.length === 0 ? (
+          <Empty icon={<Bell className="w-6 h-6" />} msg="কোন নোটিফিকেশন নেই।" />
+        ) : (
+          <div className="space-y-2">
+            {rows.map((n) => (
+              <div key={n.id} className={`flex items-start gap-3 p-3 rounded-xl border ${n.read_status ? "border-border bg-background" : "border-primary/40 bg-primary/5"}`}>
+                <div className="w-9 h-9 rounded-xl grid place-items-center bg-primary/15 text-primary shrink-0"><Bell className="w-4 h-4" /></div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold text-foreground">{n.title}</div>
+                  {n.message && <div className="text-xs text-muted-foreground mt-0.5">{n.message}</div>}
+                  <div className="text-[10px] text-muted-foreground mt-1">{new Date(n.created_at).toLocaleString()}</div>
+                </div>
+                {n.link && <a href={n.link} className="text-primary text-xs font-semibold hover:underline shrink-0">Open</a>}
+                {!n.read_status && <button onClick={() => markRead(n.id)} className="text-xs text-primary hover:underline shrink-0">Mark read</button>}
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+/* ===================== POINTS ===================== */
+function PointsView() {
+  const { user } = useAuth();
+  const [bal, setBal] = useState<number | null>(null);
+  const [tx, setTx] = useState<Array<{ id: string; amount: number; reason: string | null; created_at: string }>>([]);
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data: w } = await supabase.from("wallets").select("balance").eq("user_id", user.id).maybeSingle();
+      const { data: t } = await supabase.from("wallet_transactions").select("id,amount,reason,created_at,type").eq("user_id", user.id).in("type", ["cashback", "referral"]).order("created_at", { ascending: false }).limit(20);
+      const earned = (t ?? []).reduce((s, r) => s + Number(r.amount || 0), 0);
+      setBal(Math.max(0, Math.round(Number(w?.balance ?? 0)) + Math.round(earned)));
+      setTx((t ?? []).map((r) => ({ id: r.id, amount: Number(r.amount), reason: r.reason, created_at: r.created_at })));
+    })();
+  }, [user?.id]);
+  return (
+    <div className="space-y-6">
+      <PageHead title="Reward Points" desc="পয়েন্ট জমা ও ইতিহাস" />
+      <Card>
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl grid place-items-center text-primary-foreground" style={{ background: "linear-gradient(135deg,#f59e0b,#ef4444)" }}><Star className="w-6 h-6" /></div>
+          <div>
+            <div className="text-xs text-muted-foreground">Available Points</div>
+            <div className="text-3xl font-bold text-foreground">{bal === null ? "—" : bal.toLocaleString()}</div>
+            <div className="text-xs text-muted-foreground mt-1">প্রতি ১ পয়েন্ট = ১ ৳ ছাড়ে রিডিম করা যায়</div>
+          </div>
+        </div>
+      </Card>
+      <Card>
+        <div className="text-sm font-semibold mb-3 text-foreground">Recent activity</div>
+        {tx.length === 0 ? (
+          <Empty icon={<Star className="w-6 h-6" />} msg="এখনো কোন পয়েন্ট অর্জিত হয়নি। কেনাকাটা ও রেফারেলে পয়েন্ট পাবেন।" />
+        ) : (
+          <div className="space-y-2">
+            {tx.map((r) => (
+              <div key={r.id} className="flex items-center justify-between p-3 rounded-xl bg-background border border-border">
+                <div>
+                  <div className="text-sm font-medium text-foreground">{r.reason || "Reward"}</div>
+                  <div className="text-[10px] text-muted-foreground">{new Date(r.created_at).toLocaleString()}</div>
+                </div>
+                <div className={`font-bold text-sm ${r.amount >= 0 ? "text-emerald-500" : "text-rose-500"}`}>{r.amount >= 0 ? "+" : ""}{r.amount}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+/* ===================== REFERRAL ===================== */
+function ReferralView({ user }: { user: { id?: string; email?: string } | null }) {
+  const code = (user?.id || "").slice(0, 8).toUpperCase();
+  const link = typeof window !== "undefined" ? `${window.location.origin}/signup?ref=${code}` : `/signup?ref=${code}`;
+  const [copied, setCopied] = useState(false);
+  const copy = () => { navigator.clipboard.writeText(link); setCopied(true); setTimeout(() => setCopied(false), 1500); };
+  const share = async () => {
+    const data = { title: "AccessNow BD", text: "আমার রেফারেল লিংক দিয়ে সাইন আপ করুন!", url: link };
+    if ((navigator as any).share) { try { await (navigator as any).share(data); } catch { /* user cancelled */ } }
+    else copy();
+  };
+  return (
+    <div className="space-y-6">
+      <PageHead title="Referral Program" desc="বন্ধুকে রেফার করে ক্যাশব্যাক পান" />
+      <Card>
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl grid place-items-center text-primary-foreground" style={{ background: "linear-gradient(135deg,#ec4899,#a855f7)" }}><Gift className="w-6 h-6" /></div>
+          <div className="flex-1 min-w-[200px]">
+            <div className="text-xs text-muted-foreground">Your referral code</div>
+            <div className="text-2xl font-bold tracking-widest text-foreground font-mono">{code || "—"}</div>
+          </div>
+        </div>
+        <div className="mt-5">
+          <div className="text-xs text-muted-foreground mb-1.5">Share this link</div>
+          <div className="flex gap-2">
+            <input readOnly value={link} className="flex-1 h-11 px-4 rounded-xl bg-background border border-border text-sm text-foreground" />
+            <Btn variant="ghost" onClick={copy}>{copied ? <><Check className="w-4 h-4" />Copied</> : <><Copy className="w-4 h-4" />Copy</>}</Btn>
+            <Btn variant="primary" onClick={share}><Share2 className="w-4 h-4" />Share</Btn>
+          </div>
+        </div>
+        <div className="mt-5 grid sm:grid-cols-3 gap-3 text-center">
+          <div className="rounded-xl p-3 bg-background border border-border"><div className="text-2xl font-bold text-foreground">৳50</div><div className="text-[11px] text-muted-foreground">বন্ধু সাইন আপ করলে</div></div>
+          <div className="rounded-xl p-3 bg-background border border-border"><div className="text-2xl font-bold text-foreground">5%</div><div className="text-[11px] text-muted-foreground">প্রথম অর্ডারে কমিশন</div></div>
+          <div className="rounded-xl p-3 bg-background border border-border"><div className="text-2xl font-bold text-foreground">∞</div><div className="text-[11px] text-muted-foreground">আনলিমিটেড রেফার</div></div>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+/* ===================== ADDRESSES ===================== */
+type Address = { id: string; label: string; name: string; phone: string; line1: string; city: string; area?: string; is_default?: boolean };
+const ADDR_KEY = "anbd:addresses";
+function loadAddrs(): Address[] { try { return JSON.parse(localStorage.getItem(ADDR_KEY) || "[]"); } catch { return []; } }
+function saveAddrs(a: Address[]) { localStorage.setItem(ADDR_KEY, JSON.stringify(a)); }
+function AddressesView() {
+  const [list, setList] = useState<Address[]>([]);
+  const [editing, setEditing] = useState<Address | null>(null);
+  useEffect(() => { setList(loadAddrs()); }, []);
+  const persist = (next: Address[]) => { setList(next); saveAddrs(next); };
+  const save = (a: Address) => {
+    let next: Address[];
+    if (list.some((x) => x.id === a.id)) next = list.map((x) => x.id === a.id ? a : x);
+    else next = [...list, a];
+    if (a.is_default) next = next.map((x) => ({ ...x, is_default: x.id === a.id }));
+    persist(next); setEditing(null);
+  };
+  const remove = (id: string) => persist(list.filter((x) => x.id !== id));
+  const makeDefault = (id: string) => persist(list.map((x) => ({ ...x, is_default: x.id === id })));
+  return (
+    <div className="space-y-6">
+      <PageHead title="Addresses" desc="ডেলিভারি ঠিকানা ম্যানেজ করুন" action={<Btn variant="primary" onClick={() => setEditing({ id: crypto.randomUUID(), label: "Home", name: "", phone: "", line1: "", city: "", area: "" })}><Plus className="w-4 h-4" />Add address</Btn>} />
+      {editing ? (
+        <Card>
+          <AddressForm initial={editing} onSave={save} onCancel={() => setEditing(null)} />
+        </Card>
+      ) : list.length === 0 ? (
+        <Card><Empty icon={<Home className="w-6 h-6" />} msg="কোন ঠিকানা যোগ করা হয়নি।" /></Card>
+      ) : (
+        <div className="grid md:grid-cols-2 gap-4">
+          {list.map((a) => (
+            <Card key={a.id}>
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2"><Badge color={a.is_default ? "success" : "muted"}>{a.label}</Badge>{a.is_default && <span className="text-[10px] text-emerald-500 font-bold">DEFAULT</span>}</div>
+                  <div className="mt-2 font-semibold text-foreground">{a.name}</div>
+                  <div className="text-xs text-muted-foreground">{a.phone}</div>
+                  <div className="text-sm text-foreground mt-1">{a.line1}{a.area ? `, ${a.area}` : ""}, {a.city}</div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <button onClick={() => setEditing(a)} className="h-8 w-8 grid place-items-center rounded-lg border border-border text-foreground hover:bg-accent" aria-label="Edit"><Edit3 className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => remove(a.id)} className="h-8 w-8 grid place-items-center rounded-lg border border-border text-rose-500 hover:bg-rose-500/10" aria-label="Delete"><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+              </div>
+              {!a.is_default && <button onClick={() => makeDefault(a.id)} className="mt-3 text-xs text-primary font-semibold hover:underline">Set as default</button>}
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+function AddressForm({ initial, onSave, onCancel }: { initial: Address; onSave: (a: Address) => void; onCancel: () => void }) {
+  const [f, setF] = useState(initial);
+  const [err, setErr] = useState<string | null>(null);
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!f.name.trim() || !f.phone.trim() || !f.line1.trim() || !f.city.trim()) { setErr("নাম, ফোন, ঠিকানা ও শহর প্রয়োজন"); return; }
+    onSave(f);
+  };
+  return (
+    <form onSubmit={submit} className="grid md:grid-cols-2 gap-4">
+      <Field label="Label"><Input value={f.label} onChange={(e) => setF({ ...f, label: e.target.value })} placeholder="Home / Office" /></Field>
+      <Field label="পুরো নাম"><Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} /></Field>
+      <Field label="ফোন"><Input value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} placeholder="01XXXXXXXXX" /></Field>
+      <Field label="শহর"><Input value={f.city} onChange={(e) => setF({ ...f, city: e.target.value })} placeholder="Dhaka" /></Field>
+      <div className="md:col-span-2"><Field label="ঠিকানা"><Input value={f.line1} onChange={(e) => setF({ ...f, line1: e.target.value })} placeholder="House, road" /></Field></div>
+      <Field label="এরিয়া (optional)"><Input value={f.area || ""} onChange={(e) => setF({ ...f, area: e.target.value })} /></Field>
+      <label className="flex items-center gap-2 text-sm text-foreground"><input type="checkbox" checked={!!f.is_default} onChange={(e) => setF({ ...f, is_default: e.target.checked })} /> Default address</label>
+      {err && <div className="md:col-span-2 text-sm text-rose-500">{err}</div>}
+      <div className="md:col-span-2 flex gap-2"><Btn type="submit" variant="primary"><Check className="w-4 h-4" />Save</Btn><Btn variant="ghost" onClick={onCancel}>Cancel</Btn></div>
+    </form>
+  );
+}
+
+/* ===================== SECURITY ===================== */
+function SecurityView() {
+  const { signOut } = useAuth();
+  const [pw, setPw] = useState({ next: "", confirm: "" });
+  const [show, setShow] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
+  const changePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMsg(null);
+    if (pw.next.length < 8) { setMsg({ kind: "err", text: "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে" }); return; }
+    if (pw.next !== pw.confirm) { setMsg({ kind: "err", text: "পাসওয়ার্ড মিলেনি" }); return; }
+    setBusy(true);
+    const { error } = await supabase.auth.updateUser({ password: pw.next });
+    setBusy(false);
+    if (error) setMsg({ kind: "err", text: error.message });
+    else { setMsg({ kind: "ok", text: "পাসওয়ার্ড পরিবর্তন হয়েছে" }); setPw({ next: "", confirm: "" }); }
+  };
+  const signOutAll = async () => {
+    if (!confirm("সব ডিভাইস থেকে সাইন আউট হবেন?")) return;
+    await supabase.auth.signOut({ scope: "global" } as any);
+    await signOut();
+  };
+  return (
+    <div className="space-y-6">
+      <PageHead title="Security" desc="পাসওয়ার্ড ও সেশন ম্যানেজমেন্ট" />
+      <Card>
+        <div className="flex items-center gap-3 mb-4"><Lock className="w-5 h-5 text-primary" /><h3 className="font-semibold text-foreground">পাসওয়ার্ড পরিবর্তন</h3></div>
+        <form onSubmit={changePassword} className="grid md:grid-cols-2 gap-4">
+          <Field label="নতুন পাসওয়ার্ড">
+            <div className="relative">
+              <Input type={show ? "text" : "password"} value={pw.next} onChange={(e) => setPw({ ...pw, next: e.target.value })} />
+              <button type="button" onClick={() => setShow((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">{show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}</button>
+            </div>
+          </Field>
+          <Field label="কনফার্ম পাসওয়ার্ড"><Input type={show ? "text" : "password"} value={pw.confirm} onChange={(e) => setPw({ ...pw, confirm: e.target.value })} /></Field>
+          {msg && <div className={`md:col-span-2 text-sm px-3 py-2 rounded-xl ${msg.kind === "ok" ? "bg-emerald-500/10 text-emerald-500" : "bg-rose-500/10 text-rose-500"}`}>{msg.text}</div>}
+          <div className="md:col-span-2"><Btn type="submit" variant="primary">{busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Shield className="w-4 h-4" />}পাসওয়ার্ড আপডেট</Btn></div>
+        </form>
+      </Card>
+      <Card>
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <div className="font-semibold text-foreground">Sign out from all devices</div>
+            <div className="text-xs text-muted-foreground mt-0.5">সব ব্রাউজার ও মোবাইল থেকে আপনার সেশন বাতিল করুন</div>
+          </div>
+          <Btn variant="outline" onClick={signOutAll}><LogOut className="w-4 h-4" />Sign out all</Btn>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+/* ===================== LANGUAGE ===================== */
+function LanguageView() {
+  const current = (typeof window !== "undefined" && (localStorage.getItem("anbd:lang") || "bn")) as "bn" | "en";
+  const [lang, setLang] = useState<"bn" | "en">(current);
+  const pick = (l: "bn" | "en") => {
+    setLang(l);
+    localStorage.setItem("anbd:lang", l);
+    document.documentElement.lang = l;
+    window.dispatchEvent(new CustomEvent("lang:change", { detail: l }));
+  };
+  const opts: Array<{ id: "bn" | "en"; name: string; sub: string; flag: string }> = [
+    { id: "bn", name: "বাংলা", sub: "Bangla", flag: "🇧🇩" },
+    { id: "en", name: "English", sub: "ইংরেজি", flag: "🇬🇧" },
+  ];
+  return (
+    <div className="space-y-6">
+      <PageHead title="Language" desc="পছন্দের ভাষা নির্বাচন করুন" />
+      <div className="grid sm:grid-cols-2 gap-4">
+        {opts.map((o) => (
+          <button key={o.id} onClick={() => pick(o.id)} className={`text-left p-5 rounded-2xl border-2 transition ${lang === o.id ? "border-primary bg-primary/5" : "border-border bg-card hover:border-primary/40"}`}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3"><span className="text-3xl">{o.flag}</span><div><div className="font-bold text-foreground">{o.name}</div><div className="text-xs text-muted-foreground">{o.sub}</div></div></div>
+              {lang === o.id && <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground grid place-items-center"><Check className="w-3.5 h-3.5" strokeWidth={3} /></div>}
+            </div>
+          </button>
+        ))}
+      </div>
+      <p className="text-xs text-muted-foreground">কিছু অংশ এখনো শুধু বাংলায় সাপোর্টেড।</p>
+    </div>
+  );
+}
+
+/* ===================== INSTALL APP ===================== */
+function InstallAppView() {
+  const [deferred, setDeferred] = useState<any>(null);
+  const [installed, setInstalled] = useState(false);
+  useEffect(() => {
+    const onBefore = (e: any) => { e.preventDefault(); setDeferred(e); };
+    const onInstalled = () => { setInstalled(true); setDeferred(null); };
+    window.addEventListener("beforeinstallprompt", onBefore);
+    window.addEventListener("appinstalled", onInstalled);
+    if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) setInstalled(true);
+    return () => { window.removeEventListener("beforeinstallprompt", onBefore); window.removeEventListener("appinstalled", onInstalled); };
+  }, []);
+  const install = async () => {
+    if (!deferred) return;
+    deferred.prompt();
+    const choice = await deferred.userChoice;
+    if (choice?.outcome === "accepted") setInstalled(true);
+    setDeferred(null);
+  };
+  const isIOS = typeof navigator !== "undefined" && /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  return (
+    <div className="space-y-6">
+      <PageHead title="Install App" desc="হোমস্ক্রিনে যুক্ত করে অ্যাপের মত ব্যবহার করুন" />
+      <Card>
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl grid place-items-center text-primary-foreground" style={{ background: "linear-gradient(135deg,#6366f1,#8b5cf6,#d946ef)" }}><Smartphone className="w-6 h-6" /></div>
+          <div className="flex-1">
+            <div className="font-bold text-foreground">AccessNow BD App</div>
+            <div className="text-xs text-muted-foreground mt-0.5">দ্রুত অ্যাক্সেস, অফলাইন সাপোর্ট ও পুশ নোটিফিকেশন</div>
+          </div>
+          {installed ? (
+            <span className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-500/15 text-emerald-600 border border-emerald-500/30"><Check className="w-3.5 h-3.5" />Installed</span>
+          ) : deferred ? (
+            <Btn variant="primary" onClick={install}><Download className="w-4 h-4" />Install</Btn>
+          ) : null}
+        </div>
+        {!installed && !deferred && (
+          <div className="mt-5 text-sm text-muted-foreground space-y-2">
+            {isIOS ? (
+              <>
+                <p className="font-semibold text-foreground">iOS-এ ইনস্টল করতে:</p>
+                <ol className="list-decimal list-inside space-y-1 text-xs">
+                  <li>Safari-তে শেয়ার বাটনে চাপুন</li>
+                  <li>"Add to Home Screen" নির্বাচন করুন</li>
+                  <li>"Add" বাটনে চাপুন</li>
+                </ol>
+              </>
+            ) : (
+              <>
+                <p className="font-semibold text-foreground">ম্যানুয়াল ইনস্টল:</p>
+                <ol className="list-decimal list-inside space-y-1 text-xs">
+                  <li>ব্রাউজার মেনু খুলুন (⋮)</li>
+                  <li>"Install app" বা "Add to Home screen" চাপুন</li>
+                </ol>
+              </>
+            )}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
