@@ -12,6 +12,7 @@ export type CartItem = {
 
 type CartCtx = {
   items: CartItem[];
+  ready: boolean;
   add: (item: CartItem) => void;
   remove: (slug: string, planPeriod: string) => void;
   setQty: (slug: string, planPeriod: string, qty: number) => void;
@@ -25,6 +26,7 @@ const KEY = "accessnow_cart_v2";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     try {
@@ -32,21 +34,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (raw) setItems(JSON.parse(raw));
     } catch {
       // ignore
+    } finally {
+      setReady(true);
     }
   }, []);
 
   useEffect(() => {
+    if (!ready) return;
     try {
       localStorage.setItem(KEY, JSON.stringify(items));
     } catch {
       // ignore
     }
-  }, [items]);
+  }, [items, ready]);
 
   const value = useMemo<CartCtx>(() => {
     const total = items.reduce((sum, it) => sum + it.price * it.qty, 0);
     return {
       items,
+      ready,
       count: items.reduce((s, i) => s + i.qty, 0),
       total,
       add: (item) =>
@@ -66,7 +72,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         ),
       clear: () => setItems([]),
     };
-  }, [items]);
+  }, [items, ready]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
