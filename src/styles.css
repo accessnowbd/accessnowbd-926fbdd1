@@ -2099,9 +2099,43 @@ html.theme-white .product-whatsapp-button,
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
-:root:not(.theme-white) .force-light * {
-  /* let inner text-* utilities still work; only neutralize inherited white */
+/* Inside force-light, neutralize dark-theme white text overrides so content stays readable on the white card. */
+:root:not(.theme-white) .force-light,
+:root:not(.theme-white) .force-light h1,
+:root:not(.theme-white) .force-light h2,
+:root:not(.theme-white) .force-light h3,
+:root:not(.theme-white) .force-light h4,
+:root:not(.theme-white) .force-light p,
+:root:not(.theme-white) .force-light span,
+:root:not(.theme-white) .force-light label,
+:root:not(.theme-white) .force-light li,
+:root:not(.theme-white) .force-light a,
+:root:not(.theme-white) .force-light div {
+  color: #0f172a;
 }
+:root:not(.theme-white) .force-light .text-foreground,
+:root:not(.theme-white) .force-light [class*="text-foreground"] { color: #0f172a !important; }
+:root:not(.theme-white) .force-light .text-muted-foreground { color: #64748b !important; }
+:root:not(.theme-white) .force-light .text-slate-900 { color: #0f172a !important; }
+:root:not(.theme-white) .force-light .text-slate-800 { color: #1e293b !important; }
+:root:not(.theme-white) .force-light .text-slate-700 { color: #334155 !important; }
+:root:not(.theme-white) .force-light .text-slate-600 { color: #475569 !important; }
+:root:not(.theme-white) .force-light .text-slate-500 { color: #64748b !important; }
+:root:not(.theme-white) .force-light .text-slate-400 { color: #94a3b8 !important; }
+/* Inputs/cards inside force-light keep light surfaces */
+:root:not(.theme-white) .force-light .bg-white { background-color: #ffffff !important; }
+:root:not(.theme-white) .force-light .bg-slate-50 { background-color: #f8fafc !important; }
+:root:not(.theme-white) .force-light .bg-slate-100 { background-color: #f1f5f9 !important; }
+:root:not(.theme-white) .force-light input,
+:root:not(.theme-white) .force-light textarea,
+:root:not(.theme-white) .force-light select { color: #0f172a !important; background-color: #ffffff !important; }
+/* Buttons/badges that explicitly want white text keep it */
+:root:not(.theme-white) .force-light .keep-white,
+:root:not(.theme-white) .force-light button[class*="bg-"][class*="text-white"],
+:root:not(.theme-white) .force-light a[class*="bg-"][class*="text-white"],
+:root:not(.theme-white) .force-light [class*="bg-gradient"][class*="text-white"],
+:root:not(.theme-white) .force-light [class*="bg-violet"][class*="text-white"],
+:root:not(.theme-white) .force-light [class*="bg-primary"][class*="text-white"] { color: #ffffff !important; }
 
 :root:not(.theme-white) .glass-strong {
   background: linear-gradient(180deg, rgba(26, 32, 50, 0.92), rgba(18, 24, 38, 0.92)) !important;
