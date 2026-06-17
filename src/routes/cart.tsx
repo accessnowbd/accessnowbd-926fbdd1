@@ -47,14 +47,24 @@ function CartPage() {
         <p className="text-muted-foreground mt-1">{count} {count === 1 ? "item" : "items"}</p>
 
         {items.length === 0 ? (
-          <GlassCard tone="soft" className="mt-12 py-20 text-center">
-            <ShoppingBag className="w-12 h-12 mx-auto text-primary/70" />
-            <h3 className="mt-4 text-lg font-semibold" style={{ fontFamily: "var(--font-heading)" }}>Your cart is empty</h3>
+          <div
+            className="mt-12 py-20 text-center rounded-3xl border"
+            style={{
+              background: "var(--card, rgba(255,255,255,0.06))",
+              borderColor: "var(--border, rgba(255,255,255,0.16))",
+              color: "var(--card-foreground, inherit)",
+              boxShadow: "0 12px 40px -16px rgba(0,0,0,0.45)",
+            }}
+          >
+            <ShoppingBag className="w-12 h-12 mx-auto text-primary/80" />
+            <h3 className="mt-4 text-lg font-semibold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>Your cart is empty</h3>
             <p className="text-sm text-muted-foreground mt-2">Add a subscription to get started.</p>
             <GlassButton onClick={() => navigate({ to: "/" })} className="mt-5">
               Browse subscriptions
             </GlassButton>
-          </GlassCard>
+          </div>
+
+
         ) : (
           <div className="mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
             <div className="space-y-3">

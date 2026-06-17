@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Check, Copy, Lock, Smartphone, Loader2, Pencil, X, ChevronRight, Tag } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
@@ -268,39 +268,47 @@ function CheckoutPage() {
 
 
   // ----- Auth/empty guards -----
+  const guardCardStyle: CSSProperties = {
+    background: "var(--card, rgba(255,255,255,0.06))",
+    borderColor: "var(--border, rgba(255,255,255,0.16))",
+    color: "var(--card-foreground, inherit)",
+    boxShadow: "0 12px 40px -16px rgba(0,0,0,0.45)",
+  };
+
   if (authLoading || !cartReady) {
     return (
-      <div className="checkout-dark dark-adapt min-h-screen grid place-items-center px-4 bg-background text-foreground">
-        <GlassCard className="text-center max-w-sm">
+      <div className="min-h-screen grid place-items-center px-4 bg-background text-foreground">
+        <div className="text-center max-w-sm rounded-3xl border p-8" style={guardCardStyle}>
           <Loader2 className="mx-auto h-5 w-5 animate-spin text-primary" />
           <p className="mt-3 text-sm text-foreground/80">Checkout loading…</p>
-        </GlassCard>
+        </div>
       </div>
     );
   }
 
   if (!user && items.length > 0) {
     return (
-      <div className="checkout-dark dark-adapt min-h-screen grid place-items-center px-4 bg-background text-foreground">
-        <GlassCard className="checkout-info-card text-center max-w-sm">
+      <div className="min-h-screen grid place-items-center px-4 bg-background text-foreground">
+        <div className="text-center max-w-sm rounded-3xl border p-8" style={guardCardStyle}>
           <h1 className="text-2xl font-semibold text-foreground">Login to checkout</h1>
           <p className="text-sm text-foreground/75 mt-2">Sign in or create an account to place your order and track it later.</p>
           <GlassButton onClick={() => { rememberReturnTo(); navigate({ to: "/login" }); }} size="lg" className="mt-5">Login / Sign up</GlassButton>
-        </GlassCard>
+        </div>
       </div>
     );
   }
 
   if (items.length === 0) {
     return (
-      <div className="checkout-dark dark-adapt min-h-screen grid place-items-center px-4 bg-background text-foreground">
-        <GlassCard className="checkout-info-card text-center">
+      <div className="min-h-screen grid place-items-center px-4 bg-background text-foreground">
+        <div className="text-center rounded-3xl border p-8" style={guardCardStyle}>
           <h1 className="text-2xl font-semibold text-foreground">Your cart is empty</h1>
           <Link to="/" className="text-primary underline mt-3 inline-block">Browse subscriptions</Link>
-        </GlassCard>
+        </div>
       </div>
     );
   }
+
 
   // ----- Wizard -----
   const goNext = () => {

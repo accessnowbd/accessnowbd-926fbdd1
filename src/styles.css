@@ -2853,6 +2853,30 @@ html:not(.theme-white) .cart-surface ::placeholder {
   opacity: 1;
 }
 
+/* Cart + Checkout — Aurora theme: ensure every GlassCard/Card surface has
+   a visible dark glass background, not transparent. */
+html:not(.theme-white) .cart-surface :where(
+  .bg-card, [class*="bg-card"], [class*="bg-white\\/"], [class*="bg-white/"]
+),
+html:not(.theme-white) .checkout-dark :where(
+  .bg-card, [class*="bg-card"], [class*="bg-white\\/"], [class*="bg-white/"]
+) {
+  background-color: oklch(0.20 0.04 280 / 0.92) !important;
+  background-image: none !important;
+  border-color: oklch(1 0 0 / 0.16) !important;
+  color: oklch(0.96 0.01 280) !important;
+}
+
+/* Cart quantity pill (uses bg-slate-100 text-slate-700) → dark glass */
+html:not(.theme-white) .cart-surface .bg-slate-100 {
+  background-color: oklch(1 0 0 / 0.10) !important;
+  color: oklch(0.96 0.01 280) !important;
+}
+html:not(.theme-white) .cart-surface .bg-slate-100 :where(span, button) {
+  color: oklch(0.96 0.01 280) !important;
+}
+
+
 /* Checkout info cards (login prompt / empty cart) — guaranteed visible in both themes */
 .checkout-info-card {
   background-color: oklch(0.22 0.04 280 / 0.95) !important;
