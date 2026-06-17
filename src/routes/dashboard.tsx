@@ -166,143 +166,225 @@ function DashboardPage() {
     );
   }
 
-  const currentLabel = NAV.find((i) => i.id === section)?.label ?? "Dashboard";
+  const stats4 = {
+    orders: stats.total,
+    spent: stats.spent,
+    wishlist: 0,
+  };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <aside
-        className={`fixed lg:sticky top-0 left-0 z-40 h-screen w-72 shrink-0 transition-transform duration-300 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        }`}
-      >
-        <div className="h-full flex flex-col bg-card border-r border-border">
-          <div className="px-5 py-5 flex items-center justify-between border-b border-border">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl grid place-items-center text-primary-foreground font-bold" style={{ background: "var(--gradient-aurora)" }}>
-                A
-              </div>
-              <div>
-                <div className="text-sm font-bold leading-tight text-foreground" style={{ fontFamily: "var(--font-heading)" }}>AccessNow BD</div>
-                <div className="text-[10px] text-muted-foreground uppercase tracking-wider">User Panel</div>
-              </div>
-            </Link>
-            <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-muted-foreground hover:text-foreground">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          <div className="px-5 pt-5 pb-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">মেনু</span>
-          </div>
-
-          <nav className="flex-1 overflow-y-auto px-3 pb-4 space-y-1 scrollbar-thin">
-            {NAV.map((it) => {
-              const Icon = it.icon;
-              const active = section === it.id;
-              return (
-                <button
-                  key={it.id}
-                  onClick={() => { setSection(it.id); setSidebarOpen(false); }}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-sm transition group ${
-                    active
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                      : "text-foreground hover:bg-accent"
-                  }`}
-                >
-                  <span className="flex items-center gap-3">
-                    <span className={`w-9 h-9 rounded-xl grid place-items-center transition ${
-                      active ? "bg-primary-foreground/15" : it.tintBg
-                    }`}>
-                      <Icon className={`w-4 h-4 ${active ? "text-primary-foreground" : it.tint}`} />
-                    </span>
-                    <span className="font-semibold">{it.label}</span>
-                  </span>
-                  <ChevronRight className={`w-4 h-4 transition ${active ? "opacity-80" : "opacity-30 group-hover:opacity-70"}`} />
-                </button>
-              );
-            })}
-
-            <div className="my-3 mx-3 h-px bg-border" />
-
-            {isAdmin && (
-              <Link
-                to="/admin"
-                onClick={() => setSidebarOpen(false)}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-bold text-primary-foreground shadow-[0_10px_24px_-10px_rgba(124,58,237,0.55)]"
-                style={{ background: "var(--gradient-aurora)" }}
-              >
-                <Shield className="w-4 h-4" /> Admin Panel
-              </Link>
-            )}
-            <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-[var(--color-destructive)] hover:bg-[var(--color-destructive)]/10 transition">
-              <LogOut className="w-4 h-4" /> লগআউট
-            </button>
-          </nav>
+    <div className="min-h-screen bg-background">
+      {/* Mobile header */}
+      <header className="lg:hidden sticky top-0 z-30 bg-card/80 backdrop-blur-md border-b border-border">
+        <div className="flex items-center gap-3 px-4 h-14">
+          <button onClick={() => setSidebarOpen(true)} className="text-foreground" aria-label="Open menu">
+            <Menu className="w-6 h-6" />
+          </button>
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl grid place-items-center text-primary-foreground font-bold text-sm" style={{ background: "var(--gradient-aurora, linear-gradient(135deg,#6366f1,#8b5cf6,#d946ef))" }}>
+              A
+            </div>
+            <span className="text-sm font-bold text-foreground">My Dashboard</span>
+          </Link>
         </div>
-      </aside>
+      </header>
 
-      {sidebarOpen && (
-        <div onClick={() => setSidebarOpen(false)} className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm lg:hidden" />
-      )}
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6">
+        {/* TOP WELCOME CARD — gradient border */}
+        <WelcomeCard greetingName={greetingName} email={user?.email ?? ""} stats={stats4} />
 
-      <div className="flex-1 min-w-0 flex flex-col">
-        <header className="sticky top-0 z-20 glass-strong border-b border-[var(--glass-border)]">
-          <div className="flex items-center gap-3 px-4 md:px-6 h-16">
-            <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-foreground">
-              <Menu className="w-6 h-6" />
-            </button>
-            <div className="flex-1" />
-            <button className="relative w-9 h-9 rounded-full glass border border-[var(--glass-border)] grid place-items-center hover:border-primary/40">
-              <Bell className="w-4 h-4" />
-            </button>
-            <div className="relative">
-              <button onClick={() => setUserMenu((v) => !v)} className="flex items-center gap-2 pl-1 pr-3 h-9 rounded-full glass border border-[var(--glass-border)] hover:border-primary/40">
-                <div className="w-7 h-7 rounded-full grid place-items-center text-white text-xs font-bold" style={{ background: "var(--gradient-aurora)" }}>
-                  {greetingName.charAt(0).toUpperCase()}
-                </div>
-                <span className="hidden md:block text-sm font-medium max-w-[100px] truncate">{greetingName}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
-              </button>
-              {userMenu && (
-                <div onMouseLeave={() => setUserMenu(false)} className="absolute right-0 mt-2 w-56 glass-strong rounded-2xl border border-[var(--glass-border)] p-2 shadow-2xl">
-                  <UserMenuItem icon={<UserIcon className="w-4 h-4" />} label="My Profile" onClick={() => { setSection("profile"); setUserMenu(false); }} />
-                  <UserMenuItem icon={<Package className="w-4 h-4" />} label="My Orders" onClick={() => { setSection("orders"); setUserMenu(false); }} />
-                  <UserMenuItem icon={<LifeBuoy className="w-4 h-4" />} label="Support" onClick={() => { setSection("open-ticket"); setUserMenu(false); }} />
+        {/* WELCOME GIFT BANNER */}
+        <GiftBanner onClaim={() => navigate({ to: "/wallet" })} />
+
+        {/* LAYOUT: sidebar + main */}
+        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
+          {/* Sidebar */}
+          <aside
+            className={`fixed lg:sticky lg:top-6 inset-y-0 left-0 z-40 w-[300px] lg:w-auto transition-transform duration-300 ${
+              sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+            }`}
+          >
+            <div className="h-full lg:h-auto lg:max-h-[calc(100vh-3rem)] overflow-y-auto bg-card border border-border lg:rounded-3xl shadow-sm">
+              <div className="lg:hidden flex items-center justify-between px-5 py-4 border-b border-border">
+                <span className="text-sm font-bold text-foreground">Menu</span>
+                <button onClick={() => setSidebarOpen(false)} className="text-muted-foreground hover:text-foreground" aria-label="Close menu">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <nav className="p-3 space-y-5">
+                {NAV_GROUPS.map((group) => (
+                  <div key={group.title}>
+                    <div className="px-3 pb-2 flex items-center gap-2">
+                      <span className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground">{group.title}</span>
+                      <span className="h-px flex-1 bg-border" />
+                    </div>
+                    <div className="space-y-0.5">
+                      {group.items.map((it) => {
+                        const Icon = it.icon;
+                        const active = section === it.id;
+                        return (
+                          <button
+                            key={it.id}
+                            onClick={() => { setSection(it.id); setSidebarOpen(false); }}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm transition ${
+                              active
+                                ? "bg-primary/10 text-primary font-semibold ring-1 ring-primary/20"
+                                : "text-foreground/85 hover:bg-accent/60 font-medium"
+                            }`}
+                          >
+                            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-primary" : "text-muted-foreground"}`} />
+                            <span>{it.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Bottom CTA buttons */}
+                <div className="pt-3 border-t border-border space-y-2">
+                  <button
+                    onClick={() => setSection("referral")}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-primary-foreground shadow-md"
+                    style={{ background: "linear-gradient(90deg, #8b5cf6, #6366f1)" }}
+                  >
+                    <Users className="w-4 h-4" /> Affiliate Program
+                  </button>
+                  <Link
+                    to="/ai-tools"
+                    onClick={() => setSidebarOpen(false)}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-amber-950 shadow-md"
+                    style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
+                  >
+                    <Wrench className="w-4 h-4" /> Free Tools
+                  </Link>
                   {isAdmin && (
-                    <>
-                      <div className="my-1 h-px bg-[var(--glass-border)]" />
-                      <Link to="/admin" onClick={() => setUserMenu(false)} className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-primary hover:bg-primary/10 transition">
-                        <Shield className="w-4 h-4" /> Admin Panel
-                      </Link>
-                    </>
+                    <Link
+                      to="/admin"
+                      onClick={() => setSidebarOpen(false)}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-bold text-primary-foreground shadow-md"
+                      style={{ background: "linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef)" }}
+                    >
+                      <Shield className="w-4 h-4" /> Admin Panel
+                    </Link>
                   )}
-                  <div className="my-1 h-px bg-[var(--glass-border)]" />
-                  <UserMenuItem icon={<LogOut className="w-4 h-4" />} label="Logout" onClick={handleSignOut} danger />
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-rose-500 border border-rose-500/30 hover:bg-rose-500/10 transition"
+                  >
+                    <LogOut className="w-4 h-4" /> Logout
+                  </button>
                 </div>
-              )}
+              </nav>
+            </div>
+          </aside>
+
+          {sidebarOpen && (
+            <div onClick={() => setSidebarOpen(false)} className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm lg:hidden" />
+          )}
+
+          {/* Main content */}
+          <main className="min-w-0">
+            <SectionRenderer
+              section={section}
+              stats={stats}
+              orders={orders}
+              greetingName={greetingName}
+              user={user}
+              profile={profile}
+              onNavigate={setSection}
+            />
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ========== Top Welcome Card ========== */
+function WelcomeCard({ greetingName, email, stats }: { greetingName: string; email: string; stats: { orders: number; spent: number; wishlist: number } }) {
+  const initial = greetingName.charAt(0).toUpperCase();
+  return (
+    <div className="relative rounded-[2rem] p-[1.5px]" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899, #06b6d4)" }}>
+      <div className="rounded-[calc(2rem-1.5px)] bg-card p-5 md:p-6">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-5">
+          {/* Avatar + identity */}
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <div className="relative shrink-0">
+              <div className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-2xl grid place-items-center text-primary-foreground text-2xl font-bold shadow-lg" style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}>
+                {initial}
+              </div>
+              <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 grid place-items-center text-white text-[10px] ring-2 ring-card">
+                <Check className="w-3 h-3" strokeWidth={3} />
+              </span>
+            </div>
+            <div className="min-w-0">
+              <div className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground">WELCOME BACK</div>
+              <div className="mt-0.5 flex items-center gap-2">
+                <h1 className="text-xl md:text-2xl font-bold text-foreground truncate" style={{ fontFamily: "var(--font-heading)" }}>
+                  {greetingName}
+                </h1>
+                <Check className="w-4 h-4 text-sky-500 shrink-0" strokeWidth={3} />
+              </div>
+              <div className="text-xs text-muted-foreground truncate mt-0.5 inline-flex items-center gap-1.5">
+                <Mail className="w-3 h-3" /> {email}
+              </div>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30">
+                  <BadgeCheck className="w-3 h-3" /> Verified
+                </span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border">
+                  <AtSign className="w-3 h-3" /> {(greetingName || "user").toLowerCase().replace(/\s+/g, "")}
+                </span>
+              </div>
             </div>
           </div>
-        </header>
 
-        <div className="flex-1 p-4 md:p-8">
-          <SectionRenderer
-            section={section}
-            stats={stats}
-            orders={orders}
-            greetingName={greetingName}
-            user={user}
-            profile={profile}
-            onNavigate={setSection}
-          />
-        </div>
-
-        <footer className="px-6 py-5 border-t border-[var(--glass-border)] text-xs text-muted-foreground flex flex-wrap items-center justify-between gap-3">
-          <span>© 2026 AccessNow BD. All Rights Reserved.</span>
-          <div className="flex gap-4">
-            <Link to="/contact" className="hover:text-foreground">Contact</Link>
-            <Link to="/faq" className="hover:text-foreground">FAQ</Link>
+          {/* Stat pills */}
+          <div className="grid grid-cols-3 gap-3 lg:gap-4">
+            <StatPill icon={Package} tint="text-sky-500" label="ORDER" value={String(stats.orders)} />
+            <StatPill icon={Receipt} tint="text-violet-500" label="TOTAL" value={`৳${stats.spent.toLocaleString()}`} />
+            <StatPill icon={Heart} tint="text-rose-500" label="WISHLIST" value={String(stats.wishlist)} />
           </div>
-        </footer>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatPill({ icon: Icon, tint, label, value }: { icon: React.ComponentType<{ className?: string }>; tint: string; label: string; value: string }) {
+  return (
+    <div className="min-w-[88px] rounded-2xl bg-background border border-border px-3 py-2.5 text-center shadow-sm">
+      <div className={`mx-auto w-7 h-7 rounded-full grid place-items-center bg-muted ${tint}`}>
+        <Icon className="w-3.5 h-3.5" />
+      </div>
+      <div className="mt-1 text-[9px] font-bold tracking-wider text-muted-foreground">{label}</div>
+      <div className="text-base font-bold text-foreground tabular-nums leading-tight">{value}</div>
+    </div>
+  );
+}
+
+function GiftBanner({ onClaim }: { onClaim: () => void }) {
+  return (
+    <div className="relative overflow-hidden rounded-3xl p-4 md:p-5 bg-card border border-border shadow-sm">
+      <div className="absolute inset-0 opacity-30 pointer-events-none" style={{ background: "linear-gradient(90deg, rgba(236,72,153,0.18), rgba(251,191,36,0.18), rgba(139,92,246,0.18))" }} />
+      <div className="relative flex flex-wrap items-center gap-4">
+        <div className="w-11 h-11 shrink-0 rounded-full grid place-items-center text-primary-foreground shadow-lg" style={{ background: "linear-gradient(135deg,#ec4899,#a855f7)" }}>
+          <Gift className="w-5 h-5" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-[10px] font-bold tracking-[0.18em] text-pink-500 dark:text-pink-300">WELCOME GIFT</div>
+          <div className="text-sm md:text-[15px] font-bold text-foreground mt-0.5">🎁 আপনার বিশেষ ছাড় দাবি করুন</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">Lucky Spin ঘুরিয়ে ৳১০০–১৫০ পর্যন্ত ছাড় পেতে পারেন</div>
+        </div>
+        <button
+          onClick={onClaim}
+          className="shrink-0 inline-flex items-center gap-1.5 h-10 px-5 rounded-full text-primary-foreground text-sm font-bold shadow-lg shadow-primary/25 hover:opacity-95 transition"
+          style={{ background: "linear-gradient(90deg,#ec4899,#a855f7)" }}
+        >
+          Claim Now <ChevronRight className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );
@@ -310,7 +392,7 @@ function DashboardPage() {
 
 function UserMenuItem({ icon, label, onClick, danger }: { icon: React.ReactNode; label: string; onClick?: () => void; danger?: boolean }) {
   return (
-    <button onClick={onClick} className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition ${danger ? "text-red-300 hover:bg-red-500/10" : "hover:bg-white/5"}`}>
+    <button onClick={onClick} className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition ${danger ? "text-rose-500 hover:bg-rose-500/10" : "text-foreground hover:bg-accent"}`}>
       {icon} {label}
     </button>
   );
