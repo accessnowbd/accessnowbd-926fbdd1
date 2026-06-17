@@ -240,7 +240,7 @@ function CheckoutPage() {
         <GlassCard className="text-center max-w-sm force-light">
           <h1 className="text-2xl font-semibold text-aurora">Login to checkout</h1>
           <p className="text-sm text-muted-foreground mt-2">Sign in or create an account to place your order and track it later.</p>
-          <GlassButton onClick={() => navigate({ to: "/login" })} size="lg" className="mt-5">Login / Sign up</GlassButton>
+          <GlassButton onClick={() => { rememberReturnTo(); navigate({ to: "/login" }); }} size="lg" className="mt-5">Login / Sign up</GlassButton>
         </GlassCard>
       </div>
     );
