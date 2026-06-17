@@ -387,7 +387,7 @@ function CheckoutPage() {
                 <span className="text-foreground font-medium">৳{total.toLocaleString()}</span>
             </div>
             {applied.discount > 0 && (
-              <div className="flex items-center justify-between px-4 py-2.5 text-sm border-t border-slate-100">
+              <div className="flex items-center justify-between px-4 py-2.5 text-sm border-t border-border">
                 <span className="text-emerald-600">ছাড় ({applied.code})</span>
                 <span className="text-emerald-600 font-medium">−৳{applied.discount.toLocaleString()}</span>
               </div>
