@@ -47,7 +47,7 @@ function CartPage() {
         <p className="text-muted-foreground mt-1">{count} {count === 1 ? "item" : "items"}</p>
 
         {items.length === 0 ? (
-          <GlassCard tone="soft" className="mt-12 py-20 text-center">
+          <GlassCard tone="soft" className="checkout-info-card mt-12 py-20 text-center">
             <ShoppingBag className="w-12 h-12 mx-auto text-primary/70" />
             <h3 className="mt-4 text-lg font-semibold" style={{ fontFamily: "var(--font-heading)" }}>Your cart is empty</h3>
             <p className="text-sm text-muted-foreground mt-2">Add a subscription to get started.</p>
@@ -55,6 +55,7 @@ function CartPage() {
               Browse subscriptions
             </GlassButton>
           </GlassCard>
+
         ) : (
           <div className="mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
             <div className="space-y-3">
