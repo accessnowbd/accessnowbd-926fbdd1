@@ -356,7 +356,7 @@ function CheckoutPage() {
             <div>
               <label className="text-[12px] font-medium text-foreground/80 ml-3">কুপন কোড (ঐচ্ছিক)</label>
               <div className="mt-1 flex items-center gap-2">
-                <div className="flex-1 flex items-center gap-2 rounded-full border border-border bg-background/60 px-4 h-11 shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition">
+                <div className="flex-1 flex items-center gap-2 rounded-full border border-border bg-card text-card-foreground px-4 h-11 shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition">
                   <Tag className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                   <input
                     value={couponInput}
