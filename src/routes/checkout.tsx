@@ -107,9 +107,25 @@ function CheckoutPage() {
   const [err, setErr] = useState<string | null>(null);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
+  // Auto-fill name/phone/email from saved profile, but leave editable.
   useEffect(() => {
-    if (user) setForm((f) => ({ ...f, email: f.email || user.email || "" }));
+    if (!user) return;
+    setForm((f) => ({ ...f, email: f.email || user.email || "" }));
+    supabase
+      .from("profiles")
+      .select("display_name, phone")
+      .eq("id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data) return;
+        setForm((f) => ({
+          ...f,
+          name: f.name || data.display_name || "",
+          phone: f.phone || data.phone || "",
+        }));
+      });
   }, [user]);
+
 
   // Load wallet balance
   useEffect(() => {

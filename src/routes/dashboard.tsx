@@ -296,8 +296,8 @@ function SectionRenderer({
 }) {
   switch (section) {
     case "overview": return <Overview stats={stats} orders={orders} greetingName={greetingName} onNavigate={onNavigate} />;
-    case "profile": return <ProfileView user={user} profile={profile} />;
-    case "edit-profile": return <EditProfile profile={profile} />;
+    case "profile": return <ProfileView user={user} profile={profile} onNavigate={onNavigate} />;
+    case "edit-profile": return <EditProfile profile={profile} onSaved={() => onNavigate("profile")} onCancel={() => onNavigate("profile")} />;
     case "orders": return <OrdersTable orders={orders} />;
     case "active-services": return <ServiceList kind="active" />;
     case "expired": return <ServiceList kind="expired" />;
@@ -313,6 +313,7 @@ function SectionRenderer({
     default: return null;
   }
 }
+
 
 function ComingSoon({ title, desc }: { title: string; desc: string }) {
   return (
@@ -535,10 +536,14 @@ function Overview({ stats, orders, greetingName, onNavigate }: { stats: { total:
 }
 
 /* ===================== PROFILE ===================== */
-function ProfileView({ user, profile }: { user: { email?: string; id?: string } | null; profile: { display_name?: string | null; phone?: string | null } | null }) {
+function ProfileView({ user, profile, onNavigate }: { user: { email?: string; id?: string } | null; profile: { display_name?: string | null; phone?: string | null } | null; onNavigate: (s: SectionId) => void }) {
   return (
     <div className="space-y-6">
-      <PageHead title="My Profile" desc="Your personal information" />
+      <PageHead
+        title="My Profile"
+        desc="Your personal information"
+        action={<Btn variant="primary" onClick={() => onNavigate("edit-profile")}>তথ্য এডিট করুন</Btn>}
+      />
       <Card>
         <div className="flex flex-wrap items-center gap-5">
           <div className="w-20 h-20 rounded-2xl grid place-items-center text-white text-2xl font-bold" style={{ background: "var(--gradient-aurora)" }}>
@@ -576,26 +581,83 @@ function Row({ icon, label, value }: { icon: React.ReactNode; label: string; val
   );
 }
 
-function EditProfile({ profile }: { profile: { display_name?: string | null; phone?: string | null } | null }) {
+function EditProfile({ profile, onSaved, onCancel }: { profile: { display_name?: string | null; phone?: string | null } | null; onSaved: () => void; onCancel: () => void }) {
+  const { user } = useAuth();
+  const [form, setForm] = useState({
+    display_name: profile?.display_name || "",
+    phone: profile?.phone || "",
+  });
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [okAt, setOkAt] = useState<number | null>(null);
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+    setErr(null);
+    const name = form.display_name.trim();
+    const phone = form.phone.trim();
+    if (!name) { setErr("নাম দিন"); return; }
+    if (phone && !/^[0-9+\-\s]{6,20}$/.test(phone)) { setErr("সঠিক ফোন নম্বর দিন"); return; }
+    setSaving(true);
+    const { error } = await supabase
+      .from("profiles")
+      .upsert({ id: user.id, display_name: name, phone: phone || null }, { onConflict: "id" });
+    setSaving(false);
+    if (error) { setErr(error.message); return; }
+    setOkAt(Date.now());
+    setTimeout(() => { onSaved(); }, 700);
+  };
+
   return (
     <div className="space-y-6">
-      <PageHead title="Edit Profile" desc="Update your personal information" />
+      <PageHead title="Edit Profile" desc="আপনার ব্যক্তিগত তথ্য আপডেট করুন" />
       <Card>
-        <form className="grid md:grid-cols-2 gap-4">
-          <Field label="Full Name"><Input defaultValue={profile?.display_name || ""} placeholder="Your name" /></Field>
-          <Field label="Phone"><Input defaultValue={profile?.phone || ""} placeholder="+880 1XXX-XXXXXX" /></Field>
-          <Field label="Country"><Input defaultValue="Bangladesh" /></Field>
+        <form onSubmit={handleSave} className="grid md:grid-cols-2 gap-4">
+          <Field label="পুরো নাম">
+            <Input
+              value={form.display_name}
+              onChange={(e) => setForm((f) => ({ ...f, display_name: e.target.value }))}
+              placeholder="আপনার নাম"
+              maxLength={100}
+            />
+          </Field>
+          <Field label="ফোন নম্বর">
+            <Input
+              type="tel"
+              value={form.phone}
+              onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+              placeholder="01XXXXXXXXX"
+              maxLength={20}
+            />
+          </Field>
+          <Field label="ইমেইল">
+            <Input value={user?.email ?? ""} disabled className="opacity-60 cursor-not-allowed" />
+          </Field>
           <div />
-          <div className="md:col-span-2"><Field label="Address"><Textarea rows={3} placeholder="Street, City, Postal Code" /></Field></div>
+          {err && (
+            <div className="md:col-span-2 rounded-xl bg-[var(--color-destructive)]/10 text-[var(--color-destructive)] text-sm px-4 py-3">
+              {err}
+            </div>
+          )}
+          {okAt && (
+            <div className="md:col-span-2 rounded-xl bg-emerald-500/10 text-emerald-500 text-sm px-4 py-3 inline-flex items-center gap-2">
+              <Check className="w-4 h-4" /> সংরক্ষণ হয়েছে
+            </div>
+          )}
           <div className="md:col-span-2 flex gap-3">
-            <Btn variant="primary">Save Changes</Btn>
-            <Btn variant="ghost">Cancel</Btn>
+            <Btn variant="primary" type="submit">
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+              {saving ? "Saving..." : "Save Changes"}
+            </Btn>
+            <Btn variant="ghost" onClick={onCancel}>Cancel</Btn>
           </div>
         </form>
       </Card>
     </div>
   );
 }
+
 
 /* ===================== ORDERS / SERVICES ===================== */
 function OrdersTable({ orders }: { orders: Order[] }) {
