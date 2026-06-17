@@ -500,7 +500,7 @@ function CheckoutPage() {
                 role="radio"
                 aria-checked={active}
                 className={`relative rounded-2xl border-2 bg-background/60 px-3 py-3 flex flex-col items-center gap-1.5 transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                  active ? "border-primary ring-2 ring-primary/20" : "border-slate-200 hover:border-primary/40"
+                  active ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-primary/40"
                 }`}
               >
                 <div className="w-12 h-12 grid place-items-center">
