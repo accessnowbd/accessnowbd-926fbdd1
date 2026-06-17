@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Package, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { rememberReturnTo } from "@/lib/auth-return-to";
 
 
 export const Route = createFileRoute("/orders")({
@@ -39,6 +40,7 @@ function OrdersPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
+      rememberReturnTo();
       navigate({ to: "/login" });
       return;
     }

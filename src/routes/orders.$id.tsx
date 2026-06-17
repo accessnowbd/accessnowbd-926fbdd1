@@ -5,6 +5,7 @@ import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { ArrowLeft, Loader2, Copy, Check, Crown, Download, PartyPopper, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { rememberReturnTo } from "@/lib/auth-return-to";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 import { downloadReceiptPdf } from "@/lib/receipt";
@@ -56,6 +57,7 @@ function OrderDetailPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
+      rememberReturnTo();
       navigate({ to: "/login" });
       return;
     }

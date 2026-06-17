@@ -4,6 +4,7 @@ import { ArrowLeft, Loader2, Crown, Check } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { rememberReturnTo } from "@/lib/auth-return-to";
 import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 
@@ -33,6 +34,7 @@ function ProfilePage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
+      rememberReturnTo();
       navigate({ to: "/login" });
       return;
     }

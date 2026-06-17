@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Wallet, Plus, ArrowLeft, Loader2, Check, Upload, ArrowDownCircle, ArrowUpCircle, Gift, Sparkles, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { rememberReturnTo } from "@/lib/auth-return-to";
 
 export const Route = createFileRoute("/wallet")({
   component: WalletPage,
@@ -62,7 +63,7 @@ function WalletPage() {
   }, [user]);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate({ to: "/login" });
+    if (!authLoading && !user) { rememberReturnTo(); navigate({ to: "/login" }); }
   }, [authLoading, user, navigate]);
 
   useEffect(() => { load(); }, [load]);

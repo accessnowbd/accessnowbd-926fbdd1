@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { rememberReturnTo } from "@/lib/auth-return-to";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
@@ -74,7 +75,7 @@ function DashboardPage() {
 
   useEffect(() => {
     if (authLoading) return;
-    if (!user) { navigate({ to: "/login" }); return; }
+    if (!user) { rememberReturnTo(); navigate({ to: "/login" }); return; }
     let cancelled = false;
     setLoading(true);
     const t0 = performance.now();

@@ -39,22 +39,40 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
   const [forgotErr, setForgotErr] = useState<string | null>(null);
   const [forgotBusy, setForgotBusy] = useState(false);
 
-  // Capture where the user came from so we can return them there after login.
-  // Falls back to "/" if there's no usable referrer (direct visit, external link, or an auth-related page).
+  // Where to return after login. Priority:
+  // 1. ?redirect=<path> search param (set by route guards / header links)
+  // 2. sessionStorage "auth:returnTo" (set by callers right before navigating)
+  // 3. document.referrer (same-origin, non-auth pages)
+  // 4. "/"
   const [returnTo] = useState<string>(() => {
     if (typeof window === "undefined") return "/";
+    const authPaths = ["/auth", "/login", "/register", "/forgot-password", "/reset-password"];
+    const isSafe = (p: string) =>
+      p.startsWith("/") && !p.startsWith("//") && !authPaths.some((a) => p === a || p.startsWith(a + "/") || p.startsWith(a + "?"));
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const fromQuery = params.get("redirect");
+      if (fromQuery && isSafe(fromQuery)) return fromQuery;
+    } catch { /* ignore */ }
+    try {
+      const stored = window.sessionStorage.getItem("auth:returnTo");
+      if (stored && isSafe(stored)) {
+        window.sessionStorage.removeItem("auth:returnTo");
+        return stored;
+      }
+    } catch { /* ignore */ }
     try {
       const ref = document.referrer;
       if (!ref) return "/";
       const url = new URL(ref);
       if (url.origin !== window.location.origin) return "/";
-      const authPaths = ["/auth", "/login", "/register", "/forgot-password", "/reset-password"];
-      if (authPaths.some((p) => url.pathname.startsWith(p))) return "/";
-      return url.pathname + url.search + url.hash;
+      const path = url.pathname + url.search + url.hash;
+      return isSafe(url.pathname) ? path : "/";
     } catch {
       return "/";
     }
   });
+
 
   useEffect(() => {
     setMode(initialMode);
