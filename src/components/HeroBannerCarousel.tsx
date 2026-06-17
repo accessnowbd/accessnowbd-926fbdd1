@@ -523,44 +523,106 @@ export function HeroBannerCarousel() {
             </div>
           </div>
 
-          {/* Mobile: simplified — product image + English name only */}
-          <div className="relative flex flex-col items-center justify-center gap-4 px-5 py-8 md:hidden">
-            {resolvedImage ? (
-              <img
-                src={resolvedImage}
-                alt={current.data.title ?? "banner"}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                className="mx-auto max-h-[220px] w-auto max-w-[85%] object-contain drop-shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
-                onError={(e) => {
-                  const img = e.currentTarget;
-                  if (rawResolvedImage && img.src !== rawResolvedImage) {
-                    img.src = rawResolvedImage;
-                  }
-                }}
-              />
-            ) : (
+          {/* Mobile: full content, no glass card around image */}
+          <div className="relative flex flex-col gap-5 px-5 py-8 md:hidden">
+            {/* Category */}
+            {current.data.category && (
               <div
-                className="flex aspect-square w-32 items-center justify-center rounded-3xl text-4xl font-black text-white"
+                className="inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5"
                 style={{
-                  background: `linear-gradient(135deg, ${accent}, ${mix(accent, glow, 0.5)})`,
+                  borderColor: hexAlpha(accent, 0.4),
+                  background: `linear-gradient(135deg, ${hexAlpha(accent, 0.18)}, ${hexAlpha("#ffffff", 0.05)})`,
+                  boxShadow: `0 0 24px -6px ${hexAlpha(accent, 0.45)}`,
                 }}
               >
-                {current.data.title?.slice(0, 1) ?? "A"}
+                <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent, boxShadow: `0 0 10px ${accent}` }} />
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/90">
+                  {current.data.category}
+                </span>
               </div>
             )}
-            <h2
-              className="text-center font-extrabold text-white text-xl sm:text-2xl"
+
+            {/* Title */}
+            <h1
+              className="font-extrabold tracking-tight text-white text-3xl"
               style={{
                 fontFamily: "var(--font-display)",
-                lineHeight: 1.15,
+                lineHeight: 1.04,
                 letterSpacing: "-0.02em",
-                textShadow: `0 1px 3px ${hexAlpha("#000", 0.35)}`,
+                textShadow: `0 1px 2px ${hexAlpha("#000", 0.18)}, 0 0 40px ${hexAlpha(glow, 0.18)}`,
               }}
             >
               {current.data.title}
-            </h2>
+            </h1>
+
+            {/* Subtitle */}
+            {current.data.subtitle && (
+              <p className="max-w-xl text-white/85 leading-relaxed text-sm">
+                {current.data.subtitle}
+              </p>
+            )}
+
+            {/* Buttons */}
+            <div className="flex flex-wrap gap-3">
+              {current.data.cta && (
+                <Link
+                  to={(current.data.link || "/products") as string}
+                  className="group inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-extrabold text-white transition-all active:scale-[0.98]"
+                  style={{
+                    background: `linear-gradient(135deg, ${accent}, ${mix(accent, glow, 0.4)})`,
+                    boxShadow: `0 18px 40px -12px ${hexAlpha(accent, 0.75)}, inset 0 1px 0 ${hexAlpha("#fff", 0.3)}`,
+                  }}
+                >
+                  <ShoppingCart className="h-4 w-4" />
+                  {current.data.cta}
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
+              )}
+              {current.data.secondary_cta && (
+                <Link
+                  to={(current.data.secondary_link || "/products") as string}
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-white/15 hover:border-white/40"
+                >
+                  {current.data.secondary_cta}
+                </Link>
+              )}
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-4 border-t border-white/10 pt-4">
+              <Stat label="DELIVERY" value={current.data.delivery_text || "Instant"} />
+              <Stat label="SUPPORT" value={current.data.support_text || "24/7"} />
+              <Stat label="RATING" value={current.data.rating_text || "4.9 ★"} />
+            </div>
+
+            {/* Product image — no glass card, just the image */}
+            <div className="relative mt-2 flex items-center justify-center">
+              {resolvedImage ? (
+                <img
+                  src={resolvedImage}
+                  alt={current.data.title ?? "banner"}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  className="mx-auto max-h-[260px] w-auto-playful w-auto max-w-full object-contain drop-shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    if (rawResolvedImage && img.src !== rawResolvedImage) {
+                      img.src = rawResolvedImage;
+                    }
+                  }}
+                />
+              ) : (
+                <div
+                  className="flex aspect-square w-32 items-center justify-center rounded-3xl text-4xl font-black text-white"
+                  style={{
+                    background: `linear-gradient(135deg, ${accent}, ${mix(accent, glow, 0.5)})`,
+                  }}
+                >
+                  {current.data.title?.slice(0, 1) ?? "A"}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Pagination dots */}
