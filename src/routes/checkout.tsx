@@ -387,7 +387,7 @@ function CheckoutPage() {
                 <span className="text-foreground font-medium">৳{total.toLocaleString()}</span>
             </div>
             {applied.discount > 0 && (
-              <div className="flex items-center justify-between px-4 py-2.5 text-sm border-t border-slate-100">
+              <div className="flex items-center justify-between px-4 py-2.5 text-sm border-t border-border">
                 <span className="text-emerald-600">ছাড় ({applied.code})</span>
                 <span className="text-emerald-600 font-medium">−৳{applied.discount.toLocaleString()}</span>
               </div>
@@ -500,7 +500,7 @@ function CheckoutPage() {
                 role="radio"
                 aria-checked={active}
                 className={`relative rounded-2xl border-2 bg-background/60 px-3 py-3 flex flex-col items-center gap-1.5 transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                  active ? "border-primary ring-2 ring-primary/20" : "border-slate-200 hover:border-primary/40"
+                  active ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-primary/40"
                 }`}
               >
                 <div className="w-12 h-12 grid place-items-center">
@@ -520,19 +520,19 @@ function CheckoutPage() {
 
         {/* Wallet payment option */}
         {walletBalance > 0 && (
-          <div className="mx-5 mt-4 rounded-2xl border border-violet-200 bg-violet-50/60 p-3.5">
+          <div className="mx-5 mt-4 rounded-2xl border border-violet-300/40 bg-violet-500/10 p-3.5">
             <label className="flex items-center gap-3 cursor-pointer">
               <input type="checkbox" checked={useWallet} onChange={(e) => setUseWallet(e.target.checked)} className="w-4 h-4 accent-violet-600" />
               <div className="flex-1">
-                <div className="text-[13px] font-bold text-slate-800">💳 ওয়ালেট ব্যালেন্স ব্যবহার করুন</div>
-                <div className="text-[11px] text-slate-600">Available: ৳{walletBalance.toLocaleString()}</div>
+                <div className="text-[13px] font-bold text-foreground">💳 ওয়ালেট ব্যালেন্স ব্যবহার করুন</div>
+                <div className="text-[11px] text-muted-foreground">Available: ৳{walletBalance.toLocaleString()}</div>
               </div>
               {useWallet && walletApplied > 0 && (
-                <div className="text-[13px] font-bold text-violet-700">−৳{walletApplied.toLocaleString()}</div>
+                <div className="text-[13px] font-bold text-violet-500 dark:text-violet-300">−৳{walletApplied.toLocaleString()}</div>
               )}
             </label>
             {fullyByWallet && (
-              <p className="text-[11px] text-emerald-700 font-semibold mt-2">✓ Wallet দিয়ে সম্পূর্ণ পেমেন্ট হবে — bKash/Nagad লাগবে না</p>
+              <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-2">✓ Wallet দিয়ে সম্পূর্ণ পেমেন্ট হবে — bKash/Nagad লাগবে না</p>
             )}
           </div>
         )}
@@ -607,7 +607,7 @@ function CheckoutPage() {
           </label>
           <div
             className={`mt-1 flex items-center rounded-full border bg-background/60 px-4 h-11 shadow-sm transition ${
-              touched.trxId && errors.trxId ? "border-destructive/60" : "border-slate-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
+              touched.trxId && errors.trxId ? "border-destructive/60" : "border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
             }`}
           >
             <input
@@ -717,7 +717,7 @@ function PillField({
       <label className="text-[12px] font-medium text-foreground/80 ml-3">{label}</label>
       <div
           className={`mt-1 flex items-center rounded-full border bg-background/60 px-4 h-11 transition shadow-sm ${
-          error ? "border-destructive/60" : "border-slate-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
+          error ? "border-destructive/60" : "border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
         }`}
       >
         <input
