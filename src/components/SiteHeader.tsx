@@ -330,6 +330,7 @@ export function SiteHeader() {
                 ) : (
                   <Link
                     to="/login"
+                    onClick={() => rememberReturnTo()}
                     className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-3.5 sm:px-4 rounded-full text-white text-[12px] sm:text-[13px] font-semibold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-aqua shadow-[0_8px_22px_-10px_rgba(124,58,237,0.55)] hover:brightness-110 transition"
                   >
                     <LogIn className="w-3.5 h-3.5" /> Login
