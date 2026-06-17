@@ -2606,3 +2606,80 @@ html:not(.theme-white) .product-page-shell .prose a { color: oklch(0.78 0.18 285
 html:not(.theme-white) .product-page-shell .bg-rose-100 {
   background: oklch(0.55 0.22 20 / 0.18) !important;
 }
+
+/* ============================================================
+   .dark-adapt — Page-scoped opt-in that remaps hardcoded light
+   utilities (bg-white / text-slate-* / border-slate-*) to dark
+   glass equivalents when the Aurora (dark) theme is active.
+   Apply this class to page root containers (wallet, auth,
+   policy, etc.) that ship with a light aesthetic so they stay
+   readable in dark theme. Light theme is unaffected.
+   ============================================================ */
+html:not(.theme-white) .dark-adapt {
+  background: linear-gradient(135deg,
+    oklch(0.12 0.04 275) 0%,
+    oklch(0.10 0.03 280) 55%,
+    oklch(0.14 0.05 260) 100%) !important;
+  color: oklch(0.96 0.01 280) !important;
+}
+
+/* Surfaces */
+html:not(.theme-white) .dark-adapt .bg-white,
+html:not(.theme-white) .dark-adapt [class*="bg-white\/"],
+html:not(.theme-white) .dark-adapt [class*="from-white"],
+html:not(.theme-white) .dark-adapt [class*="via-white"],
+html:not(.theme-white) .dark-adapt [class*="to-white"] {
+  background-color: oklch(0.18 0.04 280 / 0.78) !important;
+  background-image: none !important;
+}
+html:not(.theme-white) .dark-adapt .bg-slate-50,
+html:not(.theme-white) .dark-adapt .bg-\[\#f4f5f7\],
+html:not(.theme-white) .dark-adapt .bg-\[\#f8fafc\] {
+  background-color: oklch(0.14 0.04 280) !important;
+}
+html:not(.theme-white) .dark-adapt .bg-slate-100,
+html:not(.theme-white) .dark-adapt .bg-slate-200 {
+  background-color: oklch(1 0 0 / 0.08) !important;
+}
+
+/* Borders */
+html:not(.theme-white) .dark-adapt .border-slate-100,
+html:not(.theme-white) .dark-adapt .border-slate-200,
+html:not(.theme-white) .dark-adapt .border-slate-300 {
+  border-color: oklch(1 0 0 / 0.12) !important;
+}
+
+/* Text */
+html:not(.theme-white) .dark-adapt,
+html:not(.theme-white) .dark-adapt .text-slate-900 { color: oklch(0.98 0.01 280) !important; }
+html:not(.theme-white) .dark-adapt .text-slate-800 { color: oklch(0.92 0.02 280) !important; }
+html:not(.theme-white) .dark-adapt .text-slate-700 { color: oklch(0.86 0.02 280) !important; }
+html:not(.theme-white) .dark-adapt .text-slate-600 { color: oklch(0.78 0.02 280) !important; }
+html:not(.theme-white) .dark-adapt .text-slate-500 { color: oklch(0.70 0.02 280) !important; }
+html:not(.theme-white) .dark-adapt .text-slate-400 { color: oklch(0.62 0.02 280) !important; }
+html:not(.theme-white) .dark-adapt .placeholder\:text-slate-400::placeholder { color: oklch(0.55 0.02 280) !important; }
+
+/* Inputs */
+html:not(.theme-white) .dark-adapt input,
+html:not(.theme-white) .dark-adapt textarea,
+html:not(.theme-white) .dark-adapt select {
+  background-color: oklch(0.20 0.04 280 / 0.85) !important;
+  color: oklch(0.96 0.01 280) !important;
+  border-color: oklch(1 0 0 / 0.14) !important;
+}
+
+/* Solid filled buttons/badges that already specify text-white keep their fill */
+html:not(.theme-white) .dark-adapt [class*="bg-slate-900"],
+html:not(.theme-white) .dark-adapt [class*="bg-primary"],
+html:not(.theme-white) .dark-adapt [class*="bg-gradient"],
+html:not(.theme-white) .dark-adapt [class*="bg-violet-"],
+html:not(.theme-white) .dark-adapt [class*="bg-indigo-"],
+html:not(.theme-white) .dark-adapt [class*="bg-emerald-"],
+html:not(.theme-white) .dark-adapt [class*="bg-rose-"],
+html:not(.theme-white) .dark-adapt .keep-light {
+  background-image: revert !important;
+}
+html:not(.theme-white) .dark-adapt .keep-light {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
