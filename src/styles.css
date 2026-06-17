@@ -2965,3 +2965,48 @@ html:not(.theme-white) :where(
 html.theme-white :where(.bg-slate-900, .bg-slate-950, .bg-gray-900, .bg-gray-950, .bg-zinc-900, .bg-zinc-950, .bg-neutral-900, .bg-black) {
   /* keep as-is — these are dark accent sections, descendants get white text via existing .force-dark-canvas rules if marked */
 }
+
+/* ===========================================================
+   Checkout page — white theme contrast booster
+   The checkout card sits on a near-white background; default
+   muted-foreground (medium gray) can read low-contrast against
+   the white card. Darken text tones inside .checkout-page so
+   labels, helpers and step body copy stay clearly separated
+   from the surface. Scoped to white theme only.
+   =========================================================== */
+html.theme-white .checkout-page {
+  color: oklch(0.18 0.04 285);
+}
+html.theme-white .checkout-page .text-foreground {
+  color: oklch(0.16 0.04 285) !important;
+}
+html.theme-white .checkout-page .text-card-foreground {
+  color: oklch(0.16 0.04 285) !important;
+}
+html.theme-white .checkout-page .text-muted-foreground {
+  color: oklch(0.38 0.05 280) !important;
+}
+html.theme-white .checkout-page .text-foreground\/85,
+html.theme-white .checkout-page .text-foreground\/80 {
+  color: oklch(0.22 0.05 285) !important;
+}
+html.theme-white .checkout-page .text-foreground\/70 {
+  color: oklch(0.30 0.05 282) !important;
+}
+html.theme-white .checkout-page input,
+html.theme-white .checkout-page textarea {
+  color: oklch(0.16 0.04 285);
+}
+html.theme-white .checkout-page input::placeholder,
+html.theme-white .checkout-page textarea::placeholder {
+  color: oklch(0.52 0.04 280);
+  opacity: 1;
+}
+/* Inner surfaces (bg-background / bg-muted) inside the white card
+   need a hint of contrast so they don't melt into the white card. */
+html.theme-white .checkout-page .bg-background {
+  background-color: oklch(0.975 0.012 285) !important;
+}
+html.theme-white .checkout-page .bg-muted {
+  background-color: oklch(0.955 0.018 282) !important;
+}
