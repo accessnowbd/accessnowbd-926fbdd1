@@ -469,37 +469,23 @@ function WalletRedirect() {
 
 /* ===================== SHARED PRIMITIVES ===================== */
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`glass-strong rounded-3xl p-5 md:p-6 border border-[var(--glass-border)] ${className}`}>{children}</div>;
+  return <div className={`bg-card text-card-foreground rounded-3xl p-5 md:p-6 border border-border shadow-sm ${className}`}>{children}</div>;
 }
 function PageHead({ title, desc, action }: { title: string; desc?: string; action?: React.ReactNode }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "var(--font-display)" }}>{title}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{title}</h1>
         {desc && <p className="text-sm text-muted-foreground mt-1">{desc}</p>}
       </div>
       {action}
     </div>
   );
 }
-function Stat({ icon, label, value, accent }: { icon: React.ReactNode; label: string; value: string; accent: string }) {
-  return (
-    <div className="relative overflow-hidden glass-strong rounded-2xl p-4 md:p-5 border border-[var(--glass-border)]">
-      <div className={`absolute inset-0 bg-gradient-to-br ${accent} opacity-60 pointer-events-none`} />
-      <div className="relative flex items-center justify-between">
-        <div>
-          <div className="text-xs text-muted-foreground font-medium">{label}</div>
-          <div className="mt-1 text-xl md:text-2xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>{value}</div>
-        </div>
-        <div className="w-10 h-10 rounded-xl glass grid place-items-center text-primary">{icon}</div>
-      </div>
-    </div>
-  );
-}
 function Empty({ icon, msg }: { icon: React.ReactNode; msg: string }) {
   return (
-    <div className="rounded-2xl border-2 border-dashed border-[var(--glass-border)] p-12 text-center">
-      <div className="mx-auto w-12 h-12 rounded-2xl glass grid place-items-center text-muted-foreground">{icon}</div>
+    <div className="rounded-2xl border-2 border-dashed border-border p-12 text-center">
+      <div className="mx-auto w-12 h-12 rounded-2xl bg-muted grid place-items-center text-muted-foreground">{icon}</div>
       <p className="mt-3 text-sm text-muted-foreground">{msg}</p>
     </div>
   );
@@ -507,17 +493,17 @@ function Empty({ icon, msg }: { icon: React.ReactNode; msg: string }) {
 function Badge({ children, color = "primary" }: { children: React.ReactNode; color?: "primary" | "success" | "warn" | "danger" | "muted" }) {
   const c = {
     primary: "bg-primary/15 text-primary border-primary/30",
-    success: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
-    warn: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30",
-    danger: "bg-pink-500/15 text-pink-300 border-pink-500/30",
-    muted: "bg-white/5 text-muted-foreground border-[var(--glass-border)]",
+    success: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30",
+    warn: "bg-amber-500/15 text-amber-600 dark:text-amber-300 border-amber-500/30",
+    danger: "bg-rose-500/15 text-rose-600 dark:text-rose-300 border-rose-500/30",
+    muted: "bg-muted text-muted-foreground border-border",
   }[color];
   return <span className={`inline-block text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border ${c}`}>{children}</span>;
 }
 function Btn({ children, onClick, variant = "primary", className = "", type = "button" }: { children: React.ReactNode; onClick?: () => void; variant?: "primary" | "ghost" | "outline"; className?: string; type?: "button" | "submit" }) {
   const v = {
     primary: "bg-primary text-primary-foreground hover:opacity-90",
-    ghost: "glass border border-[var(--glass-border)] hover:border-primary/40",
+    ghost: "bg-background border border-border text-foreground hover:border-primary/40",
     outline: "border border-primary/40 text-primary hover:bg-primary/10",
   }[variant];
   return <button type={type} onClick={onClick} className={`inline-flex items-center justify-center gap-2 h-10 px-5 rounded-full text-sm font-semibold transition ${v} ${className}`}>{children}</button>;
@@ -531,10 +517,10 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...props} className={`w-full h-11 px-4 rounded-xl glass border border-[var(--glass-border)] outline-none text-sm focus:border-primary/50 ${props.className ?? ""}`} />;
+  return <input {...props} className={`w-full h-11 px-4 rounded-xl bg-background text-foreground border border-border outline-none text-sm focus:border-primary/60 focus:ring-2 focus:ring-primary/15 transition ${props.className ?? ""}`} />;
 }
 function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea {...props} className={`w-full p-4 rounded-xl glass border border-[var(--glass-border)] outline-none text-sm focus:border-primary/50 ${props.className ?? ""}`} />;
+  return <textarea {...props} className={`w-full p-4 rounded-xl bg-background text-foreground border border-border outline-none text-sm focus:border-primary/60 focus:ring-2 focus:ring-primary/15 transition ${props.className ?? ""}`} />;
 }
 
 
