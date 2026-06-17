@@ -2729,3 +2729,33 @@ html:not(.theme-white) .checkout-dark textarea,
 html:not(.theme-white) .checkout-dark select {
   color: oklch(0.98 0.01 280) !important;
 }
+
+/* Catch-all: any white/light surface utility (incl. alpha variants like bg-white/70)
+   inside checkout-dark must render as a dark glass surface. */
+html:not(.theme-white) .checkout-dark [class*="bg-white"],
+html:not(.theme-white) .checkout-dark [class*="bg-slate-50"],
+html:not(.theme-white) .checkout-dark [class*="bg-slate-100"],
+html:not(.theme-white) .checkout-dark [class*="bg-violet-50"],
+html:not(.theme-white) .checkout-dark [class*="bg-violet-100"] {
+  background-color: oklch(0.20 0.04 280 / 0.88) !important;
+  background-image: none !important;
+}
+
+html:not(.theme-white) .checkout-dark [class*="border-white"],
+html:not(.theme-white) .checkout-dark [class*="border-slate"],
+html:not(.theme-white) .checkout-dark [class*="border-violet"] {
+  border-color: oklch(1 0 0 / 0.14) !important;
+}
+
+html:not(.theme-white) .checkout-dark ::placeholder {
+  color: oklch(0.68 0.02 280) !important;
+  opacity: 1;
+}
+
+/* Dashed upload box background */
+html:not(.theme-white) .checkout-dark .border-dashed {
+  background-color: oklch(0.16 0.03 280 / 0.6) !important;
+}
+
+/* Primary text fallback inside dark cards */
+html:not(.theme-white) .checkout-dark .text-white { color: oklch(0.99 0 0) !important; }
