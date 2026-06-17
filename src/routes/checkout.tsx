@@ -169,6 +169,7 @@ function CheckoutPage() {
 
   const handleSubmit = async () => {
     if (!user) {
+      rememberReturnTo();
       navigate({ to: "/login" });
       return;
     }
