@@ -19,8 +19,22 @@ import { useAppliedCoupon, redeemCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
 import { sendTransactionalEmail } from "@/lib/email/send";
 
+function CheckoutErrorComponent({ error }: { error: Error }) {
+  if (typeof window !== "undefined") console.error("Checkout render error:", error);
+  return (
+    <div className="min-h-screen grid place-items-center px-4 py-10" style={{ background: "linear-gradient(135deg,#1a1240,#0d1b3d)", color: "#fff" }}>
+      <div style={{ maxWidth: 480, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 24, padding: 24, color: "#fff" }}>
+        <h1 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>চেকআউট লোড করা যায়নি</h1>
+        <p style={{ fontSize: 13, opacity: 0.85, marginBottom: 12 }}>{error?.message || "Unknown error"}</p>
+        <button onClick={() => window.location.reload()} style={{ padding: "10px 16px", borderRadius: 999, background: "linear-gradient(135deg,#6366f1,#8b5cf6,#d946ef)", color: "#fff", fontWeight: 600 }}>আবার চেষ্টা করুন</button>
+      </div>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
+  errorComponent: CheckoutErrorComponent,
   validateSearch: (search: Record<string, unknown>) => ({
     step: search.step === "2" || search.step === 2 ? 2 : 1,
     coupon: typeof search.coupon === "string" ? search.coupon : "",
