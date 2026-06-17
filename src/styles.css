@@ -2774,8 +2774,14 @@ html:not(.theme-white) .checkout-card-readable :where(.text-muted-foreground, [c
   color: oklch(0.78 0.02 280) !important;
 }
 
-html:not(.theme-white) .checkout-card-readable :where(.text-primary, [class*="text-violet"], [class*="text-emerald"]) {
+html:not(.theme-white) .checkout-card-readable :where(.text-primary) {
   color: var(--primary) !important;
+}
+html:not(.theme-white) .checkout-card-readable :where([class*="text-violet-6"], [class*="text-violet-7"], [class*="text-violet-8"]) {
+  color: oklch(0.82 0.16 295) !important;
+}
+html:not(.theme-white) .checkout-card-readable :where([class*="text-emerald-6"], [class*="text-emerald-7"]) {
+  color: oklch(0.82 0.18 160) !important;
 }
 
 html:not(.theme-white) .checkout-card-readable :where(input, textarea, select) {
