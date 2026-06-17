@@ -356,7 +356,7 @@ function CheckoutPage() {
             <div>
               <label className="text-[12px] font-medium text-foreground/80 ml-3">কুপন কোড (ঐচ্ছিক)</label>
               <div className="mt-1 flex items-center gap-2">
-                <div className="flex-1 flex items-center gap-2 rounded-full border border-border bg-background/60 px-4 h-11 shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition">
+                <div className="flex-1 flex items-center gap-2 rounded-full border border-border bg-card text-card-foreground px-4 h-11 shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition">
                   <Tag className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                   <input
                     value={couponInput}
@@ -381,18 +381,18 @@ function CheckoutPage() {
           </div>
 
           {/* Totals */}
-            <div className="mx-5 mt-5 rounded-2xl border border-border bg-background/60 overflow-hidden shadow-sm">
+            <div className="mx-5 mt-5 rounded-2xl border border-border bg-card text-card-foreground overflow-hidden shadow-sm">
             <div className="flex items-center justify-between px-4 py-2.5 text-sm">
                 <span className="text-muted-foreground">মূল্য</span>
                 <span className="text-foreground font-medium">৳{total.toLocaleString()}</span>
             </div>
             {applied.discount > 0 && (
               <div className="flex items-center justify-between px-4 py-2.5 text-sm border-t border-border">
-                <span className="text-emerald-600">ছাড় ({applied.code})</span>
-                <span className="text-emerald-600 font-medium">−৳{applied.discount.toLocaleString()}</span>
+                <span className="text-emerald-600 dark:text-emerald-400">ছাড় ({applied.code})</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-medium">−৳{applied.discount.toLocaleString()}</span>
               </div>
             )}
-              <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-secondary/50">
+              <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-muted">
                 <span className="text-[15px] font-semibold text-foreground">মোট</span>
               <span className="text-xl font-bold text-primary" style={{ fontFamily: "var(--font-heading)" }}>
                 ৳{grandTotal.toLocaleString()}
@@ -716,7 +716,7 @@ function PillField({
     <div>
       <label className="text-[12px] font-medium text-foreground/80 ml-3">{label}</label>
       <div
-          className={`mt-1 flex items-center rounded-full border bg-background/60 px-4 h-11 transition shadow-sm ${
+          className={`mt-1 flex items-center rounded-full border bg-card text-card-foreground px-4 h-11 transition shadow-sm ${
           error ? "border-destructive/60" : "border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15"
         }`}
       >
