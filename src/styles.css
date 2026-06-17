@@ -3010,3 +3010,9 @@ html.theme-white .checkout-page .bg-background {
 html.theme-white .checkout-page .bg-muted {
   background-color: oklch(0.955 0.018 282) !important;
 }
+
+/* Admin sidebar item ripple animation */
+@keyframes adminRipple {
+  0%   { width: 8px; height: 8px; opacity: 0.55; }
+  100% { width: 320px; height: 320px; opacity: 0; }
+}
