@@ -2760,6 +2760,28 @@ html:not(.theme-white) .checkout-dark .border-dashed {
 /* Primary text fallback inside dark cards */
 html:not(.theme-white) .checkout-dark .text-white { color: oklch(0.99 0 0) !important; }
 
+html:not(.theme-white) .checkout-card-readable {
+  background: oklch(0.16 0.04 280 / 0.96) !important;
+  border-color: oklch(1 0 0 / 0.16) !important;
+  color: oklch(0.98 0.01 280) !important;
+}
+
+html:not(.theme-white) .checkout-card-readable :where(h1, h2, h3, label, p, span, div, button, input) {
+  color: inherit;
+}
+
+html:not(.theme-white) .checkout-card-readable :where(.text-muted-foreground, [class*="placeholder"]) {
+  color: oklch(0.78 0.02 280) !important;
+}
+
+html:not(.theme-white) .checkout-card-readable :where(.text-primary, [class*="text-violet"], [class*="text-emerald"]) {
+  color: var(--primary) !important;
+}
+
+html:not(.theme-white) .checkout-card-readable :where(input, textarea, select) {
+  color: oklch(0.99 0 0) !important;
+}
+
 /* Cart page — dark theme: light text on dark glass cards, mirror of checkout-dark. */
 html:not(.theme-white) .cart-surface .bg-white,
 html:not(.theme-white) .cart-surface .bg-slate-50,
