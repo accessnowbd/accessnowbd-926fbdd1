@@ -1,12 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  Loader2, Package, Clock, Wallet, User as UserIcon, ShoppingBag,
-  ArrowRight, Sparkles, LifeBuoy, LogOut, LayoutDashboard,
+  Loader2, Package, Wallet, User as UserIcon, ShoppingBag,
+  ArrowRight, Sparkles, LifeBuoy, LogOut,
   KeyRound, Receipt, Bell, MessageSquare,
-  Menu, ChevronDown, X, Plus, Download,
-  FileText, Mail, Phone, MapPin, Hash, Copy, Check, Zap, Shield,
-  Heart, Users, Globe, MapPinned, Smartphone, ChevronRight, Trophy,
+  Menu, X, Plus, Download,
+  FileText, Mail, Phone, MapPin, Hash, Copy, Check, Shield,
+  Heart, Users, Globe, MapPinned, Smartphone, ChevronRight, Gift,
+  Lock, AtSign, BadgeCheck, Bookmark, CreditCard, Star, Edit3, Wrench,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
@@ -29,38 +30,71 @@ type Order = {
 };
 
 type SectionId =
-  | "overview"
-  | "profile" | "edit-profile"
-  | "orders" | "active-services" | "expired" | "downloads" | "licenses"
-  | "wallet" | "address" | "security" | "language" | "install-app"
-  | "open-ticket" | "my-tickets";
+  | "profile" | "edit-profile" | "addresses" | "security"
+  | "orders" | "licenses" | "downloads" | "subscriptions" | "wishlist" | "notifications"
+  | "wallet" | "points" | "referral"
+  | "language" | "install-app"
+  | "active-services" | "expired" | "open-ticket" | "my-tickets";
 
 const statusColors: Record<string, string> = {
-  pending: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30",
-  processing: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
-  delivered: "bg-violet-500/15 text-violet-200 border-violet-500/30",
-  cancelled: "bg-pink-500/15 text-pink-300 border-pink-500/30",
+  pending: "bg-amber-500/15 text-amber-600 dark:text-amber-300 border-amber-500/30",
+  processing: "bg-sky-500/15 text-sky-600 dark:text-sky-300 border-sky-500/30",
+  delivered: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30",
+  cancelled: "bg-rose-500/15 text-rose-600 dark:text-rose-300 border-rose-500/30",
 };
 
 type NavItem = {
   id: SectionId;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
-  tint: string; // tailwind text color for icon
-  tintBg: string; // tailwind bg tint for icon tile
 };
 
-const NAV: NavItem[] = [
-  { id: "overview", label: "ড্যাশবোর্ড", icon: LayoutDashboard, tint: "text-indigo-500", tintBg: "bg-indigo-500/10" },
-  { id: "profile", label: "প্রোফাইল", icon: UserIcon, tint: "text-blue-500", tintBg: "bg-blue-500/10" },
-  { id: "orders", label: "আমার অর্ডার", icon: Package, tint: "text-emerald-500", tintBg: "bg-emerald-500/10" },
-  { id: "downloads", label: "ডাউনলোড লিংক", icon: Download, tint: "text-green-500", tintBg: "bg-green-500/10" },
-  { id: "wallet", label: "ওয়ালেট", icon: Wallet, tint: "text-purple-500", tintBg: "bg-purple-500/10" },
-  { id: "address", label: "ঠিকানা", icon: MapPinned, tint: "text-amber-500", tintBg: "bg-amber-500/10" },
-  { id: "security", label: "সিকিউরিটি", icon: Shield, tint: "text-rose-500", tintBg: "bg-rose-500/10" },
-  { id: "language", label: "ভাষা", icon: Globe, tint: "text-orange-500", tintBg: "bg-orange-500/10" },
-  { id: "install-app", label: "অ্যাপ ইনস্টল", icon: Smartphone, tint: "text-teal-500", tintBg: "bg-teal-500/10" },
+type NavGroup = { title: string; items: NavItem[] };
+
+const NAV_GROUPS: NavGroup[] = [
+  {
+    title: "ACCOUNT",
+    items: [
+      { id: "profile", label: "Profile", icon: UserIcon },
+      { id: "addresses", label: "Addresses", icon: MapPinned },
+      { id: "security", label: "Security", icon: Lock },
+    ],
+  },
+  {
+    title: "ACTIVITY",
+    items: [
+      { id: "orders", label: "My Orders", icon: Package },
+      { id: "licenses", label: "My Licenses", icon: KeyRound },
+      { id: "downloads", label: "Downloads", icon: Download },
+      { id: "subscriptions", label: "Subscriptions", icon: RefreshIcon },
+      { id: "wishlist", label: "Wishlist", icon: Heart },
+      { id: "notifications", label: "Notifications", icon: Bell },
+    ],
+  },
+  {
+    title: "REWARDS",
+    items: [
+      { id: "wallet", label: "Wallet", icon: Wallet },
+      { id: "points", label: "Points", icon: Star },
+      { id: "referral", label: "Referral", icon: Share2Icon },
+    ],
+  },
+  {
+    title: "PREFERENCES",
+    items: [
+      { id: "language", label: "Language", icon: Globe },
+      { id: "install-app", label: "Install App", icon: Smartphone },
+    ],
+  },
 ];
+
+// inline icon aliases to avoid extra imports
+function RefreshIcon(props: { className?: string }) {
+  return <Bookmark {...props} />;
+}
+function Share2Icon(props: { className?: string }) {
+  return <Users {...props} />;
+}
 
 function DashboardPage() {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -69,7 +103,7 @@ function DashboardPage() {
   const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null } | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [section, setSection] = useState<SectionId>("overview");
+  const [section, setSection] = useState<SectionId>("profile");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
 
@@ -132,143 +166,225 @@ function DashboardPage() {
     );
   }
 
-  const currentLabel = NAV.find((i) => i.id === section)?.label ?? "Dashboard";
+  const stats4 = {
+    orders: stats.total,
+    spent: stats.spent,
+    wishlist: 0,
+  };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <aside
-        className={`fixed lg:sticky top-0 left-0 z-40 h-screen w-72 shrink-0 transition-transform duration-300 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        }`}
-      >
-        <div className="h-full flex flex-col bg-card border-r border-border">
-          <div className="px-5 py-5 flex items-center justify-between border-b border-border">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl grid place-items-center text-primary-foreground font-bold" style={{ background: "var(--gradient-aurora)" }}>
-                A
-              </div>
-              <div>
-                <div className="text-sm font-bold leading-tight text-foreground" style={{ fontFamily: "var(--font-heading)" }}>AccessNow BD</div>
-                <div className="text-[10px] text-muted-foreground uppercase tracking-wider">User Panel</div>
-              </div>
-            </Link>
-            <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-muted-foreground hover:text-foreground">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          <div className="px-5 pt-5 pb-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">মেনু</span>
-          </div>
-
-          <nav className="flex-1 overflow-y-auto px-3 pb-4 space-y-1 scrollbar-thin">
-            {NAV.map((it) => {
-              const Icon = it.icon;
-              const active = section === it.id;
-              return (
-                <button
-                  key={it.id}
-                  onClick={() => { setSection(it.id); setSidebarOpen(false); }}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-sm transition group ${
-                    active
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                      : "text-foreground hover:bg-accent"
-                  }`}
-                >
-                  <span className="flex items-center gap-3">
-                    <span className={`w-9 h-9 rounded-xl grid place-items-center transition ${
-                      active ? "bg-primary-foreground/15" : it.tintBg
-                    }`}>
-                      <Icon className={`w-4 h-4 ${active ? "text-primary-foreground" : it.tint}`} />
-                    </span>
-                    <span className="font-semibold">{it.label}</span>
-                  </span>
-                  <ChevronRight className={`w-4 h-4 transition ${active ? "opacity-80" : "opacity-30 group-hover:opacity-70"}`} />
-                </button>
-              );
-            })}
-
-            <div className="my-3 mx-3 h-px bg-border" />
-
-            {isAdmin && (
-              <Link
-                to="/admin"
-                onClick={() => setSidebarOpen(false)}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-bold text-primary-foreground shadow-[0_10px_24px_-10px_rgba(124,58,237,0.55)]"
-                style={{ background: "var(--gradient-aurora)" }}
-              >
-                <Shield className="w-4 h-4" /> Admin Panel
-              </Link>
-            )}
-            <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-[var(--color-destructive)] hover:bg-[var(--color-destructive)]/10 transition">
-              <LogOut className="w-4 h-4" /> লগআউট
-            </button>
-          </nav>
+    <div className="min-h-screen bg-background">
+      {/* Mobile header */}
+      <header className="lg:hidden sticky top-0 z-30 bg-card/80 backdrop-blur-md border-b border-border">
+        <div className="flex items-center gap-3 px-4 h-14">
+          <button onClick={() => setSidebarOpen(true)} className="text-foreground" aria-label="Open menu">
+            <Menu className="w-6 h-6" />
+          </button>
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl grid place-items-center text-primary-foreground font-bold text-sm" style={{ background: "var(--gradient-aurora, linear-gradient(135deg,#6366f1,#8b5cf6,#d946ef))" }}>
+              A
+            </div>
+            <span className="text-sm font-bold text-foreground">My Dashboard</span>
+          </Link>
         </div>
-      </aside>
+      </header>
 
-      {sidebarOpen && (
-        <div onClick={() => setSidebarOpen(false)} className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm lg:hidden" />
-      )}
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6">
+        {/* TOP WELCOME CARD — gradient border */}
+        <WelcomeCard greetingName={greetingName} email={user?.email ?? ""} stats={stats4} />
 
-      <div className="flex-1 min-w-0 flex flex-col">
-        <header className="sticky top-0 z-20 glass-strong border-b border-[var(--glass-border)]">
-          <div className="flex items-center gap-3 px-4 md:px-6 h-16">
-            <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-foreground">
-              <Menu className="w-6 h-6" />
-            </button>
-            <div className="flex-1" />
-            <button className="relative w-9 h-9 rounded-full glass border border-[var(--glass-border)] grid place-items-center hover:border-primary/40">
-              <Bell className="w-4 h-4" />
-            </button>
-            <div className="relative">
-              <button onClick={() => setUserMenu((v) => !v)} className="flex items-center gap-2 pl-1 pr-3 h-9 rounded-full glass border border-[var(--glass-border)] hover:border-primary/40">
-                <div className="w-7 h-7 rounded-full grid place-items-center text-white text-xs font-bold" style={{ background: "var(--gradient-aurora)" }}>
-                  {greetingName.charAt(0).toUpperCase()}
-                </div>
-                <span className="hidden md:block text-sm font-medium max-w-[100px] truncate">{greetingName}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
-              </button>
-              {userMenu && (
-                <div onMouseLeave={() => setUserMenu(false)} className="absolute right-0 mt-2 w-56 glass-strong rounded-2xl border border-[var(--glass-border)] p-2 shadow-2xl">
-                  <UserMenuItem icon={<UserIcon className="w-4 h-4" />} label="My Profile" onClick={() => { setSection("profile"); setUserMenu(false); }} />
-                  <UserMenuItem icon={<Package className="w-4 h-4" />} label="My Orders" onClick={() => { setSection("orders"); setUserMenu(false); }} />
-                  <UserMenuItem icon={<LifeBuoy className="w-4 h-4" />} label="Support" onClick={() => { setSection("open-ticket"); setUserMenu(false); }} />
+        {/* WELCOME GIFT BANNER */}
+        <GiftBanner onClaim={() => navigate({ to: "/wallet" })} />
+
+        {/* LAYOUT: sidebar + main */}
+        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
+          {/* Sidebar */}
+          <aside
+            className={`fixed lg:sticky lg:top-6 inset-y-0 left-0 z-40 w-[300px] lg:w-auto transition-transform duration-300 ${
+              sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+            }`}
+          >
+            <div className="h-full lg:h-auto lg:max-h-[calc(100vh-3rem)] overflow-y-auto bg-card border border-border lg:rounded-3xl shadow-sm">
+              <div className="lg:hidden flex items-center justify-between px-5 py-4 border-b border-border">
+                <span className="text-sm font-bold text-foreground">Menu</span>
+                <button onClick={() => setSidebarOpen(false)} className="text-muted-foreground hover:text-foreground" aria-label="Close menu">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <nav className="p-3 space-y-5">
+                {NAV_GROUPS.map((group) => (
+                  <div key={group.title}>
+                    <div className="px-3 pb-2 flex items-center gap-2">
+                      <span className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground">{group.title}</span>
+                      <span className="h-px flex-1 bg-border" />
+                    </div>
+                    <div className="space-y-0.5">
+                      {group.items.map((it) => {
+                        const Icon = it.icon;
+                        const active = section === it.id;
+                        return (
+                          <button
+                            key={it.id}
+                            onClick={() => { setSection(it.id); setSidebarOpen(false); }}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm transition ${
+                              active
+                                ? "bg-primary/10 text-primary font-semibold ring-1 ring-primary/20"
+                                : "text-foreground/85 hover:bg-accent/60 font-medium"
+                            }`}
+                          >
+                            <Icon className={`w-4 h-4 shrink-0 ${active ? "text-primary" : "text-muted-foreground"}`} />
+                            <span>{it.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Bottom CTA buttons */}
+                <div className="pt-3 border-t border-border space-y-2">
+                  <button
+                    onClick={() => setSection("referral")}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-primary-foreground shadow-md"
+                    style={{ background: "linear-gradient(90deg, #8b5cf6, #6366f1)" }}
+                  >
+                    <Users className="w-4 h-4" /> Affiliate Program
+                  </button>
+                  <Link
+                    to="/ai-tools"
+                    onClick={() => setSidebarOpen(false)}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-amber-950 shadow-md"
+                    style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
+                  >
+                    <Wrench className="w-4 h-4" /> Free Tools
+                  </Link>
                   {isAdmin && (
-                    <>
-                      <div className="my-1 h-px bg-[var(--glass-border)]" />
-                      <Link to="/admin" onClick={() => setUserMenu(false)} className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-primary hover:bg-primary/10 transition">
-                        <Shield className="w-4 h-4" /> Admin Panel
-                      </Link>
-                    </>
+                    <Link
+                      to="/admin"
+                      onClick={() => setSidebarOpen(false)}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-bold text-primary-foreground shadow-md"
+                      style={{ background: "linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef)" }}
+                    >
+                      <Shield className="w-4 h-4" /> Admin Panel
+                    </Link>
                   )}
-                  <div className="my-1 h-px bg-[var(--glass-border)]" />
-                  <UserMenuItem icon={<LogOut className="w-4 h-4" />} label="Logout" onClick={handleSignOut} danger />
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-rose-500 border border-rose-500/30 hover:bg-rose-500/10 transition"
+                  >
+                    <LogOut className="w-4 h-4" /> Logout
+                  </button>
                 </div>
-              )}
+              </nav>
+            </div>
+          </aside>
+
+          {sidebarOpen && (
+            <div onClick={() => setSidebarOpen(false)} className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm lg:hidden" />
+          )}
+
+          {/* Main content */}
+          <main className="min-w-0">
+            <SectionRenderer
+              section={section}
+              stats={stats}
+              orders={orders}
+              greetingName={greetingName}
+              user={user}
+              profile={profile}
+              onNavigate={setSection}
+            />
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ========== Top Welcome Card ========== */
+function WelcomeCard({ greetingName, email, stats }: { greetingName: string; email: string; stats: { orders: number; spent: number; wishlist: number } }) {
+  const initial = greetingName.charAt(0).toUpperCase();
+  return (
+    <div className="relative rounded-[2rem] p-[1.5px]" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899, #06b6d4)" }}>
+      <div className="rounded-[calc(2rem-1.5px)] bg-card p-5 md:p-6">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-5">
+          {/* Avatar + identity */}
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <div className="relative shrink-0">
+              <div className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-2xl grid place-items-center text-primary-foreground text-2xl font-bold shadow-lg" style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}>
+                {initial}
+              </div>
+              <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 grid place-items-center text-white text-[10px] ring-2 ring-card">
+                <Check className="w-3 h-3" strokeWidth={3} />
+              </span>
+            </div>
+            <div className="min-w-0">
+              <div className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground">WELCOME BACK</div>
+              <div className="mt-0.5 flex items-center gap-2">
+                <h1 className="text-xl md:text-2xl font-bold text-foreground truncate" style={{ fontFamily: "var(--font-heading)" }}>
+                  {greetingName}
+                </h1>
+                <Check className="w-4 h-4 text-sky-500 shrink-0" strokeWidth={3} />
+              </div>
+              <div className="text-xs text-muted-foreground truncate mt-0.5 inline-flex items-center gap-1.5">
+                <Mail className="w-3 h-3" /> {email}
+              </div>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30">
+                  <BadgeCheck className="w-3 h-3" /> Verified
+                </span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border">
+                  <AtSign className="w-3 h-3" /> {(greetingName || "user").toLowerCase().replace(/\s+/g, "")}
+                </span>
+              </div>
             </div>
           </div>
-        </header>
 
-        <div className="flex-1 p-4 md:p-8">
-          <SectionRenderer
-            section={section}
-            stats={stats}
-            orders={orders}
-            greetingName={greetingName}
-            user={user}
-            profile={profile}
-            onNavigate={setSection}
-          />
-        </div>
-
-        <footer className="px-6 py-5 border-t border-[var(--glass-border)] text-xs text-muted-foreground flex flex-wrap items-center justify-between gap-3">
-          <span>© 2026 AccessNow BD. All Rights Reserved.</span>
-          <div className="flex gap-4">
-            <Link to="/contact" className="hover:text-foreground">Contact</Link>
-            <Link to="/faq" className="hover:text-foreground">FAQ</Link>
+          {/* Stat pills */}
+          <div className="grid grid-cols-3 gap-3 lg:gap-4">
+            <StatPill icon={Package} tint="text-sky-500" label="ORDER" value={String(stats.orders)} />
+            <StatPill icon={Receipt} tint="text-violet-500" label="TOTAL" value={`৳${stats.spent.toLocaleString()}`} />
+            <StatPill icon={Heart} tint="text-rose-500" label="WISHLIST" value={String(stats.wishlist)} />
           </div>
-        </footer>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatPill({ icon: Icon, tint, label, value }: { icon: React.ComponentType<{ className?: string }>; tint: string; label: string; value: string }) {
+  return (
+    <div className="min-w-[88px] rounded-2xl bg-background border border-border px-3 py-2.5 text-center shadow-sm">
+      <div className={`mx-auto w-7 h-7 rounded-full grid place-items-center bg-muted ${tint}`}>
+        <Icon className="w-3.5 h-3.5" />
+      </div>
+      <div className="mt-1 text-[9px] font-bold tracking-wider text-muted-foreground">{label}</div>
+      <div className="text-base font-bold text-foreground tabular-nums leading-tight">{value}</div>
+    </div>
+  );
+}
+
+function GiftBanner({ onClaim }: { onClaim: () => void }) {
+  return (
+    <div className="relative overflow-hidden rounded-3xl p-4 md:p-5 bg-card border border-border shadow-sm">
+      <div className="absolute inset-0 opacity-30 pointer-events-none" style={{ background: "linear-gradient(90deg, rgba(236,72,153,0.18), rgba(251,191,36,0.18), rgba(139,92,246,0.18))" }} />
+      <div className="relative flex flex-wrap items-center gap-4">
+        <div className="w-11 h-11 shrink-0 rounded-full grid place-items-center text-primary-foreground shadow-lg" style={{ background: "linear-gradient(135deg,#ec4899,#a855f7)" }}>
+          <Gift className="w-5 h-5" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-[10px] font-bold tracking-[0.18em] text-pink-500 dark:text-pink-300">WELCOME GIFT</div>
+          <div className="text-sm md:text-[15px] font-bold text-foreground mt-0.5">🎁 আপনার বিশেষ ছাড় দাবি করুন</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">Lucky Spin ঘুরিয়ে ৳১০০–১৫০ পর্যন্ত ছাড় পেতে পারেন</div>
+        </div>
+        <button
+          onClick={onClaim}
+          className="shrink-0 inline-flex items-center gap-1.5 h-10 px-5 rounded-full text-primary-foreground text-sm font-bold shadow-lg shadow-primary/25 hover:opacity-95 transition"
+          style={{ background: "linear-gradient(90deg,#ec4899,#a855f7)" }}
+        >
+          Claim Now <ChevronRight className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );
@@ -276,7 +392,7 @@ function DashboardPage() {
 
 function UserMenuItem({ icon, label, onClick, danger }: { icon: React.ReactNode; label: string; onClick?: () => void; danger?: boolean }) {
   return (
-    <button onClick={onClick} className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition ${danger ? "text-red-300 hover:bg-red-500/10" : "hover:bg-white/5"}`}>
+    <button onClick={onClick} className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition ${danger ? "text-rose-500 hover:bg-rose-500/10" : "text-foreground hover:bg-accent"}`}>
       {icon} {label}
     </button>
   );
@@ -295,7 +411,6 @@ function SectionRenderer({
   onNavigate: (s: SectionId) => void;
 }) {
   switch (section) {
-    case "overview": return <Overview stats={stats} orders={orders} greetingName={greetingName} onNavigate={onNavigate} />;
     case "profile": return <ProfileView user={user} profile={profile} onNavigate={onNavigate} />;
     case "edit-profile": return <EditProfile profile={profile} onSaved={() => onNavigate("profile")} onCancel={() => onNavigate("profile")} />;
     case "orders": return <OrdersTable orders={orders} />;
@@ -303,16 +418,25 @@ function SectionRenderer({
     case "expired": return <ServiceList kind="expired" />;
     case "downloads": return <Downloads orders={orders} />;
     case "licenses": return <Licenses />;
+    case "subscriptions": return <ServiceList kind="active" />;
+    case "wishlist": return <ComingSoon title="Wishlist" desc="আপনার সংরক্ষিত পণ্যগুলি।" />;
+    case "notifications": return <ComingSoon title="Notifications" desc="অর্ডার ও প্রমোশন আপডেট।" />;
     case "wallet": return <WalletRedirect />;
-    case "address": return <ComingSoon title="ঠিকানা" desc="ডেলিভারি ঠিকানা ম্যানেজ করুন।" />;
-    case "security": return <ComingSoon title="সিকিউরিটি" desc="পাসওয়ার্ড ও 2FA সেটিংস।" />;
-    case "language": return <ComingSoon title="ভাষা" desc="বাংলা / English নির্বাচন করুন।" />;
-    case "install-app": return <ComingSoon title="অ্যাপ ইনস্টল" desc="PWA হিসেবে যুক্ত করুন।" />;
+    case "points": return <ComingSoon title="Reward Points" desc="পয়েন্ট জমা ও রিডিম করুন।" />;
+    case "referral": return <ComingSoon title="Referral Program" desc="রেফার করে আয় করুন।" />;
+    case "addresses": return <ComingSoon title="Addresses" desc="ডেলিভারি ঠিকানা ম্যানেজ করুন।" />;
+    case "security": return <ComingSoon title="Security" desc="পাসওয়ার্ড ও 2FA সেটিংস।" />;
+    case "language": return <ComingSoon title="Language" desc="বাংলা / English নির্বাচন করুন।" />;
+    case "install-app": return <ComingSoon title="Install App" desc="PWA হিসেবে যুক্ত করুন।" />;
     case "open-ticket": return <OpenTicket />;
     case "my-tickets": return <MyTickets />;
     default: return null;
   }
 }
+
+
+
+
 
 
 function ComingSoon({ title, desc }: { title: string; desc: string }) {
@@ -345,37 +469,23 @@ function WalletRedirect() {
 
 /* ===================== SHARED PRIMITIVES ===================== */
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`glass-strong rounded-3xl p-5 md:p-6 border border-[var(--glass-border)] ${className}`}>{children}</div>;
+  return <div className={`bg-card text-card-foreground rounded-3xl p-5 md:p-6 border border-border shadow-sm ${className}`}>{children}</div>;
 }
 function PageHead({ title, desc, action }: { title: string; desc?: string; action?: React.ReactNode }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "var(--font-display)" }}>{title}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{title}</h1>
         {desc && <p className="text-sm text-muted-foreground mt-1">{desc}</p>}
       </div>
       {action}
     </div>
   );
 }
-function Stat({ icon, label, value, accent }: { icon: React.ReactNode; label: string; value: string; accent: string }) {
-  return (
-    <div className="relative overflow-hidden glass-strong rounded-2xl p-4 md:p-5 border border-[var(--glass-border)]">
-      <div className={`absolute inset-0 bg-gradient-to-br ${accent} opacity-60 pointer-events-none`} />
-      <div className="relative flex items-center justify-between">
-        <div>
-          <div className="text-xs text-muted-foreground font-medium">{label}</div>
-          <div className="mt-1 text-xl md:text-2xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>{value}</div>
-        </div>
-        <div className="w-10 h-10 rounded-xl glass grid place-items-center text-primary">{icon}</div>
-      </div>
-    </div>
-  );
-}
 function Empty({ icon, msg }: { icon: React.ReactNode; msg: string }) {
   return (
-    <div className="rounded-2xl border-2 border-dashed border-[var(--glass-border)] p-12 text-center">
-      <div className="mx-auto w-12 h-12 rounded-2xl glass grid place-items-center text-muted-foreground">{icon}</div>
+    <div className="rounded-2xl border-2 border-dashed border-border p-12 text-center">
+      <div className="mx-auto w-12 h-12 rounded-2xl bg-muted grid place-items-center text-muted-foreground">{icon}</div>
       <p className="mt-3 text-sm text-muted-foreground">{msg}</p>
     </div>
   );
@@ -383,17 +493,17 @@ function Empty({ icon, msg }: { icon: React.ReactNode; msg: string }) {
 function Badge({ children, color = "primary" }: { children: React.ReactNode; color?: "primary" | "success" | "warn" | "danger" | "muted" }) {
   const c = {
     primary: "bg-primary/15 text-primary border-primary/30",
-    success: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
-    warn: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/30",
-    danger: "bg-pink-500/15 text-pink-300 border-pink-500/30",
-    muted: "bg-white/5 text-muted-foreground border-[var(--glass-border)]",
+    success: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30",
+    warn: "bg-amber-500/15 text-amber-600 dark:text-amber-300 border-amber-500/30",
+    danger: "bg-rose-500/15 text-rose-600 dark:text-rose-300 border-rose-500/30",
+    muted: "bg-muted text-muted-foreground border-border",
   }[color];
   return <span className={`inline-block text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border ${c}`}>{children}</span>;
 }
 function Btn({ children, onClick, variant = "primary", className = "", type = "button" }: { children: React.ReactNode; onClick?: () => void; variant?: "primary" | "ghost" | "outline"; className?: string; type?: "button" | "submit" }) {
   const v = {
     primary: "bg-primary text-primary-foreground hover:opacity-90",
-    ghost: "glass border border-[var(--glass-border)] hover:border-primary/40",
+    ghost: "bg-background border border-border text-foreground hover:border-primary/40",
     outline: "border border-primary/40 text-primary hover:bg-primary/10",
   }[variant];
   return <button type={type} onClick={onClick} className={`inline-flex items-center justify-center gap-2 h-10 px-5 rounded-full text-sm font-semibold transition ${v} ${className}`}>{children}</button>;
@@ -407,176 +517,75 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...props} className={`w-full h-11 px-4 rounded-xl glass border border-[var(--glass-border)] outline-none text-sm focus:border-primary/50 ${props.className ?? ""}`} />;
+  return <input {...props} className={`w-full h-11 px-4 rounded-xl bg-background text-foreground border border-border outline-none text-sm focus:border-primary/60 focus:ring-2 focus:ring-primary/15 transition ${props.className ?? ""}`} />;
 }
 function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea {...props} className={`w-full p-4 rounded-xl glass border border-[var(--glass-border)] outline-none text-sm focus:border-primary/50 ${props.className ?? ""}`} />;
+  return <textarea {...props} className={`w-full p-4 rounded-xl bg-background text-foreground border border-border outline-none text-sm focus:border-primary/60 focus:ring-2 focus:ring-primary/15 transition ${props.className ?? ""}`} />;
 }
 
-/* ===================== OVERVIEW ===================== */
-const STAT_TILES = [
-  { tint: "text-blue-500", tintBg: "bg-blue-500/10" },
-  { tint: "text-emerald-500", tintBg: "bg-emerald-500/10" },
-  { tint: "text-purple-500", tintBg: "bg-purple-500/10" },
-  { tint: "text-orange-500", tintBg: "bg-orange-500/10" },
-];
 
-const HUB_TILES: Array<{
-  id: SectionId | "shop";
-  label: string;
-  desc: string;
-  icon: React.ComponentType<{ className?: string }>;
-  tint: string;
-  tintBg: string;
-  surface: string;
-  to?: string;
-}> = [
-  { id: "orders", label: "আমার অর্ডার", desc: "অর্ডার ট্র্যাক ও ইতিহাস", icon: Package, tint: "text-blue-500", tintBg: "bg-blue-500/10", surface: "bg-blue-500/5 border-blue-500/15" },
-  { id: "overview", label: "উইশলিস্ট", desc: "সংরক্ষিত পণ্য", icon: Heart, tint: "text-rose-500", tintBg: "bg-rose-500/10", surface: "bg-rose-500/5 border-rose-500/15" },
-  { id: "downloads", label: "ডাউনলোডস", desc: "ডিজিটাল ফাইল", icon: Download, tint: "text-emerald-500", tintBg: "bg-emerald-500/10", surface: "bg-emerald-500/5 border-emerald-500/15" },
-  { id: "wallet", label: "ওয়ালেট", desc: "ব্যালেন্স ও টপ-আপ", icon: Wallet, tint: "text-purple-500", tintBg: "bg-purple-500/10", surface: "bg-purple-500/5 border-purple-500/15" },
-  { id: "overview", label: "অ্যাফিলিয়েট", desc: "রেফার ও আয় করুন", icon: Users, tint: "text-amber-500", tintBg: "bg-amber-500/10", surface: "bg-amber-500/5 border-amber-500/15" },
-  { id: "open-ticket", label: "সাপোর্ট", desc: "টিকিট ও চ্যাট", icon: LifeBuoy, tint: "text-cyan-500", tintBg: "bg-cyan-500/10", surface: "bg-cyan-500/5 border-cyan-500/15" },
-  { id: "overview", label: "রিফান্ড আবেদন", desc: "রিফান্ড পলিসি অনুযায়ী", icon: Receipt, tint: "text-orange-500", tintBg: "bg-orange-500/10", surface: "bg-orange-500/5 border-orange-500/15" },
-  { id: "overview", label: "অর্ডার ট্র্যাক", desc: "পাবলিক ট্র্যাকিং", icon: MapPin, tint: "text-indigo-500", tintBg: "bg-indigo-500/10", surface: "bg-indigo-500/5 border-indigo-500/15" },
-  { id: "shop", label: "শপ", desc: "সকল প্রোডাক্ট", icon: ShoppingBag, tint: "text-fuchsia-500", tintBg: "bg-fuchsia-500/10", surface: "bg-fuchsia-500/5 border-fuchsia-500/15", to: "/products" },
-  { id: "install-app", label: "অ্যাপ ইনস্টল", desc: "PWA হিসেবে যুক্ত করুন", icon: Smartphone, tint: "text-teal-500", tintBg: "bg-teal-500/10", surface: "bg-teal-500/5 border-teal-500/15" },
-];
 
-function Overview({ stats, orders, greetingName, onNavigate }: { stats: { total: number; pending: number; delivered: number; spent: number }; orders: Order[]; greetingName: string; onNavigate: (s: SectionId) => void }) {
-  void orders;
-  const statItems = [
-    { icon: Package, label: "অর্ডার", value: String(stats.total) },
-    { icon: Receipt, label: "মোট খরচ", value: `৳${stats.spent.toLocaleString()}` },
-    { icon: Wallet, label: "ওয়ালেট", value: "৳০" },
-    { icon: Globe, label: "ভাষা", value: "বাংলা" },
-  ];
-
-  return (
-    <div className="space-y-6">
-      {/* Hero greeting */}
-      <section className="relative overflow-hidden rounded-3xl p-6 md:p-10 bg-slate-900 dark:bg-slate-900 text-white shadow-xl">
-        <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full blur-3xl opacity-30" style={{ background: "var(--gradient-aurora)" }} />
-        <div className="relative flex flex-wrap items-start justify-between gap-6">
-          <div>
-            <p className="text-slate-400 text-sm font-medium">স্বাগতম ফিরে এসেছেন</p>
-            <h1 className="mt-1 flex items-center gap-3 text-4xl md:text-5xl font-bold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
-              {greetingName} <span className="text-3xl">👋</span>
-            </h1>
-            <p className="mt-2 text-sm text-slate-400 max-w-md">আপনার অর্ডার, ওয়ালেট এবং পছন্দ এক জায়গায় কন্ট্রোল করুন।</p>
-          </div>
-          <div className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full inline-flex items-center gap-2 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Premium Member
-          </div>
-        </div>
-
-        <div className="relative mt-8 bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5">
-          <div className="flex justify-between items-center mb-3">
-            <span className="text-xs font-bold uppercase tracking-widest text-slate-300">VIP প্রগ্রেস</span>
-            <span className="text-xs text-slate-300 inline-flex items-center gap-1"><Trophy className="w-3.5 h-3.5 text-amber-400" /> সর্বোচ্চ স্তর</span>
-          </div>
-          <div className="h-2.5 w-full bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full rounded-full w-full" style={{ background: "linear-gradient(90deg, #6366f1, #a855f7, #fbbf24)" }} />
-          </div>
-        </div>
-      </section>
-
-      {/* Stat cards */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-        {statItems.map((s, i) => {
-          const t = STAT_TILES[i];
-          const Icon = s.icon;
-          return (
-            <div key={s.label} className="bg-card border border-border rounded-3xl p-5 shadow-sm">
-              <div className={`w-11 h-11 rounded-2xl grid place-items-center mb-3 ${t.tintBg}`}>
-                <Icon className={`w-5 h-5 ${t.tint}`} />
-              </div>
-              <div className="text-xs text-muted-foreground font-medium">{s.label}</div>
-              <div className="text-2xl font-bold text-foreground mt-1" style={{ fontFamily: "var(--font-heading)" }}>{s.value}</div>
-            </div>
-          );
-        })}
-      </section>
-
-      {/* Control Hub */}
-      <section className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-sm">
-        <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">কন্ট্রোল হাব</p>
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mt-1" style={{ fontFamily: "var(--font-heading)" }}>সবকিছু এক জায়গায়</h2>
-          </div>
-          <Link to="/products" className="text-sm font-semibold text-foreground hover:text-primary inline-flex items-center gap-1 transition">
-            শপিং করুন <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
-          {HUB_TILES.map((tile, idx) => {
-            const Icon = tile.icon;
-            const inner = (
-              <>
-                <div className="w-10 h-10 rounded-2xl bg-card border border-border shadow-sm grid place-items-center mb-3 group-hover:scale-110 transition-transform">
-                  <Icon className={`w-5 h-5 ${tile.tint}`} />
-                </div>
-                <div className="text-sm font-bold text-foreground">{tile.label}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">{tile.desc}</div>
-              </>
-            );
-            const cls = `group cursor-pointer p-5 rounded-3xl border ${tile.surface} hover:shadow-lg transition-all text-left`;
-            return tile.to ? (
-              <Link key={idx} to={tile.to} className={cls}>{inner}</Link>
-            ) : (
-              <button key={idx} onClick={() => onNavigate(tile.id as SectionId)} className={cls}>{inner}</button>
-            );
-          })}
-        </div>
-      </section>
-    </div>
-  );
-}
 
 /* ===================== PROFILE ===================== */
 function ProfileView({ user, profile, onNavigate }: { user: { email?: string; id?: string } | null; profile: { display_name?: string | null; phone?: string | null } | null; onNavigate: (s: SectionId) => void }) {
+  const username = (profile?.display_name || user?.email?.split("@")[0] || "user").toLowerCase().replace(/\s+/g, "");
   return (
-    <div className="space-y-6">
-      <PageHead
-        title="My Profile"
-        desc="Your personal information"
-        action={<Btn variant="primary" onClick={() => onNavigate("edit-profile")}>তথ্য এডিট করুন</Btn>}
-      />
-      <Card>
-        <div className="flex flex-wrap items-center gap-5">
-          <div className="w-20 h-20 rounded-2xl grid place-items-center text-white text-2xl font-bold" style={{ background: "var(--gradient-aurora)" }}>
-            {(profile?.display_name || user?.email || "U").charAt(0).toUpperCase()}
+    <div className="bg-card border border-border rounded-3xl p-5 md:p-7 shadow-sm">
+      {/* Section header */}
+      <div className="flex items-center justify-between gap-3 pb-5 border-b border-border">
+        <div className="flex items-center gap-3">
+          <div className="w-11 h-11 rounded-2xl grid place-items-center text-primary-foreground" style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}>
+            <UserIcon className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>{profile?.display_name || "Not set"}</div>
-            <div className="text-sm text-muted-foreground">{user?.email}</div>
-            <div className="mt-2 flex gap-2">
-              <Badge color="success">Email Verified</Badge>
-            </div>
+            <h2 className="text-xl md:text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>Profile</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Manage your personal information</p>
           </div>
         </div>
-      </Card>
+        <button
+          onClick={() => onNavigate("edit-profile")}
+          className="inline-flex items-center gap-2 h-9 px-4 rounded-full text-primary-foreground text-sm font-semibold shadow-sm"
+          style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}
+        >
+          <Edit3 className="w-3.5 h-3.5" /> Edit
+        </button>
+      </div>
 
-      <Card>
-        <h3 className="font-semibold mb-4" style={{ fontFamily: "var(--font-heading)" }}>Personal Information</h3>
-        <div className="space-y-3 text-sm">
-          <Row icon={<UserIcon className="w-4 h-4" />} label="Full Name" value={profile?.display_name || "—"} />
-          <Row icon={<Mail className="w-4 h-4" />} label="Email" value={user?.email || "—"} />
-          <Row icon={<Phone className="w-4 h-4" />} label="Phone" value={profile?.phone || "—"} />
-          <Row icon={<MapPin className="w-4 h-4" />} label="Country" value="Bangladesh" />
-          <Row icon={<Hash className="w-4 h-4" />} label="User ID" value={user?.id?.slice(0, 12) + "..." || "—"} />
-        </div>
-      </Card>
+      {/* Fields */}
+      <div className="mt-6 space-y-4">
+        <ProfileField label="FULL NAME" icon={UserIcon} value={profile?.display_name || "—"} />
+        <ProfileField label="USERNAME" icon={AtSign} value={`@${username}`} />
+        <ProfileField label="EMAIL" icon={Mail} value={user?.email || "—"} verified />
+        <ProfileField label="PHONE NUMBER" icon={Phone} value={profile?.phone || "—"} />
+        <ProfileField label="COUNTRY" icon={MapPin} value="Bangladesh" />
+        <ProfileField label="USER ID" icon={Hash} value={user?.id ? user.id.slice(0, 12) + "…" : "—"} />
+      </div>
     </div>
   );
 }
+
+function ProfileField({ label, icon: Icon, value, verified }: { label: string; icon: React.ComponentType<{ className?: string }>; value: string; verified?: boolean }) {
+  return (
+    <div>
+      <div className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground mb-1.5">{label}</div>
+      <div className="flex items-center gap-3 h-12 px-4 rounded-2xl bg-background border border-border">
+        <Icon className="w-4 h-4 text-muted-foreground shrink-0" />
+        <span className="flex-1 text-sm font-medium text-foreground truncate">{value}</span>
+        {verified && (
+          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 shrink-0">
+            <Check className="w-3 h-3" strokeWidth={3} /> Verified
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Row({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between p-3 rounded-xl glass border border-[var(--glass-border)]">
+    <div className="flex items-center justify-between p-3 rounded-xl bg-background border border-border">
       <span className="inline-flex items-center gap-2 text-muted-foreground"><span className="text-primary">{icon}</span>{label}</span>
-      <span className="font-medium">{value}</span>
+      <span className="font-medium text-foreground">{value}</span>
     </div>
   );
 }
