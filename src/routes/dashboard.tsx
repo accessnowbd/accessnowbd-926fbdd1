@@ -411,7 +411,6 @@ function SectionRenderer({
   onNavigate: (s: SectionId) => void;
 }) {
   switch (section) {
-    case "overview": return <Overview stats={stats} orders={orders} greetingName={greetingName} onNavigate={onNavigate} />;
     case "profile": return <ProfileView user={user} profile={profile} onNavigate={onNavigate} />;
     case "edit-profile": return <EditProfile profile={profile} onSaved={() => onNavigate("profile")} onCancel={() => onNavigate("profile")} />;
     case "orders": return <OrdersTable orders={orders} />;
@@ -419,16 +418,22 @@ function SectionRenderer({
     case "expired": return <ServiceList kind="expired" />;
     case "downloads": return <Downloads orders={orders} />;
     case "licenses": return <Licenses />;
+    case "subscriptions": return <ServiceList kind="active" />;
+    case "wishlist": return <ComingSoon title="Wishlist" desc="আপনার সংরক্ষিত পণ্যগুলি।" />;
+    case "notifications": return <ComingSoon title="Notifications" desc="অর্ডার ও প্রমোশন আপডেট।" />;
     case "wallet": return <WalletRedirect />;
-    case "address": return <ComingSoon title="ঠিকানা" desc="ডেলিভারি ঠিকানা ম্যানেজ করুন।" />;
-    case "security": return <ComingSoon title="সিকিউরিটি" desc="পাসওয়ার্ড ও 2FA সেটিংস।" />;
-    case "language": return <ComingSoon title="ভাষা" desc="বাংলা / English নির্বাচন করুন।" />;
-    case "install-app": return <ComingSoon title="অ্যাপ ইনস্টল" desc="PWA হিসেবে যুক্ত করুন।" />;
+    case "points": return <ComingSoon title="Reward Points" desc="পয়েন্ট জমা ও রিডিম করুন।" />;
+    case "referral": return <ComingSoon title="Referral Program" desc="রেফার করে আয় করুন।" />;
+    case "addresses": return <ComingSoon title="Addresses" desc="ডেলিভারি ঠিকানা ম্যানেজ করুন।" />;
+    case "security": return <ComingSoon title="Security" desc="পাসওয়ার্ড ও 2FA সেটিংস।" />;
+    case "language": return <ComingSoon title="Language" desc="বাংলা / English নির্বাচন করুন।" />;
+    case "install-app": return <ComingSoon title="Install App" desc="PWA হিসেবে যুক্ত করুন।" />;
     case "open-ticket": return <OpenTicket />;
     case "my-tickets": return <MyTickets />;
     default: return null;
   }
 }
+void stats; void greetingName;
 
 
 function ComingSoon({ title, desc }: { title: string; desc: string }) {
