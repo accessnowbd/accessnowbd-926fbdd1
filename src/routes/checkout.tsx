@@ -22,7 +22,7 @@ import { usePaymentMethods } from "@/hooks/useShopConfig";
 import { sendTransactionalEmail } from "@/lib/email/send";
 
 const checkoutSearchSchema = z.object({
-  step: fallback(z.union([z.literal(1), z.literal(2)]), 1).default(1),
+  step: z.preprocess((value) => (value === "2" || value === 2 ? 2 : 1), z.union([z.literal(1), z.literal(2)])).default(1),
   coupon: fallback(z.string(), "").default(""),
 });
 
@@ -67,13 +67,13 @@ const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const bdPhoneRe = /^01[3-9]\d{8}$/;
 
 function CheckoutPage() {
-  const { items, total, clear } = useCart();
+  const { items, total, clear, ready: cartReady } = useCart();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const { step, coupon } = Route.useSearch();
   const setStep = (n: 1 | 2) =>
-    navigate({ to: "/checkout", search: { step: n, coupon }, replace: false });
+    navigate({ to: "/checkout", search: { step: String(n), coupon }, replace: false });
 
   // Scroll to top whenever the active step changes (incl. browser back/forward).
   useEffect(() => {
@@ -150,7 +150,7 @@ function CheckoutPage() {
   useEffect(() => {
     if (step === 2 && !step1Valid) {
       setTouched((t) => ({ ...t, name: true, email: true, phone: true }));
-      navigate({ to: "/checkout", search: { step: 1, coupon }, replace: true });
+      navigate({ to: "/checkout", search: { step: "1", coupon }, replace: true });
     }
   }, [step, step1Valid, navigate, coupon]);
 
@@ -234,24 +234,24 @@ function CheckoutPage() {
 
 
   // ----- Auth/empty guards -----
-  if (!authLoading && !user && items.length > 0) {
+  if (authLoading || !cartReady) {
+    return (
+      <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-background text-foreground">
+        <GlassCard className="text-center max-w-sm">
+          <Loader2 className="mx-auto h-5 w-5 animate-spin text-primary" />
+          <p className="mt-3 text-sm text-foreground/80">Checkout loading…</p>
+        </GlassCard>
+      </div>
+    );
+  }
+
+  if (!user && items.length > 0) {
     return (
       <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-background text-foreground">
         <GlassCard className="text-center max-w-sm">
           <h1 className="text-2xl font-semibold text-aurora">Login to checkout</h1>
           <p className="text-sm text-muted-foreground mt-2">Sign in or create an account to place your order and track it later.</p>
           <GlassButton onClick={() => { rememberReturnTo(); navigate({ to: "/login" }); }} size="lg" className="mt-5">Login / Sign up</GlassButton>
-        </GlassCard>
-      </div>
-    );
-  }
-
-  if (authLoading) {
-    return (
-      <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-background text-foreground">
-        <GlassCard className="text-center max-w-sm">
-          <Loader2 className="mx-auto h-5 w-5 animate-spin text-primary" />
-          <p className="mt-3 text-sm text-foreground/80">Checkout loading…</p>
         </GlassCard>
       </div>
     );
@@ -283,7 +283,7 @@ function CheckoutPage() {
     const title = items.length === 1 ? firstItem.name : `${items.length} items`;
     const applyCouponNow = () => {
       const code = couponInput.trim().toUpperCase();
-      navigate({ to: "/checkout", search: { step: 1, coupon: code }, replace: true });
+      navigate({ to: "/checkout", search: { step: "1", coupon: code }, replace: true });
     };
     return (
       <div className="checkout-dark min-h-screen grid place-items-center px-4 py-10 bg-background text-foreground">
