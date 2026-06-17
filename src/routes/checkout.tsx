@@ -71,6 +71,8 @@ function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
+
+
   const { step, coupon } = Route.useSearch();
   const setStep = (n: 1 | 2) =>
     navigate({ to: "/checkout", search: { step: String(n), coupon }, replace: false });
