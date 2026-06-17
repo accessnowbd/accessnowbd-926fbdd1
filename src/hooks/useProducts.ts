@@ -11,13 +11,19 @@ const PRODUCT_GC_MS = 60 * 60_000;    // 1 hour
 
 export const productsQueryOptions = {
   queryKey: ["products"] as const,
-  queryFn: () => listProducts(),
+  queryFn: () => fetchProducts(),
   staleTime: PRODUCT_STALE_MS,
   gcTime: PRODUCT_GC_MS,
 };
 
+// Client: use the cached HTTP endpoint so the CDN absorbs repeat loads
+// (s-maxage=300, stale-while-revalidate=3600). SSR keeps the direct
+// server-fn path to avoid an extra hop.
 async function fetchProducts(): Promise<Product[]> {
-  return listProducts();
+  if (typeof window === "undefined") return listProducts();
+  const response = await fetch("/api/public/products");
+  if (!response.ok) throw new Error("Products could not be loaded");
+  return response.json();
 }
 
 async function fetchProduct(slug: string): Promise<Product | null> {
