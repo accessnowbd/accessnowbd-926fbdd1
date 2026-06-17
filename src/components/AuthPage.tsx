@@ -5,7 +5,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { sendTransactionalEmail } from "@/lib/email/send";
-import accessNowLogo from "@/assets/logo-gold-a.png";
+import accessNowLogo from "@/assets/logo-gold-a.webp";
 
 export function AuthPageEntry({ initialMode, openForgot }: { initialMode: "login" | "signup"; openForgot?: boolean }) {
   return <AuthPage initialMode={initialMode} openForgot={openForgot} />;
