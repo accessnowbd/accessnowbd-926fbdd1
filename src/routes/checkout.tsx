@@ -268,7 +268,7 @@ function CheckoutPage() {
 
 
   // ----- Auth/empty guards -----
-  const guardCardStyle: React.CSSProperties = {
+  const guardCardStyle: CSSProperties = {
     background: "var(--card, rgba(255,255,255,0.06))",
     borderColor: "var(--border, rgba(255,255,255,0.16))",
     color: "var(--card-foreground, inherit)",
