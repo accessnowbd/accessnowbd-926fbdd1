@@ -2759,3 +2759,38 @@ html:not(.theme-white) .checkout-dark .border-dashed {
 
 /* Primary text fallback inside dark cards */
 html:not(.theme-white) .checkout-dark .text-white { color: oklch(0.99 0 0) !important; }
+
+/* Cart page — dark theme: light text on dark glass cards, mirror of checkout-dark. */
+html:not(.theme-white) .cart-surface .bg-white,
+html:not(.theme-white) .cart-surface .bg-slate-50,
+html:not(.theme-white) .cart-surface .bg-slate-100,
+html:not(.theme-white) .cart-surface [class*="bg-white"],
+html:not(.theme-white) .cart-surface [class*="bg-slate-50"],
+html:not(.theme-white) .cart-surface [class*="bg-slate-100"] {
+  background-color: oklch(0.20 0.04 280 / 0.88) !important;
+  background-image: none !important;
+}
+
+html:not(.theme-white) .cart-surface [class*="border-slate"],
+html:not(.theme-white) .cart-surface [class*="border-white"] {
+  border-color: oklch(1 0 0 / 0.14) !important;
+}
+
+html:not(.theme-white) .cart-surface .text-slate-900 { color: oklch(0.98 0.01 280) !important; }
+html:not(.theme-white) .cart-surface .text-slate-800 { color: oklch(0.93 0.02 280) !important; }
+html:not(.theme-white) .cart-surface .text-slate-700 { color: oklch(0.86 0.02 280) !important; }
+html:not(.theme-white) .cart-surface .text-slate-600 { color: oklch(0.78 0.02 280) !important; }
+html:not(.theme-white) .cart-surface .text-slate-500 { color: oklch(0.70 0.02 280) !important; }
+html:not(.theme-white) .cart-surface .text-slate-400 { color: oklch(0.62 0.02 280) !important; }
+
+html:not(.theme-white) .cart-surface input,
+html:not(.theme-white) .cart-surface textarea,
+html:not(.theme-white) .cart-surface select {
+  background-color: oklch(0.20 0.04 280 / 0.85) !important;
+  color: oklch(0.98 0.01 280) !important;
+  border-color: oklch(1 0 0 / 0.14) !important;
+}
+html:not(.theme-white) .cart-surface ::placeholder {
+  color: oklch(0.68 0.02 280) !important;
+  opacity: 1;
+}
