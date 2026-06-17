@@ -550,10 +550,10 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
   const { t } = useAdminLang();
   const label = t(item.label, item.labelBn);
   const badgeClass = item.badge === "LIVE"
-    ? "bg-rose-50 text-rose-600 ring-1 ring-rose-100"
+    ? "bg-rose-600 text-white ring-1 ring-rose-700/40 shadow-sm"
     : item.badge === "NEW"
-      ? "bg-violet-50 text-violet-600 ring-1 ring-violet-100"
-      : "bg-amber-50 text-amber-600 ring-1 ring-amber-100";
+      ? "bg-violet-600 text-white ring-1 ring-violet-700/40 shadow-sm"
+      : "bg-amber-500 text-white ring-1 ring-amber-600/40 shadow-sm";
   return (
     <Link
       to={item.to}
@@ -563,8 +563,8 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
         "group relative flex items-center gap-3 rounded-xl text-sm transition-colors",
         collapsed ? "justify-center px-2 py-2 mx-1 my-0.5" : "px-2.5 py-2",
         active
-          ? "bg-[var(--admin-active)] text-[var(--admin-primary)] ring-1 ring-[var(--admin-primary-soft)]"
-          : "text-[var(--admin-text)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-ink)]",
+          ? "bg-violet-100 text-violet-900 ring-1 ring-violet-300 shadow-[0_1px_0_0_rgba(124,58,237,0.08)_inset]"
+          : "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
       ].join(" ")}
     >
       <span
