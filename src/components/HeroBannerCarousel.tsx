@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, ShoppingCart, ArrowUpRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { optimizeSupabaseImage } from "@/lib/image-url";
 
 type BgStyle = "aurora" | "spotlight" | "mesh" | "nebula";
 type OverlayIntensity = "low" | "medium" | "high";
@@ -183,7 +184,8 @@ export function HeroBannerCarousel() {
   const intensity: OverlayIntensity = current.data.overlay_intensity || "medium";
 
   // Resolve image: explicit URL > product's image by brand slug
-  const resolvedImage = current.data.image_url || (brand?.slug ? productMap[brand.slug] : undefined);
+  const rawResolvedImage = current.data.image_url || (brand?.slug ? productMap[brand.slug] : undefined);
+  const resolvedImage = optimizeSupabaseImage(rawResolvedImage, { width: 1000, quality: 75 });
 
   // Eid / Qurbani detection — adds festive overlay (crescent, mosque, lanterns, sparkles)
   const isEid = useMemo(() => {
@@ -470,7 +472,15 @@ export function HeroBannerCarousel() {
                         src={resolvedImage}
                         alt={current.data.title ?? "banner"}
                         loading="eager"
+                        fetchPriority="high"
+                        decoding="async"
                         className="max-h-full max-w-full object-contain"
+                        onError={(e) => {
+                          const img = e.currentTarget;
+                          if (rawResolvedImage && img.src !== rawResolvedImage) {
+                            img.src = rawResolvedImage;
+                          }
+                        }}
                       />
                     </div>
                   ) : isEid ? (

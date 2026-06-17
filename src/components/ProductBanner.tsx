@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { Product } from "@/data/products";
+import { optimizeSupabaseImage } from "@/lib/image-url";
 
 /** Brand-domain guesser → logo CDN (no API key) */
 function guessLogoUrl(name: string): string {
@@ -90,7 +91,10 @@ export function ProductBanner({
 }) {
   const [imgFailed, setImgFailed] = useState(false);
   const [logoIdx, setLogoIdx] = useState(0);
-  const primary = product.imageUrl;
+  const primary = useMemo(
+    () => optimizeSupabaseImage(product.imageUrl, { width: priority ? 800 : 480, quality: 72 }),
+    [product.imageUrl, priority]
+  );
   const logos = useMemo(() => logoSources(product.name), [product.name]);
   const currentLogo = logos[logoIdx];
   const allLogosFailed = logoIdx >= logos.length;
@@ -116,7 +120,17 @@ export function ProductBanner({
           height={1024}
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
           className="relative z-10 w-full h-full object-cover"
-          onError={() => setImgFailed(true)}
+          onError={(e) => {
+            // If the transformed URL fails (transforms not enabled),
+            // fall back to the original public object URL once before
+            // surrendering to the logo fallback.
+            const img = e.currentTarget;
+            if (product.imageUrl && img.src !== product.imageUrl) {
+              img.src = product.imageUrl;
+            } else {
+              setImgFailed(true);
+            }
+          }}
         />
       ) : !allLogosFailed ? (
         <img
