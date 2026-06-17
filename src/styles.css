@@ -2794,3 +2794,21 @@ html:not(.theme-white) .cart-surface ::placeholder {
   color: oklch(0.68 0.02 280) !important;
   opacity: 1;
 }
+
+/* Checkout info cards (login prompt / empty cart) — guaranteed visible in both themes */
+.checkout-info-card {
+  background-color: oklch(0.22 0.04 280 / 0.95) !important;
+  background-image: none !important;
+  border: 1px solid oklch(1 0 0 / 0.18) !important;
+  box-shadow: 0 12px 40px -12px oklch(0 0 0 / 0.6) !important;
+  color: oklch(0.98 0.01 280) !important;
+}
+.checkout-info-card * { color: inherit; }
+.checkout-info-card a.text-primary { color: oklch(0.78 0.18 250) !important; }
+html.theme-white .checkout-info-card {
+  background-color: #ffffff !important;
+  border: 1px solid oklch(0.92 0.01 280) !important;
+  box-shadow: 0 12px 40px -16px oklch(0.6 0.1 280 / 0.25) !important;
+  color: oklch(0.20 0.04 280) !important;
+}
+html.theme-white .checkout-info-card a.text-primary { color: oklch(0.50 0.18 280) !important; }

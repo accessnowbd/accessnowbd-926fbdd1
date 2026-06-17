@@ -245,9 +245,9 @@ function CheckoutPage() {
   if (!user && items.length > 0) {
     return (
       <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-background text-foreground">
-        <GlassCard className="text-center max-w-sm">
-          <h1 className="text-2xl font-semibold text-aurora">Login to checkout</h1>
-          <p className="text-sm text-muted-foreground mt-2">Sign in or create an account to place your order and track it later.</p>
+        <GlassCard className="checkout-info-card text-center max-w-sm">
+          <h1 className="text-2xl font-semibold text-foreground">Login to checkout</h1>
+          <p className="text-sm text-foreground/75 mt-2">Sign in or create an account to place your order and track it later.</p>
           <GlassButton onClick={() => { rememberReturnTo(); navigate({ to: "/login" }); }} size="lg" className="mt-5">Login / Sign up</GlassButton>
         </GlassCard>
       </div>
@@ -257,8 +257,8 @@ function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-background text-foreground">
-        <GlassCard className="text-center">
-          <h1 className="text-2xl font-semibold">Your cart is empty</h1>
+        <GlassCard className="checkout-info-card text-center">
+          <h1 className="text-2xl font-semibold text-foreground">Your cart is empty</h1>
           <Link to="/" className="text-primary underline mt-3 inline-block">Browse subscriptions</Link>
         </GlassCard>
       </div>
