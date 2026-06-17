@@ -246,6 +246,17 @@ function CheckoutPage() {
     );
   }
 
+  if (authLoading) {
+    return (
+      <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-slate-50 text-slate-900">
+        <GlassCard className="text-center max-w-sm">
+          <Loader2 className="mx-auto h-5 w-5 animate-spin text-primary" />
+          <p className="mt-3 text-sm text-slate-700">Checkout loading…</p>
+        </GlassCard>
+      </div>
+    );
+  }
+
   if (items.length === 0) {
     return (
       <div className="checkout-dark min-h-screen grid place-items-center px-4 bg-slate-50 text-slate-900">
