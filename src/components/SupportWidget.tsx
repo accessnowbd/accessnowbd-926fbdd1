@@ -203,6 +203,7 @@ export function SupportWidget() {
       upsert("নেটওয়ার্ক সমস্যা। অনুগ্রহ করে আবার চেষ্টা করুন বা WhatsApp করুন।");
     } finally {
       setLoading(false);
+      if (acc.trim()) void logChatMessage("assistant", acc);
     }
   }
 
@@ -212,6 +213,7 @@ export function SupportWidget() {
     const next: Msg[] = [...messages, { role: "user", content: t }];
     setMessages(next);
     setInput("");
+    void logChatMessage("user", t);
     void streamReply(next);
   }
 
