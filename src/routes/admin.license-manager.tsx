@@ -158,41 +158,17 @@ function LicenseManagerPage() {
 
   return (
     <div className="space-y-5">
-      {/* Aurora header */}
-      <div className="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-violet-50 via-fuchsia-50 to-sky-50 px-6 py-5 shadow-sm">
-        <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-fuchsia-300/30 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 -left-10 w-72 h-72 rounded-full bg-sky-300/30 blur-3xl pointer-events-none" />
-        <div className="relative flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 grid place-items-center text-white shadow-lg">
-            <KeyRound className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">{t("License Manager", "লাইসেন্স ম্যানেজার")}</h1>
-            <p className="text-sm text-slate-600">{t("Sales · Manage and configure license manager", "সেলস · লাইসেন্স ম্যানেজ ও কনফিগার করুন")}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Title row + actions */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-rose-500" />
-          <div>
-            <h2 className="text-lg font-extrabold text-slate-900">{t("License Manager", "লাইসেন্স ম্যানেজার")}</h2>
-            <p className="text-xs text-slate-500">{t("Manage product licenses", "প্রোডাক্ট লাইসেন্স ম্যানেজ করুন")}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <button onClick={() => window.print()} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 shadow-sm">
-            <Printer className="w-4 h-4" /> {t("Print", "প্রিন্ট")}
-          </button>
-          <button onClick={() => setBulkOpen(true)} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 shadow-sm">
-            <Upload className="w-4 h-4" /> Bulk Import
-          </button>
-          <button onClick={() => setCreating(true)} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full text-white text-sm font-semibold shadow-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:opacity-95">
-            <Plus className="w-4 h-4" /> {t("Add License", "লাইসেন্স যোগ")}
-          </button>
-        </div>
+      {/* Actions */}
+      <div className="flex flex-wrap items-center justify-end gap-2">
+        <button onClick={() => window.print()} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 shadow-sm">
+          <Printer className="w-4 h-4" /> {t("Print", "প্রিন্ট")}
+        </button>
+        <button onClick={() => setBulkOpen(true)} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 shadow-sm">
+          <Upload className="w-4 h-4" /> Bulk Import
+        </button>
+        <button onClick={() => setCreating(true)} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full text-white text-sm font-semibold shadow-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:opacity-95">
+          <Plus className="w-4 h-4" /> {t("Add License", "লাইসেন্স যোগ")}
+        </button>
       </div>
 
       {/* Stat cards */}

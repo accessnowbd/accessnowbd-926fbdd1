@@ -107,28 +107,15 @@ function TrackingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50/40 via-white to-cyan-50/40">
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,theme(colors.emerald.200/.55),transparent_55%),radial-gradient(ellipse_at_top_right,theme(colors.cyan.200/.5),transparent_55%)]" />
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center gap-4">
-            <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/30">
-              <MapPin className="h-7 w-7" />
-            </div>
-            <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Order Tracking</h1>
-              <p className="text-sm text-slate-500 mt-1">Attach courier and tracking numbers to every shipped order.</p>
-            </div>
-            <button
-              onClick={() => load(true)}
-              className="ml-auto inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-sm text-slate-700 hover:bg-slate-50"
-            >
-              <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} /> Refresh
-            </button>
-          </div>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
+        <div className="flex justify-end">
+          <button
+            onClick={() => load(true)}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-sm text-slate-700 hover:bg-slate-50"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} /> Refresh
+          </button>
         </div>
-      </div>
-
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12 space-y-4">
         <div className="grid grid-cols-3 gap-3">
           <StatTile label="Total Orders" value={String(stats.total)} icon={Package} grad="from-sky-500 to-indigo-600" />
           <StatTile label="Tracked" value={String(stats.tracked)} icon={CheckCircle2} grad="from-emerald-500 to-teal-600" />

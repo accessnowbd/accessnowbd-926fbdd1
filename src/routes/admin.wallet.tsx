@@ -93,17 +93,8 @@ function AdminWalletPage() {
   return (
     <div className="min-h-screen bg-slate-50/60">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-6 space-y-5">
-        {/* Header */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-violet-100 text-violet-600">
-              <Wallet className="h-6 w-6" />
-            </div>
-            <div className="min-w-0">
-              <h1 className="text-2xl font-extrabold text-slate-900 truncate">Wallet Manager</h1>
-              <p className="text-sm text-slate-500">Manage customer wallets and top-up requests</p>
-            </div>
-          </div>
+        {/* Actions */}
+        <div className="flex justify-end">
           <button
             onClick={() => load(true)}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-700 hover:bg-slate-50"

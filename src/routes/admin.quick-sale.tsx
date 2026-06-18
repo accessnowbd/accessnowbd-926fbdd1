@@ -168,17 +168,8 @@ function QuickSalePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50/40 via-white to-sky-50/40 pb-32">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-        {/* Title card */}
-        <div className="flex items-center justify-between rounded-2xl bg-white border border-slate-200/70 p-5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 grid place-items-center text-white shadow-md">
-              <Zap className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-slate-900">Quick Sale</h1>
-              <p className="text-xs text-slate-500">{t("Quickly create & deliver an order", "দ্রুত অর্ডার তৈরি ও ডেলিভারি")}</p>
-            </div>
-          </div>
+        {/* Stats pill */}
+        <div className="flex justify-end">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200">
             <ShoppingCart className="w-3.5 h-3.5" /> {t("Total Orders", "মোট অর্ডার")}: {totalOrders}
           </span>

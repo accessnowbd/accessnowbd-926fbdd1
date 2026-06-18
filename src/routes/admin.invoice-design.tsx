@@ -145,29 +145,14 @@ function InvoiceDesignPage() {
 
   return (
     <div className="space-y-5">
-      {/* Aurora header */}
-      <div className="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-fuchsia-50 via-violet-50 to-sky-50 px-6 py-5 shadow-sm">
-        <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-fuchsia-300/30 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 -left-10 w-72 h-72 rounded-full bg-sky-300/30 blur-3xl pointer-events-none" />
-        <div className="relative flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-fuchsia-500 to-violet-600 grid place-items-center text-white shadow-lg">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-extrabold text-slate-900">{t("Invoice Design Studio", "ইনভয়েস ডিজাইন স্টুডিও")}</h1>
-              <p className="text-sm text-slate-600">{t("Control colours, branding text and labels for every invoice (preview, PDF & email).", "প্রতিটি ইনভয়েসের কালার, ব্র্যান্ডিং ও লেবেল নিয়ন্ত্রণ করুন।")}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={reset} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white/70 border border-white/60 text-sm font-semibold text-slate-700 hover:bg-white shadow-sm">
-              <RotateCcw className="w-4 h-4" /> {t("Reset", "রিসেট")}
-            </button>
-            <button onClick={save} disabled={saving} className="inline-flex items-center gap-1.5 h-10 px-5 rounded-full bg-gradient-to-r from-fuchsia-500 to-violet-600 text-white text-sm font-semibold shadow-lg hover:opacity-95 disabled:opacity-60">
-              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} {t("Save Design", "ডিজাইন সংরক্ষণ")}
-            </button>
-          </div>
-        </div>
+      {/* Actions */}
+      <div className="flex items-center justify-end gap-2">
+        <button onClick={reset} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 shadow-sm">
+          <RotateCcw className="w-4 h-4" /> {t("Reset", "রিসেট")}
+        </button>
+        <button onClick={save} disabled={saving} className="inline-flex items-center gap-1.5 h-10 px-5 rounded-full bg-gradient-to-r from-fuchsia-500 to-violet-600 text-white text-sm font-semibold shadow-lg hover:opacity-95 disabled:opacity-60">
+          {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} {t("Save Design", "ডিজাইন সংরক্ষণ")}
+        </button>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
