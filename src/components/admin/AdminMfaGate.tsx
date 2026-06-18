@@ -248,7 +248,7 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
             <h1 className="text-lg font-semibold text-slate-900">
               {mode === "enroll" && "Two-Factor Setup (Required)"}
               {mode === "challenge" && "Admin Verification"}
-              {mode === "loading" && "Checking security..."}
+              
               {mode === "error" && "Security check failed"}
             </h1>
             <p className="text-xs text-slate-500 truncate">{userEmail ?? "Admin account"}</p>
