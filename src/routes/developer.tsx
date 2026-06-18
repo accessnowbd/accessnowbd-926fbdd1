@@ -243,13 +243,13 @@ function DeveloperPage() {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               {/* Visit button — premium rotating gradient border, infinite animation */}
-              <span className="relative inline-flex rounded-full p-[2.5px] overflow-hidden">
-                <span className="absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,#7c3aed,#ec4899,#06b6d4,#7c3aed)] animate-[spinSlow_3s_linear_infinite]" />
+              <span className="relative inline-flex rounded-full p-[2px] overflow-hidden shadow-lg shadow-violet-500/30">
+                <span className="absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,#7c3aed,#ec4899,#06b6d4,#7c3aed)] animate-[spinSlow_3s_linear_infinite] z-0" />
                 <a
                   href="https://shahedit.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:bg-slate-900"
+                  className="relative z-10 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-slate-900 transition-all duration-300 hover:scale-105 hover:bg-slate-50"
                 >
                   Visit Shahed IT
                   <ExternalLink className="h-4 w-4" />
@@ -259,7 +259,7 @@ function DeveloperPage() {
                 href="https://shahedit.com/get-quote"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition-all duration-300 hover:bg-white/20 hover:border-white/50 hover:scale-105"
+                className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur transition-all duration-300 hover:bg-white/20 hover:border-white/60 hover:scale-105"
               >
                 Get a Quote
               </a>
