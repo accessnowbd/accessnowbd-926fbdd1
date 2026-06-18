@@ -65,7 +65,9 @@ const DESCRIPTIONS: Record<string, Desc> = {
   "/admin/security": { en: "Security settings and admin access", bn: "সিকিউরিটি সেটিংস ও অ্যাডমিন অ্যাক্সেস" },
 };
 
-function findItem(pathname: string): { group: { id: string; label: string; labelBn?: string; icon: ReactNode }; item: AdminMenuItem } | null {
+const HIDE_ON = new Set(["/admin", "/admin/analytics"]);
+
+function findItem(pathname: string): { group: { id: string; title: string; titleBn?: string; icon: ReactNode }; item: AdminMenuItem } | null {
   for (const g of ADMIN_MENU) {
     const item = g.items.find((i) => i.to === pathname);
     if (item) return { group: g as any, item };
@@ -76,12 +78,13 @@ function findItem(pathname: string): { group: { id: string; label: string; label
 export function AdminPageHeader() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { t } = useAdminLang();
+  if (HIDE_ON.has(pathname)) return null;
   const ctx = useMemo(() => findItem(pathname), [pathname]);
   if (!ctx) return null;
 
   const { group, item } = ctx;
   const title = t(item.label, item.labelBn ?? item.label);
-  const groupLabel = t(group.label, group.labelBn ?? group.label);
+  const groupLabel = t(group.title, group.titleBn ?? group.title);
   const desc = DESCRIPTIONS[item.to];
   const subtitle = desc
     ? `${groupLabel} • ${t(desc.en, desc.bn)}`
