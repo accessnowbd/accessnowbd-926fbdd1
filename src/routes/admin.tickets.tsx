@@ -291,7 +291,7 @@ function AdminTicketsPage() {
                 onClick={() => setTab(k as TabKey)}
                 className={`inline-flex items-center gap-2 px-4 h-10 text-sm font-semibold rounded-t-lg border-b-2 -mb-px transition ${
                   active
-                    ? "border-violet-500 text-violet-700 bg-violet-50/60"
+                    ? "border-violet-500 text-violet-700 bg-white"
                     : "border-transparent text-slate-500 hover:text-slate-800"
                 }`}
               >
