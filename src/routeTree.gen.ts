@@ -56,6 +56,7 @@ import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.des
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminBulkUpdateRouteImport } from './routes/admin.bulk-update'
+import { Route as AdminAbandonedCheckoutRouteImport } from './routes/admin.abandoned-checkout'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
@@ -303,6 +304,11 @@ const AdminBulkUpdateRoute = AdminBulkUpdateRouteImport.update({
   path: '/bulk-update',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAbandonedCheckoutRoute = AdminAbandonedCheckoutRouteImport.update({
+  id: '/abandoned-checkout',
+  path: '/abandoned-checkout',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPageRoute = AdminPageRouteImport.update({
   id: '/$page',
   path: '/$page',
@@ -383,6 +389,7 @@ export interface FileRoutesByFullPath {
   '/unsubscribe': typeof UnsubscribeRoute
   '/wallet': typeof WalletRoute
   '/admin/$page': typeof AdminPageRoute
+  '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
@@ -440,6 +447,7 @@ export interface FileRoutesByTo {
   '/unsubscribe': typeof UnsubscribeRoute
   '/wallet': typeof WalletRoute
   '/admin/$page': typeof AdminPageRoute
+  '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
@@ -499,6 +507,7 @@ export interface FileRoutesById {
   '/unsubscribe': typeof UnsubscribeRoute
   '/wallet': typeof WalletRoute
   '/admin/$page': typeof AdminPageRoute
+  '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
@@ -559,6 +568,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/wallet'
     | '/admin/$page'
+    | '/admin/abandoned-checkout'
     | '/admin/bulk-update'
     | '/admin/coupons'
     | '/admin/description-preview'
@@ -616,6 +626,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/wallet'
     | '/admin/$page'
+    | '/admin/abandoned-checkout'
     | '/admin/bulk-update'
     | '/admin/coupons'
     | '/admin/description-preview'
@@ -674,6 +685,7 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/wallet'
     | '/admin/$page'
+    | '/admin/abandoned-checkout'
     | '/admin/bulk-update'
     | '/admin/coupons'
     | '/admin/description-preview'
@@ -1076,6 +1088,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBulkUpdateRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/abandoned-checkout': {
+      id: '/admin/abandoned-checkout'
+      path: '/abandoned-checkout'
+      fullPath: '/admin/abandoned-checkout'
+      preLoaderRoute: typeof AdminAbandonedCheckoutRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/$page': {
       id: '/admin/$page'
       path: '/$page'
@@ -1144,6 +1163,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminPageRoute: typeof AdminPageRoute
+  AdminAbandonedCheckoutRoute: typeof AdminAbandonedCheckoutRoute
   AdminBulkUpdateRoute: typeof AdminBulkUpdateRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
@@ -1162,6 +1182,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminPageRoute: AdminPageRoute,
+  AdminAbandonedCheckoutRoute: AdminAbandonedCheckoutRoute,
   AdminBulkUpdateRoute: AdminBulkUpdateRoute,
   AdminCouponsRoute: AdminCouponsRoute,
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
