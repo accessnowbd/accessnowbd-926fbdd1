@@ -37,7 +37,7 @@ type LicenseRow = {
   created_at: string;
 };
 
-type ProductLite = { id: string; name: string };
+type ProductLite = { slug: string; name: string; emoji?: string | null; image_url?: string | null };
 
 const STATUS_META: Record<LicenseStatus, { label: string; bg: string; text: string; ring: string }> = {
   available: { label: "Available", bg: "bg-emerald-50", text: "text-emerald-600", ring: "ring-emerald-200" },
@@ -72,12 +72,15 @@ function LicenseManagerPage() {
   const [editing, setEditing] = useState<LicenseRow | null>(null);
   const [creating, setCreating] = useState(false);
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [presetSlug, setPresetSlug] = useState<string>("");
+  const [addProductOpen, setAddProductOpen] = useState(false);
+  const [productQuery, setProductQuery] = useState("");
 
   const load = useCallback(async (silent = false) => {
     if (!silent) setLoading(true); else setRefreshing(true);
     const [licRes, prodRes] = await Promise.all([
       supabase.from("admin_records").select("*").eq("kind", "license_key").order("created_at", { ascending: false }),
-      supabase.from("products").select("id, name").order("name"),
+      supabase.from("products").select("slug, name, emoji, image_url").order("name"),
     ]);
     if (licRes.error) toast.error(licRes.error.message);
     setRows(((licRes.data ?? []) as unknown) as LicenseRow[]);
@@ -117,6 +120,29 @@ function LicenseManagerPage() {
       return blob.includes(term);
     });
   }, [rows, q, statusFilter, productFilter, productSearch, onlyAvailable]);
+
+  const productStats = useMemo(() => {
+    const m = new Map<string, { available: number; assigned: number; total: number }>();
+    rows.forEach((r) => {
+      const slug = r.data?.product_id || "__none__";
+      const s = statusOf(r.data?.status);
+      const cur = m.get(slug) || { available: 0, assigned: 0, total: 0 };
+      cur.total++;
+      if (s === "available") cur.available++;
+      else if (s === "assigned") cur.assigned++;
+      m.set(slug, cur);
+    });
+    return m;
+  }, [rows]);
+
+  const filteredProducts = useMemo(() => {
+    const q2 = productQuery.trim().toLowerCase();
+    if (!q2) return products;
+    return products.filter((p) => p.name.toLowerCase().includes(q2) || p.slug.toLowerCase().includes(q2));
+  }, [products, productQuery]);
+
+  const openBulkFor = (slug: string) => { setPresetSlug(slug); setBulkOpen(true); };
+  const openAddFor = (slug: string) => { setPresetSlug(slug); setCreating(true); };
 
   const refresh = () => load(true);
 
@@ -176,6 +202,85 @@ function LicenseManagerPage() {
         <StatCard label="Revoked" value={String(stats.revoked)} tone="rose" />
       </div>
 
+      {/* Products & License Stock */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 grid place-items-center text-white">
+              <Package className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="font-extrabold text-slate-900">{t("Products & License Stock", "প্রোডাক্ট ও License স্টক")}</div>
+              <div className="text-[11px] text-slate-500">{t("All products — upload licenses or add new ones for each product", "সব প্রোডাক্ট — প্রতিটি প্রোডাক্টের জন্য লাইসেন্স আপলোড বা যোগ করুন")}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                value={productQuery}
+                onChange={(e) => setProductQuery(e.target.value)}
+                placeholder={t("Search products…", "প্রোডাক্ট খুঁজুন…")}
+                className="w-56 h-9 pl-9 pr-3 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-violet-300 text-sm outline-none"
+              />
+            </div>
+            <button onClick={() => setAddProductOpen(true)} className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:opacity-95">
+              <Plus className="w-4 h-4" /> {t("Add Product", "প্রোডাক্ট যোগ")}
+            </button>
+          </div>
+        </div>
+
+        {filteredProducts.length === 0 ? (
+          <div className="py-8 text-center text-sm text-slate-500">{t("No products found.", "কোনো প্রোডাক্ট পাওয়া যায়নি।")}</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 max-h-[460px] overflow-y-auto pr-1">
+            {filteredProducts.map((p) => {
+              const st = productStats.get(p.slug) || { available: 0, assigned: 0, total: 0 };
+              return (
+                <div key={p.slug} className="group rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-3 hover:border-violet-300 hover:shadow-md transition">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-100 to-fuchsia-100 grid place-items-center text-xl shrink-0 overflow-hidden">
+                      {p.image_url ? <img src={p.image_url} alt="" className="w-full h-full object-cover" /> : <span>{p.emoji || "📦"}</span>}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm font-bold text-slate-900 line-clamp-2 leading-snug">{p.name}</div>
+                      <div className="text-[10px] text-slate-400 font-mono truncate">{p.slug}</div>
+                    </div>
+                  </div>
+                  <div className="mt-3 grid grid-cols-3 gap-1 text-center">
+                    <div className="rounded-lg bg-emerald-50 py-1">
+                      <div className="text-[9px] font-bold uppercase text-emerald-600">Avail</div>
+                      <div className="text-sm font-extrabold text-emerald-700">{st.available}</div>
+                    </div>
+                    <div className="rounded-lg bg-violet-50 py-1">
+                      <div className="text-[9px] font-bold uppercase text-violet-600">Used</div>
+                      <div className="text-sm font-extrabold text-violet-700">{st.assigned}</div>
+                    </div>
+                    <div className="rounded-lg bg-slate-100 py-1">
+                      <div className="text-[9px] font-bold uppercase text-slate-500">Total</div>
+                      <div className="text-sm font-extrabold text-slate-700">{st.total}</div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center gap-1.5">
+                    <button onClick={() => openBulkFor(p.slug)} className="flex-1 inline-flex items-center justify-center gap-1 h-8 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-[11px] font-semibold">
+                      <Upload className="w-3 h-3" /> {t("Upload Keys", "Keys আপলোড")}
+                    </button>
+                    <button onClick={() => openAddFor(p.slug)} title={t("Add single license", "একক লাইসেন্স")} className="w-8 h-8 grid place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50">
+                      <Plus className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => { setProductFilter(p.slug); setOnlyAvailable(false); }} title={t("Filter table", "ফিল্টার")} className="w-8 h-8 grid place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50">
+                      <Filter className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+
+
       {/* Product search panel */}
       <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
         <div className="flex items-center gap-2 mb-1">
@@ -222,7 +327,7 @@ function LicenseManagerPage() {
         </select>
         <select value={productFilter} onChange={(e) => setProductFilter(e.target.value)} className="h-10 px-3 rounded-xl bg-slate-50 border border-transparent text-sm font-semibold text-slate-700 outline-none focus:bg-white focus:border-violet-300">
           <option value="all">{t("All Products", "সব প্রোডাক্ট")}</option>
-          {products.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+          {products.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}
         </select>
         <button onClick={refresh} disabled={refreshing} className="w-10 h-10 grid place-items-center rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600">
           {refreshing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
@@ -324,11 +429,25 @@ function LicenseManagerPage() {
         <LicenseFormModal
           row={editing}
           products={products}
-          onClose={() => { setCreating(false); setEditing(null); }}
-          onSaved={() => { setCreating(false); setEditing(null); load(true); }}
+          presetSlug={presetSlug}
+          onClose={() => { setCreating(false); setEditing(null); setPresetSlug(""); }}
+          onSaved={() => { setCreating(false); setEditing(null); setPresetSlug(""); load(true); }}
         />
       )}
-      {bulkOpen && <BulkImportModal products={products} onClose={() => setBulkOpen(false)} onSaved={() => { setBulkOpen(false); load(true); }} />}
+      {bulkOpen && (
+        <BulkImportModal
+          products={products}
+          presetSlug={presetSlug}
+          onClose={() => { setBulkOpen(false); setPresetSlug(""); }}
+          onSaved={() => { setBulkOpen(false); setPresetSlug(""); load(true); }}
+        />
+      )}
+      {addProductOpen && (
+        <QuickAddProductModal
+          onClose={() => setAddProductOpen(false)}
+          onSaved={() => { setAddProductOpen(false); load(true); }}
+        />
+      )}
     </div>
   );
 }
@@ -363,11 +482,11 @@ function StatCard({ label, value, tone }: { label: string; value: string; tone: 
   );
 }
 
-function LicenseFormModal({ row, products, onClose, onSaved }: { row: LicenseRow | null; products: ProductLite[]; onClose: () => void; onSaved: () => void }) {
+function LicenseFormModal({ row, products, presetSlug, onClose, onSaved }: { row: LicenseRow | null; products: ProductLite[]; presetSlug?: string; onClose: () => void; onSaved: () => void }) {
   const init = row?.data ?? {};
   const [key, setKey] = useState(init.key || "");
   const [type, setType] = useState(init.type || "License Key");
-  const [productId, setProductId] = useState(init.product_id || "");
+  const [productId, setProductId] = useState(init.product_id || presetSlug || "");
   const [status, setStatus] = useState<LicenseStatus>(statusOf(init.status));
   const [customerName, setCustomerName] = useState(init.customer_name || "");
   const [customerEmail, setCustomerEmail] = useState(init.customer_email || "");
@@ -379,7 +498,7 @@ function LicenseFormModal({ row, products, onClose, onSaved }: { row: LicenseRow
   const save = async () => {
     if (!key.trim()) return toast.error("Key required");
     setSaving(true);
-    const product = products.find((p) => p.id === productId);
+    const product = products.find((p) => p.slug === productId);
     const payload: LicenseData = {
       key: key.trim(),
       type,
@@ -420,7 +539,7 @@ function LicenseFormModal({ row, products, onClose, onSaved }: { row: LicenseRow
             <Field label="Type"><select value={type} onChange={(e) => setType(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option>License Key</option><option>Account</option><option>Activation Code</option><option>Gift Card</option></select></Field>
             <Field label="Status"><select value={status} onChange={(e) => setStatus(e.target.value as LicenseStatus)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option value="available">Available</option><option value="assigned">Assigned</option><option value="revoked">Revoked</option></select></Field>
           </div>
-          <Field label="Product"><select value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option value="">— Select product —</option>{products.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></Field>
+          <Field label="Product"><select value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option value="">— Select product —</option>{products.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}</select></Field>
           <div className="grid grid-cols-2 gap-3">
             <Field label="Customer Name"><input value={customerName} onChange={(e) => setCustomerName(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
             <Field label="Customer Email"><input value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
@@ -442,15 +561,15 @@ function LicenseFormModal({ row, products, onClose, onSaved }: { row: LicenseRow
   );
 }
 
-function BulkImportModal({ products, onClose, onSaved }: { products: ProductLite[]; onClose: () => void; onSaved: () => void }) {
-  const [productId, setProductId] = useState("");
+function BulkImportModal({ products, presetSlug, onClose, onSaved }: { products: ProductLite[]; presetSlug?: string; onClose: () => void; onSaved: () => void }) {
+  const [productId, setProductId] = useState(presetSlug || "");
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
 
   const run = async () => {
     const keys = text.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
     if (!keys.length) return toast.error("Paste keys, one per line");
-    const product = products.find((p) => p.id === productId);
+    const product = products.find((p) => p.slug === productId);
     setBusy(true);
     const payload = keys.map((k) => ({
       kind: "license_key",
@@ -472,7 +591,7 @@ function BulkImportModal({ products, onClose, onSaved }: { products: ProductLite
           <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-white/70"><X className="w-4 h-4" /></button>
         </div>
         <div className="p-5 space-y-3 text-sm">
-          <Field label="Product"><select value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option value="">— Select product —</option>{products.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></Field>
+          <Field label="Product"><select value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option value="">— Select product —</option>{products.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}</select></Field>
           <Field label="Keys (one per line)"><textarea value={text} onChange={(e) => setText(e.target.value)} rows={10} className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono text-[12px] outline-none focus:border-violet-300" /></Field>
         </div>
         <div className="px-5 py-3 border-t border-slate-100 flex items-center justify-end gap-2 bg-slate-50">
@@ -494,3 +613,70 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </label>
   );
 }
+
+function slugify(s: string) {
+  return s.toLowerCase().trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 80);
+}
+
+function QuickAddProductModal({ onClose, onSaved }: { onClose: () => void; onSaved: () => void }) {
+  const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
+  const [emoji, setEmoji] = useState("📦");
+  const [category, setCategory] = useState("License");
+  const [busy, setBusy] = useState(false);
+  const [slugDirty, setSlugDirty] = useState(false);
+
+  const finalSlug = slug.trim() || slugify(name);
+
+  const save = async () => {
+    if (!name.trim()) return toast.error("Name required");
+    if (!finalSlug) return toast.error("Slug required");
+    setBusy(true);
+    const { error } = await supabase.from("products").insert({
+      slug: finalSlug,
+      name: name.trim(),
+      emoji,
+      category,
+      is_active: true,
+      stock_status: "in_stock",
+    });
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Product added");
+    onSaved();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm grid place-items-center p-4" onClick={onClose}>
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-violet-50 to-fuchsia-50">
+          <div className="flex items-center gap-2"><Package className="w-5 h-5 text-violet-600" /><h2 className="text-base font-extrabold text-slate-900">Add Product</h2></div>
+          <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-white/70"><X className="w-4 h-4" /></button>
+        </div>
+        <div className="p-5 space-y-3 text-sm">
+          <Field label="Product Name">
+            <input value={name} onChange={(e) => { setName(e.target.value); if (!slugDirty) setSlug(slugify(e.target.value)); }} placeholder="e.g. Netflix Premium" className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" />
+          </Field>
+          <Field label="Slug (URL key)">
+            <input value={slug} onChange={(e) => { setSlug(e.target.value); setSlugDirty(true); }} placeholder="netflix-premium" className="w-full h-10 px-3 rounded-xl border border-slate-200 font-mono text-[12px] outline-none focus:border-violet-300" />
+          </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Emoji"><input value={emoji} onChange={(e) => setEmoji(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
+            <Field label="Category"><input value={category} onChange={(e) => setCategory(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
+          </div>
+        </div>
+        <div className="px-5 py-3 border-t border-slate-100 flex items-center justify-end gap-2 bg-slate-50">
+          <button onClick={onClose} className="h-10 px-4 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button onClick={save} disabled={busy} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:opacity-95">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />} Save
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
