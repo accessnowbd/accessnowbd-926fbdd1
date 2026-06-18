@@ -348,15 +348,15 @@ function Chip({ label, active, onClick, small }: { label: string; active: boolea
 function StatusBadge({ status }: { status: string }) {
   const { t } = useAdminLang();
   const m: Record<string, { cls: string; en: string; bn: string }> = {
-    pending:    { cls: "bg-amber-50 text-amber-700 border-amber-200", en: "Pending", bn: "পেন্ডিং" },
-    processing: { cls: "bg-sky-50 text-sky-700 border-sky-200", en: "Processing", bn: "প্রসেসিং" },
-    delivered:  { cls: "bg-violet-50 text-violet-700 border-violet-200", en: "Delivered", bn: "ডেলিভার্ড" },
-    completed:  { cls: "bg-emerald-50 text-emerald-700 border-emerald-200", en: "Completed", bn: "সম্পন্ন" },
-    cancelled:  { cls: "bg-rose-50 text-rose-700 border-rose-200", en: "Cancelled", bn: "বাতিল" },
-    refunded:   { cls: "bg-slate-100 text-slate-700 border-slate-200", en: "Refunded", bn: "রিফান্ড" },
-    failed:     { cls: "bg-red-50 text-red-700 border-red-200", en: "Failed", bn: "ব্যর্থ" },
+    pending:    { cls: "bg-amber-100 text-amber-800 border-amber-300", en: "Pending", bn: "পেন্ডিং" },
+    processing: { cls: "bg-sky-100 text-sky-800 border-sky-300", en: "Processing", bn: "প্রসেসিং" },
+    delivered:  { cls: "bg-violet-100 text-violet-800 border-violet-300", en: "Delivered", bn: "ডেলিভার্ড" },
+    completed:  { cls: "bg-emerald-100 text-emerald-800 border-emerald-300", en: "Completed", bn: "সম্পন্ন" },
+    cancelled:  { cls: "bg-rose-100 text-rose-800 border-rose-300", en: "Cancelled", bn: "বাতিল" },
+    refunded:   { cls: "bg-slate-200 text-slate-800 border-slate-300", en: "Refunded", bn: "রিফান্ড" },
+    failed:     { cls: "bg-red-100 text-red-800 border-red-300", en: "Failed", bn: "ব্যর্থ" },
   };
-  const v = m[status] || { cls: "bg-slate-100 text-slate-700 border-slate-200", en: status, bn: status };
+  const v = m[status] || { cls: "bg-slate-200 text-slate-800 border-slate-300", en: status, bn: status };
   return (
     <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold border ${v.cls}`}>
       {t(v.en, v.bn)}
