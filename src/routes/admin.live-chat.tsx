@@ -341,14 +341,7 @@ function LiveChatPage() {
             </Card>
           )}
 
-          {tab === "history" && (
-            <Card>
-              <div className="p-10 text-center text-sm text-slate-500">
-                <History className="w-6 h-6 mx-auto mb-2 text-slate-300" />
-                {t("Chat history coming soon.", "চ্যাট হিস্ট্রি শীঘ্রই আসছে।")}
-              </div>
-            </Card>
-          )}
+          {tab === "history" && <ChatHistoryTab />}
         </>
       )}
     </div>
