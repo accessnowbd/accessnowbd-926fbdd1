@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, Save, X, Tag, Calendar, Percent, BadgeDollarSign, TicketPercent } from "lucide-react";
+import { Plus, Pencil, Trash2, Save, X, Tag, Calendar, Percent, BadgeDollarSign, TicketPercent, Package } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AdminStatCard, AdminStatGrid, AdminGlassCard } from "@/components/admin/AdminStatCard";
+import { ProductPicker } from "@/components/admin/ProductPicker";
 
 export const Route = createFileRoute("/admin/coupons")({
   component: AdminCoupons,
@@ -224,6 +225,23 @@ function AdminCoupons() {
                   onChange={(e) => setEditing({ ...editing, code: e.target.value.toUpperCase() })}
                   className="admin-input font-mono"
                   placeholder="SAVE20"
+                />
+              </Field>
+              <Field label="Reference product (optional)" icon={<Package className="w-3.5 h-3.5" />}>
+                <ProductPicker
+                  value=""
+                  allowClear={false}
+                  placeholder="Auto-fill description from product…"
+                  onChange={(_slug, product) => {
+                    if (!product) return;
+                    setEditing((prev) => prev ? {
+                      ...prev,
+                      description: prev.description?.trim()
+                        ? prev.description
+                        : `${product.name} — ${product.tagline ?? product.category}`,
+                    } : prev);
+                    toast.success(`Description filled from ${product.name}`);
+                  }}
                 />
               </Field>
               <Field label="Description">

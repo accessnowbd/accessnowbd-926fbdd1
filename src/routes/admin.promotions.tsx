@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, Loader2, Save, X, Tag, Calendar, Percent } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, Save, X, Tag, Calendar, Percent, Package } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AdminStatCard, AdminStatGrid, AdminGlassCard } from "@/components/admin/AdminStatCard";
+import { ProductPicker } from "@/components/admin/ProductPicker";
 
 export const Route = createFileRoute("/admin/promotions")({
  component: AdminPromotions,
@@ -193,11 +194,26 @@ function AdminPromotions() {
  <Field label="Code" icon={<Tag className="w-3.5 h-3.5" />}><input value={editing.code ?? ""} onChange={(e) => setEditing({ ...editing, code: e.target.value })} className="admin-input" placeholder="SAVE20" /></Field>
  <Field label="Badge"><input value={editing.badge ?? ""} onChange={(e) => setEditing({ ...editing, badge: e.target.value })} className="admin-input" placeholder="HOT" /></Field>
  </div>
- <div className="grid grid-cols-2 gap-3">
+				<div className="grid grid-cols-2 gap-3">
  <Field label="Discount %" icon={<Percent className="w-3.5 h-3.5" />}>
  <input type="number" min={0} max={100} value={editing.discount_percent ?? ""} onChange={(e) => setEditing({ ...editing, discount_percent: e.target.value === "" ? null : Number(e.target.value) })} className="admin-input" />
  </Field>
- <Field label="Product slug"><input value={editing.product_slug ?? ""} onChange={(e) => setEditing({ ...editing, product_slug: e.target.value })} className="admin-input" placeholder="netflix" /></Field>
+ <Field label="Product" icon={<Package className="w-3.5 h-3.5" />}>
+ <ProductPicker
+ value={editing.product_slug ?? ""}
+ onChange={(slug, product) => {
+ setEditing((prev) => prev ? {
+ ...prev,
+ product_slug: slug || null,
+ // Auto-fill empty fields from the selected product
+ title: prev.title?.trim() ? prev.title : (product?.name ?? prev.title),
+ description: prev.description?.trim() ? prev.description : (product?.tagline ?? product?.shortDescription ?? prev.description),
+ badge: prev.badge?.trim() ? prev.badge : (product?.badge ?? prev.badge),
+ } : prev);
+ }}
+ placeholder="— Select product —"
+ />
+ </Field>
  </div>
  <div className="grid grid-cols-2 gap-3">
  <Field label="Starts" icon={<Calendar className="w-3.5 h-3.5" />}>

@@ -7,6 +7,7 @@ import { downloadReceiptPdf, getReceiptBlob, receiptFileName, type ReceiptOrder 
 import { useProducts } from "@/hooks/useProducts";
 import { useShopConfig } from "@/hooks/useShopConfig";
 import { AdminGlassCard } from "@/components/admin/AdminStatCard";
+import { ProductPicker } from "@/components/admin/ProductPicker";
 
 export const Route = createFileRoute("/admin/quick-tools")({
   component: QuickToolsPage,
@@ -375,10 +376,11 @@ function QuickOrderCreator() {
             <div key={i} className="grid grid-cols-12 gap-2 items-end p-3 rounded-lg border border-border bg-card">
               <div className="col-span-12 md:col-span-4">
                 <label className="text-xs text-muted-foreground">Product</label>
-                <select value={it.productSlug} onChange={(e) => onPickProduct(i, e.target.value)} className={inputCls}>
-                  <option value="">— Select —</option>
-                  {products.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}
-                </select>
+                <ProductPicker
+                  value={it.productSlug}
+                  onChange={(slug) => onPickProduct(i, slug)}
+                  placeholder="— Select product —"
+                />
               </div>
               <div className="col-span-6 md:col-span-3">
                 <label className="text-xs text-muted-foreground">Plan</label>
@@ -485,7 +487,30 @@ function BulkDeliverySender() {
   return (
     <AdminGlassCard className="p-4 md:p-6 space-y-5">
       <div>
-        <h3 className="font-semibold text-sm mb-2">Delivery Template</h3>
+        <div className="flex items-center justify-between mb-2 gap-2 flex-wrap">
+          <h3 className="font-semibold text-sm">Delivery Template</h3>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-muted-foreground">Auto-fill from product:</span>
+            <div className="w-56">
+              <ProductPicker
+                value=""
+                allowClear={false}
+                placeholder="Pick product…"
+                onChange={(_slug, product) => {
+                  if (!product) return;
+                  setDefaults((d) => ({
+                    ...d,
+                    warranty: product.warranty || d.warranty,
+                  }));
+                  // Insert a product-aware template if user hasn't customized
+                  const preset = `✅ *${product.name} — Delivery*\n\nOrder #{{order_id}}\nProduct: {{items}}\nCategory: ${product.category}\n\n🔑 Login: {{login}}\n🔒 Password: {{password}}\n\n⏱ Delivery: ${product.deliveryTime}\n🛡 Warranty: ${product.warranty}\n\n${(product.features ?? []).slice(0, 3).map((f) => `• ${f}`).join("\n")}\n\nধন্যবাদ — {{shop}} 💜`;
+                  setTemplate(preset);
+                  toast.success(`Template loaded from ${product.name}`);
+                }}
+              />
+            </div>
+          </div>
+        </div>
         <textarea
           value={template}
           onChange={(e) => setTemplate(e.target.value)}
