@@ -438,88 +438,49 @@ export function HeroBannerCarousel() {
               </div>
             </div>
 
-            {/* RIGHT — premium glass image card */}
-            <div className="relative">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -inset-6 rounded-[28px] opacity-55 blur-2xl"
-                style={{ background: `radial-gradient(ellipse at center, ${hexAlpha(accent, 0.55)} 0%, ${hexAlpha(glow, 0.25)} 45%, transparent 75%)` }}
-              />
-              <div
-                className="relative rounded-[24px] p-[1.5px] transition-shadow duration-300"
-                style={{
-                  background: `linear-gradient(135deg, ${hexAlpha("#ffffff", 0.5)} 0%, ${hexAlpha(accent, 0.6)} 35%, ${hexAlpha("#ffffff", 0.15)} 65%, ${hexAlpha(glow, 0.55)} 100%)`,
-                  boxShadow: `0 0 50px -10px ${hexAlpha(accent, 0.45)}, 0 20px 60px -20px ${hexAlpha(glow, 0.35)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.3)}`,
-                }}
-              >
+            {/* RIGHT — product image only (no glass card) */}
+            <div className="relative flex items-center justify-center">
+              {resolvedImage ? (
+                <img
+                  src={resolvedImage}
+                  alt={current.data.title ?? "banner"}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  className="max-h-[340px] w-auto max-w-full object-contain drop-shadow-[0_16px_50px_rgba(0,0,0,0.4)]"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    if (rawResolvedImage && img.src !== rawResolvedImage) {
+                      img.src = rawResolvedImage;
+                    }
+                  }}
+                />
+              ) : isEid ? (
+                <img
+                  src="/banners/eid-mubarak.png"
+                  alt="Eid Mubarak — ঈদুল আযহার শুভেচ্ছা — Coupon ACCESSEID25"
+                  loading="eager"
+                  className="max-h-[340px] w-auto max-w-full object-contain drop-shadow-[0_16px_50px_rgba(0,0,0,0.4)]"
+                />
+              ) : brand?.slug && !productsLoaded ? (
                 <div
-                  className="relative aspect-[16/10] w-full overflow-hidden rounded-[22px]"
+                  className="aspect-square w-44 animate-pulse rounded-[28px]"
                   style={{
-                    background: `linear-gradient(135deg, ${hexAlpha("#ffffff", 0.18)} 0%, ${hexAlpha("#ffffff", 0.06)} 50%, ${hexAlpha(accent, 0.1)} 100%), linear-gradient(135deg, ${hexAlpha(bg, 0.55)}, ${hexAlpha(mix(bg, accent, 0.25), 0.4)})`,
-                    boxShadow: `inset 0 1px 0 ${hexAlpha("#ffffff", 0.25)}, inset 0 0 40px ${hexAlpha("#ffffff", 0.05)}`,
+                    background: `linear-gradient(135deg, ${hexAlpha(accent, 0.35)}, ${hexAlpha(glow, 0.2)})`,
+                    boxShadow: `0 25px 55px -18px ${hexAlpha(accent, 0.55)}`,
+                  }}
+                />
+              ) : (
+                <div
+                  className="flex aspect-square w-44 items-center justify-center rounded-[28px] text-6xl font-black text-white"
+                  style={{
+                    background: `linear-gradient(135deg, ${accent}, ${mix(accent, glow, 0.5)})`,
+                    boxShadow: `0 25px 55px -18px ${hexAlpha(accent, 0.95)}`,
                   }}
                 >
-                  {/* glass top highlight */}
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-x-0 top-0 h-2/5"
-                    style={{ background: `linear-gradient(180deg, ${hexAlpha("#ffffff", 0.22)} 0%, ${hexAlpha("#ffffff", 0.04)} 60%, transparent 100%)` }}
-                  />
-                  {/* diagonal glass sheen */}
-                  <div aria-hidden className="pointer-events-none absolute -inset-px bg-white/[0.03]" />
-                  {resolvedImage ? (
-                    <div className="relative flex h-full w-full items-center justify-center p-4 md:p-6">
-                      <img
-                        src={resolvedImage}
-                        alt={current.data.title ?? "banner"}
-                        loading="eager"
-                        fetchPriority="high"
-                        decoding="async"
-                        className="max-h-full max-w-full object-contain"
-                        onError={(e) => {
-                          const img = e.currentTarget;
-                          if (rawResolvedImage && img.src !== rawResolvedImage) {
-                            img.src = rawResolvedImage;
-                          }
-                        }}
-                      />
-                    </div>
-                  ) : isEid ? (
-                    <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
-                      <img
-                        src="/banners/eid-mubarak.png"
-                        alt="Eid Mubarak — ঈদুল আযহার শুভেচ্ছা — Coupon ACCESSEID25"
-                        loading="eager"
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-
-                  ) : brand?.slug && !productsLoaded ? (
-                    // Products still loading — show shimmering skeleton instead of a one-letter fallback
-                    <div className="grid h-full w-full place-items-center px-10">
-                      <div
-                        className="aspect-square w-36 animate-pulse rounded-[28px] md:w-44"
-                        style={{
-                          background: `linear-gradient(135deg, ${hexAlpha(accent, 0.35)}, ${hexAlpha(glow, 0.2)})`,
-                          boxShadow: `0 25px 55px -18px ${hexAlpha(accent, 0.55)}, inset 0 1px 0 ${hexAlpha("#fff", 0.15)}`,
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="grid h-full w-full place-items-center px-10 text-center">
-                      <div
-                        className="flex aspect-square w-36 items-center justify-center rounded-[28px] text-5xl font-black text-white md:w-44 md:text-6xl"
-                        style={{
-                          background: `linear-gradient(135deg, ${accent}, ${mix(accent, glow, 0.5)})`,
-                          boxShadow: `0 25px 55px -18px ${hexAlpha(accent, 0.95)}, inset 0 1px 0 ${hexAlpha("#fff", 0.3)}`,
-                        }}
-                      >
-                        {current.data.title?.slice(0, 1) ?? "A"}
-                      </div>
-                    </div>
-                  )}
+                  {current.data.title?.slice(0, 1) ?? "A"}
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
