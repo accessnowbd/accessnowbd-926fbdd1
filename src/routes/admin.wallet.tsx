@@ -192,14 +192,14 @@ function RequestsList({ topups, profiles, reload }: { topups: Topup[]; profiles:
 
   const approve = async (id: string) => {
     setBusy(id);
-    const { error } = await supabase.rpc("approve_wallet_topup" as never, { _topup_id: id, _admin_note: null });
+    const { error } = await supabase.rpc("approve_wallet_topup" as any, { _topup_id: id, _admin_note: null });
     setBusy(null);
     if (error) toast.error(error.message); else { toast.success("Approved & wallet credited"); reload(); }
   };
   const reject = async (id: string) => {
     const note = window.prompt("Reason for rejection?") || "Rejected";
     setBusy(id);
-    const { error } = await supabase.rpc("reject_wallet_topup" as never, { _topup_id: id, _admin_note: note });
+    const { error } = await supabase.rpc("reject_wallet_topup" as any, { _topup_id: id, _admin_note: note });
     setBusy(null);
     if (error) toast.error(error.message); else { toast.success("Rejected"); reload(); }
   };
@@ -362,7 +362,7 @@ function ManualAdjustPanel({ wallets, profiles, selectedUser, onSelectUser, onDo
     const reason = note.trim() || (direction === "credit" ? "Manual credit" : "Manual debit");
     const signed = direction === "credit" ? amt : -amt;
     setBusy(true);
-    const { error } = await supabase.rpc("admin_adjust_wallet" as never, { _user_id: selectedUser, _amount: signed, _reason: reason });
+    const { error } = await supabase.rpc("admin_adjust_wallet" as any, { _user_id: selectedUser, _amount: signed, _reason: reason });
     setBusy(false);
     if (error) { toast.error(error.message); return; }
     toast.success(`${direction === "credit" ? "Credited" : "Debited"} ${fmt(amt)}`);
