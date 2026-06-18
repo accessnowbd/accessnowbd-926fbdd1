@@ -227,7 +227,7 @@ function DeveloperPage() {
           </section>
 
           {/* CTA — solid panel, no diagonal sheen so the text stays fully legible */}
-          <section className="mt-12 overflow-hidden rounded-2xl border border-violet-500/25 bg-gradient-to-br from-violet-600 via-violet-700 to-fuchsia-700 p-6 text-white shadow-lg shadow-violet-500/20 md:p-8">
+          <section className="mt-12 overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-950 to-black p-6 text-white shadow-lg shadow-black/30 md:p-8">
             <div className="flex items-center gap-3">
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
                 <Rocket className="h-5 w-5 text-white" />
