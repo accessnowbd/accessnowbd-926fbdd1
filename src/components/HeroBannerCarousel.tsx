@@ -241,7 +241,7 @@ export function HeroBannerCarousel() {
     <section className="px-4 md:px-10 pt-6 pb-4">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[28px] border border-white/20 transition-colors duration-500"
+          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[28px] border border-white/20 transition-colors duration-500 md:h-[440px] lg:h-[460px]"
           style={{
             background,
             minHeight: Math.max(240, Math.min(900, Number(current.data.min_height) || 430)),
@@ -369,7 +369,7 @@ export function HeroBannerCarousel() {
           )}
 
           {/* Desktop: two-column layout */}
-          <div className="relative hidden items-center gap-7 px-5 py-10 md:grid md:grid-cols-2 md:gap-10 md:px-12 md:py-14">
+          <div className="relative hidden h-full items-center gap-7 px-5 py-8 md:grid md:grid-cols-[1.05fr_1fr] md:gap-10 md:px-12 md:py-10">
             {/* LEFT */}
             <div className="space-y-5 text-white">
               {current.data.category && (
@@ -438,8 +438,26 @@ export function HeroBannerCarousel() {
               </div>
             </div>
 
-            {/* RIGHT — product image only (no glass card) */}
-            <div className="relative flex items-center justify-center">
+            {/* RIGHT — product image fused into the banner background */}
+            <div className="relative flex h-full items-center justify-center">
+              {/* Colored halo that matches the banner palette so image feels native */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background: `radial-gradient(ellipse 70% 70% at 55% 50%, ${hexAlpha(glow, 0.45)} 0%, ${hexAlpha(accent, 0.28)} 35%, transparent 70%)`,
+                  filter: "blur(8px)",
+                }}
+              />
+              {/* Soft floor reflection / ground glow */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-6 bottom-6 h-8 rounded-[50%]"
+                style={{
+                  background: `radial-gradient(ellipse at center, ${hexAlpha(accent, 0.55)} 0%, transparent 70%)`,
+                  filter: "blur(14px)",
+                }}
+              />
               {resolvedImage ? (
                 <img
                   src={resolvedImage}
@@ -447,7 +465,14 @@ export function HeroBannerCarousel() {
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
-                  className="max-h-[340px] w-auto max-w-full object-contain drop-shadow-[0_16px_50px_rgba(0,0,0,0.4)]"
+                  className="relative z-[1] max-h-[300px] w-auto max-w-full object-contain"
+                  style={{
+                    filter: `drop-shadow(0 20px 40px ${hexAlpha("#000", 0.45)}) drop-shadow(0 0 28px ${hexAlpha(glow, 0.35)})`,
+                    WebkitMaskImage:
+                      "radial-gradient(ellipse 80% 85% at 50% 50%, #000 60%, rgba(0,0,0,0.85) 78%, transparent 100%)",
+                    maskImage:
+                      "radial-gradient(ellipse 80% 85% at 50% 50%, #000 60%, rgba(0,0,0,0.85) 78%, transparent 100%)",
+                  }}
                   onError={(e) => {
                     const img = e.currentTarget;
                     if (rawResolvedImage && img.src !== rawResolvedImage) {
@@ -460,11 +485,18 @@ export function HeroBannerCarousel() {
                   src="/banners/eid-mubarak.png"
                   alt="Eid Mubarak — ঈদুল আযহার শুভেচ্ছা — Coupon ACCESSEID25"
                   loading="eager"
-                  className="max-h-[340px] w-auto max-w-full object-contain drop-shadow-[0_16px_50px_rgba(0,0,0,0.4)]"
+                  className="relative z-[1] max-h-[300px] w-auto max-w-full object-contain"
+                  style={{
+                    filter: `drop-shadow(0 20px 40px ${hexAlpha("#000", 0.45)}) drop-shadow(0 0 28px ${hexAlpha(glow, 0.35)})`,
+                    WebkitMaskImage:
+                      "radial-gradient(ellipse 80% 85% at 50% 50%, #000 60%, rgba(0,0,0,0.85) 78%, transparent 100%)",
+                    maskImage:
+                      "radial-gradient(ellipse 80% 85% at 50% 50%, #000 60%, rgba(0,0,0,0.85) 78%, transparent 100%)",
+                  }}
                 />
               ) : brand?.slug && !productsLoaded ? (
                 <div
-                  className="aspect-square w-44 animate-pulse rounded-[28px]"
+                  className="relative z-[1] aspect-square w-44 animate-pulse rounded-[28px]"
                   style={{
                     background: `linear-gradient(135deg, ${hexAlpha(accent, 0.35)}, ${hexAlpha(glow, 0.2)})`,
                     boxShadow: `0 25px 55px -18px ${hexAlpha(accent, 0.55)}`,
@@ -472,7 +504,7 @@ export function HeroBannerCarousel() {
                 />
               ) : (
                 <div
-                  className="flex aspect-square w-44 items-center justify-center rounded-[28px] text-6xl font-black text-white"
+                  className="relative z-[1] flex aspect-square w-44 items-center justify-center rounded-[28px] text-6xl font-black text-white"
                   style={{
                     background: `linear-gradient(135deg, ${accent}, ${mix(accent, glow, 0.5)})`,
                     boxShadow: `0 25px 55px -18px ${hexAlpha(accent, 0.95)}`,
