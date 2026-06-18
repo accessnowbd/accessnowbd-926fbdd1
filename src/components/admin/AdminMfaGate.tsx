@@ -255,11 +255,8 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
           </div>
         </div>
 
-        {mode === "loading" && (
-          <div className="mt-8 flex items-center justify-center gap-2 text-slate-600 text-sm">
-            <Loader2 className="w-4 h-4 animate-spin" /> Loading...
-          </div>
-        )}
+        {mode === "error" && (
+          <div className="mt-5">
 
         {mode === "error" && (
           <div className="mt-5">
