@@ -197,7 +197,7 @@ function DeveloperPage() {
               {VALUES.map((v) => (
                 <li
                   key={v}
-                  className="flex items-start gap-3 rounded-xl border border-violet-500/15 bg-card p-4 transition hover:border-violet-500/40"
+                  className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-violet-400 dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-violet-400/50 dark:backdrop-blur"
                 >
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-violet-500 dark:text-violet-400" />
                   <span className="text-sm leading-relaxed">{v}</span>
