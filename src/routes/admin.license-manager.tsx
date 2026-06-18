@@ -121,6 +121,29 @@ function LicenseManagerPage() {
     });
   }, [rows, q, statusFilter, productFilter, productSearch, onlyAvailable]);
 
+  const productStats = useMemo(() => {
+    const m = new Map<string, { available: number; assigned: number; total: number }>();
+    rows.forEach((r) => {
+      const slug = r.data?.product_id || "__none__";
+      const s = statusOf(r.data?.status);
+      const cur = m.get(slug) || { available: 0, assigned: 0, total: 0 };
+      cur.total++;
+      if (s === "available") cur.available++;
+      else if (s === "assigned") cur.assigned++;
+      m.set(slug, cur);
+    });
+    return m;
+  }, [rows]);
+
+  const filteredProducts = useMemo(() => {
+    const q2 = productQuery.trim().toLowerCase();
+    if (!q2) return products;
+    return products.filter((p) => p.name.toLowerCase().includes(q2) || p.slug.toLowerCase().includes(q2));
+  }, [products, productQuery]);
+
+  const openBulkFor = (slug: string) => { setPresetSlug(slug); setBulkOpen(true); };
+  const openAddFor = (slug: string) => { setPresetSlug(slug); setCreating(true); };
+
   const refresh = () => load(true);
 
   const removeRow = async (id: string) => {
