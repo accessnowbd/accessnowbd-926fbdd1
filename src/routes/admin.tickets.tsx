@@ -249,26 +249,8 @@ function AdminTicketsPage() {
 
   return (
     <div className="space-y-5">
-      {/* Gradient header banner */}
-      <div className="relative overflow-hidden rounded-3xl border border-violet-100 bg-gradient-to-r from-violet-50 via-sky-50 to-rose-50 p-5 sm:p-6">
-        <div className="flex items-center gap-4 relative z-10">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 grid place-items-center text-white shadow-lg shadow-violet-200">
-            <Headphones className="w-6 h-6" />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent leading-tight">
-              {t("Support Tickets", "সাপোর্ট টিকেট")}
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              {t("Customers • Manage and configure support tickets", "কাস্টমার • সাপোর্ট টিকেট পরিচালনা ও কনফিগার করুন")}
-            </p>
-          </div>
-        </div>
-        {/* decorative icons */}
-        <MessageCircle className="absolute top-6 left-1/2 -translate-x-12 w-7 h-7 text-violet-200/70" />
-        <Headphones className="absolute bottom-3 left-2/3 w-9 h-9 text-sky-200/70" />
-        <Users className="absolute top-4 right-6 w-9 h-9 text-rose-200/70" />
-      </div>
+      {/* Header rendered globally by AdminPageHeader */}
+
 
       {/* Title + legend */}
       <div className="flex flex-wrap items-end justify-between gap-3">
