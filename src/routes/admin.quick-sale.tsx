@@ -166,8 +166,7 @@ function QuickSalePage() {
   const totalItems = items.filter((i) => i.product).reduce((a, i) => a + i.qty, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50/40 via-white to-sky-50/40 pb-32">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <div className="space-y-6">
         {/* Stats pill */}
         <div className="flex justify-end">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200">
@@ -283,26 +282,23 @@ function QuickSalePage() {
             </div>
           </div>
         </Section>
-      </div>
 
-      {/* Sticky footer */}
-      <div className="fixed bottom-0 left-0 right-0 lg:left-72 border-t border-slate-200 bg-white/95 backdrop-blur z-30">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 text-sm">
-            <Package className="w-4 h-4 text-slate-500" />
-            <span className="text-slate-600">{t("Items", "আইটেম")}: <b className="text-slate-900">{totalItems}</b></span>
-            <span className="text-slate-300">|</span>
-            <span className="text-slate-600">{t("Delivery", "ডেলিভারি")}: <b className="text-slate-900 capitalize">{deliveryMode}</b></span>
-            <span className="ml-3 text-lg font-bold text-violet-700">৳{grandTotal.toFixed(0)}</span>
-          </div>
-          <button
-            disabled={busy}
-            onClick={submit}
-            className="inline-flex items-center gap-2 px-5 h-11 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-semibold shadow-md hover:opacity-95 disabled:opacity-60"
-          >
-            <Sparkles className="w-4 h-4" /> {busy ? t("Processing…", "প্রসেসিং…") : t("Create & Deliver", "অর্ডার তৈরি ও ডেলিভারি")}
-          </button>
+      {/* Inline action footer */}
+      <div className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4">
+        <div className="flex items-center gap-3 text-sm">
+          <Package className="w-4 h-4 text-slate-500" />
+          <span className="text-slate-600">{t("Items", "আইটেম")}: <b className="text-slate-900">{totalItems}</b></span>
+          <span className="text-slate-300">|</span>
+          <span className="text-slate-600">{t("Delivery", "ডেলিভারি")}: <b className="text-slate-900 capitalize">{deliveryMode}</b></span>
+          <span className="ml-3 text-lg font-bold text-violet-700">৳{grandTotal.toFixed(0)}</span>
         </div>
+        <button
+          disabled={busy}
+          onClick={submit}
+          className="inline-flex items-center gap-2 px-5 h-11 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-semibold shadow-md hover:opacity-95 disabled:opacity-60"
+        >
+          <Sparkles className="w-4 h-4" /> {busy ? t("Processing…", "প্রসেসিং…") : t("Create & Deliver", "অর্ডার তৈরি ও ডেলিভারি")}
+        </button>
       </div>
     </div>
   );
