@@ -59,6 +59,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
       total,
       add: (item) =>
         setItems((cur) => {
+          try {
+            trackAddToCart({
+              id: item.slug,
+              name: item.name,
+              value: item.price * item.qty,
+              quantity: item.qty,
+            });
+          } catch {
+            /* ignore */
+          }
           const idx = cur.findIndex((c) => c.slug === item.slug && c.planPeriod === item.planPeriod);
           if (idx >= 0) {
             const next = [...cur];
@@ -67,6 +77,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           }
           return [...cur, item];
         }),
+
       remove: (slug, planPeriod) => setItems((cur) => cur.filter((c) => !(c.slug === slug && c.planPeriod === planPeriod))),
       setQty: (slug, planPeriod, qty) =>
         setItems((cur) =>
