@@ -227,6 +227,23 @@ function AdminCoupons() {
                   placeholder="SAVE20"
                 />
               </Field>
+              <Field label="Reference product (optional)" icon={<Package className="w-3.5 h-3.5" />}>
+                <ProductPicker
+                  value=""
+                  allowClear={false}
+                  placeholder="Auto-fill description from product…"
+                  onChange={(_slug, product) => {
+                    if (!product) return;
+                    setEditing((prev) => prev ? {
+                      ...prev,
+                      description: prev.description?.trim()
+                        ? prev.description
+                        : `${product.name} — ${product.tagline ?? product.category}`,
+                    } : prev);
+                    toast.success(`Description filled from ${product.name}`);
+                  }}
+                />
+              </Field>
               <Field label="Description">
                 <input value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} className="admin-input" placeholder="20% off everything" />
               </Field>
