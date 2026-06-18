@@ -369,7 +369,7 @@ export function HeroBannerCarousel() {
           )}
 
           {/* Desktop: two-column layout */}
-          <div className="relative hidden items-center gap-7 px-5 py-10 md:grid md:grid-cols-2 md:gap-10 md:px-12 md:py-14">
+          <div className="relative hidden h-full items-center gap-7 px-5 py-8 md:grid md:grid-cols-[1.05fr_1fr] md:gap-10 md:px-12 md:py-10">
             {/* LEFT */}
             <div className="space-y-5 text-white">
               {current.data.category && (
