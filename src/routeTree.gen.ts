@@ -55,6 +55,7 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminInvoiceGeneratorRouteImport } from './routes/admin.invoice-generator'
+import { Route as AdminInvoiceDesignRouteImport } from './routes/admin.invoice-design'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
@@ -301,6 +302,11 @@ const AdminInvoiceGeneratorRoute = AdminInvoiceGeneratorRouteImport.update({
   path: '/invoice-generator',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminInvoiceDesignRoute = AdminInvoiceDesignRouteImport.update({
+  id: '/invoice-design',
+  path: '/invoice-design',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminDescriptionTemplateRoute =
   AdminDescriptionTemplateRouteImport.update({
     id: '/description-template',
@@ -412,6 +418,7 @@ export interface FileRoutesByFullPath {
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
+  '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -473,6 +480,7 @@ export interface FileRoutesByTo {
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
+  '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -536,6 +544,7 @@ export interface FileRoutesById {
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
+  '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -600,6 +609,7 @@ export interface FileRouteTypes {
     | '/admin/coupons'
     | '/admin/description-preview'
     | '/admin/description-template'
+    | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -661,6 +671,7 @@ export interface FileRouteTypes {
     | '/admin/coupons'
     | '/admin/description-preview'
     | '/admin/description-template'
+    | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -723,6 +734,7 @@ export interface FileRouteTypes {
     | '/admin/coupons'
     | '/admin/description-preview'
     | '/admin/description-template'
+    | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -1117,6 +1129,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminInvoiceGeneratorRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/invoice-design': {
+      id: '/admin/invoice-design'
+      path: '/invoice-design'
+      fullPath: '/admin/invoice-design'
+      preLoaderRoute: typeof AdminInvoiceDesignRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/description-template': {
       id: '/admin/description-template'
       path: '/description-template'
@@ -1225,6 +1244,7 @@ interface AdminRouteChildren {
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
+  AdminInvoiceDesignRoute: typeof AdminInvoiceDesignRoute
   AdminInvoiceGeneratorRoute: typeof AdminInvoiceGeneratorRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
@@ -1247,6 +1267,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCouponsRoute: AdminCouponsRoute,
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
+  AdminInvoiceDesignRoute: AdminInvoiceDesignRoute,
   AdminInvoiceGeneratorRoute: AdminInvoiceGeneratorRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminPaymentLinksRoute: AdminPaymentLinksRoute,
@@ -1320,13 +1341,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
