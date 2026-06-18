@@ -59,6 +59,7 @@ import { Route as AdminInvoiceGeneratorRouteImport } from './routes/admin.invoic
 import { Route as AdminInvoiceDesignRouteImport } from './routes/admin.invoice-design'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
+import { Route as AdminCustomerLicensesRouteImport } from './routes/admin.customer-licenses'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminBulkUpdateRouteImport } from './routes/admin.bulk-update'
 import { Route as AdminBkashTransactionsRouteImport } from './routes/admin.bkash-transactions'
@@ -325,6 +326,11 @@ const AdminDescriptionPreviewRoute = AdminDescriptionPreviewRouteImport.update({
   path: '/description-preview',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCustomerLicensesRoute = AdminCustomerLicensesRouteImport.update({
+  id: '/customer-licenses',
+  path: '/customer-licenses',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCouponsRoute = AdminCouponsRouteImport.update({
   id: '/coupons',
   path: '/coupons',
@@ -429,6 +435,7 @@ export interface FileRoutesByFullPath {
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/customer-licenses': typeof AdminCustomerLicensesRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
@@ -493,6 +500,7 @@ export interface FileRoutesByTo {
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/customer-licenses': typeof AdminCustomerLicensesRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
@@ -559,6 +567,7 @@ export interface FileRoutesById {
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/customer-licenses': typeof AdminCustomerLicensesRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
@@ -626,6 +635,7 @@ export interface FileRouteTypes {
     | '/admin/bkash-transactions'
     | '/admin/bulk-update'
     | '/admin/coupons'
+    | '/admin/customer-licenses'
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/invoice-design'
@@ -690,6 +700,7 @@ export interface FileRouteTypes {
     | '/admin/bkash-transactions'
     | '/admin/bulk-update'
     | '/admin/coupons'
+    | '/admin/customer-licenses'
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/invoice-design'
@@ -755,6 +766,7 @@ export interface FileRouteTypes {
     | '/admin/bkash-transactions'
     | '/admin/bulk-update'
     | '/admin/coupons'
+    | '/admin/customer-licenses'
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/invoice-design'
@@ -1181,6 +1193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDescriptionPreviewRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/customer-licenses': {
+      id: '/admin/customer-licenses'
+      path: '/customer-licenses'
+      fullPath: '/admin/customer-licenses'
+      preLoaderRoute: typeof AdminCustomerLicensesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/coupons': {
       id: '/admin/coupons'
       path: '/coupons'
@@ -1281,6 +1300,7 @@ interface AdminRouteChildren {
   AdminBkashTransactionsRoute: typeof AdminBkashTransactionsRoute
   AdminBulkUpdateRoute: typeof AdminBulkUpdateRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
+  AdminCustomerLicensesRoute: typeof AdminCustomerLicensesRoute
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminInvoiceDesignRoute: typeof AdminInvoiceDesignRoute
@@ -1306,6 +1326,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBkashTransactionsRoute: AdminBkashTransactionsRoute,
   AdminBulkUpdateRoute: AdminBulkUpdateRoute,
   AdminCouponsRoute: AdminCouponsRoute,
+  AdminCustomerLicensesRoute: AdminCustomerLicensesRoute,
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminInvoiceDesignRoute: AdminInvoiceDesignRoute,
