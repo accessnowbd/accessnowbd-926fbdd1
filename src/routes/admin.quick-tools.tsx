@@ -7,6 +7,7 @@ import { downloadReceiptPdf, getReceiptBlob, receiptFileName, type ReceiptOrder 
 import { useProducts } from "@/hooks/useProducts";
 import { useShopConfig } from "@/hooks/useShopConfig";
 import { AdminGlassCard } from "@/components/admin/AdminStatCard";
+import { ProductPicker } from "@/components/admin/ProductPicker";
 
 export const Route = createFileRoute("/admin/quick-tools")({
   component: QuickToolsPage,
