@@ -427,21 +427,29 @@ function LicenseManagerPage() {
         )}
       </div>
 
-      {(creating || editing) && (
-        <LicenseFormModal
-          row={editing}
+      {/* Inline panels */}
+      {creating && !editing && (
+        <AddLicensePanel
           products={products}
           presetSlug={presetSlug}
-          onClose={() => { setCreating(false); setEditing(null); setPresetSlug(""); }}
-          onSaved={() => { setCreating(false); setEditing(null); setPresetSlug(""); load(true); }}
+          onClose={() => { setCreating(false); setPresetSlug(""); }}
+          onSaved={() => { setCreating(false); setPresetSlug(""); load(true); }}
         />
       )}
       {bulkOpen && (
-        <BulkImportModal
+        <BulkImportPanel
           products={products}
           presetSlug={presetSlug}
           onClose={() => { setBulkOpen(false); setPresetSlug(""); }}
           onSaved={() => { setBulkOpen(false); setPresetSlug(""); load(true); }}
+        />
+      )}
+      {editing && (
+        <LicenseFormModal
+          row={editing}
+          products={products}
+          onClose={() => { setEditing(null); }}
+          onSaved={() => { setEditing(null); load(true); }}
         />
       )}
       {addProductOpen && (
