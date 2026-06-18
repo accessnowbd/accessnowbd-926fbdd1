@@ -92,10 +92,11 @@ function AffiliatesPage() {
       kind: "affiliate_settings",
       data: settings as unknown as Record<string, unknown>,
       is_active: true,
-    };
+    } as never;
     const { error } = recordId
       ? await supabase.from("admin_records").update(payload).eq("id", recordId)
       : await supabase.from("admin_records").insert(payload).select("id").single();
+
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success(t("Settings saved", "সেটিংস সংরক্ষিত"));
