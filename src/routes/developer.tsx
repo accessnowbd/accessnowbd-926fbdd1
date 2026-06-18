@@ -193,7 +193,7 @@ function DeveloperPage() {
 
           {/* Values */}
           <section className="mt-12">
-            <h2 className="text-2xl font-bold md:text-3xl">কেন Shahed IT?</h2>
+            <h2 className="text-2xl font-bold md:text-3xl text-foreground">কেন Shahed IT?</h2>
             <ul className="mt-6 grid gap-3 md:grid-cols-2">
               {VALUES.map((v) => (
                 <li
@@ -201,7 +201,7 @@ function DeveloperPage() {
                   className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-violet-400 dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-violet-400/50 dark:backdrop-blur"
                 >
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-violet-500 dark:text-violet-400" />
-                  <span className="text-sm leading-relaxed">{v}</span>
+                  <span className="text-sm leading-relaxed text-foreground">{v}</span>
                 </li>
               ))}
             </ul>
