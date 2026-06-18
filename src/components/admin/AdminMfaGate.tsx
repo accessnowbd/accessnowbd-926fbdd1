@@ -229,6 +229,14 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
 
   if (mode === "ok") return <>{children}</>;
 
+  if (mode === "loading") {
+    return (
+      <div className="min-h-screen grid place-items-center bg-[#f6f7fb]">
+        <Loader2 className="w-8 h-8 animate-spin text-slate-500" aria-label="Loading" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen grid place-items-center bg-[#f6f7fb] px-4 py-10">
       <div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
