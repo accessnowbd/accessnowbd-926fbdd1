@@ -153,7 +153,7 @@ function DeveloperPage() {
 
           {/* Who they are */}
           <section className="mt-12">
-            <h2 className="text-2xl font-bold md:text-3xl">
+            <h2 className="text-2xl font-bold md:text-3xl text-foreground">
               Shahed IT — কারা তারা?
             </h2>
             <p className="mt-4 leading-relaxed text-foreground/85">
