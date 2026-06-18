@@ -5,3 +5,6 @@ verify_jwt = true
 
 [functions.product-ai]
 verify_jwt = true
+
+[functions.renewal-email-ai]
+verify_jwt = true

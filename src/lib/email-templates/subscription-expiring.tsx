@@ -9,6 +9,11 @@ interface Props {
   expiresOn?: string
   daysLeft?: number
   renewUrl?: string
+  aiBody?: string
+  couponCode?: string
+  couponDiscount?: number
+  couponValidDays?: number
+  couponOfferText?: string
 }
 
 const Email = ({
@@ -17,25 +22,57 @@ const Email = ({
   expiresOn,
   daysLeft,
   renewUrl = 'https://accessnowbd.com/products',
+  aiBody,
+  couponCode,
+  couponDiscount,
+  couponValidDays,
+  couponOfferText,
 }: Props) => (
   <EmailLayout
     preview={`Your ${planName ?? 'subscription'} expires soon`}
     heading="Subscription expiring soon ⏰"
   >
-    <Text style={styles.text}>
-      Hi{name ? ` ${name}` : ''}, আপনার {planName ?? 'subscription'}-এর মেয়াদ
-      {typeof daysLeft === 'number' ? ` মাত্র ${daysLeft} দিনের` : ' শীঘ্রই'} মধ্যে শেষ হয়ে যাচ্ছে।
-    </Text>
-    {expiresOn && (
+    {aiBody ? (
+      aiBody.split(/\n{2,}/).map((para, i) => (
+        <Text key={i} style={styles.text}>
+          {para.split('\n').map((line, j) => (
+            <React.Fragment key={j}>
+              {j > 0 && <br />}
+              {line}
+            </React.Fragment>
+          ))}
+        </Text>
+      ))
+    ) : (
+      <>
+        <Text style={styles.text}>
+          Hi{name ? ` ${name}` : ''}, আপনার {planName ?? 'subscription'}-এর মেয়াদ
+          {typeof daysLeft === 'number' ? ` মাত্র ${daysLeft} দিনের` : ' শীঘ্রই'} মধ্যে শেষ হয়ে যাচ্ছে।
+        </Text>
+        {expiresOn && (
+          <div style={styles.totalBox}>
+            <Text style={styles.row}>
+              <span style={styles.label}>Expires on:</span> {expiresOn}
+            </Text>
+          </div>
+        )}
+        <Text style={styles.text}>
+          service চালু রাখতে এখনই renew করুন — bKash বা Nagad দিয়ে এক ক্লিকে।
+        </Text>
+      </>
+    )}
+
+    {couponCode && (
       <div style={styles.totalBox}>
         <Text style={styles.row}>
-          <span style={styles.label}>Expires on:</span> {expiresOn}
+          <span style={styles.label}>Your coupon:</span>{' '}
+          <strong>{couponCode}</strong> — {couponDiscount ?? 0}% off
+          {couponValidDays ? `, valid for ${couponValidDays} days` : ''}
         </Text>
+        {couponOfferText && <Text style={styles.muted}>{couponOfferText}</Text>}
       </div>
     )}
-    <Text style={styles.text}>
-      service চালু রাখতে এখনই renew করুন — bKash বা Nagad দিয়ে এক ক্লিকে।
-    </Text>
+
     <Button style={styles.button} href={renewUrl}>
       Renew now
     </Button>
