@@ -9,7 +9,7 @@ import {
   MousePointerClick,
   Settings as SettingsIcon,
   Save,
-  Search,
+
   UserCheck,
   TrendingUp,
   Banknote,
