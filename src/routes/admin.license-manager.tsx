@@ -429,11 +429,25 @@ function LicenseManagerPage() {
         <LicenseFormModal
           row={editing}
           products={products}
-          onClose={() => { setCreating(false); setEditing(null); }}
-          onSaved={() => { setCreating(false); setEditing(null); load(true); }}
+          presetSlug={presetSlug}
+          onClose={() => { setCreating(false); setEditing(null); setPresetSlug(""); }}
+          onSaved={() => { setCreating(false); setEditing(null); setPresetSlug(""); load(true); }}
         />
       )}
-      {bulkOpen && <BulkImportModal products={products} onClose={() => setBulkOpen(false)} onSaved={() => { setBulkOpen(false); load(true); }} />}
+      {bulkOpen && (
+        <BulkImportModal
+          products={products}
+          presetSlug={presetSlug}
+          onClose={() => { setBulkOpen(false); setPresetSlug(""); }}
+          onSaved={() => { setBulkOpen(false); setPresetSlug(""); load(true); }}
+        />
+      )}
+      {addProductOpen && (
+        <QuickAddProductModal
+          onClose={() => setAddProductOpen(false)}
+          onSaved={() => { setAddProductOpen(false); load(true); }}
+        />
+      )}
     </div>
   );
 }
