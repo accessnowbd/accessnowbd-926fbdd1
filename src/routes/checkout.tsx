@@ -173,11 +173,12 @@ function CheckoutPage() {
   // Capture abandoned checkout: debounced upsert as soon as we have valid contact info + items.
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (!user?.id) return; // only capture for signed-in shoppers (RLS scopes rows to user_id)
     if (!items?.length) return;
     if (!form.name.trim() || !emailRe.test(form.email) || !isValidBdPhone(form.phone)) return;
     const handle = window.setTimeout(() => {
       const payload = {
-        user_id: user?.id ?? null,
+        user_id: user.id,
         full_name: form.name.trim(),
         email: form.email.trim().toLowerCase(),
         phone: normalizeBdPhone(form.phone),
@@ -191,13 +192,14 @@ function CheckoutPage() {
         status: "pending",
       };
       (supabase.from("abandoned_checkouts" as never) as unknown as { upsert: (p: unknown, o: { onConflict: string }) => Promise<{ error: { message: string } | null }> })
-        .upsert(payload, { onConflict: "email" })
+        .upsert(payload, { onConflict: "user_id" })
         .then(({ error }) => {
           if (error && typeof console !== "undefined") console.warn("abandoned capture", error.message);
         });
 
     }, 1500);
     return () => window.clearTimeout(handle);
+
   }, [form.name, form.email, form.phone, items, total, coupon, user?.id]);
 
   const subAfterCoupon = Math.max(0, total - applied.discount);
