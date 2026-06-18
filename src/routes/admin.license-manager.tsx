@@ -561,8 +561,8 @@ function LicenseFormModal({ row, products, presetSlug, onClose, onSaved }: { row
   );
 }
 
-function BulkImportModal({ products, onClose, onSaved }: { products: ProductLite[]; onClose: () => void; onSaved: () => void }) {
-  const [productId, setProductId] = useState("");
+function BulkImportModal({ products, presetSlug, onClose, onSaved }: { products: ProductLite[]; presetSlug?: string; onClose: () => void; onSaved: () => void }) {
+  const [productId, setProductId] = useState(presetSlug || "");
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
 
