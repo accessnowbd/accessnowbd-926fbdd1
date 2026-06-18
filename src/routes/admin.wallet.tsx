@@ -222,7 +222,7 @@ function RequestsList({ topups, profiles, reload }: { topups: Topup[]; profiles:
               </div>
               <div className="text-right">
                 <div className="text-lg font-extrabold text-slate-900">{fmt(Number(r.amount))}</div>
-                <span className={`mt-1 inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold capitalize ${statusPill(r.status)}`}>
+                <span className={`mt-1 inline-block px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide shadow-sm ${statusPill(r.status)}`}>
                   {r.status}
                 </span>
               </div>
