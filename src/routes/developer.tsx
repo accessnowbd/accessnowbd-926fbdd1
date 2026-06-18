@@ -98,7 +98,7 @@ function DeveloperPage() {
           </p>
 
           {/* Intro card */}
-          <div className="mt-8 rounded-2xl border border-violet-500/20 bg-card/80 p-6 shadow-sm shadow-violet-500/5 backdrop-blur md:p-8">
+          <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8 dark:border-white/10 dark:bg-white/[0.03] dark:shadow-violet-500/10 dark:backdrop-blur">
             <p className="text-base leading-relaxed text-foreground/90 md:text-lg">
               <strong>AccessNow BD</strong> ওয়েবসাইটটির সম্পূর্ণ ডিজাইন,
               ডেভেলপমেন্ট ও রক্ষণাবেক্ষণের দায়িত্বে রয়েছে{" "}
