@@ -611,6 +611,7 @@ const ADMIN_ICON_COLORS: Record<string, string> = {
   "teal-500": "#0d9488",
   "teal-600": "#0f766e",
   "violet-500": "#7c3aed",
+  "yellow-500": "#ca8a04",
 };
 
 function iconGradientStyle(grad: string): CSSProperties {
