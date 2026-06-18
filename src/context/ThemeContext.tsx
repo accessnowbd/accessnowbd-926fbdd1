@@ -81,6 +81,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
     applyTheme(initial);
     setThemeState(initial);
+    try { localStorage.setItem(STORAGE_KEY, initial); } catch { /* ignore */ }
+    userPickedRef.current = true;
   }, []);
 
   // When availability changes (admin toggled), force fallback if needed.
