@@ -521,7 +521,7 @@ function AdminShell({ user, signOut, navigate }: any) {
 
         <div className="flex-1 p-4 md:p-8 min-w-0 overflow-x-hidden text-[var(--admin-ink)]">
           <div className="mx-auto max-w-[1400px]">
-            
+            <AdminPageHeader />
             <Outlet />
           </div>
         </div>
