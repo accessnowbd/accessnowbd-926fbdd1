@@ -229,6 +229,14 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
 
   if (mode === "ok") return <>{children}</>;
 
+  if (mode === "loading") {
+    return (
+      <div className="min-h-screen grid place-items-center bg-[#f6f7fb]">
+        <Loader2 className="w-8 h-8 animate-spin text-slate-500" aria-label="Loading" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen grid place-items-center bg-[#f6f7fb] px-4 py-10">
       <div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
@@ -240,18 +248,12 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
             <h1 className="text-lg font-semibold text-slate-900">
               {mode === "enroll" && "Two-Factor Setup (Required)"}
               {mode === "challenge" && "Admin Verification"}
-              {mode === "loading" && "Checking security..."}
+              
               {mode === "error" && "Security check failed"}
             </h1>
             <p className="text-xs text-slate-500 truncate">{userEmail ?? "Admin account"}</p>
           </div>
         </div>
-
-        {mode === "loading" && (
-          <div className="mt-8 flex items-center justify-center gap-2 text-slate-600 text-sm">
-            <Loader2 className="w-4 h-4 animate-spin" /> Loading...
-          </div>
-        )}
 
         {mode === "error" && (
           <div className="mt-5">
