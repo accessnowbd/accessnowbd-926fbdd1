@@ -44,8 +44,6 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
     items: [
       { to: "/admin", label: "Dashboard", labelBn: "ড্যাশবোর্ড", icon: ic(LayoutDashboard), grad: "from-violet-500 to-indigo-500", exact: true },
       { to: "/admin/analytics", label: "Analytics Dashboard", labelBn: "অ্যানালিটিক্স ড্যাশবোর্ড", icon: ic(PieChart), grad: "from-violet-500 to-indigo-600" },
-      { to: "/admin/customer-insights", label: "Customer Insights", labelBn: "কাস্টমার ইনসাইট", icon: ic(UsersRound), grad: "from-cyan-500 to-teal-500" },
-      { to: "/admin/activity-log", label: "Activity Log", labelBn: "অ্যাক্টিভিটি লগ", icon: ic(ClipboardList), grad: "from-amber-500 to-orange-500" },
     ],
   },
   {
