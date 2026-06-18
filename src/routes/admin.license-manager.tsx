@@ -27,6 +27,8 @@ type LicenseData = {
   delivery_number?: string;
   delivered_via?: "whatsapp" | "email" | "manual" | "";
   notes?: string;
+  extra_info?: string;
+  variant?: string;
 };
 
 type LicenseRow = {
@@ -425,21 +427,29 @@ function LicenseManagerPage() {
         )}
       </div>
 
-      {(creating || editing) && (
-        <LicenseFormModal
-          row={editing}
+      {/* Inline panels */}
+      {creating && !editing && (
+        <AddLicensePanel
           products={products}
           presetSlug={presetSlug}
-          onClose={() => { setCreating(false); setEditing(null); setPresetSlug(""); }}
-          onSaved={() => { setCreating(false); setEditing(null); setPresetSlug(""); load(true); }}
+          onClose={() => { setCreating(false); setPresetSlug(""); }}
+          onSaved={() => { setCreating(false); setPresetSlug(""); load(true); }}
         />
       )}
       {bulkOpen && (
-        <BulkImportModal
+        <BulkImportPanel
           products={products}
           presetSlug={presetSlug}
           onClose={() => { setBulkOpen(false); setPresetSlug(""); }}
           onSaved={() => { setBulkOpen(false); setPresetSlug(""); load(true); }}
+        />
+      )}
+      {editing && (
+        <LicenseFormModal
+          row={editing}
+          products={products}
+          onClose={() => { setEditing(null); }}
+          onSaved={() => { setEditing(null); load(true); }}
         />
       )}
       {addProductOpen && (
@@ -677,6 +687,224 @@ function QuickAddProductModal({ onClose, onSaved }: { onClose: () => void; onSav
         </div>
       </div>
     </div>
+  );
+}
+
+/* ============================== Inline panels (screenshot design) ============================== */
+
+const KEY_TYPES: { value: string; label: string; hint: string }[] = [
+  { value: "License Key", label: "🔑 License Key", hint: "Single activation key (Windows, Office, etc.)" },
+  { value: "Account", label: "👤 Account", hint: "Email & password style credential" },
+  { value: "Activation Code", label: "🎟️ Activation Code", hint: "Short redemption / activation code" },
+  { value: "Gift Card", label: "🎁 Gift Card", hint: "Gift card / voucher code" },
+];
+
+function PanelShell({ accent = "violet", title, icon, right, children }: { accent?: "violet" | "amber"; title: React.ReactNode; icon: React.ReactNode; right?: React.ReactNode; children: React.ReactNode }) {
+  const bar = accent === "amber" ? "bg-amber-500" : "bg-violet-500";
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+        <div className="flex items-center gap-2">
+          <span className={`w-1 h-5 rounded ${bar}`} />
+          <span className="inline-flex items-center gap-2 text-[15px] font-extrabold text-slate-900">
+            {icon} {title}
+          </span>
+        </div>
+        {right}
+      </div>
+      <div className="p-5">{children}</div>
+    </div>
+  );
+}
+
+function AddLicensePanel({ products, presetSlug, onClose, onSaved }: { products: ProductLite[]; presetSlug?: string; onClose: () => void; onSaved: () => void }) {
+  const [productId, setProductId] = useState(presetSlug || "");
+  const [keyType, setKeyType] = useState("License Key");
+  const [key, setKey] = useState("");
+  const [extraInfo, setExtraInfo] = useState("");
+  const [variant, setVariant] = useState("");
+  const [busy, setBusy] = useState(false);
+  const meta = KEY_TYPES.find((k) => k.value === keyType);
+
+  const save = async () => {
+    if (!productId) return toast.error("প্রোডাক্ট বেছে নিন");
+    if (!key.trim()) return toast.error("Key দিন");
+    setBusy(true);
+    const product = products.find((p) => p.slug === productId);
+    const payload: LicenseData = {
+      key: key.trim(),
+      type: keyType,
+      product_id: productId,
+      product_name: product?.name,
+      status: "available",
+      extra_info: extraInfo || undefined,
+      variant: variant || undefined,
+    };
+    const { error } = await supabase.from("admin_records").insert({ kind: "license_key", data: payload, is_active: true });
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("License added");
+    onSaved();
+  };
+
+  return (
+    <PanelShell title={<>নতুন License Key যোগ করুন</>} icon={<Plus className="w-4 h-4 text-violet-600" />}>
+      <div className="grid md:grid-cols-2 gap-4">
+        <PanelField label="প্রোডাক্ট" required>
+          <select value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-white outline-none focus:border-violet-400 text-sm">
+            <option value="">— প্রোডাক্ট বেছে নিন —</option>
+            {products.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}
+          </select>
+        </PanelField>
+        <PanelField label="Key Type" required hint={meta?.hint}>
+          <select value={keyType} onChange={(e) => setKeyType(e.target.value)} className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-white outline-none focus:border-violet-400 text-sm">
+            {KEY_TYPES.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
+          </select>
+        </PanelField>
+      </div>
+
+      <div className="mt-4">
+        <PanelField label="License Key / Value" required>
+          <input value={key} onChange={(e) => setKey(e.target.value)} placeholder="XXXXX-XXXXX-XXXXX-XXXXX-XXXXX" className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-white outline-none focus:border-violet-400 text-sm font-mono" />
+        </PanelField>
+      </div>
+
+      <div className="mt-4">
+        <PanelField label="Extra Info (Optional)">
+          <textarea value={extraInfo} onChange={(e) => setExtraInfo(e.target.value)} rows={3} placeholder="অতিরিক্ত তথ্য (যদি থাকে)…" className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white outline-none focus:border-violet-400 text-sm" />
+        </PanelField>
+      </div>
+
+      <div className="mt-4">
+        <PanelField
+          label={<span className="inline-flex items-center gap-1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-violet-500"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>Variant / Option (Optional)</span>}
+          hint="যেমন: 1 Year, 5 Devices, Personal"
+        >
+          <input value={variant} onChange={(e) => setVariant(e.target.value)} placeholder="যে option-এর জন্য এই key — যেমন: 1 Year" className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-white outline-none focus:border-violet-400 text-sm" />
+          <p className="text-[11px] text-slate-500 mt-1.5">কাস্টমার যখন এই option-এ অর্ডার করবেন, তখন সিস্টেম এই key-টাই অটো ডেলিভার করবে।</p>
+        </PanelField>
+      </div>
+
+      <div className="mt-5 flex items-center gap-2">
+        <button onClick={save} disabled={busy} className="inline-flex items-center gap-1.5 h-11 px-5 rounded-full text-white text-sm font-bold shadow bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:opacity-95 disabled:opacity-60">
+          {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />} Save License
+        </button>
+        <button onClick={onClose} className="h-11 px-5 rounded-full bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">বাতিল</button>
+      </div>
+    </PanelShell>
+  );
+}
+
+function BulkImportPanel({ products, presetSlug, onClose, onSaved }: { products: ProductLite[]; presetSlug?: string; onClose: () => void; onSaved: () => void }) {
+  const [productId, setProductId] = useState(presetSlug || "");
+  const [keyType, setKeyType] = useState("License Key");
+  const [variant, setVariant] = useState("");
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const keys = useMemo(() => text.split(/\r?\n/).map((s) => s.trim()).filter(Boolean), [text]);
+
+  const onFile = async (file: File) => {
+    if (file.size > 8 * 1024 * 1024) return toast.error("ফাইল 8MB এর বেশি");
+    const txt = await file.text();
+    setText((prev) => (prev ? prev.replace(/\s+$/, "") + "\n" : "") + txt);
+  };
+
+  const onDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const f = e.dataTransfer.files?.[0];
+    if (f) onFile(f);
+  };
+
+  const run = async () => {
+    if (!productId) return toast.error("প্রোডাক্ট বেছে নিন");
+    if (!keys.length) return toast.error("কোনো key পাওয়া যায়নি");
+    setBusy(true);
+    const product = products.find((p) => p.slug === productId);
+    const payload = keys.map((k) => ({
+      kind: "license_key",
+      is_active: true,
+      data: { key: k, type: keyType, status: "available", product_id: productId, product_name: product?.name, variant: variant || undefined },
+    }));
+    const { error } = await supabase.from("admin_records").insert(payload);
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success(`${keys.length} keys imported`);
+    onSaved();
+  };
+
+  return (
+    <PanelShell
+      accent="amber"
+      title={<>Bulk License Import</>}
+      icon={<Upload className="w-4 h-4 text-amber-600" />}
+      right={
+        <button onClick={() => toast.info("AI Smart Import coming soon")} className="inline-flex items-center gap-1.5 h-9 px-3 rounded-full bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+          ✨ AI Smart Import
+        </button>
+      }
+    >
+      <p className="text-[12px] text-slate-500 mb-3">প্রতি লাইনে একটি করে key লিখুন, অথবা CSV/TXT ফাইল আপলোড করুন।</p>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <select value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-white outline-none focus:border-amber-400 text-sm">
+          <option value="">— প্রোডাক্ট বেছে নিন —</option>
+          {products.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}
+        </select>
+        <select value={keyType} onChange={(e) => setKeyType(e.target.value)} className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-white outline-none focus:border-amber-400 text-sm">
+          {KEY_TYPES.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
+        </select>
+      </div>
+
+      <div className="mt-4">
+        <div className="text-[12px] font-semibold text-slate-700 mb-1.5 inline-flex items-center gap-1">
+          <span className="text-violet-500">🏷️</span> Variant / Option (Optional) <span className="text-slate-400 font-normal">— সব key এই option-এ লাগু হবে</span>
+        </div>
+        <input value={variant} onChange={(e) => setVariant(e.target.value)} placeholder="যেমন: 1 Year, 5 Devices, Personal (খালি রাখলে কোনো option থাকবে না)" className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-white outline-none focus:border-amber-400 text-sm" />
+      </div>
+
+      <label
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={onDrop}
+        className="mt-4 flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-dashed border-slate-300 bg-slate-50/60 cursor-pointer hover:border-amber-400 hover:bg-amber-50/40"
+      >
+        <span className="inline-flex items-center gap-2 text-sm text-slate-600">
+          <FileText className="w-4 h-4 text-slate-500" /> CSV বা TXT ফাইল আপলোড করুন
+        </span>
+        <span className="text-[11px] text-slate-400">.csv, .txt · সর্বোচ্চ 8MB</span>
+        <input type="file" accept=".csv,.txt,text/plain,text/csv" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) onFile(f); e.currentTarget.value = ""; }} />
+      </label>
+
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        rows={8}
+        placeholder={"XXXXX-XXXXX-XXXXX-XXXXX\nYYYYY-YYYYY-YYYYY-YYYYY\nZZZZZ-ZZZZZ-ZZZZZ-ZZZZZ\n…"}
+        className="mt-3 w-full px-3 py-2.5 rounded-xl border border-slate-200 font-mono text-[12px] outline-none focus:border-amber-400 bg-white"
+      />
+
+      <div className="mt-4 flex items-center justify-between">
+        <div className="text-[12px] text-slate-500"><span className="font-bold text-slate-900">{keys.length}</span> টি key পাওয়া গেছে</div>
+        <div className="flex items-center gap-2">
+          <button onClick={onClose} className="h-10 px-4 rounded-full bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">বাতিল</button>
+          <button onClick={run} disabled={busy || !keys.length} className="inline-flex items-center gap-1.5 h-10 px-5 rounded-full text-white text-sm font-bold shadow bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 disabled:opacity-60">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />} Import করুন
+          </button>
+        </div>
+      </div>
+    </PanelShell>
+  );
+}
+
+function PanelField({ label, required, hint, children }: { label: React.ReactNode; required?: boolean; hint?: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="text-[12px] font-semibold text-slate-700">
+        {label}{required && <span className="text-rose-500"> *</span>}
+      </span>
+      <div className="mt-1.5">{children}</div>
+      {hint && <p className="text-[11px] text-slate-500 mt-1">{hint}</p>}
+    </label>
   );
 }
 
