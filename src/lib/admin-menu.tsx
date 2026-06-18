@@ -7,7 +7,7 @@ import {
   MapPin, LifeBuoy, BookOpen, Headphones,
   FileEdit, Newspaper, UserCircle2, Download,
   PieChart, UsersRound, ClipboardList, Bot, Settings, ShieldCheck, DatabaseBackup, ShoppingCart, ListChecks, Sparkles,
-  Plug, Mail, CalendarDays,
+  Plug, Mail, CalendarDays, Code2,
 } from "lucide-react";
 
 export type AdminBadge = "LIVE" | "NEW" | "BETA";
