@@ -241,7 +241,7 @@ export function HeroBannerCarousel() {
     <section className="px-4 md:px-10 pt-6 pb-4">
       <div className="relative mx-auto max-w-[1280px]">
         <div
-          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[28px] border border-white/20 transition-colors duration-500"
+          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[28px] border border-white/20 transition-colors duration-500 md:h-[440px] lg:h-[460px]"
           style={{
             background,
             minHeight: Math.max(240, Math.min(900, Number(current.data.min_height) || 430)),
