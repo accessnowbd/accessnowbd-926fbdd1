@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      abandoned_checkouts: {
+        Row: {
+          admin_note: string | null
+          contacted_at: string | null
+          coupon_code: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          items: Json
+          phone: string
+          recovered_at: string | null
+          recovered_order_id: string | null
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          admin_note?: string | null
+          contacted_at?: string | null
+          coupon_code?: string | null
+          created_at?: string
+          email: string
+          full_name?: string
+          id?: string
+          items?: Json
+          phone?: string
+          recovered_at?: string | null
+          recovered_order_id?: string | null
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          admin_note?: string | null
+          contacted_at?: string | null
+          coupon_code?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          items?: Json
+          phone?: string
+          recovered_at?: string | null
+          recovered_order_id?: string | null
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       accessibility_reports: {
         Row: {
           created_at: string
