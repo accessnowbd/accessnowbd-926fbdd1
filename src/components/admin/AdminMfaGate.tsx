@@ -25,8 +25,17 @@ interface Props {
   userEmail?: string | null;
 }
 
+const MFA_OK_CACHE_KEY = "anbd:mfaOk";
+
+function readMfaOkCache(): boolean {
+  if (typeof sessionStorage === "undefined") return false;
+  try { return sessionStorage.getItem(MFA_OK_CACHE_KEY) === "1"; } catch { return false; }
+}
+
 export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
-  const [mode, setMode] = useState<Mode>("loading");
+  // Optimistic: if we already passed MFA this session, render children immediately
+  // and re-verify in the background. Eliminates the loading flicker on every nav.
+  const [mode, setMode] = useState<Mode>(() => (readMfaOkCache() ? "ok" : "loading"));
   const [tab, setTab] = useState<Tab>("totp");
   const [settings, setSettings] = useState<AdminSecuritySettings | null>(null);
   const [error, setError] = useState<string | null>(null);
