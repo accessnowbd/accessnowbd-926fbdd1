@@ -1152,6 +1152,42 @@ export type Database = {
           },
         ]
       }
+      tracking_pixels_public: {
+        Row: {
+          account_id: string | null
+          conversion_label: string | null
+          custom_script: string | null
+          enabled: boolean | null
+          events_config: Json | null
+          id: string | null
+          pixel_id: string | null
+          provider: string | null
+          sort_order: number | null
+        }
+        Insert: {
+          account_id?: string | null
+          conversion_label?: string | null
+          custom_script?: string | null
+          enabled?: boolean | null
+          events_config?: Json | null
+          id?: string | null
+          pixel_id?: string | null
+          provider?: string | null
+          sort_order?: number | null
+        }
+        Update: {
+          account_id?: string | null
+          conversion_label?: string | null
+          custom_script?: string | null
+          enabled?: boolean | null
+          events_config?: Json | null
+          id?: string | null
+          pixel_id?: string | null
+          provider?: string | null
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
       v_has_role_permissions: {
         Row: {
           can_execute: boolean | null
