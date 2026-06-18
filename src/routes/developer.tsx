@@ -182,7 +182,7 @@ function DeveloperPage() {
                   <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-md shadow-violet-500/30">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="text-lg font-bold">{title}</h3>
+                  <h3 className="text-lg font-bold text-foreground">{title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {desc}
                   </p>
