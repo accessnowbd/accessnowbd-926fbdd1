@@ -36,9 +36,9 @@ function initials(name?: string | null, fallback?: string) {
 }
 
 function statusPill(s: Topup["status"]) {
-  if (s === "approved") return "bg-emerald-50 text-emerald-600 ring-1 ring-emerald-200";
-  if (s === "rejected") return "bg-rose-50 text-rose-600 ring-1 ring-rose-200";
-  return "bg-amber-50 text-amber-700 ring-1 ring-amber-200";
+  if (s === "approved") return "bg-emerald-600 text-white ring-1 ring-emerald-700";
+  if (s === "rejected") return "bg-rose-600 text-white ring-1 ring-rose-700";
+  return "bg-amber-500 text-white ring-1 ring-amber-600";
 }
 
 function AdminWalletPage() {
@@ -222,7 +222,7 @@ function RequestsList({ topups, profiles, reload }: { topups: Topup[]; profiles:
               </div>
               <div className="text-right">
                 <div className="text-lg font-extrabold text-slate-900">{fmt(Number(r.amount))}</div>
-                <span className={`mt-1 inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold capitalize ${statusPill(r.status)}`}>
+                <span className={`mt-1 inline-block px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide shadow-sm ${statusPill(r.status)}`}>
                   {r.status}
                 </span>
               </div>
