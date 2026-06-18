@@ -85,12 +85,13 @@ function DeveloperPage() {
             Developer Spotlight
           </div>
 
-          <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">
+          <h1 className="text-3xl font-extrabold leading-tight md:text-5xl text-foreground">
             এই ওয়েবসাইটটি ডিজাইন ও ডেভেলপ করেছে{" "}
-            <span className="bg-gradient-to-r from-primary to-aqua bg-clip-text text-transparent">
+            <span className="inline-block bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent [-webkit-text-fill-color:transparent]">
               Shahed IT
             </span>
           </h1>
+
 
           <p className="mt-4 text-sm text-muted-foreground md:text-base">
             প্রকাশিত: 2026 • লেখক: AccessNow BD Team • পড়ার সময়: ~4 মিনিট
