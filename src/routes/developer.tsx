@@ -112,7 +112,7 @@ function DeveloperPage() {
           </div>
 
           {/* Disclaimer */}
-          <div className="mt-6 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-5 md:p-6">
+          <div className="mt-6 rounded-2xl border border-amber-300/60 bg-amber-50 p-5 md:p-6 dark:border-amber-500/30 dark:bg-amber-500/[0.06]">
             <div className="mb-2 flex items-center gap-2">
               <ShieldAlert className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               <h3 className="text-sm font-bold uppercase tracking-wide text-amber-700 dark:text-amber-300">
