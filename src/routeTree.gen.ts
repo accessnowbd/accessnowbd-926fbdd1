@@ -48,6 +48,7 @@ import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
+import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
 import { Route as AdminReviewGeneratorRouteImport } from './routes/admin.review-generator'
 import { Route as AdminRenewalRemindersRouteImport } from './routes/admin.renewal-reminders'
 import { Route as AdminQuickToolsRouteImport } from './routes/admin.quick-tools'
@@ -276,6 +277,11 @@ const AdminSecurityRoute = AdminSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminReviewsRoute = AdminReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminReviewGeneratorRoute = AdminReviewGeneratorRouteImport.update({
   id: '/review-generator',
   path: '/review-generator',
@@ -489,6 +495,7 @@ export interface FileRoutesByFullPath {
   '/admin/quick-tools': typeof AdminQuickToolsRoute
   '/admin/renewal-reminders': typeof AdminRenewalRemindersRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
+  '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -560,6 +567,7 @@ export interface FileRoutesByTo {
   '/admin/quick-tools': typeof AdminQuickToolsRoute
   '/admin/renewal-reminders': typeof AdminRenewalRemindersRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
+  '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -633,6 +641,7 @@ export interface FileRoutesById {
   '/admin/quick-tools': typeof AdminQuickToolsRoute
   '/admin/renewal-reminders': typeof AdminRenewalRemindersRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
+  '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -707,6 +716,7 @@ export interface FileRouteTypes {
     | '/admin/quick-tools'
     | '/admin/renewal-reminders'
     | '/admin/review-generator'
+    | '/admin/reviews'
     | '/admin/security'
     | '/admin/themes'
     | '/admin/tracking'
@@ -778,6 +788,7 @@ export interface FileRouteTypes {
     | '/admin/quick-tools'
     | '/admin/renewal-reminders'
     | '/admin/review-generator'
+    | '/admin/reviews'
     | '/admin/security'
     | '/admin/themes'
     | '/admin/tracking'
@@ -850,6 +861,7 @@ export interface FileRouteTypes {
     | '/admin/quick-tools'
     | '/admin/renewal-reminders'
     | '/admin/review-generator'
+    | '/admin/reviews'
     | '/admin/security'
     | '/admin/themes'
     | '/admin/tracking'
@@ -1188,6 +1200,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSecurityRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/reviews': {
+      id: '/admin/reviews'
+      path: '/reviews'
+      fullPath: '/admin/reviews'
+      preLoaderRoute: typeof AdminReviewsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/review-generator': {
       id: '/admin/review-generator'
       path: '/review-generator'
@@ -1432,6 +1451,7 @@ interface AdminRouteChildren {
   AdminQuickToolsRoute: typeof AdminQuickToolsRoute
   AdminRenewalRemindersRoute: typeof AdminRenewalRemindersRoute
   AdminReviewGeneratorRoute: typeof AdminReviewGeneratorRoute
+  AdminReviewsRoute: typeof AdminReviewsRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminThemesRoute: typeof AdminThemesRoute
   AdminTrackingRoute: typeof AdminTrackingRoute
@@ -1464,6 +1484,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminQuickToolsRoute: AdminQuickToolsRoute,
   AdminRenewalRemindersRoute: AdminRenewalRemindersRoute,
   AdminReviewGeneratorRoute: AdminReviewGeneratorRoute,
+  AdminReviewsRoute: AdminReviewsRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminThemesRoute: AdminThemesRoute,
   AdminTrackingRoute: AdminTrackingRoute,
