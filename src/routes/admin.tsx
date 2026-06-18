@@ -11,6 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
 import { AdminMfaGate } from "@/components/admin/AdminMfaGate";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { AdminLangProvider, useAdminLang } from "@/context/AdminLangContext";
 import accessNowLogo from "@/assets/logo-gold-a.webp";
 
