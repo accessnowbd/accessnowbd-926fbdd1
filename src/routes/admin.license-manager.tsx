@@ -1,0 +1,496 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useMemo, useState, useCallback } from "react";
+import {
+  KeyRound, Plus, Upload, Printer, RefreshCw, Search, Filter, Eye, EyeOff,
+  Loader2, X, Pencil, UserPlus, FileText, Mail, MessageCircle, Package,
+  ShieldCheck, CheckCircle2, Trash2,
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAdminLang } from "@/context/AdminLangContext";
+import { toast } from "sonner";
+
+export const Route = createFileRoute("/admin/license-manager")({
+  component: LicenseManagerPage,
+});
+
+type LicenseStatus = "available" | "assigned" | "revoked";
+
+type LicenseData = {
+  key?: string;
+  type?: string; // License Key | Account | etc
+  product_id?: string;
+  product_name?: string;
+  status?: LicenseStatus;
+  customer_name?: string;
+  customer_email?: string;
+  order_ref?: string;
+  delivery_number?: string;
+  delivered_via?: "whatsapp" | "email" | "manual" | "";
+  notes?: string;
+};
+
+type LicenseRow = {
+  id: string;
+  kind: string;
+  data: LicenseData;
+  is_active: boolean;
+  created_at: string;
+};
+
+type ProductLite = { id: string; name: string };
+
+const STATUS_META: Record<LicenseStatus, { label: string; bg: string; text: string; ring: string }> = {
+  available: { label: "Available", bg: "bg-emerald-50", text: "text-emerald-600", ring: "ring-emerald-200" },
+  assigned:  { label: "Assigned",  bg: "bg-violet-50",  text: "text-violet-600",  ring: "ring-violet-200" },
+  revoked:   { label: "Revoked",   bg: "bg-rose-50",    text: "text-rose-600",    ring: "ring-rose-200" },
+};
+
+function statusOf(s?: string): LicenseStatus {
+  const k = (s || "available").toLowerCase();
+  return (STATUS_META[k as LicenseStatus] ? (k as LicenseStatus) : "available");
+}
+
+function maskKey(key?: string) {
+  if (!key) return "—";
+  const k = key.trim();
+  if (k.length <= 8) return k;
+  return `${k.slice(0, 4)}${"•".repeat(Math.max(8, k.length - 8))}${k.slice(-4)}`;
+}
+
+function LicenseManagerPage() {
+  const { t } = useAdminLang();
+  const [rows, setRows] = useState<LicenseRow[]>([]);
+  const [products, setProducts] = useState<ProductLite[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [q, setQ] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [productFilter, setProductFilter] = useState<string>("all");
+  const [productSearch, setProductSearch] = useState("");
+  const [onlyAvailable, setOnlyAvailable] = useState(false);
+  const [revealed, setRevealed] = useState<Record<string, boolean>>({});
+  const [editing, setEditing] = useState<LicenseRow | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [bulkOpen, setBulkOpen] = useState(false);
+
+  const load = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true); else setRefreshing(true);
+    const [licRes, prodRes] = await Promise.all([
+      supabase.from("admin_records").select("*").eq("kind", "license_key").order("created_at", { ascending: false }),
+      supabase.from("products").select("id, name").order("name"),
+    ]);
+    if (licRes.error) toast.error(licRes.error.message);
+    setRows(((licRes.data ?? []) as unknown) as LicenseRow[]);
+    setProducts(((prodRes.data ?? []) as unknown) as ProductLite[]);
+    setLoading(false);
+    setRefreshing(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const stats = useMemo(() => {
+    let total = 0, available = 0, assigned = 0, whatsapp = 0, revoked = 0;
+    rows.forEach((r) => {
+      total++;
+      const s = statusOf(r.data?.status);
+      if (s === "available") available++;
+      else if (s === "assigned") assigned++;
+      else if (s === "revoked") revoked++;
+      if ((r.data?.delivered_via || "").toLowerCase() === "whatsapp") whatsapp++;
+    });
+    return { total, available, assigned, whatsapp, revoked };
+  }, [rows]);
+
+  const visible = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    const pTerm = productSearch.trim().toLowerCase();
+    return rows.filter((r) => {
+      const d = r.data ?? {};
+      const s = statusOf(d.status);
+      if (onlyAvailable && s !== "available") return false;
+      if (statusFilter !== "all" && s !== statusFilter) return false;
+      if (productFilter !== "all" && d.product_id !== productFilter) return false;
+      if (pTerm && !(d.product_name || "").toLowerCase().includes(pTerm)) return false;
+      if (!term) return true;
+      const blob = [d.key, d.product_name, d.customer_name, d.customer_email, d.order_ref]
+        .filter(Boolean).join(" ").toLowerCase();
+      return blob.includes(term);
+    });
+  }, [rows, q, statusFilter, productFilter, productSearch, onlyAvailable]);
+
+  const refresh = () => load(true);
+
+  const removeRow = async (id: string) => {
+    if (!confirm(t("Delete this license key?", "এই লাইসেন্স কী মুছবেন?"))) return;
+    const { error } = await supabase.from("admin_records").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success(t("Deleted", "মুছে ফেলা হয়েছে"));
+    setRows((rs) => rs.filter((r) => r.id !== id));
+  };
+
+  return (
+    <div className="space-y-5">
+      {/* Aurora header */}
+      <div className="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-violet-50 via-fuchsia-50 to-sky-50 px-6 py-5 shadow-sm">
+        <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-fuchsia-300/30 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-16 -left-10 w-72 h-72 rounded-full bg-sky-300/30 blur-3xl pointer-events-none" />
+        <div className="relative flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 grid place-items-center text-white shadow-lg">
+            <KeyRound className="w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">{t("License Manager", "লাইসেন্স ম্যানেজার")}</h1>
+            <p className="text-sm text-slate-600">{t("Sales · Manage and configure license manager", "সেলস · লাইসেন্স ম্যানেজ ও কনফিগার করুন")}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Title row + actions */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 text-rose-500" />
+          <div>
+            <h2 className="text-lg font-extrabold text-slate-900">{t("License Manager", "লাইসেন্স ম্যানেজার")}</h2>
+            <p className="text-xs text-slate-500">{t("Manage product licenses", "প্রোডাক্ট লাইসেন্স ম্যানেজ করুন")}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={() => window.print()} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 shadow-sm">
+            <Printer className="w-4 h-4" /> {t("Print", "প্রিন্ট")}
+          </button>
+          <button onClick={() => setBulkOpen(true)} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 shadow-sm">
+            <Upload className="w-4 h-4" /> Bulk Import
+          </button>
+          <button onClick={() => setCreating(true)} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-full text-white text-sm font-semibold shadow-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:opacity-95">
+            <Plus className="w-4 h-4" /> {t("Add License", "লাইসেন্স যোগ")}
+          </button>
+        </div>
+      </div>
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+        <StatCard label={t("Total Keys", "মোট Keys")} value={String(stats.total)} tone="violet" />
+        <StatCard label="Available" value={String(stats.available)} tone="emerald" />
+        <StatCard label="Assigned" value={String(stats.assigned)} tone="sky" />
+        <StatCard label="WhatsApp Delivered" value={String(stats.whatsapp)} tone="emerald" />
+        <StatCard label="Revoked" value={String(stats.revoked)} tone="rose" />
+      </div>
+
+      {/* Product search panel */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <div className="flex items-center gap-2 mb-1">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 grid place-items-center text-white">
+            <Package className="w-4 h-4" />
+          </div>
+          <div className="font-extrabold text-slate-900">{t("Find License by Product", "প্রোডাক্ট দিয়ে License খুঁজুন")}</div>
+        </div>
+        <p className="text-[11px] text-slate-500 mb-2">{t("Type a product name — see available licenses for that product", "প্রোডাক্টের নাম লিখুন — সেই প্রোডাক্টের available লাইসেন্সগুলো দেখুন")}</p>
+        <div className="flex items-center gap-2">
+          <div className="flex-1 relative">
+            <Package className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              value={productSearch}
+              onChange={(e) => setProductSearch(e.target.value)}
+              placeholder={t("e.g. Netflix, Canva, Windows 11…", "যেমন: Netflix, Canva, Windows 11…")}
+              className="w-full h-10 pl-9 pr-3 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-violet-300 text-sm text-slate-900 outline-none"
+            />
+          </div>
+          <label className="inline-flex items-center gap-2 h-10 px-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer select-none">
+            <input type="checkbox" checked={onlyAvailable} onChange={(e) => setOnlyAvailable(e.target.checked)} className="accent-violet-600" />
+            {t("Only Available", "শুধু Available")}
+          </label>
+        </div>
+      </div>
+
+      {/* Filter bar */}
+      <div className="flex flex-wrap items-center gap-2 bg-white rounded-2xl border border-slate-200 p-2 shadow-sm">
+        <div className="flex-1 min-w-[240px] relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder={t("Search by Key, product, customer…", "Key, প্রোডাক্ট, কাস্টমার খুঁজুন…")}
+            className="w-full h-10 pl-9 pr-3 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-violet-300 text-sm text-slate-900 outline-none"
+          />
+        </div>
+        <div className="flex items-center gap-1.5 text-slate-400 px-1"><Filter className="w-4 h-4" /></div>
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="h-10 px-3 rounded-xl bg-slate-50 border border-transparent text-sm font-semibold text-slate-700 outline-none focus:bg-white focus:border-violet-300">
+          <option value="all">{t("All Status", "সব Status")}</option>
+          <option value="available">Available</option>
+          <option value="assigned">Assigned</option>
+          <option value="revoked">Revoked</option>
+        </select>
+        <select value={productFilter} onChange={(e) => setProductFilter(e.target.value)} className="h-10 px-3 rounded-xl bg-slate-50 border border-transparent text-sm font-semibold text-slate-700 outline-none focus:bg-white focus:border-violet-300">
+          <option value="all">{t("All Products", "সব প্রোডাক্ট")}</option>
+          {products.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+        </select>
+        <button onClick={refresh} disabled={refreshing} className="w-10 h-10 grid place-items-center rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600">
+          {refreshing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+        </button>
+      </div>
+
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="px-5 py-3 border-b border-slate-100 text-[12px] text-slate-600">
+          {visible.length} {t("license key shown", "টি license key দেখানো হচ্ছে")}
+        </div>
+
+        {loading ? (
+          <div className="grid place-items-center py-16 text-slate-400">
+            <Loader2 className="w-6 h-6 animate-spin" />
+          </div>
+        ) : visible.length === 0 ? (
+          <div className="py-16 text-center text-slate-500 text-sm">
+            {rows.length === 0 ? t("No license keys yet.", "এখনো কোনো license key নেই।") : t("No matches.", "কিছু মেলেনি।")}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
+                <tr>
+                  <Th className="w-10"><input type="checkbox" className="accent-violet-600" /></Th>
+                  <Th>Type</Th>
+                  <Th>Key / Credentials</Th>
+                  <Th>{t("Product", "প্রোডাক্ট")}</Th>
+                  <Th>Status</Th>
+                  <Th>{t("Customer / Order", "কাস্টমার / অর্ডার")}</Th>
+                  <Th>{t("Delivery Number", "ডেলিভারি নম্বর")}</Th>
+                  <Th className="text-right pr-4">Action</Th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {visible.map((r) => {
+                  const d = r.data ?? {};
+                  const s = statusOf(d.status);
+                  const meta = STATUS_META[s];
+                  const isRevealed = revealed[r.id];
+                  return (
+                    <tr key={r.id} className="hover:bg-slate-50/60">
+                      <td className="px-4 py-3"><input type="checkbox" className="accent-violet-600" /></td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-violet-50 text-violet-600 ring-1 ring-violet-200">
+                          <KeyRound className="w-3 h-3" /> {d.type || "License Key"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 align-middle">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[12px] text-slate-700">{isRevealed ? (d.key || "—") : maskKey(d.key)}</span>
+                          {d.key && (
+                            <button onClick={() => setRevealed((m) => ({ ...m, [r.id]: !m[r.id] }))} className="text-slate-400 hover:text-violet-600" title={isRevealed ? "Hide" : "Show"}>
+                              {isRevealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 align-middle">
+                        <span className="text-slate-700">{d.product_name || <span className="text-slate-300">—</span>}</span>
+                      </td>
+                      <td className="px-4 py-3 align-middle">
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold ring-1 ${meta.bg} ${meta.text} ${meta.ring}`}>
+                          <CheckCircle2 className="w-3 h-3" /> {meta.label}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 align-middle">
+                        {d.customer_name ? (
+                          <>
+                            <div className="font-semibold text-slate-900">{d.customer_name}</div>
+                            {d.order_ref && <div className="text-[11px] text-slate-500 font-mono">#{d.order_ref}</div>}
+                          </>
+                        ) : <span className="text-slate-300">—</span>}
+                      </td>
+                      <td className="px-4 py-3 align-middle text-slate-600">
+                        {d.delivery_number || <span className="text-slate-300">—</span>}
+                      </td>
+                      <td className="px-2 py-3 align-middle">
+                        <div className="flex items-center justify-end gap-1 pr-2">
+                          <IconBtn title="Edit" onClick={() => setEditing(r)}><Pencil className="w-4 h-4" /></IconBtn>
+                          <IconBtn title="Assign"><UserPlus className="w-4 h-4" /></IconBtn>
+                          <IconBtn title="Invoice"><FileText className="w-4 h-4" /></IconBtn>
+                          <IconBtn title="Email"><Mail className="w-4 h-4" /></IconBtn>
+                          <IconBtn title="WhatsApp"><MessageCircle className="w-4 h-4" /></IconBtn>
+                          <IconBtn title="Delete" onClick={() => removeRow(r.id)}><Trash2 className="w-4 h-4" /></IconBtn>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {(creating || editing) && (
+        <LicenseFormModal
+          row={editing}
+          products={products}
+          onClose={() => { setCreating(false); setEditing(null); }}
+          onSaved={() => { setCreating(false); setEditing(null); load(true); }}
+        />
+      )}
+      {bulkOpen && <BulkImportModal products={products} onClose={() => setBulkOpen(false)} onSaved={() => { setBulkOpen(false); load(true); }} />}
+    </div>
+  );
+}
+
+/* ============================== Building blocks ============================== */
+
+function Th({ children, className }: { children?: React.ReactNode; className?: string }) {
+  return <th className={`text-left px-4 py-3 font-bold ${className ?? ""}`}>{children}</th>;
+}
+
+function IconBtn({ children, title, onClick }: { children: React.ReactNode; title?: string; onClick?: () => void }) {
+  return (
+    <button onClick={onClick} title={title} className="w-8 h-8 grid place-items-center rounded-lg text-slate-400 hover:text-violet-600 hover:bg-violet-50">
+      {children}
+    </button>
+  );
+}
+
+function StatCard({ label, value, tone }: { label: string; value: string; tone: "slate" | "emerald" | "rose" | "violet" | "sky" }) {
+  const toneClass = {
+    slate: "text-slate-900",
+    emerald: "text-emerald-600",
+    rose: "text-rose-600",
+    violet: "text-violet-600",
+    sky: "text-sky-600",
+  }[tone];
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200 px-5 py-4 shadow-sm">
+      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{label}</div>
+      <div className={`text-2xl font-extrabold mt-1 ${toneClass}`}>{value}</div>
+    </div>
+  );
+}
+
+function LicenseFormModal({ row, products, onClose, onSaved }: { row: LicenseRow | null; products: ProductLite[]; onClose: () => void; onSaved: () => void }) {
+  const init = row?.data ?? {};
+  const [key, setKey] = useState(init.key || "");
+  const [type, setType] = useState(init.type || "License Key");
+  const [productId, setProductId] = useState(init.product_id || "");
+  const [status, setStatus] = useState<LicenseStatus>(statusOf(init.status));
+  const [customerName, setCustomerName] = useState(init.customer_name || "");
+  const [customerEmail, setCustomerEmail] = useState(init.customer_email || "");
+  const [orderRef, setOrderRef] = useState(init.order_ref || "");
+  const [deliveryNumber, setDeliveryNumber] = useState(init.delivery_number || "");
+  const [notes, setNotes] = useState(init.notes || "");
+  const [saving, setSaving] = useState(false);
+
+  const save = async () => {
+    if (!key.trim()) return toast.error("Key required");
+    setSaving(true);
+    const product = products.find((p) => p.id === productId);
+    const payload: LicenseData = {
+      key: key.trim(),
+      type,
+      product_id: productId || undefined,
+      product_name: product?.name,
+      status,
+      customer_name: customerName || undefined,
+      customer_email: customerEmail || undefined,
+      order_ref: orderRef || undefined,
+      delivery_number: deliveryNumber || undefined,
+      notes: notes || undefined,
+    };
+    let error;
+    if (row) {
+      ({ error } = await supabase.from("admin_records").update({ data: payload }).eq("id", row.id));
+    } else {
+      ({ error } = await supabase.from("admin_records").insert({ kind: "license_key", data: payload, is_active: true }));
+    }
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success(row ? "Updated" : "License added");
+    onSaved();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm grid place-items-center p-4" onClick={onClose}>
+      <div className="w-full max-w-xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-violet-50 to-fuchsia-50">
+          <div className="flex items-center gap-2">
+            <KeyRound className="w-5 h-5 text-violet-600" />
+            <h2 className="text-base font-extrabold text-slate-900">{row ? "Edit License" : "Add License"}</h2>
+          </div>
+          <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-white/70"><X className="w-4 h-4" /></button>
+        </div>
+        <div className="p-5 space-y-3 text-sm max-h-[70vh] overflow-y-auto">
+          <Field label="Key / Credentials"><textarea value={key} onChange={(e) => setKey(e.target.value)} rows={2} className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono text-[12px] outline-none focus:border-violet-300" /></Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Type"><select value={type} onChange={(e) => setType(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option>License Key</option><option>Account</option><option>Activation Code</option><option>Gift Card</option></select></Field>
+            <Field label="Status"><select value={status} onChange={(e) => setStatus(e.target.value as LicenseStatus)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option value="available">Available</option><option value="assigned">Assigned</option><option value="revoked">Revoked</option></select></Field>
+          </div>
+          <Field label="Product"><select value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option value="">— Select product —</option>{products.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Customer Name"><input value={customerName} onChange={(e) => setCustomerName(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
+            <Field label="Customer Email"><input value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Order Ref"><input value={orderRef} onChange={(e) => setOrderRef(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
+            <Field label="Delivery Number"><input value={deliveryNumber} onChange={(e) => setDeliveryNumber(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
+          </div>
+          <Field label="Notes"><textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="w-full px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
+        </div>
+        <div className="px-5 py-3 border-t border-slate-100 flex items-center justify-end gap-2 bg-slate-50">
+          <button onClick={onClose} className="h-10 px-4 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button onClick={save} disabled={saving} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:opacity-95">
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />} {row ? "Update" : "Save"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BulkImportModal({ products, onClose, onSaved }: { products: ProductLite[]; onClose: () => void; onSaved: () => void }) {
+  const [productId, setProductId] = useState("");
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const run = async () => {
+    const keys = text.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+    if (!keys.length) return toast.error("Paste keys, one per line");
+    const product = products.find((p) => p.id === productId);
+    setBusy(true);
+    const payload = keys.map((k) => ({
+      kind: "license_key",
+      is_active: true,
+      data: { key: k, type: "License Key", status: "available", product_id: productId || undefined, product_name: product?.name },
+    }));
+    const { error } = await supabase.from("admin_records").insert(payload);
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success(`${keys.length} keys imported`);
+    onSaved();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm grid place-items-center p-4" onClick={onClose}>
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-violet-50 to-fuchsia-50">
+          <div className="flex items-center gap-2"><Upload className="w-5 h-5 text-violet-600" /><h2 className="text-base font-extrabold text-slate-900">Bulk Import</h2></div>
+          <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-white/70"><X className="w-4 h-4" /></button>
+        </div>
+        <div className="p-5 space-y-3 text-sm">
+          <Field label="Product"><select value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option value="">— Select product —</option>{products.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></Field>
+          <Field label="Keys (one per line)"><textarea value={text} onChange={(e) => setText(e.target.value)} rows={10} className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono text-[12px] outline-none focus:border-violet-300" /></Field>
+        </div>
+        <div className="px-5 py-3 border-t border-slate-100 flex items-center justify-end gap-2 bg-slate-50">
+          <button onClick={onClose} className="h-10 px-4 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button onClick={run} disabled={busy} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:opacity-95">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />} Import
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">{label}</span>
+      <div className="mt-1">{children}</div>
+    </label>
+  );
+}
