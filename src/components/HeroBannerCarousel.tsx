@@ -465,7 +465,7 @@ export function HeroBannerCarousel() {
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
-                  className="relative z-[1] max-h-[300px] w-auto max-w-full object-contain"
+                  className="relative z-[1] h-auto w-full max-w-[520px] max-h-[380px] lg:max-h-[420px] object-contain"
                   style={{
                     filter: `drop-shadow(0 20px 40px ${hexAlpha("#000", 0.45)}) drop-shadow(0 0 28px ${hexAlpha(glow, 0.35)})`,
                     WebkitMaskImage:
