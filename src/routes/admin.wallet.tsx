@@ -93,11 +93,18 @@ function AdminWalletPage() {
   return (
     <div className="min-h-screen bg-slate-50/60">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-6 space-y-5">
-        {/* Actions */}
-        <div className="flex justify-end">
+        {/* Section heading */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h2 className="flex items-center gap-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+              <Wallet className="h-6 w-6 text-violet-600" />
+              Wallet Manager
+            </h2>
+            <p className="text-sm text-slate-500 mt-1">Manage customer wallets and top-up requests</p>
+          </div>
           <button
             onClick={() => load(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-700 hover:bg-slate-50"
+            className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-700 hover:bg-slate-50 shadow-sm"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} /> Refresh
           </button>
