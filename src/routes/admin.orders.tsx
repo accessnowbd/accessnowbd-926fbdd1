@@ -181,7 +181,7 @@ function AdminOrders() {
             <span className="font-bold text-slate-900">{orders.length}</span>
             <span className="text-slate-500"> {t("total orders", "মোট অর্ডার")}</span>
           </div>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold border border-emerald-300">
             <MessageCircle className="w-3.5 h-3.5" /> {t("WhatsApp Active", "WhatsApp সক্রিয়")}
           </span>
         </div>
