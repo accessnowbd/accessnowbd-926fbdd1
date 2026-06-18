@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { trackAddToCart } from "@/lib/trackEvent";
+
 
 export type CartItem = {
   slug: string;
