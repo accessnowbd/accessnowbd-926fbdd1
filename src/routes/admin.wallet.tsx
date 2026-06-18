@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Loader2, Search, Plus, Minus, Check, X, Eye, Wallet, RefreshCw } from "lucide-react";
+import {
+  Loader2, Search, Plus, Minus, Check, X, Eye, Wallet, RefreshCw,
+  TrendingUp, TrendingDown, Clock, Users, History,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getWalletScreenshotUrl } from "@/lib/wallet.functions";
 import { useServerFn } from "@tanstack/react-start";
@@ -21,77 +24,184 @@ type Txn = {
   id: string; user_id: string; amount: number; type: string; reason: string | null;
   balance_after: number; created_at: string;
 };
+type ProfileEmail = Profile & { email?: string };
+type Tab = "requests" | "customers" | "transactions";
 
-type Tab = "pending" | "balances" | "transactions";
+const fmt = (n: number) => "৳" + Math.round(Number(n || 0)).toLocaleString("en-IN");
+const fmt2 = (n: number) => "৳" + Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function initials(name?: string | null, fallback?: string) {
+  const s = (name || fallback || "?").trim();
+  return s.slice(0, 1).toUpperCase();
+}
+
+function statusPill(s: Topup["status"]) {
+  if (s === "approved") return "bg-emerald-50 text-emerald-600 ring-1 ring-emerald-200";
+  if (s === "rejected") return "bg-rose-50 text-rose-600 ring-1 ring-rose-200";
+  return "bg-amber-50 text-amber-700 ring-1 ring-amber-200";
+}
 
 function AdminWalletPage() {
-  const [tab, setTab] = useState<Tab>("pending");
+  const [tab, setTab] = useState<Tab>("requests");
+  const [topups, setTopups] = useState<Topup[]>([]);
+  const [wallets, setWallets] = useState<WalletRow[]>([]);
+  const [txns, setTxns] = useState<Txn[]>([]);
+  const [profiles, setProfiles] = useState<Record<string, ProfileEmail>>({});
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+
+  const load = useCallback(async (silent = false) => {
+    if (silent) setRefreshing(true); else setLoading(true);
+    const [t, w, tx] = await Promise.all([
+      supabase.from("wallet_topups").select("*").order("created_at", { ascending: false }).limit(300),
+      supabase.from("wallets").select("user_id, balance").order("balance", { ascending: false }).limit(500),
+      supabase.from("wallet_transactions").select("*").order("created_at", { ascending: false }).limit(300),
+    ]);
+    const tList = (t.data ?? []) as unknown as Topup[];
+    const wList = (w.data ?? []) as unknown as WalletRow[];
+    const txList = (tx.data ?? []) as unknown as Txn[];
+    setTopups(tList); setWallets(wList); setTxns(txList);
+
+    const ids = Array.from(new Set([
+      ...tList.map(r => r.user_id),
+      ...wList.map(r => r.user_id),
+      ...txList.map(r => r.user_id),
+    ]));
+    if (ids.length) {
+      const { data: ps } = await supabase.from("profiles").select("id, display_name, phone").in("id", ids);
+      const map: Record<string, ProfileEmail> = {};
+      ((ps ?? []) as unknown as Profile[]).forEach(p => { map[p.id] = p; });
+      setProfiles(map);
+    }
+    setLoading(false); setRefreshing(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const stats = useMemo(() => {
+    const totalWallet = wallets.reduce((s, w) => s + Number(w.balance || 0), 0);
+    let credits = 0, debits = 0;
+    txns.forEach(t => {
+      const a = Number(t.amount || 0);
+      if (a > 0) credits += a; else debits += Math.abs(a);
+    });
+    const pending = topups.filter(t => t.status === "pending").length;
+    return { totalWallet, credits, debits, pending };
+  }, [wallets, txns, topups]);
+
   return (
-    <div className="space-y-6">
-      <header className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2"><Wallet className="w-6 h-6 text-violet-600" /> Wallet Management</h1>
-          <p className="text-sm text-slate-500">Approve top-ups, view balances, credit/debit any user.</p>
-        </div>
-      </header>
-
-      <div className="flex gap-2 border-b border-slate-200">
-        {([
-          ["pending", "Pending top-ups"],
-          ["balances", "User balances"],
-          ["transactions", "All transactions"],
-        ] as [Tab, string][]).map(([id, label]) => (
-          <button key={id} onClick={() => setTab(id)}
-            className={`px-4 h-10 text-sm font-semibold border-b-2 -mb-px ${tab === id ? "border-violet-600 text-violet-700" : "border-transparent text-slate-500 hover:text-slate-800"}`}>
-            {label}
+    <div className="min-h-screen bg-slate-50/60">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-6 space-y-5">
+        {/* Header */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-violet-100 text-violet-600">
+              <Wallet className="h-6 w-6" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-2xl font-extrabold text-slate-900 truncate">Wallet Manager</h1>
+              <p className="text-sm text-slate-500">Manage customer wallets and top-up requests</p>
+            </div>
+          </div>
+          <button
+            onClick={() => load(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-sm text-slate-700 hover:bg-slate-50"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} /> Refresh
           </button>
-        ))}
-      </div>
+        </div>
 
-      {tab === "pending" && <PendingTopups />}
-      {tab === "balances" && <Balances />}
-      {tab === "transactions" && <AllTransactions />}
+        {/* Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <StatCard label="Total Wallet" icon={Wallet} iconColor="text-violet-500" value={fmt2(stats.totalWallet)} valueColor="text-slate-900" />
+          <StatCard label="Total Credits" icon={TrendingUp} iconColor="text-emerald-500" value={fmt(stats.credits)} valueColor="text-emerald-600" />
+          <StatCard label="Total Debits" icon={TrendingDown} iconColor="text-rose-500" value={fmt2(stats.debits)} valueColor="text-rose-600" />
+          <StatCard label="Pending" icon={Clock} iconColor="text-amber-500" value={String(stats.pending)} valueColor="text-slate-900" />
+        </div>
+
+        {/* Body grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-5 items-start">
+          {/* Left: tabs + list */}
+          <div className="space-y-4">
+            <div className="inline-flex p-1 rounded-2xl bg-slate-100/80">
+              {([
+                ["requests", "Requests", Clock],
+                ["customers", "Customers", Users],
+                ["transactions", "Transactions", History],
+              ] as [Tab, string, React.ComponentType<{ className?: string }>][]).map(([id, label, Icon]) => (
+                <button
+                  key={id}
+                  onClick={() => setTab(id)}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold inline-flex items-center gap-1.5 transition ${
+                    tab === id
+                      ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-md shadow-violet-500/30"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5" /> {label}
+                </button>
+              ))}
+            </div>
+
+            <div className="rounded-2xl bg-white border border-slate-200 overflow-hidden">
+              {loading ? (
+                <div className="p-16 grid place-items-center text-slate-500"><Loader2 className="h-6 w-6 animate-spin" /></div>
+              ) : tab === "requests" ? (
+                <RequestsList topups={topups} profiles={profiles} reload={() => load(true)} />
+              ) : tab === "customers" ? (
+                <CustomersList wallets={wallets} profiles={profiles} onSelect={(uid) => setSelectedUser(uid)} selected={selectedUser} />
+              ) : (
+                <TransactionsList txns={txns} profiles={profiles} />
+              )}
+            </div>
+          </div>
+
+          {/* Right: manual adjust */}
+          <ManualAdjustPanel
+            wallets={wallets}
+            profiles={profiles}
+            selectedUser={selectedUser}
+            onSelectUser={setSelectedUser}
+            onDone={() => load(true)}
+          />
+        </div>
+      </div>
     </div>
   );
 }
 
-function PendingTopups() {
-  const [rows, setRows] = useState<Topup[]>([]);
-  const [profiles, setProfiles] = useState<Record<string, Profile>>({});
-  const [loading, setLoading] = useState(true);
+function StatCard({ label, icon: Icon, iconColor, value, valueColor }: {
+  label: string; icon: React.ComponentType<{ className?: string }>; iconColor: string; value: string; valueColor: string;
+}) {
+  return (
+    <div className="rounded-2xl bg-white border border-slate-200 p-4">
+      <div className="flex items-center gap-2 text-xs text-slate-500">
+        <Icon className={`h-4 w-4 ${iconColor}`} />
+        <span>{label}</span>
+      </div>
+      <div className={`mt-2 text-2xl font-extrabold ${valueColor}`}>{value}</div>
+    </div>
+  );
+}
+
+function RequestsList({ topups, profiles, reload }: { topups: Topup[]; profiles: Record<string, ProfileEmail>; reload: () => void }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const getSigned = useServerFn(getWalletScreenshotUrl);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    const { data } = await supabase.from("wallet_topups").select("*").order("created_at", { ascending: false }).limit(200);
-    const list = (data as any as Topup[]) || [];
-    setRows(list);
-    const ids = Array.from(new Set(list.map((r) => r.user_id)));
-    if (ids.length) {
-      const { data: ps } = await supabase.from("profiles").select("id, display_name, phone").in("id", ids);
-      const map: Record<string, Profile> = {};
-      (ps as any as Profile[] | null)?.forEach((p) => { map[p.id] = p; });
-      setProfiles(map);
-    }
-    setLoading(false);
-  }, []);
-
-  useEffect(() => { load(); }, [load]);
 
   const approve = async (id: string) => {
     setBusy(id);
     const { error } = await supabase.rpc("approve_wallet_topup" as any, { _topup_id: id, _admin_note: null });
     setBusy(null);
-    if (error) toast.error(error.message); else { toast.success("Approved & wallet credited"); load(); }
+    if (error) toast.error(error.message); else { toast.success("Approved & wallet credited"); reload(); }
   };
   const reject = async (id: string) => {
     const note = window.prompt("Reason for rejection?") || "Rejected";
     setBusy(id);
     const { error } = await supabase.rpc("reject_wallet_topup" as any, { _topup_id: id, _admin_note: note });
     setBusy(null);
-    if (error) toast.error(error.message); else { toast.success("Rejected"); load(); }
+    if (error) toast.error(error.message); else { toast.success("Rejected"); reload(); }
   };
   const view = async (path: string) => {
     try {
@@ -100,59 +210,56 @@ function PendingTopups() {
     } catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
 
-  const pending = rows.filter((r) => r.status === "pending");
-  const reviewed = rows.filter((r) => r.status !== "pending").slice(0, 50);
+  if (topups.length === 0) {
+    return <div className="p-12 text-center text-slate-500 text-sm">No top-up requests yet.</div>;
+  }
 
   return (
-    <div className="space-y-6">
-      <button onClick={load} className="text-xs inline-flex items-center gap-1.5 px-3 h-8 rounded-full bg-slate-100 hover:bg-slate-200"><RefreshCw className="w-3.5 h-3.5" />Refresh</button>
-
-      <Section title={`Pending (${pending.length})`}>
-        {loading ? <Skel /> : pending.length === 0 ? <Empty>No pending top-ups.</Empty> : (
-          <Table>
-            <thead><tr className="text-left text-xs text-slate-500"><th className="p-3">User</th><th className="p-3">Amount</th><th className="p-3">Method</th><th className="p-3">TrxID / Sender</th><th className="p-3">When</th><th className="p-3 text-right">Actions</th></tr></thead>
-            <tbody>
-              {pending.map((r) => (
-                <tr key={r.id} className="border-t border-slate-100">
-                  <td className="p-3"><div className="font-semibold text-slate-900">{profiles[r.user_id]?.display_name || r.user_id.slice(0, 8)}</div><div className="text-[11px] text-slate-500">{profiles[r.user_id]?.phone || "—"}</div></td>
-                  <td className="p-3 font-bold text-emerald-600">৳{Number(r.amount).toLocaleString()}</td>
-                  <td className="p-3 text-sm">{r.method}</td>
-                  <td className="p-3 text-xs"><div className="font-mono">{r.txn_id || "—"}</div><div className="text-slate-500">{r.sender_number || "—"}</div></td>
-                  <td className="p-3 text-xs text-slate-500">{new Date(r.created_at).toLocaleString()}</td>
-                  <td className="p-3">
-                    <div className="flex items-center justify-end gap-1.5">
-                      {r.screenshot_path && (
-                        <button onClick={() => view(r.screenshot_path!)} className="px-2 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs inline-flex items-center gap-1"><Eye className="w-3.5 h-3.5" />View</button>
-                      )}
-                      <button disabled={busy === r.id} onClick={() => approve(r.id)} className="px-3 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-1 disabled:opacity-50"><Check className="w-3.5 h-3.5" />Approve</button>
-                      <button disabled={busy === r.id} onClick={() => reject(r.id)} className="px-3 h-8 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold inline-flex items-center gap-1 disabled:opacity-50"><X className="w-3.5 h-3.5" />Reject</button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </Section>
-
-      <Section title="Recently reviewed">
-        {reviewed.length === 0 ? <Empty>None.</Empty> : (
-          <Table>
-            <thead><tr className="text-left text-xs text-slate-500"><th className="p-3">User</th><th className="p-3">Amount</th><th className="p-3">Status</th><th className="p-3">Note</th><th className="p-3">When</th></tr></thead>
-            <tbody>
-              {reviewed.map((r) => (
-                <tr key={r.id} className="border-t border-slate-100">
-                  <td className="p-3 text-sm">{profiles[r.user_id]?.display_name || r.user_id.slice(0, 8)}</td>
-                  <td className="p-3 font-semibold">৳{Number(r.amount).toLocaleString()}</td>
-                  <td className="p-3"><span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${r.status === "approved" ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}>{r.status}</span></td>
-                  <td className="p-3 text-xs text-slate-600">{r.admin_note || "—"}</td>
-                  <td className="p-3 text-xs text-slate-500">{new Date(r.created_at).toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </Section>
+    <div className="divide-y divide-slate-100">
+      {topups.map((r) => {
+        const p = profiles[r.user_id];
+        const name = p?.display_name || "Customer";
+        return (
+          <div key={r.id} className="px-5 py-4">
+            <div className="flex flex-wrap items-start gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-violet-50 text-violet-600 font-semibold">
+                {initials(name, r.user_id)}
+              </div>
+              <div className="flex-1 min-w-[200px]">
+                <div className="font-semibold text-slate-800">{name}</div>
+                <div className="text-xs text-slate-500">{p?.phone || r.user_id.slice(0, 12)}…</div>
+              </div>
+              <div className="text-right">
+                <div className="text-lg font-extrabold text-slate-900">{fmt(Number(r.amount))}</div>
+                <span className={`mt-1 inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold capitalize ${statusPill(r.status)}`}>
+                  {r.status}
+                </span>
+              </div>
+            </div>
+            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-y-1 gap-x-6 text-xs text-slate-600">
+              <div><span className="font-semibold text-slate-500">Method:</span> {r.method}</div>
+              <div className="truncate"><span className="font-semibold text-slate-500">TrxID:</span> {r.txn_id || "—"}</div>
+              <div><span className="font-semibold text-slate-500">Date:</span> {new Date(r.created_at).toLocaleString()}</div>
+              {r.sender_number && <div><span className="font-semibold text-slate-500">Sender:</span> {r.sender_number}</div>}
+            </div>
+            {r.status === "pending" && (
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {r.screenshot_path && (
+                  <button onClick={() => view(r.screenshot_path!)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs hover:bg-slate-50">
+                    <Eye className="h-3.5 w-3.5" /> View screenshot
+                  </button>
+                )}
+                <button disabled={busy === r.id} onClick={() => approve(r.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 disabled:opacity-50">
+                  <Check className="h-3.5 w-3.5" /> Approve
+                </button>
+                <button disabled={busy === r.id} onClick={() => reject(r.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-semibold hover:bg-rose-700 disabled:opacity-50">
+                  <X className="h-3.5 w-3.5" /> Reject
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      })}
 
       {previewUrl && (
         <div className="fixed inset-0 z-50 bg-black/70 grid place-items-center p-4" onClick={() => setPreviewUrl(null)}>
@@ -163,178 +270,203 @@ function PendingTopups() {
   );
 }
 
-function Balances() {
-  const [rows, setRows] = useState<(WalletRow & { profile?: Profile })[]>([]);
-  const [loading, setLoading] = useState(true);
+function CustomersList({ wallets, profiles, onSelect, selected }: {
+  wallets: WalletRow[]; profiles: Record<string, ProfileEmail>; onSelect: (uid: string) => void; selected: string | null;
+}) {
   const [q, setQ] = useState("");
-  const [editing, setEditing] = useState<{ user_id: string; name: string } | null>(null);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    const { data: wallets } = await supabase.from("wallets").select("user_id, balance").order("balance", { ascending: false }).limit(500);
-    const list = (wallets as any as WalletRow[]) || [];
-    const ids = list.map((w) => w.user_id);
-    const map: Record<string, Profile> = {};
-    if (ids.length) {
-      const { data: ps } = await supabase.from("profiles").select("id, display_name, phone").in("id", ids);
-      (ps as any as Profile[] | null)?.forEach((p) => { map[p.id] = p; });
-    }
-    setRows(list.map((w) => ({ ...w, profile: map[w.user_id] })));
-    setLoading(false);
-  }, []);
-
-  useEffect(() => { load(); }, [load]);
-
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
-    if (!s) return rows;
-    return rows.filter((r) =>
-      r.user_id.includes(s)
-      || (r.profile?.display_name || "").toLowerCase().includes(s)
-      || (r.profile?.phone || "").includes(s)
-    );
-  }, [rows, q]);
+    if (!s) return wallets;
+    return wallets.filter(w => {
+      const p = profiles[w.user_id];
+      return w.user_id.includes(s) || (p?.display_name || "").toLowerCase().includes(s) || (p?.phone || "").includes(s);
+    });
+  }, [wallets, profiles, q]);
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name / phone / id" className="w-full h-10 pl-9 pr-3 rounded-xl border border-slate-200 text-sm" />
+    <div>
+      <div className="p-4 border-b border-slate-100">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name / phone / id…" className="w-full rounded-xl bg-slate-50 border border-slate-200 pl-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400" />
         </div>
-        <button onClick={load} className="text-xs inline-flex items-center gap-1.5 px-3 h-10 rounded-xl bg-slate-100 hover:bg-slate-200"><RefreshCw className="w-3.5 h-3.5" />Refresh</button>
       </div>
-
-      {loading ? <Skel /> : (
-        <Table>
-          <thead><tr className="text-left text-xs text-slate-500"><th className="p-3">User</th><th className="p-3">Phone</th><th className="p-3 text-right">Balance</th><th className="p-3 text-right">Adjust</th></tr></thead>
-          <tbody>
-            {filtered.map((r) => (
-              <tr key={r.user_id} className="border-t border-slate-100">
-                <td className="p-3"><div className="font-semibold text-slate-900">{r.profile?.display_name || "—"}</div><div className="text-[11px] text-slate-500 font-mono">{r.user_id.slice(0, 8)}…</div></td>
-                <td className="p-3 text-sm">{r.profile?.phone || "—"}</td>
-                <td className="p-3 text-right font-bold text-violet-700">৳{Number(r.balance).toLocaleString()}</td>
-                <td className="p-3 text-right">
-                  <button onClick={() => setEditing({ user_id: r.user_id, name: r.profile?.display_name || r.user_id.slice(0, 8) })} className="px-3 h-8 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold">Credit / Debit</button>
-                </td>
-              </tr>
-            ))}
-            {filtered.length === 0 && <tr><td colSpan={4} className="p-8 text-center text-slate-500 text-sm">No users.</td></tr>}
-          </tbody>
-        </Table>
-      )}
-
-      {editing && <AdjustModal target={editing} onClose={() => setEditing(null)} onDone={() => { setEditing(null); load(); }} />}
+      <div className="divide-y divide-slate-100 max-h-[560px] overflow-y-auto">
+        {filtered.length === 0 ? (
+          <div className="p-12 text-center text-slate-500 text-sm">No customers.</div>
+        ) : filtered.map((w) => {
+          const p = profiles[w.user_id];
+          const name = p?.display_name || "Customer";
+          const isSel = selected === w.user_id;
+          return (
+            <button key={w.user_id} onClick={() => onSelect(w.user_id)} className={`w-full flex items-center gap-3 px-5 py-3 text-left transition ${isSel ? "bg-violet-50" : "hover:bg-slate-50"}`}>
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-violet-100 text-violet-600 font-semibold">{initials(name, w.user_id)}</div>
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-slate-800 truncate">{name}</div>
+                <div className="text-xs text-slate-500 truncate">{p?.phone || w.user_id.slice(0, 18)}…</div>
+              </div>
+              <div className="font-bold text-violet-700">{fmt(Number(w.balance))}</div>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
 
-function AdjustModal({ target, onClose, onDone }: { target: { user_id: string; name: string }; onClose: () => void; onDone: () => void }) {
+function TransactionsList({ txns, profiles }: { txns: Txn[]; profiles: Record<string, ProfileEmail> }) {
+  if (txns.length === 0) return <div className="p-12 text-center text-slate-500 text-sm">No transactions.</div>;
+  return (
+    <div className="divide-y divide-slate-100 max-h-[640px] overflow-y-auto">
+      {txns.map((t) => {
+        const name = profiles[t.user_id]?.display_name || t.user_id.slice(0, 8);
+        const positive = Number(t.amount) > 0;
+        return (
+          <div key={t.id} className="px-5 py-3 flex items-center gap-3">
+            <div className={`grid h-9 w-9 place-items-center rounded-full ${positive ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-rose-600"}`}>
+              {positive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-semibold text-slate-800 truncate">{name} <span className="text-slate-400 font-normal">· {t.type}</span></div>
+              <div className="text-xs text-slate-500 truncate">{t.reason || "—"} · {new Date(t.created_at).toLocaleString()}</div>
+            </div>
+            <div className="text-right">
+              <div className={`font-bold ${positive ? "text-emerald-600" : "text-rose-600"}`}>{positive ? "+" : ""}{fmt(Number(t.amount))}</div>
+              <div className="text-[11px] text-slate-400">bal {fmt(Number(t.balance_after))}</div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ManualAdjustPanel({ wallets, profiles, selectedUser, onSelectUser, onDone }: {
+  wallets: WalletRow[]; profiles: Record<string, ProfileEmail>; selectedUser: string | null;
+  onSelectUser: (uid: string | null) => void; onDone: () => void;
+}) {
   const [direction, setDirection] = useState<"credit" | "debit">("credit");
   const [amount, setAmount] = useState("");
-  const [reason, setReason] = useState("");
+  const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
-  const submit = async () => {
-    setErr(null);
+  const selected = wallets.find(w => w.user_id === selectedUser);
+  const selectedName = selected ? (profiles[selected.user_id]?.display_name || "Customer") : null;
+  const QUICK = [100, 200, 500, 1000, 2000];
+
+  const apply = async () => {
+    if (!selectedUser) { toast.error("Select a customer"); return; }
     const amt = Number(amount);
-    if (!amt || amt <= 0) { setErr("Enter a positive amount"); return; }
-    if (reason.trim().length < 3) { setErr("Reason required"); return; }
+    if (!amt || amt <= 0) { toast.error("Enter a positive amount"); return; }
+    const reason = note.trim() || (direction === "credit" ? "Manual credit" : "Manual debit");
     const signed = direction === "credit" ? amt : -amt;
     setBusy(true);
-    const { error } = await supabase.rpc("admin_adjust_wallet" as any, { _user_id: target.user_id, _amount: signed, _reason: reason.trim() });
+    const { error } = await supabase.rpc("admin_adjust_wallet" as any, { _user_id: selectedUser, _amount: signed, _reason: reason });
     setBusy(false);
-    if (error) setErr(error.message); else { toast.success(`${direction === "credit" ? "Credited" : "Debited"} ৳${amt}`); onDone(); }
+    if (error) { toast.error(error.message); return; }
+    toast.success(`${direction === "credit" ? "Credited" : "Debited"} ${fmt(amt)}`);
+    setAmount(""); setNote("");
+    onDone();
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 grid place-items-center p-4" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-white rounded-3xl p-5 shadow-2xl">
-        <h2 className="text-lg font-bold">Adjust wallet — {target.name}</h2>
-        <div className="mt-4 grid grid-cols-2 gap-2">
-          <button onClick={() => setDirection("credit")} className={`h-10 rounded-xl border text-sm font-semibold inline-flex items-center justify-center gap-1.5 ${direction === "credit" ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200"}`}><Plus className="w-4 h-4" />Credit (+)</button>
-          <button onClick={() => setDirection("debit")} className={`h-10 rounded-xl border text-sm font-semibold inline-flex items-center justify-center gap-1.5 ${direction === "debit" ? "border-rose-500 bg-rose-50 text-rose-700" : "border-slate-200"}`}><Minus className="w-4 h-4" />Debit (−)</button>
-        </div>
-        <label className="block text-xs font-semibold text-slate-700 mt-4">Amount (৳)</label>
-        <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full h-11 px-3 rounded-xl border border-slate-200 text-sm mt-1" placeholder="0" />
-        <label className="block text-xs font-semibold text-slate-700 mt-3">Reason (required, will appear in user's history)</label>
-        <textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={3} className="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm mt-1" placeholder="e.g. Refund for order ANB-XXX" />
-        {err && <p className="mt-2 text-xs text-rose-600">{err}</p>}
-        <div className="mt-4 flex gap-2">
-          <button onClick={onClose} className="flex-1 h-11 rounded-full bg-slate-100 hover:bg-slate-200 text-sm font-semibold">Cancel</button>
-          <button onClick={submit} disabled={busy} className="flex-1 h-11 rounded-full text-white text-sm font-bold disabled:opacity-50" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)" }}>
-            {busy ? <Loader2 className="w-4 h-4 animate-spin inline mr-1" /> : null}Apply
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AllTransactions() {
-  const [rows, setRows] = useState<Txn[]>([]);
-  const [profiles, setProfiles] = useState<Record<string, Profile>>({});
-  const [loading, setLoading] = useState(true);
-  const [typeFilter, setTypeFilter] = useState<string>("");
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    let q = supabase.from("wallet_transactions").select("*").order("created_at", { ascending: false }).limit(300);
-    if (typeFilter) q = q.eq("type", typeFilter as any);
-    const { data } = await q;
-    const list = (data as any as Txn[]) || [];
-    setRows(list);
-    const ids = Array.from(new Set(list.map((r) => r.user_id)));
-    if (ids.length) {
-      const { data: ps } = await supabase.from("profiles").select("id, display_name, phone").in("id", ids);
-      const map: Record<string, Profile> = {};
-      (ps as any as Profile[] | null)?.forEach((p) => { map[p.id] = p; });
-      setProfiles(map);
-    }
-    setLoading(false);
-  }, [typeFilter]);
-  useEffect(() => { load(); }, [load]);
-
-  return (
-    <div className="space-y-3">
+    <div className="rounded-2xl bg-white border border-slate-200 p-5 lg:sticky lg:top-4 self-start">
       <div className="flex items-center gap-2">
-        <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="h-10 px-3 rounded-xl border border-slate-200 text-sm">
-          <option value="">All types</option>
-          {["topup", "refund", "cashback", "referral", "spend", "adjustment"].map((t) => <option key={t} value={t}>{t}</option>)}
-        </select>
-        <button onClick={load} className="text-xs inline-flex items-center gap-1.5 px-3 h-10 rounded-xl bg-slate-100 hover:bg-slate-200"><RefreshCw className="w-3.5 h-3.5" />Refresh</button>
+        <div className="h-7 w-1 rounded bg-gradient-to-b from-violet-500 to-fuchsia-600" />
+        <Wallet className="h-5 w-5 text-violet-600" />
+        <h2 className="text-xl font-extrabold text-slate-900">Manual Wallet Adjust</h2>
       </div>
-      {loading ? <Skel /> : (
-        <Table>
-          <thead><tr className="text-left text-xs text-slate-500"><th className="p-3">When</th><th className="p-3">User</th><th className="p-3">Type</th><th className="p-3">Reason</th><th className="p-3 text-right">Amount</th><th className="p-3 text-right">Balance after</th></tr></thead>
-          <tbody>
-            {rows.map((t) => (
-              <tr key={t.id} className="border-t border-slate-100">
-                <td className="p-3 text-xs text-slate-500">{new Date(t.created_at).toLocaleString()}</td>
-                <td className="p-3 text-sm">{profiles[t.user_id]?.display_name || t.user_id.slice(0, 8)}</td>
-                <td className="p-3"><span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">{t.type}</span></td>
-                <td className="p-3 text-xs text-slate-600 max-w-[300px] truncate">{t.reason || "—"}</td>
-                <td className={`p-3 text-right font-bold ${Number(t.amount) > 0 ? "text-emerald-600" : "text-rose-600"}`}>{Number(t.amount) > 0 ? "+" : ""}৳{Number(t.amount).toLocaleString()}</td>
-                <td className="p-3 text-right text-sm">৳{Number(t.balance_after).toLocaleString()}</td>
-              </tr>
-            ))}
-            {rows.length === 0 && <tr><td colSpan={6} className="p-8 text-center text-slate-500 text-sm">No transactions.</td></tr>}
-          </tbody>
-        </Table>
-      )}
+
+      {/* Selector */}
+      <div className="mt-4">
+        <button onClick={() => setPickerOpen(o => !o)} className="w-full rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 text-sm text-left hover:bg-slate-100">
+          {selectedName ? (
+            <div className="flex items-center gap-2">
+              <div className="grid h-7 w-7 place-items-center rounded-full bg-violet-100 text-violet-600 text-xs font-semibold">{initials(selectedName, selectedUser!)}</div>
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-slate-800 truncate">{selectedName}</div>
+                <div className="text-[11px] text-slate-500">Balance {fmt(Number(selected?.balance || 0))}</div>
+              </div>
+            </div>
+          ) : <span className="text-slate-500">Select a customer from the list</span>}
+        </button>
+        {pickerOpen && (
+          <div className="mt-2 rounded-xl border border-slate-200 max-h-56 overflow-y-auto bg-white">
+            {wallets.slice(0, 100).map(w => {
+              const name = profiles[w.user_id]?.display_name || "Customer";
+              return (
+                <button key={w.user_id} onClick={() => { onSelectUser(w.user_id); setPickerOpen(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-slate-50">
+                  <div className="grid h-6 w-6 place-items-center rounded-full bg-violet-100 text-violet-600 text-[11px] font-semibold">{initials(name, w.user_id)}</div>
+                  <div className="flex-1 min-w-0 text-xs truncate">{name}</div>
+                  <div className="text-xs font-semibold text-violet-700">{fmt(Number(w.balance))}</div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Direction toggle */}
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        <button
+          onClick={() => setDirection("credit")}
+          className={`h-11 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-1.5 transition ${
+            direction === "credit"
+              ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
+              : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+          }`}
+        ><Plus className="h-4 w-4" /> Credit</button>
+        <button
+          onClick={() => setDirection("debit")}
+          className={`h-11 rounded-xl text-sm font-semibold inline-flex items-center justify-center gap-1.5 transition ${
+            direction === "debit"
+              ? "bg-rose-500 text-white shadow-md shadow-rose-500/30"
+              : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+          }`}
+        ><Minus className="h-4 w-4" /> Debit</button>
+      </div>
+
+      {/* Amount */}
+      <label className="block mt-4">
+        <span className="block text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Amount (৳)</span>
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="e.g. 500"
+          className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
+        />
+      </label>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {QUICK.map(v => (
+          <button key={v} onClick={() => setAmount(String(v))} className="px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs text-slate-700 hover:bg-slate-50">৳{v}</button>
+        ))}
+      </div>
+
+      {/* Note */}
+      <label className="block mt-4">
+        <span className="block text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Note (optional)</span>
+        <input
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Reason…"
+          className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
+        />
+      </label>
+
+      <button
+        onClick={apply}
+        disabled={busy || !selectedUser || !amount}
+        className={`mt-5 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition ${
+          direction === "credit"
+            ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-95"
+            : "bg-gradient-to-r from-rose-500 to-pink-600 hover:opacity-95"
+        } disabled:opacity-50`}
+      >
+        {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : (direction === "credit" ? <Plus className="h-4 w-4" /> : <Minus className="h-4 w-4" />)}
+        {direction === "credit" ? "Credit Wallet" : "Debit Wallet"}
+      </button>
     </div>
   );
 }
-
-// ---- shared ----
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return <div><h2 className="text-sm font-extrabold text-slate-800 mb-2">{title}</h2>{children}</div>;
-}
-function Table({ children }: { children: React.ReactNode }) {
-  return <div className="admin-card rounded-2xl overflow-x-auto"><table className="w-full text-sm">{children}</table></div>;
-}
-function Empty({ children }: { children: React.ReactNode }) {
-  return <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-8 text-center text-slate-500 text-sm">{children}</div>;
-}
-function Skel() { return <div className="p-8 text-center text-slate-500"><Loader2 className="w-5 h-5 animate-spin inline" /></div>; }
