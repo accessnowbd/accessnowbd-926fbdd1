@@ -487,7 +487,30 @@ function BulkDeliverySender() {
   return (
     <AdminGlassCard className="p-4 md:p-6 space-y-5">
       <div>
-        <h3 className="font-semibold text-sm mb-2">Delivery Template</h3>
+        <div className="flex items-center justify-between mb-2 gap-2 flex-wrap">
+          <h3 className="font-semibold text-sm">Delivery Template</h3>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-muted-foreground">Auto-fill from product:</span>
+            <div className="w-56">
+              <ProductPicker
+                value=""
+                allowClear={false}
+                placeholder="Pick product…"
+                onChange={(_slug, product) => {
+                  if (!product) return;
+                  setDefaults((d) => ({
+                    ...d,
+                    warranty: product.warranty || d.warranty,
+                  }));
+                  // Insert a product-aware template if user hasn't customized
+                  const preset = `✅ *${product.name} — Delivery*\n\nOrder #{{order_id}}\nProduct: {{items}}\nCategory: ${product.category}\n\n🔑 Login: {{login}}\n🔒 Password: {{password}}\n\n⏱ Delivery: ${product.deliveryTime}\n🛡 Warranty: ${product.warranty}\n\n${(product.features ?? []).slice(0, 3).map((f) => `• ${f}`).join("\n")}\n\nধন্যবাদ — {{shop}} 💜`;
+                  setTemplate(preset);
+                  toast.success(`Template loaded from ${product.name}`);
+                }}
+              />
+            </div>
+          </div>
+        </div>
         <textarea
           value={template}
           onChange={(e) => setTemplate(e.target.value)}
