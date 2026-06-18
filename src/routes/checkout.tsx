@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAppliedCoupon, redeemCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
 import { sendTransactionalEmail } from "@/lib/email/send";
+import { trackPurchase } from "@/lib/trackEvent";
+
 
 function CheckoutErrorComponent({ error }: { error: Error }) {
   if (typeof window !== "undefined") console.error("Checkout render error:", error);
