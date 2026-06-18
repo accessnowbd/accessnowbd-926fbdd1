@@ -190,10 +190,12 @@ function CheckoutPage() {
         coupon_code: coupon || null,
         status: "pending",
       };
-      // @ts-expect-error new table not yet in generated types
-      supabase.from("abandoned_checkouts").upsert(payload, { onConflict: "email" }).then(({ error }) => {
-        if (error && typeof console !== "undefined") console.warn("abandoned capture", error.message);
-      });
+      (supabase.from("abandoned_checkouts" as never) as unknown as { upsert: (p: unknown, o: { onConflict: string }) => Promise<{ error: { message: string } | null }> })
+        .upsert(payload, { onConflict: "email" })
+        .then(({ error }) => {
+          if (error && typeof console !== "undefined") console.warn("abandoned capture", error.message);
+        });
+
     }, 1500);
     return () => window.clearTimeout(handle);
   }, [form.name, form.email, form.phone, items, total, coupon, user?.id]);
