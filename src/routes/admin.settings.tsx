@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Save, Loader2, Eye, EyeOff, Plus, Send, Mail, MessageCircle,
   Sparkles, Info, ShieldCheck, Database, ExternalLink, RefreshCcw,
+  Settings,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -12,28 +13,33 @@ export const Route = createFileRoute("/admin/settings")({
 });
 
 type SettingsData = {
-  // General
   site_name?: string;
   support_email?: string;
   whatsapp_number?: string;
   address?: string;
-  // Currency
   currency_code?: string;
   currency_symbol?: string;
   minimum_order_amount?: number;
-  // Order
   order_number_prefix?: string;
-  // AI
   gemini_keys?: string[];
   openai_key?: string;
-  // Telegram
   telegram_bot_token?: string;
   telegram_chat_id?: string;
-  // Admin email notif
   admin_email?: string;
-  // WhatsApp notif
   whatsapp_notify_number?: string;
 };
+
+/* ── Tone system: stronger tints + darker text for readability ── */
+const TONE = {
+  violet:  { bg: "bg-violet-100",    text: "text-violet-700",    border: "border-violet-200",    soft: "bg-violet-50",    ink: "text-violet-900" },
+  sky:     { bg: "bg-sky-100",       text: "text-sky-700",       border: "border-sky-200",       soft: "bg-sky-50",       ink: "text-sky-900" },
+  amber:   { bg: "bg-amber-100",     text: "text-amber-700",     border: "border-amber-200",     soft: "bg-amber-50",     ink: "text-amber-900" },
+  emerald: { bg: "bg-emerald-100",   text: "text-emerald-700",   border: "border-emerald-200",   soft: "bg-emerald-50",   ink: "text-emerald-900" },
+  fuchsia: { bg: "bg-fuchsia-100",  text: "text-fuchsia-700",  border: "border-fuchsia-200",  soft: "bg-fuchsia-50",  ink: "text-fuchsia-900" },
+  slate:   { bg: "bg-slate-200",      text: "text-slate-700",      border: "border-slate-300",      soft: "bg-slate-100",    ink: "text-slate-800" },
+} as const;
+
+type ToneKey = keyof typeof TONE;
 
 function GeneralSettingsPage() {
   const [data, setData] = useState<SettingsData>({});
@@ -82,24 +88,29 @@ function GeneralSettingsPage() {
 
   if (loading) {
     return (
-      <div className="grid place-items-center h-64 text-slate-500">
+      <div className="grid place-items-center h-64" style={{ color: "var(--admin-muted)" }}>
         <Loader2 className="w-6 h-6 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-5">
-      {/* Page sub-header with Save bar */}
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div>
-          <h2 className="text-base font-bold text-slate-900">Site Settings</h2>
-          <p className="text-xs text-slate-500">Configure your store settings</p>
+    <div className="space-y-5 max-w-5xl">
+      {/* Page header */}
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3">
+          <span className="w-10 h-10 rounded-xl bg-violet-100 grid place-items-center text-violet-700">
+            <Settings className="w-5 h-5" />
+          </span>
+          <div>
+            <h2 className="text-lg font-extrabold" style={{ color: "var(--admin-ink)" }}>Site Settings</h2>
+            <p className="text-xs mt-0.5" style={{ color: "var(--admin-muted)" }}>Configure your store settings</p>
+          </div>
         </div>
         <button
           onClick={save}
           disabled={saving}
-          className="inline-flex items-center gap-1.5 h-10 px-5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow disabled:opacity-60"
+          className="a-save-btn"
         >
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           Save Changes
@@ -125,7 +136,7 @@ function GeneralSettingsPage() {
       </Card>
 
       {/* Currency & Payment */}
-      <Card icon={<span className="text-base">৳</span>} title="Currency & Payment" tone="amber">
+      <Card icon={<span className="text-base font-bold">৳</span>} title="Currency & Payment" tone="amber">
         <Grid2>
           <Field label="Currency code">
             <Input value={data.currency_code ?? ""} onChange={(v) => set("currency_code", v)} placeholder="BDT" />
@@ -153,12 +164,12 @@ function GeneralSettingsPage() {
 
       {/* AI API */}
       <Card icon={<Sparkles className="w-4 h-4" />} title="AI API কনফিগারেশন" tone="fuchsia">
-        <p className="text-xs text-slate-500 -mt-1 mb-3">
+        <p className="text-xs mb-3" style={{ color: "var(--admin-muted)" }}>
           ChatGPT (OpenAI) ও Google Gemini — দুটোর যেকোনো একটার কী থাকলেই কাজ করবে।
         </p>
 
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-slate-800 flex items-center gap-1.5">🔮 Google Gemini</h4>
+          <h4 className="text-sm font-bold flex items-center gap-1.5" style={{ color: "var(--admin-ink)" }}>🔮 Google Gemini</h4>
           <KeyList
             keys={data.gemini_keys ?? [""]}
             onChange={(arr) => set("gemini_keys", arr)}
@@ -169,31 +180,32 @@ function GeneralSettingsPage() {
         </div>
 
         <div className="mt-5 space-y-2">
-          <h4 className="text-sm font-semibold text-slate-800 flex items-center gap-1.5">🧠 OpenAI (ChatGPT)</h4>
+          <h4 className="text-sm font-bold flex items-center gap-1.5" style={{ color: "var(--admin-ink)" }}>🧠 OpenAI (ChatGPT)</h4>
           <SecretInput
             value={data.openai_key ?? ""}
             onChange={(v) => set("openai_key", v)}
             placeholder="sk-..."
           />
           <a href="https://platform.openai.com/api-keys" target="_blank" rel="noreferrer"
-             className="text-xs text-violet-600 hover:underline inline-flex items-center gap-1">
+             className="text-xs inline-flex items-center gap-1 hover:underline"
+             style={{ color: "var(--admin-primary)" }}>
             OpenAI ড্যাশবোর্ড থেকে কী নিন <ExternalLink className="w-3 h-3" />
           </a>
         </div>
 
-        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 space-y-1">
+        <InfoBox tone="amber">
           <p className="font-semibold">⚡ টিপস:</p>
           <ul className="list-disc pl-5 space-y-0.5">
             <li>প্রথমে Gemini ট্রাই করা হবে — ফ্রি কোটা বেশি।</li>
             <li>Gemini ফেল হলে OpenAI fallback হিসেবে কাজ করবে।</li>
             <li>সব কী নিরাপদে এনক্রিপ্টেড আকারে আমাদের ডাটাবেসে থাকে।</li>
           </ul>
-        </div>
+        </InfoBox>
       </Card>
 
       {/* Telegram */}
       <Card icon={<Send className="w-4 h-4" />} title="Telegram অর্ডার নোটিফিকেশন" tone="sky">
-        <p className="text-xs text-slate-500 -mt-1 mb-3">নতুন অর্ডার এলে Telegram-এ ইনস্ট্যান্ট নোটিফিকেশন</p>
+        <p className="text-xs mb-3" style={{ color: "var(--admin-muted)" }}>নতুন অর্ডার এলে Telegram-এ ইনস্ট্যান্ট নোটিফিকেশন</p>
         <Grid2>
           <Field label="Telegram Bot Token">
             <SecretInput value={data.telegram_bot_token ?? ""} onChange={(v) => set("telegram_bot_token", v)} placeholder="123456:ABC-..." />
@@ -204,52 +216,52 @@ function GeneralSettingsPage() {
               <button
                 type="button"
                 onClick={() => testTelegram(data.telegram_bot_token, data.telegram_chat_id)}
-                className="shrink-0 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold"
+                className="a-save-btn shrink-0"
               >
-                <Send className="w-3.5 h-3.5" /> টেস্ট মেসেজ পাঠান
+                <Send className="w-3.5 h-3.5" /> টেস্ট
               </button>
             </div>
-            <p className="text-[11px] text-slate-500 mt-1">@userinfobot থেকে Chat ID নিন</p>
+            <p className="text-[11px] mt-1" style={{ color: "var(--admin-muted)" }}>@userinfobot থেকে Chat ID নিন</p>
           </Field>
         </Grid2>
 
-        <div className="mt-3 rounded-xl border border-sky-200 bg-sky-50 p-3 text-xs text-sky-900">
+        <InfoBox tone="sky">
           <p className="font-semibold mb-1">📌 কিভাবে সেট আপ করবেন:</p>
           <ol className="list-decimal pl-5 space-y-0.5">
             <li>Telegram-এ <b>@BotFather</b>-এর সাথে চ্যাট করে নতুন বট তৈরি করুন → Bot Token পাবেন</li>
             <li>আপনার বটকে যে গ্রুপ/চ্যানেলে অ্যাড করেছেন সেটার Chat ID নিন (@userinfobot)</li>
-            <li>উপরে দুটো বসিয়ে <b>"টেস্ট মেসেজ পাঠান"</b> ক্লিক করুন</li>
+            <li>উপরে দুটো বসিয়ে <b>"টেস্ট"</b> ক্লিক করুন</li>
           </ol>
-        </div>
+        </InfoBox>
       </Card>
 
       {/* Admin Email */}
       <Card icon={<Mail className="w-4 h-4" />} title="Admin Email নোটিফিকেশন" tone="violet">
-        <p className="text-xs text-slate-500 -mt-1 mb-3">নতুন অর্ডার ও কাস্টমার মেসেজ এই ইমেইলে যাবে</p>
+        <p className="text-xs mb-3" style={{ color: "var(--admin-muted)" }}>নতুন অর্ডার ও কাস্টমার মেসেজ এই ইমেইলে যাবে</p>
         <Field label="Admin notification email">
           <Input type="email" value={data.admin_email ?? ""} onChange={(v) => set("admin_email", v)} placeholder="admin@example.com" />
         </Field>
-        <p className="text-[11px] text-slate-500 mt-1">একাধিক ইমেইল কমা দিয়ে লিখুন</p>
+        <p className="text-[11px] mt-1" style={{ color: "var(--admin-muted)" }}>একাধিক ইমেইল কমা দিয়ে লিখুন</p>
       </Card>
 
       {/* WhatsApp Notification */}
       <Card icon={<MessageCircle className="w-4 h-4" />} title="WhatsApp অর্ডার নোটিফিকেশন" tone="emerald">
-        <p className="text-xs text-slate-500 -mt-1 mb-3">নতুন অর্ডার এলে WhatsApp-এ নোটিফিকেশন আসবে</p>
+        <p className="text-xs mb-3" style={{ color: "var(--admin-muted)" }}>নতুন অর্ডার এলে WhatsApp-এ নোটিফিকেশন আসবে</p>
         <Field label="WhatsApp নম্বর (দেশ কোড সহ)">
           <div className="flex gap-2">
             <Input value={data.whatsapp_notify_number ?? ""} onChange={(v) => set("whatsapp_notify_number", v)} placeholder="8801580607614" />
             <button
               type="button"
               onClick={() => testWhatsApp(data.whatsapp_notify_number)}
-              className="shrink-0 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold"
+              className="a-save-btn shrink-0"
             >
-              <Send className="w-3.5 h-3.5" /> টেস্ট মেসেজ পাঠান
+              <Send className="w-3.5 h-3.5" /> টেস্ট
             </button>
           </div>
-          <p className="text-[11px] text-slate-500 mt-1">উদাহরণ: 8801XXXXXXXXX (+ ছাড়া)</p>
+          <p className="text-[11px] mt-1" style={{ color: "var(--admin-muted)" }}>উদাহরণ: 8801XXXXXXXXX (+ ছাড়া)</p>
         </Field>
 
-        <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-900">
+        <InfoBox tone="emerald">
           <p className="font-semibold mb-1">✅ যেভাবে কাজ করবে:</p>
           <ul className="list-disc pl-5 space-y-0.5">
             <li>নতুন অর্ডার এলেই এই নম্বরে WhatsApp মেসেজ যাবে (অর্ডার সামারি সহ)</li>
@@ -257,15 +269,15 @@ function GeneralSettingsPage() {
             <li>মোবাইল থেকে কাস্টমারকে সরাসরি WhatsApp করতে পারবেন</li>
             <li>Currency সহ অর্ডারের total amount দেখাবে</li>
           </ul>
-        </div>
+        </InfoBox>
       </Card>
 
       {/* Admin Account */}
       <Card icon={<ShieldCheck className="w-4 h-4" />} title="Admin Account" tone="slate">
-        <p className="text-xs text-slate-600 -mt-1">Manage admin user access from Lovable Cloud dashboard</p>
-        <div className="mt-3 rounded-xl border border-violet-200 bg-violet-50 p-3 text-xs text-violet-900">
+        <p className="text-xs" style={{ color: "var(--admin-muted)" }}>Manage admin user access from Lovable Cloud dashboard</p>
+        <InfoBox tone="violet">
           নতুন অ্যাডমিন যোগ করতে: Lovable Cloud → Database → <b>user_roles</b> → user_id সহ role = <b>admin</b> insert করুন
-        </div>
+        </InfoBox>
       </Card>
 
       {/* Bottom Save */}
@@ -273,7 +285,7 @@ function GeneralSettingsPage() {
         <button
           onClick={save}
           disabled={saving}
-          className="inline-flex items-center gap-1.5 h-11 px-6 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow disabled:opacity-60"
+          className="a-save-btn h-11 px-6"
         >
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           Save Changes
@@ -310,29 +322,29 @@ function testWhatsApp(num?: string) {
   window.open(`https://wa.me/${num.replace(/\D/g, "")}?text=${msg}`, "_blank");
 }
 
-/* ============================== Primitive UI ============================== */
+/* ============================== UI Primitives ============================== */
 
-const TONE: Record<string, string> = {
-  violet: "from-violet-50 to-fuchsia-50 ring-violet-100 text-violet-600",
-  fuchsia: "from-fuchsia-50 to-pink-50 ring-fuchsia-100 text-fuchsia-600",
-  sky: "from-sky-50 to-cyan-50 ring-sky-100 text-sky-600",
-  amber: "from-amber-50 to-orange-50 ring-amber-100 text-amber-600",
-  emerald: "from-emerald-50 to-teal-50 ring-emerald-100 text-emerald-600",
-  slate: "from-slate-50 to-slate-100 ring-slate-200 text-slate-600",
-};
-
-function Card({ icon, title, tone = "violet", children }: { icon: React.ReactNode; title: string; tone?: string; children: React.ReactNode }) {
-  const cls = TONE[tone] ?? TONE.violet;
+function Card({ icon, title, tone = "violet", children }: { icon: React.ReactNode; title: string; tone?: ToneKey; children: React.ReactNode }) {
+  const t = TONE[tone];
   return (
-    <section className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-      <header className={`px-5 py-3.5 bg-gradient-to-r ${cls} border-b border-slate-100 flex items-center gap-2.5`}>
-        <span className="w-8 h-8 rounded-lg bg-white grid place-items-center ring-1 ring-inset shadow-sm">
+    <section className="a-card overflow-hidden" style={{ borderLeftWidth: 4, borderLeftStyle: "solid", borderLeftColor: "var(--admin-primary)" }}>
+      <header className="px-5 py-4 border-b flex items-center gap-3" style={{ borderColor: "var(--admin-border)" }}>
+        <span className={`w-8 h-8 rounded-lg grid place-items-center shrink-0 ${t.bg} ${t.text}`}>
           {icon}
         </span>
-        <h3 className="text-sm font-bold text-slate-900">{title}</h3>
+        <h3 className="text-sm font-bold" style={{ color: "var(--admin-ink)" }}>{title}</h3>
       </header>
-      <div className="p-5">{children}</div>
+      <div className="p-5 space-y-4">{children}</div>
     </section>
+  );
+}
+
+function InfoBox({ tone = "violet", children }: { tone?: ToneKey; children: React.ReactNode }) {
+  const t = TONE[tone];
+  return (
+    <div className={`mt-4 rounded-xl border p-3.5 text-xs space-y-1 ${t.soft} ${t.border} ${t.ink}`}>
+      {children}
+    </div>
   );
 }
 
@@ -343,7 +355,7 @@ function Grid2({ children }: { children: React.ReactNode }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="text-xs font-semibold text-slate-700 mb-1.5 block">{label}</span>
+      <span className="text-xs font-semibold mb-1.5 block" style={{ color: "var(--admin-text)" }}>{label}</span>
       {children}
     </label>
   );
@@ -356,7 +368,14 @@ function Input({ value, onChange, placeholder, type = "text" }: { value: string;
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full h-10 rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition"
+      className="w-full h-10 rounded-xl border px-3.5 text-sm transition focus:outline-none focus:ring-2"
+      style={{
+        background: "#ffffff",
+        color: "var(--admin-ink)",
+        borderColor: "var(--admin-border)",
+      }}
+      onFocus={(e) => { e.currentTarget.style.borderColor = "#c4b5fd"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(167,139,250,0.35)"; }}
+      onBlur={(e) => { e.currentTarget.style.borderColor = "var(--admin-border)"; e.currentTarget.style.boxShadow = "none"; }}
     />
   );
 }
@@ -370,12 +389,22 @@ function SecretInput({ value, onChange, placeholder }: { value: string; onChange
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full h-10 rounded-xl border border-slate-200 bg-white pl-3.5 pr-10 text-sm font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition"
+        className="w-full h-10 rounded-xl border pl-3.5 pr-10 text-sm font-mono transition focus:outline-none focus:ring-2"
+        style={{
+          background: "#ffffff",
+          color: "var(--admin-ink)",
+          borderColor: "var(--admin-border)",
+        }}
+        onFocus={(e) => { e.currentTarget.style.borderColor = "#c4b5fd"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(167,139,250,0.35)"; }}
+        onBlur={(e) => { e.currentTarget.style.borderColor = "var(--admin-border)"; e.currentTarget.style.boxShadow = "none"; }}
       />
       <button
         type="button"
         onClick={() => setShow((s) => !s)}
-        className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 grid place-items-center rounded-lg text-slate-500 hover:bg-slate-100"
+        className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 grid place-items-center rounded-lg transition"
+        style={{ color: "var(--admin-muted)" }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = "var(--admin-hover)"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
       >
         {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
       </button>
@@ -405,14 +434,17 @@ function KeyList({ keys, onChange, placeholder, hint, link }: {
     <div className="space-y-2">
       {list.map((k, i) => (
         <div key={i} className="flex items-center gap-2">
-          <span className="shrink-0 text-[11px] font-bold text-slate-500 w-14">API Key {i + 1}</span>
+          <span className="shrink-0 text-[11px] font-bold w-14" style={{ color: "var(--admin-muted)" }}>API Key {i + 1}</span>
           <div className="flex-1">
             <SecretInput value={k} onChange={(v) => set(i, v)} placeholder={placeholder} />
           </div>
           <button
             type="button"
             onClick={() => del(i)}
-            className="shrink-0 w-9 h-9 grid place-items-center rounded-lg border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200"
+            className="shrink-0 w-9 h-9 grid place-items-center rounded-lg border transition"
+            style={{ borderColor: "var(--admin-border)", color: "var(--admin-muted)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "#ffe4e6"; e.currentTarget.style.color = "#e11d48"; e.currentTarget.style.borderColor = "#fecdd3"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--admin-muted)"; e.currentTarget.style.borderColor = "var(--admin-border)"; }}
             title="রিসেট"
           >
             <RefreshCcw className="w-3.5 h-3.5" />
@@ -420,18 +452,22 @@ function KeyList({ keys, onChange, placeholder, hint, link }: {
         </div>
       ))}
       <div className="flex items-center justify-between gap-3 pt-1">
-        {hint && <p className="text-[11px] text-slate-500">{hint}</p>}
+        {hint && <p className="text-[11px]" style={{ color: "var(--admin-muted)" }}>{hint}</p>}
         <button
           type="button"
           onClick={add}
-          className="ml-auto inline-flex items-center gap-1 h-8 px-3 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700"
+          className="ml-auto inline-flex items-center gap-1 h-8 px-3 rounded-full text-xs font-semibold transition"
+          style={{ background: "var(--admin-hover)", color: "var(--admin-text)" }}
+          onMouseEnter={(e) => { e.currentTarget.style.filter = "brightness(0.97)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.filter = "none"; }}
         >
           <Plus className="w-3 h-3" /> আরেকটি কী
         </button>
       </div>
       {link && (
         <a href={link.href} target="_blank" rel="noreferrer"
-           className="text-xs text-violet-600 hover:underline inline-flex items-center gap-1">
+           className="text-xs inline-flex items-center gap-1 hover:underline"
+           style={{ color: "var(--admin-primary)" }}>
           {link.label} <ExternalLink className="w-3 h-3" />
         </a>
       )}
