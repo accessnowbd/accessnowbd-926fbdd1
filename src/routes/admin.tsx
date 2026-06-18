@@ -68,9 +68,11 @@ function readCachedAdmin(): boolean {
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const [cachedAdmin, setCachedAdmin] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [verified, setVerified] = useState(false);
+  // Read cache synchronously in initializer so first render already has it.
+  const initialCachedAdmin = typeof window !== "undefined" ? readCachedAdmin() : false;
+  const [cachedAdmin] = useState(initialCachedAdmin);
+  const [isAdmin, setIsAdmin] = useState(initialCachedAdmin);
+  const [verified, setVerified] = useState(initialCachedAdmin);
   const [roleError, setRoleError] = useState<{
     message: string;
     code?: string;
@@ -84,13 +86,8 @@ function AdminLayout() {
   // flag can never leave the route on an empty gradient screen.
   useEffect(() => {
     purgeLegacySplashFlags();
-    const cached = readCachedAdmin();
-    setCachedAdmin(cached);
-    if (cached) {
-      setIsAdmin(true);
-      setVerified(true);
-    }
   }, []);
+
   // Admin panel is always light/white themed regardless of the user-selected
   // site theme. Force `theme-white` on <html> while mounted, then restore on unmount.
   useEffect(() => {
