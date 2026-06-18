@@ -359,7 +359,7 @@ function AdminShell({ user, signOut, navigate }: any) {
       {/* SIDEBAR */}
       <aside
         className={[
-          "shrink-0 transition-all duration-200 flex flex-col h-screen relative z-10",
+          "shrink-0 transition-all duration-200 flex flex-col h-screen lg:relative",
           "bg-[var(--admin-panel)] border-r border-[var(--admin-border)]",
           "lg:sticky lg:top-0 lg:translate-x-0 lg:z-10",
           collapsed ? "lg:w-[76px]" : "lg:w-[260px]",
