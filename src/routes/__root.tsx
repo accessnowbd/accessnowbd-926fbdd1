@@ -10,6 +10,8 @@ import { SupportWidget } from "@/components/SupportWidget";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WelcomePopup } from "@/components/WelcomePopup";
 import { InstallAppPrompt } from "@/components/InstallAppPrompt";
+import { TrackingScripts } from "@/components/TrackingScripts";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -175,6 +177,8 @@ function RootComponent() {
               {!isAdmin && <SupportWidget />}
               {!isAdmin && <WelcomePopup />}
               {!isAdmin && <InstallAppPrompt />}
+              {!isAdmin && <TrackingScripts />}
+
             </ShopConfigProvider>
           </CartProvider>
         </AuthProvider>

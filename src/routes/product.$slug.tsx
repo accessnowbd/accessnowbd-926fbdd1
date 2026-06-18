@@ -5,6 +5,8 @@ import { badgeColorFor } from "@/lib/badgeColor";
 import { useEffect, useState } from "react";
 import { recordRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { useCart } from "@/context/CartContext";
+import { trackViewContent } from "@/lib/trackEvent";
+
 import { ProductBanner } from "@/components/ProductBanner";
 import { optimizeSupabaseImage } from "@/lib/image-url";
 import { useShopConfig } from "@/hooks/useShopConfig";
@@ -165,8 +167,20 @@ function ProductPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
-    if (product?.slug) recordRecentlyViewed(product.slug);
-  }, [product?.slug]);
+    if (product?.slug) {
+      recordRecentlyViewed(product.slug);
+      try {
+        trackViewContent({
+          id: product.slug,
+          name: product.name,
+          value: parsePrice(product.plans?.[0]?.price ?? "0"),
+        });
+      } catch {
+        /* ignore */
+      }
+    }
+  }, [product?.slug, product?.name, product?.plans]);
+
 
   if (isLoading) return <ProductSkeleton />;
   if (!product) {

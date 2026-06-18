@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAppliedCoupon, redeemCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
 import { sendTransactionalEmail } from "@/lib/email/send";
+import { trackPurchase } from "@/lib/trackEvent";
+
 
 function CheckoutErrorComponent({ error }: { error: Error }) {
   if (typeof window !== "undefined") console.error("Checkout render error:", error);
@@ -267,9 +269,25 @@ function CheckoutPage() {
           estimatedDelivery: "১৫–৩০ মিনিট",
         },
       }).catch((err) => console.warn("Order confirmation email failed", err));
+      try {
+        trackPurchase({
+          value: subAfterCoupon,
+          currency: "BDT",
+          orderId: `ANB-${newId.slice(0, 8).toUpperCase()}`,
+          items: items.map((it) => ({
+            id: it.slug,
+            name: it.name,
+            price: it.price,
+            quantity: it.qty,
+          })),
+        });
+      } catch {
+        /* ignore */
+      }
       clear();
       navigate({ to: "/orders/$id", params: { id: newId }, search: { new: 1 } });
       return;
+
     } catch (e: unknown) {
       setErr(e instanceof Error ? e.message : "Failed to place order");
     } finally {
