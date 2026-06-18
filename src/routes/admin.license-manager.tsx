@@ -472,7 +472,7 @@ function BulkImportModal({ products, onClose, onSaved }: { products: ProductLite
           <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-white/70"><X className="w-4 h-4" /></button>
         </div>
         <div className="p-5 space-y-3 text-sm">
-          <Field label="Product"><select value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option value="">— Select product —</option>{products.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></Field>
+          <Field label="Product"><select value={productId} onChange={(e) => setProductId(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300"><option value="">— Select product —</option>{products.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}</select></Field>
           <Field label="Keys (one per line)"><textarea value={text} onChange={(e) => setText(e.target.value)} rows={10} className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono text-[12px] outline-none focus:border-violet-300" /></Field>
         </div>
         <div className="px-5 py-3 border-t border-slate-100 flex items-center justify-end gap-2 bg-slate-50">
