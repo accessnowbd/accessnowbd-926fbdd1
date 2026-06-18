@@ -25,8 +25,17 @@ interface Props {
   userEmail?: string | null;
 }
 
+const MFA_OK_CACHE_KEY = "anbd:mfaOk";
+
+function readMfaOkCache(): boolean {
+  if (typeof sessionStorage === "undefined") return false;
+  try { return sessionStorage.getItem(MFA_OK_CACHE_KEY) === "1"; } catch { return false; }
+}
+
 export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
-  const [mode, setMode] = useState<Mode>("loading");
+  // Optimistic: if we already passed MFA this session, render children immediately
+  // and re-verify in the background. Eliminates the loading flicker on every nav.
+  const [mode, setMode] = useState<Mode>(() => (readMfaOkCache() ? "ok" : "loading"));
   const [tab, setTab] = useState<Tab>("totp");
   const [settings, setSettings] = useState<AdminSecuritySettings | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +70,8 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
   const refresh = useCallback(async () => {
     setError(null);
     setInfo(null);
-    setMode("loading");
+    const wasOk = readMfaOkCache();
+    if (!wasOk) setMode("loading");
     try {
       // 0+1. Load admin security settings and existing grant in parallel.
       const [settingsRes, grantRes] = await Promise.all([
@@ -70,14 +80,22 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
       ]);
       const cfg = settingsRes.settings;
       setSettings(cfg);
-      if (!cfg.mfa_enforced) {
+      const markOk = () => {
+        try { sessionStorage.setItem(MFA_OK_CACHE_KEY, "1"); } catch { /* ignore */ }
         setMode("ok");
+      };
+      if (!cfg.mfa_enforced) {
+        markOk();
         return;
       }
       if (grantRes && !grantRes.__error && grantRes.granted) {
-        setMode("ok");
+        markOk();
         return;
       }
+      // Cache is stale — clear and continue with challenge flow
+      try { sessionStorage.removeItem(MFA_OK_CACHE_KEY); } catch { /* ignore */ }
+
+
 
       // 2. Existing aal2 session?
       const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
