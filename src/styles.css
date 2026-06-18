@@ -3052,3 +3052,74 @@ html.theme-white .checkout-page .bg-muted {
   animation: adminLoaderBar 1s ease-in-out infinite;
   transform-origin: center;
 }
+
+/* ============================================================
+   UNIVERSAL GLASSMORPHISM CARDS — white theme
+   Applies a premium frosted-glass look to every card-like surface
+   (shadcn Card, bg-card containers, gradient/border cards, KPI tiles,
+   trust items, category cards, FAQ panels, etc.) under the white theme.
+   ============================================================ */
+html.theme-white [data-slot="card"],
+html.theme-white .ui-card,
+html.theme-white .glass-card,
+html.theme-white [class*="rounded-2xl"][class*="border"]:not(button):not(a[class*="rounded-full"]):not([class*="bg-gradient"]):not(.product-action-button),
+html.theme-white [class*="rounded-3xl"][class*="border"]:not(button):not([class*="bg-gradient"]),
+html.theme-white .trust-card,
+html.theme-white .category-card,
+html.theme-white .kpi-card,
+html.theme-white .feature-card,
+html.theme-white .stat-card,
+html.theme-white .info-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.48) 100%) !important;
+  border: 1px solid rgba(255,255,255,0.85) !important;
+  box-shadow:
+    0 20px 50px -22px rgba(79, 70, 229, 0.25),
+    0 1px 0 0 rgba(255,255,255,0.95) inset,
+    0 0 0 1px rgba(124, 58, 237, 0.06) !important;
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+
+html.theme-white [data-slot="card"]:hover,
+html.theme-white .glass-card:hover,
+html.theme-white .trust-card:hover,
+html.theme-white .category-card:hover,
+html.theme-white .feature-card:hover,
+html.theme-white .stat-card:hover,
+html.theme-white .info-card:hover {
+  border-color: rgba(124, 58, 237, 0.32) !important;
+  box-shadow:
+    0 28px 70px -22px rgba(79, 70, 229, 0.4),
+    0 1px 0 0 rgba(255,255,255,1) inset !important;
+  transform: translateY(-2px);
+}
+
+/* Inner subdued surfaces inside cards stay legible */
+html.theme-white [data-slot="card"] [class*="bg-muted"],
+html.theme-white [data-slot="card"] [class*="bg-secondary"] {
+  background-color: rgba(248, 247, 255, 0.7) !important;
+}
+
+/* Section-level wrapper panels (anything explicitly tagged) */
+html.theme-white .glass-panel,
+html.theme-white .glass-section {
+  background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.35) 100%) !important;
+  border: 1px solid rgba(255,255,255,0.75) !important;
+  border-radius: 24px;
+  box-shadow:
+    0 24px 60px -24px rgba(79, 70, 229, 0.22),
+    0 1px 0 0 rgba(255,255,255,0.9) inset !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+}
+
+/* Pills / chips get a soft glass treatment too */
+html.theme-white .chip,
+html.theme-white .pill,
+html.theme-white [class*="rounded-full"][class*="border"][class*="bg-white"] {
+  background: rgba(255,255,255,0.55) !important;
+  border-color: rgba(255,255,255,0.8) !important;
+  backdrop-filter: blur(14px) saturate(170%);
+  -webkit-backdrop-filter: blur(14px) saturate(170%);
+}
