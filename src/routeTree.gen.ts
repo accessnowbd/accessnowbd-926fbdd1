@@ -54,6 +54,7 @@ import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminLicenseManagerRouteImport } from './routes/admin.license-manager'
 import { Route as AdminInvoiceGeneratorRouteImport } from './routes/admin.invoice-generator'
 import { Route as AdminInvoiceDesignRouteImport } from './routes/admin.invoice-design'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
@@ -298,6 +299,11 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLicenseManagerRoute = AdminLicenseManagerRouteImport.update({
+  id: '/license-manager',
+  path: '/license-manager',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminInvoiceGeneratorRoute = AdminInvoiceGeneratorRouteImport.update({
   id: '/invoice-generator',
   path: '/invoice-generator',
@@ -427,6 +433,7 @@ export interface FileRoutesByFullPath {
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
+  '/admin/license-manager': typeof AdminLicenseManagerRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
@@ -490,6 +497,7 @@ export interface FileRoutesByTo {
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
+  '/admin/license-manager': typeof AdminLicenseManagerRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
@@ -555,6 +563,7 @@ export interface FileRoutesById {
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
+  '/admin/license-manager': typeof AdminLicenseManagerRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
@@ -621,6 +630,7 @@ export interface FileRouteTypes {
     | '/admin/description-template'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
+    | '/admin/license-manager'
     | '/admin/orders'
     | '/admin/payment-links'
     | '/admin/products'
@@ -684,6 +694,7 @@ export interface FileRouteTypes {
     | '/admin/description-template'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
+    | '/admin/license-manager'
     | '/admin/orders'
     | '/admin/payment-links'
     | '/admin/products'
@@ -748,6 +759,7 @@ export interface FileRouteTypes {
     | '/admin/description-template'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
+    | '/admin/license-manager'
     | '/admin/orders'
     | '/admin/payment-links'
     | '/admin/products'
@@ -1134,6 +1146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrdersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/license-manager': {
+      id: '/admin/license-manager'
+      path: '/license-manager'
+      fullPath: '/admin/license-manager'
+      preLoaderRoute: typeof AdminLicenseManagerRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/invoice-generator': {
       id: '/admin/invoice-generator'
       path: '/invoice-generator'
@@ -1266,6 +1285,7 @@ interface AdminRouteChildren {
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminInvoiceDesignRoute: typeof AdminInvoiceDesignRoute
   AdminInvoiceGeneratorRoute: typeof AdminInvoiceGeneratorRoute
+  AdminLicenseManagerRoute: typeof AdminLicenseManagerRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
   AdminProductsRoute: typeof AdminProductsRoute
@@ -1290,6 +1310,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminInvoiceDesignRoute: AdminInvoiceDesignRoute,
   AdminInvoiceGeneratorRoute: AdminInvoiceGeneratorRoute,
+  AdminLicenseManagerRoute: AdminLicenseManagerRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminPaymentLinksRoute: AdminPaymentLinksRoute,
   AdminProductsRoute: AdminProductsRoute,
