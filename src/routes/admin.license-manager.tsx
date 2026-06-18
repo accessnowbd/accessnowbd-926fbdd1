@@ -37,7 +37,7 @@ type LicenseRow = {
   created_at: string;
 };
 
-type ProductLite = { id: string; name: string };
+type ProductLite = { slug: string; name: string; emoji?: string | null; image_url?: string | null };
 
 const STATUS_META: Record<LicenseStatus, { label: string; bg: string; text: string; ring: string }> = {
   available: { label: "Available", bg: "bg-emerald-50", text: "text-emerald-600", ring: "ring-emerald-200" },
