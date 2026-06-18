@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import {
   LayoutDashboard, Package, PlusSquare, FolderTree, Image as ImageIcon, PartyPopper,
   Megaphone, Star, Percent, MessageCircle, Images, Home, PanelBottom,
-  ShoppingBag, Users, Wallet, CreditCard, Truck, Boxes, Bell, FileCheck, FileText,
+  ShoppingBag, Users, Wallet, CreditCard, Truck, Boxes, Bell, FileText,
   TicketPercent, Gift, Share2, Megaphone as MegaphoneIcon, Target, Activity, BarChart3, Search,
   MapPin, LifeBuoy, BookOpen, Headphones,
   FileEdit, Newspaper, UserCircle2, Download,
