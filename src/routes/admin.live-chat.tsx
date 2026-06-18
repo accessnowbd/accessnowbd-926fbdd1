@@ -155,7 +155,7 @@ function LiveChatPage() {
               onClick={() => setTab(key)}
               className={`inline-flex items-center gap-2 h-10 px-4 rounded-lg text-sm font-semibold transition ${
                 active
-                  ? "bg-violet-50 text-violet-700 border border-violet-200 shadow-sm"
+                  ? "bg-white text-violet-700 border border-violet-300 shadow-sm ring-1 ring-violet-200"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent"
               }`}
             >
@@ -341,14 +341,7 @@ function LiveChatPage() {
             </Card>
           )}
 
-          {tab === "history" && (
-            <Card>
-              <div className="p-10 text-center text-sm text-slate-500">
-                <History className="w-6 h-6 mx-auto mb-2 text-slate-300" />
-                {t("Chat history coming soon.", "চ্যাট হিস্ট্রি শীঘ্রই আসছে।")}
-              </div>
-            </Card>
-          )}
+          {tab === "history" && <ChatHistoryTab />}
         </>
       )}
     </div>
@@ -431,6 +424,189 @@ function Field({ label, value, onChange, placeholder }: { label: string; value: 
         placeholder={placeholder}
         className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-300"
       />
+    </div>
+  );
+}
+
+type ChatRow = {
+  id: string;
+  session_id: string;
+  role: string;
+  content: string;
+  visitor_label: string | null;
+  created_at: string;
+  user_id: string | null;
+};
+
+type ChatSession = {
+  id: string;
+  label: string | null;
+  user_id: string | null;
+  messages: ChatRow[];
+  last_at: string;
+};
+
+function ChatHistoryTab() {
+  const { t } = useAdminLang();
+  const [sessions, setSessions] = useState<ChatSession[]>([]);
+  const [active, setActive] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("live_chat_messages" as any)
+      .select("*")
+      .order("created_at", { ascending: true })
+      .limit(2000);
+    if (error) {
+      toast.error(error.message);
+      setLoading(false);
+      return;
+    }
+    const map = new Map<string, ChatSession>();
+    for (const r of (data ?? []) as unknown as ChatRow[]) {
+      const s = map.get(r.session_id) ?? {
+        id: r.session_id,
+        label: r.visitor_label,
+        user_id: r.user_id,
+        messages: [],
+        last_at: r.created_at,
+      };
+      s.messages.push(r);
+      if (r.visitor_label) s.label = r.visitor_label;
+      if (r.created_at > s.last_at) s.last_at = r.created_at;
+      map.set(r.session_id, s);
+    }
+    const list = Array.from(map.values()).sort((a, b) => (a.last_at < b.last_at ? 1 : -1));
+    setSessions(list);
+    setActive((prev) => prev ?? list[0]?.id ?? null);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    void load();
+    const ch = supabase
+      .channel("admin-live-chat")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "live_chat_messages" }, () => void load())
+      .subscribe();
+    return () => {
+      void supabase.removeChannel(ch);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const current = sessions.find((s) => s.id === active) ?? null;
+
+  const fmt = (iso: string) =>
+    new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+
+  const deleteSession = async (id: string) => {
+    if (!confirm(t("Delete this chat?", "এই চ্যাটটি মুছবেন?"))) return;
+    const { error } = await supabase.from("live_chat_messages" as any).delete().eq("session_id", id);
+    if (error) return toast.error(error.message);
+    toast.success(t("Deleted", "মুছে ফেলা হয়েছে"));
+    setSessions((p) => p.filter((s) => s.id !== id));
+    if (active === id) setActive(null);
+  };
+
+  if (loading) {
+    return (
+      <Card>
+        <div className="p-10 text-center text-sm text-slate-500">
+          <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
+          {t("Loading…", "লোড হচ্ছে…")}
+        </div>
+      </Card>
+    );
+  }
+
+  if (sessions.length === 0) {
+    return (
+      <Card>
+        <div className="p-10 text-center text-sm text-slate-500">
+          <History className="w-6 h-6 mx-auto mb-2 text-slate-300" />
+          {t("No chat history yet.", "এখনও কোনো চ্যাট হিস্ট্রি নেই।")}
+        </div>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-3">
+      <Card>
+        <div className="p-3 border-b border-slate-100 text-xs font-bold uppercase tracking-wide text-slate-500">
+          {t("Sessions", "সেশন")} · {sessions.length}
+        </div>
+        <div className="max-h-[520px] overflow-auto divide-y divide-slate-100">
+          {sessions.map((s) => {
+            const userMsg = s.messages.find((m) => m.role === "user");
+            const preview = userMsg?.content ?? s.messages[0]?.content ?? "";
+            return (
+              <button
+                key={s.id}
+                onClick={() => setActive(s.id)}
+                className={`w-full text-left p-3 transition ${
+                  active === s.id ? "bg-violet-50/70" : "hover:bg-slate-50"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-sm font-semibold text-slate-800 truncate">
+                    {s.label || t("Guest", "অতিথি")} · {s.messages.length} {t("msg", "মেসেজ")}
+                  </div>
+                  <span className="text-[10px] text-slate-400 shrink-0">{fmt(s.last_at).split(",")[0]}</span>
+                </div>
+                <div className="text-xs text-slate-500 truncate mt-0.5">{preview}</div>
+              </button>
+            );
+          })}
+        </div>
+      </Card>
+
+      <Card>
+        {current ? (
+          <div className="flex flex-col h-[560px]">
+            <div className="flex items-center justify-between gap-3 p-4 border-b border-slate-100">
+              <div className="min-w-0">
+                <div className="text-sm font-bold text-slate-900 truncate">
+                  {current.label || t("Guest", "অতিথি")}
+                </div>
+                <div className="text-xs text-slate-500">
+                  {current.id.slice(0, 8)} · {fmt(current.last_at)}
+                </div>
+              </div>
+              <button
+                onClick={() => deleteSession(current.id)}
+                className="text-xs font-semibold text-rose-600 hover:text-rose-700 px-3 h-8 rounded-lg hover:bg-rose-50"
+              >
+                {t("Delete", "মুছুন")}
+              </button>
+            </div>
+            <div className="flex-1 overflow-auto p-4 space-y-3 bg-slate-50/50">
+              {current.messages.map((m) => (
+                <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm whitespace-pre-wrap break-words shadow-sm ${
+                      m.role === "user"
+                        ? "bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white rounded-br-md"
+                        : "bg-white text-slate-800 border border-slate-200 rounded-bl-md"
+                    }`}
+                  >
+                    {m.content}
+                    <div className={`text-[10px] mt-1 ${m.role === "user" ? "text-white/70" : "text-slate-400"}`}>
+                      {fmt(m.created_at)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="p-10 text-center text-sm text-slate-500">
+            {t("Select a session", "একটি সেশন নির্বাচন করুন")}
+          </div>
+        )}
+      </Card>
     </div>
   );
 }

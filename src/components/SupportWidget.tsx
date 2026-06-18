@@ -64,6 +64,41 @@ const FAQS: { q: string; a: string }[] = [
 ];
 
 import { useSupportWidgetConfig } from "@/hooks/useSupportWidgetConfig";
+import { supabase } from "@/integrations/supabase/client";
+
+const CHAT_SESSION_KEY = "anbd_chat_session_id";
+function getChatSessionId(): string {
+  if (typeof window === "undefined") return "";
+  let id = window.localStorage.getItem(CHAT_SESSION_KEY);
+  if (!id) {
+    id =
+      (globalThis.crypto?.randomUUID?.() as string | undefined) ??
+      `s_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+    window.localStorage.setItem(CHAT_SESSION_KEY, id);
+  }
+  return id;
+}
+async function logChatMessage(role: "user" | "assistant", content: string) {
+  try {
+    const session_id = getChatSessionId();
+    if (!session_id) return;
+    const { data: auth } = await supabase.auth.getUser();
+    const user = auth?.user ?? null;
+    const visitor_label =
+      user?.email ??
+      (user?.user_metadata as { name?: string } | null)?.name ??
+      null;
+    await supabase.from("live_chat_messages" as any).insert({
+      session_id,
+      role,
+      content: content.slice(0, 4000),
+      user_id: user?.id ?? null,
+      visitor_label,
+    });
+  } catch {
+    /* non-blocking */
+  }
+}
 
 export function SupportWidget() {
   const { data: cfg } = useSupportWidgetConfig();
@@ -168,6 +203,7 @@ export function SupportWidget() {
       upsert("নেটওয়ার্ক সমস্যা। অনুগ্রহ করে আবার চেষ্টা করুন বা WhatsApp করুন।");
     } finally {
       setLoading(false);
+      if (acc.trim()) void logChatMessage("assistant", acc);
     }
   }
 
@@ -177,6 +213,7 @@ export function SupportWidget() {
     const next: Msg[] = [...messages, { role: "user", content: t }];
     setMessages(next);
     setInput("");
+    void logChatMessage("user", t);
     void streamReply(next);
   }
 
