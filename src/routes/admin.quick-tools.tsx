@@ -376,10 +376,11 @@ function QuickOrderCreator() {
             <div key={i} className="grid grid-cols-12 gap-2 items-end p-3 rounded-lg border border-border bg-card">
               <div className="col-span-12 md:col-span-4">
                 <label className="text-xs text-muted-foreground">Product</label>
-                <select value={it.productSlug} onChange={(e) => onPickProduct(i, e.target.value)} className={inputCls}>
-                  <option value="">— Select —</option>
-                  {products.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}
-                </select>
+                <ProductPicker
+                  value={it.productSlug}
+                  onChange={(slug) => onPickProduct(i, slug)}
+                  placeholder="— Select product —"
+                />
               </div>
               <div className="col-span-6 md:col-span-3">
                 <label className="text-xs text-muted-foreground">Plan</label>
