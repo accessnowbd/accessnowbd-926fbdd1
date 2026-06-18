@@ -77,7 +77,7 @@ const VALUES = [
 
 function DeveloperPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-violet-50/60 via-background to-background text-foreground dark:from-violet-950/20 dark:via-background dark:to-background">
+    <div className="min-h-screen bg-white text-foreground dark:bg-gradient-to-b dark:from-[#0b0a18] dark:via-[#0d0b22] dark:to-[#080714]">
       <div className="mx-auto max-w-4xl px-4 py-12 md:py-20">
         <article>
           {/* Hero badge */}
@@ -98,7 +98,7 @@ function DeveloperPage() {
           </p>
 
           {/* Intro card */}
-          <div className="mt-8 rounded-2xl border border-violet-500/20 bg-card/80 p-6 shadow-sm shadow-violet-500/5 backdrop-blur md:p-8">
+          <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8 dark:border-white/10 dark:bg-white/[0.03] dark:shadow-violet-500/10 dark:backdrop-blur">
             <p className="text-base leading-relaxed text-foreground/90 md:text-lg">
               <strong>AccessNow BD</strong> ওয়েবসাইটটির সম্পূর্ণ ডিজাইন,
               ডেভেলপমেন্ট ও রক্ষণাবেক্ষণের দায়িত্বে রয়েছে{" "}
@@ -112,7 +112,7 @@ function DeveloperPage() {
           </div>
 
           {/* Disclaimer */}
-          <div className="mt-6 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-5 md:p-6">
+          <div className="mt-6 rounded-2xl border border-amber-300/60 bg-amber-50 p-5 md:p-6 dark:border-amber-500/30 dark:bg-amber-500/[0.06]">
             <div className="mb-2 flex items-center gap-2">
               <ShieldAlert className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               <h3 className="text-sm font-bold uppercase tracking-wide text-amber-700 dark:text-amber-300">
@@ -135,7 +135,7 @@ function DeveloperPage() {
             {STATS.map(({ icon: Icon, label, value }) => (
               <div
                 key={label}
-                className="rounded-2xl border border-violet-500/15 bg-card p-5 text-center shadow-sm transition hover:border-violet-500/40 hover:shadow-violet-500/10"
+                className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm transition hover:border-violet-400 hover:shadow-md dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-violet-400/50 dark:hover:shadow-violet-500/10 dark:backdrop-blur"
               >
                 <div className="mx-auto mb-2 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/15 to-fuchsia-500/15 text-violet-600 dark:text-violet-300">
                   <Icon className="h-4 w-4" />
@@ -176,7 +176,7 @@ function DeveloperPage() {
               {SERVICES.map(({ icon: Icon, title, desc }) => (
                 <div
                   key={title}
-                  className="group rounded-2xl border border-violet-500/15 bg-card p-5 transition hover:border-violet-500/40 hover:shadow-md hover:shadow-violet-500/10"
+                  className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-violet-400 hover:shadow-md dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-violet-400/50 dark:hover:shadow-violet-500/10 dark:backdrop-blur"
                 >
                   <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-md shadow-violet-500/30">
                     <Icon className="h-5 w-5" />
@@ -197,7 +197,7 @@ function DeveloperPage() {
               {VALUES.map((v) => (
                 <li
                   key={v}
-                  className="flex items-start gap-3 rounded-xl border border-violet-500/15 bg-card p-4 transition hover:border-violet-500/40"
+                  className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-violet-400 dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-violet-400/50 dark:backdrop-blur"
                 >
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-violet-500 dark:text-violet-400" />
                   <span className="text-sm leading-relaxed">{v}</span>
