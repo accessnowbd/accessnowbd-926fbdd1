@@ -427,16 +427,16 @@ function OrderRow({ order: o, onView, onDelete, onDownload }: { order: Order; on
       </td>
       <td className="px-4 py-3">
         <div className="flex items-center justify-end gap-1">
-          <IconBtn title={t("Download PDF", "PDF ডাউনলোড")} onClick={onDownload}><Download className="w-3.5 h-3.5" /></IconBtn>
+          <IconBtn title={t("Download PDF", "PDF ডাউনলোড")} onClick={onDownload}><Download className="w-4 h-4" /></IconBtn>
           {waLink && (
             <a href={waLink} target="_blank" rel="noreferrer" title="WhatsApp"
-              className="w-7 h-7 grid place-items-center rounded-md text-slate-500 hover:text-emerald-600 hover:bg-emerald-50">
-              <MessageCircle className="w-3.5 h-3.5" />
+              className="w-8 h-8 grid place-items-center rounded-md text-slate-700 bg-white border border-slate-200 hover:text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300">
+              <MessageCircle className="w-4 h-4" />
             </a>
           )}
-          <IconBtn title={t("View", "দেখুন")} onClick={onView}><Eye className="w-3.5 h-3.5" /></IconBtn>
-          <IconBtn title={t("Edit", "এডিট")} onClick={onView}><Pencil className="w-3.5 h-3.5" /></IconBtn>
-          <IconBtn title={t("Delete", "ডিলিট")} onClick={onDelete} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
+          <IconBtn title={t("View", "দেখুন")} onClick={onView}><Eye className="w-4 h-4" /></IconBtn>
+          <IconBtn title={t("Edit", "এডিট")} onClick={onView}><Pencil className="w-4 h-4" /></IconBtn>
+          <IconBtn title={t("Delete", "ডিলিট")} onClick={onDelete} danger><Trash2 className="w-4 h-4" /></IconBtn>
         </div>
       </td>
     </tr>
@@ -448,7 +448,7 @@ function IconBtn({ children, onClick, title, danger }: { children: React.ReactNo
     <button
       onClick={onClick}
       title={title}
-      className={`w-7 h-7 grid place-items-center rounded-md ${danger ? "text-slate-500 hover:text-rose-600 hover:bg-rose-50" : "text-slate-500 hover:text-violet-600 hover:bg-violet-50"}`}
+      className={`w-8 h-8 grid place-items-center rounded-md bg-white border border-slate-200 ${danger ? "text-slate-700 hover:text-rose-700 hover:bg-rose-50 hover:border-rose-300" : "text-slate-700 hover:text-violet-700 hover:bg-violet-50 hover:border-violet-300"}`}
     >
       {children}
     </button>
