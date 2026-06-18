@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  Save, Loader2, Eye, EyeOff, Plus, Trash2, Send, Mail, MessageCircle,
+  Save, Loader2, Eye, EyeOff, Plus, Send, Mail, MessageCircle,
   Sparkles, Info, ShieldCheck, Database, ExternalLink, RefreshCcw,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
