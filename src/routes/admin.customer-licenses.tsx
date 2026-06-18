@@ -202,27 +202,6 @@ function CustomerLicensesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50/40 via-white to-sky-50/40">
-      {/* Aurora header */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,theme(colors.violet.200/.6),transparent_55%),radial-gradient(ellipse_at_top_right,theme(colors.sky.200/.5),transparent_55%),radial-gradient(ellipse_at_bottom_right,theme(colors.fuchsia.200/.45),transparent_55%)]" />
-        <div className="absolute -top-10 right-12 opacity-20 text-violet-400"><ShoppingCart className="h-32 w-32" /></div>
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 opacity-20 text-fuchsia-400"><TrendingUp className="h-24 w-24" /></div>
-        <div className="absolute top-8 right-44 opacity-20 text-sky-400"><CreditCard className="h-20 w-20" /></div>
-
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center gap-4">
-            <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow-lg shadow-violet-500/30 text-white">
-              <KeyRound className="h-7 w-7" />
-            </div>
-            <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-violet-600 via-fuchsia-600 to-sky-600 bg-clip-text text-transparent leading-tight">
-                Customer Licenses
-              </h1>
-              <p className="text-sm text-slate-500 mt-1">Sales • Manage and configure customer licenses</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12 space-y-4">
         {/* Title block */}
