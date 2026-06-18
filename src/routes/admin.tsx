@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { type CSSProperties, useEffect, useMemo, useState } from "react";
 import { AuthPageEntry } from "@/components/AuthPage";
 import {
   ShieldAlert, LogOut, Globe,
@@ -68,9 +68,29 @@ function readCachedAdmin(): boolean {
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const [cachedAdmin, setCachedAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [roleError, setRoleError] = useState<{
+    message: string;
+    code?: string;
+    details?: string;
+    hint?: string;
+    raw?: unknown;
+  } | null>(null);
+  const [checkedAt, setCheckedAt] = useState<string | null>(null);
+
   // Wipe historical splash/admin flags immediately on mount so a stale client
   // flag can never leave the route on an empty gradient screen.
-  useEffect(() => { purgeLegacySplashFlags(); }, []);
+  useEffect(() => {
+    purgeLegacySplashFlags();
+    const cached = readCachedAdmin();
+    setCachedAdmin(cached);
+    if (cached) {
+      setIsAdmin(true);
+      setVerified(true);
+    }
+  }, []);
   // Admin panel is always light/white themed regardless of the user-selected
   // site theme. Force `theme-white` on <html> while mounted, then restore on unmount.
   useEffect(() => {
@@ -80,16 +100,6 @@ function AdminLayout() {
     root.classList.add("theme-white");
     return () => { if (!hadWhite) root.classList.remove("theme-white"); };
   }, []);
-  const [isAdmin, setIsAdmin] = useState<boolean>(() => readCachedAdmin());
-  const [verified, setVerified] = useState<boolean>(() => readCachedAdmin());
-  const [roleError, setRoleError] = useState<{
-    message: string;
-    code?: string;
-    details?: string;
-    hint?: string;
-    raw?: unknown;
-  } | null>(null);
-  const [checkedAt, setCheckedAt] = useState<string | null>(null);
 
   const verifyRole = useMemo(
     () => async (uid: string) => {
@@ -151,8 +161,6 @@ function AdminLayout() {
     })();
     return () => { cancelled = true; };
   }, [user, loading, verifyRole]);
-
-  const cachedAdmin = readCachedAdmin();
 
   // Optimistic render: if we have a cached admin flag, skip all blocking
   // spinners and render the shell immediately. Background verification still
@@ -571,6 +579,48 @@ function SidebarGroup({ group, collapsed, pathname }: { group: any; collapsed: b
   );
 }
 
+const ADMIN_ICON_COLORS: Record<string, string> = {
+  "amber-400": "#f59e0b",
+  "amber-500": "#d97706",
+  "blue-500": "#2563eb",
+  "blue-600": "#1d4ed8",
+  "cyan-500": "#0891b2",
+  "emerald-500": "#059669",
+  "emerald-600": "#047857",
+  "fuchsia-500": "#c026d3",
+  "fuchsia-600": "#a21caf",
+  "green-500": "#16a34a",
+  "green-600": "#15803d",
+  "indigo-500": "#4f46e5",
+  "indigo-600": "#4338ca",
+  "indigo-700": "#3730a3",
+  "orange-400": "#f97316",
+  "orange-500": "#ea580c",
+  "orange-600": "#c2410c",
+  "pink-500": "#db2777",
+  "pink-600": "#be185d",
+  "purple-600": "#9333ea",
+  "red-500": "#dc2626",
+  "red-600": "#b91c1c",
+  "red-700": "#991b1b",
+  "rose-500": "#e11d48",
+  "rose-600": "#be123c",
+  "sky-500": "#0284c7",
+  "slate-600": "#475569",
+  "slate-800": "#1e293b",
+  "teal-500": "#0d9488",
+  "teal-600": "#0f766e",
+  "violet-500": "#7c3aed",
+};
+
+function iconGradientStyle(grad: string): CSSProperties {
+  const from = /from-([\w-]+)/.exec(grad)?.[1] ?? "violet-500";
+  const to = /to-([\w-]+)/.exec(grad)?.[1] ?? "fuchsia-500";
+  return {
+    backgroundImage: `linear-gradient(135deg, ${ADMIN_ICON_COLORS[from] ?? "#7c3aed"} 0%, ${ADMIN_ICON_COLORS[to] ?? "#c026d3"} 100%)`,
+  };
+}
+
 function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collapsed?: boolean; active: boolean }) {
   const { t } = useAdminLang();
   const label = t(item.label, item.labelBn);
@@ -623,11 +673,11 @@ function SidebarItem({ item, collapsed, active }: { item: AdminMenuItem; collaps
         />
       ))}
       <span
+        style={iconGradientStyle(item.grad)}
         className={[
-          "admin-menu-icon relative shrink-0 w-8 h-8 rounded-lg grid place-items-center text-white shadow-[0_8px_18px_-10px_rgba(15,23,42,0.55)]",
-          "bg-gradient-to-br transition-transform duration-200",
+          "admin-menu-icon relative shrink-0 w-9 h-9 rounded-xl grid place-items-center text-white bg-[var(--admin-primary)] ring-1 ring-slate-900/10 shadow-[0_10px_22px_-10px_rgba(15,23,42,0.65)]",
+          "transition-transform duration-200",
           active ? "scale-110" : "group-hover:scale-105 group-active:scale-95",
-          item.grad,
         ].join(" ")}
       >
         {item.icon}

@@ -295,11 +295,18 @@
   }
   .admin-clarity .admin-kpi-icon,
   .admin-clarity .admin-menu-icon {
+    background-color: var(--admin-primary) !important;
     color: #ffffff !important;
-    box-shadow: 0 12px 26px -14px rgba(15, 23, 42, 0.65) !important;
+    box-shadow: 0 12px 26px -13px rgba(15, 23, 42, 0.76) !important;
   }
   .admin-clarity .admin-kpi-icon *,
   .admin-clarity .admin-menu-icon * { color: #ffffff !important; }
+  .admin-clarity .admin-menu-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+    stroke-width: 2.65 !important;
+    filter: drop-shadow(0 1px 1px rgba(15, 23, 42, 0.28));
+  }
   .admin-clarity button[class*="bg-violet-5"],
   .admin-clarity button[class*="bg-violet-6"],
   .admin-clarity button[class*="bg-violet-7"],

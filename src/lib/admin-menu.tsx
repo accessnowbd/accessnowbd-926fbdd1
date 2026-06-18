@@ -33,7 +33,7 @@ export type AdminMenuGroup = {
   items: AdminMenuItem[];
 };
 
-const ic = (Icon: any) => <Icon className="w-4 h-4" />;
+const ic = (Icon: any) => <Icon className="w-5 h-5" strokeWidth={2.75} absoluteStrokeWidth />;
 
 export const ADMIN_MENU: AdminMenuGroup[] = [
   {
