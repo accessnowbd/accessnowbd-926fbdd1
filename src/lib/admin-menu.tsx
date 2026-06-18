@@ -67,9 +67,6 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/tracking", label: "Order Tracking", labelBn: "অর্ডার ট্র্যাকিং", icon: ic(MapPin), grad: "from-emerald-500 to-teal-600" },
       { to: "/admin/wallet", label: "Wallet", labelBn: "ওয়ালেট", icon: ic(Wallet), grad: "from-amber-400 to-orange-500" },
       { to: "/admin/account-delivery", label: "Account Delivery", labelBn: "অ্যাকাউন্ট ডেলিভারি", icon: ic(Truck), grad: "from-amber-500 to-yellow-500" },
-      { to: "/admin/checkout-policy", label: "Checkout Policy", labelBn: "চেকআউট পলিসি", icon: ic(FileCheck), grad: "from-blue-500 to-cyan-500" },
-      { to: "/admin/custom-invoice", label: "Custom Invoice", labelBn: "কাস্টম ইনভয়েস", icon: ic(FileText), grad: "from-slate-600 to-indigo-700" },
-      { to: "/admin/quick-tools", label: "Quick Tools (WhatsApp)", labelBn: "কুইক টুলস (WhatsApp)", icon: ic(Sparkles), grad: "from-green-500 to-emerald-600" },
     ],
   },
   {
