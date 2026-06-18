@@ -202,6 +202,85 @@ function LicenseManagerPage() {
         <StatCard label="Revoked" value={String(stats.revoked)} tone="rose" />
       </div>
 
+      {/* Products & License Stock */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 grid place-items-center text-white">
+              <Package className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="font-extrabold text-slate-900">{t("Products & License Stock", "প্রোডাক্ট ও License স্টক")}</div>
+              <div className="text-[11px] text-slate-500">{t("All products — upload licenses or add new ones for each product", "সব প্রোডাক্ট — প্রতিটি প্রোডাক্টের জন্য লাইসেন্স আপলোড বা যোগ করুন")}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                value={productQuery}
+                onChange={(e) => setProductQuery(e.target.value)}
+                placeholder={t("Search products…", "প্রোডাক্ট খুঁজুন…")}
+                className="w-56 h-9 pl-9 pr-3 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-violet-300 text-sm outline-none"
+              />
+            </div>
+            <button onClick={() => setAddProductOpen(true)} className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:opacity-95">
+              <Plus className="w-4 h-4" /> {t("Add Product", "প্রোডাক্ট যোগ")}
+            </button>
+          </div>
+        </div>
+
+        {filteredProducts.length === 0 ? (
+          <div className="py-8 text-center text-sm text-slate-500">{t("No products found.", "কোনো প্রোডাক্ট পাওয়া যায়নি।")}</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 max-h-[460px] overflow-y-auto pr-1">
+            {filteredProducts.map((p) => {
+              const st = productStats.get(p.slug) || { available: 0, assigned: 0, total: 0 };
+              return (
+                <div key={p.slug} className="group rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-3 hover:border-violet-300 hover:shadow-md transition">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-100 to-fuchsia-100 grid place-items-center text-xl shrink-0 overflow-hidden">
+                      {p.image_url ? <img src={p.image_url} alt="" className="w-full h-full object-cover" /> : <span>{p.emoji || "📦"}</span>}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm font-bold text-slate-900 line-clamp-2 leading-snug">{p.name}</div>
+                      <div className="text-[10px] text-slate-400 font-mono truncate">{p.slug}</div>
+                    </div>
+                  </div>
+                  <div className="mt-3 grid grid-cols-3 gap-1 text-center">
+                    <div className="rounded-lg bg-emerald-50 py-1">
+                      <div className="text-[9px] font-bold uppercase text-emerald-600">Avail</div>
+                      <div className="text-sm font-extrabold text-emerald-700">{st.available}</div>
+                    </div>
+                    <div className="rounded-lg bg-violet-50 py-1">
+                      <div className="text-[9px] font-bold uppercase text-violet-600">Used</div>
+                      <div className="text-sm font-extrabold text-violet-700">{st.assigned}</div>
+                    </div>
+                    <div className="rounded-lg bg-slate-100 py-1">
+                      <div className="text-[9px] font-bold uppercase text-slate-500">Total</div>
+                      <div className="text-sm font-extrabold text-slate-700">{st.total}</div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center gap-1.5">
+                    <button onClick={() => openBulkFor(p.slug)} className="flex-1 inline-flex items-center justify-center gap-1 h-8 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-[11px] font-semibold">
+                      <Upload className="w-3 h-3" /> {t("Upload Keys", "Keys আপলোড")}
+                    </button>
+                    <button onClick={() => openAddFor(p.slug)} title={t("Add single license", "একক লাইসেন্স")} className="w-8 h-8 grid place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50">
+                      <Plus className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => { setProductFilter(p.slug); setOnlyAvailable(false); }} title={t("Filter table", "ফিল্টার")} className="w-8 h-8 grid place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50">
+                      <Filter className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+
+
       {/* Product search panel */}
       <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
         <div className="flex items-center gap-2 mb-1">
