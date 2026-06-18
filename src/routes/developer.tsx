@@ -172,7 +172,7 @@ function DeveloperPage() {
 
           {/* Services */}
           <section className="mt-12">
-            <h2 className="text-2xl font-bold md:text-3xl">তাদের সেবাসমূহ</h2>
+            <h2 className="text-2xl font-bold md:text-3xl text-foreground">তাদের সেবাসমূহ</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               {SERVICES.map(({ icon: Icon, title, desc }) => (
                 <div
