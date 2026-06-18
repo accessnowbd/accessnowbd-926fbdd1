@@ -176,7 +176,7 @@ function DeveloperPage() {
               {SERVICES.map(({ icon: Icon, title, desc }) => (
                 <div
                   key={title}
-                  className="group rounded-2xl border border-violet-500/15 bg-card p-5 transition hover:border-violet-500/40 hover:shadow-md hover:shadow-violet-500/10"
+                  className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-violet-400 hover:shadow-md dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-violet-400/50 dark:hover:shadow-violet-500/10 dark:backdrop-blur"
                 >
                   <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-md shadow-violet-500/30">
                     <Icon className="h-5 w-5" />
