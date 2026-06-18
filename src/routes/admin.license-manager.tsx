@@ -613,3 +613,70 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </label>
   );
 }
+
+function slugify(s: string) {
+  return s.toLowerCase().trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 80);
+}
+
+function QuickAddProductModal({ onClose, onSaved }: { onClose: () => void; onSaved: () => void }) {
+  const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
+  const [emoji, setEmoji] = useState("📦");
+  const [category, setCategory] = useState("License");
+  const [busy, setBusy] = useState(false);
+  const [slugDirty, setSlugDirty] = useState(false);
+
+  const finalSlug = slug.trim() || slugify(name);
+
+  const save = async () => {
+    if (!name.trim()) return toast.error("Name required");
+    if (!finalSlug) return toast.error("Slug required");
+    setBusy(true);
+    const { error } = await supabase.from("products").insert({
+      slug: finalSlug,
+      name: name.trim(),
+      emoji,
+      category,
+      is_active: true,
+      stock_status: "in_stock",
+    });
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Product added");
+    onSaved();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm grid place-items-center p-4" onClick={onClose}>
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-violet-50 to-fuchsia-50">
+          <div className="flex items-center gap-2"><Package className="w-5 h-5 text-violet-600" /><h2 className="text-base font-extrabold text-slate-900">Add Product</h2></div>
+          <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-white/70"><X className="w-4 h-4" /></button>
+        </div>
+        <div className="p-5 space-y-3 text-sm">
+          <Field label="Product Name">
+            <input value={name} onChange={(e) => { setName(e.target.value); if (!slugDirty) setSlug(slugify(e.target.value)); }} placeholder="e.g. Netflix Premium" className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" />
+          </Field>
+          <Field label="Slug (URL key)">
+            <input value={slug} onChange={(e) => { setSlug(e.target.value); setSlugDirty(true); }} placeholder="netflix-premium" className="w-full h-10 px-3 rounded-xl border border-slate-200 font-mono text-[12px] outline-none focus:border-violet-300" />
+          </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Emoji"><input value={emoji} onChange={(e) => setEmoji(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
+            <Field label="Category"><input value={category} onChange={(e) => setCategory(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-slate-200 outline-none focus:border-violet-300" /></Field>
+          </div>
+        </div>
+        <div className="px-5 py-3 border-t border-slate-100 flex items-center justify-end gap-2 bg-slate-50">
+          <button onClick={onClose} className="h-10 px-4 rounded-xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button onClick={save} disabled={busy} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:opacity-95">
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />} Save
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
