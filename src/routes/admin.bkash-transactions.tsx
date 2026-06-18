@@ -128,21 +128,6 @@ function BkashTransactionsPage() {
 
   return (
     <div className="space-y-5">
-      {/* Aurora header */}
-      <div className="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-fuchsia-50 via-violet-50 to-sky-50 px-6 py-5 shadow-sm">
-        <div className="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-fuchsia-300/30 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 -left-10 w-72 h-72 rounded-full bg-sky-300/30 blur-3xl pointer-events-none" />
-        <div className="relative flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-fuchsia-600 grid place-items-center text-white shadow-lg">
-            <Wallet className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-fuchsia-600 to-violet-600 bg-clip-text text-transparent">{t("bKash Transactions", "বিকাশ ট্রানজেকশন")}</h1>
-            <p className="text-sm text-slate-600">{t("Sales · Manage and configure bkash transactions", "সেলস · বিকাশ ট্রানজেকশন ম্যানেজ ও কনফিগার করুন")}</p>
-          </div>
-        </div>
-      </div>
-
       {/* Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
