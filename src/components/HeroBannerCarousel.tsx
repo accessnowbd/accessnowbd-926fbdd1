@@ -185,7 +185,7 @@ export function HeroBannerCarousel() {
 
   // Resolve image: explicit URL > product's image by brand slug
   const rawResolvedImage = current.data.image_url || (brand?.slug ? productMap[brand.slug] : undefined);
-  const resolvedImage = optimizeSupabaseImage(rawResolvedImage, { width: 1000, quality: 75 });
+  const resolvedImage = optimizeSupabaseImage(rawResolvedImage, { width: 1400, quality: 80 });
 
   // Eid / Qurbani detection — adds festive overlay (crescent, mosque, lanterns, sparkles)
   const isEid = useMemo(() => {
@@ -465,7 +465,7 @@ export function HeroBannerCarousel() {
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
-                  className="relative z-[1] max-h-[300px] w-auto max-w-full object-contain"
+                  className="relative z-[1] h-auto w-full max-w-[520px] max-h-[380px] lg:max-h-[420px] object-contain"
                   style={{
                     filter: `drop-shadow(0 20px 40px ${hexAlpha("#000", 0.45)}) drop-shadow(0 0 28px ${hexAlpha(glow, 0.35)})`,
                     WebkitMaskImage:
