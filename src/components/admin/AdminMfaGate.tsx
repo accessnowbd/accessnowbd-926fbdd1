@@ -94,14 +94,8 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
       }
       // Cache is stale — clear and continue with challenge flow
       try { sessionStorage.removeItem(MFA_OK_CACHE_KEY); } catch { /* ignore */ }
-      if (!cfg.mfa_enforced) {
-        setMode("ok");
-        return;
-      }
-      if (grantRes && !grantRes.__error && grantRes.granted) {
-        setMode("ok");
-        return;
-      }
+
+
 
       // 2. Existing aal2 session?
       const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
