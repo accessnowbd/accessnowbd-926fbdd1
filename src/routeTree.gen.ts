@@ -45,6 +45,7 @@ import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe
 import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/blog.how-to-buy-netflix-in-bangladesh'
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminReviewGeneratorRouteImport } from './routes/admin.review-generator'
@@ -256,6 +257,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTrackingRoute = AdminTrackingRouteImport.update({
+  id: '/tracking',
+  path: '/tracking',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminThemesRoute = AdminThemesRouteImport.update({
   id: '/themes',
   path: '/themes',
@@ -457,6 +463,7 @@ export interface FileRoutesByFullPath {
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
+  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -523,6 +530,7 @@ export interface FileRoutesByTo {
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
+  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -591,6 +599,7 @@ export interface FileRoutesById {
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
+  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -660,6 +669,7 @@ export interface FileRouteTypes {
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
+    | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -726,6 +736,7 @@ export interface FileRouteTypes {
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
+    | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -793,6 +804,7 @@ export interface FileRouteTypes {
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
+    | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -1107,6 +1119,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/tracking': {
+      id: '/admin/tracking'
+      path: '/tracking'
+      fullPath: '/admin/tracking'
+      preLoaderRoute: typeof AdminTrackingRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/themes': {
       id: '/admin/themes'
       path: '/themes'
@@ -1335,6 +1354,7 @@ interface AdminRouteChildren {
   AdminReviewGeneratorRoute: typeof AdminReviewGeneratorRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminThemesRoute: typeof AdminThemesRoute
+  AdminTrackingRoute: typeof AdminTrackingRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWalletRoute: typeof AdminWalletRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -1362,6 +1382,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReviewGeneratorRoute: AdminReviewGeneratorRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminThemesRoute: AdminThemesRoute,
+  AdminTrackingRoute: AdminTrackingRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWalletRoute: AdminWalletRoute,
   AdminIndexRoute: AdminIndexRoute,
