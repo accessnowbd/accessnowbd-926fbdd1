@@ -25,15 +25,39 @@ const fmtBDT = (n: number) => "৳" + Math.round(n).toLocaleString("en-IN");
 
 type Period = "daily" | "weekly" | "monthly";
 
+const DASH_CACHE_KEY = "anbd:adminDashCache";
+const DASH_CACHE_TTL = 60_000; // 1 minute
+
+type DashCache = {
+  ts: number;
+  orders: OrderRow[];
+  products: ProductRow[];
+  counts: { products: number; orders: number; users: number };
+};
+
+function readDashCache(): DashCache | null {
+  if (typeof sessionStorage === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(DASH_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as DashCache;
+    return parsed;
+  } catch { return null; }
+}
+
 function AdminDashboard() {
   const { t, lang } = useAdminLang();
-  const [orders, setOrders] = useState<OrderRow[]>([]);
-  const [products, setProducts] = useState<ProductRow[]>([]);
-  const [counts, setCounts] = useState({ products: 0, orders: 0, users: 0 });
-  const [loading, setLoading] = useState(true);
+  const cached = useMemo(() => readDashCache(), []);
+  const [orders, setOrders] = useState<OrderRow[]>(cached?.orders ?? []);
+  const [products, setProducts] = useState<ProductRow[]>(cached?.products ?? []);
+  const [counts, setCounts] = useState(cached?.counts ?? { products: 0, orders: 0, users: 0 });
+  const [loading, setLoading] = useState(!cached);
   const [period, setPeriod] = useState<Period>("daily");
 
   useEffect(() => {
+    // Skip refetch if cache is fresh (< TTL)
+    if (cached && Date.now() - cached.ts < DASH_CACHE_TTL) return;
+    let cancelled = false;
     (async () => {
       const [pAll, oAll, uAll, recentOrders, recentProducts] = await Promise.all([
         supabase.from("products").select("*", { count: "exact", head: true }),
@@ -42,12 +66,22 @@ function AdminDashboard() {
         supabase.from("orders").select("id,created_at,status,total,full_name,email,payment_method,items").order("created_at", { ascending: false }).limit(200),
         supabase.from("products").select("slug,name,emoji,image_url,category,is_active,created_at").order("created_at", { ascending: false }).limit(60),
       ]);
-      setCounts({ products: pAll.count ?? 0, orders: oAll.count ?? 0, users: uAll.count ?? 0 });
-      setOrders((recentOrders.data ?? []) as OrderRow[]);
-      setProducts((recentProducts.data ?? []) as ProductRow[]);
+      if (cancelled) return;
+      const nextCounts = { products: pAll.count ?? 0, orders: oAll.count ?? 0, users: uAll.count ?? 0 };
+      const nextOrders = (recentOrders.data ?? []) as OrderRow[];
+      const nextProducts = (recentProducts.data ?? []) as ProductRow[];
+      setCounts(nextCounts);
+      setOrders(nextOrders);
+      setProducts(nextProducts);
       setLoading(false);
+      try {
+        sessionStorage.setItem(DASH_CACHE_KEY, JSON.stringify({
+          ts: Date.now(), orders: nextOrders, products: nextProducts, counts: nextCounts,
+        } as DashCache));
+      } catch { /* ignore quota */ }
     })();
-  }, []);
+    return () => { cancelled = true; };
+  }, [cached]);
 
   // ----- Aggregate stats -----
   const stats = useMemo(() => {
