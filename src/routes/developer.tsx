@@ -119,7 +119,7 @@ function DeveloperPage() {
                 দায়িত্ব বিবৃতি / Disclaimer
               </h3>
             </div>
-            <p className="text-sm leading-relaxed text-foreground/85 md:text-base">
+            <p className="text-sm leading-relaxed text-amber-950 md:text-base dark:text-amber-50/90">
               <strong>Shahed IT</strong> শুধুমাত্র এই ওয়েবসাইটটি প্রিমিয়ামভাবে
               ডিজাইন ও ডেভেলপ করছে। ডেভেলপার কোম্পানির সাথে ওয়েবসাইটের
               মালিক/প্রতিষ্ঠানের কোনো স্বত্ব, অংশীদারিত্ব বা ব্যবসায়িক সম্পর্ক
@@ -129,6 +129,7 @@ function DeveloperPage() {
               ডেভেলপার কোম্পানি (<strong>Shahed IT</strong>) দায়ী থাকবে না।
             </p>
           </div>
+
 
           {/* Stats */}
           <section className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
