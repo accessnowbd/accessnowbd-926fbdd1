@@ -246,7 +246,7 @@ function DeveloperPage() {
                 href="https://shahedit.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-violet-700 transition hover:bg-white/90"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-white/90"
               >
                 Visit Shahed IT
                 <ExternalLink className="h-4 w-4" />
