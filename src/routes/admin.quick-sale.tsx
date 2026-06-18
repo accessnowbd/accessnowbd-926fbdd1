@@ -483,16 +483,16 @@ function DeliveryOption({ active, onClick, icon, title, desc }: { active: boolea
     <button onClick={onClick}
       className={`w-full text-left rounded-lg border p-3 flex items-center gap-3 transition ${
         active
-          ? "border-violet-400 bg-violet-50 ring-2 ring-violet-100"
+          ? "border-violet-400 bg-[#f3eeff] ring-2 ring-[#ede4ff]"
           : "border-slate-200 bg-white hover:border-slate-300"
       }`}
     >
-      <span className={`w-8 h-8 rounded-lg grid place-items-center ${active ? "bg-violet-600 text-white" : "bg-slate-100 text-slate-600"}`}>{icon}</span>
-      <span className="flex-1">
-        <span className={`block text-sm font-semibold ${active ? "text-violet-800" : "text-slate-800"}`}>{title}</span>
-        <span className="block text-xs text-slate-500">{desc}</span>
+      <span className={`w-8 h-8 rounded-lg grid place-items-center shrink-0 ${active ? "bg-[#6d28d9] text-white" : "bg-slate-100 text-slate-600"}`}>{icon}</span>
+      <span className="flex-1 min-w-0">
+        <span className={`block text-sm font-semibold ${active ? "text-[#4c1d95]" : "text-slate-800"}`}>{title}</span>
+        <span className={`block text-xs ${active ? "text-[#6d28d9]" : "text-slate-500"}`}>{desc}</span>
       </span>
-      <span className={`w-4 h-4 rounded-full border-2 ${active ? "border-violet-600 bg-violet-600" : "border-slate-300"}`} />
+      <span className={`w-4 h-4 rounded-full border-2 shrink-0 ${active ? "border-[#6d28d9] bg-[#6d28d9]" : "border-slate-300"}`} />
     </button>
   );
 }
