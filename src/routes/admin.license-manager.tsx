@@ -77,7 +77,7 @@ function LicenseManagerPage() {
     if (!silent) setLoading(true); else setRefreshing(true);
     const [licRes, prodRes] = await Promise.all([
       supabase.from("admin_records").select("*").eq("kind", "license_key").order("created_at", { ascending: false }),
-      supabase.from("products").select("id, name").order("name"),
+      supabase.from("products").select("slug, name, emoji, image_url").order("name"),
     ]);
     if (licRes.error) toast.error(licRes.error.message);
     setRows(((licRes.data ?? []) as unknown) as LicenseRow[]);
