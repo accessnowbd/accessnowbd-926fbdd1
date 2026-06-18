@@ -5,6 +5,8 @@ export type AdminSecuritySettings = {
   allow_totp: boolean;
   allow_email_otp: boolean;
   grant_ttl_hours: number;
+  remember_device_enabled: boolean;
+  remember_device_days: number;
 };
 
 export const DEFAULT_SECURITY_SETTINGS: AdminSecuritySettings = {
@@ -12,6 +14,8 @@ export const DEFAULT_SECURITY_SETTINGS: AdminSecuritySettings = {
   allow_totp: true,
   allow_email_otp: true,
   grant_ttl_hours: 12,
+  remember_device_enabled: true,
+  remember_device_days: 30,
 };
 
 export const SECURITY_KIND = "security_settings";
@@ -26,6 +30,14 @@ function normalize(raw: any): AdminSecuritySettings {
       typeof d.grant_ttl_hours === "number" && d.grant_ttl_hours > 0 && d.grant_ttl_hours <= 720
         ? Math.floor(d.grant_ttl_hours)
         : DEFAULT_SECURITY_SETTINGS.grant_ttl_hours,
+    remember_device_enabled:
+      typeof d.remember_device_enabled === "boolean"
+        ? d.remember_device_enabled
+        : DEFAULT_SECURITY_SETTINGS.remember_device_enabled,
+    remember_device_days:
+      typeof d.remember_device_days === "number" && d.remember_device_days > 0 && d.remember_device_days <= 365
+        ? Math.floor(d.remember_device_days)
+        : DEFAULT_SECURITY_SETTINGS.remember_device_days,
   };
 }
 
