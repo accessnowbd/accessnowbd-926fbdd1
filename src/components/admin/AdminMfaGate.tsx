@@ -70,7 +70,8 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
   const refresh = useCallback(async () => {
     setError(null);
     setInfo(null);
-    setMode("loading");
+    const wasOk = readMfaOkCache();
+    if (!wasOk) setMode("loading");
     try {
       // 0+1. Load admin security settings and existing grant in parallel.
       const [settingsRes, grantRes] = await Promise.all([
@@ -79,6 +80,20 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
       ]);
       const cfg = settingsRes.settings;
       setSettings(cfg);
+      const markOk = () => {
+        try { sessionStorage.setItem(MFA_OK_CACHE_KEY, "1"); } catch { /* ignore */ }
+        setMode("ok");
+      };
+      if (!cfg.mfa_enforced) {
+        markOk();
+        return;
+      }
+      if (grantRes && !grantRes.__error && grantRes.granted) {
+        markOk();
+        return;
+      }
+      // Cache is stale — clear and continue with challenge flow
+      try { sessionStorage.removeItem(MFA_OK_CACHE_KEY); } catch { /* ignore */ }
       if (!cfg.mfa_enforced) {
         setMode("ok");
         return;
