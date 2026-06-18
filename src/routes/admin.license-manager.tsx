@@ -482,11 +482,11 @@ function StatCard({ label, value, tone }: { label: string; value: string; tone: 
   );
 }
 
-function LicenseFormModal({ row, products, onClose, onSaved }: { row: LicenseRow | null; products: ProductLite[]; onClose: () => void; onSaved: () => void }) {
+function LicenseFormModal({ row, products, presetSlug, onClose, onSaved }: { row: LicenseRow | null; products: ProductLite[]; presetSlug?: string; onClose: () => void; onSaved: () => void }) {
   const init = row?.data ?? {};
   const [key, setKey] = useState(init.key || "");
   const [type, setType] = useState(init.type || "License Key");
-  const [productId, setProductId] = useState(init.product_id || "");
+  const [productId, setProductId] = useState(init.product_id || presetSlug || "");
   const [status, setStatus] = useState<LicenseStatus>(statusOf(init.status));
   const [customerName, setCustomerName] = useState(init.customer_name || "");
   const [customerEmail, setCustomerEmail] = useState(init.customer_email || "");
