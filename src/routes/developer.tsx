@@ -77,7 +77,7 @@ const VALUES = [
 
 function DeveloperPage() {
   return (
-    <div className="min-h-screen bg-white text-foreground dark:bg-gradient-to-b dark:from-[#0b0a18] dark:via-[#0d0b22] dark:to-[#080714]">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-4xl px-4 py-12 md:py-20">
         <article>
           {/* Hero badge */}
@@ -153,7 +153,7 @@ function DeveloperPage() {
 
           {/* Who they are */}
           <section className="mt-12">
-            <h2 className="text-2xl font-bold md:text-3xl">
+            <h2 className="text-2xl font-bold md:text-3xl text-foreground">
               Shahed IT — কারা তারা?
             </h2>
             <p className="mt-4 leading-relaxed text-foreground/85">
@@ -172,7 +172,7 @@ function DeveloperPage() {
 
           {/* Services */}
           <section className="mt-12">
-            <h2 className="text-2xl font-bold md:text-3xl">তাদের সেবাসমূহ</h2>
+            <h2 className="text-2xl font-bold md:text-3xl text-foreground">তাদের সেবাসমূহ</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               {SERVICES.map(({ icon: Icon, title, desc }) => (
                 <div
@@ -182,7 +182,7 @@ function DeveloperPage() {
                   <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-md shadow-violet-500/30">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="text-lg font-bold">{title}</h3>
+                  <h3 className="text-lg font-bold text-foreground">{title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {desc}
                   </p>
@@ -193,7 +193,7 @@ function DeveloperPage() {
 
           {/* Values */}
           <section className="mt-12">
-            <h2 className="text-2xl font-bold md:text-3xl">কেন Shahed IT?</h2>
+            <h2 className="text-2xl font-bold md:text-3xl text-foreground">কেন Shahed IT?</h2>
             <ul className="mt-6 grid gap-3 md:grid-cols-2">
               {VALUES.map((v) => (
                 <li
@@ -201,7 +201,7 @@ function DeveloperPage() {
                   className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-violet-400 dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-violet-400/50 dark:backdrop-blur"
                 >
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-violet-500 dark:text-violet-400" />
-                  <span className="text-sm leading-relaxed">{v}</span>
+                  <span className="text-sm leading-relaxed text-foreground">{v}</span>
                 </li>
               ))}
             </ul>
