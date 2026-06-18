@@ -81,6 +81,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
     applyTheme(initial);
     setThemeState(initial);
+    try { localStorage.setItem(STORAGE_KEY, initial); } catch { /* ignore */ }
+    userPickedRef.current = true;
   }, []);
 
   // When availability changes (admin toggled), force fallback if needed.
@@ -95,14 +97,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, [availability, defaultTheme, theme]);
 
-  // When the admin default changes and the user hasn't explicitly picked, follow the default.
-  useEffect(() => {
-    if (userPickedRef.current) return;
-    if (!availability[defaultTheme]) return;
-    if (theme === defaultTheme) return;
-    applyTheme(defaultTheme);
-    setThemeState(defaultTheme);
-  }, [defaultTheme, availability, theme]);
+  // Note: we intentionally do NOT auto-follow admin default theme changes after mount.
+  // Once a visitor lands on the site, their active theme stays put unless they pick a new
+  // one or the current theme is disabled by an admin (handled in the fallback effect above).
 
   const setTheme = useCallback((id: ThemeId) => {
     if (!THEMES.some((t) => t.id === id)) return;
