@@ -368,39 +368,6 @@ export type Database = {
         }
         Relationships: []
       }
-      newsletter_subscribers: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-          name: string | null
-          source: string | null
-          status: string
-          tags: string[]
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: string
-          name?: string | null
-          source?: string | null
-          status?: string
-          tags?: string[]
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-          name?: string | null
-          source?: string | null
-          status?: string
-          tags?: string[]
-          updated_at?: string
-        }
-        Relationships: []
-      }
       notifications: {
         Row: {
           created_at: string
@@ -685,41 +652,6 @@ export type Database = {
           },
         ]
       }
-      renewal_reminders_sent: {
-        Row: {
-          expiry_date: string
-          id: string
-          item_key: string
-          order_id: string
-          recipient_email: string
-          sent_at: string
-        }
-        Insert: {
-          expiry_date: string
-          id?: string
-          item_key: string
-          order_id: string
-          recipient_email: string
-          sent_at?: string
-        }
-        Update: {
-          expiry_date?: string
-          id?: string
-          item_key?: string
-          order_id?: string
-          recipient_email?: string
-          sent_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "renewal_reminders_sent_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       support_tickets: {
         Row: {
           assigned_to: string | null
@@ -821,41 +753,6 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
-      }
-      ticket_messages: {
-        Row: {
-          body: string
-          created_at: string
-          id: string
-          sender_role: string
-          sender_user_id: string
-          ticket_id: string
-        }
-        Insert: {
-          body: string
-          created_at?: string
-          id?: string
-          sender_role: string
-          sender_user_id: string
-          ticket_id: string
-        }
-        Update: {
-          body?: string
-          created_at?: string
-          id?: string
-          sender_role?: string
-          sender_user_id?: string
-          ticket_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ticket_messages_ticket_id_fkey"
-            columns: ["ticket_id"]
-            isOneToOne: false
-            referencedRelation: "support_tickets"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       user_roles: {
         Row: {
