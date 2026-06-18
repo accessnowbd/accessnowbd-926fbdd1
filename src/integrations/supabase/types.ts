@@ -887,6 +887,90 @@ export type Database = {
           },
         ]
       }
+      tracking_events_log: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          event_name: string
+          id: string
+          payload: Json
+          provider: string
+          response: Json | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          event_name: string
+          id?: string
+          payload?: Json
+          provider: string
+          response?: Json | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          event_name?: string
+          id?: string
+          payload?: Json
+          provider?: string
+          response?: Json | null
+          status?: string
+        }
+        Relationships: []
+      }
+      tracking_pixels: {
+        Row: {
+          access_token: string | null
+          account_id: string | null
+          conversion_label: string | null
+          created_at: string
+          custom_script: string | null
+          enabled: boolean
+          events_config: Json
+          id: string
+          label: string | null
+          notes: string | null
+          pixel_id: string | null
+          provider: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          access_token?: string | null
+          account_id?: string | null
+          conversion_label?: string | null
+          created_at?: string
+          custom_script?: string | null
+          enabled?: boolean
+          events_config?: Json
+          id?: string
+          label?: string | null
+          notes?: string | null
+          pixel_id?: string | null
+          provider: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string | null
+          account_id?: string | null
+          conversion_label?: string | null
+          created_at?: string
+          custom_script?: string | null
+          enabled?: boolean
+          events_config?: Json
+          id?: string
+          label?: string | null
+          notes?: string | null
+          pixel_id?: string | null
+          provider?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
