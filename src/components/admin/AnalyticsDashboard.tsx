@@ -144,22 +144,23 @@ export function AnalyticsDashboard() {
   ];
 
   const kpis = [
-    { icon: <DollarSign className="w-4 h-4" />, label: t("Net Revenue", "নেট রেভিনিউ"), value: fmtMoney(stats.revenue), delta: stats.revDelta, tone: "emerald" },
-    { icon: <ShoppingCart className="w-4 h-4" />, label: t("Net Orders", "নেট অর্ডার"), value: String(stats.count), delta: stats.ordDelta, tone: "violet" },
-    { icon: <Activity className="w-4 h-4" />, label: t("Avg Order Value", "গড় অর্ডার ভ্যালু"), value: fmtMoney(stats.avg), delta: 0, tone: "amber" },
-    { icon: <Users className="w-4 h-4" />, label: t("Active Customers", "সক্রিয় কাস্টমার"), value: String(stats.customers), delta: 0, tone: "sky" },
-    { icon: <Percent className="w-4 h-4" />, label: t("Completion Rate", "কমপ্লিশন রেট"), value: stats.completion + "%", delta: 0, tone: "indigo" },
-    { icon: <RotateCcw className="w-4 h-4" />, label: t("Refund Rate", "রিফান্ড রেট"), value: stats.refundPct + "%", delta: 0, tone: "rose" },
+    { icon: <DollarSign className="w-5 h-5" />, label: t("Net Revenue", "নেট রেভিনিউ"), value: fmtMoney(stats.revenue), delta: stats.revDelta, tone: "emerald" },
+    { icon: <ShoppingCart className="w-5 h-5" />, label: t("Net Orders", "নেট অর্ডার"), value: String(stats.count), delta: stats.ordDelta, tone: "violet" },
+    { icon: <Activity className="w-5 h-5" />, label: t("Avg Order Value", "গড় অর্ডার ভ্যালু"), value: fmtMoney(stats.avg), delta: 0, tone: "amber" },
+    { icon: <Users className="w-5 h-5" />, label: t("Active Customers", "সক্রিয় কাস্টমার"), value: String(stats.customers), delta: 0, tone: "sky" },
+    { icon: <Percent className="w-5 h-5" />, label: t("Completion Rate", "কমপ্লিশন রেট"), value: stats.completion + "%", delta: 0, tone: "indigo" },
+    { icon: <RotateCcw className="w-5 h-5" />, label: t("Refund Rate", "রিফান্ড রেট"), value: stats.refundPct + "%", delta: 0, tone: "rose" },
   ];
 
   const toneRing: Record<string, string> = {
-    emerald: "bg-emerald-50 text-emerald-600 ring-emerald-100",
-    violet: "bg-violet-50 text-violet-600 ring-violet-100",
-    amber: "bg-amber-50 text-amber-600 ring-amber-100",
-    sky: "bg-sky-50 text-sky-600 ring-sky-100",
-    indigo: "bg-indigo-50 text-indigo-600 ring-indigo-100",
-    rose: "bg-rose-50 text-rose-600 ring-rose-100",
+    emerald: "bg-emerald-100 text-emerald-700 ring-emerald-200",
+    violet: "bg-violet-100 text-violet-700 ring-violet-200",
+    amber: "bg-amber-100 text-amber-700 ring-amber-200",
+    sky: "bg-sky-100 text-sky-700 ring-sky-200",
+    indigo: "bg-indigo-100 text-indigo-700 ring-indigo-200",
+    rose: "bg-rose-100 text-rose-700 ring-rose-200",
   };
+
 
   return (
     <div className="space-y-5">
