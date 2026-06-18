@@ -222,7 +222,7 @@ function LicenseManagerPage() {
         </select>
         <select value={productFilter} onChange={(e) => setProductFilter(e.target.value)} className="h-10 px-3 rounded-xl bg-slate-50 border border-transparent text-sm font-semibold text-slate-700 outline-none focus:bg-white focus:border-violet-300">
           <option value="all">{t("All Products", "সব প্রোডাক্ট")}</option>
-          {products.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+          {products.map((p) => <option key={p.slug} value={p.slug}>{p.name}</option>)}
         </select>
         <button onClick={refresh} disabled={refreshing} className="w-10 h-10 grid place-items-center rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600">
           {refreshing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
