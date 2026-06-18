@@ -72,6 +72,9 @@ function LicenseManagerPage() {
   const [editing, setEditing] = useState<LicenseRow | null>(null);
   const [creating, setCreating] = useState(false);
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [presetSlug, setPresetSlug] = useState<string>("");
+  const [addProductOpen, setAddProductOpen] = useState(false);
+  const [productQuery, setProductQuery] = useState("");
 
   const load = useCallback(async (silent = false) => {
     if (!silent) setLoading(true); else setRefreshing(true);
