@@ -77,7 +77,7 @@ const VALUES = [
 
 function DeveloperPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-violet-50/60 via-background to-background text-foreground dark:from-violet-950/20 dark:via-background dark:to-background">
+    <div className="min-h-screen bg-white text-foreground dark:bg-gradient-to-b dark:from-[#0b0a18] dark:via-[#0d0b22] dark:to-[#080714]">
       <div className="mx-auto max-w-4xl px-4 py-12 md:py-20">
         <article>
           {/* Hero badge */}
