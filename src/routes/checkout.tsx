@@ -267,9 +267,25 @@ function CheckoutPage() {
           estimatedDelivery: "১৫–৩০ মিনিট",
         },
       }).catch((err) => console.warn("Order confirmation email failed", err));
+      try {
+        trackPurchase({
+          value: subAfterCoupon,
+          currency: "BDT",
+          orderId: `ANB-${newId.slice(0, 8).toUpperCase()}`,
+          items: items.map((it) => ({
+            id: it.slug,
+            name: it.name,
+            price: it.price,
+            quantity: it.qty,
+          })),
+        });
+      } catch {
+        /* ignore */
+      }
       clear();
       navigate({ to: "/orders/$id", params: { id: newId }, search: { new: 1 } });
       return;
+
     } catch (e: unknown) {
       setErr(e instanceof Error ? e.message : "Failed to place order");
     } finally {
