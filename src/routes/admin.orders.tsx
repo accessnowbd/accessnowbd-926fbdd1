@@ -448,7 +448,7 @@ function IconBtn({ children, onClick, title, danger }: { children: React.ReactNo
     <button
       onClick={onClick}
       title={title}
-      className={`w-7 h-7 grid place-items-center rounded-md ${danger ? "text-slate-500 hover:text-rose-600 hover:bg-rose-50" : "text-slate-500 hover:text-violet-600 hover:bg-violet-50"}`}
+      className={`w-8 h-8 grid place-items-center rounded-md bg-white border border-slate-200 ${danger ? "text-slate-700 hover:text-rose-700 hover:bg-rose-50 hover:border-rose-300" : "text-slate-700 hover:text-violet-700 hover:bg-violet-50 hover:border-violet-300"}`}
     >
       {children}
     </button>
