@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, Loader2, Save, X, Tag, Calendar, Percent } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, Save, X, Tag, Calendar, Percent, Package } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AdminStatCard, AdminStatGrid, AdminGlassCard } from "@/components/admin/AdminStatCard";
+import { ProductPicker } from "@/components/admin/ProductPicker";
 
 export const Route = createFileRoute("/admin/promotions")({
  component: AdminPromotions,
