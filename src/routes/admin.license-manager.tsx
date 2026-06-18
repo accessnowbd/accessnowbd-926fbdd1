@@ -379,7 +379,7 @@ function LicenseFormModal({ row, products, onClose, onSaved }: { row: LicenseRow
   const save = async () => {
     if (!key.trim()) return toast.error("Key required");
     setSaving(true);
-    const product = products.find((p) => p.id === productId);
+    const product = products.find((p) => p.slug === productId);
     const payload: LicenseData = {
       key: key.trim(),
       type,
