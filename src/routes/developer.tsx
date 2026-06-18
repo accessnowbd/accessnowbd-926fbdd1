@@ -135,7 +135,7 @@ function DeveloperPage() {
             {STATS.map(({ icon: Icon, label, value }) => (
               <div
                 key={label}
-                className="rounded-2xl border border-violet-500/15 bg-card p-5 text-center shadow-sm transition hover:border-violet-500/40 hover:shadow-violet-500/10"
+                className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm transition hover:border-violet-400 hover:shadow-md dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-violet-400/50 dark:hover:shadow-violet-500/10 dark:backdrop-blur"
               >
                 <div className="mx-auto mb-2 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/15 to-fuchsia-500/15 text-violet-600 dark:text-violet-300">
                   <Icon className="h-4 w-4" />
