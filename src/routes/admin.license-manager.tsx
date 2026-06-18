@@ -450,7 +450,7 @@ function BulkImportModal({ products, onClose, onSaved }: { products: ProductLite
   const run = async () => {
     const keys = text.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
     if (!keys.length) return toast.error("Paste keys, one per line");
-    const product = products.find((p) => p.id === productId);
+    const product = products.find((p) => p.slug === productId);
     setBusy(true);
     const payload = keys.map((k) => ({
       kind: "license_key",
