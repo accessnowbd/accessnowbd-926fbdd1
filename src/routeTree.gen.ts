@@ -45,6 +45,7 @@ import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe
 import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/blog.how-to-buy-netflix-in-bangladesh'
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminReviewGeneratorRouteImport } from './routes/admin.review-generator'
@@ -54,6 +55,7 @@ import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminOrderRecoveryRouteImport } from './routes/admin.order-recovery'
 import { Route as AdminLicenseManagerRouteImport } from './routes/admin.license-manager'
 import { Route as AdminInvoiceGeneratorRouteImport } from './routes/admin.invoice-generator'
 import { Route as AdminInvoiceDesignRouteImport } from './routes/admin.invoice-design'
@@ -255,6 +257,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTrackingRoute = AdminTrackingRouteImport.update({
+  id: '/tracking',
+  path: '/tracking',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminThemesRoute = AdminThemesRouteImport.update({
   id: '/themes',
   path: '/themes',
@@ -298,6 +305,11 @@ const AdminPaymentLinksRoute = AdminPaymentLinksRouteImport.update({
 const AdminOrdersRoute = AdminOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOrderRecoveryRoute = AdminOrderRecoveryRouteImport.update({
+  id: '/order-recovery',
+  path: '/order-recovery',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminLicenseManagerRoute = AdminLicenseManagerRouteImport.update({
@@ -441,6 +453,7 @@ export interface FileRoutesByFullPath {
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
+  '/admin/order-recovery': typeof AdminOrderRecoveryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
@@ -450,6 +463,7 @@ export interface FileRoutesByFullPath {
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
+  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -506,6 +520,7 @@ export interface FileRoutesByTo {
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
+  '/admin/order-recovery': typeof AdminOrderRecoveryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
@@ -515,6 +530,7 @@ export interface FileRoutesByTo {
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
+  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -573,6 +589,7 @@ export interface FileRoutesById {
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
+  '/admin/order-recovery': typeof AdminOrderRecoveryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
@@ -582,6 +599,7 @@ export interface FileRoutesById {
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
+  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -641,6 +659,7 @@ export interface FileRouteTypes {
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/license-manager'
+    | '/admin/order-recovery'
     | '/admin/orders'
     | '/admin/payment-links'
     | '/admin/products'
@@ -650,6 +669,7 @@ export interface FileRouteTypes {
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
+    | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -706,6 +726,7 @@ export interface FileRouteTypes {
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/license-manager'
+    | '/admin/order-recovery'
     | '/admin/orders'
     | '/admin/payment-links'
     | '/admin/products'
@@ -715,6 +736,7 @@ export interface FileRouteTypes {
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
+    | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -772,6 +794,7 @@ export interface FileRouteTypes {
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/license-manager'
+    | '/admin/order-recovery'
     | '/admin/orders'
     | '/admin/payment-links'
     | '/admin/products'
@@ -781,6 +804,7 @@ export interface FileRouteTypes {
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
+    | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -1095,6 +1119,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/tracking': {
+      id: '/admin/tracking'
+      path: '/tracking'
+      fullPath: '/admin/tracking'
+      preLoaderRoute: typeof AdminTrackingRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/themes': {
       id: '/admin/themes'
       path: '/themes'
@@ -1156,6 +1187,13 @@ declare module '@tanstack/react-router' {
       path: '/orders'
       fullPath: '/admin/orders'
       preLoaderRoute: typeof AdminOrdersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/order-recovery': {
+      id: '/admin/order-recovery'
+      path: '/order-recovery'
+      fullPath: '/admin/order-recovery'
+      preLoaderRoute: typeof AdminOrderRecoveryRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/license-manager': {
@@ -1306,6 +1344,7 @@ interface AdminRouteChildren {
   AdminInvoiceDesignRoute: typeof AdminInvoiceDesignRoute
   AdminInvoiceGeneratorRoute: typeof AdminInvoiceGeneratorRoute
   AdminLicenseManagerRoute: typeof AdminLicenseManagerRoute
+  AdminOrderRecoveryRoute: typeof AdminOrderRecoveryRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
   AdminProductsRoute: typeof AdminProductsRoute
@@ -1315,6 +1354,7 @@ interface AdminRouteChildren {
   AdminReviewGeneratorRoute: typeof AdminReviewGeneratorRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminThemesRoute: typeof AdminThemesRoute
+  AdminTrackingRoute: typeof AdminTrackingRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWalletRoute: typeof AdminWalletRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -1332,6 +1372,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminInvoiceDesignRoute: AdminInvoiceDesignRoute,
   AdminInvoiceGeneratorRoute: AdminInvoiceGeneratorRoute,
   AdminLicenseManagerRoute: AdminLicenseManagerRoute,
+  AdminOrderRecoveryRoute: AdminOrderRecoveryRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminPaymentLinksRoute: AdminPaymentLinksRoute,
   AdminProductsRoute: AdminProductsRoute,
@@ -1341,6 +1382,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReviewGeneratorRoute: AdminReviewGeneratorRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminThemesRoute: AdminThemesRoute,
+  AdminTrackingRoute: AdminTrackingRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWalletRoute: AdminWalletRoute,
   AdminIndexRoute: AdminIndexRoute,
