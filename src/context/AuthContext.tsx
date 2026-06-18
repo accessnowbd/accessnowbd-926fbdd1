@@ -26,9 +26,32 @@ async function withAuthTimeout<T>(promise: PromiseLike<T>): Promise<T> {
   }
 }
 
+// Read persisted Supabase session synchronously from localStorage so the
+// first render already has a user object — eliminates the "loading flash"
+// for signed-in users (admin shell, dashboards, etc).
+function readPersistedSession(): Session | null {
+  if (typeof localStorage === "undefined") return null;
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith("sb-") || !key.endsWith("-auth-token")) continue;
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      const parsed = JSON.parse(raw);
+      const sess = (parsed?.currentSession ?? parsed) as Session | null;
+      if (sess && typeof sess === "object" && sess.access_token && sess.user) {
+        const expMs = (sess.expires_at ?? 0) * 1000;
+        if (!expMs || expMs > Date.now()) return sess;
+      }
+    }
+  } catch { /* ignore */ }
+  return null;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const initialSession = typeof window !== "undefined" ? readPersistedSession() : null;
+  const [session, setSession] = useState<Session | null>(initialSession);
+  const [loading, setLoading] = useState(!initialSession);
 
   useEffect(() => {
     let mounted = true;
@@ -55,6 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       sub.subscription.unsubscribe();
     };
   }, []);
+
 
   return (
     <Ctx.Provider
