@@ -465,7 +465,7 @@ function ChatHistoryTab() {
       return;
     }
     const map = new Map<string, ChatSession>();
-    for (const r of (data ?? []) as ChatRow[]) {
+    for (const r of (data ?? []) as unknown as ChatRow[]) {
       const s = map.get(r.session_id) ?? {
         id: r.session_id,
         label: r.visitor_label,
