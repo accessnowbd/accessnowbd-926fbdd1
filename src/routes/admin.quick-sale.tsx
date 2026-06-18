@@ -166,8 +166,7 @@ function QuickSalePage() {
   const totalItems = items.filter((i) => i.product).reduce((a, i) => a + i.qty, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50/40 via-white to-sky-50/40 pb-32">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <div className="space-y-6">
         {/* Stats pill */}
         <div className="flex justify-end">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200">
