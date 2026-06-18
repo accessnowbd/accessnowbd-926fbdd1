@@ -60,6 +60,7 @@ import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.des
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminBulkUpdateRouteImport } from './routes/admin.bulk-update'
+import { Route as AdminBkashTransactionsRouteImport } from './routes/admin.bkash-transactions'
 import { Route as AdminAbandonedCheckoutRouteImport } from './routes/admin.abandoned-checkout'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
@@ -328,6 +329,11 @@ const AdminBulkUpdateRoute = AdminBulkUpdateRouteImport.update({
   path: '/bulk-update',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBkashTransactionsRoute = AdminBkashTransactionsRouteImport.update({
+  id: '/bkash-transactions',
+  path: '/bkash-transactions',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAbandonedCheckoutRoute = AdminAbandonedCheckoutRouteImport.update({
   id: '/abandoned-checkout',
   path: '/abandoned-checkout',
@@ -414,6 +420,7 @@ export interface FileRoutesByFullPath {
   '/wallet': typeof WalletRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
+  '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
@@ -476,6 +483,7 @@ export interface FileRoutesByTo {
   '/wallet': typeof WalletRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
+  '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
@@ -540,6 +548,7 @@ export interface FileRoutesById {
   '/wallet': typeof WalletRoute
   '/admin/$page': typeof AdminPageRoute
   '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
+  '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
@@ -605,6 +614,7 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/admin/$page'
     | '/admin/abandoned-checkout'
+    | '/admin/bkash-transactions'
     | '/admin/bulk-update'
     | '/admin/coupons'
     | '/admin/description-preview'
@@ -667,6 +677,7 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/admin/$page'
     | '/admin/abandoned-checkout'
+    | '/admin/bkash-transactions'
     | '/admin/bulk-update'
     | '/admin/coupons'
     | '/admin/description-preview'
@@ -730,6 +741,7 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/admin/$page'
     | '/admin/abandoned-checkout'
+    | '/admin/bkash-transactions'
     | '/admin/bulk-update'
     | '/admin/coupons'
     | '/admin/description-preview'
@@ -1164,6 +1176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBulkUpdateRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/bkash-transactions': {
+      id: '/admin/bkash-transactions'
+      path: '/bkash-transactions'
+      fullPath: '/admin/bkash-transactions'
+      preLoaderRoute: typeof AdminBkashTransactionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/abandoned-checkout': {
       id: '/admin/abandoned-checkout'
       path: '/abandoned-checkout'
@@ -1240,6 +1259,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminPageRoute: typeof AdminPageRoute
   AdminAbandonedCheckoutRoute: typeof AdminAbandonedCheckoutRoute
+  AdminBkashTransactionsRoute: typeof AdminBkashTransactionsRoute
   AdminBulkUpdateRoute: typeof AdminBulkUpdateRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
@@ -1263,6 +1283,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminPageRoute: AdminPageRoute,
   AdminAbandonedCheckoutRoute: AdminAbandonedCheckoutRoute,
+  AdminBkashTransactionsRoute: AdminBkashTransactionsRoute,
   AdminBulkUpdateRoute: AdminBulkUpdateRoute,
   AdminCouponsRoute: AdminCouponsRoute,
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
