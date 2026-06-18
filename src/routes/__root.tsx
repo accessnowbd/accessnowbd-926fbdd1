@@ -175,6 +175,8 @@ function RootComponent() {
               {!isAdmin && <SupportWidget />}
               {!isAdmin && <WelcomePopup />}
               {!isAdmin && <InstallAppPrompt />}
+              {!isAdmin && <TrackingScripts />}
+
             </ShopConfigProvider>
           </CartProvider>
         </AuthProvider>
