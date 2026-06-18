@@ -155,7 +155,7 @@ function LiveChatPage() {
               onClick={() => setTab(key)}
               className={`inline-flex items-center gap-2 h-10 px-4 rounded-lg text-sm font-semibold transition ${
                 active
-                  ? "bg-violet-50 text-violet-700 border border-violet-200 shadow-sm"
+                  ? "bg-white text-violet-700 border border-violet-300 shadow-sm ring-1 ring-violet-200"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent"
               }`}
             >
