@@ -49,6 +49,7 @@ import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminReviewGeneratorRouteImport } from './routes/admin.review-generator'
+import { Route as AdminRenewalRemindersRouteImport } from './routes/admin.renewal-reminders'
 import { Route as AdminQuickToolsRouteImport } from './routes/admin.quick-tools'
 import { Route as AdminQuickSaleRouteImport } from './routes/admin.quick-sale'
 import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
@@ -56,9 +57,12 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminOrderRecoveryRouteImport } from './routes/admin.order-recovery'
+import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
+import { Route as AdminLiveChatRouteImport } from './routes/admin.live-chat'
 import { Route as AdminLicenseManagerRouteImport } from './routes/admin.license-manager'
 import { Route as AdminInvoiceGeneratorRouteImport } from './routes/admin.invoice-generator'
 import { Route as AdminInvoiceDesignRouteImport } from './routes/admin.invoice-design'
+import { Route as AdminEmailDashboardRouteImport } from './routes/admin.email-dashboard'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
 import { Route as AdminCustomerLicensesRouteImport } from './routes/admin.customer-licenses'
@@ -277,6 +281,11 @@ const AdminReviewGeneratorRoute = AdminReviewGeneratorRouteImport.update({
   path: '/review-generator',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRenewalRemindersRoute = AdminRenewalRemindersRouteImport.update({
+  id: '/renewal-reminders',
+  path: '/renewal-reminders',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminQuickToolsRoute = AdminQuickToolsRouteImport.update({
   id: '/quick-tools',
   path: '/quick-tools',
@@ -312,6 +321,16 @@ const AdminOrderRecoveryRoute = AdminOrderRecoveryRouteImport.update({
   path: '/order-recovery',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNewsletterRoute = AdminNewsletterRouteImport.update({
+  id: '/newsletter',
+  path: '/newsletter',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLiveChatRoute = AdminLiveChatRouteImport.update({
+  id: '/live-chat',
+  path: '/live-chat',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLicenseManagerRoute = AdminLicenseManagerRouteImport.update({
   id: '/license-manager',
   path: '/license-manager',
@@ -325,6 +344,11 @@ const AdminInvoiceGeneratorRoute = AdminInvoiceGeneratorRouteImport.update({
 const AdminInvoiceDesignRoute = AdminInvoiceDesignRouteImport.update({
   id: '/invoice-design',
   path: '/invoice-design',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEmailDashboardRoute = AdminEmailDashboardRouteImport.update({
+  id: '/email-dashboard',
+  path: '/email-dashboard',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminDescriptionTemplateRoute =
@@ -450,9 +474,12 @@ export interface FileRoutesByFullPath {
   '/admin/customer-licenses': typeof AdminCustomerLicensesRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
+  '/admin/email-dashboard': typeof AdminEmailDashboardRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
+  '/admin/live-chat': typeof AdminLiveChatRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/order-recovery': typeof AdminOrderRecoveryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -460,6 +487,7 @@ export interface FileRoutesByFullPath {
   '/admin/promotions': typeof AdminPromotionsRoute
   '/admin/quick-sale': typeof AdminQuickSaleRoute
   '/admin/quick-tools': typeof AdminQuickToolsRoute
+  '/admin/renewal-reminders': typeof AdminRenewalRemindersRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
@@ -517,9 +545,12 @@ export interface FileRoutesByTo {
   '/admin/customer-licenses': typeof AdminCustomerLicensesRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
+  '/admin/email-dashboard': typeof AdminEmailDashboardRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
+  '/admin/live-chat': typeof AdminLiveChatRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/order-recovery': typeof AdminOrderRecoveryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -527,6 +558,7 @@ export interface FileRoutesByTo {
   '/admin/promotions': typeof AdminPromotionsRoute
   '/admin/quick-sale': typeof AdminQuickSaleRoute
   '/admin/quick-tools': typeof AdminQuickToolsRoute
+  '/admin/renewal-reminders': typeof AdminRenewalRemindersRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
@@ -586,9 +618,12 @@ export interface FileRoutesById {
   '/admin/customer-licenses': typeof AdminCustomerLicensesRoute
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
+  '/admin/email-dashboard': typeof AdminEmailDashboardRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
+  '/admin/live-chat': typeof AdminLiveChatRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/order-recovery': typeof AdminOrderRecoveryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -596,6 +631,7 @@ export interface FileRoutesById {
   '/admin/promotions': typeof AdminPromotionsRoute
   '/admin/quick-sale': typeof AdminQuickSaleRoute
   '/admin/quick-tools': typeof AdminQuickToolsRoute
+  '/admin/renewal-reminders': typeof AdminRenewalRemindersRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
@@ -656,9 +692,12 @@ export interface FileRouteTypes {
     | '/admin/customer-licenses'
     | '/admin/description-preview'
     | '/admin/description-template'
+    | '/admin/email-dashboard'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/license-manager'
+    | '/admin/live-chat'
+    | '/admin/newsletter'
     | '/admin/order-recovery'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -666,6 +705,7 @@ export interface FileRouteTypes {
     | '/admin/promotions'
     | '/admin/quick-sale'
     | '/admin/quick-tools'
+    | '/admin/renewal-reminders'
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
@@ -723,9 +763,12 @@ export interface FileRouteTypes {
     | '/admin/customer-licenses'
     | '/admin/description-preview'
     | '/admin/description-template'
+    | '/admin/email-dashboard'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/license-manager'
+    | '/admin/live-chat'
+    | '/admin/newsletter'
     | '/admin/order-recovery'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -733,6 +776,7 @@ export interface FileRouteTypes {
     | '/admin/promotions'
     | '/admin/quick-sale'
     | '/admin/quick-tools'
+    | '/admin/renewal-reminders'
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
@@ -791,9 +835,12 @@ export interface FileRouteTypes {
     | '/admin/customer-licenses'
     | '/admin/description-preview'
     | '/admin/description-template'
+    | '/admin/email-dashboard'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/license-manager'
+    | '/admin/live-chat'
+    | '/admin/newsletter'
     | '/admin/order-recovery'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -801,6 +848,7 @@ export interface FileRouteTypes {
     | '/admin/promotions'
     | '/admin/quick-sale'
     | '/admin/quick-tools'
+    | '/admin/renewal-reminders'
     | '/admin/review-generator'
     | '/admin/security'
     | '/admin/themes'
@@ -1147,6 +1195,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReviewGeneratorRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/renewal-reminders': {
+      id: '/admin/renewal-reminders'
+      path: '/renewal-reminders'
+      fullPath: '/admin/renewal-reminders'
+      preLoaderRoute: typeof AdminRenewalRemindersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/quick-tools': {
       id: '/admin/quick-tools'
       path: '/quick-tools'
@@ -1196,6 +1251,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrderRecoveryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/newsletter': {
+      id: '/admin/newsletter'
+      path: '/newsletter'
+      fullPath: '/admin/newsletter'
+      preLoaderRoute: typeof AdminNewsletterRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/live-chat': {
+      id: '/admin/live-chat'
+      path: '/live-chat'
+      fullPath: '/admin/live-chat'
+      preLoaderRoute: typeof AdminLiveChatRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/license-manager': {
       id: '/admin/license-manager'
       path: '/license-manager'
@@ -1215,6 +1284,13 @@ declare module '@tanstack/react-router' {
       path: '/invoice-design'
       fullPath: '/admin/invoice-design'
       preLoaderRoute: typeof AdminInvoiceDesignRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/email-dashboard': {
+      id: '/admin/email-dashboard'
+      path: '/email-dashboard'
+      fullPath: '/admin/email-dashboard'
+      preLoaderRoute: typeof AdminEmailDashboardRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/description-template': {
@@ -1341,9 +1417,12 @@ interface AdminRouteChildren {
   AdminCustomerLicensesRoute: typeof AdminCustomerLicensesRoute
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
+  AdminEmailDashboardRoute: typeof AdminEmailDashboardRoute
   AdminInvoiceDesignRoute: typeof AdminInvoiceDesignRoute
   AdminInvoiceGeneratorRoute: typeof AdminInvoiceGeneratorRoute
   AdminLicenseManagerRoute: typeof AdminLicenseManagerRoute
+  AdminLiveChatRoute: typeof AdminLiveChatRoute
+  AdminNewsletterRoute: typeof AdminNewsletterRoute
   AdminOrderRecoveryRoute: typeof AdminOrderRecoveryRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
@@ -1351,6 +1430,7 @@ interface AdminRouteChildren {
   AdminPromotionsRoute: typeof AdminPromotionsRoute
   AdminQuickSaleRoute: typeof AdminQuickSaleRoute
   AdminQuickToolsRoute: typeof AdminQuickToolsRoute
+  AdminRenewalRemindersRoute: typeof AdminRenewalRemindersRoute
   AdminReviewGeneratorRoute: typeof AdminReviewGeneratorRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminThemesRoute: typeof AdminThemesRoute
@@ -1369,9 +1449,12 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCustomerLicensesRoute: AdminCustomerLicensesRoute,
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
+  AdminEmailDashboardRoute: AdminEmailDashboardRoute,
   AdminInvoiceDesignRoute: AdminInvoiceDesignRoute,
   AdminInvoiceGeneratorRoute: AdminInvoiceGeneratorRoute,
   AdminLicenseManagerRoute: AdminLicenseManagerRoute,
+  AdminLiveChatRoute: AdminLiveChatRoute,
+  AdminNewsletterRoute: AdminNewsletterRoute,
   AdminOrderRecoveryRoute: AdminOrderRecoveryRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminPaymentLinksRoute: AdminPaymentLinksRoute,
@@ -1379,6 +1462,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPromotionsRoute: AdminPromotionsRoute,
   AdminQuickSaleRoute: AdminQuickSaleRoute,
   AdminQuickToolsRoute: AdminQuickToolsRoute,
+  AdminRenewalRemindersRoute: AdminRenewalRemindersRoute,
   AdminReviewGeneratorRoute: AdminReviewGeneratorRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminThemesRoute: AdminThemesRoute,

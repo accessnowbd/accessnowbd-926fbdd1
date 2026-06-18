@@ -7,7 +7,7 @@ import {
   MapPin, LifeBuoy, BookOpen, Headphones,
   FileEdit, Newspaper, UserCircle2, Download,
   PieChart, UsersRound, ClipboardList, Bot, Settings, ShieldCheck, DatabaseBackup, ShoppingCart, ListChecks, Sparkles,
-  Plug,
+  Plug, Mail, CalendarDays,
 } from "lucide-react";
 
 export type AdminBadge = "LIVE" | "NEW" | "BETA";
@@ -94,6 +94,10 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/notifications", label: "Notifications", labelBn: "নোটিফিকেশন", icon: ic(Bell), grad: "from-rose-500 to-red-500" },
       { to: "/admin/reviews", label: "Manage Reviews", labelBn: "রিভিউ ম্যানেজ", icon: ic(Star), grad: "from-amber-400 to-orange-500" },
       { to: "/admin/tickets", label: "Support Tickets", labelBn: "সাপোর্ট টিকেট", icon: ic(LifeBuoy), grad: "from-emerald-500 to-green-600" },
+      { to: "/admin/live-chat", label: "Live Chat", labelBn: "লাইভ চ্যাট", icon: ic(MessageCircle), grad: "from-violet-500 to-fuchsia-500" },
+      { to: "/admin/newsletter", label: "Newsletter", labelBn: "নিউজলেটার", icon: ic(Mail), grad: "from-orange-500 to-amber-500" },
+      { to: "/admin/renewal-reminders", label: "Renewal Reminders", labelBn: "রিনিউয়াল রিমাইন্ডার", icon: ic(CalendarDays), grad: "from-orange-500 to-rose-500", badge: "NEW" },
+      { to: "/admin/email-dashboard", label: "Email Dashboard", labelBn: "ইমেইল ড্যাশবোর্ড", icon: ic(Activity), grad: "from-green-500 to-emerald-600", badge: "NEW" },
       { to: "/admin/referral", label: "Referral Program", labelBn: "রেফারেল প্রোগ্রাম", icon: ic(Gift), grad: "from-pink-500 to-fuchsia-500" },
       { to: "/admin/affiliates", label: "Affiliates", labelBn: "অ্যাফিলিয়েট", icon: ic(Share2), grad: "from-violet-500 to-purple-600" },
     ],
