@@ -119,7 +119,7 @@ function DeveloperPage() {
                 দায়িত্ব বিবৃতি / Disclaimer
               </h3>
             </div>
-            <p className="text-sm leading-relaxed text-foreground/85 md:text-base">
+            <p className="text-sm leading-relaxed text-amber-950 md:text-base dark:text-amber-50/90">
               <strong>Shahed IT</strong> শুধুমাত্র এই ওয়েবসাইটটি প্রিমিয়ামভাবে
               ডিজাইন ও ডেভেলপ করছে। ডেভেলপার কোম্পানির সাথে ওয়েবসাইটের
               মালিক/প্রতিষ্ঠানের কোনো স্বত্ব, অংশীদারিত্ব বা ব্যবসায়িক সম্পর্ক
@@ -129,6 +129,7 @@ function DeveloperPage() {
               ডেভেলপার কোম্পানি (<strong>Shahed IT</strong>) দায়ী থাকবে না।
             </p>
           </div>
+
 
           {/* Stats */}
           <section className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -226,7 +227,7 @@ function DeveloperPage() {
           </section>
 
           {/* CTA — solid panel, no diagonal sheen so the text stays fully legible */}
-          <section className="mt-12 overflow-hidden rounded-2xl border border-violet-500/25 bg-gradient-to-br from-violet-600 via-violet-700 to-fuchsia-700 p-6 text-white shadow-lg shadow-violet-500/20 md:p-8">
+          <section className="mt-12 overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-950 to-black p-6 text-white shadow-lg shadow-black/30 md:p-8">
             <div className="flex items-center gap-3">
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
                 <Rocket className="h-5 w-5 text-white" />
@@ -245,7 +246,7 @@ function DeveloperPage() {
                 href="https://shahedit.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-violet-700 transition hover:bg-white/90"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-white/90"
               >
                 Visit Shahed IT
                 <ExternalLink className="h-4 w-4" />
