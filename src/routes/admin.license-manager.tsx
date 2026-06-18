@@ -27,6 +27,8 @@ type LicenseData = {
   delivery_number?: string;
   delivered_via?: "whatsapp" | "email" | "manual" | "";
   notes?: string;
+  extra_info?: string;
+  variant?: string;
 };
 
 type LicenseRow = {
