@@ -257,9 +257,6 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
 
         {mode === "error" && (
           <div className="mt-5">
-
-        {mode === "error" && (
-          <div className="mt-5">
             <p className="text-sm text-rose-700 bg-rose-50 border border-rose-200 rounded-lg p-3 break-words">
               {error}
             </p>
