@@ -52,6 +52,7 @@ import { Route as AdminQuickToolsRouteImport } from './routes/admin.quick-tools'
 import { Route as AdminQuickSaleRouteImport } from './routes/admin.quick-sale'
 import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
@@ -284,6 +285,11 @@ const AdminProductsRoute = AdminProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPaymentLinksRoute = AdminPaymentLinksRouteImport.update({
+  id: '/payment-links',
+  path: '/payment-links',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminOrdersRoute = AdminOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -401,6 +407,7 @@ export interface FileRoutesByFullPath {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
   '/admin/quick-sale': typeof AdminQuickSaleRoute
@@ -460,6 +467,7 @@ export interface FileRoutesByTo {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
   '/admin/quick-sale': typeof AdminQuickSaleRoute
@@ -521,6 +529,7 @@ export interface FileRoutesById {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
   '/admin/quick-sale': typeof AdminQuickSaleRoute
@@ -583,6 +592,7 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/orders'
+    | '/admin/payment-links'
     | '/admin/products'
     | '/admin/promotions'
     | '/admin/quick-sale'
@@ -642,6 +652,7 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/orders'
+    | '/admin/payment-links'
     | '/admin/products'
     | '/admin/promotions'
     | '/admin/quick-sale'
@@ -702,6 +713,7 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/orders'
+    | '/admin/payment-links'
     | '/admin/products'
     | '/admin/promotions'
     | '/admin/quick-sale'
@@ -1072,6 +1084,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/payment-links': {
+      id: '/admin/payment-links'
+      path: '/payment-links'
+      fullPath: '/admin/payment-links'
+      preLoaderRoute: typeof AdminPaymentLinksRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/orders': {
       id: '/admin/orders'
       path: '/orders'
@@ -1188,6 +1207,7 @@ interface AdminRouteChildren {
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminPromotionsRoute: typeof AdminPromotionsRoute
   AdminQuickSaleRoute: typeof AdminQuickSaleRoute
@@ -1208,6 +1228,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminOrdersRoute: AdminOrdersRoute,
+  AdminPaymentLinksRoute: AdminPaymentLinksRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminPromotionsRoute: AdminPromotionsRoute,
   AdminQuickSaleRoute: AdminQuickSaleRoute,
