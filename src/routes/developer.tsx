@@ -107,6 +107,22 @@ function DeveloperPage() {
             </p>
           </div>
 
+          {/* Disclaimer */}
+          <div className="mt-6 rounded-xl border border-yellow-500/30 bg-yellow-500/5 p-5 md:p-6">
+            <h3 className="mb-2 text-sm font-bold uppercase tracking-wide text-yellow-600 dark:text-yellow-400">
+              দায়িত্ব বিবৃতি / Disclaimer
+            </h3>
+            <p className="text-sm leading-relaxed text-foreground/85 md:text-base">
+              <strong>Shahed IT</strong> শুধুমাত্র এই ওয়েবসাইটটি প্রিমিয়ামভাবে
+              ডিজাইন ও ডেভেলপ করছে। ডেভেলপার কোম্পানির সাথে ওয়েবসাইটের
+              মালিক/প্রতিষ্ঠানের কোনো স্বত্ব, অংশীদারিত্ব বা ব্যবসায়িক সম্পর্ক
+              নেই। সম্পূর্ণ মালিকানা, ব্যবস্থাপনা, পণ্য/সার্ভিস, লেনদেন এবং
+              আইনি দায়িত্ব ওয়েবসাইটের প্রকৃত মালিক/প্রতিষ্ঠানের। ভবিষ্যতে
+              ওয়েবসাইট থেকে যেকোনো ধরনের সমস্যা, অভিযোগ বা আইনি বিষয়ের জন্য
+              ডেভেলপার কোম্পানি (<strong>Shahed IT</strong>) দায়ী থাকবে না।
+            </p>
+          </div>
+
           {/* Stats */}
           <section className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
             {STATS.map(({ icon: Icon, label, value }) => (
