@@ -46,6 +46,7 @@ import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/bl
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
+import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
@@ -265,6 +266,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
 const AdminTrackingRoute = AdminTrackingRouteImport.update({
   id: '/tracking',
   path: '/tracking',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTicketsRoute = AdminTicketsRouteImport.update({
+  id: '/tickets',
+  path: '/tickets',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminThemesRoute = AdminThemesRouteImport.update({
@@ -498,6 +504,7 @@ export interface FileRoutesByFullPath {
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
+  '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
@@ -570,6 +577,7 @@ export interface FileRoutesByTo {
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
+  '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
@@ -644,6 +652,7 @@ export interface FileRoutesById {
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/themes': typeof AdminThemesRoute
+  '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
@@ -719,6 +728,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/security'
     | '/admin/themes'
+    | '/admin/tickets'
     | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
@@ -791,6 +801,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/security'
     | '/admin/themes'
+    | '/admin/tickets'
     | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
@@ -864,6 +875,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/security'
     | '/admin/themes'
+    | '/admin/tickets'
     | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
@@ -1186,6 +1198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTrackingRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/tickets': {
+      id: '/admin/tickets'
+      path: '/tickets'
+      fullPath: '/admin/tickets'
+      preLoaderRoute: typeof AdminTicketsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/themes': {
       id: '/admin/themes'
       path: '/themes'
@@ -1454,6 +1473,7 @@ interface AdminRouteChildren {
   AdminReviewsRoute: typeof AdminReviewsRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminThemesRoute: typeof AdminThemesRoute
+  AdminTicketsRoute: typeof AdminTicketsRoute
   AdminTrackingRoute: typeof AdminTrackingRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWalletRoute: typeof AdminWalletRoute
@@ -1487,6 +1507,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReviewsRoute: AdminReviewsRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminThemesRoute: AdminThemesRoute,
+  AdminTicketsRoute: AdminTicketsRoute,
   AdminTrackingRoute: AdminTrackingRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWalletRoute: AdminWalletRoute,
