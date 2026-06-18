@@ -45,6 +45,7 @@ import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe
 import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/blog.how-to-buy-netflix-in-bangladesh'
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTrackingPixelsRouteImport } from './routes/admin.tracking-pixels'
 import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
@@ -57,6 +58,7 @@ import { Route as AdminQuickSaleRouteImport } from './routes/admin.quick-sale'
 import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
+import { Route as AdminOtherPixelsRouteImport } from './routes/admin.other-pixels'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminOrderRecoveryRouteImport } from './routes/admin.order-recovery'
 import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
@@ -64,6 +66,9 @@ import { Route as AdminLiveChatRouteImport } from './routes/admin.live-chat'
 import { Route as AdminLicenseManagerRouteImport } from './routes/admin.license-manager'
 import { Route as AdminInvoiceGeneratorRouteImport } from './routes/admin.invoice-generator'
 import { Route as AdminInvoiceDesignRouteImport } from './routes/admin.invoice-design'
+import { Route as AdminGoogleAdsRouteImport } from './routes/admin.google-ads'
+import { Route as AdminFbPixelRouteImport } from './routes/admin.fb-pixel'
+import { Route as AdminFbAudiencesRouteImport } from './routes/admin.fb-audiences'
 import { Route as AdminEmailDashboardRouteImport } from './routes/admin.email-dashboard'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
@@ -264,6 +269,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTrackingPixelsRoute = AdminTrackingPixelsRouteImport.update({
+  id: '/tracking-pixels',
+  path: '/tracking-pixels',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminTrackingRoute = AdminTrackingRouteImport.update({
   id: '/tracking',
   path: '/tracking',
@@ -324,6 +334,11 @@ const AdminPaymentLinksRoute = AdminPaymentLinksRouteImport.update({
   path: '/payment-links',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminOtherPixelsRoute = AdminOtherPixelsRouteImport.update({
+  id: '/other-pixels',
+  path: '/other-pixels',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminOrdersRoute = AdminOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -357,6 +372,21 @@ const AdminInvoiceGeneratorRoute = AdminInvoiceGeneratorRouteImport.update({
 const AdminInvoiceDesignRoute = AdminInvoiceDesignRouteImport.update({
   id: '/invoice-design',
   path: '/invoice-design',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminGoogleAdsRoute = AdminGoogleAdsRouteImport.update({
+  id: '/google-ads',
+  path: '/google-ads',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFbPixelRoute = AdminFbPixelRouteImport.update({
+  id: '/fb-pixel',
+  path: '/fb-pixel',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFbAudiencesRoute = AdminFbAudiencesRouteImport.update({
+  id: '/fb-audiences',
+  path: '/fb-audiences',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminEmailDashboardRoute = AdminEmailDashboardRouteImport.update({
@@ -494,6 +524,9 @@ export interface FileRoutesByFullPath {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
+  '/admin/fb-audiences': typeof AdminFbAudiencesRoute
+  '/admin/fb-pixel': typeof AdminFbPixelRoute
+  '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
@@ -501,6 +534,7 @@ export interface FileRoutesByFullPath {
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/order-recovery': typeof AdminOrderRecoveryRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -513,6 +547,7 @@ export interface FileRoutesByFullPath {
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
+  '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -568,6 +603,9 @@ export interface FileRoutesByTo {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
+  '/admin/fb-audiences': typeof AdminFbAudiencesRoute
+  '/admin/fb-pixel': typeof AdminFbPixelRoute
+  '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
@@ -575,6 +613,7 @@ export interface FileRoutesByTo {
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/order-recovery': typeof AdminOrderRecoveryRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -587,6 +626,7 @@ export interface FileRoutesByTo {
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
+  '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -644,6 +684,9 @@ export interface FileRoutesById {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
+  '/admin/fb-audiences': typeof AdminFbAudiencesRoute
+  '/admin/fb-pixel': typeof AdminFbPixelRoute
+  '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
@@ -651,6 +694,7 @@ export interface FileRoutesById {
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/order-recovery': typeof AdminOrderRecoveryRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -663,6 +707,7 @@ export interface FileRoutesById {
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
+  '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -721,6 +766,9 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/email-dashboard'
+    | '/admin/fb-audiences'
+    | '/admin/fb-pixel'
+    | '/admin/google-ads'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/license-manager'
@@ -728,6 +776,7 @@ export interface FileRouteTypes {
     | '/admin/newsletter'
     | '/admin/order-recovery'
     | '/admin/orders'
+    | '/admin/other-pixels'
     | '/admin/payment-links'
     | '/admin/products'
     | '/admin/promotions'
@@ -740,6 +789,7 @@ export interface FileRouteTypes {
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
+    | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -795,6 +845,9 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/email-dashboard'
+    | '/admin/fb-audiences'
+    | '/admin/fb-pixel'
+    | '/admin/google-ads'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/license-manager'
@@ -802,6 +855,7 @@ export interface FileRouteTypes {
     | '/admin/newsletter'
     | '/admin/order-recovery'
     | '/admin/orders'
+    | '/admin/other-pixels'
     | '/admin/payment-links'
     | '/admin/products'
     | '/admin/promotions'
@@ -814,6 +868,7 @@ export interface FileRouteTypes {
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
+    | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -870,6 +925,9 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/email-dashboard'
+    | '/admin/fb-audiences'
+    | '/admin/fb-pixel'
+    | '/admin/google-ads'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
     | '/admin/license-manager'
@@ -877,6 +935,7 @@ export interface FileRouteTypes {
     | '/admin/newsletter'
     | '/admin/order-recovery'
     | '/admin/orders'
+    | '/admin/other-pixels'
     | '/admin/payment-links'
     | '/admin/products'
     | '/admin/promotions'
@@ -889,6 +948,7 @@ export interface FileRouteTypes {
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
+    | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -1203,6 +1263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/tracking-pixels': {
+      id: '/admin/tracking-pixels'
+      path: '/tracking-pixels'
+      fullPath: '/admin/tracking-pixels'
+      preLoaderRoute: typeof AdminTrackingPixelsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/tracking': {
       id: '/admin/tracking'
       path: '/tracking'
@@ -1287,6 +1354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPaymentLinksRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/other-pixels': {
+      id: '/admin/other-pixels'
+      path: '/other-pixels'
+      fullPath: '/admin/other-pixels'
+      preLoaderRoute: typeof AdminOtherPixelsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/orders': {
       id: '/admin/orders'
       path: '/orders'
@@ -1334,6 +1408,27 @@ declare module '@tanstack/react-router' {
       path: '/invoice-design'
       fullPath: '/admin/invoice-design'
       preLoaderRoute: typeof AdminInvoiceDesignRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/google-ads': {
+      id: '/admin/google-ads'
+      path: '/google-ads'
+      fullPath: '/admin/google-ads'
+      preLoaderRoute: typeof AdminGoogleAdsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/fb-pixel': {
+      id: '/admin/fb-pixel'
+      path: '/fb-pixel'
+      fullPath: '/admin/fb-pixel'
+      preLoaderRoute: typeof AdminFbPixelRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/fb-audiences': {
+      id: '/admin/fb-audiences'
+      path: '/fb-audiences'
+      fullPath: '/admin/fb-audiences'
+      preLoaderRoute: typeof AdminFbAudiencesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/email-dashboard': {
@@ -1476,6 +1571,9 @@ interface AdminRouteChildren {
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminEmailDashboardRoute: typeof AdminEmailDashboardRoute
+  AdminFbAudiencesRoute: typeof AdminFbAudiencesRoute
+  AdminFbPixelRoute: typeof AdminFbPixelRoute
+  AdminGoogleAdsRoute: typeof AdminGoogleAdsRoute
   AdminInvoiceDesignRoute: typeof AdminInvoiceDesignRoute
   AdminInvoiceGeneratorRoute: typeof AdminInvoiceGeneratorRoute
   AdminLicenseManagerRoute: typeof AdminLicenseManagerRoute
@@ -1483,6 +1581,7 @@ interface AdminRouteChildren {
   AdminNewsletterRoute: typeof AdminNewsletterRoute
   AdminOrderRecoveryRoute: typeof AdminOrderRecoveryRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminOtherPixelsRoute: typeof AdminOtherPixelsRoute
   AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminPromotionsRoute: typeof AdminPromotionsRoute
@@ -1495,6 +1594,7 @@ interface AdminRouteChildren {
   AdminThemesRoute: typeof AdminThemesRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminTrackingRoute: typeof AdminTrackingRoute
+  AdminTrackingPixelsRoute: typeof AdminTrackingPixelsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWalletRoute: typeof AdminWalletRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -1511,6 +1611,9 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminEmailDashboardRoute: AdminEmailDashboardRoute,
+  AdminFbAudiencesRoute: AdminFbAudiencesRoute,
+  AdminFbPixelRoute: AdminFbPixelRoute,
+  AdminGoogleAdsRoute: AdminGoogleAdsRoute,
   AdminInvoiceDesignRoute: AdminInvoiceDesignRoute,
   AdminInvoiceGeneratorRoute: AdminInvoiceGeneratorRoute,
   AdminLicenseManagerRoute: AdminLicenseManagerRoute,
@@ -1518,6 +1621,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminNewsletterRoute: AdminNewsletterRoute,
   AdminOrderRecoveryRoute: AdminOrderRecoveryRoute,
   AdminOrdersRoute: AdminOrdersRoute,
+  AdminOtherPixelsRoute: AdminOtherPixelsRoute,
   AdminPaymentLinksRoute: AdminPaymentLinksRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminPromotionsRoute: AdminPromotionsRoute,
@@ -1530,6 +1634,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminThemesRoute: AdminThemesRoute,
   AdminTicketsRoute: AdminTicketsRoute,
   AdminTrackingRoute: AdminTrackingRoute,
+  AdminTrackingPixelsRoute: AdminTrackingPixelsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWalletRoute: AdminWalletRoute,
   AdminIndexRoute: AdminIndexRoute,
