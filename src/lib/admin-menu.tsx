@@ -66,7 +66,6 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/order-recovery", label: "Order Recovery", labelBn: "অর্ডার রিকভারি", icon: ic(ShoppingCart), grad: "from-emerald-500 to-teal-500" },
       { to: "/admin/tracking", label: "Order Tracking", labelBn: "অর্ডার ট্র্যাকিং", icon: ic(MapPin), grad: "from-emerald-500 to-teal-600" },
       { to: "/admin/wallet", label: "Wallet", labelBn: "ওয়ালেট", icon: ic(Wallet), grad: "from-amber-400 to-orange-500" },
-      { to: "/admin/account-delivery", label: "Account Delivery", labelBn: "অ্যাকাউন্ট ডেলিভারি", icon: ic(Truck), grad: "from-amber-500 to-yellow-500" },
     ],
   },
   {
