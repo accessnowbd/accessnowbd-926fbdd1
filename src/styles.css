@@ -293,6 +293,35 @@
     color-scheme: light;
   }
 
+  /* Mobile safety net — prevents admin content from being clipped on small screens.
+     Wide tables get their own horizontal scroll; long text wraps; tab/pill rows
+     scroll horizontally instead of overflowing the viewport. */
+  @media (max-width: 768px) {
+    .admin-shell table {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+    }
+    .admin-shell h1,
+    .admin-shell h2,
+    .admin-shell h3,
+    .admin-shell p,
+    .admin-shell label { overflow-wrap: anywhere; word-break: break-word; }
+
+    .admin-shell [role="tablist"] {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
+    }
+    .admin-shell [role="tablist"]::-webkit-scrollbar { display: none; }
+
+    /* Catch-all: any element that's wider than the viewport gets a scrollbar
+       instead of being clipped invisibly by the parent `overflow-x-hidden`. */
+    .admin-shell .a-scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  }
+
   /* Admin design system — pill tabs, stat cards, search bar, action icons */
   .admin-clarity .a-stat {
     background: #ffffff;
