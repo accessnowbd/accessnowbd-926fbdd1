@@ -343,8 +343,12 @@ function InfoBox({ tone = "violet", children }: { tone?: ToneKey; children: Reac
   const t = TONE[tone];
   return (
     <div
-      className={`mt-4 rounded-xl border p-3.5 text-xs space-y-1 ${t.soft} ${t.border}`}
-      style={{ color: t.inkHex }}
+      className="mt-4 rounded-xl border p-3.5 text-xs space-y-1 font-medium"
+      style={{
+        color: t.inkHex,
+        backgroundColor: t.softHex,
+        borderColor: t.borderHex,
+      }}
     >
       {children}
     </div>
