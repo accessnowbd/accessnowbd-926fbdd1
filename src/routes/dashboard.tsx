@@ -456,7 +456,7 @@ function WalletRedirect() {
       <Card>
         <div className="text-center py-6">
           <Wallet className="w-10 h-10 mx-auto text-primary mb-3" />
-          <h3 className="text-lg font-bold mb-1">My Wallet</h3>
+          <h3 className="text-lg font-bold mb-1 text-foreground">My Wallet</h3>
           <p className="text-sm text-muted-foreground mb-4">Balance দেখুন, টপ-আপ করুন এবং লেনদেন ইতিহাস ব্রাউজ করুন।</p>
           <Link to="/wallet" className="inline-flex items-center gap-2 px-5 h-11 rounded-full text-white text-sm font-bold" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)" }}>
             Open Wallet <ChevronRight className="w-4 h-4" />
@@ -905,7 +905,7 @@ function Downloads({ orders }: { orders: Order[] }) {
                   <div className="w-11 h-11 rounded-lg bg-primary/10 grid place-items-center text-primary"><FileText className="w-5 h-5" /></div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold truncate">{l.productName}</div>
+                  <div className="text-sm font-semibold truncate text-foreground">{l.productName}</div>
                   <div className="text-xs text-muted-foreground truncate">{l.label} • {l.url}</div>
                 </div>
                 <button onClick={() => doCopy(l.url)} className="inline-flex items-center gap-1 h-9 px-3 rounded-full text-xs font-semibold glass border border-[var(--glass-border)] hover:border-primary/40">
@@ -987,7 +987,7 @@ function MyTickets() {
             <div key={t.id} className="flex items-center gap-3 p-3 rounded-xl glass border border-[var(--glass-border)]">
               <MessageSquare className="w-4 h-4 text-primary" />
               <div className="flex-1">
-                <div className="text-sm font-semibold">{t.s}</div>
+                <div className="text-sm font-semibold text-foreground">{t.s}</div>
                 <div className="text-xs text-muted-foreground">{t.id}</div>
               </div>
               <Badge color={t.st === "open" ? "warn" : "success"}>{t.st}</Badge>
