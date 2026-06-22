@@ -342,7 +342,10 @@ function Card({ icon, title, tone = "violet", children }: { icon: React.ReactNod
 function InfoBox({ tone = "violet", children }: { tone?: ToneKey; children: React.ReactNode }) {
   const t = TONE[tone];
   return (
-    <div className={`mt-4 rounded-xl border p-3.5 text-xs space-y-1 ${t.soft} ${t.border} ${t.ink}`}>
+    <div
+      className={`mt-4 rounded-xl border p-3.5 text-xs space-y-1 ${t.soft} ${t.border}`}
+      style={{ color: t.inkHex }}
+    >
       {children}
     </div>
   );
