@@ -164,17 +164,42 @@
   }
   /* Defense-in-depth: stop wide media/fixed-width children from blowing out the viewport on mobile */
   img, video, svg, canvas, iframe { max-width: 100%; height: auto; }
-  /* Premium aurora background — layered radial glows with subtle vignette and
-     a faint noise overlay for depth. No grid lines. */
+  /* Premium obsidian background — deep midnight canvas with refined aurora glow,
+     a soft conic sweep, fine mesh grid for depth, vignette and subtle grain.
+     Designed to read as luxury/premium while keeping text crisp. */
   body {
-    background-color: #06051a;
+    background-color: #050414;
     background-image:
-      radial-gradient(70% 55% at 10% 12%, rgba(124, 58, 237, 0.45), transparent 70%),
-      radial-gradient(60% 50% at 92% 8%, rgba(6, 182, 212, 0.28), transparent 72%),
-      radial-gradient(65% 55% at 78% 95%, rgba(236, 72, 153, 0.22), transparent 72%),
-      radial-gradient(55% 45% at 25% 85%, rgba(99, 102, 241, 0.30), transparent 72%),
-      radial-gradient(120% 80% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.45) 100%);
-    background-attachment: scroll;
+      /* Top-left violet aurora */
+      radial-gradient(50% 42% at 8% 6%, rgba(124, 58, 237, 0.32), transparent 70%),
+      /* Top-right cyan aurora */
+      radial-gradient(45% 38% at 96% 4%, rgba(6, 182, 212, 0.18), transparent 72%),
+      /* Bottom-right magenta glow */
+      radial-gradient(55% 45% at 88% 96%, rgba(236, 72, 153, 0.16), transparent 74%),
+      /* Bottom-left indigo glow */
+      radial-gradient(48% 40% at 6% 92%, rgba(79, 70, 229, 0.22), transparent 74%),
+      /* Soft center lift */
+      radial-gradient(80% 60% at 50% 40%, rgba(99, 102, 241, 0.08), transparent 70%),
+      /* Strong vignette for premium framing */
+      radial-gradient(130% 90% at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.6) 100%),
+      /* Base obsidian gradient */
+      linear-gradient(180deg, #07061a 0%, #050414 45%, #04030f 100%);
+    background-attachment: fixed;
+  }
+  /* Fine mesh grid overlay for depth — very subtle */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+    background-image:
+      linear-gradient(rgba(148, 163, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 255, 0.035) 1px, transparent 1px);
+    background-size: 56px 56px, 56px 56px;
+    mask-image: radial-gradient(120% 90% at 50% 40%, #000 30%, transparent 85%);
+    -webkit-mask-image: radial-gradient(120% 90% at 50% 40%, #000 30%, transparent 85%);
   }
   body::before {
     content: "";
@@ -182,11 +207,12 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.5;
+    opacity: 0.35;
     mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
   body > * { position: relative; z-index: 1; }
+
 
   /* ===========================
      White (Glassmorp) theme — applied via <html class="theme-white">
