@@ -12,7 +12,55 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { useLang } from "@/context/LangContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
+
+// English label -> Bangla translation for sidebar nav, group titles, page heads & common buttons.
+const BN: Record<string, string> = {
+  // Group titles
+  "ACCOUNT": "অ্যাকাউন্ট",
+  "ACTIVITY": "অ্যাক্টিভিটি",
+  "REWARDS": "রিওয়ার্ড",
+  "PREFERENCES": "পছন্দসমূহ",
+  // Nav labels
+  "Profile": "প্রোফাইল",
+  "Addresses": "ঠিকানা",
+  "Security": "সিকিউরিটি",
+  "My Orders": "আমার অর্ডার",
+  "My Licenses": "আমার লাইসেন্স",
+  "Downloads": "ডাউনলোড",
+  "Subscriptions": "সাবস্ক্রিপশন",
+  "Wishlist": "উইশলিস্ট",
+  "Notifications": "নোটিফিকেশন",
+  "Wallet": "ওয়ালেট",
+  "Points": "পয়েন্ট",
+  "Referral": "রেফারেল",
+  "Language": "ভাষা",
+  "Install App": "অ্যাপ ইন্সটল",
+  "Menu": "মেনু",
+  "Affiliate Program": "অ্যাফিলিয়েট প্রোগ্রাম",
+  // Common
+  "Edit Profile": "প্রোফাইল এডিট",
+  "My Wallet": "আমার ওয়ালেট",
+  "Open Wallet": "ওয়ালেট খুলুন",
+  "Reward Points": "রিওয়ার্ড পয়েন্ট",
+  "Referral Program": "রেফারেল প্রোগ্রাম",
+  "My Wishlist": "আমার উইশলিস্ট",
+  "License Keys": "লাইসেন্স কী",
+  "Open Support Ticket": "সাপোর্ট টিকেট খুলুন",
+  "My Tickets": "আমার টিকেট",
+  "Active Services": "চলমান সার্ভিস",
+  "Expired Services": "মেয়াদোত্তীর্ণ সার্ভিস",
+  "New Order": "নতুন অর্ডার",
+  "Mark all read": "সব পঠিত করুন",
+  "Logout": "লগআউট",
+  "Admin Panel": "অ্যাডমিন প্যানেল",
+};
+
+function tr(label: string, lang: "bn" | "en"): string {
+  if (lang === "bn") return BN[label] ?? label;
+  return label;
+}
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
@@ -99,6 +147,7 @@ function Share2Icon(props: { className?: string }) {
 
 function DashboardPage() {
   const { user, loading: authLoading, signOut } = useAuth();
+  const { lang } = useLang();
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
   const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null } | null>(null);
@@ -207,7 +256,7 @@ function DashboardPage() {
           >
             <div className="h-full lg:h-auto lg:max-h-[calc(100vh-3rem)] overflow-y-auto bg-card border border-border lg:rounded-3xl shadow-sm">
               <div className="lg:hidden flex items-center justify-between px-5 py-4 border-b border-border">
-                <span className="text-sm font-bold text-foreground">Menu</span>
+                <span className="text-sm font-bold text-foreground">{tr("Menu", lang)}</span>
                 <button onClick={() => setSidebarOpen(false)} className="text-muted-foreground hover:text-foreground" aria-label="Close menu">
                   <X className="w-5 h-5" />
                 </button>
@@ -217,7 +266,7 @@ function DashboardPage() {
                 {NAV_GROUPS.map((group) => (
                   <div key={group.title}>
                     <div className="px-3 pb-2 flex items-center gap-2">
-                      <span className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground">{group.title}</span>
+                      <span className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground">{tr(group.title, lang)}</span>
                       <span className="h-px flex-1 bg-border" />
                     </div>
                     <div className="space-y-0.5">
@@ -235,7 +284,7 @@ function DashboardPage() {
                             }`}
                           >
                             <Icon className={`w-4 h-4 shrink-0 ${active ? "text-primary" : "text-muted-foreground"}`} />
-                            <span>{it.label}</span>
+                            <span>{tr(it.label, lang)}</span>
                           </button>
                         );
                       })}
@@ -250,7 +299,7 @@ function DashboardPage() {
                     className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-primary-foreground shadow-md"
                     style={{ background: "linear-gradient(90deg, #8b5cf6, #6366f1)" }}
                   >
-                    <Users className="w-4 h-4" /> Affiliate Program
+                    <Users className="w-4 h-4" /> {tr("Affiliate Program", lang)}
                   </button>
                   <Link
                     to="/ai-tools"
@@ -258,7 +307,7 @@ function DashboardPage() {
                     className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-amber-950 shadow-md"
                     style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
                   >
-                    <Wrench className="w-4 h-4" /> Free Tools
+                    <Wrench className="w-4 h-4" /> {lang === "bn" ? "ফ্রি টুলস" : "Free Tools"}
                   </Link>
                   {isAdmin && (
                     <Link
@@ -267,7 +316,7 @@ function DashboardPage() {
                       className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-bold text-primary-foreground shadow-md"
                       style={{ background: "linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef)" }}
                     >
-                      <Shield className="w-4 h-4" /> Admin Panel
+                      <Shield className="w-4 h-4" /> {tr("Admin Panel", lang)}
                     </Link>
                   )}
                   <button
@@ -275,7 +324,7 @@ function DashboardPage() {
                     className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold text-white shadow-md hover:opacity-90 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/60"
                     style={{ background: "linear-gradient(90deg, #f43f5e, #e11d48)" }}
                   >
-                    <LogOut className="w-4 h-4" /> Logout
+                    <LogOut className="w-4 h-4" /> {tr("Logout", lang)}
                   </button>
                 </div>
               </nav>
@@ -474,11 +523,41 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
   return <div className={`bg-card text-card-foreground rounded-3xl p-5 md:p-6 border border-border shadow-sm ${className}`}>{children}</div>;
 }
 function PageHead({ title, desc, action }: { title: string; desc?: string; action?: React.ReactNode }) {
+  const { lang } = useLang();
+  // Auto-translate common page titles & descriptions.
+  const PAGE_DESC_BN: Record<string, string> = {
+    "All your purchases": "আপনার সব ক্রয়",
+    "Currently running subscriptions": "চলমান সাবস্ক্রিপশন",
+    "Subscriptions that need renewal": "যেগুলো রিনিউ করতে হবে",
+    "Your purchased license keys": "আপনার কেনা লাইসেন্স কী",
+    "We'll get back to you ASAP": "আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব",
+    "Your support history": "আপনার সাপোর্ট ইতিহাস",
+  };
+  const PAGE_DESC_EN: Record<string, string> = {
+    "আপনার ব্যক্তিগত তথ্য আপডেট করুন": "Update your personal information",
+    "ডাউনলোড লিংক": "Download Links",
+    "আপনার কেনা প্রোডাক্টের ডাউনলোড লিংক এক জায়গায়।": "All your purchased product download links in one place.",
+    "আপনার সংরক্ষিত পণ্যসমূহ": "Your saved products",
+    "অর্ডার ও প্রমোশন আপডেট": "Order and promotion updates",
+    "পয়েন্ট জমা ও ইতিহাস": "Points balance & history",
+    "বন্ধুকে রেফার করে ক্যাশব্যাক পান": "Refer friends and earn cashback",
+    "ডেলিভারি ঠিকানা ম্যানেজ করুন": "Manage delivery addresses",
+    "পাসওয়ার্ড ও সেশন ম্যানেজমেন্ট": "Password & session management",
+    "পছন্দের ভাষা নির্বাচন করুন": "Choose your preferred language",
+    "হোমস্ক্রিনে যুক্ত করে অ্যাপের মত ব্যবহার করুন": "Add to homescreen and use like a native app",
+    "ব্যালেন্স, টপ-আপ ও লেনদেন ইতিহাস": "Balance, top-up & transaction history",
+  };
+  const displayTitle = tr(title, lang);
+  const displayDesc = desc
+    ? (lang === "bn"
+        ? (PAGE_DESC_BN[desc] ?? desc)
+        : (PAGE_DESC_EN[desc] ?? desc))
+    : undefined;
   return (
     <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{title}</h1>
-        {desc && <p className="text-sm text-muted-foreground mt-1">{desc}</p>}
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{displayTitle}</h1>
+        {displayDesc && <p className="text-sm text-muted-foreground mt-1">{displayDesc}</p>}
       </div>
       {action}
     </div>
@@ -1312,24 +1391,17 @@ function SecurityView() {
 
 /* ===================== LANGUAGE ===================== */
 function LanguageView() {
-  const current = (typeof window !== "undefined" && (localStorage.getItem("anbd:lang") || "bn")) as "bn" | "en";
-  const [lang, setLang] = useState<"bn" | "en">(current);
-  const pick = (l: "bn" | "en") => {
-    setLang(l);
-    localStorage.setItem("anbd:lang", l);
-    document.documentElement.lang = l;
-    window.dispatchEvent(new CustomEvent("lang:change", { detail: l }));
-  };
+  const { lang, setLang } = useLang();
   const opts: Array<{ id: "bn" | "en"; name: string; sub: string; flag: string }> = [
     { id: "bn", name: "বাংলা", sub: "Bangla", flag: "🇧🇩" },
     { id: "en", name: "English", sub: "ইংরেজি", flag: "🇬🇧" },
   ];
   return (
     <div className="space-y-6">
-      <PageHead title="Language" desc="পছন্দের ভাষা নির্বাচন করুন" />
+      <PageHead title={lang === "bn" ? "ভাষা" : "Language"} desc={lang === "bn" ? "পছন্দের ভাষা নির্বাচন করুন" : "Choose your preferred language"} />
       <div className="grid sm:grid-cols-2 gap-4">
         {opts.map((o) => (
-          <button key={o.id} onClick={() => pick(o.id)} className={`text-left p-5 rounded-2xl border-2 transition ${lang === o.id ? "border-primary bg-primary/5" : "border-border bg-card hover:border-primary/40"}`}>
+          <button key={o.id} onClick={() => setLang(o.id)} className={`text-left p-5 rounded-2xl border-2 transition ${lang === o.id ? "border-primary bg-primary/5" : "border-border bg-card hover:border-primary/40"}`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3"><span className="text-3xl">{o.flag}</span><div><div className="font-bold text-foreground">{o.name}</div><div className="text-xs text-muted-foreground">{o.sub}</div></div></div>
               {lang === o.id && <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground grid place-items-center"><Check className="w-3.5 h-3.5" strokeWidth={3} /></div>}
@@ -1337,7 +1409,11 @@ function LanguageView() {
           </button>
         ))}
       </div>
-      <p className="text-xs text-muted-foreground">কিছু অংশ এখনো শুধু বাংলায় সাপোর্টেড।</p>
+      <p className="text-xs text-muted-foreground">
+        {lang === "bn"
+          ? "ভাষা পরিবর্তন করলে কাস্টমার ড্যাশবোর্ড সাথে সাথে আপডেট হবে। কিছু অংশ এখনো শুধু বাংলায় সাপোর্টেড।"
+          : "Switching language updates your customer dashboard instantly. Some sections are still Bangla-only."}
+      </p>
     </div>
   );
 }
