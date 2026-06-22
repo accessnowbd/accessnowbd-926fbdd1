@@ -523,11 +523,41 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
   return <div className={`bg-card text-card-foreground rounded-3xl p-5 md:p-6 border border-border shadow-sm ${className}`}>{children}</div>;
 }
 function PageHead({ title, desc, action }: { title: string; desc?: string; action?: React.ReactNode }) {
+  const { lang } = useLang();
+  // Auto-translate common page titles & descriptions.
+  const PAGE_DESC_BN: Record<string, string> = {
+    "All your purchases": "আপনার সব ক্রয়",
+    "Currently running subscriptions": "চলমান সাবস্ক্রিপশন",
+    "Subscriptions that need renewal": "যেগুলো রিনিউ করতে হবে",
+    "Your purchased license keys": "আপনার কেনা লাইসেন্স কী",
+    "We'll get back to you ASAP": "আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব",
+    "Your support history": "আপনার সাপোর্ট ইতিহাস",
+  };
+  const PAGE_DESC_EN: Record<string, string> = {
+    "আপনার ব্যক্তিগত তথ্য আপডেট করুন": "Update your personal information",
+    "ডাউনলোড লিংক": "Download Links",
+    "আপনার কেনা প্রোডাক্টের ডাউনলোড লিংক এক জায়গায়।": "All your purchased product download links in one place.",
+    "আপনার সংরক্ষিত পণ্যসমূহ": "Your saved products",
+    "অর্ডার ও প্রমোশন আপডেট": "Order and promotion updates",
+    "পয়েন্ট জমা ও ইতিহাস": "Points balance & history",
+    "বন্ধুকে রেফার করে ক্যাশব্যাক পান": "Refer friends and earn cashback",
+    "ডেলিভারি ঠিকানা ম্যানেজ করুন": "Manage delivery addresses",
+    "পাসওয়ার্ড ও সেশন ম্যানেজমেন্ট": "Password & session management",
+    "পছন্দের ভাষা নির্বাচন করুন": "Choose your preferred language",
+    "হোমস্ক্রিনে যুক্ত করে অ্যাপের মত ব্যবহার করুন": "Add to homescreen and use like a native app",
+    "ব্যালেন্স, টপ-আপ ও লেনদেন ইতিহাস": "Balance, top-up & transaction history",
+  };
+  const displayTitle = tr(title, lang);
+  const displayDesc = desc
+    ? (lang === "bn"
+        ? (PAGE_DESC_BN[desc] ?? desc)
+        : (PAGE_DESC_EN[desc] ?? desc))
+    : undefined;
   return (
     <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{title}</h1>
-        {desc && <p className="text-sm text-muted-foreground mt-1">{desc}</p>}
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{displayTitle}</h1>
+        {displayDesc && <p className="text-sm text-muted-foreground mt-1">{displayDesc}</p>}
       </div>
       {action}
     </div>
