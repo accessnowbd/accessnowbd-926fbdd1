@@ -3291,3 +3291,9 @@ html:not(.theme-white) .bg-card :where(h1, h2, h3, h4, h5, h6):not([class*="text
 html:not(.theme-white) [class*="rounded-3xl"][class*="border"] :where(h1, h2, h3, h4, h5, h6):not([class*="text-"]):not(.text-aurora):not(.text-aurora-strong):not(.text-neon):not(.text-sunset) {
   color: var(--card-foreground);
 }
+
+@keyframes cardTapFlash {
+  0% { opacity: 0; transform: scale(0.85); }
+  40% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.15); }
+}

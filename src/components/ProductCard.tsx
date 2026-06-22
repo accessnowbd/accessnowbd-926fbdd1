@@ -53,15 +53,17 @@ function ProductCardImpl({ product }: { product: Product }) {
       to="/product/$slug"
       params={{ slug: product.slug }}
       preload="intent"
-      className="group product-card-v2 overflow-hidden flex flex-col h-full rounded-lg border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-shadow hover:shadow-[var(--shadow-glass)]"
+      className="group product-card-v2 overflow-hidden flex flex-col h-full rounded-lg border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[var(--shadow-glass)] active:scale-[0.97] active:shadow-[var(--shadow-glass-sm)] will-change-transform"
     >
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden [&_img]:transition-transform [&_img]:duration-500 [&_img]:ease-out group-active:[&_img]:scale-[1.05]">
         <ProductBanner product={product} ratio="1/1" />
         {/* Elegant hover: soft glow + diagonal shine sweep (desktop only) */}
         <div className="pointer-events-none absolute inset-0 z-10 hidden md:block opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.18),transparent_60%)]" />
         <div className="pointer-events-none absolute inset-0 z-10 hidden md:block overflow-hidden">
           <div className="absolute top-0 -left-3/4 h-full w-1/2 rotate-12 bg-gradient-to-r from-transparent via-white/35 to-transparent blur-md opacity-0 md:group-hover:opacity-100 md:group-hover:translate-x-[260%] transition-all duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]" />
         </div>
+        {/* Click flash — radial light pulse on tap/click */}
+        <div className="pointer-events-none absolute inset-0 z-20 opacity-0 group-active:opacity-100 group-active:animate-[cardTapFlash_500ms_ease-out] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.45),transparent_60%)]" />
         {/* Discount + badge row, bottom-left of image — like reference */}
         <div className="absolute left-3 bottom-3 flex items-center gap-1.5 z-20">
           {plan?.original && plan?.price && (() => {
