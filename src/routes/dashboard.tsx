@@ -150,7 +150,7 @@ function DashboardPage() {
   const { lang } = useLang();
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null } | null>(null);
+  const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null } | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState<SectionId>("profile");
@@ -175,7 +175,7 @@ function DashboardPage() {
       .then((r) => { mark("orders fetch", tOrders); return r; });
 
     const tProfile = performance.now();
-    const profileP = supabase.from("profiles").select("display_name, phone").eq("id", user.id).maybeSingle()
+    const profileP = supabase.from("profiles").select("display_name, phone, username, country").eq("id", user.id).maybeSingle()
       .then((r) => { mark("profile fetch", tProfile); return r; });
 
     const roleP = supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
@@ -184,7 +184,7 @@ function DashboardPage() {
       .then(([o, p, r]) => {
         if (cancelled) return;
         setOrders(((o.data as unknown) as Order[]) || []);
-        setProfile((p.data as { display_name?: string | null; phone?: string | null } | null) || null);
+        setProfile((p.data as { display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null } | null) || null);
         setIsAdmin(!!r.data);
       })
       .catch((err) => {
@@ -458,7 +458,7 @@ function SectionRenderer({
   orders: Order[];
   greetingName: string;
   user: { email?: string; id?: string } | null;
-  profile: { display_name?: string | null; phone?: string | null } | null;
+  profile: { display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null } | null;
   onNavigate: (s: SectionId) => void;
 }) {
   switch (section) {
@@ -608,8 +608,9 @@ function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
 
 
 /* ===================== PROFILE ===================== */
-function ProfileView({ user, profile, onNavigate }: { user: { email?: string; id?: string } | null; profile: { display_name?: string | null; phone?: string | null } | null; onNavigate: (s: SectionId) => void }) {
-  const username = (profile?.display_name || user?.email?.split("@")[0] || "user").toLowerCase().replace(/\s+/g, "");
+function ProfileView({ user, profile, onNavigate }: { user: { email?: string; id?: string } | null; profile: { display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null } | null; onNavigate: (s: SectionId) => void }) {
+  const username = (profile?.username || profile?.display_name || user?.email?.split("@")[0] || "user").toLowerCase().replace(/\s+/g, "");
+  const country = profile?.country || "Bangladesh";
   return (
     <div className="bg-card border border-border rounded-3xl p-5 md:p-7 shadow-sm">
       {/* Section header */}
@@ -638,8 +639,7 @@ function ProfileView({ user, profile, onNavigate }: { user: { email?: string; id
         <ProfileField label="USERNAME" icon={AtSign} value={`@${username}`} />
         <ProfileField label="EMAIL" icon={Mail} value={user?.email || "—"} verified />
         <ProfileField label="PHONE NUMBER" icon={Phone} value={profile?.phone || "—"} />
-        <ProfileField label="COUNTRY" icon={MapPin} value="Bangladesh" />
-        
+        <ProfileField label="COUNTRY" icon={MapPin} value={country} />
       </div>
     </div>
   );
@@ -671,11 +671,22 @@ function Row({ icon, label, value }: { icon: React.ReactNode; label: string; val
   );
 }
 
-function EditProfile({ profile, onSaved, onCancel }: { profile: { display_name?: string | null; phone?: string | null } | null; onSaved: () => void; onCancel: () => void }) {
+const COUNTRY_OPTIONS = [
+  "Bangladesh", "India", "Pakistan", "Nepal", "Sri Lanka", "Bhutan", "Maldives",
+  "United States", "United Kingdom", "Canada", "Australia",
+  "United Arab Emirates", "Saudi Arabia", "Qatar", "Kuwait", "Bahrain", "Oman",
+  "Malaysia", "Singapore", "Japan", "South Korea",
+  "Germany", "France", "Italy", "Spain", "Netherlands", "Sweden", "Norway",
+  "Other",
+];
+
+function EditProfile({ profile, onSaved, onCancel }: { profile: { display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null } | null; onSaved: () => void; onCancel: () => void }) {
   const { user } = useAuth();
   const [form, setForm] = useState({
     display_name: profile?.display_name || "",
+    username: profile?.username || "",
     phone: profile?.phone || "",
+    country: profile?.country || "Bangladesh",
   });
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -686,15 +697,34 @@ function EditProfile({ profile, onSaved, onCancel }: { profile: { display_name?:
     if (!user) return;
     setErr(null);
     const name = form.display_name.trim();
+    const username = form.username.trim().toLowerCase().replace(/^@+/, "");
     const phone = form.phone.trim();
+    const country = form.country.trim();
     if (!name) { setErr("নাম দিন"); return; }
+    if (username && !/^[a-z0-9._]{3,30}$/.test(username)) {
+      setErr("Username শুধু ছোট অক্ষর, সংখ্যা, . অথবা _ — ৩-৩০ অক্ষর");
+      return;
+    }
     if (phone && !/^[0-9+\-\s]{6,20}$/.test(phone)) { setErr("সঠিক ফোন নম্বর দিন"); return; }
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .upsert({ id: user.id, display_name: name, phone: phone || null }, { onConflict: "id" });
+      .upsert({
+        id: user.id,
+        display_name: name,
+        username: username || null,
+        phone: phone || null,
+        country: country || null,
+      } as any, { onConflict: "id" });
     setSaving(false);
-    if (error) { setErr(error.message); return; }
+    if (error) {
+      if ((error as any).code === "23505" || /duplicate|unique/i.test(error.message)) {
+        setErr("এই username টি ইতিমধ্যে নেওয়া হয়েছে। অন্যটি চেষ্টা করুন।");
+      } else {
+        setErr(error.message);
+      }
+      return;
+    }
     setOkAt(Date.now());
     setTimeout(() => { onSaved(); }, 700);
   };
@@ -712,6 +742,14 @@ function EditProfile({ profile, onSaved, onCancel }: { profile: { display_name?:
               maxLength={100}
             />
           </Field>
+          <Field label="Username">
+            <Input
+              value={form.username}
+              onChange={(e) => setForm((f) => ({ ...f, username: e.target.value.replace(/\s+/g, "") }))}
+              placeholder="accessnowbd"
+              maxLength={30}
+            />
+          </Field>
           <Field label="ফোন নম্বর">
             <Input
               type="tel"
@@ -720,6 +758,15 @@ function EditProfile({ profile, onSaved, onCancel }: { profile: { display_name?:
               placeholder="01XXXXXXXXX"
               maxLength={20}
             />
+          </Field>
+          <Field label="দেশ">
+            <select
+              value={form.country}
+              onChange={(e) => setForm((f) => ({ ...f, country: e.target.value }))}
+              className="w-full h-11 px-4 rounded-xl bg-background text-foreground border border-border outline-none text-sm focus:border-primary/60 focus:ring-2 focus:ring-primary/15 transition"
+            >
+              {COUNTRY_OPTIONS.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
           </Field>
           <Field label="ইমেইল">
             <Input value={user?.email ?? ""} disabled className="opacity-60 cursor-not-allowed" />
@@ -747,6 +794,7 @@ function EditProfile({ profile, onSaved, onCancel }: { profile: { display_name?:
     </div>
   );
 }
+
 
 
 /* ===================== ORDERS / SERVICES ===================== */
