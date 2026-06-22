@@ -1,4 +1,5 @@
 import { sendTransactionalEmail } from "./send";
+import { publicUrl } from "@/lib/site-url";
 
 interface InvoiceOrderItem {
   name?: string;
