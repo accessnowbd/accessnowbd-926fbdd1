@@ -2444,6 +2444,12 @@ html.theme-white .home-scroll-optimized .product-card-v2:hover {
   box-shadow: none !important;
 }
 
+html.theme-white .product-card-v2:hover:active,
+html.theme-white .home-scroll-optimized .product-card-v2:hover:active,
+:root:not(.theme-white) .product-card-v2:hover:active {
+  box-shadow: none !important;
+}
+
 .glow-search-inner,
 .glow-search-inner:hover {
   background-color: #ffffff !important;
