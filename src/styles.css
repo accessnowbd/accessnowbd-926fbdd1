@@ -127,7 +127,7 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body { background-color: #06051a; color-scheme: dark; }
+  html, body { background-color: #050414; color-scheme: dark; }
 
   /* A11y: clear, high-contrast focus ring for keyboard navigation.
      Applies globally (admin included). Mouse clicks won't show it
