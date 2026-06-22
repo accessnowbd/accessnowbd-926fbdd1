@@ -55,7 +55,7 @@ function ProductCardImpl({ product }: { product: Product }) {
       preload="intent"
       className="group product-card-v2 overflow-hidden flex flex-col h-full rounded-lg border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-shadow hover:shadow-[var(--shadow-glass)]"
     >
-      <div className="relative">
+      <div className="relative overflow-hidden [&_img]:transition-transform [&_img]:duration-[600ms] [&_img]:ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:[&_img]:scale-[1.12]">
         <ProductBanner product={product} ratio="1/1" />
         {/* Discount + badge row, bottom-left of image — like reference */}
         <div className="absolute left-3 bottom-3 flex items-center gap-1.5 z-20">
