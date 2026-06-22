@@ -132,16 +132,19 @@ export function HeroBannerCarousel() {
 
   useEffect(() => {
     let mounted = true;
-    supabase
-      .from("admin_records")
-      .select("id, is_active, sort_order, data")
-      .eq("kind", "banner_slider")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true })
-      .then(({ data }) => {
-        if (!mounted) return;
-        setRows((data ?? []) as BannerRow[]);
-      });
+    const loadBanners = () => {
+      supabase
+        .from("admin_records")
+        .select("id, is_active, sort_order, data")
+        .eq("kind", "banner_slider")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .then(({ data }) => {
+          if (!mounted) return;
+          setRows((data ?? []) as BannerRow[]);
+        });
+    };
+    loadBanners();
     supabase
       .from("products")
       .select("slug, image_url")
@@ -155,7 +158,21 @@ export function HeroBannerCarousel() {
         setProductMap(map);
         setProductsLoaded(true);
       });
-    return () => { mounted = false; };
+
+    // Realtime sync — admin panel changes propagate live to the homepage carousel
+    const channel = supabase
+      .channel("banner_slider_sync")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "admin_records", filter: "kind=eq.banner_slider" },
+        () => loadBanners(),
+      )
+      .subscribe();
+
+    return () => {
+      mounted = false;
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const banners = rows.length ? rows : FALLBACK;
