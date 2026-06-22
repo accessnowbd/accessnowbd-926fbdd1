@@ -2432,6 +2432,18 @@ html.theme-white .home-scroll-optimized .product-card-v2:hover {
 }
 
 /* === Glow gradient search — force white inner regardless of theme overrides === */
+.product-card-v2,
+.product-card-v2 * {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.product-card-v2:active,
+.product-card-v2:focus,
+.product-card-v2:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .glow-search-inner,
 .glow-search-inner:hover {
   background-color: #ffffff !important;
