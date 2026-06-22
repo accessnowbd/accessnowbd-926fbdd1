@@ -2442,12 +2442,14 @@ html.theme-white .home-scroll-optimized .product-card-v2:hover {
 .product-card-v2:focus-visible {
   outline: none !important;
   box-shadow: none !important;
+  transition: none !important;
 }
 
 html.theme-white .product-card-v2:hover:active,
 html.theme-white .home-scroll-optimized .product-card-v2:hover:active,
 :root:not(.theme-white) .product-card-v2:hover:active {
   box-shadow: none !important;
+  transition: none !important;
 }
 
 .glow-search-inner,
