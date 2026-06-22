@@ -3274,3 +3274,20 @@ html.theme-white [class*="rounded-full"][class*="border"][class*="bg-white"] {
   backdrop-filter: blur(14px) saturate(170%);
   -webkit-backdrop-filter: blur(14px) saturate(170%);
 }
+
+/* ===========================================================================
+   Customer dashboard / account pages — readability safety net.
+   Headings & strong-weight text inside a Card sometimes ship without an
+   explicit text color class. On the white (glassmorph) theme that can read as
+   a faded violet on the translucent white card. Force them to the card/foreground
+   token unless the author explicitly opted into a custom color (text-*, color:..., or a gradient class).
+   =========================================================================== */
+html.theme-white .bg-card :where(h1, h2, h3, h4, h5, h6):not([class*="text-"]):not(.text-aurora):not(.text-aurora-strong):not(.text-neon):not(.text-sunset),
+html.theme-white [class*="rounded-3xl"][class*="border"] :where(h1, h2, h3, h4, h5, h6):not([class*="text-"]):not(.text-aurora):not(.text-aurora-strong):not(.text-neon):not(.text-sunset) {
+  color: oklch(0.22 0.04 285);
+}
+
+html:not(.theme-white) .bg-card :where(h1, h2, h3, h4, h5, h6):not([class*="text-"]):not(.text-aurora):not(.text-aurora-strong):not(.text-neon):not(.text-sunset),
+html:not(.theme-white) [class*="rounded-3xl"][class*="border"] :where(h1, h2, h3, h4, h5, h6):not([class*="text-"]):not(.text-aurora):not(.text-aurora-strong):not(.text-neon):not(.text-sunset) {
+  color: var(--card-foreground);
+}
