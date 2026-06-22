@@ -31,12 +31,12 @@ type SettingsData = {
 
 /* ── Tone system: stronger tints + darker text for readability ── */
 const TONE = {
-  violet:  { bg: "bg-violet-100",    text: "text-violet-700",    border: "border-violet-200",    soft: "bg-violet-50",    ink: "text-violet-900",   inkHex: "#4c1d95" },
-  sky:     { bg: "bg-sky-100",       text: "text-sky-700",       border: "border-sky-200",       soft: "bg-sky-50",       ink: "text-sky-900",      inkHex: "#0c4a6e" },
-  amber:   { bg: "bg-amber-100",     text: "text-amber-700",     border: "border-amber-200",     soft: "bg-amber-50",     ink: "text-amber-900",    inkHex: "#78350f" },
-  emerald: { bg: "bg-emerald-100",   text: "text-emerald-700",   border: "border-emerald-200",   soft: "bg-emerald-50",   ink: "text-emerald-900",  inkHex: "#064e3b" },
-  fuchsia: { bg: "bg-fuchsia-100",  text: "text-fuchsia-700",  border: "border-fuchsia-200",  soft: "bg-fuchsia-50",  ink: "text-fuchsia-900",  inkHex: "#701a75" },
-  slate:   { bg: "bg-slate-200",      text: "text-slate-700",      border: "border-slate-300",      soft: "bg-slate-100",    ink: "text-slate-800",    inkHex: "#1e293b" },
+  violet:  { bg: "bg-violet-100",    text: "text-violet-700",    border: "border-violet-200",    soft: "bg-violet-50",    ink: "text-violet-900",   inkHex: "#3b0764", softHex: "#f5f3ff", borderHex: "#ddd6fe" },
+  sky:     { bg: "bg-sky-100",       text: "text-sky-700",       border: "border-sky-200",       soft: "bg-sky-50",       ink: "text-sky-900",      inkHex: "#082f49", softHex: "#f0f9ff", borderHex: "#bae6fd" },
+  amber:   { bg: "bg-amber-100",     text: "text-amber-700",     border: "border-amber-200",     soft: "bg-amber-50",     ink: "text-amber-900",    inkHex: "#451a03", softHex: "#fffbeb", borderHex: "#fde68a" },
+  emerald: { bg: "bg-emerald-100",   text: "text-emerald-700",   border: "border-emerald-200",   soft: "bg-emerald-50",   ink: "text-emerald-900",  inkHex: "#022c22", softHex: "#ecfdf5", borderHex: "#a7f3d0" },
+  fuchsia: { bg: "bg-fuchsia-100",  text: "text-fuchsia-700",  border: "border-fuchsia-200",  soft: "bg-fuchsia-50",  ink: "text-fuchsia-900",  inkHex: "#4a044e", softHex: "#fdf4ff", borderHex: "#f5d0fe" },
+  slate:   { bg: "bg-slate-200",      text: "text-slate-700",      border: "border-slate-300",      soft: "bg-slate-100",    ink: "text-slate-800",    inkHex: "#0f172a", softHex: "#f1f5f9", borderHex: "#cbd5e1" },
 } as const;
 
 type ToneKey = keyof typeof TONE;
@@ -343,8 +343,12 @@ function InfoBox({ tone = "violet", children }: { tone?: ToneKey; children: Reac
   const t = TONE[tone];
   return (
     <div
-      className={`mt-4 rounded-xl border p-3.5 text-xs space-y-1 ${t.soft} ${t.border}`}
-      style={{ color: t.inkHex }}
+      className="mt-4 rounded-xl border p-3.5 text-xs space-y-1 font-medium"
+      style={{
+        color: t.inkHex,
+        backgroundColor: t.softHex,
+        borderColor: t.borderHex,
+      }}
     >
       {children}
     </div>
