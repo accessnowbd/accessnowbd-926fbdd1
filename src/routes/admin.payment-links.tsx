@@ -116,7 +116,7 @@ function PaymentLinksPage() {
   };
 
   const copyLink = (slug: string) => {
-    const url = `${window.location.origin}/pay/${slug}`;
+    const url = publicUrl(`/pay/${slug}`);
     navigator.clipboard.writeText(url).then(
       () => toast.success(t("Link copied", "লিঙ্ক কপি হয়েছে")),
       () => toast.error(t("Copy failed", "কপি ব্যর্থ")),
@@ -124,7 +124,7 @@ function PaymentLinksPage() {
   };
 
   const openLink = (slug: string) => {
-    window.open(`${window.location.origin}/pay/${slug}`, "_blank", "noopener");
+    window.open(publicUrl(`/pay/${slug}`), "_blank", "noopener");
   };
 
   const visibleRows = useMemo(() => {
