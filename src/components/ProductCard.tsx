@@ -55,8 +55,13 @@ function ProductCardImpl({ product }: { product: Product }) {
       preload="intent"
       className="group product-card-v2 overflow-hidden flex flex-col h-full rounded-lg border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-shadow hover:shadow-[var(--shadow-glass)]"
     >
-      <div className="relative overflow-hidden [&_img]:transition-transform [&_img]:duration-[600ms] [&_img]:ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:[&_img]:scale-[1.12]">
+      <div className="relative overflow-hidden">
         <ProductBanner product={product} ratio="1/1" />
+        {/* Elegant hover: soft glow + diagonal shine sweep (desktop only) */}
+        <div className="pointer-events-none absolute inset-0 z-10 hidden md:block opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.18),transparent_60%)]" />
+        <div className="pointer-events-none absolute inset-0 z-10 hidden md:block overflow-hidden">
+          <div className="absolute top-0 -left-3/4 h-full w-1/2 rotate-12 bg-gradient-to-r from-transparent via-white/35 to-transparent blur-md opacity-0 md:group-hover:opacity-100 md:group-hover:translate-x-[260%] transition-all duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]" />
+        </div>
         {/* Discount + badge row, bottom-left of image — like reference */}
         <div className="absolute left-3 bottom-3 flex items-center gap-1.5 z-20">
           {plan?.original && plan?.price && (() => {
