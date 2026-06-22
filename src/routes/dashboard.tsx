@@ -256,7 +256,7 @@ function DashboardPage() {
           >
             <div className="h-full lg:h-auto lg:max-h-[calc(100vh-3rem)] overflow-y-auto bg-card border border-border lg:rounded-3xl shadow-sm">
               <div className="lg:hidden flex items-center justify-between px-5 py-4 border-b border-border">
-                <span className="text-sm font-bold text-foreground">Menu</span>
+                <span className="text-sm font-bold text-foreground">{tr("Menu", lang)}</span>
                 <button onClick={() => setSidebarOpen(false)} className="text-muted-foreground hover:text-foreground" aria-label="Close menu">
                   <X className="w-5 h-5" />
                 </button>
@@ -266,7 +266,7 @@ function DashboardPage() {
                 {NAV_GROUPS.map((group) => (
                   <div key={group.title}>
                     <div className="px-3 pb-2 flex items-center gap-2">
-                      <span className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground">{group.title}</span>
+                      <span className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground">{tr(group.title, lang)}</span>
                       <span className="h-px flex-1 bg-border" />
                     </div>
                     <div className="space-y-0.5">
@@ -284,7 +284,7 @@ function DashboardPage() {
                             }`}
                           >
                             <Icon className={`w-4 h-4 shrink-0 ${active ? "text-primary" : "text-muted-foreground"}`} />
-                            <span>{it.label}</span>
+                            <span>{tr(it.label, lang)}</span>
                           </button>
                         );
                       })}
@@ -299,7 +299,7 @@ function DashboardPage() {
                     className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-primary-foreground shadow-md"
                     style={{ background: "linear-gradient(90deg, #8b5cf6, #6366f1)" }}
                   >
-                    <Users className="w-4 h-4" /> Affiliate Program
+                    <Users className="w-4 h-4" /> {tr("Affiliate Program", lang)}
                   </button>
                   <Link
                     to="/ai-tools"
@@ -307,7 +307,7 @@ function DashboardPage() {
                     className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-semibold text-amber-950 shadow-md"
                     style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
                   >
-                    <Wrench className="w-4 h-4" /> Free Tools
+                    <Wrench className="w-4 h-4" /> {lang === "bn" ? "ফ্রি টুলস" : "Free Tools"}
                   </Link>
                   {isAdmin && (
                     <Link
@@ -316,7 +316,7 @@ function DashboardPage() {
                       className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-bold text-primary-foreground shadow-md"
                       style={{ background: "linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef)" }}
                     >
-                      <Shield className="w-4 h-4" /> Admin Panel
+                      <Shield className="w-4 h-4" /> {tr("Admin Panel", lang)}
                     </Link>
                   )}
                   <button
@@ -324,7 +324,7 @@ function DashboardPage() {
                     className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold text-white shadow-md hover:opacity-90 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/60"
                     style={{ background: "linear-gradient(90deg, #f43f5e, #e11d48)" }}
                   >
-                    <LogOut className="w-4 h-4" /> Logout
+                    <LogOut className="w-4 h-4" /> {tr("Logout", lang)}
                   </button>
                 </div>
               </nav>
