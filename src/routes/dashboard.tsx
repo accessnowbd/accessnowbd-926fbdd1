@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { useLang } from "@/context/LangContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
+import { publicUrl } from "@/lib/site-url";
 
 // English label -> Bangla translation for sidebar nav, group titles, page heads & common buttons.
 const BN: Record<string, string> = {
@@ -1272,7 +1273,7 @@ function PointsView() {
 /* ===================== REFERRAL ===================== */
 function ReferralView({ user }: { user: { id?: string; email?: string } | null }) {
   const code = (user?.id || "").slice(0, 8).toUpperCase();
-  const link = typeof window !== "undefined" ? `${window.location.origin}/signup?ref=${code}` : `/signup?ref=${code}`;
+  const link = publicUrl(`/signup?ref=${code}`);
   const [copied, setCopied] = useState(false);
   const copy = () => { navigator.clipboard.writeText(link); setCopied(true); setTimeout(() => setCopied(false), 1500); };
   const share = async () => {
