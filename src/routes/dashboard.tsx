@@ -12,7 +12,55 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { useLang } from "@/context/LangContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
+
+// English label -> Bangla translation for sidebar nav, group titles, page heads & common buttons.
+const BN: Record<string, string> = {
+  // Group titles
+  "ACCOUNT": "অ্যাকাউন্ট",
+  "ACTIVITY": "অ্যাক্টিভিটি",
+  "REWARDS": "রিওয়ার্ড",
+  "PREFERENCES": "পছন্দসমূহ",
+  // Nav labels
+  "Profile": "প্রোফাইল",
+  "Addresses": "ঠিকানা",
+  "Security": "সিকিউরিটি",
+  "My Orders": "আমার অর্ডার",
+  "My Licenses": "আমার লাইসেন্স",
+  "Downloads": "ডাউনলোড",
+  "Subscriptions": "সাবস্ক্রিপশন",
+  "Wishlist": "উইশলিস্ট",
+  "Notifications": "নোটিফিকেশন",
+  "Wallet": "ওয়ালেট",
+  "Points": "পয়েন্ট",
+  "Referral": "রেফারেল",
+  "Language": "ভাষা",
+  "Install App": "অ্যাপ ইন্সটল",
+  "Menu": "মেনু",
+  "Affiliate Program": "অ্যাফিলিয়েট প্রোগ্রাম",
+  // Common
+  "Edit Profile": "প্রোফাইল এডিট",
+  "My Wallet": "আমার ওয়ালেট",
+  "Open Wallet": "ওয়ালেট খুলুন",
+  "Reward Points": "রিওয়ার্ড পয়েন্ট",
+  "Referral Program": "রেফারেল প্রোগ্রাম",
+  "My Wishlist": "আমার উইশলিস্ট",
+  "License Keys": "লাইসেন্স কী",
+  "Open Support Ticket": "সাপোর্ট টিকেট খুলুন",
+  "My Tickets": "আমার টিকেট",
+  "Active Services": "চলমান সার্ভিস",
+  "Expired Services": "মেয়াদোত্তীর্ণ সার্ভিস",
+  "New Order": "নতুন অর্ডার",
+  "Mark all read": "সব পঠিত করুন",
+  "Logout": "লগআউট",
+  "Admin Panel": "অ্যাডমিন প্যানেল",
+};
+
+function tr(label: string, lang: "bn" | "en"): string {
+  if (lang === "bn") return BN[label] ?? label;
+  return label;
+}
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
