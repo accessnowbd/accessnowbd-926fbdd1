@@ -21,7 +21,9 @@ import {
   useRouterState,
   HeadContent,
   Scripts,
+  ScriptOnce,
 } from "@tanstack/react-router";
+
 
 import appCss from "../styles.css?url";
 
