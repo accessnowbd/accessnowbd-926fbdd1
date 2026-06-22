@@ -112,7 +112,7 @@ export function SiteFooter() {
               <div>
                 <Link
                   to="/"
-                  className="inline-flex max-w-full items-center gap-3 sm:gap-4"
+                  className="mx-auto flex max-w-full items-center justify-center gap-3 sm:gap-4 lg:mx-0 lg:inline-flex lg:justify-start"
                   aria-label="AccessNow BD home"
                 >
                   <span className="relative grid h-16 w-16 shrink-0 place-items-center rounded-full bg-[var(--gradient-conic)] p-[2px] shadow-[0_16px_42px_-16px_rgba(34,211,238,0.7)] md:h-[72px] md:w-[72px]">
@@ -173,7 +173,7 @@ export function SiteFooter() {
                   </span>
                 </Link>
 
-                <p className="mt-6 max-w-xl text-[14px] leading-7 text-white/72">
+                <p className="mt-6 max-w-xl text-center text-[14px] leading-7 text-white/72 lg:text-left">
                   <span className="font-bold text-cyan-600">বাংলাদেশের</span> সবচেয়ে{" "}
                   <span className="font-bold text-fuchsia-700">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span>{" "}
                   — <span className="font-semibold text-emerald-700">ভেরিফাইড সাবস্ক্রিপশন</span>,{" "}
