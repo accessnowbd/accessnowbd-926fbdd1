@@ -710,43 +710,92 @@ function OrdersTable({ orders }: { orders: Order[] }) {
   );
 }
 
-function ServiceList({ kind }: { kind: "active" | "expired" }) {
-  const items = kind === "active"
-    ? [
-        { n: "Netflix Premium", e: "15 Dec 2026", u: "78%" },
-        { n: "Spotify Family", e: "22 Jan 2027", u: "45%" },
-        { n: "ChatGPT Plus", e: "8 Feb 2027", u: "92%" },
-      ]
-    : [
-        { n: "Disney+", e: "10 Oct 2026", u: "—" },
-        { n: "Canva Pro", e: "5 Sep 2026", u: "—" },
-      ];
+function parsePlanToMs(plan?: string): number | null {
+  if (!plan) return null;
+  const m = String(plan).trim().toLowerCase().match(/(\d+(?:\.\d+)?)\s*(year|yr|month|mo|week|wk|day|d)s?/);
+  if (!m) return null;
+  const n = parseFloat(m[1]);
+  const unit = m[2];
+  const day = 24 * 60 * 60 * 1000;
+  if (unit.startsWith("y")) return n * 365 * day;
+  if (unit.startsWith("mo") || unit === "m") return n * 30 * day;
+  if (unit.startsWith("w")) return n * 7 * day;
+  return n * day;
+}
+
+function ServiceList({ kind, orders }: { kind: "active" | "expired"; orders: Order[] }) {
+  const now = Date.now();
+  const subs = React.useMemo(() => {
+    const out: { key: string; name: string; emoji?: string; orderId: string; start: number; end: number; daysLeft: number; totalDays: number }[] = [];
+    for (const o of orders || []) {
+      const st = String(o.status || "").toLowerCase();
+      if (!["completed", "delivered", "paid"].includes(st)) continue;
+      const startStr = (o as unknown as { delivered_at?: string | null }).delivered_at || o.created_at;
+      const start = new Date(startStr).getTime();
+      for (let i = 0; i < (o.items || []).length; i++) {
+        const it = o.items[i];
+        const dur = parsePlanToMs(it.planPeriod);
+        if (!dur) continue;
+        const end = start + dur;
+        const daysLeft = Math.ceil((end - now) / (24 * 60 * 60 * 1000));
+        const totalDays = Math.ceil(dur / (24 * 60 * 60 * 1000));
+        out.push({
+          key: `${o.id}:${i}`,
+          name: it.name || it.slug || "Subscription",
+          emoji: it.emoji,
+          orderId: o.id,
+          start, end, daysLeft, totalDays,
+        });
+      }
+    }
+    return out;
+  }, [orders, now]);
+
+  const items = subs.filter((s) => (kind === "active" ? s.end > now : s.end <= now))
+                    .sort((a, b) => (kind === "active" ? a.end - b.end : b.end - a.end));
+
   return (
     <div className="space-y-6">
       <PageHead title={kind === "active" ? "Active Services" : "Expired Services"} desc={kind === "active" ? "Currently running subscriptions" : "Subscriptions that need renewal"} />
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {items.map((it) => (
-          <Card key={it.n}>
-            <div className="flex items-center justify-between mb-3">
-              <div className="font-semibold" style={{ fontFamily: "var(--font-heading)" }}>{it.n}</div>
-              <Badge color={kind === "active" ? "success" : "danger"}>{kind === "active" ? "Active" : "Expired"}</Badge>
-            </div>
-            <div className="text-xs text-muted-foreground">Expiry: {it.e}</div>
-            {kind === "active" && (
-              <div className="mt-3">
-                <div className="text-xs text-muted-foreground mb-1">Usage: {it.u}</div>
-                <div className="h-2 rounded-full bg-white/5 overflow-hidden">
-                  <div className="h-full rounded-full" style={{ width: it.u, background: "var(--gradient-aurora)" }} />
+      {items.length === 0 ? (
+        <Card><Empty icon={<RefreshIcon className="w-6 h-6" />} msg={kind === "active" ? "এখনও কোনো সক্রিয় সাবস্ক্রিপশন নেই" : "এক্সপায়ার হওয়া কোনো সাবস্ক্রিপশন নেই"} /></Card>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((it) => {
+            const used = Math.max(0, Math.min(100, Math.round(((now - it.start) / (it.end - it.start)) * 100)));
+            const expiryStr = new Date(it.end).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+            return (
+              <Card key={it.key}>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="font-semibold text-foreground truncate" style={{ fontFamily: "var(--font-heading)" }}>
+                    {it.emoji ? <span className="mr-1">{it.emoji}</span> : null}{it.name}
+                  </div>
+                  <Badge color={kind === "active" ? "success" : "danger"}>{kind === "active" ? "Active" : "Expired"}</Badge>
                 </div>
-              </div>
-            )}
-            <div className="mt-4 flex gap-2">
-              <Btn variant="primary" className="!h-9 !px-4 text-xs flex-1">{kind === "active" ? "Manage" : "Renew"}</Btn>
-              <Btn variant="ghost" className="!h-9 !px-4 text-xs">Details</Btn>
-            </div>
-          </Card>
-        ))}
-      </div>
+                <div className="text-xs text-muted-foreground">Expiry: {expiryStr}</div>
+                {kind === "active" && (
+                  <div className="mt-3">
+                    <div className="text-xs text-muted-foreground mb-1">
+                      {it.daysLeft > 0 ? `${it.daysLeft} day${it.daysLeft === 1 ? "" : "s"} left` : "Expiring today"} · Used {used}%
+                    </div>
+                    <div className="h-2 rounded-full bg-muted overflow-hidden">
+                      <div className="h-full rounded-full" style={{ width: `${used}%`, background: "var(--gradient-aurora)" }} />
+                    </div>
+                  </div>
+                )}
+                <div className="mt-4 flex gap-2">
+                  <Link to="/orders/$id" params={{ id: it.orderId }} className="flex-1">
+                    <Btn variant="primary" className="!h-9 !px-4 text-xs w-full">{kind === "active" ? "Manage" : "Renew"}</Btn>
+                  </Link>
+                  <Link to="/orders/$id" params={{ id: it.orderId }}>
+                    <Btn variant="ghost" className="!h-9 !px-4 text-xs">Details</Btn>
+                  </Link>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
