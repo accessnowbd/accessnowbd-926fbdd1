@@ -1272,7 +1272,7 @@ function PointsView() {
 /* ===================== REFERRAL ===================== */
 function ReferralView({ user }: { user: { id?: string; email?: string } | null }) {
   const code = (user?.id || "").slice(0, 8).toUpperCase();
-  const link = typeof window !== "undefined" ? `${window.location.origin}/signup?ref=${code}` : `/signup?ref=${code}`;
+  const link = publicUrl(`/signup?ref=${code}`);
   const [copied, setCopied] = useState(false);
   const copy = () => { navigator.clipboard.writeText(link); setCopied(true); setTimeout(() => setCopied(false), 1500); };
   const share = async () => {
