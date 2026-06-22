@@ -147,6 +147,7 @@ function Share2Icon(props: { className?: string }) {
 
 function DashboardPage() {
   const { user, loading: authLoading, signOut } = useAuth();
+  const { lang } = useLang();
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
   const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null } | null>(null);
