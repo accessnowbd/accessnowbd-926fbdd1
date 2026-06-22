@@ -61,7 +61,7 @@ export async function sendInvoiceEmail(order: InvoiceOrderLike) {
       subtotal: fmtAmount(subtotal),
       discount: fmtAmount(discount),
       total: fmtAmount(order.total),
-      invoiceUrl: `${typeof window !== "undefined" ? window.location.origin : "https://accessnowbd.com"}/orders/${order.id}`,
+      invoiceUrl: publicUrl(`/orders/${order.id}`),
     },
   });
 }
