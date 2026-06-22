@@ -905,7 +905,7 @@ function Downloads({ orders }: { orders: Order[] }) {
                   <div className="w-11 h-11 rounded-lg bg-primary/10 grid place-items-center text-primary"><FileText className="w-5 h-5" /></div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold truncate">{l.productName}</div>
+                  <div className="text-sm font-semibold truncate text-foreground">{l.productName}</div>
                   <div className="text-xs text-muted-foreground truncate">{l.label} • {l.url}</div>
                 </div>
                 <button onClick={() => doCopy(l.url)} className="inline-flex items-center gap-1 h-9 px-3 rounded-full text-xs font-semibold glass border border-[var(--glass-border)] hover:border-primary/40">
