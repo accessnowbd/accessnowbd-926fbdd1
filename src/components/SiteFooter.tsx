@@ -112,7 +112,7 @@ export function SiteFooter() {
               <div>
                 <Link
                   to="/"
-                  className="inline-flex max-w-full items-center gap-3 sm:gap-4"
+                  className="mx-auto flex max-w-full items-center justify-center gap-3 sm:gap-4 lg:mx-0 lg:inline-flex lg:justify-start"
                   aria-label="AccessNow BD home"
                 >
                   <span className="relative grid h-16 w-16 shrink-0 place-items-center rounded-full bg-[var(--gradient-conic)] p-[2px] shadow-[0_16px_42px_-16px_rgba(34,211,238,0.7)] md:h-[72px] md:w-[72px]">
