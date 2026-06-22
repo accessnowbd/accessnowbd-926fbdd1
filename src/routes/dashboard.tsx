@@ -1361,24 +1361,17 @@ function SecurityView() {
 
 /* ===================== LANGUAGE ===================== */
 function LanguageView() {
-  const current = (typeof window !== "undefined" && (localStorage.getItem("anbd:lang") || "bn")) as "bn" | "en";
-  const [lang, setLang] = useState<"bn" | "en">(current);
-  const pick = (l: "bn" | "en") => {
-    setLang(l);
-    localStorage.setItem("anbd:lang", l);
-    document.documentElement.lang = l;
-    window.dispatchEvent(new CustomEvent("lang:change", { detail: l }));
-  };
+  const { lang, setLang } = useLang();
   const opts: Array<{ id: "bn" | "en"; name: string; sub: string; flag: string }> = [
     { id: "bn", name: "বাংলা", sub: "Bangla", flag: "🇧🇩" },
     { id: "en", name: "English", sub: "ইংরেজি", flag: "🇬🇧" },
   ];
   return (
     <div className="space-y-6">
-      <PageHead title="Language" desc="পছন্দের ভাষা নির্বাচন করুন" />
+      <PageHead title={lang === "bn" ? "ভাষা" : "Language"} desc={lang === "bn" ? "পছন্দের ভাষা নির্বাচন করুন" : "Choose your preferred language"} />
       <div className="grid sm:grid-cols-2 gap-4">
         {opts.map((o) => (
-          <button key={o.id} onClick={() => pick(o.id)} className={`text-left p-5 rounded-2xl border-2 transition ${lang === o.id ? "border-primary bg-primary/5" : "border-border bg-card hover:border-primary/40"}`}>
+          <button key={o.id} onClick={() => setLang(o.id)} className={`text-left p-5 rounded-2xl border-2 transition ${lang === o.id ? "border-primary bg-primary/5" : "border-border bg-card hover:border-primary/40"}`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3"><span className="text-3xl">{o.flag}</span><div><div className="font-bold text-foreground">{o.name}</div><div className="text-xs text-muted-foreground">{o.sub}</div></div></div>
               {lang === o.id && <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground grid place-items-center"><Check className="w-3.5 h-3.5" strokeWidth={3} /></div>}
@@ -1386,7 +1379,11 @@ function LanguageView() {
           </button>
         ))}
       </div>
-      <p className="text-xs text-muted-foreground">কিছু অংশ এখনো শুধু বাংলায় সাপোর্টেড।</p>
+      <p className="text-xs text-muted-foreground">
+        {lang === "bn"
+          ? "ভাষা পরিবর্তন করলে কাস্টমার ড্যাশবোর্ড সাথে সাথে আপডেট হবে। কিছু অংশ এখনো শুধু বাংলায় সাপোর্টেড।"
+          : "Switching language updates your customer dashboard instantly. Some sections are still Bangla-only."}
+      </p>
     </div>
   );
 }
