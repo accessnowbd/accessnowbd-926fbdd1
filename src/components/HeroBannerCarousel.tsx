@@ -238,16 +238,17 @@ export function HeroBannerCarousel() {
     setActive((i) => (i + dir + banners.length) % banners.length);
 
   return (
-    <section className="px-3 sm:px-4 md:px-8 pt-6 pb-4">
+    <section className="px-3 sm:px-4 md:px-4 lg:px-4 pt-4 pb-4">
       <div className="relative mx-auto w-full">
         <div
-          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[24px] sm:rounded-[28px] border border-white/20 transition-colors duration-500 h-[360px] md:h-[420px] lg:h-[460px]"
+          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[32px] border border-white/20 transition-colors duration-500 h-[360px] md:h-[520px] lg:h-[600px] xl:h-[620px]"
           style={{
             background,
             minHeight: Math.max(280, Math.min(900, Number(current.data.min_height) || 360)),
             boxShadow: `0 30px 80px -30px ${hexAlpha(accent, 0.45)}, 0 8px 32px -8px ${hexAlpha(glow, 0.25)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.18)}, inset 0 0 0 1px ${hexAlpha("#ffffff", 0.05)}`,
           }}
         >
+
 
           {/* Static soft glows for depth */}
           <div
