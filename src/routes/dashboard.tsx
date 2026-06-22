@@ -987,7 +987,7 @@ function MyTickets() {
             <div key={t.id} className="flex items-center gap-3 p-3 rounded-xl glass border border-[var(--glass-border)]">
               <MessageSquare className="w-4 h-4 text-primary" />
               <div className="flex-1">
-                <div className="text-sm font-semibold">{t.s}</div>
+                <div className="text-sm font-semibold text-foreground">{t.s}</div>
                 <div className="text-xs text-muted-foreground">{t.id}</div>
               </div>
               <Badge color={t.st === "open" ? "warn" : "success"}>{t.st}</Badge>
