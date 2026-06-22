@@ -21,7 +21,9 @@ import {
   useRouterState,
   HeadContent,
   Scripts,
+  ScriptOnce,
 } from "@tanstack/react-router";
+
 
 import appCss from "../styles.css?url";
 
@@ -133,17 +135,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="" data-theme="aurora">
+    <html lang="en" className="" data-theme="aurora" suppressHydrationWarning>
       <head>
+        <ScriptOnce>
+          {`(function(){try{var t=localStorage.getItem('anbd-theme');if(t!=='aurora'&&t!=='white'){t='white';}var r=document.documentElement;r.classList.remove('theme-white');if(t==='white'){r.classList.add('theme-white');}r.dataset.theme=t;}catch(e){}})();`}
+        </ScriptOnce>
         <HeadContent />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <Scripts />
       </body>
     </html>
   );
 }
+
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
