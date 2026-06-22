@@ -175,7 +175,7 @@ function DashboardPage() {
       .then((r) => { mark("orders fetch", tOrders); return r; });
 
     const tProfile = performance.now();
-    const profileP = supabase.from("profiles").select("display_name, phone").eq("id", user.id).maybeSingle()
+    const profileP = supabase.from("profiles").select("display_name, phone, username, country").eq("id", user.id).maybeSingle()
       .then((r) => { mark("profile fetch", tProfile); return r; });
 
     const roleP = supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
