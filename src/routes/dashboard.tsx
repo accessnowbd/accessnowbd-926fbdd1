@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { useLang } from "@/context/LangContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
+import { publicUrl } from "@/lib/site-url";
 
 // English label -> Bangla translation for sidebar nav, group titles, page heads & common buttons.
 const BN: Record<string, string> = {
