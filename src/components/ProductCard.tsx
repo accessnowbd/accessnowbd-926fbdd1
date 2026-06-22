@@ -53,11 +53,9 @@ function ProductCardImpl({ product }: { product: Product }) {
       to="/product/$slug"
       params={{ slug: product.slug }}
       preload="intent"
-      className="group product-card-v2 relative overflow-hidden flex flex-col h-full rounded-lg border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[var(--shadow-glass)] active:scale-[0.985] will-change-transform"
+      className="group product-card-v2 relative overflow-hidden flex flex-col h-full rounded-lg border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[var(--shadow-glass)] will-change-transform"
     >
-      {/* Click effect — animated gradient border traveling around all 4 sides */}
-      <span aria-hidden className="card-border-trace pointer-events-none absolute -inset-px rounded-lg opacity-0 group-active:opacity-100 group-active:animate-[cardBorderTrace_750ms_ease-out] z-30" />
-      <div className="relative overflow-hidden [&_img]:transition-transform [&_img]:duration-[600ms] [&_img]:ease-[cubic-bezier(0.22,1,0.36,1)] group-active:[&_img]:scale-[1.03]">
+      <div className="relative overflow-hidden [&_img]:transition-transform [&_img]:duration-[600ms] [&_img]:ease-[cubic-bezier(0.22,1,0.36,1)]">
         <ProductBanner product={product} ratio="1/1" />
         {/* Elegant hover: soft glow + diagonal shine sweep (desktop only) */}
         <div className="pointer-events-none absolute inset-0 z-10 hidden md:block opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.18),transparent_60%)]" />

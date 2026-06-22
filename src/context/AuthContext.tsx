@@ -26,9 +26,8 @@ async function withAuthTimeout<T>(promise: PromiseLike<T>): Promise<T> {
   }
 }
 
-// Read persisted Supabase session synchronously from localStorage so the
-// first render already has a user object — eliminates the "loading flash"
-// for signed-in users (admin shell, dashboards, etc).
+// Read persisted session only after hydration. Reading it during the initial
+// client render makes SSR output differ for signed-in users.
 function readPersistedSession(): Session | null {
   if (typeof localStorage === "undefined") return null;
   try {
@@ -49,12 +48,16 @@ function readPersistedSession(): Session | null {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const initialSession = typeof window !== "undefined" ? readPersistedSession() : null;
-  const [session, setSession] = useState<Session | null>(initialSession);
-  const [loading, setLoading] = useState(!initialSession);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
+    const persistedSession = readPersistedSession();
+    if (persistedSession) {
+      setSession(persistedSession);
+      setLoading(false);
+    }
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       if (!mounted) return;
       setSession(s);
