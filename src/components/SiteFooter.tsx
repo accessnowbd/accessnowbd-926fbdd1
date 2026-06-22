@@ -173,7 +173,7 @@ export function SiteFooter() {
                   </span>
                 </Link>
 
-                <p className="mt-6 max-w-xl text-[14px] leading-7 text-white/72">
+                <p className="mt-6 max-w-xl text-center text-[14px] leading-7 text-white/72 lg:text-left">
                   <span className="font-bold text-cyan-600">বাংলাদেশের</span> সবচেয়ে{" "}
                   <span className="font-bold text-fuchsia-700">বিশ্বস্ত ডিজিটাল মার্কেটপ্লেস</span>{" "}
                   — <span className="font-semibold text-emerald-700">ভেরিফাইড সাবস্ক্রিপশন</span>,{" "}
