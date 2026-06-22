@@ -725,7 +725,7 @@ function parsePlanToMs(plan?: string): number | null {
 
 function ServiceList({ kind, orders }: { kind: "active" | "expired"; orders: Order[] }) {
   const now = Date.now();
-  const subs = React.useMemo(() => {
+  const subs = useMemo(() => {
     const out: { key: string; name: string; emoji?: string; orderId: string; start: number; end: number; daysLeft: number; totalDays: number }[] = [];
     for (const o of orders || []) {
       const st = String(o.status || "").toLowerCase();
