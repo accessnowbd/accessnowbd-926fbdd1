@@ -415,11 +415,11 @@ function SectionRenderer({
     case "profile": return <ProfileView user={user} profile={profile} onNavigate={onNavigate} />;
     case "edit-profile": return <EditProfile profile={profile} onSaved={() => onNavigate("profile")} onCancel={() => onNavigate("profile")} />;
     case "orders": return <OrdersTable orders={orders} />;
-    case "active-services": return <ServiceList kind="active" />;
-    case "expired": return <ServiceList kind="expired" />;
+    case "active-services": return <ServiceList kind="active" orders={orders} />;
+    case "expired": return <ServiceList kind="expired" orders={orders} />;
     case "downloads": return <Downloads orders={orders} />;
     case "licenses": return <Licenses />;
-    case "subscriptions": return <ServiceList kind="active" />;
+    case "subscriptions": return <ServiceList kind="active" orders={orders} />;
     case "wishlist": return <WishlistView />;
     case "notifications": return <NotificationsView />;
     case "wallet": return <WalletRedirect />;
