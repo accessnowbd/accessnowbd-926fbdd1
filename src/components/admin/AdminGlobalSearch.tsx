@@ -212,7 +212,7 @@ export function AdminGlobalSearch({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 gap-0 max-w-2xl bg-white border-slate-200 overflow-hidden rounded-2xl shadow-[0_30px_80px_-20px_rgba(15,23,42,0.3)]">
+      <DialogContent className="force-light-canvas p-0 gap-0 max-w-2xl bg-white border-slate-200 overflow-hidden rounded-2xl shadow-[0_30px_80px_-20px_rgba(15,23,42,0.3)]">
         <DialogTitle className="sr-only">Admin search</DialogTitle>
 
         {/* Input row */}
