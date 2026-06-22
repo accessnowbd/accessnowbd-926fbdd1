@@ -12,14 +12,15 @@ export type SupportWidgetConfig = {
 };
 
 export const DEFAULT_SUPPORT_WIDGET: SupportWidgetConfig = {
-  orb_from: "#064e3b",
-  orb_via: "#047857",
-  orb_to: "#022c22",
-  ring_color: "#10b981",
-  spin_color_1: "#10b981",
-  spin_color_2: "#34d399",
+  orb_from: "#3b0764",
+  orb_via: "#6d28d9",
+  orb_to: "#1e1b4b",
+  ring_color: "#8b5cf6",
+  spin_color_1: "#a855f7",
+  spin_color_2: "#c084fc",
   icon_color: "#ffffff",
 };
+
 
 
 export function useSupportWidgetConfig() {
