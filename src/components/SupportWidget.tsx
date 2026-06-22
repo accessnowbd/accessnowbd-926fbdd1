@@ -275,8 +275,8 @@ export function SupportWidget() {
             {/* Ripple ping waves (only when idle) */}
             {!open && !chooser && (
               <>
-                <span className="absolute inset-0 rounded-full animate-ping" style={{ backgroundColor: `${cfg?.ring_color ?? "#10b981"}66` }} />
-                <span className="absolute inset-0 rounded-full animate-ping [animation-delay:0.6s]" style={{ backgroundColor: `${cfg?.spin_color_2 ?? "#34d399"}4d` }} />
+                <span className="absolute inset-0 rounded-full animate-ping" style={{ backgroundColor: "#8b5cf666" }} />
+                <span className="absolute inset-0 rounded-full animate-ping [animation-delay:0.6s]" style={{ backgroundColor: "#a78bfa4d" }} />
               </>
             )}
 
@@ -284,7 +284,7 @@ export function SupportWidget() {
             <span
               className="absolute -inset-4 rounded-full opacity-60 blur-2xl group-hover:opacity-100 transition-opacity duration-500 animate-pulse"
               style={{
-                background: `linear-gradient(135deg, ${cfg?.ring_color ?? "#10b981"}66, ${cfg?.spin_color_1 ?? "#10b981"}66, ${cfg?.spin_color_2 ?? "#34d399"}66)`,
+                background: "linear-gradient(135deg, #8b5cf666, #7c3aed66, #a78bfa66)",
               }}
             />
 
@@ -292,31 +292,32 @@ export function SupportWidget() {
             <span
               className="absolute -inset-[3px] rounded-full opacity-90 animate-[spin_6s_linear_infinite]"
               style={{
-                background: `conic-gradient(from 0deg, ${cfg?.spin_color_1 ?? "#10b981"}f2, ${cfg?.spin_color_2 ?? "#34d399"}f2, ${cfg?.spin_color_1 ?? "#10b981"}f2, ${cfg?.spin_color_2 ?? "#34d399"}f2, ${cfg?.spin_color_1 ?? "#10b981"}f2)`,
+                background: "conic-gradient(from 0deg, #7c3aedf2, #a78bfaf2, #7c3aedf2, #a78bfaf2, #7c3aedf2)",
                 filter: "blur(2px)",
               }}
             />
 
             {/* Main orb */}
             <span
-              className="relative grid place-items-center h-16 w-16 rounded-full text-white shadow-[0_22px_50px_-12px_rgba(16,185,129,0.65)] ring-1 ring-white/20 overflow-hidden"
-              style={{ background: `linear-gradient(135deg, ${cfg?.orb_from ?? "#064e3b"}, ${cfg?.orb_via ?? "#047857"}, ${cfg?.orb_to ?? "#022c22"})` }}
+              className="relative grid place-items-center h-16 w-16 rounded-full text-white shadow-[0_22px_50px_-12px_rgba(124,58,237,0.65)] ring-1 ring-white/20 overflow-hidden"
+              style={{ background: "linear-gradient(135deg, #7c3aed, #6d28d9, #4c1d95)" }}
             >
               <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/20 blur-[3px]" />
-              <span className="absolute -bottom-4 inset-x-3 h-6 rounded-full blur-xl" style={{ backgroundColor: `${cfg?.spin_color_2 ?? "#34d399"}66` }} />
+              <span className="absolute -bottom-4 inset-x-3 h-6 rounded-full blur-xl" style={{ backgroundColor: "#a78bfa66" }} />
 
 
               {(chooser || open) ? (
-                <X className="h-7 w-7 relative drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]" strokeWidth={2.6} style={{ color: cfg?.icon_color ?? "#ffffff" }} />
+                <X className="h-7 w-7 relative drop-shadow-[0_2px_10px_rgba(167,139,250,0.6)]" strokeWidth={2.6} style={{ color: "#ffffff" }} />
               ) : (
                 <MessageCircleMore
-                  className="h-8 w-8 relative drop-shadow-[0_2px_10px_rgba(0,229,255,0.6)]"
+                  className="h-8 w-8 relative drop-shadow-[0_2px_10px_rgba(167,139,250,0.6)]"
                   strokeWidth={2.4}
-                  style={{ color: cfg?.icon_color ?? "#ffffff" }}
+                  style={{ color: "#ffffff" }}
                 />
               )}
             </span>
           </button>
+
 
         </div>
       )}
