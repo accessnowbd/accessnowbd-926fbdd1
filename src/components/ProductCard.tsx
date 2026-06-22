@@ -55,8 +55,8 @@ function ProductCardImpl({ product }: { product: Product }) {
       preload="intent"
       className="group product-card-v2 relative overflow-hidden flex flex-col h-full rounded-lg border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[var(--shadow-glass)] active:scale-[0.985] will-change-transform"
     >
-      {/* Soft primary glow ring pulse on click — subtle, no white flash */}
-      <span aria-hidden className="pointer-events-none absolute inset-0 rounded-lg ring-2 ring-[hsl(var(--primary)/0.45)] opacity-0 group-active:animate-[cardSoftPulse_550ms_ease-out] z-30" />
+      {/* Click effect — animated gradient border traveling around all 4 sides */}
+      <span aria-hidden className="card-border-trace pointer-events-none absolute -inset-px rounded-lg opacity-0 group-active:opacity-100 group-active:animate-[cardBorderTrace_750ms_ease-out] z-30" />
       <div className="relative overflow-hidden [&_img]:transition-transform [&_img]:duration-[600ms] [&_img]:ease-[cubic-bezier(0.22,1,0.36,1)] group-active:[&_img]:scale-[1.03]">
         <ProductBanner product={product} ratio="1/1" />
         {/* Elegant hover: soft glow + diagonal shine sweep (desktop only) */}
