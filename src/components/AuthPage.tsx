@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Loader2, Eye, EyeOff, X, CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/context/AuthContext";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import accessNowLogo from "@/assets/logo-gold-a.webp";
@@ -88,6 +89,15 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
   const oauth = async (provider: "google" | "apple") => {
     setErr(null);
     try {
+      if (provider === "google") {
+        const result = await lovable.auth.signInWithOAuth("google", {
+          redirect_uri: `${window.location.origin}${returnTo}`,
+        });
+        if (result.error) throw new Error(result.error.message || "Google sign-in failed");
+        if (result.redirected) return;
+        navigate({ to: returnTo as string });
+        return;
+      }
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: { redirectTo: `${window.location.origin}${returnTo}` },
