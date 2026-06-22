@@ -293,9 +293,7 @@
     color-scheme: light;
   }
 
-  /* Mobile safety net — prevents admin content from being clipped on small screens.
-     Wide tables get their own horizontal scroll; long text wraps; tab/pill rows
-     scroll horizontally instead of overflowing the viewport. */
+  /* Mobile safety net — prevents admin content from being clipped on small screens. */
   @media (max-width: 768px) {
     .admin-shell table {
       display: block;
@@ -317,9 +315,36 @@
     }
     .admin-shell [role="tablist"]::-webkit-scrollbar { display: none; }
 
-    /* Catch-all: any element that's wider than the viewport gets a scrollbar
-       instead of being clipped invisibly by the parent `overflow-x-hidden`. */
     .admin-shell .a-scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Rigid multi-column grids → collapse to 2 columns on mobile so form fields
+       and stat cards don't overflow. Responsive variants (sm:/md:/lg:) untouched. */
+    .admin-shell .grid.grid-cols-3,
+    .admin-shell .grid.grid-cols-4,
+    .admin-shell .grid.grid-cols-5,
+    .admin-shell .grid.grid-cols-6 {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .admin-shell .a-card,
+    .admin-shell form { max-width: 100%; }
+    .admin-shell input,
+    .admin-shell select,
+    .admin-shell textarea { max-width: 100%; }
+    .admin-shell img:not(.admin-keep-size) { max-width: 100%; height: auto; }
+
+    .admin-shell .a-pills,
+    .admin-shell .a-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
+    .admin-shell .a-pills::-webkit-scrollbar,
+    .admin-shell .a-tabs::-webkit-scrollbar { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    /* On very small phones, drop rigid 2-col grids to a single column so labels
+       and inputs are fully visible. */
+    .admin-shell .grid.grid-cols-2 {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
   }
 
   /* Admin design system — pill tabs, stat cards, search bar, action icons */
