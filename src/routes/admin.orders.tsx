@@ -587,11 +587,7 @@ function OrderStatusFlow({ status, onChange }: { status: string; onChange: (s: s
               key={step}
               type="button"
               onClick={() => onChange(step)}
-              className={`h-8 rounded-full border px-3 text-xs font-bold transition ${
-                status === step
-                  ? "border-rose-300 bg-rose-100 text-rose-800"
-                  : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
-              }`}
+              className={`order-exception-button h-8 rounded-full border px-3 text-xs font-bold transition ${status === step ? "order-exception-active" : ""}`}
             >
               {getStatusText(step, t)}
             </button>
@@ -601,7 +597,7 @@ function OrderStatusFlow({ status, onChange }: { status: string; onChange: (s: s
           type="button"
           disabled={!nextStatus || isException}
           onClick={() => nextStatus && onChange(nextStatus)}
-          className={`h-9 rounded-full px-4 text-xs font-extrabold shadow-sm transition ${nextStatus && !isException ? "bg-violet-600 text-white hover:bg-violet-700" : "bg-slate-200 text-slate-600 shadow-none"}`}
+          className={`order-next-button h-9 rounded-full px-4 text-xs font-extrabold shadow-sm transition ${nextStatus && !isException ? "" : "order-next-disabled"}`}
         >
           {nextStatus ? `${t("Next", "পরের ধাপ")}: ${getStatusText(nextStatus, t)}` : t("Completed", "সম্পন্ন")}
         </button>
@@ -628,7 +624,7 @@ function PaymentStatusButtons({ status, onChange }: { status: string; onChange: 
               key={step}
               type="button"
               onClick={() => onChange(step)}
-              className={`h-10 rounded-xl border text-xs font-extrabold capitalize transition ${active ? tones[step] : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}
+              className={`order-payment-button h-10 rounded-xl border text-xs font-extrabold capitalize transition ${active ? `order-payment-active-${step}` : ""}`}
             >
               {getStatusText(step, t)}
             </button>
