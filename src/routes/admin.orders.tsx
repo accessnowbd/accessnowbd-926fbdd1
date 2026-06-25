@@ -360,6 +360,18 @@ function AdminOrders() {
           onDelete={() => deleteOrder(selected.id)}
         />
       )}
+
+      {editing && (
+        <OrderEditModal
+          order={editing}
+          onClose={() => setEditing(null)}
+          onSave={async (patch) => {
+            const ok = await saveOrderEdits(editing.id, patch);
+            if (ok) setEditing(null);
+          }}
+        />
+      )}
+
     </div>
   );
 }
