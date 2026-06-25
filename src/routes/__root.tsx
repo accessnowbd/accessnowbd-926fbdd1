@@ -12,6 +12,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { WelcomePopup } from "@/components/WelcomePopup";
 import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 import { TrackingScripts } from "@/components/TrackingScripts";
+import { AbandonedCheckoutTracker } from "@/components/AbandonedCheckoutTracker";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -253,6 +254,7 @@ function RootComponent() {
                 {!isAdmin && <WelcomePopup />}
                 {!isAdmin && <InstallAppPrompt />}
                 {!isAdmin && <TrackingScripts />}
+                {!isAdmin && <AbandonedCheckoutTracker />}
               </LangProvider>
             </ShopConfigProvider>
           </CartProvider>
