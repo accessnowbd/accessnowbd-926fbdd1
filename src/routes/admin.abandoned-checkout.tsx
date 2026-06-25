@@ -87,6 +87,59 @@ function AbandonedCheckoutPage() {
     if (selected?.id === id) setSelected(null);
   };
 
+  const createOrderFromAbandoned = async (r: Row) => {
+    if (!r.items?.length) { toast.error(t("No items in this cart", "এই কার্টে কোনো আইটেম নেই")); return; }
+    if (!confirm(t(
+      `Create an order for ${r.full_name || r.email}? Total: ৳${Math.round(Number(r.total))}`,
+      `${r.full_name || r.email}-এর জন্য অর্ডার তৈরি করবেন? মোট: ৳${Math.round(Number(r.total))}`,
+    ))) return;
+    setCreatingId(r.id);
+    try {
+      const { data: { user: adminUser } } = await supabase.auth.getUser();
+      if (!adminUser) throw new Error("Not authenticated");
+      const orderItems = (r.items ?? []).map((it) => ({
+        slug: it.slug,
+        name: it.name,
+        emoji: it.emoji || "📦",
+        planPeriod: it.planPeriod || "",
+        qty: it.qty ?? 1,
+        price: Number(it.price) || 0,
+      }));
+      const { data: ord, error } = await supabase
+        .from("orders")
+        .insert({
+          user_id: r.user_id ?? adminUser.id,
+          full_name: r.full_name || "—",
+          email: r.email,
+          phone: r.phone || "",
+          payment_method: "manual",
+          transaction_id: `AC-${Date.now()}`,
+          items: orderItems,
+          total: Number(r.total) || 0,
+          status: "pending",
+          payment_status: "pending",
+          admin_note: `Created from abandoned checkout${r.coupon_code ? ` (coupon: ${r.coupon_code})` : ""}`,
+        } as never)
+        .select("id")
+        .single();
+      if (error) throw error;
+      await updateRow(r.id, {
+        status: "recovered",
+        recovered_at: new Date().toISOString(),
+        recovered_order_id: (ord as { id: string }).id,
+      });
+      toast.success(t("Order created", "অর্ডার তৈরি হয়েছে"));
+      setSelected(null);
+      navigate({ to: "/admin/orders" });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to create order");
+    } finally {
+      setCreatingId(null);
+    }
+  };
+
+
+
   const counts = useMemo(() => ({
     all: rows.length,
     pending: rows.filter((r) => r.status === "pending").length,
