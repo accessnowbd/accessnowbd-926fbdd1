@@ -446,9 +446,10 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-function OrderRow({ order: o, onView, onDelete, onDownload }: { order: Order; onView: () => void; onDelete: () => void; onDownload: () => void }) {
+function OrderRow({ order: o, onView, onEdit, onDelete, onDownload }: { order: Order; onView: () => void; onEdit: () => void; onDelete: () => void; onDownload: () => void }) {
   const { t } = useAdminLang();
   const firstItem = o.items?.[0];
+
   const verified = (o.payment_status || "pending") === "verified";
   const waLink = o.phone ? `https://wa.me/${o.phone.replace(/\D/g, "")}` : "";
   return (
