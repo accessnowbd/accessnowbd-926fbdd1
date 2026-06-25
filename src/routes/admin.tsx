@@ -538,9 +538,9 @@ function AdminShell({ user, signOut, navigate }: any) {
               className="hidden xl:block w-64"
             />
 
-            <Link to="/" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
+            <a href="/" target="_blank" rel="noopener noreferrer" className="hidden sm:inline-flex h-9 px-3 rounded-lg text-xs font-bold items-center gap-1.5 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition">
               <ExternalLink className="w-3.5 h-3.5" /> {t("View store", "স্টোর দেখুন")}
-            </Link>
+            </a>
           </div>
         </header>
 
