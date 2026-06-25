@@ -182,6 +182,23 @@ function ProductPage() {
     }
   }, [product?.slug, product?.name, product?.plans]);
 
+
+  if (isLoading) return <ProductSkeleton />;
+  if (!product) {
+    return (
+      <div className="min-h-screen grid place-items-center px-4">
+        <div className="text-center">
+          <h1 className="text-3xl font-semibold mb-2">Product not found</h1>
+          <Link to="/" className="text-primary underline">Back to home</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const activeIdx = Math.min(selected, Math.max(product.plans.length - 1, 0));
+  const plan = product.plans[activeIdx];
+  const related = products.filter((p) => p.slug !== product.slug).slice(0, 8);
+
   useEffect(() => {
     if (!product || !plan) return;
     const handle = window.setTimeout(() => {
@@ -202,23 +219,6 @@ function ProductPage() {
     }, 800);
     return () => window.clearTimeout(handle);
   }, [product, plan, qty]);
-
-
-  if (isLoading) return <ProductSkeleton />;
-  if (!product) {
-    return (
-      <div className="min-h-screen grid place-items-center px-4">
-        <div className="text-center">
-          <h1 className="text-3xl font-semibold mb-2">Product not found</h1>
-          <Link to="/" className="text-primary underline">Back to home</Link>
-        </div>
-      </div>
-    );
-  }
-
-  const activeIdx = Math.min(selected, Math.max(product.plans.length - 1, 0));
-  const plan = product.plans[activeIdx];
-  const related = products.filter((p) => p.slug !== product.slug).slice(0, 8);
 
   const galleryImages = (product.meta?.gallery ?? []).filter(Boolean);
   const allImages = [product.imageUrl, ...galleryImages].filter((u): u is string => !!u);

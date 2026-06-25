@@ -173,6 +173,11 @@ function CheckoutPage() {
 
   const applied = useAppliedCoupon(coupon, total);
 
+  const subAfterCoupon = Math.max(0, total - applied.discount);
+  const walletApplied = useWallet ? Math.min(walletBalance, subAfterCoupon) : 0;
+  const grandTotal = Math.max(0, subAfterCoupon - walletApplied);
+  const fullyByWallet = walletApplied > 0 && grandTotal === 0;
+
   // Capture abandoned checkout immediately, then enrich it as the customer types.
   // Captures for BOTH signed-in shoppers and anonymous guests (so admin can recover them).
   useEffect(() => {
@@ -201,11 +206,6 @@ function CheckoutPage() {
     return () => window.clearTimeout(handle);
 
   }, [form.name, form.email, form.phone, items, total, grandTotal, coupon, user?.id, step, method, applied.valid, applied.code]);
-
-  const subAfterCoupon = Math.max(0, total - applied.discount);
-  const walletApplied = useWallet ? Math.min(walletBalance, subAfterCoupon) : 0;
-  const grandTotal = Math.max(0, subAfterCoupon - walletApplied);
-  const fullyByWallet = walletApplied > 0 && grandTotal === 0;
 
   const copyNumber = async () => {
     await navigator.clipboard.writeText(selectedMethod.number.replace(/-/g, ""));
