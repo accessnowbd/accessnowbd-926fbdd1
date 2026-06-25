@@ -305,25 +305,10 @@ function CheckoutPage() {
     );
   }
 
-  if (!user && items.length > 0) {
-    return (
-      <GuardLayout>
-        <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
-          Login to checkout
-        </h1>
-        <p className="text-sm text-muted-foreground mt-2">
-          Sign in or create an account to place your order and track it later.
-        </p>
-        <button
-          onClick={() => { rememberReturnTo(); navigate({ to: "/login" }); }}
-          className="mt-5 h-11 px-6 rounded-full text-primary-foreground text-sm font-bold inline-flex items-center justify-center hover:opacity-95 transition shadow-lg shadow-primary/25"
-          style={{ background: CTA_GRADIENT }}
-        >
-          Login / Sign up
-        </button>
-      </GuardLayout>
-    );
-  }
+  // Guests are allowed to fill the form so we can capture abandoned checkouts
+  // and prefill returning users. Final order submission still requires login
+  // (handleSubmit redirects to /login when !user).
+
 
   if (items.length === 0) {
     return (
