@@ -57,7 +57,7 @@ function AbandonedCheckoutPage() {
         select: (s: string) => { order: (c: string, o: { ascending: boolean }) => Promise<{ data: Row[] | null; error: { message: string } | null }> };
       })
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("last_seen_at", { ascending: false });
     if (error) toast.error(error.message);
     setRows((data ?? []) as Row[]);
     setLoading(false);
