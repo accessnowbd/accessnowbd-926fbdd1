@@ -230,6 +230,92 @@ export type Database = {
         }
         Relationships: []
       }
+      brands: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          is_active: boolean
+          logo_url: string
+          name: string
+          slug: string
+          sort_order: number
+          updated_at: string
+          website: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          logo_url?: string
+          name: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+          website?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          logo_url?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+          website?: string
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          image_url: string
+          is_active: boolean
+          name: string
+          parent_id: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          name: string
+          parent_id?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          name?: string
+          parent_id?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       coupons: {
         Row: {
           code: string
@@ -280,6 +366,58 @@ export type Database = {
           value?: number
         }
         Relationships: []
+      }
+      digital_downloads_log: {
+        Row: {
+          downloaded_at: string
+          file_id: string | null
+          id: string
+          ip: string
+          order_id: string | null
+          product_slug: string
+          user_id: string | null
+        }
+        Insert: {
+          downloaded_at?: string
+          file_id?: string | null
+          id?: string
+          ip?: string
+          order_id?: string | null
+          product_slug: string
+          user_id?: string | null
+        }
+        Update: {
+          downloaded_at?: string
+          file_id?: string | null
+          id?: string
+          ip?: string
+          order_id?: string | null
+          product_slug?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "digital_downloads_log_file_id_fkey"
+            columns: ["file_id"]
+            isOneToOne: false
+            referencedRelation: "product_digital_files"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "digital_downloads_log_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "digital_downloads_log_product_slug_fkey"
+            columns: ["product_slug"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["slug"]
+          },
+        ]
       }
       email_send_log: {
         Row: {
@@ -527,6 +665,146 @@ export type Database = {
         }
         Relationships: []
       }
+      product_digital_files: {
+        Row: {
+          content_type: string
+          created_at: string
+          download_limit_per_order: number
+          file_name: string
+          file_path: string
+          id: string
+          product_slug: string
+          size_bytes: number
+        }
+        Insert: {
+          content_type?: string
+          created_at?: string
+          download_limit_per_order?: number
+          file_name: string
+          file_path: string
+          id?: string
+          product_slug: string
+          size_bytes?: number
+        }
+        Update: {
+          content_type?: string
+          created_at?: string
+          download_limit_per_order?: number
+          file_name?: string
+          file_path?: string
+          id?: string
+          product_slug?: string
+          size_bytes?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_digital_files_product_slug_fkey"
+            columns: ["product_slug"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
+      product_license_keys: {
+        Row: {
+          assigned_at: string | null
+          assigned_order_id: string | null
+          assigned_user_id: string | null
+          created_at: string
+          id: string
+          license_key: string
+          note: string
+          product_slug: string
+          status: Database["public"]["Enums"]["license_key_status"]
+          variant_id: string | null
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_order_id?: string | null
+          assigned_user_id?: string | null
+          created_at?: string
+          id?: string
+          license_key: string
+          note?: string
+          product_slug: string
+          status?: Database["public"]["Enums"]["license_key_status"]
+          variant_id?: string | null
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_order_id?: string | null
+          assigned_user_id?: string | null
+          created_at?: string
+          id?: string
+          license_key?: string
+          note?: string
+          product_slug?: string
+          status?: Database["public"]["Enums"]["license_key_status"]
+          variant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_license_keys_assigned_order_id_fkey"
+            columns: ["assigned_order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_license_keys_product_slug_fkey"
+            columns: ["product_slug"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "product_license_keys_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "product_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_media: {
+        Row: {
+          alt: string
+          created_at: string
+          id: string
+          is_primary: boolean
+          product_slug: string
+          sort_order: number
+          url: string
+        }
+        Insert: {
+          alt?: string
+          created_at?: string
+          id?: string
+          is_primary?: boolean
+          product_slug: string
+          sort_order?: number
+          url: string
+        }
+        Update: {
+          alt?: string
+          created_at?: string
+          id?: string
+          is_primary?: boolean
+          product_slug?: string
+          sort_order?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_media_product_slug_fkey"
+            columns: ["product_slug"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
       product_reviews: {
         Row: {
           comment: string
@@ -563,24 +841,119 @@ export type Database = {
         }
         Relationships: []
       }
+      product_tags: {
+        Row: {
+          product_slug: string
+          tag_id: string
+        }
+        Insert: {
+          product_slug: string
+          tag_id: string
+        }
+        Update: {
+          product_slug?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_tags_product_slug_fkey"
+            columns: ["product_slug"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "product_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_variants: {
+        Row: {
+          compare_at_price: number | null
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          options: Json
+          price: number | null
+          product_slug: string
+          sku: string | null
+          sort_order: number
+          stock: number
+          updated_at: string
+        }
+        Insert: {
+          compare_at_price?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          options?: Json
+          price?: number | null
+          product_slug: string
+          sku?: string | null
+          sort_order?: number
+          stock?: number
+          updated_at?: string
+        }
+        Update: {
+          compare_at_price?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          options?: Json
+          price?: number | null
+          product_slug?: string
+          sku?: string | null
+          sort_order?: number
+          stock?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_variants_product_slug_fkey"
+            columns: ["product_slug"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
       products: {
         Row: {
           badge: string | null
+          brand_id: string | null
+          canonical_url: string
           category: string
+          category_id: string | null
           created_at: string
           delivery_time: string
           description: string
+          download_limit: number
           emoji: string
           features: Json
           gradient: string
           image_url: string
           is_active: boolean
+          is_digital: boolean
           meta: Json
           name: string
+          og_image: string
           plans: Json
+          scheduled_publish_at: string | null
+          seo_description: string
+          seo_keywords: string
+          seo_title: string
           short_description: string
+          sku: string | null
           slug: string
           sort_order: number
+          status: Database["public"]["Enums"]["product_status"]
           stock_status: string
           tagline: string
           updated_at: string
@@ -590,21 +963,33 @@ export type Database = {
         }
         Insert: {
           badge?: string | null
+          brand_id?: string | null
+          canonical_url?: string
           category: string
+          category_id?: string | null
           created_at?: string
           delivery_time?: string
           description?: string
+          download_limit?: number
           emoji?: string
           features?: Json
           gradient?: string
           image_url?: string
           is_active?: boolean
+          is_digital?: boolean
           meta?: Json
           name: string
+          og_image?: string
           plans?: Json
+          scheduled_publish_at?: string | null
+          seo_description?: string
+          seo_keywords?: string
+          seo_title?: string
           short_description?: string
+          sku?: string | null
           slug: string
           sort_order?: number
+          status?: Database["public"]["Enums"]["product_status"]
           stock_status?: string
           tagline?: string
           updated_at?: string
@@ -614,21 +999,33 @@ export type Database = {
         }
         Update: {
           badge?: string | null
+          brand_id?: string | null
+          canonical_url?: string
           category?: string
+          category_id?: string | null
           created_at?: string
           delivery_time?: string
           description?: string
+          download_limit?: number
           emoji?: string
           features?: Json
           gradient?: string
           image_url?: string
           is_active?: boolean
+          is_digital?: boolean
           meta?: Json
           name?: string
+          og_image?: string
           plans?: Json
+          scheduled_publish_at?: string | null
+          seo_description?: string
+          seo_keywords?: string
+          seo_title?: string
           short_description?: string
+          sku?: string | null
           slug?: string
           sort_order?: number
+          status?: Database["public"]["Enums"]["product_status"]
           stock_status?: string
           tagline?: string
           updated_at?: string
@@ -636,7 +1033,22 @@ export type Database = {
           warranty?: string
           whatsapp_order_text?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "products_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -816,6 +1228,27 @@ export type Database = {
           id?: string
           metadata?: Json | null
           reason?: string
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
         }
         Relationships: []
       }
@@ -1373,6 +1806,8 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      license_key_status: "available" | "assigned" | "revoked"
+      product_status: "draft" | "scheduled" | "published" | "archived"
       wallet_topup_status: "pending" | "approved" | "rejected"
       wallet_txn_type:
         | "topup"
@@ -1509,6 +1944,8 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      license_key_status: ["available", "assigned", "revoked"],
+      product_status: ["draft", "scheduled", "published", "archived"],
       wallet_topup_status: ["pending", "approved", "rejected"],
       wallet_txn_type: [
         "topup",
