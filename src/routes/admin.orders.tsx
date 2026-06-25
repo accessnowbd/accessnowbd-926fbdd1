@@ -844,16 +844,30 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
               <PaymentStatusButtons status={order.payment_status || "pending"} onChange={onPaymentStatusChange} />
             </div>
 
-            {/* WhatsApp custom message */}
+            {/* WhatsApp auto status message */}
             <div>
-              <label className="text-xs font-semibold text-slate-600 mb-1.5 block">{t("WhatsApp Custom Message (optional)", "WhatsApp কাস্টম মেসেজ (ঐচ্ছিক)")}</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-semibold text-slate-600">{t("WhatsApp Status Message (auto-generated)", "WhatsApp স্ট্যাটাস মেসেজ (অটো-জেনারেটেড)")}</label>
+                <button
+                  type="button"
+                  onClick={() => setWaMsg(buildOrderStatusMessage(order))}
+                  className="text-[11px] font-bold text-violet-600 hover:text-violet-800 inline-flex items-center gap-1"
+                  title={t("Regenerate from current order status", "বর্তমান অর্ডার স্ট্যাটাস থেকে রিজেনারেট")}
+                >
+                  <RefreshCw className="w-3 h-3" /> {t("Regenerate", "রিজেনারেট")}
+                </button>
+              </div>
               <textarea
                 value={waMsg} onChange={(e) => setWaMsg(e.target.value)}
-                rows={3}
-                placeholder={t("License key, delivery instructions…", "লাইসেন্স কি, ডেলিভারি নির্দেশনা...")}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-violet-400 outline-none resize-none"
+                rows={10}
+                placeholder={t("Auto status message — edit if needed before sending", "অটো স্ট্যাটাস মেসেজ — পাঠানোর আগে প্রয়োজনে এডিট করুন")}
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-mono focus:border-violet-400 outline-none resize-y whitespace-pre-wrap"
               />
+              <p className="mt-1 text-[11px] text-slate-500">
+                {t("Click WhatsApp above to open chat with this message pre-filled. Status updates automatically when you change order status.", "উপরের WhatsApp-এ ক্লিক করলে এই মেসেজ সহ চ্যাট খুলবে। অর্ডার স্ট্যাটাস বদলালে মেসেজ অটো আপডেট হবে।")}
+              </p>
             </div>
+
 
             {/* Admin notes */}
             <div>
