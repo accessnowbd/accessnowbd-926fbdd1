@@ -509,7 +509,9 @@ function OrderRow({ order: o, onView, onEdit, onDelete, onDownload }: { order: O
   const firstItem = o.items?.[0];
 
   const verified = (o.payment_status || "pending") === "verified";
-  const waLink = o.phone ? `https://wa.me/${o.phone.replace(/\D/g, "")}` : "";
+  const waLink = o.phone
+    ? `https://wa.me/${o.phone.replace(/\D/g, "")}?text=${encodeURIComponent(buildOrderStatusMessage(o))}`
+    : "";
   return (
     <tr className="border-t border-slate-100 hover:bg-slate-50/60">
       <td className="px-4 py-3"><input type="checkbox" className="rounded" /></td>
