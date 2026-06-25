@@ -173,14 +173,14 @@ function CheckoutPage() {
   const applied = useAppliedCoupon(coupon, total);
 
   // Capture abandoned checkout: debounced upsert as soon as we have valid contact info + items.
+  // Captures for BOTH signed-in shoppers and anonymous guests (so admin can recover them).
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!user?.id) return; // only capture for signed-in shoppers (RLS scopes rows to user_id)
     if (!items?.length) return;
     if (!form.name.trim() || !emailRe.test(form.email) || !isValidBdPhone(form.phone)) return;
     const handle = window.setTimeout(() => {
       const payload = {
-        user_id: user.id,
+        user_id: user?.id ?? null,
         full_name: form.name.trim(),
         email: form.email.trim().toLowerCase(),
         phone: normalizeBdPhone(form.phone),
@@ -194,7 +194,7 @@ function CheckoutPage() {
         status: "pending",
       };
       (supabase.from("abandoned_checkouts" as never) as unknown as { upsert: (p: unknown, o: { onConflict: string }) => Promise<{ error: { message: string } | null }> })
-        .upsert(payload, { onConflict: "user_id" })
+        .upsert(payload, { onConflict: "email" })
         .then(({ error }) => {
           if (error && typeof console !== "undefined") console.warn("abandoned capture", error.message);
         });
