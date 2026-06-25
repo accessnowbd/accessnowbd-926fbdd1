@@ -131,7 +131,19 @@ function AdminOrders() {
     if (error) { setOrders(prev); toast.error(error.message); return; }
     toast.success(t("Order deleted", "অর্ডার মুছে ফেলা হয়েছে"));
     if (selected?.id === id) setSelected(null);
+    if (editing?.id === id) setEditing(null);
   };
+
+  const saveOrderEdits = async (id: string, patch: Partial<Order>) => {
+    const prev = orders;
+    setOrders((o) => o.map((x) => x.id === id ? { ...x, ...patch } as Order : x));
+    setSelected((s) => s && s.id === id ? { ...s, ...patch } as Order : s);
+    const { error } = await supabase.from("orders").update(patch as never).eq("id", id);
+    if (error) { setOrders(prev); toast.error(error.message); return false; }
+    toast.success(t("Order updated", "অর্ডার আপডেট হয়েছে"));
+    return true;
+  };
+
 
   const filtered = useMemo(() => orders.filter((o) => {
     if (filter !== "all" && o.status !== filter) return false;
