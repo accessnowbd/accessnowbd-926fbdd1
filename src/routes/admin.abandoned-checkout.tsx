@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   Loader2, Eye, Trash2, MessageCircle, RefreshCw, Search as SearchIcon,
-  Mail, Phone, ArrowRight, FileText, Clock, Package, X,
+  Mail, Phone, ArrowRight, FileText, Clock, Package, X, ShoppingBag,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
