@@ -68,11 +68,13 @@ function readCachedAdmin(): boolean {
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  // Read cache synchronously in initializer so first render already has it.
-  const initialCachedAdmin = typeof window !== "undefined" ? readCachedAdmin() : false;
-  const [cachedAdmin] = useState(initialCachedAdmin);
-  const [isAdmin, setIsAdmin] = useState(initialCachedAdmin);
-  const [verified, setVerified] = useState(initialCachedAdmin);
+  // Hydration-safe: start with `false` on both server and first client render,
+  // then hydrate the cached flag in an effect. Reading localStorage during
+  // the initializer caused server/client mismatches (server renders the
+  // blank loader, client renders the shell), breaking hydration.
+  const [cachedAdmin, setCachedAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [verified, setVerified] = useState(false);
   const [roleError, setRoleError] = useState<{
     message: string;
     code?: string;
@@ -83,10 +85,18 @@ function AdminLayout() {
   const [checkedAt, setCheckedAt] = useState<string | null>(null);
 
   // Wipe historical splash/admin flags immediately on mount so a stale client
-  // flag can never leave the route on an empty gradient screen.
+  // flag can never leave the route on an empty gradient screen. Also hydrate
+  // the cached admin flag here (post-mount) to avoid SSR hydration mismatch.
   useEffect(() => {
     purgeLegacySplashFlags();
+    const cached = readCachedAdmin();
+    if (cached) {
+      setCachedAdmin(true);
+      setIsAdmin(true);
+      setVerified(true);
+    }
   }, []);
+
 
   // Admin panel is always light/white themed regardless of the user-selected
   // site theme. Force `theme-white` on <html> while mounted, and KEEP it
