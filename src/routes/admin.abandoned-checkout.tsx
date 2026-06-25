@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   Loader2, Eye, Trash2, MessageCircle, RefreshCw, Search as SearchIcon,
-  Mail, Phone, ArrowRight, FileText, Clock, Package, X,
+  Mail, Phone, ArrowRight, FileText, Clock, Package, X, ShoppingBag,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -36,8 +36,10 @@ const fmtMoney = (n: number) => "৳" + Math.round(n).toLocaleString("en-IN");
 
 function AbandonedCheckoutPage() {
   const { t } = useAdminLang();
+  const navigate = useNavigate();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
+  const [creatingId, setCreatingId] = useState<string | null>(null);
   const [q, setQ] = useState("");
   const [tab, setTab] = useState<"pending" | "all" | "recovered" | "contacted">("pending");
   const [selected, setSelected] = useState<Row | null>(null);
@@ -84,6 +86,59 @@ function AbandonedCheckoutPage() {
     toast.success(t("Deleted", "ডিলিট হয়েছে"));
     if (selected?.id === id) setSelected(null);
   };
+
+  const createOrderFromAbandoned = async (r: Row) => {
+    if (!r.items?.length) { toast.error(t("No items in this cart", "এই কার্টে কোনো আইটেম নেই")); return; }
+    if (!confirm(t(
+      `Create an order for ${r.full_name || r.email}? Total: ৳${Math.round(Number(r.total))}`,
+      `${r.full_name || r.email}-এর জন্য অর্ডার তৈরি করবেন? মোট: ৳${Math.round(Number(r.total))}`,
+    ))) return;
+    setCreatingId(r.id);
+    try {
+      const { data: { user: adminUser } } = await supabase.auth.getUser();
+      if (!adminUser) throw new Error("Not authenticated");
+      const orderItems = (r.items ?? []).map((it) => ({
+        slug: it.slug,
+        name: it.name,
+        emoji: it.emoji || "📦",
+        planPeriod: it.planPeriod || "",
+        qty: it.qty ?? 1,
+        price: Number(it.price) || 0,
+      }));
+      const { data: ord, error } = await supabase
+        .from("orders")
+        .insert({
+          user_id: r.user_id ?? adminUser.id,
+          full_name: r.full_name || "—",
+          email: r.email,
+          phone: r.phone || "",
+          payment_method: "manual",
+          transaction_id: `AC-${Date.now()}`,
+          items: orderItems,
+          total: Number(r.total) || 0,
+          status: "pending",
+          payment_status: "pending",
+          admin_note: `Created from abandoned checkout${r.coupon_code ? ` (coupon: ${r.coupon_code})` : ""}`,
+        } as never)
+        .select("id")
+        .single();
+      if (error) throw error;
+      await updateRow(r.id, {
+        status: "recovered",
+        recovered_at: new Date().toISOString(),
+        recovered_order_id: (ord as { id: string }).id,
+      });
+      toast.success(t("Order created", "অর্ডার তৈরি হয়েছে"));
+      setSelected(null);
+      navigate({ to: "/admin/orders" });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to create order");
+    } finally {
+      setCreatingId(null);
+    }
+  };
+
+
 
   const counts = useMemo(() => ({
     all: rows.length,
@@ -163,8 +218,10 @@ function AbandonedCheckoutPage() {
                   <RowItem
                     key={r.id}
                     row={r}
+                    creating={creatingId === r.id}
                     onView={() => setSelected(r)}
                     onContact={() => updateRow(r.id, { status: "contacted", contacted_at: new Date().toISOString() })}
+                    onCreateOrder={() => createOrderFromAbandoned(r)}
                     onDelete={() => deleteRow(r.id)}
                   />
                 ))}
@@ -180,8 +237,10 @@ function AbandonedCheckoutPage() {
       {selected && (
         <DetailModal
           row={selected}
+          creating={creatingId === selected.id}
           onClose={() => setSelected(null)}
           onUpdate={(p) => updateRow(selected.id, p)}
+          onCreateOrder={() => createOrderFromAbandoned(selected)}
           onDelete={() => deleteRow(selected.id)}
         />
       )}
@@ -230,7 +289,7 @@ function StatusBadge({ status }: { status: Row["status"] }) {
   return <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold border ${v.cls}`}>{t(v.en, v.bn)}</span>;
 }
 
-function RowItem({ row: r, onView, onContact, onDelete }: { row: Row; onView: () => void; onContact: () => void; onDelete: () => void }) {
+function RowItem({ row: r, creating, onView, onContact, onCreateOrder, onDelete }: { row: Row; creating?: boolean; onView: () => void; onContact: () => void; onCreateOrder: () => void; onDelete: () => void }) {
   const { t } = useAdminLang();
   const waLink = r.phone ? `https://wa.me/${r.phone.replace(/\D/g, "")}?text=${encodeURIComponent(`আসসালামু আলাইকুম ${r.full_name}, আপনি আমাদের ওয়েবসাইটে একটি অর্ডার শুরু করেছিলেন। কোনো সাহায্যের প্রয়োজন হলে জানান।`)}` : "";
   return (
@@ -250,13 +309,21 @@ function RowItem({ row: r, onView, onContact, onDelete }: { row: Row; onView: ()
       <td className="px-4 py-3">
         <div className="flex items-center justify-end gap-1">
           <IconBtn title={t("View", "দেখুন")} onClick={onView}><Eye className="w-3.5 h-3.5" /></IconBtn>
-          <IconBtn title={t("Mark contacted", "কন্টাক্ট করা হয়েছে")} onClick={onContact}><ArrowRight className="w-3.5 h-3.5" /></IconBtn>
           {waLink && (
             <a href={waLink} target="_blank" rel="noreferrer" title="WhatsApp"
               className="w-7 h-7 grid place-items-center rounded-md text-slate-500 hover:text-emerald-600 hover:bg-emerald-50">
               <MessageCircle className="w-3.5 h-3.5" />
             </a>
           )}
+          <IconBtn title={t("Mark contacted", "কন্টাক্ট করা হয়েছে")} onClick={onContact}><ArrowRight className="w-3.5 h-3.5" /></IconBtn>
+          <button
+            onClick={onCreateOrder}
+            disabled={creating}
+            title={t("Create order", "অর্ডার তৈরি করুন")}
+            className="w-7 h-7 grid place-items-center rounded-md text-slate-500 hover:text-violet-600 hover:bg-violet-50 disabled:opacity-50"
+          >
+            {creating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShoppingBag className="w-3.5 h-3.5" />}
+          </button>
           <IconBtn title={t("Delete", "ডিলিট")} onClick={onDelete} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
         </div>
       </td>
@@ -275,7 +342,7 @@ function IconBtn({ children, onClick, title, danger }: { children: React.ReactNo
   );
 }
 
-function DetailModal({ row, onClose, onUpdate, onDelete }: { row: Row; onClose: () => void; onUpdate: (p: Partial<Row>) => void; onDelete: () => void }) {
+function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete }: { row: Row; creating?: boolean; onClose: () => void; onUpdate: (p: Partial<Row>) => void; onCreateOrder: () => void; onDelete: () => void }) {
   const { t } = useAdminLang();
   const [note, setNote] = useState(row.admin_note || "");
   const waLink = row.phone ? `https://wa.me/${row.phone.replace(/\D/g, "")}` : "";
@@ -321,7 +388,7 @@ function DetailModal({ row, onClose, onUpdate, onDelete }: { row: Row; onClose: 
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <a href={waLink || "#"} target={waLink ? "_blank" : undefined} rel="noreferrer"
                className={`h-10 rounded-xl border inline-flex items-center justify-center gap-2 text-sm font-semibold ${waLink ? "border-emerald-200 text-emerald-700 bg-emerald-50/40 hover:bg-emerald-50" : "border-slate-200 text-slate-400 cursor-not-allowed"}`}>
               <MessageCircle className="w-4 h-4" /> WhatsApp
@@ -329,6 +396,11 @@ function DetailModal({ row, onClose, onUpdate, onDelete }: { row: Row; onClose: 
             <button onClick={() => onUpdate({ status: "contacted", contacted_at: new Date().toISOString() })}
                className="h-10 rounded-xl border border-sky-200 text-sky-700 bg-sky-50/40 hover:bg-sky-50 inline-flex items-center justify-center gap-2 text-sm font-semibold">
               <ArrowRight className="w-4 h-4" /> {t("Mark Contacted", "কন্টাক্ট করা হয়েছে")}
+            </button>
+            <button onClick={onCreateOrder} disabled={creating}
+               className="h-10 rounded-xl bg-violet-600 text-white hover:bg-violet-700 disabled:opacity-60 inline-flex items-center justify-center gap-2 text-sm font-semibold">
+              {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingBag className="w-4 h-4" />}
+              {t("Create Order", "অর্ডার তৈরি")}
             </button>
           </div>
 
