@@ -342,7 +342,7 @@ function IconBtn({ children, onClick, title, danger }: { children: React.ReactNo
   );
 }
 
-function DetailModal({ row, onClose, onUpdate, onDelete }: { row: Row; onClose: () => void; onUpdate: (p: Partial<Row>) => void; onDelete: () => void }) {
+function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete }: { row: Row; creating?: boolean; onClose: () => void; onUpdate: (p: Partial<Row>) => void; onCreateOrder: () => void; onDelete: () => void }) {
   const { t } = useAdminLang();
   const [note, setNote] = useState(row.admin_note || "");
   const waLink = row.phone ? `https://wa.me/${row.phone.replace(/\D/g, "")}` : "";
