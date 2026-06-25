@@ -73,11 +73,20 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
     const wasOk = readMfaOkCache();
     if (!wasOk) setMode("loading");
     try {
-      // 0+1. Load admin security settings and existing grant in parallel.
+      // 0. Ensure we have a session before calling auth-protected server fns.
+      //    Without it, the bearer middleware throws a 401 Response which
+      //    surfaces as a noisy `[object Response]` runtime error.
+      const { data: sessionData } = await supabase.auth.getSession();
+      const hasSession = !!sessionData.session?.access_token;
+
+      // 1. Load admin security settings and existing grant in parallel.
       const [settingsRes, grantRes] = await Promise.all([
         loadSecuritySettings(),
-        checkGrant().catch((e) => ({ __error: e })) as Promise<any>,
+        hasSession
+          ? (checkGrant().catch((e) => ({ __error: e })) as Promise<any>)
+          : Promise.resolve({ __error: new Error("no-session") }),
       ]);
+
       const cfg = settingsRes.settings;
       setSettings(cfg);
       const markOk = () => {
