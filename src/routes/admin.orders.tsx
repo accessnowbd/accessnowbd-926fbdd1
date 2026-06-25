@@ -52,8 +52,10 @@ function AdminOrders() {
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<string>("all");
   const [selected, setSelected] = useState<Order | null>(null);
+  const [editing, setEditing] = useState<Order | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [paymentFilter, setPaymentFilter] = useState<string>("all");
+
 
   const load = useCallback(async () => {
     setLoading(true);
