@@ -218,8 +218,10 @@ function AbandonedCheckoutPage() {
                   <RowItem
                     key={r.id}
                     row={r}
+                    creating={creatingId === r.id}
                     onView={() => setSelected(r)}
                     onContact={() => updateRow(r.id, { status: "contacted", contacted_at: new Date().toISOString() })}
+                    onCreateOrder={() => createOrderFromAbandoned(r)}
                     onDelete={() => deleteRow(r.id)}
                   />
                 ))}
