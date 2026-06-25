@@ -45,6 +45,52 @@ const shortId = (id: string) => "ORD-" + id.replace(/-/g, "").slice(0, 8).toUppe
 
 const fmtMoney = (n: number) => "৳" + Math.round(n).toLocaleString("en-IN");
 
+const STATUS_BN: Record<string, string> = {
+  pending: "⏳ পেন্ডিং — আপনার অর্ডারটি গ্রহণ করা হয়েছে, পেমেন্ট ভেরিফিকেশনের অপেক্ষায় আছে।",
+  processing: "⚙️ প্রসেসিং — আপনার অর্ডারটি প্রস্তুত করা হচ্ছে, খুব শীঘ্রই ডেলিভারি দেওয়া হবে।",
+  delivered: "✅ ডেলিভার্ড — আপনার অর্ডারটি ডেলিভারি দেওয়া হয়েছে। অনুগ্রহ করে চেক করে কনফার্ম করুন।",
+  completed: "🎉 কমপ্লিটেড — আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে। ধন্যবাদ Access Now BD-এর সাথে থাকার জন্য!",
+  cancelled: "❌ ক্যান্সেল — দুঃখিত, আপনার অর্ডারটি বাতিল করা হয়েছে। বিস্তারিত জানতে যোগাযোগ করুন।",
+  refunded: "💸 রিফান্ডেড — আপনার পেমেন্ট রিফান্ড করা হয়েছে।",
+  failed: "⚠️ ফেইলড — অর্ডারটি প্রসেস করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
+};
+
+function buildOrderStatusMessage(o: Order): string {
+  const sid = shortId(o.id);
+  const name = (o.full_name || "").split(" ")[0] || "Customer";
+  const items = (o.items ?? [])
+    .map((it, i) => `${i + 1}. ${it.name}${it.plan ? ` (${it.plan})` : ""} ×${it.qty ?? 1} — ${fmtMoney(Number(it.price) * (it.qty ?? 1))}`)
+    .join("\n");
+  const statusLine = STATUS_BN[o.status] || `📦 স্ট্যাটাস: ${o.status}`;
+  const payVerified = (o.payment_status || "pending") === "verified";
+  const payLine = payVerified ? "✅ পেমেন্ট: ভেরিফাইড" : "⏳ পেমেন্ট: ভেরিফিকেশন বাকি";
+  const creds = o.delivered_credentials;
+  const credBlock = (o.status === "delivered" || o.status === "completed") && creds && (creds.loginEmail || creds.loginPassword)
+    ? `\n\n🔐 লগইন তথ্য:\n• Email: ${creds.loginEmail ?? "—"}\n• Password: ${creds.loginPassword ?? "—"}${creds.plan ? `\n• Plan: ${creds.plan}` : ""}${creds.startsOn ? `\n• Starts: ${creds.startsOn}` : ""}${creds.expiresOn ? `\n• Expires: ${creds.expiresOn}` : ""}`
+    : "";
+  const orderDate = new Date(o.created_at).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  return [
+    `আসসালামু আলাইকুম ${name},`,
+    `Access Now BD থেকে আপনার অর্ডার আপডেট:`,
+    ``,
+    `🧾 অর্ডার আইডি: ${sid}`,
+    `📅 তারিখ: ${orderDate}`,
+    ``,
+    `🛒 প্রোডাক্ট:`,
+    items || "—",
+    ``,
+    `💰 মোট: ${fmtMoney(Number(o.total))}`,
+    `💳 পেমেন্ট মেথড: ${o.payment_method || "—"}`,
+    payLine,
+    ``,
+    `📦 বর্তমান অবস্থা:`,
+    statusLine + credBlock,
+    ``,
+    `কোনো প্রশ্ন থাকলে এই WhatsApp-এ রিপ্লাই করুন।`,
+    `— Access Now BD`,
+  ].join("\n");
+}
+
 function AdminOrders() {
   const { t } = useAdminLang();
   const [orders, setOrders] = useState<Order[]>([]);
@@ -463,7 +509,9 @@ function OrderRow({ order: o, onView, onEdit, onDelete, onDownload }: { order: O
   const firstItem = o.items?.[0];
 
   const verified = (o.payment_status || "pending") === "verified";
-  const waLink = o.phone ? `https://wa.me/${o.phone.replace(/\D/g, "")}` : "";
+  const waLink = o.phone
+    ? `https://wa.me/${o.phone.replace(/\D/g, "")}?text=${encodeURIComponent(buildOrderStatusMessage(o))}`
+    : "";
   return (
     <tr className="border-t border-slate-100 hover:bg-slate-50/60">
       <td className="px-4 py-3"><input type="checkbox" className="rounded" /></td>
@@ -669,7 +717,8 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
 }) {
   const { t } = useAdminLang();
   const [tab, setTab] = useState<"details"|"history">("details");
-  const [waMsg, setWaMsg] = useState("");
+  const [waMsg, setWaMsg] = useState(() => buildOrderStatusMessage(order));
+  useEffect(() => { setWaMsg(buildOrderStatusMessage(order)); }, [order.id, order.status, order.payment_status, order.total]);
   const [note, setNote] = useState(order.admin_note || "");
   const [savingNote, setSavingNote] = useState(false);
   const [downloading, setDownloading] = useState(false);
@@ -795,16 +844,30 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
               <PaymentStatusButtons status={order.payment_status || "pending"} onChange={onPaymentStatusChange} />
             </div>
 
-            {/* WhatsApp custom message */}
+            {/* WhatsApp auto status message */}
             <div>
-              <label className="text-xs font-semibold text-slate-600 mb-1.5 block">{t("WhatsApp Custom Message (optional)", "WhatsApp কাস্টম মেসেজ (ঐচ্ছিক)")}</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-semibold text-slate-600">{t("WhatsApp Status Message (auto-generated)", "WhatsApp স্ট্যাটাস মেসেজ (অটো-জেনারেটেড)")}</label>
+                <button
+                  type="button"
+                  onClick={() => setWaMsg(buildOrderStatusMessage(order))}
+                  className="text-[11px] font-bold text-violet-600 hover:text-violet-800 inline-flex items-center gap-1"
+                  title={t("Regenerate from current order status", "বর্তমান অর্ডার স্ট্যাটাস থেকে রিজেনারেট")}
+                >
+                  <RefreshCw className="w-3 h-3" /> {t("Regenerate", "রিজেনারেট")}
+                </button>
+              </div>
               <textarea
                 value={waMsg} onChange={(e) => setWaMsg(e.target.value)}
-                rows={3}
-                placeholder={t("License key, delivery instructions…", "লাইসেন্স কি, ডেলিভারি নির্দেশনা...")}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-violet-400 outline-none resize-none"
+                rows={10}
+                placeholder={t("Auto status message — edit if needed before sending", "অটো স্ট্যাটাস মেসেজ — পাঠানোর আগে প্রয়োজনে এডিট করুন")}
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-mono focus:border-violet-400 outline-none resize-y whitespace-pre-wrap"
               />
+              <p className="mt-1 text-[11px] text-slate-500">
+                {t("Click WhatsApp above to open chat with this message pre-filled. Status updates automatically when you change order status.", "উপরের WhatsApp-এ ক্লিক করলে এই মেসেজ সহ চ্যাট খুলবে। অর্ডার স্ট্যাটাস বদলালে মেসেজ অটো আপডেট হবে।")}
+              </p>
             </div>
+
 
             {/* Admin notes */}
             <div>
