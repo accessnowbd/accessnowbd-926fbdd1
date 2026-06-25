@@ -87,23 +87,25 @@ export async function captureAbandonedCheckout(input: CaptureInput) {
   };
 
   const table = supabase.from("abandoned_checkouts" as never) as unknown as {
-    upsert: (p: unknown, o: { onConflict: string }) => Promise<{ error: { code?: string; message: string } | null }>;
+    insert: (p: unknown) => Promise<{ error: { code?: string; message: string } | null }>;
     update: (p: unknown) => { eq: (c: string, v: string) => Promise<{ error: { message: string } | null }> };
-    insert: (p: unknown) => Promise<{ error: { message: string } | null }>;
   };
 
-  const { error } = await table.upsert(payload, { onConflict: "session_key" });
-  if (!error) return;
+  const inserted = await table.insert(payload);
+  if (!inserted.error) return;
 
-  const email = payload.email;
-  if (email) {
-    const byEmail = await table.update(payload).eq("email", email);
-    if (!byEmail.error) return;
+  if (inserted.error.code === "23505") {
+    const bySession = await table.update(payload).eq("session_key", sessionKey);
+    if (!bySession.error) return;
+
+    const email = payload.email;
+    if (email) {
+      const byEmail = await table.update(payload).eq("email", email);
+      if (!byEmail.error) return;
+    }
   }
 
-  const fallbackPayload = { ...payload, session_key: `${sessionKey}-${Date.now()}` };
-  const inserted = await table.insert(fallbackPayload);
-  if (inserted.error && typeof console !== "undefined") {
+  if (typeof console !== "undefined") {
     console.warn("abandoned checkout capture failed", inserted.error.message);
   }
 }
