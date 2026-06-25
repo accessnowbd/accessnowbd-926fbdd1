@@ -36,8 +36,10 @@ const fmtMoney = (n: number) => "৳" + Math.round(n).toLocaleString("en-IN");
 
 function AbandonedCheckoutPage() {
   const { t } = useAdminLang();
+  const navigate = useNavigate();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
+  const [creatingId, setCreatingId] = useState<string | null>(null);
   const [q, setQ] = useState("");
   const [tab, setTab] = useState<"pending" | "all" | "recovered" | "contacted">("pending");
   const [selected, setSelected] = useState<Row | null>(null);
