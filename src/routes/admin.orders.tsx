@@ -709,6 +709,138 @@ function PaymentStatusButtons({ status, onChange }: { status: string; onChange: 
 }
 
 
+type QuickStepKey = "verify" | "processing" | "delivered" | "whatsapp" | "completed";
+
+function QuickFlow({ order, waLink, downloading, onPaymentStatusChange, onStatusChange, onDownload }: {
+  order: Order;
+  waLink: string;
+  downloading: boolean;
+  onPaymentStatusChange: (s: string) => void;
+  onStatusChange: (s: string) => void;
+  onDownload: () => void;
+}) {
+  const { t } = useAdminLang();
+  const [waSent, setWaSent] = useState(false);
+
+  const payVerified = (order.payment_status || "pending") === "verified";
+  const isProcessing = order.status === "processing" || order.status === "delivered" || order.status === "completed";
+  const isDelivered = order.status === "delivered" || order.status === "completed";
+  const isCompleted = order.status === "completed";
+  const isException = (EXCEPTION_STATUSES as readonly string[]).includes(order.status);
+
+  type Step = { key: QuickStepKey; label: string; done: boolean; run: () => void; icon: React.ReactNode; tone: string };
+  const steps: Step[] = [
+    { key: "verify",     label: t("Verify Payment", "পেমেন্ট ভেরিফাই"), done: payVerified, run: () => onPaymentStatusChange("verified"), icon: <ShieldCheck className="w-4 h-4" />, tone: "emerald" },
+    { key: "processing", label: t("Mark Processing", "প্রসেসিং"),       done: isProcessing, run: () => onStatusChange("processing"),    icon: <RefreshCw className="w-4 h-4" />,    tone: "amber" },
+    { key: "delivered",  label: t("Mark Delivered", "ডেলিভার্ড"),       done: isDelivered, run: () => onStatusChange("delivered"),      icon: <Truck className="w-4 h-4" />,        tone: "sky" },
+    { key: "whatsapp",   label: t("Send WhatsApp", "WhatsApp পাঠান"),  done: waSent,       run: () => { if (waLink) { window.open(waLink, "_blank", "noopener,noreferrer"); setWaSent(true); } else { toast.error(t("No phone number", "ফোন নম্বর নেই")); } }, icon: <MessageCircle className="w-4 h-4" />, tone: "green" },
+    { key: "completed",  label: t("Complete Order", "অর্ডার কমপ্লিট"),  done: isCompleted, run: () => onStatusChange("completed"),      icon: <Check className="w-4 h-4" />,        tone: "violet" },
+  ];
+
+  const nextIdx = steps.findIndex((s) => !s.done);
+  const next = nextIdx >= 0 ? steps[nextIdx] : null;
+  const allDone = nextIdx < 0;
+
+  return (
+    <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-sky-50 p-3 sm:p-4 shadow-sm">
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-xs font-bold uppercase tracking-wide text-violet-700">{t("Quick Flow", "কুইক ফ্লো")}</div>
+        <div className="text-[11px] font-semibold text-slate-500">
+          {allDone ? t("All steps complete", "সব ধাপ সম্পন্ন") : `${nextIdx} / ${steps.length} ${t("done", "সম্পন্ন")}`}
+        </div>
+      </div>
+
+      {/* Primary "Next" button — one click advances one step */}
+      {isException ? (
+        <div className="mb-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-bold text-rose-700">
+          {t("This order is", "এই অর্ডারটি")} {getStatusText(order.status, t)} — {t("flow is paused.", "ফ্লো বন্ধ।")}
+        </div>
+      ) : next ? (
+        <button
+          type="button"
+          onClick={next.run}
+          className="mb-3 inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 text-base font-extrabold text-white shadow-md transition hover:from-violet-700 hover:to-indigo-700 active:scale-[0.99]"
+        >
+          {next.icon}
+          <span>{t("Next", "পরবর্তী")}: {next.label}</span>
+        </button>
+      ) : (
+        <div className="mb-3 inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 text-base font-extrabold text-white shadow-md">
+          <Check className="w-5 h-5" /> {t("All Done", "সব শেষ")}
+        </div>
+      )}
+
+      {/* Step progress chips */}
+      <ol className="grid grid-cols-1 gap-2 sm:grid-cols-5">
+        {steps.map((s, i) => {
+          const isCurrent = i === nextIdx;
+          const cls = s.done
+            ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+            : isCurrent
+              ? "border-violet-300 bg-white text-violet-800 ring-2 ring-violet-200"
+              : "border-slate-200 bg-white text-slate-400";
+          return (
+            <li key={s.key}>
+              <button
+                type="button"
+                onClick={s.run}
+                disabled={s.done || (!isCurrent && !s.done) || isException}
+                className={`flex w-full items-center gap-2 rounded-xl border px-2.5 py-2 text-left text-xs font-bold transition disabled:cursor-not-allowed ${cls}`}
+                title={s.label}
+              >
+                <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-[11px] font-extrabold ${
+                  s.done ? "bg-emerald-600 text-white" : isCurrent ? "bg-violet-600 text-white" : "bg-slate-100 text-slate-500"
+                }`}>{s.done ? <Check className="h-3.5 w-3.5" /> : i + 1}</span>
+                <span className="min-w-0 truncate">{s.label}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+
+      {/* Utility actions */}
+      <div className="mt-3 flex flex-wrap gap-2 border-t border-violet-100 pt-3">
+        <button
+          type="button"
+          onClick={onDownload}
+          disabled={downloading}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-60"
+        >
+          {downloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+          {t("PDF", "PDF")}
+        </button>
+        {waLink && (
+          <a
+            href={waLink}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-9 items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 text-xs font-bold text-emerald-700 hover:bg-emerald-100"
+          >
+            <MessageCircle className="w-3.5 h-3.5" /> {t("Open WhatsApp", "WhatsApp খুলুন")}
+          </a>
+        )}
+        <div className="ml-auto flex gap-2">
+          {EXCEPTION_STATUSES.map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => onStatusChange(s)}
+              className={`inline-flex h-9 items-center rounded-full border px-3 text-xs font-bold transition ${
+                order.status === s
+                  ? "border-rose-300 bg-rose-100 text-rose-800"
+                  : "border-slate-200 bg-white text-slate-600 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-700"
+              }`}
+            >
+              {getStatusText(s, t)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, onSaveNote, onDelete }: {
   order: Order;
   onClose: () => void;
@@ -821,49 +953,15 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
               </div>
             </Card>
 
-            {/* Quick actions */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-xs font-bold text-slate-500 uppercase tracking-wide">{t("Quick Actions", "দ্রুত অ্যাকশন")}</div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-
-                <button
-                  onClick={() => onPaymentStatusChange("verified")}
-                  disabled={order.payment_status === "verified"}
-                  className="order-quick-action inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <ShieldCheck className="w-4 h-4" /> {t("Verify Payment", "পেমেন্ট ভেরিফাই")}
-                </button>
-                <button
-                  onClick={() => onStatusChange("delivered")}
-                  disabled={order.status === "delivered" || order.status === "completed"}
-                  className="order-quick-action inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm border-sky-200 bg-sky-50 text-sky-700 hover:bg-sky-100 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <Truck className="w-4 h-4" /> {t("Delivered", "ডেলিভার্ড")}
-                </button>
-                <a href={waLink || "#"} target={waLink ? "_blank" : undefined} rel="noreferrer"
-                   className={`order-quick-action inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm ${waLink ? "order-quick-whatsapp" : "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 shadow-none"}`}>
-                  <MessageCircle className="w-4 h-4" /> WhatsApp
-                </a>
-                <button onClick={downloadReceipt} disabled={downloading}
-                   className="order-quick-action order-quick-pdf inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:shadow-none">
-                  {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} {t("PDF Download", "PDF ডাউনলোড")}
-                </button>
-                <button onClick={() => { onStatusChange("cancelled"); }}
-                   className="order-quick-action order-quick-cancel inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm sm:col-span-1">
-                  <XIcon className="w-4 h-4" /> {t("Cancel", "বাতিল")}
-                </button>
-              </div>
-            </div>
-
-
-            {/* Status controls */}
-            <div className="grid grid-cols-1 gap-3">
-              <OrderStatusFlow status={order.status} onChange={onStatusChange} />
-              <PaymentStatusButtons status={order.payment_status || "pending"} onChange={onPaymentStatusChange} />
-            </div>
+            {/* Quick Flow — sequential one-click stepper */}
+            <QuickFlow
+              order={order}
+              waLink={waLink}
+              downloading={downloading}
+              onPaymentStatusChange={onPaymentStatusChange}
+              onStatusChange={onStatusChange}
+              onDownload={downloadReceipt}
+            />
 
             {/* WhatsApp auto status message */}
             <div>
