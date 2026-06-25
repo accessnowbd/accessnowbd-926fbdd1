@@ -1397,13 +1397,33 @@
 
   /* Badges sitting on solid color chips keep white text */
   html.theme-white .bg-primary,
-  html.theme-white [class*="bg-emerald-5"],
-  html.theme-white [class*="bg-rose-5"],
-  html.theme-white [class*="bg-amber-5"],
-  html.theme-white [class*="bg-sky-5"],
-  html.theme-white [class*="bg-violet-5"],
-  html.theme-white [class*="bg-pink-5"],
-  html.theme-white [class*="bg-cyan-5"] {
+  html.theme-white [class*="bg-emerald-500"],
+  html.theme-white [class*="bg-emerald-600"],
+  html.theme-white [class*="bg-emerald-700"],
+  html.theme-white [class*="bg-emerald-800"],
+  html.theme-white [class*="bg-emerald-900"],
+  html.theme-white [class*="bg-rose-500"],
+  html.theme-white [class*="bg-rose-600"],
+  html.theme-white [class*="bg-rose-700"],
+  html.theme-white [class*="bg-rose-800"],
+  html.theme-white [class*="bg-rose-900"],
+  html.theme-white [class*="bg-amber-500"],
+  html.theme-white [class*="bg-amber-600"],
+  html.theme-white [class*="bg-amber-700"],
+  html.theme-white [class*="bg-sky-500"],
+  html.theme-white [class*="bg-sky-600"],
+  html.theme-white [class*="bg-sky-700"],
+  html.theme-white [class*="bg-violet-500"],
+  html.theme-white [class*="bg-violet-600"],
+  html.theme-white [class*="bg-violet-700"],
+  html.theme-white [class*="bg-violet-800"],
+  html.theme-white [class*="bg-violet-900"],
+  html.theme-white [class*="bg-pink-500"],
+  html.theme-white [class*="bg-pink-600"],
+  html.theme-white [class*="bg-pink-700"],
+  html.theme-white [class*="bg-cyan-500"],
+  html.theme-white [class*="bg-cyan-600"],
+  html.theme-white [class*="bg-cyan-700"] {
     color: #ffffff !important;
   }
 
