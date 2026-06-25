@@ -1,8 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useMemo } from "react";
+import { createPortal } from "react-dom";
 import {
   Loader2, Eye, Trash2, MessageCircle, RefreshCw, Search as SearchIcon,
   Mail, Phone, ArrowRight, FileText, Clock, Package, X, ShoppingBag,
+  UserRound, Tag, MapPin,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -39,6 +41,31 @@ type Row = {
 };
 
 const fmtMoney = (n: number) => "৳" + Math.round(n).toLocaleString("en-IN");
+
+function formatWhen(value?: string | null) {
+  if (!value) return "—";
+  return new Date(value).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+}
+
+function buildRecoveryMessage(r: Row): string {
+  const name = r.full_name || "Customer";
+  const items = (r.items ?? [])
+    .map((it, i) => `${i + 1}. ${it.name}${it.planPeriod ? ` (${it.planPeriod})` : ""} ×${it.qty ?? 1} — ${fmtMoney(Number(it.price) * (it.qty ?? 1))}`)
+    .join("\n");
+  return [
+    `আসসালামু আলাইকুম ${name},`,
+    `আপনি Access Now BD-তে একটি checkout শুরু করেছিলেন।`,
+    ``,
+    `🛒 আপনার কার্ট:`,
+    items || "Selected product",
+    ``,
+    `💰 মোট: ${fmtMoney(Number(r.total || 0))}`,
+    r.coupon_code ? `🎟️ কুপন: ${r.coupon_code}` : null,
+    ``,
+    `অর্ডার সম্পন্ন করতে বা সাহায্য লাগলে এই WhatsApp-এ রিপ্লাই করুন।`,
+    `— Access Now BD`,
+  ].filter(Boolean).join("\n");
+}
 
 function AbandonedCheckoutPage() {
   const { t } = useAdminLang();
@@ -204,50 +231,51 @@ function AbandonedCheckoutPage() {
   }), [rows, tab, q]);
 
   return (
-    <div className="space-y-4 animate-fade-in">
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div className="space-y-5 animate-fade-in">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard label={t("Total", "মোট")} value={counts.all} tone="slate" icon={<FileText className="w-4 h-4" />} loading={loading} />
-        <StatCard label={t("Pending Recovery", "পেন্ডিং রিকভারি")} value={counts.pending} tone="amber" icon={<Clock className="w-4 h-4" />} loading={loading} highlight />
+        <StatCard label={t("Pending Recovery", "পেন্ডিং রিকভারি")} value={counts.pending} tone="amber" icon={<Clock className="w-4 h-4" />} loading={loading} />
         <StatCard label={t("Recovered", "রিকভারড")} value={counts.recovered} tone="emerald" icon={<RefreshCw className="w-4 h-4" />} loading={loading} />
-        <StatCard label={t("Lost Value", "লস্ট ভ্যালু")} value={fmtMoney(lostValue)} tone="rose" icon={<Package className="w-4 h-4" />} loading={loading} highlight />
+        <StatCard label={t("Lost Value", "লস্ট ভ্যালু")} value={fmtMoney(lostValue)} tone="rose" icon={<Package className="w-4 h-4" />} loading={loading} />
       </div>
 
-      {/* Search + tabs */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <div className="flex items-center gap-2 flex-1 min-w-[260px] px-3 h-11 rounded-2xl bg-white border border-slate-200">
-          <SearchIcon className="w-4 h-4 text-slate-400" />
+      <div className="a-card p-3 sm:p-4">
+        <div className="grid gap-3 xl:grid-cols-[minmax(280px,1fr)_auto] xl:items-center">
+          <div className="relative min-w-0">
+            <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             value={q} onChange={(e) => setQ(e.target.value)}
             placeholder={t("Search by name, email, phone, coupon or product…", "নাম, ইমেইল, ফোন, কুপন বা প্রোডাক্ট...")}
-            className="flex-1 bg-transparent outline-none text-sm placeholder:text-slate-400"
+              className="a-search"
           />
         </div>
-        <Tab active={tab === "pending"} onClick={() => setTab("pending")} primary>{t("Pending", "পেন্ডিং")} ({counts.pending})</Tab>
-        <Tab active={tab === "all"} onClick={() => setTab("all")}>{t("All", "সব")} ({counts.all})</Tab>
-        <Tab active={tab === "recovered"} onClick={() => setTab("recovered")}>{t("Recovered", "রিকভারড")} ({counts.recovered})</Tab>
-        <Tab active={tab === "contacted"} onClick={() => setTab("contacted")}>{t("Contacted", "কন্টাক্টেড")} ({counts.contacted})</Tab>
-        <button onClick={load} className="inline-flex items-center gap-1.5 px-3 h-11 rounded-xl text-slate-600 hover:text-slate-900 text-sm font-semibold">
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> {t("Refresh", "রিফ্রেশ")}
-        </button>
+          <div className="a-pills flex min-w-0 flex-wrap items-center gap-2">
+            <Tab active={tab === "pending"} onClick={() => setTab("pending")}>{t("Pending", "পেন্ডিং")} <span className="a-pill-count">{counts.pending}</span></Tab>
+            <Tab active={tab === "all"} onClick={() => setTab("all")}>{t("All", "সব")} <span className="a-pill-count">{counts.all}</span></Tab>
+            <Tab active={tab === "recovered"} onClick={() => setTab("recovered")}>{t("Recovered", "রিকভারড")} <span className="a-pill-count">{counts.recovered}</span></Tab>
+            <Tab active={tab === "contacted"} onClick={() => setTab("contacted")}>{t("Contacted", "কন্টাক্টেড")} <span className="a-pill-count">{counts.contacted}</span></Tab>
+            <button onClick={load} className="a-pill shrink-0">
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> {t("Refresh", "রিফ্রেশ")}
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+      <div className="a-card overflow-hidden">
         {loading ? (
           <div className="p-10 grid place-items-center text-slate-400"><Loader2 className="w-6 h-6 animate-spin" /></div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm min-w-[900px]">
+            <table className="w-full min-w-[980px] text-sm">
               <thead className="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
                 <tr>
-                  <th className="text-left px-4 py-3">{t("Customer", "কাস্টমার")}</th>
+                  <th className="text-left px-5 py-3">{t("Customer", "কাস্টমার")}</th>
                   <th className="text-left px-3 py-3">{t("Contact", "কন্টাক্ট")}</th>
-                  <th className="text-left px-3 py-3">{t("Items", "আইটেম")}</th>
+                  <th className="text-left px-3 py-3">{t("Cart", "কার্ট")}</th>
                   <th className="text-left px-3 py-3">{t("Total", "মোট")}</th>
-                  <th className="text-left px-3 py-3">{t("When", "কখন")}</th>
+                  <th className="text-left px-3 py-3">{t("Activity", "অ্যাক্টিভিটি")}</th>
                   <th className="text-left px-3 py-3">{t("Status", "স্ট্যাটাস")}</th>
-                  <th className="text-right px-4 py-3">{t("Actions", "অ্যাকশন")}</th>
+                  <th className="text-right px-5 py-3">{t("Actions", "অ্যাকশন")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -285,29 +313,29 @@ function AbandonedCheckoutPage() {
   );
 }
 
-function StatCard({ label, value, tone, icon, loading, highlight }: { label: string; value: string | number; tone: "slate"|"amber"|"emerald"|"rose"; icon: React.ReactNode; loading?: boolean; highlight?: boolean }) {
+function StatCard({ label, value, tone, icon, loading }: { label: string; value: string | number; tone: "slate"|"amber"|"emerald"|"rose"; icon: React.ReactNode; loading?: boolean }) {
   const tones: Record<string, string> = {
-    slate: "bg-slate-600 text-white",
-    amber: "bg-amber-500 text-white",
-    emerald: "bg-emerald-500 text-white",
-    rose: "bg-rose-500 text-white",
+    slate: "bg-slate-100 text-slate-700",
+    amber: "bg-amber-100 text-amber-700",
+    emerald: "bg-emerald-100 text-emerald-700",
+    rose: "bg-rose-100 text-rose-700",
   };
   return (
-    <div className={`bg-white rounded-2xl p-4 border ${highlight ? "border-violet-300 ring-1 ring-violet-200" : "border-slate-200"}`}>
-      <div className="flex items-start justify-between mb-2">
-        <div className="text-xs text-slate-500 font-medium">{label}</div>
-        <span className={`w-9 h-9 rounded-full grid place-items-center shadow-sm ${tones[tone]}`}>{icon}</span>
+    <div className="a-stat">
+      <div className="flex items-start justify-between gap-3">
+        <div className="a-stat-label">{label}</div>
+        <span className={`a-stat-icon ${tones[tone]}`}>{icon}</span>
       </div>
-      <div className="text-2xl font-extrabold text-slate-900 tracking-tight">{loading ? "…" : value}</div>
+      <div className="a-stat-value">{loading ? "…" : value}</div>
     </div>
   );
 }
 
-function Tab({ active, onClick, children, primary }: { active: boolean; onClick: () => void; children: React.ReactNode; primary?: boolean }) {
+function Tab({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button
       onClick={onClick}
-      className={`px-4 h-11 rounded-xl text-sm font-semibold transition ${active ? (primary ? "bg-violet-600 text-white shadow-sm" : "bg-slate-900 text-white") : "text-slate-600 hover:text-slate-900 hover:bg-white"}`}
+      className={`a-pill shrink-0 ${active ? "a-pill-active" : ""}`}
     >
       {children}
     </button>
@@ -317,66 +345,87 @@ function Tab({ active, onClick, children, primary }: { active: boolean; onClick:
 function StatusBadge({ status }: { status: Row["status"] }) {
   const { t } = useAdminLang();
   const m: Record<Row["status"], { cls: string; en: string; bn: string }> = {
-    pending: { cls: "bg-amber-50 text-amber-700 border-amber-200", en: "Pending", bn: "পেন্ডিং" },
-    contacted: { cls: "bg-sky-50 text-sky-700 border-sky-200", en: "Contacted", bn: "কন্টাক্টেড" },
-    recovered: { cls: "bg-emerald-50 text-emerald-700 border-emerald-200", en: "Recovered", bn: "রিকভারড" },
-    lost: { cls: "bg-rose-50 text-rose-700 border-rose-200", en: "Lost", bn: "লস্ট" },
+    pending: { cls: "a-status-pending", en: "Pending", bn: "পেন্ডিং" },
+    contacted: { cls: "a-status-processing", en: "Contacted", bn: "কন্টাক্টেড" },
+    recovered: { cls: "a-status-completed", en: "Recovered", bn: "রিকভারড" },
+    lost: { cls: "a-status-failed", en: "Lost", bn: "লস্ট" },
   };
   const v = m[status];
-  return <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold border ${v.cls}`}>{t(v.en, v.bn)}</span>;
+  return <span className={`a-status ${v.cls}`}>{t(v.en, v.bn)}</span>;
 }
 
 function RowItem({ row: r, creating, onView, onContact, onCreateOrder, onDelete }: { row: Row; creating?: boolean; onView: () => void; onContact: () => void; onCreateOrder: () => void; onDelete: () => void }) {
   const { t } = useAdminLang();
-  const waLink = r.phone ? `https://wa.me/${r.phone.replace(/\D/g, "")}?text=${encodeURIComponent(`আসসালামু আলাইকুম ${r.full_name}, আপনি আমাদের ওয়েবসাইটে একটি অর্ডার শুরু করেছিলেন। কোনো সাহায্যের প্রয়োজন হলে জানান।`)}` : "";
+  const waLink = r.phone ? `https://wa.me/${r.phone.replace(/\D/g, "")}?text=${encodeURIComponent(buildRecoveryMessage(r))}` : "";
   const firstItem = (r.items ?? [])[0];
+  const itemCount = (r.items ?? []).reduce((a, it) => a + (it.qty ?? 1), 0);
   return (
     <tr className="border-t border-slate-100 hover:bg-slate-50/60">
-      <td className="px-4 py-3">
-        <div className="font-semibold text-slate-900">{r.full_name || t("Guest visitor", "গেস্ট ভিজিটর")}</div>
-        <div className="text-[11px] text-slate-400 mt-0.5">{r.user_id ? t("Logged in", "লগড ইন") : t("Guest", "গেস্ট")} • {stageText(r.stage, t)}</div>
+      <td className="px-5 py-4">
+        <div className="flex items-center gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-violet-100 text-violet-700">
+            <UserRound className="h-4 w-4" />
+          </span>
+          <div className="min-w-0">
+            <div className="truncate font-extrabold text-slate-900">{r.full_name || t("Guest visitor", "গেস্ট ভিজিটর")}</div>
+            <div className="mt-0.5 text-[11px] font-semibold text-slate-500">{r.user_id ? t("Logged in", "লগড ইন") : t("Guest", "গেস্ট")} • {stageText(r.stage, t)}</div>
+          </div>
+        </div>
       </td>
       <td className="px-3 py-3 text-xs text-slate-600">
-        <div className="flex items-center gap-1.5"><Mail className="w-3 h-3 text-slate-400" />{r.email || t("Not given yet", "এখনো দেয়নি")}</div>
-        {r.phone && <div className="flex items-center gap-1.5 mt-1"><Phone className="w-3 h-3 text-slate-400" />{r.phone}</div>}
+        <div className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-slate-400" /><span className="max-w-[190px] truncate">{r.email || t("Not given yet", "এখনো দেয়নি")}</span></div>
+        {r.phone && <div className="mt-1.5 flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-slate-400" />{r.phone}</div>}
       </td>
       <td className="px-3 py-3 text-slate-700">
-        <div className="max-w-[210px] truncate font-semibold text-slate-800">{firstItem?.name || t("Selected product", "সিলেক্টেড প্রোডাক্ট")}</div>
-        <div className="text-[11px] text-slate-400">{(r.items ?? []).reduce((a, it) => a + (it.qty ?? 1), 0)} {t("item", "আইটেম")}</div>
+        <div className="max-w-[260px] truncate font-bold text-slate-900" title={firstItem?.name}>{firstItem?.name || t("Selected product", "সিলেক্টেড প্রোডাক্ট")}</div>
+        <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] font-semibold text-slate-500">
+          <span className="rounded-full bg-slate-100 px-2 py-0.5">{itemCount} {t("item", "আইটেম")}</span>
+          {r.coupon_code && <span className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2 py-0.5 text-violet-700"><Tag className="h-3 w-3" />{r.coupon_code}</span>}
+        </div>
       </td>
-      <td className="px-3 py-3 font-bold text-slate-900">{fmtMoney(Number(r.total))}</td>
-      <td className="px-3 py-3 text-xs text-slate-500">{new Date(r.created_at).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
+      <td className="px-3 py-3 text-base font-extrabold text-slate-950">{fmtMoney(Number(r.total))}</td>
+      <td className="px-3 py-3 text-xs text-slate-500">
+        <div className="font-semibold text-slate-700">{formatWhen(r.last_seen_at || r.updated_at || r.created_at)}</div>
+        <div className="mt-1 flex items-center gap-1"><MapPin className="h-3 w-3" />{r.source || t("Website", "ওয়েবসাইট")}</div>
+      </td>
       <td className="px-3 py-3"><StatusBadge status={r.status} /></td>
-      <td className="px-4 py-3">
-        <div className="flex items-center justify-end gap-1">
-          <IconBtn title={t("View", "দেখুন")} onClick={onView}><Eye className="w-3.5 h-3.5" /></IconBtn>
+      <td className="px-5 py-3">
+        <div className="flex items-center justify-end gap-1.5">
+          <IconBtn title={t("View", "দেখুন")} onClick={onView} tone="sky"><Eye className="w-4 h-4" /></IconBtn>
           {waLink && (
             <a href={waLink} target="_blank" rel="noreferrer" title="WhatsApp"
-              className="w-7 h-7 grid place-items-center rounded-md text-slate-500 hover:text-emerald-600 hover:bg-emerald-50">
-              <MessageCircle className="w-3.5 h-3.5" />
+              className="a-action a-action-emerald">
+              <MessageCircle className="w-4 h-4" />
             </a>
           )}
-          <IconBtn title={t("Mark contacted", "কন্টাক্ট করা হয়েছে")} onClick={onContact}><ArrowRight className="w-3.5 h-3.5" /></IconBtn>
+          <IconBtn title={t("Mark contacted", "কন্টাক্ট করা হয়েছে")} onClick={onContact} tone="violet"><ArrowRight className="w-4 h-4" /></IconBtn>
           <button
             onClick={onCreateOrder}
             disabled={creating}
             title={t("Create order", "অর্ডার তৈরি করুন")}
-            className="w-7 h-7 grid place-items-center rounded-md text-slate-500 hover:text-violet-600 hover:bg-violet-50 disabled:opacity-50"
+            className="a-action a-action-amber disabled:opacity-50"
           >
-            {creating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShoppingBag className="w-3.5 h-3.5" />}
+            {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingBag className="w-4 h-4" />}
           </button>
-          <IconBtn title={t("Delete", "ডিলিট")} onClick={onDelete} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
+          <IconBtn title={t("Delete", "ডিলিট")} onClick={onDelete} tone="rose"><Trash2 className="w-4 h-4" /></IconBtn>
         </div>
       </td>
     </tr>
   );
 }
 
-function IconBtn({ children, onClick, title, danger }: { children: React.ReactNode; onClick: () => void; title: string; danger?: boolean }) {
+function IconBtn({ children, onClick, title, tone = "violet" }: { children: React.ReactNode; onClick: () => void; title: string; tone?: "violet" | "emerald" | "sky" | "amber" | "rose" }) {
+  const toneClass: Record<string, string> = {
+    violet: "a-action-violet",
+    emerald: "a-action-emerald",
+    sky: "a-action-sky",
+    amber: "a-action-amber",
+    rose: "a-action-rose",
+  };
   return (
     <button
       onClick={onClick} title={title}
-      className={`w-7 h-7 grid place-items-center rounded-md ${danger ? "text-slate-500 hover:text-rose-600 hover:bg-rose-50" : "text-slate-500 hover:text-violet-600 hover:bg-violet-50"}`}
+      className={`a-action ${toneClass[tone]}`}
     >
       {children}
     </button>
@@ -397,40 +446,44 @@ function stageText(stage: string | null | undefined, t: (en: string, bn: string)
 function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete }: { row: Row; creating?: boolean; onClose: () => void; onUpdate: (p: Partial<Row>) => void; onCreateOrder: () => void; onDelete: () => void }) {
   const { t } = useAdminLang();
   const [note, setNote] = useState(row.admin_note || "");
-  const waLink = row.phone ? `https://wa.me/${row.phone.replace(/\D/g, "")}` : "";
-  return (
-    <div className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-3 overflow-y-auto" onClick={onClose}>
-      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[95vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="sticky top-0 z-10 bg-white border-b border-slate-100 px-5 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3 flex-wrap">
-            <h2 className="font-extrabold text-lg text-slate-900">{row.full_name || t("Guest", "গেস্ট")}</h2>
+  const waLink = row.phone ? `https://wa.me/${row.phone.replace(/\D/g, "")}?text=${encodeURIComponent(buildRecoveryMessage(row))}` : "";
+  return createPortal(
+    <div className="fixed inset-0 z-[100] grid place-items-center overflow-y-auto bg-slate-950/60 p-2 backdrop-blur-sm sm:p-4" onClick={onClose}>
+      <div role="dialog" aria-modal="true" className="w-full max-w-4xl max-h-[95vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="sticky top-0 z-10 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-slate-100 bg-white px-4 py-3 sm:px-5">
+          <div className="flex min-w-0 flex-wrap items-center gap-3">
+            <h2 className="min-w-0 truncate text-lg font-extrabold text-slate-950">{row.full_name || t("Guest visitor", "গেস্ট ভিজিটর")}</h2>
             <StatusBadge status={row.status} />
+            <span className="text-xs font-semibold text-slate-500">{formatWhen(row.last_seen_at || row.created_at)}</span>
           </div>
-          <button onClick={onClose} className="w-9 h-9 grid place-items-center rounded-lg text-slate-500 hover:bg-slate-100"><X className="w-4 h-4" /></button>
+          <button onClick={onClose} className="grid h-9 w-9 place-items-center rounded-full text-slate-500 hover:bg-slate-100"><X className="w-4 h-4" /></button>
         </div>
 
-        <div className="p-5 space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="bg-slate-50 rounded-xl p-3">
-              <div className="text-xs font-bold text-slate-700 mb-2">{t("Contact", "কন্টাক্ট")}</div>
-              <div className="text-sm flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-slate-400" />{row.email || t("Not given yet", "এখনো দেয়নি")}</div>
-              {row.phone && <div className="text-sm flex items-center gap-2 mt-1"><Phone className="w-3.5 h-3.5 text-slate-400" />{row.phone}</div>}
+        <div className="space-y-4 p-4 sm:p-5">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+              <div className="mb-2 text-xs font-extrabold uppercase tracking-wide text-slate-500">{t("Contact", "কন্টাক্ট")}</div>
+              <div className="flex items-center gap-2 text-sm font-semibold text-slate-800"><Mail className="w-4 h-4 text-slate-400" />{row.email || t("Not given yet", "এখনো দেয়নি")}</div>
+              {row.phone && <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-slate-800"><Phone className="w-4 h-4 text-slate-400" />{row.phone}</div>}
             </div>
-            <div className="bg-slate-50 rounded-xl p-3">
-              <div className="text-xs font-bold text-slate-700 mb-2">{t("Cart", "কার্ট")}</div>
-              <div className="text-sm flex items-center justify-between"><span className="text-slate-500">{t("Total", "মোট")}</span><span className="font-bold text-violet-700">{fmtMoney(Number(row.total))}</span></div>
-              {row.coupon_code && <div className="text-xs text-slate-500 mt-1">{t("Coupon", "কুপন")}: <span className="font-mono font-semibold text-slate-700">{row.coupon_code}</span></div>}
-              <div className="text-xs text-slate-500 mt-1">{t("Stage", "ধাপ")}: <span className="font-semibold text-slate-700">{stageText(row.stage, t)}</span></div>
-              <div className="text-xs text-slate-500 mt-1">{t("When", "কখন")}: {new Date(row.last_seen_at || row.created_at).toLocaleString()}</div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+              <div className="mb-2 text-xs font-extrabold uppercase tracking-wide text-slate-500">{t("Cart Value", "কার্ট ভ্যালু")}</div>
+              <div className="text-2xl font-extrabold text-slate-950">{fmtMoney(Number(row.total))}</div>
+              {row.coupon_code && <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-violet-100 px-2 py-1 text-xs font-bold text-violet-700"><Tag className="h-3 w-3" />{row.coupon_code}</div>}
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+              <div className="mb-2 text-xs font-extrabold uppercase tracking-wide text-slate-500">{t("Activity", "অ্যাক্টিভিটি")}</div>
+              <div className="text-sm font-bold text-slate-900">{stageText(row.stage, t)}</div>
+              <div className="mt-1 text-xs font-semibold text-slate-500">{row.source || t("Website", "ওয়েবসাইট")}</div>
             </div>
           </div>
 
           <div>
-            <div className="text-xs font-bold text-slate-700 mb-2">{t("Items", "আইটেম")}</div>
-            <div className="border border-slate-100 rounded-xl divide-y divide-slate-100">
+            <div className="mb-2 text-xs font-extrabold uppercase tracking-wide text-slate-500">{t("Items", "আইটেম")}</div>
+            <div className="overflow-hidden rounded-2xl border border-slate-200">
               {(row.items ?? []).map((it, i) => (
-                <div key={i} className="p-3 flex items-center justify-between">
-                  <div className="text-sm">
+                <div key={i} className="flex items-center justify-between gap-3 border-b border-slate-100 p-3 last:border-b-0">
+                  <div className="min-w-0 text-sm">
                     <span className="font-medium text-slate-900">{it.emoji ? `${it.emoji} ` : ""}{it.name}</span>
                     {it.planPeriod && <span className="text-xs text-slate-500 ml-1">({it.planPeriod})</span>}
                     <span className="text-xs text-slate-400 ml-1.5">×{it.qty ?? 1}</span>
@@ -443,15 +496,15 @@ function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <a href={waLink || "#"} target={waLink ? "_blank" : undefined} rel="noreferrer"
-               className={`h-10 rounded-xl border inline-flex items-center justify-center gap-2 text-sm font-semibold ${waLink ? "border-emerald-200 text-emerald-700 bg-emerald-50/40 hover:bg-emerald-50" : "border-slate-200 text-slate-400 cursor-not-allowed"}`}>
+               className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-bold ${waLink ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100" : "cursor-not-allowed border-slate-200 text-slate-400"}`}>
               <MessageCircle className="w-4 h-4" /> WhatsApp
             </a>
             <button onClick={() => onUpdate({ status: "contacted", contacted_at: new Date().toISOString() })}
-               className="h-10 rounded-xl border border-sky-200 text-sky-700 bg-sky-50/40 hover:bg-sky-50 inline-flex items-center justify-center gap-2 text-sm font-semibold">
+               className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-sky-200 bg-sky-50 text-sm font-bold text-sky-700 hover:bg-sky-100">
               <ArrowRight className="w-4 h-4" /> {t("Mark Contacted", "কন্টাক্ট করা হয়েছে")}
             </button>
             <button onClick={onCreateOrder} disabled={creating}
-               className="h-10 rounded-xl bg-violet-600 text-white hover:bg-violet-700 disabled:opacity-60 inline-flex items-center justify-center gap-2 text-sm font-semibold">
+               className="a-save-btn h-11 justify-center disabled:opacity-60">
               {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingBag className="w-4 h-4" />}
               {t("Create Order", "অর্ডার তৈরি")}
             </button>
@@ -460,7 +513,7 @@ function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete
           <div>
             <label className="text-xs font-semibold text-slate-600 mb-1.5 block">{t("Status", "স্ট্যাটাস")}</label>
             <select value={row.status} onChange={(e) => onUpdate({ status: e.target.value as Row["status"] })}
-              className="w-full h-10 rounded-xl border border-slate-200 px-3 text-sm bg-white capitalize focus:border-violet-400 outline-none">
+              className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm capitalize outline-none focus:border-violet-400">
               {["pending","contacted","recovered","lost"].map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
@@ -469,10 +522,10 @@ function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete
             <label className="text-xs font-semibold text-slate-600 mb-1.5 block">{t("Admin Note", "অ্যাডমিন নোট")}</label>
             <div className="flex gap-2">
               <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={2}
-                className="flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-violet-400 outline-none resize-none"
+                className="flex-1 resize-none rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-violet-400"
                 placeholder={t("Internal notes…", "ইন্টারনাল নোট...")} />
               <button onClick={() => onUpdate({ admin_note: note })}
-                className="self-start px-4 h-10 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700">
+                className="a-save-btn self-start">
                 {t("Save", "সেভ")}
               </button>
             </div>
@@ -485,6 +538,7 @@ function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
