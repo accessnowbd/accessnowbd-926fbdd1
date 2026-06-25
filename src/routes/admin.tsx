@@ -89,14 +89,29 @@ function AdminLayout() {
   }, []);
 
   // Admin panel is always light/white themed regardless of the user-selected
-  // site theme. Force `theme-white` on <html> while mounted, then restore on unmount.
+  // site theme. Force `theme-white` on <html> while mounted, and KEEP it
+  // forced via a MutationObserver — the global ThemeProvider may otherwise
+  // re-apply the dark theme and strip our class, causing dark panels to
+  // briefly flash inside the admin.
   useEffect(() => {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
+    const prevTheme = root.dataset.theme;
     const hadWhite = root.classList.contains("theme-white");
-    root.classList.add("theme-white");
-    return () => { if (!hadWhite) root.classList.remove("theme-white"); };
+    const enforce = () => {
+      if (!root.classList.contains("theme-white")) root.classList.add("theme-white");
+      if (root.dataset.theme !== "white") root.dataset.theme = "white";
+    };
+    enforce();
+    const obs = new MutationObserver(enforce);
+    obs.observe(root, { attributes: true, attributeFilter: ["class", "data-theme"] });
+    return () => {
+      obs.disconnect();
+      if (!hadWhite) root.classList.remove("theme-white");
+      if (prevTheme) root.dataset.theme = prevTheme;
+    };
   }, []);
+
 
   const verifyRole = useMemo(
     () => async (uid: string) => {
