@@ -237,8 +237,10 @@ function AbandonedCheckoutPage() {
       {selected && (
         <DetailModal
           row={selected}
+          creating={creatingId === selected.id}
           onClose={() => setSelected(null)}
           onUpdate={(p) => updateRow(selected.id, p)}
+          onCreateOrder={() => createOrderFromAbandoned(selected)}
           onDelete={() => deleteRow(selected.id)}
         />
       )}
