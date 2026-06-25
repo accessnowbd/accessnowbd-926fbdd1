@@ -501,7 +501,7 @@ function OrderRow({ order: o, onView, onEdit, onDelete, onDownload }: { order: O
             </a>
           )}
           <IconBtn title={t("View", "দেখুন")} onClick={onView} tone="indigo"><Eye className="w-4 h-4" /></IconBtn>
-          <IconBtn title={t("Edit", "এডিট")} onClick={onView} tone="amber"><Pencil className="w-4 h-4" /></IconBtn>
+          <IconBtn title={t("Edit", "এডিট")} onClick={onEdit} tone="amber"><Pencil className="w-4 h-4" /></IconBtn>
           <IconBtn title={t("Delete", "ডিলিট")} onClick={onDelete} tone="rose"><Trash2 className="w-4 h-4" /></IconBtn>
         </div>
       </td>
