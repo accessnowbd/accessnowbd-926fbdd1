@@ -6,7 +6,7 @@ import {
   Pencil, Filter as FilterIcon, Search as SearchIcon, ShieldCheck,
   User as UserIcon, Mail, Phone, CreditCard, Package, FileText,
   Copy, Check, History as HistoryIcon, AlertCircle, X as XIcon,
-  Truck, Zap,
+  Truck,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
