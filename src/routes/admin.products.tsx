@@ -30,6 +30,7 @@ type FaqItem = { q: string; a: string };
 type ProductMeta = {
  product_type?: ProductType;
  account_type?: AccountType;
+ account_types?: AccountType[];
  brand?: string;
  subcategory?: string;
  additional_categories?: string[];
