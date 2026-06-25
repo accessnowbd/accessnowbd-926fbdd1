@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { installErrorLogger } from "@/lib/error-logger";
 import { startScrollPerfMonitor } from "@/lib/scrollPerfMonitor";
 
