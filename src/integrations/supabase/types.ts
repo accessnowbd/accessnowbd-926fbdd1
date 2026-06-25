@@ -1753,6 +1753,24 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      capture_abandoned_checkout: {
+        Args: {
+          _coupon_code: string
+          _email: string
+          _full_name: string
+          _items: Json
+          _metadata: Json
+          _page_url: string
+          _phone: string
+          _session_key: string
+          _source: string
+          _stage: string
+          _subtotal: number
+          _total: number
+          _user_id: string
+        }
+        Returns: string
+      }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
