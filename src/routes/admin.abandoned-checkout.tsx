@@ -287,7 +287,7 @@ function StatusBadge({ status }: { status: Row["status"] }) {
   return <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold border ${v.cls}`}>{t(v.en, v.bn)}</span>;
 }
 
-function RowItem({ row: r, onView, onContact, onDelete }: { row: Row; onView: () => void; onContact: () => void; onDelete: () => void }) {
+function RowItem({ row: r, creating, onView, onContact, onCreateOrder, onDelete }: { row: Row; creating?: boolean; onView: () => void; onContact: () => void; onCreateOrder: () => void; onDelete: () => void }) {
   const { t } = useAdminLang();
   const waLink = r.phone ? `https://wa.me/${r.phone.replace(/\D/g, "")}?text=${encodeURIComponent(`আসসালামু আলাইকুম ${r.full_name}, আপনি আমাদের ওয়েবসাইটে একটি অর্ডার শুরু করেছিলেন। কোনো সাহায্যের প্রয়োজন হলে জানান।`)}` : "";
   return (
@@ -307,13 +307,21 @@ function RowItem({ row: r, onView, onContact, onDelete }: { row: Row; onView: ()
       <td className="px-4 py-3">
         <div className="flex items-center justify-end gap-1">
           <IconBtn title={t("View", "দেখুন")} onClick={onView}><Eye className="w-3.5 h-3.5" /></IconBtn>
-          <IconBtn title={t("Mark contacted", "কন্টাক্ট করা হয়েছে")} onClick={onContact}><ArrowRight className="w-3.5 h-3.5" /></IconBtn>
           {waLink && (
             <a href={waLink} target="_blank" rel="noreferrer" title="WhatsApp"
               className="w-7 h-7 grid place-items-center rounded-md text-slate-500 hover:text-emerald-600 hover:bg-emerald-50">
               <MessageCircle className="w-3.5 h-3.5" />
             </a>
           )}
+          <IconBtn title={t("Mark contacted", "কন্টাক্ট করা হয়েছে")} onClick={onContact}><ArrowRight className="w-3.5 h-3.5" /></IconBtn>
+          <button
+            onClick={onCreateOrder}
+            disabled={creating}
+            title={t("Create order", "অর্ডার তৈরি করুন")}
+            className="w-7 h-7 grid place-items-center rounded-md text-slate-500 hover:text-violet-600 hover:bg-violet-50 disabled:opacity-50"
+          >
+            {creating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShoppingBag className="w-3.5 h-3.5" />}
+          </button>
           <IconBtn title={t("Delete", "ডিলিট")} onClick={onDelete} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
         </div>
       </td>
