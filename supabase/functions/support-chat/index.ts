@@ -72,7 +72,8 @@ Deno.serve(async (req) => {
       if (!m || typeof m !== "object") return new Response(JSON.stringify({ error: "invalid message" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       const role = (m as any).role;
       const content = (m as any).content;
-      if (role !== "user" && role !== "assistant" && role !== "system") {
+      // Only accept user/assistant roles from callers; reject system to prevent prompt injection
+      if (role !== "user" && role !== "assistant") {
         return new Response(JSON.stringify({ error: "invalid role" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       if (typeof content !== "string" || content.length === 0 || content.length > MAX_CONTENT_LEN) {
