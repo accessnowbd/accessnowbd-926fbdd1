@@ -881,3 +881,228 @@ function HistoryRow({ icon, label, time }: { icon: React.ReactNode; label: strin
     </div>
   );
 }
+
+function OrderEditModal({ order, onClose, onSave }: { order: Order; onClose: () => void; onSave: (patch: Partial<Order>) => void | Promise<void> }) {
+  const { t } = useAdminLang();
+  const [fullName, setFullName] = useState(order.full_name);
+  const [email, setEmail] = useState(order.email);
+  const [phone, setPhone] = useState(order.phone);
+  const [paymentMethod, setPaymentMethod] = useState(order.payment_method);
+  const [transactionId, setTransactionId] = useState(order.transaction_id);
+  const [status, setStatus] = useState(order.status);
+  const [paymentStatus, setPaymentStatus] = useState(order.payment_status || "pending");
+  const [adminNote, setAdminNote] = useState(order.admin_note ?? "");
+  const [items, setItems] = useState<OrderItem[]>(
+    (order.items ?? []).map((it) => ({ name: it.name, plan: it.plan ?? "", price: Number(it.price) || 0, qty: Number(it.qty ?? 1) || 1, slug: it.slug ?? "" }))
+  );
+  const [totalOverride, setTotalOverride] = useState<string>(String(Number(order.total) || 0));
+  const [autoTotal, setAutoTotal] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const computedTotal = useMemo(
+    () => items.reduce((sum, it) => sum + (Number(it.price) || 0) * (Number(it.qty) || 1), 0),
+    [items]
+  );
+  const finalTotal = autoTotal ? computedTotal : Number(totalOverride) || 0;
+
+  useEffect(() => { if (autoTotal) setTotalOverride(String(computedTotal)); }, [autoTotal, computedTotal]);
+
+  const updateItem = (idx: number, patch: Partial<OrderItem>) => {
+    setItems((arr) => arr.map((it, i) => i === idx ? { ...it, ...patch } : it));
+  };
+  const addItem = () => setItems((arr) => [...arr, { name: "", plan: "", price: 0, qty: 1 }]);
+  const removeItem = (idx: number) => setItems((arr) => arr.filter((_, i) => i !== idx));
+
+  const submit = async () => {
+    if (!fullName.trim()) { toast.error(t("Customer name required", "কাস্টমার নাম প্রয়োজন")); return; }
+    if (items.length === 0) { toast.error(t("At least one product required", "অন্তত একটি প্রোডাক্ট প্রয়োজন")); return; }
+    setSaving(true);
+    await onSave({
+      full_name: fullName.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      payment_method: paymentMethod.trim(),
+      transaction_id: transactionId.trim(),
+      status,
+      payment_status: paymentStatus,
+      admin_note: adminNote.trim() || null,
+      items: items.map((it) => ({
+        name: it.name.trim(),
+        plan: (it.plan ?? "").trim(),
+        price: Number(it.price) || 0,
+        qty: Number(it.qty) || 1,
+        slug: it.slug ?? "",
+      })),
+      total: finalTotal,
+    });
+    setSaving(false);
+  };
+
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onClick={onClose}>
+      <div
+        className="relative w-full max-w-3xl max-h-[92vh] overflow-hidden bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-gradient-to-r from-amber-50 to-orange-50">
+          <div className="flex items-center gap-2.5">
+            <span className="w-9 h-9 grid place-items-center rounded-lg bg-amber-500 text-white"><Pencil className="w-4 h-4" /></span>
+            <div>
+              <div className="text-sm font-bold text-slate-900">{t("Edit Order", "অর্ডার এডিট")}</div>
+              <div className="text-xs text-slate-500 font-mono">{shortId(order.id)}</div>
+            </div>
+          </div>
+          <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-md bg-white border border-slate-200 text-slate-500 hover:bg-slate-50">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="overflow-y-auto p-5 space-y-5">
+          {/* Customer */}
+          <section>
+            <div className="text-xs font-bold uppercase tracking-wide text-slate-500 mb-2">{t("Customer", "কাস্টমার")}</div>
+            <div className="grid sm:grid-cols-2 gap-3">
+              <Field label={t("Full Name", "পুরো নাম")}>
+                <input value={fullName} onChange={(e) => setFullName(e.target.value)} className={inputCls} />
+              </Field>
+              <Field label={t("Phone", "ফোন")}>
+                <input value={phone} onChange={(e) => setPhone(e.target.value)} className={inputCls} />
+              </Field>
+              <Field label={t("Email", "ইমেইল")}>
+                <input value={email} onChange={(e) => setEmail(e.target.value)} className={inputCls} />
+              </Field>
+            </div>
+          </section>
+
+          {/* Payment */}
+          <section>
+            <div className="text-xs font-bold uppercase tracking-wide text-slate-500 mb-2">{t("Payment", "পেমেন্ট")}</div>
+            <div className="grid sm:grid-cols-2 gap-3">
+              <Field label={t("Method", "পদ্ধতি")}>
+                <input value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} className={inputCls} placeholder="bKash / Nagad / Rocket" />
+              </Field>
+              <Field label={t("Transaction ID", "ট্রানজেকশন ID")}>
+                <input value={transactionId} onChange={(e) => setTransactionId(e.target.value)} className={inputCls} />
+              </Field>
+              <Field label={t("Order Status", "অর্ডার স্ট্যাটাস")}>
+                <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputCls}>
+                  {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </Field>
+              <Field label={t("Payment Status", "পেমেন্ট স্ট্যাটাস")}>
+                <select value={paymentStatus} onChange={(e) => setPaymentStatus(e.target.value)} className={inputCls}>
+                  {PAYMENT_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </Field>
+            </div>
+          </section>
+
+          {/* Items */}
+          <section>
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-xs font-bold uppercase tracking-wide text-slate-500">{t("Products", "প্রোডাক্ট")}</div>
+              <button type="button" onClick={addItem} className="inline-flex items-center gap-1 px-2.5 h-7 rounded-md bg-violet-100 text-violet-700 text-xs font-semibold hover:bg-violet-200">
+                <Plus className="w-3.5 h-3.5" /> {t("Add", "যোগ")}
+              </button>
+            </div>
+            <div className="space-y-2.5">
+              {items.map((it, idx) => (
+                <div key={idx} className="rounded-xl border border-slate-200 p-3 bg-slate-50/60">
+                  <div className="grid grid-cols-12 gap-2">
+                    <div className="col-span-12 sm:col-span-6">
+                      <label className="text-[10px] font-semibold text-slate-500 uppercase">{t("Name", "নাম")}</label>
+                      <input value={it.name} onChange={(e) => updateItem(idx, { name: e.target.value })} className={inputCls} />
+                    </div>
+                    <div className="col-span-6 sm:col-span-3">
+                      <label className="text-[10px] font-semibold text-slate-500 uppercase">{t("Plan", "প্ল্যান")}</label>
+                      <input value={it.plan ?? ""} onChange={(e) => updateItem(idx, { plan: e.target.value })} className={inputCls} />
+                    </div>
+                    <div className="col-span-3 sm:col-span-1">
+                      <label className="text-[10px] font-semibold text-slate-500 uppercase">{t("Qty", "পরিমাণ")}</label>
+                      <input type="number" min={1} value={it.qty ?? 1} onChange={(e) => updateItem(idx, { qty: Number(e.target.value) || 1 })} className={inputCls} />
+                    </div>
+                    <div className="col-span-3 sm:col-span-2">
+                      <label className="text-[10px] font-semibold text-slate-500 uppercase">{t("Price", "দাম")}</label>
+                      <input type="number" min={0} step="0.01" value={it.price} onChange={(e) => updateItem(idx, { price: Number(e.target.value) || 0 })} className={inputCls} />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between">
+                    <div className="text-xs text-slate-500">{t("Subtotal", "মোট")}: <span className="font-bold text-slate-800">{fmtMoney((Number(it.price) || 0) * (Number(it.qty) || 1))}</span></div>
+                    <button type="button" onClick={() => removeItem(idx)} className="inline-flex items-center gap-1 px-2 h-6 rounded-md bg-rose-100 text-rose-700 text-[11px] font-semibold hover:bg-rose-200">
+                      <Trash2 className="w-3 h-3" /> {t("Remove", "মুছুন")}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Total */}
+          <section>
+            <div className="text-xs font-bold uppercase tracking-wide text-slate-500 mb-2">{t("Total Amount", "মোট টাকা")}</div>
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
+              <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 mb-2 cursor-pointer">
+                <input type="checkbox" checked={autoTotal} onChange={(e) => setAutoTotal(e.target.checked)} className="rounded" />
+                {t("Auto-calculate from products", "প্রোডাক্ট থেকে স্বয়ংক্রিয় হিসাব")}
+              </label>
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-amber-700">৳</span>
+                <input
+                  type="number" min={0} step="0.01"
+                  disabled={autoTotal}
+                  value={totalOverride}
+                  onChange={(e) => setTotalOverride(e.target.value)}
+                  className={`${inputCls} flex-1 text-lg font-bold disabled:bg-slate-100 disabled:text-slate-600`}
+                />
+              </div>
+              {autoTotal && computedTotal !== Number(order.total) && (
+                <div className="mt-2 text-[11px] text-amber-700">
+                  {t("Was:", "আগে ছিল:")} {fmtMoney(Number(order.total))} → {t("New:", "নতুন:")} {fmtMoney(computedTotal)}
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* Admin note */}
+          <section>
+            <Field label={t("Admin Note", "অ্যাডমিন নোট")}>
+              <textarea value={adminNote} onChange={(e) => setAdminNote(e.target.value)} rows={2} className={inputCls} />
+            </Field>
+          </section>
+        </div>
+
+        <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
+          <div className="text-xs text-slate-500">
+            {t("Final Total", "চূড়ান্ত মোট")}: <span className="font-bold text-slate-900">{fmtMoney(finalTotal)}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={onClose} className="px-4 h-9 rounded-md bg-white border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-100">
+              {t("Cancel", "বাতিল")}
+            </button>
+            <button
+              onClick={submit}
+              disabled={saving}
+              className="inline-flex items-center gap-2 px-4 h-9 rounded-md bg-amber-500 text-white text-sm font-bold hover:bg-amber-600 disabled:opacity-60"
+            >
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+              {t("Save Changes", "সেভ করুন")}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+const inputCls = "w-full px-3 h-9 rounded-md border border-slate-200 bg-white text-sm text-slate-900 outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100";
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="block text-[11px] font-semibold text-slate-500 uppercase mb-1">{label}</span>
+      {children}
+    </label>
+  );
+}
+
