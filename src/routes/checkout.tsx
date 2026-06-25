@@ -193,11 +193,22 @@ function CheckoutPage() {
         coupon_code: coupon || null,
         status: "pending",
       };
-      (supabase.from("abandoned_checkouts" as never) as unknown as { upsert: (p: unknown, o: { onConflict: string }) => Promise<{ error: { message: string } | null }> })
-        .upsert(payload, { onConflict: "email" })
-        .then(({ error }) => {
-          if (error && typeof console !== "undefined") console.warn("abandoned capture", error.message);
-        });
+      const tbl = supabase.from("abandoned_checkouts" as never) as unknown as {
+        insert: (p: unknown) => Promise<{ error: { code?: string; message: string } | null }>;
+        update: (p: unknown) => { eq: (c: string, v: string) => Promise<{ error: { message: string } | null }> };
+      };
+      tbl.insert(payload).then(({ error }) => {
+        if (!error) return;
+        // 23505 = unique_violation on email → row already exists, update it instead.
+        if (error.code === "23505") {
+          tbl.update(payload).eq("email", payload.email).then(({ error: uErr }) => {
+            if (uErr && typeof console !== "undefined") console.warn("abandoned update", uErr.message);
+          });
+          return;
+        }
+        if (typeof console !== "undefined") console.warn("abandoned capture", error.message);
+      });
+
 
     }, 1500);
     return () => window.clearTimeout(handle);
