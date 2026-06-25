@@ -17,7 +17,7 @@ import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { ProductReviews } from "@/components/ProductReviews";
-import { captureAbandonedCheckout } from "@/lib/abandonedCheckout.client";
+import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
 
 const parsePrice = (p: unknown): number => {
   try {
