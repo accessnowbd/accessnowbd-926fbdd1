@@ -5,6 +5,9 @@ let lastCapturedError: { error: unknown; at: number } | undefined;
 const TTL_MS = 5_000;
 
 function record(error: unknown) {
+  // Ignore raw Response throws from server-fn auth middleware (e.g. 401 when
+  // the session is not yet ready) — they're already handled by callers.
+  if (typeof Response !== "undefined" && error instanceof Response) return;
   lastCapturedError = { error, at: Date.now() };
 }
 
@@ -14,6 +17,7 @@ if (typeof globalThis.addEventListener === "function") {
     record((event as PromiseRejectionEvent).reason),
   );
 }
+
 
 export function consumeLastCapturedError(): unknown {
   if (!lastCapturedError) return undefined;
