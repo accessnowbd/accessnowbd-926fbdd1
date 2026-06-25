@@ -69,43 +69,23 @@ export async function captureAbandonedCheckout(input: CaptureInput) {
   const total = Number(input.total ?? subtotal) || 0;
   const now = new Date().toISOString();
   const payload = {
-    session_key: sessionKey,
-    user_id: userId ?? null,
-    full_name: (input.fullName ?? "").trim(),
-    email: cleanEmail(input.email),
-    phone: cleanPhone(input.phone),
-    items,
-    subtotal,
-    total,
-    coupon_code: input.couponCode || null,
-    status: "pending",
-    source: input.source,
-    stage: input.stage,
-    page_url: window.location.href,
-    last_seen_at: now,
-    metadata: input.metadata ?? {},
+    _session_key: sessionKey,
+    _user_id: userId ?? null,
+    _full_name: (input.fullName ?? "").trim(),
+    _email: cleanEmail(input.email),
+    _phone: cleanPhone(input.phone),
+    _items: items,
+    _subtotal: subtotal,
+    _total: total,
+    _coupon_code: input.couponCode || null,
+    _source: input.source,
+    _stage: input.stage,
+    _page_url: window.location.href,
+    _metadata: { capturedAt: now, ...(input.metadata ?? {}) },
   };
 
-  const table = supabase.from("abandoned_checkouts" as never) as unknown as {
-    insert: (p: unknown) => Promise<{ error: { code?: string; message: string } | null }>;
-    update: (p: unknown) => { eq: (c: string, v: string) => Promise<{ error: { message: string } | null }> };
-  };
-
-  const inserted = await table.insert(payload);
-  if (!inserted.error) return;
-
-  if (inserted.error.code === "23505") {
-    const bySession = await table.update(payload).eq("session_key", sessionKey);
-    if (!bySession.error) return;
-
-    const email = payload.email;
-    if (email) {
-      const byEmail = await table.update(payload).eq("email", email);
-      if (!byEmail.error) return;
-    }
-  }
-
-  if (typeof console !== "undefined") {
-    console.warn("abandoned checkout capture failed", inserted.error.message);
+  const { error } = await supabase.rpc("capture_abandoned_checkout" as never, payload as never);
+  if (error && typeof console !== "undefined") {
+    console.warn("abandoned checkout capture failed", error.message);
   }
 }
