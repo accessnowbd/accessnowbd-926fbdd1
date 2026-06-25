@@ -323,6 +323,36 @@ function ProductPage() {
               </p>
             )}
 
+            {(() => {
+              const ACCOUNT_LABELS: Record<string, { label: string; icon: string }> = {
+                personal: { label: "Personal", icon: "👤" },
+                shared: { label: "Shared", icon: "👥" },
+                family: { label: "Family", icon: "👪" },
+                student: { label: "Student", icon: "🎓" },
+                business: { label: "Business", icon: "🛍️" },
+              };
+              const raw = product.meta?.account_types
+                ?? (product.meta?.account_type && product.meta.account_type !== "none" ? [product.meta.account_type] : []);
+              const types = (raw ?? []).filter((t) => t && t !== "none" && ACCOUNT_LABELS[t]);
+              if (types.length === 0) return null;
+              return (
+                <div className="mt-3 flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Account Type</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {types.map((t) => (
+                      <span
+                        key={t}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-violet-50 text-violet-700 border border-violet-200"
+                      >
+                        <span>{ACCOUNT_LABELS[t].icon}</span>
+                        {ACCOUNT_LABELS[t].label}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+
             {product.features && product.features.length > 0 && (
               <ul className="mt-3 space-y-1.5">
                 {product.features.map((f, i) => (
