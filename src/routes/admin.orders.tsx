@@ -282,7 +282,14 @@ function AdminOrders() {
             <Loader2 className="w-6 h-6 animate-spin" />
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div
+            ref={scrollRef}
+            onMouseDown={onDragMouseDown}
+            onMouseMove={onDragMouseMove}
+            onMouseUp={endDrag}
+            onMouseLeave={endDrag}
+            className="overflow-x-auto cursor-grab select-none [scrollbar-width:thin]"
+          >
             <table className="w-full text-sm min-w-[1100px]">
               <thead className="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
                 <tr>
