@@ -193,11 +193,22 @@ function CheckoutPage() {
         coupon_code: coupon || null,
         status: "pending",
       };
-      (supabase.from("abandoned_checkouts" as never) as unknown as { upsert: (p: unknown, o: { onConflict: string }) => Promise<{ error: { message: string } | null }> })
-        .upsert(payload, { onConflict: "email" })
-        .then(({ error }) => {
-          if (error && typeof console !== "undefined") console.warn("abandoned capture", error.message);
-        });
+      const tbl = supabase.from("abandoned_checkouts" as never) as unknown as {
+        insert: (p: unknown) => Promise<{ error: { code?: string; message: string } | null }>;
+        update: (p: unknown) => { eq: (c: string, v: string) => Promise<{ error: { message: string } | null }> };
+      };
+      tbl.insert(payload).then(({ error }) => {
+        if (!error) return;
+        // 23505 = unique_violation on email → row already exists, update it instead.
+        if (error.code === "23505") {
+          tbl.update(payload).eq("email", payload.email).then(({ error: uErr }) => {
+            if (uErr && typeof console !== "undefined") console.warn("abandoned update", uErr.message);
+          });
+          return;
+        }
+        if (typeof console !== "undefined") console.warn("abandoned capture", error.message);
+      });
+
 
     }, 1500);
     return () => window.clearTimeout(handle);
@@ -305,25 +316,10 @@ function CheckoutPage() {
     );
   }
 
-  if (!user && items.length > 0) {
-    return (
-      <GuardLayout>
-        <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
-          Login to checkout
-        </h1>
-        <p className="text-sm text-muted-foreground mt-2">
-          Sign in or create an account to place your order and track it later.
-        </p>
-        <button
-          onClick={() => { rememberReturnTo(); navigate({ to: "/login" }); }}
-          className="mt-5 h-11 px-6 rounded-full text-primary-foreground text-sm font-bold inline-flex items-center justify-center hover:opacity-95 transition shadow-lg shadow-primary/25"
-          style={{ background: CTA_GRADIENT }}
-        >
-          Login / Sign up
-        </button>
-      </GuardLayout>
-    );
-  }
+  // Guests are allowed to fill the form so we can capture abandoned checkouts
+  // and prefill returning users. Final order submission still requires login
+  // (handleSubmit redirects to /login when !user).
+
 
   if (items.length === 0) {
     return (
