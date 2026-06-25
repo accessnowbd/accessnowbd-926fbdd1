@@ -20,13 +20,19 @@ export type Database = {
           contacted_at: string | null
           coupon_code: string | null
           created_at: string
-          email: string
+          email: string | null
           full_name: string
           id: string
           items: Json
+          last_seen_at: string
+          metadata: Json
+          page_url: string | null
           phone: string
           recovered_at: string | null
           recovered_order_id: string | null
+          session_key: string | null
+          source: string | null
+          stage: string
           status: string
           subtotal: number
           total: number
@@ -38,13 +44,19 @@ export type Database = {
           contacted_at?: string | null
           coupon_code?: string | null
           created_at?: string
-          email: string
+          email?: string | null
           full_name?: string
           id?: string
           items?: Json
+          last_seen_at?: string
+          metadata?: Json
+          page_url?: string | null
           phone?: string
           recovered_at?: string | null
           recovered_order_id?: string | null
+          session_key?: string | null
+          source?: string | null
+          stage?: string
           status?: string
           subtotal?: number
           total?: number
@@ -56,13 +68,19 @@ export type Database = {
           contacted_at?: string | null
           coupon_code?: string | null
           created_at?: string
-          email?: string
+          email?: string | null
           full_name?: string
           id?: string
           items?: Json
+          last_seen_at?: string
+          metadata?: Json
+          page_url?: string | null
           phone?: string
           recovered_at?: string | null
           recovered_order_id?: string | null
+          session_key?: string | null
+          source?: string | null
+          stage?: string
           status?: string
           subtotal?: number
           total?: number
