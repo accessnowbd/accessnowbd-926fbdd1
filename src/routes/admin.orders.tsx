@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import {
   Loader2, Eye, X, Download, Trash2, Plus, RefreshCw, MessageCircle,
   Pencil, Filter as FilterIcon, Search as SearchIcon, ShieldCheck,
@@ -172,6 +172,30 @@ function AdminOrders() {
     return t(pair[0], pair[1]);
   };
 
+  // Mouse drag-to-scroll for the orders table on narrow viewports
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const dragState = useRef<{ down: boolean; startX: number; startLeft: number; moved: boolean }>({
+    down: false, startX: 0, startLeft: 0, moved: false,
+  });
+  const onDragMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = scrollRef.current; if (!el) return;
+    // Don't hijack clicks on interactive elements
+    if ((e.target as HTMLElement).closest("button,a,input,select,textarea,label")) return;
+    dragState.current = { down: true, startX: e.pageX, startLeft: el.scrollLeft, moved: false };
+    el.classList.add("cursor-grabbing");
+  };
+  const onDragMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = scrollRef.current; if (!el || !dragState.current.down) return;
+    const dx = e.pageX - dragState.current.startX;
+    if (Math.abs(dx) > 3) dragState.current.moved = true;
+    el.scrollLeft = dragState.current.startLeft - dx;
+  };
+  const endDrag = () => {
+    const el = scrollRef.current; if (!el) return;
+    dragState.current.down = false;
+    el.classList.remove("cursor-grabbing");
+  };
+
   return (
     <div className="space-y-4 animate-fade-in">
       {/* Header bar */}
@@ -258,7 +282,14 @@ function AdminOrders() {
             <Loader2 className="w-6 h-6 animate-spin" />
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div
+            ref={scrollRef}
+            onMouseDown={onDragMouseDown}
+            onMouseMove={onDragMouseMove}
+            onMouseUp={endDrag}
+            onMouseLeave={endDrag}
+            className="overflow-x-auto cursor-grab select-none [scrollbar-width:thin]"
+          >
             <table className="w-full text-sm min-w-[1100px]">
               <thead className="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
                 <tr>
