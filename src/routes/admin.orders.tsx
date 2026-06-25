@@ -45,6 +45,52 @@ const shortId = (id: string) => "ORD-" + id.replace(/-/g, "").slice(0, 8).toUppe
 
 const fmtMoney = (n: number) => "৳" + Math.round(n).toLocaleString("en-IN");
 
+const STATUS_BN: Record<string, string> = {
+  pending: "⏳ পেন্ডিং — আপনার অর্ডারটি গ্রহণ করা হয়েছে, পেমেন্ট ভেরিফিকেশনের অপেক্ষায় আছে।",
+  processing: "⚙️ প্রসেসিং — আপনার অর্ডারটি প্রস্তুত করা হচ্ছে, খুব শীঘ্রই ডেলিভারি দেওয়া হবে।",
+  delivered: "✅ ডেলিভার্ড — আপনার অর্ডারটি ডেলিভারি দেওয়া হয়েছে। অনুগ্রহ করে চেক করে কনফার্ম করুন।",
+  completed: "🎉 কমপ্লিটেড — আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে। ধন্যবাদ Access Now BD-এর সাথে থাকার জন্য!",
+  cancelled: "❌ ক্যান্সেল — দুঃখিত, আপনার অর্ডারটি বাতিল করা হয়েছে। বিস্তারিত জানতে যোগাযোগ করুন।",
+  refunded: "💸 রিফান্ডেড — আপনার পেমেন্ট রিফান্ড করা হয়েছে।",
+  failed: "⚠️ ফেইলড — অর্ডারটি প্রসেস করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
+};
+
+function buildOrderStatusMessage(o: Order): string {
+  const sid = shortId(o.id);
+  const name = (o.full_name || "").split(" ")[0] || "Customer";
+  const items = (o.items ?? [])
+    .map((it, i) => `${i + 1}. ${it.name}${it.plan ? ` (${it.plan})` : ""} ×${it.qty ?? 1} — ${fmtMoney(Number(it.price) * (it.qty ?? 1))}`)
+    .join("\n");
+  const statusLine = STATUS_BN[o.status] || `📦 স্ট্যাটাস: ${o.status}`;
+  const payVerified = (o.payment_status || "pending") === "verified";
+  const payLine = payVerified ? "✅ পেমেন্ট: ভেরিফাইড" : "⏳ পেমেন্ট: ভেরিফিকেশন বাকি";
+  const creds = o.delivered_credentials;
+  const credBlock = (o.status === "delivered" || o.status === "completed") && creds && (creds.loginEmail || creds.loginPassword)
+    ? `\n\n🔐 লগইন তথ্য:\n• Email: ${creds.loginEmail ?? "—"}\n• Password: ${creds.loginPassword ?? "—"}${creds.plan ? `\n• Plan: ${creds.plan}` : ""}${creds.startsOn ? `\n• Starts: ${creds.startsOn}` : ""}${creds.expiresOn ? `\n• Expires: ${creds.expiresOn}` : ""}`
+    : "";
+  const orderDate = new Date(o.created_at).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  return [
+    `আসসালামু আলাইকুম ${name},`,
+    `Access Now BD থেকে আপনার অর্ডার আপডেট:`,
+    ``,
+    `🧾 অর্ডার আইডি: ${sid}`,
+    `📅 তারিখ: ${orderDate}`,
+    ``,
+    `🛒 প্রোডাক্ট:`,
+    items || "—",
+    ``,
+    `💰 মোট: ${fmtMoney(Number(o.total))}`,
+    `💳 পেমেন্ট মেথড: ${o.payment_method || "—"}`,
+    payLine,
+    ``,
+    `📦 বর্তমান অবস্থা:`,
+    statusLine + credBlock,
+    ``,
+    `কোনো প্রশ্ন থাকলে এই WhatsApp-এ রিপ্লাই করুন।`,
+    `— Access Now BD`,
+  ].join("\n");
+}
+
 function AdminOrders() {
   const { t } = useAdminLang();
   const [orders, setOrders] = useState<Order[]>([]);
