@@ -6,7 +6,7 @@ import { useShopConfigValue } from "@/context/ShopConfigContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { ProductBanner } from "@/components/ProductBanner";
 import { waAskUrl } from "@/lib/whatsapp";
-import { captureAbandonedCheckout } from "@/lib/abandonedCheckout.client";
+import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
 import type { Product } from "@/data/products";
 
 const parsePrice = (p: unknown) => {

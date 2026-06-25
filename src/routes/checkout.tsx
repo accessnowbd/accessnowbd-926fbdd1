@@ -9,7 +9,7 @@ import { useAppliedCoupon, redeemCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import { trackPurchase } from "@/lib/trackEvent";
-import { captureAbandonedCheckout } from "@/lib/abandonedCheckout.client";
+import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
 
 
 function CheckoutErrorComponent({ error }: { error: Error }) {

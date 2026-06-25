@@ -57,37 +57,67 @@ function NotFoundComponent() {
   );
 }
 
+function isChunkLoadError(error: unknown): boolean {
+  const msg = error instanceof Error ? `${error.name}: ${error.message}` : String(error ?? "");
+  return (
+    /Failed to fetch dynamically imported module/i.test(msg) ||
+    /Importing a module script failed/i.test(msg) ||
+    /error loading dynamically imported module/i.test(msg) ||
+    /ChunkLoadError/i.test(msg) ||
+    /Loading chunk [\w-]+ failed/i.test(msg) ||
+    /Loading CSS chunk/i.test(msg) ||
+    /_nonReactive/i.test(msg) // stale router internals after deploy
+  );
+}
+
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   const [showFallback, setShowFallback] = useState(false);
 
-  // Auto-recover from transient route errors (chunk load failures, hydration
-  // mismatches, stale loader data) without ever flashing the error page.
-  // Only show the fallback if a second error occurs in quick succession.
+  // Auto-recover from transient route errors (chunk load failures after a new
+  // deploy, hydration mismatches, stale loader data) without ever flashing the
+  // error page. Hard-reload on chunk errors so the browser fetches fresh
+  // index.html + new asset hashes. Soft-retry on everything else.
   useEffect(() => {
-    const KEY = "__lov_root_error_retry_at";
+    const CHUNK_KEY = "__lov_chunk_reload_at";
+    const RETRY_KEY = "__lov_root_error_retry_at";
     const now = Date.now();
+
+    if (isChunkLoadError(error)) {
+      let lastReload = 0;
+      try { lastReload = Number(sessionStorage.getItem(CHUNK_KEY) ?? 0); } catch { /* ignore */ }
+      if (now - lastReload > 15000) {
+        try { sessionStorage.setItem(CHUNK_KEY, String(now)); } catch { /* ignore */ }
+        // Hard reload bypasses bfcache so the browser refetches index.html
+        // with the new asset manifest. This eliminates the "didn't load" flash.
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set("__r", String(now));
+          window.location.replace(url.toString());
+        } catch {
+          window.location.reload();
+        }
+        return;
+      }
+      setShowFallback(true);
+      return;
+    }
+
     let lastRetry = 0;
-    try {
-      lastRetry = Number(sessionStorage.getItem(KEY) ?? 0);
-    } catch { /* ignore */ }
+    try { lastRetry = Number(sessionStorage.getItem(RETRY_KEY) ?? 0); } catch { /* ignore */ }
 
     if (now - lastRetry > 8000) {
-      try { sessionStorage.setItem(KEY, String(now)); } catch { /* ignore */ }
-      // Defer one tick so React commits before we invalidate.
+      try { sessionStorage.setItem(RETRY_KEY, String(now)); } catch { /* ignore */ }
       const t = setTimeout(() => {
         router.invalidate().finally(() => reset());
       }, 50);
       return () => clearTimeout(t);
     }
-    // Recent retry already happened — show the fallback this time.
     setShowFallback(true);
-  }, [router, reset]);
+  }, [error, router, reset]);
 
   if (!showFallback) {
-    // Render a neutral, theme-aware blank while auto-retry runs. Avoids the
-    // jarring "This page didn't load" flash on transient errors.
     return <div className="min-h-screen bg-background" aria-hidden="true" />;
   }
 
@@ -103,9 +133,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
-              try { sessionStorage.removeItem("__lov_root_error_retry_at"); } catch { /* ignore */ }
-              router.invalidate();
-              reset();
+              try {
+                sessionStorage.removeItem("__lov_root_error_retry_at");
+                sessionStorage.removeItem("__lov_chunk_reload_at");
+              } catch { /* ignore */ }
+              window.location.reload();
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
@@ -122,6 +154,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     </div>
   );
 }
+
 
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({

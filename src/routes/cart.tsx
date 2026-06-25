@@ -7,7 +7,7 @@ import { useCart } from "@/context/CartContext";
 import { useAppliedCoupon } from "@/lib/coupons";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { useShopConfig } from "@/hooks/useShopConfig";
-import { captureAbandonedCheckout } from "@/lib/abandonedCheckout.client";
+import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
 
 const cartSearchSchema = z.object({
   coupon: fallback(z.string(), "").default(""),
