@@ -470,27 +470,27 @@
     stroke-width: 2.65 !important;
     filter: drop-shadow(0 1px 1px rgba(15, 23, 42, 0.28));
   }
-  .admin-clarity button[class*="bg-violet-5"],
-  .admin-clarity button[class*="bg-violet-6"],
-  .admin-clarity button[class*="bg-violet-7"],
-  .admin-clarity button[class*="bg-violet-8"],
-  .admin-clarity button[class*="bg-violet-9"],
-  .admin-clarity button[class*="bg-indigo-5"],
-  .admin-clarity button[class*="bg-indigo-6"],
-  .admin-clarity button[class*="bg-indigo-7"],
-  .admin-clarity button[class*="bg-indigo-8"],
-  .admin-clarity button[class*="bg-indigo-9"],
-  .admin-clarity button[class*="bg-emerald-5"],
-  .admin-clarity button[class*="bg-emerald-6"],
-  .admin-clarity button[class*="bg-emerald-7"],
-  .admin-clarity button[class*="bg-emerald-8"],
-  .admin-clarity button[class*="bg-emerald-9"],
-  .admin-clarity button[class*="bg-rose-5"],
-  .admin-clarity button[class*="bg-rose-6"],
-  .admin-clarity button[class*="bg-rose-7"],
-  .admin-clarity button[class*="bg-rose-8"],
-  .admin-clarity button[class*="bg-rose-9"],
-  .admin-clarity button[class*="bg-slate-9"] { color: #ffffff !important; }
+  .admin-clarity button[class*="bg-violet-500"],
+  .admin-clarity button[class*="bg-violet-600"],
+  .admin-clarity button[class*="bg-violet-700"],
+  .admin-clarity button[class*="bg-violet-800"],
+  .admin-clarity button[class*="bg-violet-900"],
+  .admin-clarity button[class*="bg-indigo-500"],
+  .admin-clarity button[class*="bg-indigo-600"],
+  .admin-clarity button[class*="bg-indigo-700"],
+  .admin-clarity button[class*="bg-indigo-800"],
+  .admin-clarity button[class*="bg-indigo-900"],
+  .admin-clarity button[class*="bg-emerald-500"],
+  .admin-clarity button[class*="bg-emerald-600"],
+  .admin-clarity button[class*="bg-emerald-700"],
+  .admin-clarity button[class*="bg-emerald-800"],
+  .admin-clarity button[class*="bg-emerald-900"],
+  .admin-clarity button[class*="bg-rose-500"],
+  .admin-clarity button[class*="bg-rose-600"],
+  .admin-clarity button[class*="bg-rose-700"],
+  .admin-clarity button[class*="bg-rose-800"],
+  .admin-clarity button[class*="bg-rose-900"],
+  .admin-clarity button[class*="bg-slate-900"] { color: #ffffff !important; }
   .admin-clarity table thead {
     background: oklch(0.96 0.01 255) !important;
     color: var(--admin-muted) !important;
