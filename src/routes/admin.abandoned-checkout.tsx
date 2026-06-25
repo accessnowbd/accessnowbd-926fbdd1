@@ -388,7 +388,7 @@ function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <a href={waLink || "#"} target={waLink ? "_blank" : undefined} rel="noreferrer"
                className={`h-10 rounded-xl border inline-flex items-center justify-center gap-2 text-sm font-semibold ${waLink ? "border-emerald-200 text-emerald-700 bg-emerald-50/40 hover:bg-emerald-50" : "border-slate-200 text-slate-400 cursor-not-allowed"}`}>
               <MessageCircle className="w-4 h-4" /> WhatsApp
@@ -396,6 +396,11 @@ function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete
             <button onClick={() => onUpdate({ status: "contacted", contacted_at: new Date().toISOString() })}
                className="h-10 rounded-xl border border-sky-200 text-sky-700 bg-sky-50/40 hover:bg-sky-50 inline-flex items-center justify-center gap-2 text-sm font-semibold">
               <ArrowRight className="w-4 h-4" /> {t("Mark Contacted", "কন্টাক্ট করা হয়েছে")}
+            </button>
+            <button onClick={onCreateOrder} disabled={creating}
+               className="h-10 rounded-xl bg-violet-600 text-white hover:bg-violet-700 disabled:opacity-60 inline-flex items-center justify-center gap-2 text-sm font-semibold">
+              {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingBag className="w-4 h-4" />}
+              {t("Create Order", "অর্ডার তৈরি")}
             </button>
           </div>
 
