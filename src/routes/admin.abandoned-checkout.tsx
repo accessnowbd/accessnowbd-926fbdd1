@@ -16,14 +16,20 @@ type Item = { slug?: string; name: string; planPeriod?: string; qty?: number; pr
 type Row = {
   id: string;
   user_id: string | null;
+  session_key?: string | null;
   full_name: string;
-  email: string;
+  email: string | null;
   phone: string;
   items: Item[];
   subtotal: number;
   total: number;
   coupon_code: string | null;
   status: "pending" | "contacted" | "recovered" | "lost";
+  stage?: string | null;
+  source?: string | null;
+  page_url?: string | null;
+  last_seen_at?: string | null;
+  metadata?: Record<string, unknown> | null;
   contacted_at: string | null;
   recovered_at: string | null;
   recovered_order_id: string | null;
@@ -58,6 +64,35 @@ function AbandonedCheckoutPage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("admin-abandoned-checkouts-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "abandoned_checkouts" },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            const next = payload.new as Row;
+            setRows((current) => [next, ...current.filter((r) => r.id !== next.id)]);
+            return;
+          }
+          if (payload.eventType === "UPDATE") {
+            const next = payload.new as Row;
+            setRows((current) => current.map((r) => (r.id === next.id ? next : r)));
+            setSelected((current) => (current?.id === next.id ? next : current));
+            return;
+          }
+          if (payload.eventType === "DELETE") {
+            const old = payload.old as Pick<Row, "id">;
+            setRows((current) => current.filter((r) => r.id !== old.id));
+            setSelected((current) => (current?.id === old.id ? null : current));
+          }
+        },
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, []);
 
   const updateRow = async (id: string, patch: Partial<Row>) => {
     const prev = rows;
@@ -110,7 +145,7 @@ function AbandonedCheckoutPage() {
         .insert({
           user_id: r.user_id ?? adminUser.id,
           full_name: r.full_name || "—",
-          email: r.email,
+          email: r.email || "",
           phone: r.phone || "",
           payment_method: "manual",
           transaction_id: `AC-${Date.now()}`,
@@ -162,6 +197,8 @@ function AbandonedCheckoutPage() {
       r.email?.toLowerCase().includes(s) ||
       r.phone?.toLowerCase().includes(s) ||
       r.coupon_code?.toLowerCase().includes(s) ||
+      r.source?.toLowerCase().includes(s) ||
+      r.stage?.toLowerCase().includes(s) ||
       (r.items ?? []).some((it) => it.name?.toLowerCase().includes(s))
     );
   }), [rows, tab, q]);
@@ -292,17 +329,21 @@ function StatusBadge({ status }: { status: Row["status"] }) {
 function RowItem({ row: r, creating, onView, onContact, onCreateOrder, onDelete }: { row: Row; creating?: boolean; onView: () => void; onContact: () => void; onCreateOrder: () => void; onDelete: () => void }) {
   const { t } = useAdminLang();
   const waLink = r.phone ? `https://wa.me/${r.phone.replace(/\D/g, "")}?text=${encodeURIComponent(`আসসালামু আলাইকুম ${r.full_name}, আপনি আমাদের ওয়েবসাইটে একটি অর্ডার শুরু করেছিলেন। কোনো সাহায্যের প্রয়োজন হলে জানান।`)}` : "";
+  const firstItem = (r.items ?? [])[0];
   return (
     <tr className="border-t border-slate-100 hover:bg-slate-50/60">
       <td className="px-4 py-3">
-        <div className="font-semibold text-slate-900">{r.full_name || "—"}</div>
-        <div className="text-[11px] text-slate-400 mt-0.5">{r.user_id ? t("Logged in", "লগড ইন") : t("Guest", "গেস্ট")}</div>
+        <div className="font-semibold text-slate-900">{r.full_name || t("Guest visitor", "গেস্ট ভিজিটর")}</div>
+        <div className="text-[11px] text-slate-400 mt-0.5">{r.user_id ? t("Logged in", "লগড ইন") : t("Guest", "গেস্ট")} • {stageText(r.stage, t)}</div>
       </td>
       <td className="px-3 py-3 text-xs text-slate-600">
-        <div className="flex items-center gap-1.5"><Mail className="w-3 h-3 text-slate-400" />{r.email}</div>
+        <div className="flex items-center gap-1.5"><Mail className="w-3 h-3 text-slate-400" />{r.email || t("Not given yet", "এখনো দেয়নি")}</div>
         {r.phone && <div className="flex items-center gap-1.5 mt-1"><Phone className="w-3 h-3 text-slate-400" />{r.phone}</div>}
       </td>
-      <td className="px-3 py-3 text-slate-700">{(r.items ?? []).reduce((a, it) => a + (it.qty ?? 1), 0)}</td>
+      <td className="px-3 py-3 text-slate-700">
+        <div className="max-w-[210px] truncate font-semibold text-slate-800">{firstItem?.name || t("Selected product", "সিলেক্টেড প্রোডাক্ট")}</div>
+        <div className="text-[11px] text-slate-400">{(r.items ?? []).reduce((a, it) => a + (it.qty ?? 1), 0)} {t("item", "আইটেম")}</div>
+      </td>
       <td className="px-3 py-3 font-bold text-slate-900">{fmtMoney(Number(r.total))}</td>
       <td className="px-3 py-3 text-xs text-slate-500">{new Date(r.created_at).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}</td>
       <td className="px-3 py-3"><StatusBadge status={r.status} /></td>
@@ -342,6 +383,17 @@ function IconBtn({ children, onClick, title, danger }: { children: React.ReactNo
   );
 }
 
+function stageText(stage: string | null | undefined, t: (en: string, bn: string) => string) {
+  const map: Record<string, string> = {
+    intent: t("Browsing", "ব্রাউজ করছে"),
+    product_view: t("Viewing product", "প্রোডাক্ট দেখছে"),
+    cart: t("Cart", "কার্ট"),
+    contact: t("Info entered", "তথ্য দিয়েছে"),
+    payment: t("Payment step", "পেমেন্ট ধাপে"),
+  };
+  return map[stage || ""] || t("Activity", "অ্যাক্টিভিটি");
+}
+
 function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete }: { row: Row; creating?: boolean; onClose: () => void; onUpdate: (p: Partial<Row>) => void; onCreateOrder: () => void; onDelete: () => void }) {
   const { t } = useAdminLang();
   const [note, setNote] = useState(row.admin_note || "");
@@ -361,14 +413,15 @@ function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="bg-slate-50 rounded-xl p-3">
               <div className="text-xs font-bold text-slate-700 mb-2">{t("Contact", "কন্টাক্ট")}</div>
-              <div className="text-sm flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-slate-400" />{row.email}</div>
+              <div className="text-sm flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-slate-400" />{row.email || t("Not given yet", "এখনো দেয়নি")}</div>
               {row.phone && <div className="text-sm flex items-center gap-2 mt-1"><Phone className="w-3.5 h-3.5 text-slate-400" />{row.phone}</div>}
             </div>
             <div className="bg-slate-50 rounded-xl p-3">
               <div className="text-xs font-bold text-slate-700 mb-2">{t("Cart", "কার্ট")}</div>
               <div className="text-sm flex items-center justify-between"><span className="text-slate-500">{t("Total", "মোট")}</span><span className="font-bold text-violet-700">{fmtMoney(Number(row.total))}</span></div>
               {row.coupon_code && <div className="text-xs text-slate-500 mt-1">{t("Coupon", "কুপন")}: <span className="font-mono font-semibold text-slate-700">{row.coupon_code}</span></div>}
-              <div className="text-xs text-slate-500 mt-1">{t("When", "কখন")}: {new Date(row.created_at).toLocaleString()}</div>
+              <div className="text-xs text-slate-500 mt-1">{t("Stage", "ধাপ")}: <span className="font-semibold text-slate-700">{stageText(row.stage, t)}</span></div>
+              <div className="text-xs text-slate-500 mt-1">{t("When", "কখন")}: {new Date(row.last_seen_at || row.created_at).toLocaleString()}</div>
             </div>
           </div>
 

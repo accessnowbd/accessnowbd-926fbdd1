@@ -9,6 +9,7 @@ import { useAppliedCoupon, redeemCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import { trackPurchase } from "@/lib/trackEvent";
+import { captureAbandonedCheckout } from "@/lib/abandonedCheckout.client";
 
 
 function CheckoutErrorComponent({ error }: { error: Error }) {
@@ -172,48 +173,34 @@ function CheckoutPage() {
 
   const applied = useAppliedCoupon(coupon, total);
 
-  // Capture abandoned checkout: debounced upsert as soon as we have valid contact info + items.
+  // Capture abandoned checkout immediately, then enrich it as the customer types.
   // Captures for BOTH signed-in shoppers and anonymous guests (so admin can recover them).
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!items?.length) return;
-    if (!form.name.trim() || !emailRe.test(form.email) || !isValidBdPhone(form.phone)) return;
     const handle = window.setTimeout(() => {
-      const payload = {
-        user_id: user?.id ?? null,
-        full_name: form.name.trim(),
-        email: form.email.trim().toLowerCase(),
-        phone: normalizeBdPhone(form.phone),
-        items: items.map((it) => ({
-          slug: it.slug, name: it.name, planPeriod: it.planPeriod,
-          qty: it.qty, price: it.price, emoji: it.emoji,
-        })),
+      const hasContact = Boolean(form.name.trim() || form.email.trim() || form.phone.trim());
+      captureAbandonedCheckout({
+        userId: user?.id ?? null,
+        fullName: form.name,
+        email: form.email,
+        phone: form.phone,
+        items,
         subtotal: total,
-        total: Math.max(0, total),
-        coupon_code: coupon || null,
-        status: "pending",
-      };
-      const tbl = supabase.from("abandoned_checkouts" as never) as unknown as {
-        insert: (p: unknown) => Promise<{ error: { code?: string; message: string } | null }>;
-        update: (p: unknown) => { eq: (c: string, v: string) => Promise<{ error: { message: string } | null }> };
-      };
-      tbl.insert(payload).then(({ error }) => {
-        if (!error) return;
-        // 23505 = unique_violation on email → row already exists, update it instead.
-        if (error.code === "23505") {
-          tbl.update(payload).eq("email", payload.email).then(({ error: uErr }) => {
-            if (uErr && typeof console !== "undefined") console.warn("abandoned update", uErr.message);
-          });
-          return;
-        }
-        if (typeof console !== "undefined") console.warn("abandoned capture", error.message);
+        total: grandTotal,
+        couponCode: coupon || null,
+        source: "checkout_page",
+        stage: step === 2 ? "payment" : hasContact ? "contact" : "cart",
+        metadata: {
+          step,
+          paymentMethod: step === 2 ? method : undefined,
+          couponApplied: applied.valid ? applied.code : undefined,
+        },
       });
-
-
-    }, 1500);
+    }, 700);
     return () => window.clearTimeout(handle);
 
-  }, [form.name, form.email, form.phone, items, total, coupon, user?.id]);
+  }, [form.name, form.email, form.phone, items, total, grandTotal, coupon, user?.id, step, method, applied.valid, applied.code]);
 
   const subAfterCoupon = Math.max(0, total - applied.discount);
   const walletApplied = useWallet ? Math.min(walletBalance, subAfterCoupon) : 0;

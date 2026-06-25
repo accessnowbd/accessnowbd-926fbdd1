@@ -7,6 +7,7 @@ import { useCart } from "@/context/CartContext";
 import { useAppliedCoupon } from "@/lib/coupons";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { useShopConfig } from "@/hooks/useShopConfig";
+import { captureAbandonedCheckout } from "@/lib/abandonedCheckout.client";
 
 const cartSearchSchema = z.object({
   coupon: fallback(z.string(), "").default(""),
@@ -32,6 +33,22 @@ function CartPage() {
     navigate({ to: "/cart", search: { coupon: val }, replace: true });
 
   const grandTotal = Math.max(0, total - applied.discount);
+
+  useEffect(() => {
+    if (!items.length) return;
+    const handle = window.setTimeout(() => {
+      captureAbandonedCheckout({
+        items,
+        subtotal: total,
+        total: grandTotal,
+        couponCode: applied.valid ? applied.code : coupon || null,
+        source: "cart_page",
+        stage: "cart",
+        metadata: { itemCount: count },
+      });
+    }, 700);
+    return () => window.clearTimeout(handle);
+  }, [items, total, grandTotal, applied.valid, applied.code, coupon, count]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">

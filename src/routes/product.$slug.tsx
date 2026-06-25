@@ -17,6 +17,7 @@ import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { ProductReviews } from "@/components/ProductReviews";
+import { captureAbandonedCheckout } from "@/lib/abandonedCheckout.client";
 
 const parsePrice = (p: unknown): number => {
   try {
@@ -181,6 +182,27 @@ function ProductPage() {
     }
   }, [product?.slug, product?.name, product?.plans]);
 
+  useEffect(() => {
+    if (!product || !plan) return;
+    const handle = window.setTimeout(() => {
+      captureAbandonedCheckout({
+        items: [{
+          slug: product.slug,
+          planPeriod: plan.period,
+          qty,
+          price: parsePrice(plan.price),
+          name: product.name,
+          emoji: product.emoji,
+          gradient: product.gradient,
+        }],
+        source: "product_detail",
+        stage: "product_view",
+        metadata: { productSlug: product.slug, category: product.category },
+      });
+    }, 800);
+    return () => window.clearTimeout(handle);
+  }, [product, plan, qty]);
+
 
   if (isLoading) return <ProductSkeleton />;
   if (!product) {
@@ -206,11 +228,29 @@ function ProductPage() {
 
   const addToCart = () => {
     if (!plan) return;
+    const item = { slug: product.slug, planPeriod: plan.period, qty, price: parsePrice(plan.price), name: product.name, emoji: product.emoji, gradient: product.gradient };
     for (let i = 0; i < qty; i++) {
       add({ slug: product.slug, planPeriod: plan.period, qty: 1, price: parsePrice(plan.price), name: product.name, emoji: product.emoji, gradient: product.gradient });
     }
+    captureAbandonedCheckout({
+      items: [item],
+      source: "product_detail_cart",
+      stage: "cart",
+      metadata: { productSlug: product.slug, category: product.category },
+    });
   };
-  const buyNow = () => { addToCart(); navigate({ to: "/checkout" }); };
+  const buyNow = () => {
+    if (plan) {
+      captureAbandonedCheckout({
+        items: [{ slug: product.slug, planPeriod: plan.period, qty, price: parsePrice(plan.price), name: product.name, emoji: product.emoji, gradient: product.gradient }],
+        source: "product_detail_buy_now",
+        stage: "cart",
+        metadata: { productSlug: product.slug, category: product.category },
+      });
+    }
+    addToCart();
+    navigate({ to: "/checkout" });
+  };
 
   const hasDiscount = !!plan?.original && parsePrice(plan.original) > parsePrice(plan.price);
 
