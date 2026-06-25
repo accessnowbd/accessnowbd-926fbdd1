@@ -1,11 +1,15 @@
 export type Plan = { period: string; price: string; original?: string; popular?: boolean };
 
+export type AccountType = "none" | "personal" | "shared" | "family" | "student" | "business";
+
 export type ProductMeta = {
   seo_title?: string;
   meta_description?: string;
   tags?: string[];
   gallery?: string[];
   video_url?: string;
+  account_type?: AccountType;
+  account_types?: AccountType[];
 };
 
 export type Product = {

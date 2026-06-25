@@ -30,6 +30,7 @@ type FaqItem = { q: string; a: string };
 type ProductMeta = {
  product_type?: ProductType;
  account_type?: AccountType;
+ account_types?: AccountType[];
  brand?: string;
  subcategory?: string;
  additional_categories?: string[];
@@ -957,16 +958,35 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <p className="text-[11px] text-slate-500 mt-1">প্রোডাক্ট টাইটেলের নিচে এই ছোট টেক্সটটি দেখাবে</p>
  </div>
 
- {/* Account type */}
+ {/* Account type (multi-select) */}
  <div>
- <Label>👤 অ্যাকাউন্ট টাইপ <span className="text-slate-500 font-normal">(প্রযোজ্য হলে)</span></Label>
+ <Label>👤 অ্যাকাউন্ট টাইপ <span className="text-slate-500 font-normal">(একাধিক নির্বাচন করা যাবে)</span></Label>
  <div className="flex flex-wrap gap-2">
- {ACCOUNT_TYPES.map((t) => (
- <ChipBig key={t.id} active={(meta.account_type ?? "none") === t.id} onClick={() => setMeta("account_type", t.id)}>
- {t.icon && <span>{t.icon}</span>} {t.label}
- </ChipBig>
- ))}
+ {ACCOUNT_TYPES.map((t) => {
+  const current = meta.account_types ?? (meta.account_type && meta.account_type !== "none" ? [meta.account_type] : []);
+  const isNone = t.id === "none";
+  const active = isNone ? current.length === 0 : current.includes(t.id);
+  return (
+  <ChipBig
+   key={t.id}
+   active={active}
+   onClick={() => {
+   if (isNone) {
+    setMeta("account_types", []);
+    setMeta("account_type", "none");
+    return;
+   }
+   const next = active ? current.filter((x) => x !== t.id) : [...current, t.id];
+   setMeta("account_types", next);
+   setMeta("account_type", next[0] ?? "none");
+   }}
+  >
+   {t.icon && <span>{t.icon}</span>} {t.label}
+  </ChipBig>
+  );
+ })}
  </div>
+ <p className="text-[11px] text-slate-500 mt-1">যেগুলো সিলেক্ট থাকবে, প্রোডাক্ট পেজে শুধু সেগুলোই দেখাবে।</p>
  </div>
 
  {/* Slug + Brand */}
