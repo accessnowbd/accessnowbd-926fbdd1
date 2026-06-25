@@ -451,6 +451,22 @@
 
   .admin-clarity .a-save-btn { display: inline-flex; align-items: center; gap: 0.5rem; height: 2.5rem; padding: 0 1.25rem; border-radius: 0.75rem; background: linear-gradient(135deg, #7c3aed, #a855f7); color: #ffffff; font-weight: 700; font-size: 0.875rem; box-shadow: 0 10px 24px -10px rgba(124, 58, 237, 0.6); }
   .admin-clarity .a-save-btn:hover { filter: brightness(1.05); }
+  .admin-clarity .order-quick-action { color: #ffffff !important; }
+  .admin-clarity .order-quick-whatsapp { background: #059669 !important; border-color: #059669 !important; }
+  .admin-clarity .order-quick-whatsapp:hover { background: #047857 !important; border-color: #047857 !important; }
+  .admin-clarity .order-quick-pdf { background: #2563eb !important; border-color: #2563eb !important; }
+  .admin-clarity .order-quick-pdf:hover { background: #1d4ed8 !important; border-color: #1d4ed8 !important; }
+  .admin-clarity .order-quick-cancel { background: #e11d48 !important; border-color: #e11d48 !important; }
+  .admin-clarity .order-quick-cancel:hover { background: #be123c !important; border-color: #be123c !important; }
+  .admin-clarity .order-quick-action svg { color: #ffffff !important; stroke: #ffffff !important; }
+  .order-quick-action { color: #ffffff !important; }
+  .order-quick-whatsapp { background: #059669 !important; border-color: #059669 !important; }
+  .order-quick-whatsapp:hover { background: #047857 !important; border-color: #047857 !important; }
+  .order-quick-pdf { background: #2563eb !important; border-color: #2563eb !important; }
+  .order-quick-pdf:hover { background: #1d4ed8 !important; border-color: #1d4ed8 !important; }
+  .order-quick-cancel { background: #e11d48 !important; border-color: #e11d48 !important; }
+  .order-quick-cancel:hover { background: #be123c !important; border-color: #be123c !important; }
+  .order-quick-action svg { color: #ffffff !important; stroke: #ffffff !important; }
   .admin-clarity .admin-card {
     background: var(--admin-card) !important;
     border: 1px solid var(--admin-border) !important;
@@ -3386,5 +3402,44 @@ html.theme-white [class*="rounded-3xl"][class*="border"] :where(h1, h2, h3, h4, 
 html:not(.theme-white) .bg-card :where(h1, h2, h3, h4, h5, h6):not([class*="text-"]):not(.text-aurora):not(.text-aurora-strong):not(.text-neon):not(.text-sunset),
 html:not(.theme-white) [class*="rounded-3xl"][class*="border"] :where(h1, h2, h3, h4, h5, h6):not([class*="text-"]):not(.text-aurora):not(.text-aurora-strong):not(.text-neon):not(.text-sunset) {
   color: var(--card-foreground);
+}
+
+/* Order detail dialog — final scoped overrides so broad theme safety rules never
+   wash out quick actions or status-step controls. */
+html.theme-white [role="dialog"] .order-quick-action,
+[role="dialog"] .order-quick-action {
+  color: #ffffff !important;
+}
+html.theme-white [role="dialog"] .order-quick-action svg,
+[role="dialog"] .order-quick-action svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+html.theme-white [role="dialog"] .order-quick-whatsapp,
+[role="dialog"] .order-quick-whatsapp {
+  background: #059669 !important;
+  border-color: #059669 !important;
+}
+html.theme-white [role="dialog"] .order-quick-pdf,
+[role="dialog"] .order-quick-pdf {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+}
+html.theme-white [role="dialog"] .order-quick-cancel,
+[role="dialog"] .order-quick-cancel {
+  background: #e11d48 !important;
+  border-color: #e11d48 !important;
+}
+html.theme-white [role="dialog"] button[class*="border-slate-200"][class*="bg-white"],
+[role="dialog"] button[class*="border-slate-200"][class*="bg-white"] {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+html.theme-white [role="dialog"] button[class*="bg-slate-200"],
+[role="dialog"] button[class*="bg-slate-200"] {
+  background: #e2e8f0 !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
 }
 

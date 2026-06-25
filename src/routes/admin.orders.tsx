@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import { createPortal } from "react-dom";
 import {
   Loader2, Eye, X, Download, Trash2, Plus, RefreshCw, MessageCircle,
   Pencil, Filter as FilterIcon, Search as SearchIcon, ShieldCheck,
@@ -37,6 +38,8 @@ type Order = {
 
 const STATUSES = ["pending", "processing", "delivered", "completed", "cancelled", "refunded", "failed"] as const;
 const PAYMENT_STATUSES = ["pending", "verified", "failed"] as const;
+const ORDER_FLOW = ["pending", "processing", "delivered", "completed"] as const;
+const EXCEPTION_STATUSES = ["cancelled", "refunded", "failed"] as const;
 
 const shortId = (id: string) => "ORD-" + id.replace(/-/g, "").slice(0, 8).toUpperCase();
 
@@ -395,6 +398,21 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
+function getStatusText(status: string, t: (en: string, bn: string) => string) {
+  const m: Record<string, [string, string]> = {
+    pending: ["Pending", "পেন্ডিং"],
+    processing: ["Processing", "প্রসেসিং"],
+    delivered: ["Delivered", "ডেলিভার্ড"],
+    completed: ["Completed", "সম্পন্ন"],
+    cancelled: ["Cancelled", "বাতিল"],
+    refunded: ["Refunded", "রিফান্ড"],
+    failed: ["Failed", "ব্যর্থ"],
+    verified: ["Verified", "ভেরিফাইড"],
+  };
+  const pair = m[status] || [status, status];
+  return t(pair[0], pair[1]);
+}
+
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -493,6 +511,134 @@ function IconBtn({ children, onClick, title, tone = "slate" }: { children: React
   );
 }
 
+function OrderStatusFlow({ status, onChange }: { status: string; onChange: (s: string) => void }) {
+  const { t } = useAdminLang();
+  const flowIndex = ORDER_FLOW.indexOf(status as (typeof ORDER_FLOW)[number]);
+  const isException = EXCEPTION_STATUSES.includes(status as (typeof EXCEPTION_STATUSES)[number]);
+  const nextStatus = flowIndex >= 0 && flowIndex < ORDER_FLOW.length - 1 ? ORDER_FLOW[flowIndex + 1] : null;
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3 sm:p-4">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 mb-3">
+        <div className="min-w-0">
+          <div className="text-xs font-bold text-slate-700 uppercase tracking-wide">{t("Order Status Flow", "অর্ডার স্ট্যাটাস ধাপ")}</div>
+          <div className="text-[11px] font-medium text-slate-500 mt-0.5 truncate">
+            {isException
+              ? t("This order is outside the normal delivery flow.", "এই অর্ডারটি সাধারণ ডেলিভারি ধাপের বাইরে আছে।")
+              : nextStatus
+                ? t("Click the next active step to move forward.", "পরের active ধাপে ক্লিক করলে status সামনে এগোবে।")
+                : t("All steps are complete.", "সব ধাপ সম্পন্ন হয়েছে।")}
+          </div>
+        </div>
+        <StatusBadge status={status} />
+      </div>
+
+      <div className="overflow-x-auto pb-1 [scrollbar-width:thin]">
+        <div className="grid min-w-[640px] grid-cols-4 gap-2">
+          {ORDER_FLOW.map((step, index) => {
+            const isDone = flowIndex > index;
+            const isCurrent = flowIndex === index;
+            const isNext = !isException && index === flowIndex + 1;
+            const isComplete = status === "completed";
+            const canClick = isNext;
+            return (
+              <button
+                key={step}
+                type="button"
+                disabled={!canClick}
+                onClick={() => onChange(step)}
+                className={`relative h-16 rounded-xl border px-3 text-left transition disabled:cursor-not-allowed ${
+                  isDone || isComplete
+                    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                    : isCurrent
+                      ? "border-violet-300 bg-violet-50 text-violet-800 shadow-sm ring-2 ring-violet-100"
+                      : isNext
+                        ? "border-sky-300 bg-white text-sky-800 shadow-sm hover:bg-sky-50 hover:border-sky-400"
+                        : "border-slate-200 bg-white text-slate-400"
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-extrabold ${
+                    isDone || isComplete
+                      ? "bg-emerald-600 text-white"
+                      : isCurrent
+                        ? "bg-violet-600 text-white"
+                        : isNext
+                          ? "bg-sky-600 text-white"
+                          : "bg-slate-100 text-slate-500"
+                  }`}>{isDone || isComplete ? <Check className="h-4 w-4" /> : index + 1}</span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-extrabold">{getStatusText(step, t)}</span>
+                    <span className="block truncate text-[11px] font-semibold opacity-75">
+                      {isNext ? t("Next click", "পরের ক্লিক") : isCurrent ? t("Current", "বর্তমান") : isDone || isComplete ? t("Done", "শেষ") : t("Locked", "লকড")}
+                    </span>
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-3 grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+        <div className="flex flex-wrap gap-2">
+          {EXCEPTION_STATUSES.map((step) => (
+            <button
+              key={step}
+              type="button"
+              onClick={() => onChange(step)}
+              className={`h-8 rounded-full border px-3 text-xs font-bold transition ${
+                status === step
+                  ? "border-rose-300 bg-rose-100 text-rose-800"
+                  : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+              }`}
+            >
+              {getStatusText(step, t)}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          disabled={!nextStatus || isException}
+          onClick={() => nextStatus && onChange(nextStatus)}
+          className={`h-9 rounded-full px-4 text-xs font-extrabold shadow-sm transition ${nextStatus && !isException ? "bg-violet-600 text-white hover:bg-violet-700" : "bg-slate-200 text-slate-600 shadow-none"}`}
+        >
+          {nextStatus ? `${t("Next", "পরের ধাপ")}: ${getStatusText(nextStatus, t)}` : t("Completed", "সম্পন্ন")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function PaymentStatusButtons({ status, onChange }: { status: string; onChange: (s: string) => void }) {
+  const { t } = useAdminLang();
+  const tones: Record<string, string> = {
+    pending: "border-amber-300 bg-amber-50 text-amber-800",
+    verified: "border-emerald-300 bg-emerald-50 text-emerald-800",
+    failed: "border-rose-300 bg-rose-50 text-rose-800",
+  };
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-slate-700">{t("Payment Status", "পেমেন্ট স্ট্যাটাস")}</label>
+      <div className="grid grid-cols-3 gap-2">
+        {PAYMENT_STATUSES.map((step) => {
+          const active = (status || "pending") === step;
+          return (
+            <button
+              key={step}
+              type="button"
+              onClick={() => onChange(step)}
+              className={`h-10 rounded-xl border text-xs font-extrabold capitalize transition ${active ? tones[step] : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}
+            >
+              {getStatusText(step, t)}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, onSaveNote, onDelete }: {
   order: Order;
   onClose: () => void;
@@ -534,15 +680,15 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
     } finally { setDownloading(false); }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-2 sm:p-4 overflow-y-auto" onClick={onClose}>
-      <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[95vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+  return createPortal(
+    <div className="fixed inset-0 z-[100] grid place-items-center overflow-y-auto bg-slate-950/70 p-2 backdrop-blur-sm sm:p-4" onClick={onClose}>
+      <div role="dialog" aria-modal="true" className="w-full max-w-5xl max-h-[95vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-white border-b border-slate-100 px-5 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3 flex-wrap">
-            <h2 className="font-extrabold text-lg text-slate-900">{t("Order", "অর্ডার")} #{shortId(order.id)}</h2>
+        <div className="sticky top-0 z-10 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-slate-100 bg-white px-4 py-3 sm:px-5">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
+            <h2 className="min-w-0 truncate text-base font-extrabold text-slate-950 sm:text-lg">{t("Order", "অর্ডার")} #{shortId(order.id)}</h2>
             <StatusBadge status={order.status} />
-            <span className="text-xs text-slate-500">{new Date(order.created_at).toLocaleString()}</span>
+            <span className="text-xs font-medium text-slate-600">{new Date(order.created_at).toLocaleString()}</span>
           </div>
           <div className="flex items-center gap-1">
             <button onClick={downloadReceipt} disabled={downloading} className="w-9 h-9 grid place-items-center rounded-lg text-slate-500 hover:text-violet-600 hover:bg-violet-50">
@@ -565,21 +711,21 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
         </div>
 
         {tab === "details" ? (
-          <div className="p-5 space-y-4">
+          <div className="space-y-4 p-4 sm:p-5">
             {/* Customer + Payment */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Card title={t("Customer", "কাস্টমার")} icon={<UserIcon className="w-3.5 h-3.5" />}>
                 <div className="font-bold text-slate-900">{order.full_name}</div>
                 <div className="mt-2 space-y-1.5 text-sm text-slate-600">
-                  <div className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-slate-400" />{order.email}</div>
-                  <div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-slate-400" />{order.phone}</div>
+                  <div className="flex min-w-0 items-center gap-2"><Mail className="h-3.5 w-3.5 shrink-0 text-slate-400" /><span className="min-w-0 break-all">{order.email}</span></div>
+                  <div className="flex min-w-0 items-center gap-2"><Phone className="h-3.5 w-3.5 shrink-0 text-slate-400" /><span className="min-w-0 break-all">{order.phone}</span></div>
                 </div>
               </Card>
               <Card title={t("Payment", "পেমেন্ট")} icon={<CreditCard className="w-3.5 h-3.5" />}>
                 <div className="space-y-1.5 text-sm">
                   <Row label={t("Method", "মাধ্যম")} value={<span className="font-bold text-slate-900">{order.payment_method}</span>} />
-                  <Row label="TrxID:" value={<span className="font-mono text-xs text-slate-700">{order.transaction_id}</span>} />
-                  <Row label={t("Payment:", "পেমেন্ট:")} value={<span className="font-semibold text-emerald-600">{(order.payment_status || "pending")}</span>} />
+                  <Row label="TrxID:" value={<span className="font-mono text-xs text-slate-700 break-all">{order.transaction_id}</span>} />
+                  <Row label={t("Payment:", "পেমেন্ট:")} value={<span className="font-semibold text-emerald-700">{getStatusText(order.payment_status || "pending", t)}</span>} />
                 </div>
                 <div className="mt-3 pt-3 border-t border-slate-100 space-y-1">
                   <Row label={t("Total:", "মোট:")} value={<span className="font-bold text-violet-700">{fmtMoney(Number(order.total))}</span>} />
@@ -592,8 +738,8 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
             <Card title={t("Products", "পণ্যসমূহ")} icon={<Package className="w-3.5 h-3.5" />}>
               <div className="divide-y divide-slate-100">
                 {(order.items ?? []).map((it, i) => (
-                  <div key={i} className="py-2 flex items-center justify-between">
-                    <div className="text-sm">
+                  <div key={i} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-2">
+                    <div className="min-w-0 text-sm">
                       <span className="font-medium text-slate-900">{it.name}</span>
                       {it.plan && <span className="text-xs text-slate-500 ml-1">({it.plan})</span>}
                       <span className="text-xs text-slate-400 ml-1.5">×{it.qty ?? 1}</span>
@@ -607,38 +753,26 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
             {/* Quick actions */}
             <div>
               <div className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">{t("Quick Actions", "দ্রুত অ্যাকশন")}</div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                 <a href={waLink || "#"} target={waLink ? "_blank" : undefined} rel="noreferrer"
-                   className={`h-10 rounded-xl border inline-flex items-center justify-center gap-2 text-sm font-semibold ${waLink ? "border-emerald-200 text-emerald-700 bg-emerald-50/40 hover:bg-emerald-50" : "border-slate-200 text-slate-400 cursor-not-allowed"}`}>
+                   className={`order-quick-action inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm ${waLink ? "order-quick-whatsapp" : "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 shadow-none"}`}>
                   <MessageCircle className="w-4 h-4" /> WhatsApp
                 </a>
                 <button onClick={downloadReceipt} disabled={downloading}
-                   className="h-10 rounded-xl border border-violet-200 text-violet-700 bg-violet-50/40 hover:bg-violet-50 inline-flex items-center justify-center gap-2 text-sm font-semibold">
+                   className="order-quick-action order-quick-pdf inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:shadow-none">
                   {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} {t("PDF Download", "PDF ডাউনলোড")}
                 </button>
                 <button onClick={() => { onStatusChange("cancelled"); }}
-                   className="h-10 rounded-xl border border-rose-200 text-rose-700 bg-rose-50/40 hover:bg-rose-50 inline-flex items-center justify-center gap-2 text-sm font-semibold">
+                   className="order-quick-action order-quick-cancel inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm">
                   <XIcon className="w-4 h-4" /> {t("Cancel", "বাতিল")}
                 </button>
               </div>
             </div>
 
-            {/* Status selects */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs font-semibold text-slate-600 mb-1.5 block">{t("Order Status", "Status পরিবর্তন")}</label>
-                <select value={order.status} onChange={(e) => onStatusChange(e.target.value)}
-                  className="w-full h-10 rounded-xl border border-slate-200 px-3 text-sm bg-white capitalize focus:border-violet-400 outline-none">
-                  {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-slate-600 mb-1.5 block">{t("Payment Status", "পেমেন্ট স্ট্যাটাস")}</label>
-                <select value={order.payment_status || "pending"} onChange={(e) => onPaymentStatusChange(e.target.value)}
-                  className="w-full h-10 rounded-xl border border-slate-200 px-3 text-sm bg-white capitalize focus:border-violet-400 outline-none">
-                  {PAYMENT_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
+            {/* Status controls */}
+            <div className="grid grid-cols-1 gap-3">
+              <OrderStatusFlow status={order.status} onChange={onStatusChange} />
+              <PaymentStatusButtons status={order.payment_status || "pending"} onChange={onPaymentStatusChange} />
             </div>
 
             {/* WhatsApp custom message */}
@@ -691,13 +825,14 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
 function Card({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-3.5">
+    <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-sm">
       <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-2">
         <span className="text-violet-600">{icon}</span>{title}
       </div>
@@ -708,9 +843,9 @@ function Card({ title, icon, children }: { title: string; icon: React.ReactNode;
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between text-sm">
+    <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 text-sm">
       <span className="text-slate-500">{label}</span>
-      <span>{value}</span>
+      <span className="min-w-0 text-right">{value}</span>
     </div>
   );
 }
