@@ -20,13 +20,19 @@ export type Database = {
           contacted_at: string | null
           coupon_code: string | null
           created_at: string
-          email: string
+          email: string | null
           full_name: string
           id: string
           items: Json
+          last_seen_at: string
+          metadata: Json
+          page_url: string | null
           phone: string
           recovered_at: string | null
           recovered_order_id: string | null
+          session_key: string | null
+          source: string | null
+          stage: string
           status: string
           subtotal: number
           total: number
@@ -38,13 +44,19 @@ export type Database = {
           contacted_at?: string | null
           coupon_code?: string | null
           created_at?: string
-          email: string
+          email?: string | null
           full_name?: string
           id?: string
           items?: Json
+          last_seen_at?: string
+          metadata?: Json
+          page_url?: string | null
           phone?: string
           recovered_at?: string | null
           recovered_order_id?: string | null
+          session_key?: string | null
+          source?: string | null
+          stage?: string
           status?: string
           subtotal?: number
           total?: number
@@ -56,13 +68,19 @@ export type Database = {
           contacted_at?: string | null
           coupon_code?: string | null
           created_at?: string
-          email?: string
+          email?: string | null
           full_name?: string
           id?: string
           items?: Json
+          last_seen_at?: string
+          metadata?: Json
+          page_url?: string | null
           phone?: string
           recovered_at?: string | null
           recovered_order_id?: string | null
+          session_key?: string | null
+          source?: string | null
+          stage?: string
           status?: string
           subtotal?: number
           total?: number
@@ -1734,6 +1752,24 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      capture_abandoned_checkout: {
+        Args: {
+          _coupon_code: string
+          _email: string
+          _full_name: string
+          _items: Json
+          _metadata: Json
+          _page_url: string
+          _phone: string
+          _session_key: string
+          _source: string
+          _stage: string
+          _subtotal: number
+          _total: number
+          _user_id: string
+        }
+        Returns: string
       }
       delete_email: {
         Args: { message_id: number; queue_name: string }

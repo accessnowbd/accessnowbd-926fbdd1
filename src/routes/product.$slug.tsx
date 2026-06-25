@@ -17,6 +17,7 @@ import { GlassCard } from "@/components/ui-glass/GlassCard";
 import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { ProductReviews } from "@/components/ProductReviews";
+import { captureAbandonedCheckout } from "@/lib/abandonedCheckout.client";
 
 const parsePrice = (p: unknown): number => {
   try {
@@ -163,8 +164,10 @@ function ProductPage() {
   const popularIdx = (loaderProduct?.plans ?? product?.plans ?? []).findIndex((p: { popular?: boolean }) => p.popular);
   const [selected, setSelected] = useState(() => (popularIdx > 0 ? popularIdx : 0));
   const [qty, setQty] = useState(1);
-  
+  const [activeImg, setActiveImg] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const activeIdx = product ? Math.min(selected, Math.max(product.plans.length - 1, 0)) : 0;
+  const plan = product?.plans[activeIdx];
 
   useEffect(() => {
     if (product?.slug) {
@@ -182,6 +185,27 @@ function ProductPage() {
   }, [product?.slug, product?.name, product?.plans]);
 
 
+  useEffect(() => {
+    if (!product || !plan) return;
+    const handle = window.setTimeout(() => {
+      captureAbandonedCheckout({
+        items: [{
+          slug: product.slug,
+          planPeriod: plan.period,
+          qty,
+          price: parsePrice(plan.price),
+          name: product.name,
+          emoji: product.emoji,
+          gradient: product.gradient,
+        }],
+        source: "product_detail",
+        stage: "product_view",
+        metadata: { productSlug: product.slug, category: product.category },
+      });
+    }, 800);
+    return () => window.clearTimeout(handle);
+  }, [product, plan, qty]);
+
   if (isLoading) return <ProductSkeleton />;
   if (!product) {
     return (
@@ -194,23 +218,38 @@ function ProductPage() {
     );
   }
 
-  const activeIdx = Math.min(selected, Math.max(product.plans.length - 1, 0));
-  const plan = product.plans[activeIdx];
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 8);
 
   const galleryImages = (product.meta?.gallery ?? []).filter(Boolean);
   const allImages = [product.imageUrl, ...galleryImages].filter((u): u is string => !!u);
-  const [activeImg, setActiveImg] = useState<string | null>(null);
   const heroImg = activeImg ?? allImages[0] ?? null;
   const videoEmbed = toEmbedUrl(product.meta?.video_url);
 
   const addToCart = () => {
     if (!plan) return;
+    const item = { slug: product.slug, planPeriod: plan.period, qty, price: parsePrice(plan.price), name: product.name, emoji: product.emoji, gradient: product.gradient };
     for (let i = 0; i < qty; i++) {
       add({ slug: product.slug, planPeriod: plan.period, qty: 1, price: parsePrice(plan.price), name: product.name, emoji: product.emoji, gradient: product.gradient });
     }
+    captureAbandonedCheckout({
+      items: [item],
+      source: "product_detail_cart",
+      stage: "cart",
+      metadata: { productSlug: product.slug, category: product.category },
+    });
   };
-  const buyNow = () => { addToCart(); navigate({ to: "/checkout" }); };
+  const buyNow = () => {
+    if (plan) {
+      captureAbandonedCheckout({
+        items: [{ slug: product.slug, planPeriod: plan.period, qty, price: parsePrice(plan.price), name: product.name, emoji: product.emoji, gradient: product.gradient }],
+        source: "product_detail_buy_now",
+        stage: "cart",
+        metadata: { productSlug: product.slug, category: product.category },
+      });
+    }
+    addToCart();
+    navigate({ to: "/checkout" });
+  };
 
   const hasDiscount = !!plan?.original && parsePrice(plan.original) > parsePrice(plan.price);
 

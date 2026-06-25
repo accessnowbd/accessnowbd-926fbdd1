@@ -6,6 +6,7 @@ import { useShopConfigValue } from "@/context/ShopConfigContext";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { ProductBanner } from "@/components/ProductBanner";
 import { waAskUrl } from "@/lib/whatsapp";
+import { captureAbandonedCheckout } from "@/lib/abandonedCheckout.client";
 import type { Product } from "@/data/products";
 
 const parsePrice = (p: unknown) => {
@@ -37,7 +38,7 @@ function ProductCardImpl({ product }: { product: Product }) {
   const onAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     if (!plan) return;
-    add({
+    const item = {
       slug: product.slug,
       planPeriod: plan.period,
       qty: 1,
@@ -45,6 +46,31 @@ function ProductCardImpl({ product }: { product: Product }) {
       name: product.name,
       emoji: product.emoji,
       gradient: product.gradient,
+    };
+    add(item);
+    captureAbandonedCheckout({
+      items: [item],
+      source: "product_card_cart",
+      stage: "cart",
+      metadata: { productSlug: product.slug, category: product.category },
+    });
+  };
+
+  const captureIntent = () => {
+    if (!plan) return;
+    captureAbandonedCheckout({
+      items: [{
+        slug: product.slug,
+        planPeriod: plan.period,
+        qty: 1,
+        price: parsePrice(plan.price),
+        name: product.name,
+        emoji: product.emoji,
+        gradient: product.gradient,
+      }],
+      source: "product_card_click",
+      stage: "intent",
+      metadata: { productSlug: product.slug, category: product.category },
     });
   };
 
@@ -53,6 +79,7 @@ function ProductCardImpl({ product }: { product: Product }) {
       to="/product/$slug"
       params={{ slug: product.slug }}
       preload="intent"
+      onClick={captureIntent}
       className="group product-card-v2 relative overflow-hidden flex flex-col h-full rounded-lg border border-[var(--glass-border)] bg-card shadow-[var(--shadow-glass-sm)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[var(--shadow-glass)] will-change-transform"
     >
       <div className="relative overflow-hidden [&_img]:transition-transform [&_img]:duration-[600ms] [&_img]:ease-[cubic-bezier(0.22,1,0.36,1)]">
