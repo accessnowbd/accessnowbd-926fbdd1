@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { installErrorLogger } from "@/lib/error-logger";
 import { startScrollPerfMonitor } from "@/lib/scrollPerfMonitor";
 
@@ -60,6 +60,36 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const [showFallback, setShowFallback] = useState(false);
+
+  // Auto-recover from transient route errors (chunk load failures, hydration
+  // mismatches, stale loader data) without ever flashing the error page.
+  // Only show the fallback if a second error occurs in quick succession.
+  useEffect(() => {
+    const KEY = "__lov_root_error_retry_at";
+    const now = Date.now();
+    let lastRetry = 0;
+    try {
+      lastRetry = Number(sessionStorage.getItem(KEY) ?? 0);
+    } catch { /* ignore */ }
+
+    if (now - lastRetry > 8000) {
+      try { sessionStorage.setItem(KEY, String(now)); } catch { /* ignore */ }
+      // Defer one tick so React commits before we invalidate.
+      const t = setTimeout(() => {
+        router.invalidate().finally(() => reset());
+      }, 50);
+      return () => clearTimeout(t);
+    }
+    // Recent retry already happened — show the fallback this time.
+    setShowFallback(true);
+  }, [router, reset]);
+
+  if (!showFallback) {
+    // Render a neutral, theme-aware blank while auto-retry runs. Avoids the
+    // jarring "This page didn't load" flash on transient errors.
+    return <div className="min-h-screen bg-background" aria-hidden="true" />;
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -73,6 +103,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
+              try { sessionStorage.removeItem("__lov_root_error_retry_at"); } catch { /* ignore */ }
               router.invalidate();
               reset();
             }}
@@ -91,6 +122,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     </div>
   );
 }
+
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
