@@ -821,49 +821,15 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
               </div>
             </Card>
 
-            {/* Quick actions */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-xs font-bold text-slate-500 uppercase tracking-wide">{t("Quick Actions", "দ্রুত অ্যাকশন")}</div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-
-                <button
-                  onClick={() => onPaymentStatusChange("verified")}
-                  disabled={order.payment_status === "verified"}
-                  className="order-quick-action inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <ShieldCheck className="w-4 h-4" /> {t("Verify Payment", "পেমেন্ট ভেরিফাই")}
-                </button>
-                <button
-                  onClick={() => onStatusChange("delivered")}
-                  disabled={order.status === "delivered" || order.status === "completed"}
-                  className="order-quick-action inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm border-sky-200 bg-sky-50 text-sky-700 hover:bg-sky-100 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <Truck className="w-4 h-4" /> {t("Delivered", "ডেলিভার্ড")}
-                </button>
-                <a href={waLink || "#"} target={waLink ? "_blank" : undefined} rel="noreferrer"
-                   className={`order-quick-action inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm ${waLink ? "order-quick-whatsapp" : "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 shadow-none"}`}>
-                  <MessageCircle className="w-4 h-4" /> WhatsApp
-                </a>
-                <button onClick={downloadReceipt} disabled={downloading}
-                   className="order-quick-action order-quick-pdf inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:shadow-none">
-                  {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} {t("PDF Download", "PDF ডাউনলোড")}
-                </button>
-                <button onClick={() => { onStatusChange("cancelled"); }}
-                   className="order-quick-action order-quick-cancel inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm sm:col-span-1">
-                  <XIcon className="w-4 h-4" /> {t("Cancel", "বাতিল")}
-                </button>
-              </div>
-            </div>
-
-
-            {/* Status controls */}
-            <div className="grid grid-cols-1 gap-3">
-              <OrderStatusFlow status={order.status} onChange={onStatusChange} />
-              <PaymentStatusButtons status={order.payment_status || "pending"} onChange={onPaymentStatusChange} />
-            </div>
+            {/* Quick Flow — sequential one-click stepper */}
+            <QuickFlow
+              order={order}
+              waLink={waLink}
+              downloading={downloading}
+              onPaymentStatusChange={onPaymentStatusChange}
+              onStatusChange={onStatusChange}
+              onDownload={downloadReceipt}
+            />
 
             {/* WhatsApp auto status message */}
             <div>
