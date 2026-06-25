@@ -327,6 +327,7 @@ function AdminOrders() {
                     key={o.id}
                     order={o}
                     onView={() => setSelected(o)}
+                    onEdit={() => setEditing(o)}
                     onDelete={() => deleteOrder(o.id)}
                     onDownload={() => downloadReceiptPdf({
                       id: o.id, full_name: o.full_name, email: o.email, phone: o.phone,
@@ -339,6 +340,7 @@ function AdminOrders() {
                     })}
                   />
                 ))}
+
                 {filtered.length === 0 && (
                   <tr><td colSpan={9} className="p-10 text-center text-slate-400">{t("No orders found.", "কোনো অর্ডার পাওয়া যায়নি।")}</td></tr>
                 )}
