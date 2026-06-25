@@ -914,15 +914,8 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
                 <div className="text-xs font-bold text-slate-500 uppercase tracking-wide">{t("Quick Actions", "দ্রুত অ্যাকশন")}</div>
               </div>
 
-              {/* Auto Complete — runs all steps sequentially */}
-              <AutoCompleteButton
-                order={order}
-                waLink={waLink}
-                onPaymentStatusChange={onPaymentStatusChange}
-                onStatusChange={onStatusChange}
-              />
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
 
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 mt-2">
                 <button
                   onClick={() => onPaymentStatusChange("verified")}
                   disabled={order.payment_status === "verified"}
