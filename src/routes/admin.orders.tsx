@@ -717,7 +717,8 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
 }) {
   const { t } = useAdminLang();
   const [tab, setTab] = useState<"details"|"history">("details");
-  const [waMsg, setWaMsg] = useState("");
+  const [waMsg, setWaMsg] = useState(() => buildOrderStatusMessage(order));
+  useEffect(() => { setWaMsg(buildOrderStatusMessage(order)); }, [order.id, order.status, order.payment_status, order.total]);
   const [note, setNote] = useState(order.admin_note || "");
   const [savingNote, setSavingNote] = useState(false);
   const [downloading, setDownloading] = useState(false);
