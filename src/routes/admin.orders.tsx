@@ -608,11 +608,6 @@ function OrderStatusFlow({ status, onChange }: { status: string; onChange: (s: s
 
 function PaymentStatusButtons({ status, onChange }: { status: string; onChange: (s: string) => void }) {
   const { t } = useAdminLang();
-  const tones: Record<string, string> = {
-    pending: "border-amber-300 bg-amber-50 text-amber-800",
-    verified: "border-emerald-300 bg-emerald-50 text-emerald-800",
-    failed: "border-rose-300 bg-rose-50 text-rose-800",
-  };
   return (
     <div>
       <label className="mb-1.5 block text-xs font-semibold text-slate-700">{t("Payment Status", "পেমেন্ট স্ট্যাটাস")}</label>
