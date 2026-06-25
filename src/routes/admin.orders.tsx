@@ -6,6 +6,7 @@ import {
   Pencil, Filter as FilterIcon, Search as SearchIcon, ShieldCheck,
   User as UserIcon, Mail, Phone, CreditCard, Package, FileText,
   Copy, Check, History as HistoryIcon, AlertCircle, X as XIcon,
+  Truck, Zap,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -707,6 +708,94 @@ function PaymentStatusButtons({ status, onChange }: { status: string; onChange: 
   );
 }
 
+function AutoCompleteButton({ order, waLink, onPaymentStatusChange, onStatusChange }: {
+  order: Order;
+  waLink: string;
+  onPaymentStatusChange: (s: string) => void;
+  onStatusChange: (s: string) => void;
+}) {
+  const { t } = useAdminLang();
+  const [running, setRunning] = useState(false);
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4>(0);
+
+  const run = async () => {
+    if (running) return;
+    setRunning(true);
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    try {
+      // Step 1: Verify payment
+      setStep(1);
+      if (order.payment_status !== "verified") {
+        onPaymentStatusChange("verified");
+        toast.success(t("Payment verified", "পেমেন্ট ভেরিফাই হয়েছে"));
+      } else {
+        toast.message(t("Payment already verified", "পেমেন্ট আগেই ভেরিফাই করা"));
+      }
+      await sleep(900);
+
+      // Step 2: Mark delivered
+      setStep(2);
+      if (order.status !== "delivered" && order.status !== "completed") {
+        onStatusChange("delivered");
+        toast.success(t("Marked as delivered", "ডেলিভার্ড হিসেবে মার্ক করা হয়েছে"));
+      } else {
+        toast.message(t("Already delivered", "আগেই ডেলিভার্ড"));
+      }
+      await sleep(900);
+
+      // Step 3: Open WhatsApp with status message
+      setStep(3);
+      if (waLink) {
+        window.open(waLink, "_blank", "noopener,noreferrer");
+        toast.success(t("WhatsApp opened", "WhatsApp খোলা হয়েছে"));
+      } else {
+        toast.error(t("No phone number — cannot open WhatsApp", "ফোন নম্বর নেই — WhatsApp খোলা যায়নি"));
+      }
+      await sleep(600);
+
+      setStep(4);
+      toast.success(t("Auto Complete finished", "অটো কমপ্লিট শেষ"));
+    } finally {
+      setTimeout(() => { setRunning(false); setStep(0); }, 1200);
+    }
+  };
+
+  const stepLabel = (n: 1 | 2 | 3) => {
+    const labels: Record<1 | 2 | 3, [string, string]> = {
+      1: ["Verifying payment…", "পেমেন্ট ভেরিফাই হচ্ছে…"],
+      2: ["Marking delivered…", "ডেলিভার্ড করা হচ্ছে…"],
+      3: ["Opening WhatsApp…", "WhatsApp খুলছে…"],
+    };
+    return t(labels[n][0], labels[n][1]);
+  };
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={run}
+        disabled={running}
+        className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl text-sm font-extrabold text-white shadow-md bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 hover:from-violet-700 hover:via-fuchsia-600 hover:to-pink-600 disabled:opacity-70 disabled:cursor-wait"
+      >
+        {running ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
+        {running && step >= 1 && step <= 3
+          ? stepLabel(step as 1 | 2 | 3)
+          : t("Auto Complete (Verify → Deliver → WhatsApp)", "অটো কমপ্লিট (ভেরিফাই → ডেলিভার → WhatsApp)")}
+      </button>
+      {running && (
+        <div className="mt-2 flex items-center justify-between gap-2 text-[11px] font-semibold">
+          {([1, 2, 3] as const).map((n) => (
+            <div key={n} className={`flex-1 flex items-center gap-1.5 justify-center rounded-lg py-1.5 border ${step > n ? "bg-emerald-50 border-emerald-200 text-emerald-700" : step === n ? "bg-violet-50 border-violet-200 text-violet-700" : "bg-slate-50 border-slate-200 text-slate-400"}`}>
+              {step > n ? <Check className="w-3 h-3" /> : step === n ? <Loader2 className="w-3 h-3 animate-spin" /> : <span className="w-3 h-3 inline-block rounded-full border border-current" />}
+              {n === 1 ? t("Payment", "পেমেন্ট") : n === 2 ? t("Deliver", "ডেলিভার") : "WhatsApp"}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, onSaveNote, onDelete }: {
   order: Order;
   onClose: () => void;
@@ -821,8 +910,33 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
 
             {/* Quick actions */}
             <div>
-              <div className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">{t("Quick Actions", "দ্রুত অ্যাকশন")}</div>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-xs font-bold text-slate-500 uppercase tracking-wide">{t("Quick Actions", "দ্রুত অ্যাকশন")}</div>
+              </div>
+
+              {/* Auto Complete — runs all steps sequentially */}
+              <AutoCompleteButton
+                order={order}
+                waLink={waLink}
+                onPaymentStatusChange={onPaymentStatusChange}
+                onStatusChange={onStatusChange}
+              />
+
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 mt-2">
+                <button
+                  onClick={() => onPaymentStatusChange("verified")}
+                  disabled={order.payment_status === "verified"}
+                  className="order-quick-action inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <ShieldCheck className="w-4 h-4" /> {t("Verify Payment", "পেমেন্ট ভেরিফাই")}
+                </button>
+                <button
+                  onClick={() => onStatusChange("delivered")}
+                  disabled={order.status === "delivered" || order.status === "completed"}
+                  className="order-quick-action inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm border-sky-200 bg-sky-50 text-sky-700 hover:bg-sky-100 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <Truck className="w-4 h-4" /> {t("Delivered", "ডেলিভার্ড")}
+                </button>
                 <a href={waLink || "#"} target={waLink ? "_blank" : undefined} rel="noreferrer"
                    className={`order-quick-action inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm ${waLink ? "order-quick-whatsapp" : "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 shadow-none"}`}>
                   <MessageCircle className="w-4 h-4" /> WhatsApp
@@ -832,11 +946,12 @@ function OrderDetail({ order, onClose, onStatusChange, onPaymentStatusChange, on
                   {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} {t("PDF Download", "PDF ডাউনলোড")}
                 </button>
                 <button onClick={() => { onStatusChange("cancelled"); }}
-                   className="order-quick-action order-quick-cancel inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm">
+                   className="order-quick-action order-quick-cancel inline-flex h-11 min-w-0 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold shadow-sm sm:col-span-1">
                   <XIcon className="w-4 h-4" /> {t("Cancel", "বাতিল")}
                 </button>
               </div>
             </div>
+
 
             {/* Status controls */}
             <div className="grid grid-cols-1 gap-3">
