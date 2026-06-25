@@ -3442,4 +3442,53 @@ html.theme-white [role="dialog"] button[class*="bg-slate-200"],
   border-color: #e2e8f0 !important;
   color: #475569 !important;
 }
+html.theme-white [role="dialog"] .order-exception-button,
+[role="dialog"] .order-exception-button {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+html.theme-white [role="dialog"] .order-exception-button.order-exception-active,
+[role="dialog"] .order-exception-button.order-exception-active {
+  background: #ffe4e6 !important;
+  border-color: #fda4af !important;
+  color: #be123c !important;
+}
+html.theme-white [role="dialog"] .order-next-button,
+[role="dialog"] .order-next-button {
+  background: #7c3aed !important;
+  border-color: #7c3aed !important;
+  color: #ffffff !important;
+}
+html.theme-white [role="dialog"] .order-next-button.order-next-disabled,
+[role="dialog"] .order-next-button.order-next-disabled {
+  background: #e2e8f0 !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+  box-shadow: none !important;
+}
+html.theme-white [role="dialog"] .order-payment-button,
+[role="dialog"] .order-payment-button {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+html.theme-white [role="dialog"] .order-payment-active-pending,
+[role="dialog"] .order-payment-active-pending {
+  background: #fef3c7 !important;
+  border-color: #fcd34d !important;
+  color: #92400e !important;
+}
+html.theme-white [role="dialog"] .order-payment-active-verified,
+[role="dialog"] .order-payment-active-verified {
+  background: #ecfdf5 !important;
+  border-color: #34d399 !important;
+  color: #047857 !important;
+}
+html.theme-white [role="dialog"] .order-payment-active-failed,
+[role="dialog"] .order-payment-active-failed {
+  background: #ffe4e6 !important;
+  border-color: #fda4af !important;
+  color: #be123c !important;
+}
 
