@@ -377,7 +377,22 @@ function WelcomeCard({ greetingName, email, stats }: { greetingName: string; ema
                 <h1 className="text-xl md:text-2xl font-bold text-foreground truncate" style={{ fontFamily: "var(--font-heading)" }}>
                   {greetingName}
                 </h1>
-                <Check className="w-4 h-4 text-sky-500 shrink-0" strokeWidth={3} />
+                <span
+                  className="shrink-0 inline-flex items-center justify-center"
+                  aria-label="Verified"
+                  title="Verified"
+                >
+                  <svg viewBox="0 0 24 24" className="w-[18px] h-[18px]" aria-hidden="true">
+                    <path
+                      fill="#1D9BF0"
+                      d="M22.5 12l-2.3-2.6.32-3.45-3.38-.77L15.36 2.2 12 3.65 8.64 2.2 6.86 5.18l-3.38.77.32 3.45L1.5 12l2.3 2.6-.32 3.45 3.38.77L8.64 21.8 12 20.35l3.36 1.45 1.78-2.98 3.38-.77-.32-3.45L22.5 12z"
+                    />
+                    <path
+                      d="M10.6 15.6l-3-3 1.4-1.4 1.6 1.6 4.4-4.4 1.4 1.4-5.8 5.8z"
+                      fill="#fff"
+                    />
+                  </svg>
+                </span>
               </div>
               <div className="text-xs text-muted-foreground truncate mt-0.5 inline-flex items-center gap-1.5">
                 <Mail className="w-3 h-3" /> {email}
