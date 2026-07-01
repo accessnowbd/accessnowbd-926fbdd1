@@ -352,15 +352,17 @@ function DashboardPage() {
 
           {/* Main content */}
           <main className="min-w-0">
-            <SectionRenderer
-              section={section}
-              stats={stats}
-              orders={orders}
-              greetingName={greetingName}
-              user={user}
-              profile={profile}
-              onNavigate={setSection}
-            />
+            <SectionCtx.Provider value={SECTION_STEP[section] ?? 1}>
+              <SectionRenderer
+                section={section}
+                stats={stats}
+                orders={orders}
+                greetingName={greetingName}
+                user={user}
+                profile={profile}
+                onNavigate={setSection}
+              />
+            </SectionCtx.Provider>
           </main>
         </div>
       </div>
