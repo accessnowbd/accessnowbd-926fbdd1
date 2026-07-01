@@ -16,6 +16,7 @@ import { useLang } from "@/context/LangContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
 import { publicUrl } from "@/lib/site-url";
 import { WalletInline } from "@/routes/wallet";
+import { WelcomeBanner } from "@/components/WelcomeBanner";
 
 // English label -> Bangla translation for sidebar nav, group titles, page heads & common buttons.
 const BN: Record<string, string> = {
@@ -256,6 +257,9 @@ function DashboardPage() {
       </header>
 
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6">
+        {/* ADMIN-CONFIGURABLE WELCOME BANNER */}
+        <WelcomeBanner />
+
         {/* TOP WELCOME CARD — gradient border */}
         <WelcomeCard greetingName={greetingName} email={user?.email ?? ""} stats={stats4} avatarUrl={profile?.avatar_url ?? null} />
 
