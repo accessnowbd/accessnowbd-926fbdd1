@@ -554,10 +554,17 @@ function WalletRedirect() {
 
 /* ===================== SHARED PRIMITIVES ===================== */
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <div className={`bg-card text-card-foreground rounded-3xl p-5 md:p-6 border border-border shadow-sm ${className}`}>{children}</div>;
+  return (
+    <div
+      className={`bg-white dark:bg-card text-card-foreground rounded-3xl p-5 md:p-6 border border-violet-100/80 dark:border-border shadow-[0_1px_2px_rgba(139,92,246,0.04),0_8px_24px_-12px_rgba(139,92,246,0.12)] ${className}`}
+    >
+      {children}
+    </div>
+  );
 }
 function PageHead({ title, desc, action }: { title: string; desc?: string; action?: React.ReactNode }) {
   const { lang } = useLang();
+  const step = useContext(SectionCtx);
   // Auto-translate common page titles & descriptions.
   const PAGE_DESC_BN: Record<string, string> = {
     "All your purchases": "আপনার সব ক্রয়",
@@ -588,10 +595,19 @@ function PageHead({ title, desc, action }: { title: string; desc?: string; actio
         : (PAGE_DESC_EN[desc] ?? desc))
     : undefined;
   return (
-    <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
-      <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{displayTitle}</h1>
-        {displayDesc && <p className="text-sm text-muted-foreground mt-1">{displayDesc}</p>}
+    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 mb-5">
+      <div className="flex min-w-0 items-center gap-3">
+        <span
+          className="shrink-0 grid place-items-center w-9 h-9 rounded-full text-white text-sm font-bold shadow-md shadow-violet-500/30 ring-2 ring-white dark:ring-card"
+          style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}
+          aria-hidden
+        >
+          {step}
+        </span>
+        <div className="min-w-0">
+          <h1 className="truncate text-xl md:text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{displayTitle}</h1>
+          {displayDesc && <p className="text-xs md:text-sm text-muted-foreground mt-0.5 truncate">{displayDesc}</p>}
+        </div>
       </div>
       {action}
     </div>
@@ -599,8 +615,8 @@ function PageHead({ title, desc, action }: { title: string; desc?: string; actio
 }
 function Empty({ icon, msg }: { icon: React.ReactNode; msg: string }) {
   return (
-    <div className="rounded-2xl border-2 border-dashed border-border p-12 text-center">
-      <div className="mx-auto w-12 h-12 rounded-2xl bg-muted grid place-items-center text-muted-foreground">{icon}</div>
+    <div className="rounded-2xl border-2 border-dashed border-violet-200/70 dark:border-border p-12 text-center bg-violet-50/40 dark:bg-transparent">
+      <div className="mx-auto w-12 h-12 rounded-2xl bg-violet-100 dark:bg-muted grid place-items-center text-violet-600 dark:text-muted-foreground">{icon}</div>
       <p className="mt-3 text-sm text-muted-foreground">{msg}</p>
     </div>
   );
@@ -617,11 +633,16 @@ function Badge({ children, color = "primary" }: { children: React.ReactNode; col
 }
 function Btn({ children, onClick, variant = "primary", className = "", type = "button" }: { children: React.ReactNode; onClick?: () => void; variant?: "primary" | "ghost" | "outline"; className?: string; type?: "button" | "submit" }) {
   const v = {
-    primary: "bg-primary text-primary-foreground hover:opacity-90",
-    ghost: "bg-background border border-border text-foreground hover:border-primary/40",
-    outline: "border border-primary/40 text-primary hover:bg-primary/10",
+    primary: "text-white shadow-md shadow-violet-500/30 hover:opacity-95",
+    ghost: "bg-white dark:bg-background border border-violet-200 dark:border-border text-foreground hover:border-violet-400",
+    outline: "border border-violet-400/60 text-violet-600 dark:text-primary hover:bg-violet-50 dark:hover:bg-primary/10",
   }[variant];
-  return <button type={type} onClick={onClick} className={`inline-flex items-center justify-center gap-2 h-10 px-5 rounded-full text-sm font-semibold transition ${v} ${className}`}>{children}</button>;
+  const style = variant === "primary" ? { background: "linear-gradient(135deg,#8b5cf6,#6366f1)" } : undefined;
+  return (
+    <button type={type} onClick={onClick} style={style} className={`inline-flex items-center justify-center gap-2 h-10 px-5 rounded-full text-sm font-semibold transition ${v} ${className}`}>
+      {children}
+    </button>
+  );
 }
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
