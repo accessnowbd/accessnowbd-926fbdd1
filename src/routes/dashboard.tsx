@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, createContext, useContext } from "react";
 import {
   Loader2, Package, Wallet, User as UserIcon, ShoppingBag,
   ArrowRight, Sparkles, LifeBuoy, LogOut,
