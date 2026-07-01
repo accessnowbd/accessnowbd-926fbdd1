@@ -238,7 +238,7 @@ function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#f5f3ff_0%,#faf5ff_35%,#f8fafc_100%)] dark:bg-background">
       {/* Mobile header */}
       <header className="lg:hidden sticky top-0 z-30 bg-card/80 backdrop-blur-md border-b border-border">
         <div className="flex items-center gap-3 px-4 h-14">
