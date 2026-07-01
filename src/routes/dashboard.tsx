@@ -256,6 +256,9 @@ function DashboardPage() {
       </header>
 
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6">
+        {/* ADMIN-CONFIGURABLE WELCOME BANNER */}
+        <WelcomeBanner />
+
         {/* TOP WELCOME CARD — gradient border */}
         <WelcomeCard greetingName={greetingName} email={user?.email ?? ""} stats={stats4} avatarUrl={profile?.avatar_url ?? null} />
 

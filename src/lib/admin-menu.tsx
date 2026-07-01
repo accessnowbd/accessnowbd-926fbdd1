@@ -113,6 +113,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/footer-editor", label: "Footer Editor", labelBn: "ফুটার এডিটর", icon: ic(PanelBottom), grad: "from-slate-600 to-indigo-700" },
       { to: "/admin/announcement-bar", label: "Announcement Bar", labelBn: "ঘোষণা বার", icon: ic(Megaphone), grad: "from-orange-500 to-rose-500" },
       { to: "/admin/welcome-popup", label: "Welcome Popup", labelBn: "ওয়েলকাম পপআপ", icon: ic(PartyPopper), grad: "from-pink-500 to-rose-500" },
+      { to: "/admin/welcome-banner", label: "Welcome Banner", labelBn: "ওয়েলকাম ব্যানার", icon: ic(PartyPopper), grad: "from-violet-500 to-pink-500" },
       { to: "/admin/ceo-message", label: "CEO Message", labelBn: "CEO বার্তা", icon: ic(UserCircle2), grad: "from-amber-500 to-orange-500" },
       { to: "/admin/themes", label: "Themes", labelBn: "থিম", icon: ic(Sparkles), grad: "from-violet-500 to-fuchsia-500" },
       { to: "/admin/shop-config", label: "Shop & WhatsApp", labelBn: "শপ ও হোয়াটসঅ্যাপ", icon: ic(MessageCircle), grad: "from-green-500 to-emerald-600" },
