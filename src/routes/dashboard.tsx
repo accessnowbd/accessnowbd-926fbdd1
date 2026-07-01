@@ -242,7 +242,7 @@ function DashboardPage() {
 
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6">
         {/* TOP WELCOME CARD — gradient border */}
-        <WelcomeCard greetingName={greetingName} email={user?.email ?? ""} stats={stats4} />
+        <WelcomeCard greetingName={greetingName} email={user?.email ?? ""} stats={stats4} avatarUrl={profile?.avatar_url ?? null} />
 
         {/* WELCOME GIFT BANNER */}
         <GiftBanner onClaim={() => navigate({ to: "/wallet" })} />
