@@ -414,34 +414,40 @@ function ProductPage() {
             )}
 
             {(() => {
-              const ACCOUNT_LABELS: Record<string, { label: string; icon: string }> = {
-                personal: { label: "Personal", icon: "👤" },
-                shared: { label: "Shared", icon: "👥" },
-                family: { label: "Family", icon: "👪" },
-                student: { label: "Student", icon: "🎓" },
-                business: { label: "Business", icon: "🛍️" },
+              const ACCOUNT_LABELS: Record<string, { label: string; icon: string; grad: string }> = {
+                personal: { label: "Personal",  icon: "👤", grad: "from-violet-500 to-indigo-500" },
+                shared:   { label: "Shared",    icon: "👥", grad: "from-sky-500 to-blue-600" },
+                family:   { label: "Family",    icon: "👪", grad: "from-amber-500 to-orange-500" },
+                student:  { label: "Student",   icon: "🎓", grad: "from-emerald-500 to-teal-600" },
+                business: { label: "Business",  icon: "🛍️", grad: "from-fuchsia-500 to-pink-600" },
               };
               const raw = product.meta?.account_types
                 ?? (product.meta?.account_type && product.meta.account_type !== "none" ? [product.meta.account_type] : []);
               const types = (raw ?? []).filter((t) => t && t !== "none" && ACCOUNT_LABELS[t]);
               if (types.length === 0) return null;
               return (
-                <div className="mt-3 flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Account Type</span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {types.map((t) => (
-                      <span
-                        key={t}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-violet-50 text-violet-700 border border-violet-200"
-                      >
-                        <span>{ACCOUNT_LABELS[t].icon}</span>
-                        {ACCOUNT_LABELS[t].label}
-                      </span>
-                    ))}
+                <div className="mt-4 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/60 p-3">
+                  <div className="text-[11px] font-bold text-violet-700 uppercase tracking-widest mb-2 inline-flex items-center gap-1.5">
+                    <span>👤</span> Account Type
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {types.map((t) => {
+                      const m = ACCOUNT_LABELS[t];
+                      return (
+                        <span
+                          key={t}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold text-white shadow-sm bg-gradient-to-r ${m.grad}`}
+                        >
+                          <span className="text-sm leading-none">{m.icon}</span>
+                          {m.label}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               );
             })()}
+
 
             {product.features && product.features.length > 0 && (
               <ul className="mt-3 space-y-1.5">
