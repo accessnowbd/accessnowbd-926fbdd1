@@ -18,6 +18,7 @@ import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { ProductReviews } from "@/components/ProductReviews";
 import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
+import { ImageZoomModal } from "@/components/ImageZoomModal";
 
 const parsePrice = (p: unknown): number => {
   try {
