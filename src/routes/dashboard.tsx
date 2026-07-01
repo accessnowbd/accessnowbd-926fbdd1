@@ -87,10 +87,10 @@ type SectionId =
   | "active-services" | "expired" | "open-ticket" | "my-tickets";
 
 const statusColors: Record<string, string> = {
-  pending: "bg-amber-500/15 text-amber-600 dark:text-amber-300 border-amber-500/30",
-  processing: "bg-sky-500/15 text-sky-600 dark:text-sky-300 border-sky-500/30",
-  delivered: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30",
-  cancelled: "bg-rose-500/15 text-rose-600 dark:text-rose-300 border-rose-500/30",
+  pending: "bg-amber-100 text-amber-800 dark:bg-amber-500/25 dark:text-amber-100 border-amber-500/40",
+  processing: "bg-sky-100 text-sky-800 dark:bg-sky-500/25 dark:text-sky-100 border-sky-500/40",
+  delivered: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/25 dark:text-emerald-100 border-emerald-500/40",
+  cancelled: "bg-rose-100 text-rose-800 dark:bg-rose-500/25 dark:text-rose-100 border-rose-500/40",
 };
 
 type NavItem = {
