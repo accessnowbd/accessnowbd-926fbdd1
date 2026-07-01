@@ -326,6 +326,7 @@ export function SiteHeader() {
                       ) : (
                         <UserCircle2 className="w-4 h-4" />
                       )}
+                      <span className="hidden sm:inline max-w-[120px] truncate">Dashboard</span>
                     </Link>
                     <button
                       type="button"
