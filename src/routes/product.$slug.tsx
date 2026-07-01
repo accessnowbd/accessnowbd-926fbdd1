@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
-import { Minus, Plus, Star, ArrowLeft, Loader2, CreditCard, MessageCircle, ShoppingCart, Check, ShieldCheck, Zap, RefreshCw, Headphones, Users, Lock, ZoomIn } from "lucide-react";
+import { Minus, Plus, Star, ArrowLeft, Loader2, CreditCard, MessageCircle, ShoppingCart, Check, ShieldCheck, Zap, RefreshCw, Headphones, Users, Lock } from "lucide-react";
 import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { useEffect, useState } from "react";
@@ -18,7 +18,6 @@ import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { ProductReviews } from "@/components/ProductReviews";
 import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
-import { ImageZoomModal } from "@/components/ImageZoomModal";
 
 const parsePrice = (p: unknown): number => {
   try {
@@ -166,7 +165,6 @@ function ProductPage() {
   const [selected, setSelected] = useState(() => (popularIdx > 0 ? popularIdx : 0));
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState<string | null>(null);
-  const [zoomOpen, setZoomOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const activeIdx = product ? Math.min(selected, Math.max(product.plans.length - 1, 0)) : 0;
   const plan = product?.plans[activeIdx];
