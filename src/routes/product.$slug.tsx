@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
-import { Minus, Plus, Star, ArrowLeft, Loader2, CreditCard, MessageCircle, ShoppingCart, Check, ShieldCheck, Zap, RefreshCw, Headphones, Users, Lock } from "lucide-react";
+import { Minus, Plus, Star, ArrowLeft, Loader2, CreditCard, MessageCircle, ShoppingCart, Check, ShieldCheck, Zap, RefreshCw, Headphones, Users, Lock, ZoomIn } from "lucide-react";
 import { useProducts, useProduct } from "@/hooks/useProducts";
 import { badgeColorFor } from "@/lib/badgeColor";
 import { useEffect, useState } from "react";
@@ -18,6 +18,7 @@ import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { ProductReviews } from "@/components/ProductReviews";
 import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
+import { ImageZoomModal } from "@/components/ImageZoomModal";
 
 const parsePrice = (p: unknown): number => {
   try {
@@ -165,6 +166,7 @@ function ProductPage() {
   const [selected, setSelected] = useState(() => (popularIdx > 0 ? popularIdx : 0));
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState<string | null>(null);
+  const [zoomOpen, setZoomOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const activeIdx = product ? Math.min(selected, Math.max(product.plans.length - 1, 0)) : 0;
   const plan = product?.plans[activeIdx];
@@ -275,22 +277,33 @@ function ProductPage() {
       <section className="relative mx-auto max-w-6xl px-4 md:px-8 py-8 md:py-12 grid md:grid-cols-12 gap-8 md:gap-12 items-start">
         {/* Media gallery */}
         <div className="md:col-span-6 space-y-4">
-          <div className="relative aspect-square overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200">
+          <div className="relative aspect-square overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200 group">
             {heroImg ? (
-              <img
-                src={optimizeSupabaseImage(heroImg, { width: 900, quality: 75 })}
-                alt={product.name}
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="eager"
-                decoding="async"
-                fetchPriority="high"
-                width={900}
-                height={900}
-                onError={(e) => {
-                  const img = e.currentTarget;
-                  if (img.src !== heroImg) img.src = heroImg;
-                }}
-              />
+              <>
+                <img
+                  src={optimizeSupabaseImage(heroImg, { width: 900, quality: 75 })}
+                  alt={product.name}
+                  className="absolute inset-0 w-full h-full object-cover cursor-zoom-in transition-transform duration-500 group-hover:scale-[1.03]"
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
+                  width={900}
+                  height={900}
+                  onClick={() => setZoomOpen(true)}
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    if (img.src !== heroImg) img.src = heroImg;
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setZoomOpen(true)}
+                  aria-label="Zoom image"
+                  className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-semibold border border-white/15 opacity-0 group-hover:opacity-100 transition"
+                >
+                  <ZoomIn className="w-3.5 h-3.5" /> Zoom
+                </button>
+              </>
             ) : (
               <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-3xl overflow-hidden" />
             )}
@@ -654,6 +667,15 @@ function ProductPage() {
       <div className="relative">
         <SiteFooter />
       </div>
+
+      {heroImg && (
+        <ImageZoomModal
+          src={optimizeSupabaseImage(heroImg, { width: 1600, quality: 85 })}
+          alt={product.name}
+          open={zoomOpen}
+          onClose={() => setZoomOpen(false)}
+        />
+      )}
     </div>
   );
 }
