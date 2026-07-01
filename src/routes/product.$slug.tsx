@@ -18,6 +18,7 @@ import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { ProductReviews } from "@/components/ProductReviews";
 import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
+import { useProductZoomConfig } from "@/hooks/useProductZoomConfig";
 
 const parsePrice = (p: unknown): number => {
   try {
@@ -166,6 +167,8 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const zoomCfg = useProductZoomConfig();
+  const [zoomOn, setZoomOn] = useState(false);
   const activeIdx = product ? Math.min(selected, Math.max(product.plans.length - 1, 0)) : 0;
   const plan = product?.plans[activeIdx];
 
