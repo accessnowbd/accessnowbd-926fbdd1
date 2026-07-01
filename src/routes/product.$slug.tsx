@@ -18,6 +18,7 @@ import { GlassButton } from "@/components/ui-glass/GlassButton";
 import { waOrderUrl } from "@/lib/whatsapp";
 import { ProductReviews } from "@/components/ProductReviews";
 import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
+import { useProductZoomConfig } from "@/hooks/useProductZoomConfig";
 
 const parsePrice = (p: unknown): number => {
   try {
@@ -166,6 +167,8 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const zoomCfg = useProductZoomConfig();
+  const [zoomOn, setZoomOn] = useState(false);
   const activeIdx = product ? Math.min(selected, Math.max(product.plans.length - 1, 0)) : 0;
   const plan = product?.plans[activeIdx];
 
@@ -276,22 +279,31 @@ function ProductPage() {
         {/* Media gallery */}
         <div className="md:col-span-6 space-y-4">
           <div
-            className="relative aspect-square overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200 group cursor-zoom-in"
+            className={`relative aspect-square overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200 group ${zoomCfg.enabled ? "cursor-zoom-in" : ""}`}
             onMouseMove={(e) => {
+              if (!zoomCfg.enabled) return;
               const el = e.currentTarget;
               const r = el.getBoundingClientRect();
-              const x = ((e.clientX - r.left) / r.width) * 100;
-              const y = ((e.clientY - r.top) / r.height) * 100;
-              el.style.setProperty("--zx", `${x}%`);
-              el.style.setProperty("--zy", `${y}%`);
+              el.style.setProperty("--zx", `${((e.clientX - r.left) / r.width) * 100}%`);
+              el.style.setProperty("--zy", `${((e.clientY - r.top) / r.height) * 100}%`);
             }}
+            onMouseLeave={() => zoomCfg.trigger === "click" && setZoomOn(false)}
+            onClick={() => zoomCfg.enabled && zoomCfg.trigger === "click" && setZoomOn((v) => !v)}
           >
             {heroImg ? (
               <img
                 src={optimizeSupabaseImage(heroImg, { width: 1400, quality: 82 })}
                 alt={product.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.6]"
-                style={{ transformOrigin: "var(--zx, 50%) var(--zy, 50%)" }}
+                className={`absolute inset-0 w-full h-full object-cover will-change-transform ${
+                  zoomCfg.enabled && zoomCfg.trigger === "hover" ? "group-hover:scale-[var(--zs)]" : ""
+                } ${zoomCfg.enabled && zoomCfg.trigger === "click" && zoomOn ? "scale-[var(--zs)]" : ""}`}
+                style={{
+                  transformOrigin: "var(--zx, 50%) var(--zy, 50%)",
+                  transitionProperty: "transform",
+                  transitionDuration: `${zoomCfg.duration_ms}ms`,
+                  transitionTimingFunction: zoomCfg.easing,
+                  ["--zs" as never]: zoomCfg.scale,
+                }}
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
