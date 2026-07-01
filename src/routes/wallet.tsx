@@ -56,6 +56,21 @@ const typeMeta: Record<Txn["type"], { label: string; bn: string; icon: any; colo
 };
 
 function WalletPage() {
+  return (
+    <div className="dark-adapt min-h-screen bg-gradient-to-b from-violet-50/40 via-slate-50 to-white text-slate-900">
+      <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900">
+            <ArrowLeft className="w-4 h-4" /> Back to dashboard
+          </Link>
+        </div>
+        <WalletInline />
+      </div>
+    </div>
+  );
+}
+
+export function WalletInline() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { t } = useLang();
