@@ -151,7 +151,7 @@ function DashboardPage() {
   const { lang } = useLang();
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null } | null>(null);
+  const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null; avatar_url?: string | null } | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState<SectionId>("profile");
