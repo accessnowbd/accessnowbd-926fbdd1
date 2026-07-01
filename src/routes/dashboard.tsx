@@ -15,6 +15,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useLang } from "@/context/LangContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
 import { publicUrl } from "@/lib/site-url";
+import { WalletInline } from "@/routes/wallet";
 
 // English label -> Bangla translation for sidebar nav, group titles, page heads & common buttons.
 const BN: Record<string, string> = {
@@ -537,16 +538,7 @@ function WalletRedirect() {
   return (
     <div className="space-y-6">
       <PageHead title="ওয়ালেট" desc="ব্যালেন্স, টপ-আপ ও লেনদেন ইতিহাস" />
-      <Card>
-        <div className="text-center py-6">
-          <Wallet className="w-10 h-10 mx-auto text-primary mb-3" />
-          <h3 className="text-lg font-bold mb-1 text-foreground">My Wallet</h3>
-          <p className="text-sm text-muted-foreground mb-4">Balance দেখুন, টপ-আপ করুন এবং লেনদেন ইতিহাস ব্রাউজ করুন।</p>
-          <Link to="/wallet" className="inline-flex items-center gap-2 px-5 h-11 rounded-full text-white text-sm font-bold" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)" }}>
-            Open Wallet <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </Card>
+      <WalletInline />
     </div>
   );
 }
