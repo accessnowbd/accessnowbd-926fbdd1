@@ -43,6 +43,7 @@ import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/blog.how-to-buy-netflix-in-bangladesh'
+import { Route as AdminWelcomeBannerRouteImport } from './routes/admin.welcome-banner'
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTrackingPixelsRouteImport } from './routes/admin.tracking-pixels'
@@ -260,6 +261,11 @@ const BlogHowToBuyNetflixInBangladeshRoute =
     path: '/blog/how-to-buy-netflix-in-bangladesh',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AdminWelcomeBannerRoute = AdminWelcomeBannerRouteImport.update({
+  id: '/welcome-banner',
+  path: '/welcome-banner',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminWalletRoute = AdminWalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
@@ -557,6 +563,7 @@ export interface FileRoutesByFullPath {
   '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
+  '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/orders/$id': typeof OrdersIdRoute
@@ -637,6 +644,7 @@ export interface FileRoutesByTo {
   '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
+  '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/orders/$id': typeof OrdersIdRoute
@@ -719,6 +727,7 @@ export interface FileRoutesById {
   '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
+  '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/orders/$id': typeof OrdersIdRoute
@@ -802,6 +811,7 @@ export interface FileRouteTypes {
     | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
+    | '/admin/welcome-banner'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
     | '/orders/$id'
@@ -882,6 +892,7 @@ export interface FileRouteTypes {
     | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
+    | '/admin/welcome-banner'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
     | '/orders/$id'
@@ -963,6 +974,7 @@ export interface FileRouteTypes {
     | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
+    | '/admin/welcome-banner'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
     | '/orders/$id'
@@ -1260,6 +1272,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/blog/how-to-buy-netflix-in-bangladesh'
       preLoaderRoute: typeof BlogHowToBuyNetflixInBangladeshRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/welcome-banner': {
+      id: '/admin/welcome-banner'
+      path: '/welcome-banner'
+      fullPath: '/admin/welcome-banner'
+      preLoaderRoute: typeof AdminWelcomeBannerRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/wallet': {
       id: '/admin/wallet'
@@ -1617,6 +1636,7 @@ interface AdminRouteChildren {
   AdminTrackingPixelsRoute: typeof AdminTrackingPixelsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWalletRoute: typeof AdminWalletRoute
+  AdminWelcomeBannerRoute: typeof AdminWelcomeBannerRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -1658,6 +1678,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminTrackingPixelsRoute: AdminTrackingPixelsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWalletRoute: AdminWalletRoute,
+  AdminWelcomeBannerRoute: AdminWelcomeBannerRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
