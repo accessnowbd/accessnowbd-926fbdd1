@@ -277,38 +277,39 @@ function ProductPage() {
       <section className="relative mx-auto max-w-6xl px-4 md:px-8 py-8 md:py-12 grid md:grid-cols-12 gap-8 md:gap-12 items-start">
         {/* Media gallery */}
         <div className="md:col-span-6 space-y-4">
-          <div className="relative aspect-square overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200 group">
+          <div
+            className="relative aspect-square overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200 group cursor-zoom-in"
+            onMouseMove={(e) => {
+              const el = e.currentTarget;
+              const r = el.getBoundingClientRect();
+              const x = ((e.clientX - r.left) / r.width) * 100;
+              const y = ((e.clientY - r.top) / r.height) * 100;
+              el.style.setProperty("--zx", `${x}%`);
+              el.style.setProperty("--zy", `${y}%`);
+            }}
+          >
             {heroImg ? (
-              <>
-                <img
-                  src={optimizeSupabaseImage(heroImg, { width: 900, quality: 75 })}
-                  alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover cursor-zoom-in transition-transform duration-500 group-hover:scale-[1.03]"
-                  loading="eager"
-                  decoding="async"
-                  fetchPriority="high"
-                  width={900}
-                  height={900}
-                  onClick={() => setZoomOpen(true)}
-                  onError={(e) => {
-                    const img = e.currentTarget;
-                    if (img.src !== heroImg) img.src = heroImg;
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setZoomOpen(true)}
-                  aria-label="Zoom image"
-                  className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-semibold border border-white/15 opacity-0 group-hover:opacity-100 transition"
-                >
-                  <ZoomIn className="w-3.5 h-3.5" /> Zoom
-                </button>
-              </>
+              <img
+                src={optimizeSupabaseImage(heroImg, { width: 1400, quality: 82 })}
+                alt={product.name}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.6]"
+                style={{ transformOrigin: "var(--zx, 50%) var(--zy, 50%)" }}
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                width={1400}
+                height={1400}
+                draggable={false}
+                onError={(e) => {
+                  const img = e.currentTarget;
+                  if (img.src !== heroImg) img.src = heroImg;
+                }}
+              />
             ) : (
               <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-3xl overflow-hidden" />
             )}
             {product.badge && (
-              <span className={`absolute top-4 left-4 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm`}>
+              <span className={`absolute top-4 left-4 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm pointer-events-none`}>
                 {product.badge}
               </span>
             )}
@@ -667,15 +668,6 @@ function ProductPage() {
       <div className="relative">
         <SiteFooter />
       </div>
-
-      {heroImg && (
-        <ImageZoomModal
-          src={optimizeSupabaseImage(heroImg, { width: 1600, quality: 85 })}
-          alt={product.name}
-          open={zoomOpen}
-          onClose={() => setZoomOpen(false)}
-        />
-      )}
     </div>
   );
 }
