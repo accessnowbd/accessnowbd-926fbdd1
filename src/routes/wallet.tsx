@@ -236,7 +236,6 @@ export function WalletInline() {
               </li>
             ))}
           </ol>
-        </div>
       </div>
     </div>
   );
