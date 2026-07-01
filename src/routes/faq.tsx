@@ -98,7 +98,7 @@ function FaqPage() {
             </div>
 
             <div className="flex-1 text-left">
-              <span className="inline-flex px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 text-[11px] font-bold tracking-wide uppercase mb-2">
+              <span className="inline-flex px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-500/25 dark:text-emerald-100 border border-emerald-500/40 text-[11px] font-bold tracking-wide uppercase mb-2">
                 ● Live support
               </span>
               <h2 className="text-2xl md:text-3xl font-extrabold text-foreground leading-tight">

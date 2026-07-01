@@ -26,10 +26,10 @@ type Order = {
 };
 
 const statusColors: Record<string, string> = {
-  pending: "bg-amber-500/15 text-amber-300 border border-amber-400/30",
-  processing: "bg-sky-500/15 text-sky-300 border border-sky-400/30",
-  delivered: "bg-emerald-500/15 text-emerald-300 border border-emerald-400/30",
-  cancelled: "bg-rose-500/15 text-rose-300 border border-rose-400/30",
+  pending: "bg-amber-100 text-amber-800 dark:bg-amber-500/25 dark:text-amber-100 border border-amber-500/40",
+  processing: "bg-sky-100 text-sky-800 dark:bg-sky-500/25 dark:text-sky-100 border border-sky-500/40",
+  delivered: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/25 dark:text-emerald-100 border border-emerald-500/40",
+  cancelled: "bg-rose-100 text-rose-800 dark:bg-rose-500/25 dark:text-rose-100 border border-rose-500/40",
 };
 
 function OrdersPage() {

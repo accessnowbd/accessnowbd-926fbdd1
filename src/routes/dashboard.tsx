@@ -87,10 +87,10 @@ type SectionId =
   | "active-services" | "expired" | "open-ticket" | "my-tickets";
 
 const statusColors: Record<string, string> = {
-  pending: "bg-amber-500/15 text-amber-600 dark:text-amber-300 border-amber-500/30",
-  processing: "bg-sky-500/15 text-sky-600 dark:text-sky-300 border-sky-500/30",
-  delivered: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30",
-  cancelled: "bg-rose-500/15 text-rose-600 dark:text-rose-300 border-rose-500/30",
+  pending: "bg-amber-100 text-amber-800 dark:bg-amber-500/25 dark:text-amber-100 border-amber-500/40",
+  processing: "bg-sky-100 text-sky-800 dark:bg-sky-500/25 dark:text-sky-100 border-sky-500/40",
+  delivered: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/25 dark:text-emerald-100 border-emerald-500/40",
+  cancelled: "bg-rose-100 text-rose-800 dark:bg-rose-500/25 dark:text-rose-100 border-rose-500/40",
 };
 
 type NavItem = {
@@ -398,7 +398,7 @@ function WelcomeCard({ greetingName, email, stats }: { greetingName: string; ema
                 <Mail className="w-3 h-3" /> {email}
               </div>
               <div className="mt-2 flex flex-wrap gap-1.5">
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600 text-white border border-emerald-700 shadow-sm">
                   <BadgeCheck className="w-3 h-3" /> Verified
                 </span>
                 <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border">
@@ -590,9 +590,9 @@ function Empty({ icon, msg }: { icon: React.ReactNode; msg: string }) {
 function Badge({ children, color = "primary" }: { children: React.ReactNode; color?: "primary" | "success" | "warn" | "danger" | "muted" }) {
   const c = {
     primary: "bg-primary/15 text-primary border-primary/30",
-    success: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30",
-    warn: "bg-amber-500/15 text-amber-600 dark:text-amber-300 border-amber-500/30",
-    danger: "bg-rose-500/15 text-rose-600 dark:text-rose-300 border-rose-500/30",
+    success: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/25 dark:text-emerald-100 border-emerald-500/40",
+    warn: "bg-amber-100 text-amber-800 dark:bg-amber-500/25 dark:text-amber-100 border-amber-500/40",
+    danger: "bg-rose-100 text-rose-800 dark:bg-rose-500/25 dark:text-rose-100 border-rose-500/40",
     muted: "bg-muted text-muted-foreground border-border",
   }[color];
   return <span className={`inline-block text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border ${c}`}>{children}</span>;
@@ -669,7 +669,7 @@ function ProfileField({ label, icon: Icon, value, verified }: { label: string; i
         <Icon className="w-4 h-4 text-muted-foreground shrink-0" />
         <span className="flex-1 text-sm font-medium text-foreground truncate">{value}</span>
         {verified && (
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 shrink-0">
+          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-600 text-white border border-emerald-700 shadow-sm shrink-0">
             <Check className="w-3 h-3" strokeWidth={3} /> Verified
           </span>
         )}
@@ -1561,7 +1561,7 @@ function InstallAppView() {
             <div className="text-xs text-muted-foreground mt-0.5">দ্রুত অ্যাক্সেস, অফলাইন সাপোর্ট ও পুশ নোটিফিকেশন</div>
           </div>
           {installed ? (
-            <span className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-500/15 text-emerald-600 border border-emerald-500/30"><Check className="w-3.5 h-3.5" />Installed</span>
+            <span className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-600 text-white border border-emerald-700 shadow-sm"><Check className="w-3.5 h-3.5" strokeWidth={3} />Installed</span>
           ) : deferred ? (
             <Btn variant="primary" onClick={install}><Download className="w-4 h-4" />Install</Btn>
           ) : null}
