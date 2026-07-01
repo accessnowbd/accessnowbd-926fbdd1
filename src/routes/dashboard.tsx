@@ -355,7 +355,7 @@ function DashboardPage() {
 }
 
 /* ========== Top Welcome Card ========== */
-function WelcomeCard({ greetingName, email, stats }: { greetingName: string; email: string; stats: { orders: number; spent: number; wishlist: number } }) {
+function WelcomeCard({ greetingName, email, stats, avatarUrl }: { greetingName: string; email: string; stats: { orders: number; spent: number; wishlist: number }; avatarUrl?: string | null }) {
   const initial = greetingName.charAt(0).toUpperCase();
   return (
     <div className="relative rounded-[2rem] p-[1.5px]" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899, #06b6d4)" }}>
@@ -364,8 +364,10 @@ function WelcomeCard({ greetingName, email, stats }: { greetingName: string; ema
           {/* Avatar + identity */}
           <div className="flex items-center gap-4 flex-1 min-w-0">
             <div className="relative shrink-0">
-              <div className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-2xl grid place-items-center text-primary-foreground text-2xl font-bold shadow-lg" style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}>
-                {initial}
+              <div className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-2xl grid place-items-center text-primary-foreground text-2xl font-bold shadow-lg overflow-hidden" style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}>
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt={greetingName} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                ) : initial}
               </div>
               <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 grid place-items-center text-white text-[10px] ring-2 ring-card">
                 <Check className="w-3 h-3" strokeWidth={3} />
