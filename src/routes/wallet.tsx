@@ -104,21 +104,17 @@ export function WalletInline() {
   useEffect(() => { load(); }, [load]);
 
   if (authLoading || !user) {
-    return <div className="min-h-screen grid place-items-center"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
+    return <div className="py-16 grid place-items-center"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
   }
 
   return (
-    <div className="dark-adapt min-h-screen bg-gradient-to-b from-violet-50/40 via-slate-50 to-white text-slate-900">
-      <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
-        {/* Back */}
-        <div className="flex items-center justify-between">
-          <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900">
-            <ArrowLeft className="w-4 h-4" /> {t("ড্যাশবোর্ডে ফিরুন", "Back to dashboard")}
-          </Link>
-          <button onClick={load} className="inline-flex items-center gap-1.5 text-xs px-3 h-8 rounded-full bg-white border border-slate-200 hover:bg-slate-50 text-slate-700">
-            <RefreshCw className="w-3.5 h-3.5" /> {t("রিফ্রেশ", "Refresh")}
-          </button>
-        </div>
+    <div className="space-y-4">
+      <div className="flex items-center justify-end">
+        <button onClick={load} className="inline-flex items-center gap-1.5 text-xs px-3 h-8 rounded-full bg-white border border-slate-200 hover:bg-slate-50 text-slate-700">
+          <RefreshCw className="w-3.5 h-3.5" /> {t("রিফ্রেশ", "Refresh")}
+        </button>
+      </div>
+
 
         {/* Header card */}
         <div className="rounded-2xl bg-white border border-slate-200 px-4 py-3 flex items-center gap-3">
