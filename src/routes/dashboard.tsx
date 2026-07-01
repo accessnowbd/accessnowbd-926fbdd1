@@ -185,7 +185,7 @@ function DashboardPage() {
       .then(([o, p, r]) => {
         if (cancelled) return;
         setOrders(((o.data as unknown) as Order[]) || []);
-        setProfile((p.data as { display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null } | null) || null);
+        setProfile((p.data as { display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null; avatar_url?: string | null } | null) || null);
         setIsAdmin(!!r.data);
       })
       .catch((err) => {
