@@ -261,9 +261,9 @@ export function HeroBannerCarousel() {
           className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[32px] border border-white/20 transition-colors duration-500"
           style={{
             background,
-            // Locked aspect-ratio so every device renders the same desktop-style
-            // wide banner shape (matches reference design regardless of viewport).
-            aspectRatio: "2.45 / 1",
+            // Locked aspect-ratio matches the reference (RamaSub) banner shape —
+            // wider and shorter than the previous version for a more compact hero.
+            aspectRatio: "2.72 / 1",
             boxShadow: `0 30px 80px -30px ${hexAlpha(accent, 0.45)}, 0 8px 32px -8px ${hexAlpha(glow, 0.25)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.18)}, inset 0 0 0 1px ${hexAlpha("#ffffff", 0.05)}`,
           }}
         >
