@@ -151,7 +151,7 @@ function DashboardPage() {
   const { lang } = useLang();
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null } | null>(null);
+  const [profile, setProfile] = useState<{ display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null; avatar_url?: string | null } | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState<SectionId>("profile");
@@ -176,7 +176,7 @@ function DashboardPage() {
       .then((r) => { mark("orders fetch", tOrders); return r; });
 
     const tProfile = performance.now();
-    const profileP = supabase.from("profiles").select("display_name, phone, username, country").eq("id", user.id).maybeSingle()
+    const profileP = supabase.from("profiles").select("display_name, phone, username, country, avatar_url").eq("id", user.id).maybeSingle()
       .then((r) => { mark("profile fetch", tProfile); return r; });
 
     const roleP = supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
@@ -185,7 +185,7 @@ function DashboardPage() {
       .then(([o, p, r]) => {
         if (cancelled) return;
         setOrders(((o.data as unknown) as Order[]) || []);
-        setProfile((p.data as { display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null } | null) || null);
+        setProfile((p.data as { display_name?: string | null; phone?: string | null; username?: string | null; country?: string | null; avatar_url?: string | null } | null) || null);
         setIsAdmin(!!r.data);
       })
       .catch((err) => {
@@ -242,7 +242,7 @@ function DashboardPage() {
 
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6">
         {/* TOP WELCOME CARD — gradient border */}
-        <WelcomeCard greetingName={greetingName} email={user?.email ?? ""} stats={stats4} />
+        <WelcomeCard greetingName={greetingName} email={user?.email ?? ""} stats={stats4} avatarUrl={profile?.avatar_url ?? null} />
 
         {/* WELCOME GIFT BANNER */}
         <GiftBanner onClaim={() => navigate({ to: "/wallet" })} />
@@ -355,7 +355,7 @@ function DashboardPage() {
 }
 
 /* ========== Top Welcome Card ========== */
-function WelcomeCard({ greetingName, email, stats }: { greetingName: string; email: string; stats: { orders: number; spent: number; wishlist: number } }) {
+function WelcomeCard({ greetingName, email, stats, avatarUrl }: { greetingName: string; email: string; stats: { orders: number; spent: number; wishlist: number }; avatarUrl?: string | null }) {
   const initial = greetingName.charAt(0).toUpperCase();
   return (
     <div className="relative rounded-[2rem] p-[1.5px]" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899, #06b6d4)" }}>
@@ -364,8 +364,10 @@ function WelcomeCard({ greetingName, email, stats }: { greetingName: string; ema
           {/* Avatar + identity */}
           <div className="flex items-center gap-4 flex-1 min-w-0">
             <div className="relative shrink-0">
-              <div className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-2xl grid place-items-center text-primary-foreground text-2xl font-bold shadow-lg" style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}>
-                {initial}
+              <div className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-2xl grid place-items-center text-primary-foreground text-2xl font-bold shadow-lg overflow-hidden" style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}>
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt={greetingName} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                ) : initial}
               </div>
               <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 grid place-items-center text-white text-[10px] ring-2 ring-card">
                 <Check className="w-3 h-3" strokeWidth={3} />
