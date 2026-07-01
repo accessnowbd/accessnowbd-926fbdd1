@@ -1054,21 +1054,69 @@ function Downloads({ orders }: { orders: Order[] }) {
 
 
 function Licenses() {
-  const keys = [
-    { p: "Netflix Premium", k: "NFLX-XXXX-YYYY-ZZZZ-2026" },
-    { p: "Adobe CC", k: "ADBE-AAAA-BBBB-CCCC-2027" },
-  ];
+  const { user } = useAuth();
+  const [keys, setKeys] = useState<Array<{ id: string; product: string; key: string; note: string; assigned_at: string | null; status: string }>>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user?.id) { setLoading(false); return; }
+    let cancelled = false;
+
+    const load = async () => {
+      const { data } = await supabase
+        .from("product_license_keys")
+        .select("id, license_key, note, assigned_at, status, product_slug, products:product_slug(name)")
+        .eq("assigned_user_id", user.id)
+        .order("assigned_at", { ascending: false, nullsFirst: false });
+      if (cancelled) return;
+      setKeys(
+        (data ?? []).map((r: any) => ({
+          id: r.id,
+          product: r.products?.name || r.product_slug,
+          key: r.license_key,
+          note: r.note || "",
+          assigned_at: r.assigned_at,
+          status: r.status,
+        })),
+      );
+      setLoading(false);
+    };
+    load();
+
+    // Realtime: refresh whenever admin adds/updates/removes a license for this user
+    const channel = supabase
+      .channel(`licenses:${user.id}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "product_license_keys", filter: `assigned_user_id=eq.${user.id}` },
+        () => load(),
+      )
+      .subscribe();
+
+    return () => {
+      cancelled = true;
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id]);
+
   return (
     <div className="space-y-6">
       <PageHead title="License Keys" desc="Your purchased license keys" />
       <Card>
-        <div className="space-y-2">
-          {keys.map((k) => <CopyRow key={k.p} label={k.p} value={k.k} />)}
-        </div>
+        {loading ? (
+          <div className="flex items-center gap-2 p-4 text-sm text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" /> লোড হচ্ছে…</div>
+        ) : keys.length === 0 ? (
+          <Empty icon={<KeyRound className="w-6 h-6" />} msg="এখনো কোন লাইসেন্স কী assign করা হয়নি। অর্ডার confirm হওয়ার পরে admin panel থেকে assign করা হলে এখানে real-time দেখাবে।" />
+        ) : (
+          <div className="space-y-2">
+            {keys.map((k) => <CopyRow key={k.id} label={k.product + (k.note ? ` — ${k.note}` : "")} value={k.key} />)}
+          </div>
+        )}
       </Card>
     </div>
   );
 }
+
 function CopyRow({ label, value }: { label: string; value: string }) {
   const [c, setC] = useState(false);
   return (
