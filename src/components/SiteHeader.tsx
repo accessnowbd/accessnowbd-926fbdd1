@@ -321,8 +321,11 @@ export function SiteHeader() {
                       }}
                       title={friendlyName}
                     >
-                      <UserCircle2 className="w-4 h-4" />
-                      <span className="hidden sm:inline max-w-[120px] truncate">Dashboard</span>
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt={friendlyName} referrerPolicy="no-referrer" className="w-5 h-5 rounded-full object-cover ring-1 ring-white/50" />
+                      ) : (
+                        <UserCircle2 className="w-4 h-4" />
+                      )}
                     </Link>
                     <button
                       type="button"
