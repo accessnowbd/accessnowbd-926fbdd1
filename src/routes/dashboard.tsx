@@ -16,6 +16,7 @@ import { useLang } from "@/context/LangContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
 import { publicUrl } from "@/lib/site-url";
 import { WalletInline } from "@/routes/wallet";
+import { WelcomeBanner } from "@/components/WelcomeBanner";
 
 // English label -> Bangla translation for sidebar nav, group titles, page heads & common buttons.
 const BN: Record<string, string> = {
