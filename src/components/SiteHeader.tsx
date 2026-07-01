@@ -131,14 +131,21 @@ export function SiteHeader() {
   const navigate = useNavigate();
   const { open: searchOpen, setOpen: setSearchOpen } = useGlobalSearch();
   const [displayName, setDisplayName] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) { setDisplayName(null); return; }
+    if (!user) { setDisplayName(null); setAvatarUrl(null); return; }
+    const meta = (user.user_metadata || {}) as Record<string, unknown>;
+    const googleAvatar = (meta.avatar_url as string) || (meta.picture as string) || null;
+    if (googleAvatar) setAvatarUrl(googleAvatar);
     let cancelled = false;
     (async () => {
-      const p = await supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle();
+      const p = await supabase.from("profiles").select("display_name, avatar_url").eq("id", user.id).maybeSingle();
       if (cancelled) return;
-      setDisplayName((p.data as { display_name?: string | null } | null)?.display_name || null);
+      const data = p.data as { display_name?: string | null; avatar_url?: string | null } | null;
+      setDisplayName(data?.display_name || null);
+      if (data?.avatar_url) setAvatarUrl(data.avatar_url);
+      else if (googleAvatar) setAvatarUrl(googleAvatar);
     })();
     return () => { cancelled = true; };
   }, [user]);
