@@ -667,6 +667,15 @@ function ProductPage() {
       <div className="relative">
         <SiteFooter />
       </div>
+
+      {heroImg && (
+        <ImageZoomModal
+          src={optimizeSupabaseImage(heroImg, { width: 1600, quality: 85 })}
+          alt={product.name}
+          open={zoomOpen}
+          onClose={() => setZoomOpen(false)}
+        />
+      )}
     </div>
   );
 }
