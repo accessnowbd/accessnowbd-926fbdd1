@@ -146,6 +146,20 @@ function Share2Icon(props: { className?: string }) {
   return <Users {...props} />;
 }
 
+/* ---------- Section step numbering (for numbered purple badge in PageHead) ---------- */
+const SECTION_STEP: Record<string, number> = (() => {
+  const map: Record<string, number> = {};
+  let i = 1;
+  for (const g of NAV_GROUPS) for (const it of g.items) map[it.id] = i++;
+  map["edit-profile"] = map["profile"];
+  map["active-services"] = map["subscriptions"];
+  map["expired"] = map["subscriptions"];
+  map["open-ticket"] = 20;
+  map["my-tickets"] = 21;
+  return map;
+})();
+const SectionCtx = createContext<number>(1);
+
 function DashboardPage() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { lang } = useLang();
