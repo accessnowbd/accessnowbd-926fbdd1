@@ -248,7 +248,19 @@ function AbandonedCheckoutPage() {
   );
   const recoveryRate = counts.all ? (counts.recovered / counts.all) * 100 : 0;
 
-  const filtered = useMemo(() => rows.filter((r) => {
+  // Guests (no user_id) must have submitted their info via the form.
+  // Signed-in users always show. This keeps anonymous browsers out.
+  const hasSubmittedInfo = (r: Row) => {
+    const name = (r.full_name || "").trim();
+    const email = (r.email || "").trim();
+    const phone = (r.phone || "").trim();
+    if (r.user_id) return true;
+    return Boolean(email || phone || (name && name !== "—"));
+  };
+
+  const visibleRows = useMemo(() => rows.filter(hasSubmittedInfo), [rows]);
+
+  const filtered = useMemo(() => visibleRows.filter((r) => {
     if (tab === "pending" && r.status !== "pending") return false;
     if (tab === "recovered" && r.status !== "recovered") return false;
     if (tab === "contacted" && r.status !== "contacted") return false;
@@ -262,7 +274,7 @@ function AbandonedCheckoutPage() {
       r.coupon_code?.toLowerCase().includes(s) ||
       (r.items ?? []).some((it) => it.name?.toLowerCase().includes(s))
     );
-  }), [rows, tab, q]);
+  }), [visibleRows, tab, q]);
 
   return (
     <div className="space-y-6 animate-fade-in">
