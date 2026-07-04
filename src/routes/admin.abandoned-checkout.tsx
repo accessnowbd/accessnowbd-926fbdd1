@@ -227,24 +227,35 @@ function AbandonedCheckoutPage() {
     }
   };
 
-  const HIGH_VALUE_THRESHOLD = 500;
+  const HIGH_VALUE_THRESHOLD_FOR_COUNT = 500;
 
-  const counts = useMemo(() => ({
-    all: rows.length,
-    pending: rows.filter((r) => r.status === "pending").length,
-    recovered: rows.filter((r) => r.status === "recovered").length,
-    contacted: rows.filter((r) => r.status === "contacted").length,
-    lost: rows.filter((r) => r.status === "lost").length,
-    high: rows.filter((r) => Number(r.total) >= HIGH_VALUE_THRESHOLD).length,
-  }), [rows]);
-
-  const potentialRevenue = useMemo(
-    () => rows.filter((r) => r.status === "pending" || r.status === "contacted").reduce((a, r) => a + Number(r.total || 0), 0),
+  const _visibleForCounts = useMemo(
+    () => rows.filter((r) => {
+      const name = (r.full_name || "").trim();
+      const email = (r.email || "").trim();
+      const phone = (r.phone || "").trim();
+      if (r.user_id) return true;
+      return Boolean(email || phone || (name && name !== "—"));
+    }),
     [rows],
   );
+
+  const counts = useMemo(() => ({
+    all: _visibleForCounts.length,
+    pending: _visibleForCounts.filter((r) => r.status === "pending").length,
+    recovered: _visibleForCounts.filter((r) => r.status === "recovered").length,
+    contacted: _visibleForCounts.filter((r) => r.status === "contacted").length,
+    lost: _visibleForCounts.filter((r) => r.status === "lost").length,
+    high: _visibleForCounts.filter((r) => Number(r.total) >= HIGH_VALUE_THRESHOLD_FOR_COUNT).length,
+  }), [_visibleForCounts]);
+
+  const potentialRevenue = useMemo(
+    () => _visibleForCounts.filter((r) => r.status === "pending" || r.status === "contacted").reduce((a, r) => a + Number(r.total || 0), 0),
+    [_visibleForCounts],
+  );
   const recoveredValue = useMemo(
-    () => rows.filter((r) => r.status === "recovered").reduce((a, r) => a + Number(r.total || 0), 0),
-    [rows],
+    () => _visibleForCounts.filter((r) => r.status === "recovered").reduce((a, r) => a + Number(r.total || 0), 0),
+    [_visibleForCounts],
   );
   const recoveryRate = counts.all ? (counts.recovered / counts.all) * 100 : 0;
 
