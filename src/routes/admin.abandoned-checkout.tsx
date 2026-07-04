@@ -266,14 +266,14 @@ function AbandonedCheckoutPage() {
           <div className="p-10 grid place-items-center text-slate-400"><Loader2 className="w-6 h-6 animate-spin" /></div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[980px] text-sm">
+            <table className="w-full min-w-[880px] text-sm">
               <thead className="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
                 <tr>
                   <th className="text-left px-5 py-3">{t("Customer", "কাস্টমার")}</th>
                   <th className="text-left px-3 py-3">{t("Contact", "কন্টাক্ট")}</th>
-                  <th className="text-left px-3 py-3">{t("Cart", "কার্ট")}</th>
+                  <th className="text-center px-3 py-3">{t("Items", "আইটেম")}</th>
                   <th className="text-left px-3 py-3">{t("Total", "মোট")}</th>
-                  <th className="text-left px-3 py-3">{t("Activity", "অ্যাক্টিভিটি")}</th>
+                  <th className="text-left px-3 py-3">{t("When", "কখন")}</th>
                   <th className="text-left px-3 py-3">{t("Status", "স্ট্যাটাস")}</th>
                   <th className="text-right px-5 py-3">{t("Actions", "অ্যাকশন")}</th>
                 </tr>
@@ -354,59 +354,37 @@ function StatusBadge({ status }: { status: Row["status"] }) {
   return <span className={`a-status ${v.cls}`}>{t(v.en, v.bn)}</span>;
 }
 
-function RowItem({ row: r, creating, onView, onContact, onCreateOrder, onDelete }: { row: Row; creating?: boolean; onView: () => void; onContact: () => void; onCreateOrder: () => void; onDelete: () => void }) {
+function RowItem({ row: r, onView, onContact, onDelete }: { row: Row; creating?: boolean; onView: () => void; onContact: () => void; onCreateOrder: () => void; onDelete: () => void }) {
   const { t } = useAdminLang();
   const waLink = r.phone ? `https://wa.me/${r.phone.replace(/\D/g, "")}?text=${encodeURIComponent(buildRecoveryMessage(r))}` : "";
-  const firstItem = (r.items ?? [])[0];
   const itemCount = (r.items ?? []).reduce((a, it) => a + (it.qty ?? 1), 0);
   return (
     <tr className="border-t border-slate-100 hover:bg-slate-50/60">
       <td className="px-5 py-4">
-        <div className="flex items-center gap-3">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-violet-100 text-violet-700">
-            <UserRound className="h-4 w-4" />
-          </span>
-          <div className="min-w-0">
-            <div className="truncate font-extrabold text-slate-900">{r.full_name || t("Guest visitor", "গেস্ট ভিজিটর")}</div>
-            <div className="mt-0.5 text-[11px] font-semibold text-slate-500">{r.user_id ? t("Logged in", "লগড ইন") : t("Guest", "গেস্ট")} • {stageText(r.stage, t)}</div>
-          </div>
+        <div className="min-w-0">
+          <div className="truncate font-extrabold text-slate-900">{r.full_name || t("Guest visitor", "গেস্ট ভিজিটর")}</div>
+          {r.user_id && <div className="mt-0.5 text-[11px] font-semibold text-slate-500">{t("Logged in", "লগড ইন")}</div>}
         </div>
       </td>
       <td className="px-3 py-3 text-xs text-slate-600">
-        <div className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-slate-400" /><span className="max-w-[190px] truncate">{r.email || t("Not given yet", "এখনো দেয়নি")}</span></div>
+        <div className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-slate-400" /><span className="max-w-[210px] truncate">{r.email || t("Not given yet", "এখনো দেয়নি")}</span></div>
         {r.phone && <div className="mt-1.5 flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-slate-400" />{r.phone}</div>}
       </td>
-      <td className="px-3 py-3 text-slate-700">
-        <div className="max-w-[260px] truncate font-bold text-slate-900" title={firstItem?.name}>{firstItem?.name || t("Selected product", "সিলেক্টেড প্রোডাক্ট")}</div>
-        <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] font-semibold text-slate-500">
-          <span className="rounded-full bg-slate-100 px-2 py-0.5">{itemCount} {t("item", "আইটেম")}</span>
-          {r.coupon_code && <span className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2 py-0.5 text-violet-700"><Tag className="h-3 w-3" />{r.coupon_code}</span>}
-        </div>
-      </td>
+      <td className="px-3 py-3 text-center text-sm font-bold text-slate-800">{itemCount}</td>
       <td className="px-3 py-3 text-base font-extrabold text-slate-950">{fmtMoney(Number(r.total))}</td>
-      <td className="px-3 py-3 text-xs text-slate-500">
-        <div className="font-semibold text-slate-700">{formatWhen(r.last_seen_at || r.updated_at || r.created_at)}</div>
-        <div className="mt-1 flex items-center gap-1"><MapPin className="h-3 w-3" />{r.source || t("Website", "ওয়েবসাইট")}</div>
-      </td>
+      <td className="px-3 py-3 text-xs font-semibold text-slate-600 whitespace-nowrap">{formatWhen(r.last_seen_at || r.updated_at || r.created_at)}</td>
       <td className="px-3 py-3"><StatusBadge status={r.status} /></td>
       <td className="px-5 py-3">
         <div className="flex items-center justify-end gap-1.5">
           <IconBtn title={t("View", "দেখুন")} onClick={onView} tone="sky"><Eye className="w-4 h-4" /></IconBtn>
-          {waLink && (
-            <a href={waLink} target="_blank" rel="noreferrer" title="WhatsApp"
-              className="a-action a-action-emerald">
+          <IconBtn title={t("Mark contacted", "কন্টাক্ট করা হয়েছে")} onClick={onContact} tone="violet"><ArrowRight className="w-4 h-4" /></IconBtn>
+          {waLink ? (
+            <a href={waLink} target="_blank" rel="noreferrer" title="WhatsApp" className="a-action a-action-emerald">
               <MessageCircle className="w-4 h-4" />
             </a>
+          ) : (
+            <span className="a-action a-action-emerald opacity-40 cursor-not-allowed"><MessageCircle className="w-4 h-4" /></span>
           )}
-          <IconBtn title={t("Mark contacted", "কন্টাক্ট করা হয়েছে")} onClick={onContact} tone="violet"><ArrowRight className="w-4 h-4" /></IconBtn>
-          <button
-            onClick={onCreateOrder}
-            disabled={creating}
-            title={t("Create order", "অর্ডার তৈরি করুন")}
-            className="a-action a-action-amber disabled:opacity-50"
-          >
-            {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingBag className="w-4 h-4" />}
-          </button>
           <IconBtn title={t("Delete", "ডিলিট")} onClick={onDelete} tone="rose"><Trash2 className="w-4 h-4" /></IconBtn>
         </div>
       </td>
