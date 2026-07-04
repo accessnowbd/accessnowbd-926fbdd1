@@ -89,7 +89,7 @@ const SOCIALS = [
 ];
 
 
-const PAYMENTS = ["BKash", "Nagad", "Rocket", "Visa", "Mastercard"];
+const PAYMENTS = ["BKash", "Nagad", "Rocket", "Visa"];
 
 export function SiteFooter() {
   return (
