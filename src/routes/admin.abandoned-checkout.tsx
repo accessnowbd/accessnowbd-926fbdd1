@@ -266,14 +266,14 @@ function AbandonedCheckoutPage() {
           <div className="p-10 grid place-items-center text-slate-400"><Loader2 className="w-6 h-6 animate-spin" /></div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[980px] text-sm">
+            <table className="w-full min-w-[880px] text-sm">
               <thead className="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
                 <tr>
                   <th className="text-left px-5 py-3">{t("Customer", "কাস্টমার")}</th>
                   <th className="text-left px-3 py-3">{t("Contact", "কন্টাক্ট")}</th>
-                  <th className="text-left px-3 py-3">{t("Cart", "কার্ট")}</th>
+                  <th className="text-center px-3 py-3">{t("Items", "আইটেম")}</th>
                   <th className="text-left px-3 py-3">{t("Total", "মোট")}</th>
-                  <th className="text-left px-3 py-3">{t("Activity", "অ্যাক্টিভিটি")}</th>
+                  <th className="text-left px-3 py-3">{t("When", "কখন")}</th>
                   <th className="text-left px-3 py-3">{t("Status", "স্ট্যাটাস")}</th>
                   <th className="text-right px-5 py-3">{t("Actions", "অ্যাকশন")}</th>
                 </tr>
