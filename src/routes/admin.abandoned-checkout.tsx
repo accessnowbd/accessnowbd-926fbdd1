@@ -227,7 +227,8 @@ function AbandonedCheckoutPage() {
     }
   };
 
-  const HIGH_VALUE_THRESHOLD_FOR_COUNT = 500;
+  const HIGH_VALUE_THRESHOLD = 500;
+  const HIGH_VALUE_THRESHOLD_FOR_COUNT = HIGH_VALUE_THRESHOLD;
 
   const _visibleForCounts = useMemo(
     () => rows.filter((r) => {
