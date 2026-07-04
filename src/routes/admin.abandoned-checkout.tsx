@@ -3,8 +3,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import {
   Loader2, Eye, Trash2, MessageCircle, RefreshCw, Search as SearchIcon,
-  Mail, Phone, ArrowRight, FileText, Clock, Package, X, ShoppingBag,
-  UserRound, Tag, MapPin,
+  Mail, Phone, ArrowRight, X, ShoppingBag, Tag, UserRound,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -44,7 +43,20 @@ const fmtMoney = (n: number) => "৳" + Math.round(n).toLocaleString("en-IN");
 
 function formatWhen(value?: string | null) {
   if (!value) return "—";
-  return new Date(value).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  const d = new Date(value);
+  const diff = Date.now() - d.getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins} mins ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs} hours ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 7) return `${days} days ago`;
+  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+function initials(name: string) {
+  return name.trim().split(/\s+/).slice(0, 2).map(s => s[0]).join("").toUpperCase() || "?";
 }
 
 function buildRecoveryMessage(r: Row): string {
@@ -67,6 +79,21 @@ function buildRecoveryMessage(r: Row): string {
   ].filter(Boolean).join("\n");
 }
 
+const AVATAR_TONES = [
+  "bg-indigo-100 text-indigo-700",
+  "bg-teal-100 text-teal-700",
+  "bg-rose-100 text-rose-700",
+  "bg-amber-100 text-amber-700",
+  "bg-sky-100 text-sky-700",
+  "bg-violet-100 text-violet-700",
+  "bg-emerald-100 text-emerald-700",
+];
+function avatarTone(seed: string) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return AVATAR_TONES[h % AVATAR_TONES.length];
+}
+
 function AbandonedCheckoutPage() {
   const { t } = useAdminLang();
   const navigate = useNavigate();
@@ -74,7 +101,7 @@ function AbandonedCheckoutPage() {
   const [loading, setLoading] = useState(true);
   const [creatingId, setCreatingId] = useState<string | null>(null);
   const [q, setQ] = useState("");
-  const [tab, setTab] = useState<"pending" | "all" | "recovered" | "contacted">("pending");
+  const [tab, setTab] = useState<"pending" | "all" | "recovered" | "contacted" | "high">("pending");
   const [selected, setSelected] = useState<Row | null>(null);
 
   const load = useCallback(async () => {
@@ -200,7 +227,7 @@ function AbandonedCheckoutPage() {
     }
   };
 
-
+  const HIGH_VALUE_THRESHOLD = 500;
 
   const counts = useMemo(() => ({
     all: rows.length,
@@ -208,15 +235,24 @@ function AbandonedCheckoutPage() {
     recovered: rows.filter((r) => r.status === "recovered").length,
     contacted: rows.filter((r) => r.status === "contacted").length,
     lost: rows.filter((r) => r.status === "lost").length,
+    high: rows.filter((r) => Number(r.total) >= HIGH_VALUE_THRESHOLD).length,
   }), [rows]);
 
-  const lostValue = useMemo(
-    () => rows.filter((r) => r.status === "pending" || r.status === "lost").reduce((a, r) => a + Number(r.total || 0), 0),
+  const potentialRevenue = useMemo(
+    () => rows.filter((r) => r.status === "pending" || r.status === "contacted").reduce((a, r) => a + Number(r.total || 0), 0),
     [rows],
   );
+  const recoveredValue = useMemo(
+    () => rows.filter((r) => r.status === "recovered").reduce((a, r) => a + Number(r.total || 0), 0),
+    [rows],
+  );
+  const recoveryRate = counts.all ? (counts.recovered / counts.all) * 100 : 0;
 
   const filtered = useMemo(() => rows.filter((r) => {
-    if (tab !== "all" && r.status !== tab) return false;
+    if (tab === "pending" && r.status !== "pending") return false;
+    if (tab === "recovered" && r.status !== "recovered") return false;
+    if (tab === "contacted" && r.status !== "contacted") return false;
+    if (tab === "high" && Number(r.total) < HIGH_VALUE_THRESHOLD) return false;
     if (!q) return true;
     const s = q.toLowerCase();
     return (
@@ -224,79 +260,119 @@ function AbandonedCheckoutPage() {
       r.email?.toLowerCase().includes(s) ||
       r.phone?.toLowerCase().includes(s) ||
       r.coupon_code?.toLowerCase().includes(s) ||
-      r.source?.toLowerCase().includes(s) ||
-      r.stage?.toLowerCase().includes(s) ||
       (r.items ?? []).some((it) => it.name?.toLowerCase().includes(s))
     );
   }), [rows, tab, q]);
 
   return (
-    <div className="space-y-5 animate-fade-in">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard label={t("Total", "মোট")} value={counts.all} tone="slate" icon={<FileText className="w-4 h-4" />} loading={loading} />
-        <StatCard label={t("Pending Recovery", "পেন্ডিং রিকভারি")} value={counts.pending} tone="amber" icon={<Clock className="w-4 h-4" />} loading={loading} />
-        <StatCard label={t("Recovered", "রিকভারড")} value={counts.recovered} tone="emerald" icon={<RefreshCw className="w-4 h-4" />} loading={loading} />
-        <StatCard label={t("Lost Value", "লস্ট ভ্যালু")} value={fmtMoney(lostValue)} tone="rose" icon={<Package className="w-4 h-4" />} loading={loading} />
+    <div className="space-y-6 animate-fade-in">
+      {/* KPI stat cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          label={t("Potential Revenue", "সম্ভাব্য রেভিনিউ")}
+          value={fmtMoney(potentialRevenue)}
+          note={`${counts.pending + counts.contacted} ${t("open carts", "ওপেন কার্ট")}`}
+          noteTone="slate"
+          loading={loading}
+        />
+        <StatCard
+          label={t("Recovery Rate", "রিকভারি রেট")}
+          value={`${recoveryRate.toFixed(1)}%`}
+          note={t("Target: 18%", "টার্গেট: ১৮%")}
+          noteTone="indigo"
+          loading={loading}
+        />
+        <StatCard
+          label={t("Active Checkouts", "অ্যাক্টিভ চেকআউট")}
+          value={String(counts.all)}
+          note={`${counts.high} ${t("high value", "হাই ভ্যালু")}`}
+          noteTone="amber"
+          loading={loading}
+        />
+        <StatCard
+          label={t("Recovered Value", "রিকভারড ভ্যালু")}
+          value={fmtMoney(recoveredValue)}
+          note={`${counts.recovered} ${t("carts", "কার্ট")}`}
+          noteTone="emerald"
+          loading={loading}
+        />
       </div>
 
-      <div className="a-card p-3 sm:p-4">
-        <div className="grid gap-3 xl:grid-cols-[minmax(280px,1fr)_auto] xl:items-center">
-          <div className="relative min-w-0">
-            <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <input
-            value={q} onChange={(e) => setQ(e.target.value)}
-            placeholder={t("Search by name, email, phone, coupon or product…", "নাম, ইমেইল, ফোন, কুপন বা প্রোডাক্ট...")}
-              className="a-search"
-          />
-        </div>
-          <div className="a-pills flex min-w-0 flex-wrap items-center gap-2">
-            <Tab active={tab === "pending"} onClick={() => setTab("pending")}>{t("Pending", "পেন্ডিং")} <span className="a-pill-count">{counts.pending}</span></Tab>
-            <Tab active={tab === "all"} onClick={() => setTab("all")}>{t("All", "সব")} <span className="a-pill-count">{counts.all}</span></Tab>
-            <Tab active={tab === "recovered"} onClick={() => setTab("recovered")}>{t("Recovered", "রিকভারড")} <span className="a-pill-count">{counts.recovered}</span></Tab>
-            <Tab active={tab === "contacted"} onClick={() => setTab("contacted")}>{t("Contacted", "কন্টাক্টেড")} <span className="a-pill-count">{counts.contacted}</span></Tab>
-            <button onClick={load} className="a-pill shrink-0">
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} /> {t("Refresh", "রিফ্রেশ")}
+      {/* Table container with search + filters */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="relative flex-1 max-w-md">
+            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder={t("Search by name, email, phone, coupon or product…", "নাম, ইমেইল, ফোন, কুপন বা প্রোডাক্ট...")}
+              className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <FilterPill active={tab === "pending"} onClick={() => setTab("pending")}>
+              {t("Pending", "পেন্ডিং")} <span className="ml-1 opacity-70">{counts.pending}</span>
+            </FilterPill>
+            <FilterPill active={tab === "all"} onClick={() => setTab("all")}>
+              {t("All sessions", "সব")} <span className="ml-1 opacity-70">{counts.all}</span>
+            </FilterPill>
+            <FilterPill active={tab === "high"} onClick={() => setTab("high")}>
+              {t("High Value (>৳500)", "হাই ভ্যালু (>৳৫০০)")} <span className="ml-1 opacity-70">{counts.high}</span>
+            </FilterPill>
+            <FilterPill active={tab === "contacted"} onClick={() => setTab("contacted")}>
+              {t("Contacted", "কন্টাক্টেড")} <span className="ml-1 opacity-70">{counts.contacted}</span>
+            </FilterPill>
+            <FilterPill active={tab === "recovered"} onClick={() => setTab("recovered")}>
+              {t("Recovered", "রিকভারড")} <span className="ml-1 opacity-70">{counts.recovered}</span>
+            </FilterPill>
+            <div className="h-4 w-px bg-slate-200 mx-1" />
+            <button onClick={load} title={t("Refresh", "রিফ্রেশ")}
+              className="p-1.5 rounded-md text-slate-500 hover:bg-slate-100 transition-colors">
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             </button>
           </div>
         </div>
-      </div>
 
-      <div className="a-card overflow-hidden">
-        {loading ? (
-          <div className="p-10 grid place-items-center text-slate-400"><Loader2 className="w-6 h-6 animate-spin" /></div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[880px] text-sm">
-              <thead className="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
-                <tr>
-                  <th className="text-left px-5 py-3">{t("Customer", "কাস্টমার")}</th>
-                  <th className="text-left px-3 py-3">{t("Contact", "কন্টাক্ট")}</th>
-                  <th className="text-center px-3 py-3">{t("Items", "আইটেম")}</th>
-                  <th className="text-left px-3 py-3">{t("Total", "মোট")}</th>
-                  <th className="text-left px-3 py-3">{t("When", "কখন")}</th>
-                  <th className="text-left px-3 py-3">{t("Status", "স্ট্যাটাস")}</th>
-                  <th className="text-right px-5 py-3">{t("Actions", "অ্যাকশন")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((r) => (
-                  <RowItem
-                    key={r.id}
-                    row={r}
-                    creating={creatingId === r.id}
-                    onView={() => setSelected(r)}
-                    onContact={() => updateRow(r.id, { status: "contacted", contacted_at: new Date().toISOString() })}
-                    onCreateOrder={() => createOrderFromAbandoned(r)}
-                    onDelete={() => deleteRow(r.id)}
-                  />
-                ))}
-                {filtered.length === 0 && (
-                  <tr><td colSpan={7} className="p-10 text-center text-slate-400">{t("No abandoned checkouts.", "কোনো অ্যাবান্ডনড চেকআউট নেই।")}</td></tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[880px] text-left">
+            <thead className="bg-slate-50 text-slate-500 text-[11px] uppercase tracking-wider font-semibold">
+              <tr>
+                <th className="px-6 py-4">{t("Customer / Session", "কাস্টমার / সেশন")}</th>
+                <th className="px-6 py-4">{t("Potential Revenue", "সম্ভাব্য রেভিনিউ")}</th>
+                <th className="px-6 py-4">{t("Status", "স্ট্যাটাস")}</th>
+                <th className="px-6 py-4 text-center">{t("Items", "আইটেম")}</th>
+                <th className="px-6 py-4 text-right">{t("Last Activity", "শেষ অ্যাক্টিভিটি")}</th>
+                <th className="px-6 py-4 text-right">{t("Action", "অ্যাকশন")}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {loading && (
+                <tr><td colSpan={6} className="p-12 text-center"><Loader2 className="w-6 h-6 animate-spin inline text-slate-400" /></td></tr>
+              )}
+              {!loading && filtered.map((r) => (
+                <TableRow
+                  key={r.id}
+                  row={r}
+                  creating={creatingId === r.id}
+                  highValue={Number(r.total) >= HIGH_VALUE_THRESHOLD}
+                  onView={() => setSelected(r)}
+                  onContact={() => updateRow(r.id, { status: "contacted", contacted_at: new Date().toISOString() })}
+                  onDelete={() => deleteRow(r.id)}
+                />
+              ))}
+              {!loading && filtered.length === 0 && (
+                <tr><td colSpan={6} className="p-12 text-center text-slate-400 text-sm">{t("No abandoned checkouts.", "কোনো অ্যাবান্ডনড চেকআউট নেই।")}</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="p-4 border-t border-slate-100 flex items-center justify-between">
+          <span className="text-xs text-slate-500 font-medium">
+            {t("Showing", "দেখানো হচ্ছে")} {filtered.length} {t("of", "মোট")} {counts.all} {t("sessions", "সেশন")}
+          </span>
+        </div>
       </div>
 
       {selected && (
@@ -313,29 +389,31 @@ function AbandonedCheckoutPage() {
   );
 }
 
-function StatCard({ label, value, tone, icon, loading }: { label: string; value: string | number; tone: "slate"|"amber"|"emerald"|"rose"; icon: React.ReactNode; loading?: boolean }) {
-  const tones: Record<string, string> = {
-    slate: "bg-slate-100 text-slate-700",
-    amber: "bg-amber-100 text-amber-700",
-    emerald: "bg-emerald-100 text-emerald-700",
-    rose: "bg-rose-100 text-rose-700",
+function StatCard({ label, value, note, noteTone, loading }: { label: string; value: string | number; note?: string; noteTone?: "slate" | "indigo" | "emerald" | "amber"; loading?: boolean }) {
+  const toneCls: Record<string, string> = {
+    slate: "text-slate-400",
+    indigo: "text-indigo-600",
+    emerald: "text-emerald-600",
+    amber: "text-amber-600",
   };
   return (
-    <div className="a-stat">
-      <div className="flex items-start justify-between gap-3">
-        <div className="a-stat-label">{label}</div>
-        <span className={`a-stat-icon ${tones[tone]}`}>{icon}</span>
+    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+      <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">{label}</p>
+      <div className="mt-2 flex items-baseline gap-2 flex-wrap">
+        <span className="text-2xl font-bold text-slate-900">{loading ? "…" : value}</span>
+        {note && <span className={`text-xs font-medium ${toneCls[noteTone || "slate"]}`}>{note}</span>}
       </div>
-      <div className="a-stat-value">{loading ? "…" : value}</div>
     </div>
   );
 }
 
-function Tab({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function FilterPill({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button
       onClick={onClick}
-      className={`a-pill shrink-0 ${active ? "a-pill-active" : ""}`}
+      className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors whitespace-nowrap ${
+        active ? "bg-slate-900 text-white" : "text-slate-500 hover:bg-slate-100"
+      }`}
     >
       {children}
     </button>
@@ -345,68 +423,109 @@ function Tab({ active, onClick, children }: { active: boolean; onClick: () => vo
 function StatusBadge({ status }: { status: Row["status"] }) {
   const { t } = useAdminLang();
   const m: Record<Row["status"], { cls: string; en: string; bn: string }> = {
-    pending: { cls: "a-status-pending", en: "Pending", bn: "পেন্ডিং" },
-    contacted: { cls: "a-status-processing", en: "Contacted", bn: "কন্টাক্টেড" },
-    recovered: { cls: "a-status-completed", en: "Recovered", bn: "রিকভারড" },
-    lost: { cls: "a-status-failed", en: "Lost", bn: "লস্ট" },
+    pending: { cls: "bg-amber-50 text-amber-700", en: "Actionable", bn: "অ্যাকশনেবল" },
+    contacted: { cls: "bg-sky-50 text-sky-700", en: "Contacted", bn: "কন্টাক্টেড" },
+    recovered: { cls: "bg-emerald-50 text-emerald-700", en: "Recovered", bn: "রিকভারড" },
+    lost: { cls: "bg-slate-100 text-slate-500", en: "Not Given", bn: "নট গিভেন" },
   };
   const v = m[status];
-  return <span className={`a-status ${v.cls}`}>{t(v.en, v.bn)}</span>;
+  return <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${v.cls}`}>{t(v.en, v.bn)}</span>;
 }
 
-function RowItem({ row: r, onView, onContact, onDelete }: { row: Row; creating?: boolean; onView: () => void; onContact: () => void; onCreateOrder: () => void; onDelete: () => void }) {
+function TableRow({ row: r, creating, highValue, onView, onContact, onDelete }: { row: Row; creating?: boolean; highValue: boolean; onView: () => void; onContact: () => void; onDelete: () => void }) {
   const { t } = useAdminLang();
   const waLink = r.phone ? `https://wa.me/${r.phone.replace(/\D/g, "")}?text=${encodeURIComponent(buildRecoveryMessage(r))}` : "";
   const itemCount = (r.items ?? []).reduce((a, it) => a + (it.qty ?? 1), 0);
+  const isGuest = !r.full_name || r.full_name.trim() === "";
+  const displayName = isGuest ? t("Guest Visitor", "গেস্ট ভিজিটর") : r.full_name;
+  const sub = isGuest
+    ? (r.email || `Session #${(r.session_key || r.id).slice(-6).toUpperCase()}`)
+    : (r.email || r.phone || "—");
+
   return (
-    <tr className="border-t border-slate-100 hover:bg-slate-50/60">
-      <td className="px-5 py-4">
-        <div className="min-w-0">
-          <div className="truncate font-extrabold text-slate-900">{r.full_name || t("Guest visitor", "গেস্ট ভিজিটর")}</div>
-          {r.user_id && <div className="mt-0.5 text-[11px] font-semibold text-slate-500">{t("Logged in", "লগড ইন")}</div>}
+    <tr className={`transition-colors group ${highValue && r.status === "pending" ? "hover:bg-violet-50/40" : "hover:bg-slate-50"}`}>
+      <td className="px-6 py-4">
+        <div className={`flex items-center gap-3 ${isGuest ? "opacity-70" : ""}`}>
+          {isGuest ? (
+            <span className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center shrink-0">
+              <UserRound className="h-4 w-4" />
+            </span>
+          ) : (
+            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${avatarTone(r.full_name)}`}>
+              {initials(r.full_name)}
+            </span>
+          )}
+          <div className="min-w-0">
+            <div className={`text-sm font-semibold text-slate-900 truncate max-w-[220px] ${isGuest ? "italic text-slate-600 font-medium" : ""}`}>{displayName}</div>
+            <div className="text-xs text-slate-500 truncate max-w-[220px] flex items-center gap-1.5">
+              {!isGuest && r.email && <Mail className="w-3 h-3 text-slate-400 shrink-0" />}
+              {!isGuest && !r.email && r.phone && <Phone className="w-3 h-3 text-slate-400 shrink-0" />}
+              <span className="truncate">{sub}</span>
+            </div>
+          </div>
         </div>
       </td>
-      <td className="px-3 py-3 text-xs text-slate-600">
-        <div className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-slate-400" /><span className="max-w-[210px] truncate">{r.email || t("Not given yet", "এখনো দেয়নি")}</span></div>
-        {r.phone && <div className="mt-1.5 flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-slate-400" />{r.phone}</div>}
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-2">
+          <span className={`text-sm font-bold ${highValue ? "text-slate-900" : "text-slate-700"}`}>{fmtMoney(Number(r.total))}</span>
+          {highValue && r.status === "pending" && <span className="flex h-2 w-2 rounded-full bg-orange-500 animate-pulse" title={t("High value pending", "হাই ভ্যালু পেন্ডিং")} />}
+          {r.coupon_code && (
+            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-violet-700 bg-violet-50 rounded px-1.5 py-0.5">
+              <Tag className="w-2.5 h-2.5" />{r.coupon_code}
+            </span>
+          )}
+        </div>
       </td>
-      <td className="px-3 py-3 text-center text-sm font-bold text-slate-800">{itemCount}</td>
-      <td className="px-3 py-3 text-base font-extrabold text-slate-950">{fmtMoney(Number(r.total))}</td>
-      <td className="px-3 py-3 text-xs font-semibold text-slate-600 whitespace-nowrap">{formatWhen(r.last_seen_at || r.updated_at || r.created_at)}</td>
-      <td className="px-3 py-3"><StatusBadge status={r.status} /></td>
-      <td className="px-5 py-3">
-        <div className="flex items-center justify-end gap-1.5">
-          <IconBtn title={t("View", "দেখুন")} onClick={onView} tone="sky"><Eye className="w-4 h-4" /></IconBtn>
-          <IconBtn title={t("Mark contacted", "কন্টাক্ট করা হয়েছে")} onClick={onContact} tone="violet"><ArrowRight className="w-4 h-4" /></IconBtn>
-          {waLink ? (
-            <a href={waLink} target="_blank" rel="noreferrer" title="WhatsApp" className="a-action a-action-emerald">
+      <td className="px-6 py-4"><StatusBadge status={r.status} /></td>
+      <td className="px-6 py-4 text-sm text-slate-600 text-center font-semibold">{itemCount}</td>
+      <td className="px-6 py-4 text-right text-xs text-slate-500 whitespace-nowrap">{formatWhen(r.last_seen_at || r.updated_at || r.created_at)}</td>
+      <td className="px-6 py-4 text-right">
+        <div className="flex items-center justify-end gap-1">
+          {waLink && (
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noreferrer"
+              title="WhatsApp"
+              className="p-1.5 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
+              onClick={(e) => e.stopPropagation()}
+            >
               <MessageCircle className="w-4 h-4" />
             </a>
-          ) : (
-            <span className="a-action a-action-emerald opacity-40 cursor-not-allowed"><MessageCircle className="w-4 h-4" /></span>
           )}
-          <IconBtn title={t("Delete", "ডিলিট")} onClick={onDelete} tone="rose"><Trash2 className="w-4 h-4" /></IconBtn>
+          {r.status === "pending" && (
+            <button
+              onClick={onContact}
+              title={t("Mark contacted", "কন্টাক্ট করা হয়েছে")}
+              className="p-1.5 rounded-md text-slate-400 hover:text-sky-600 hover:bg-sky-50 transition-colors"
+            >
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          )}
+          <button
+            onClick={onDelete}
+            title={t("Delete", "ডিলিট")}
+            className="p-1.5 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={onView}
+            disabled={creating}
+            className={`ml-1 px-3 py-1 text-xs font-semibold rounded-md shadow-sm transition-colors inline-flex items-center gap-1.5 ${
+              highValue && r.status === "pending"
+                ? "text-white bg-violet-600 hover:bg-violet-700"
+                : r.status === "pending"
+                ? "text-violet-700 hover:text-violet-800"
+                : "text-slate-600 bg-white border border-slate-200 hover:bg-slate-50"
+            }`}
+          >
+            {creating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Eye className="w-3.5 h-3.5" />}
+            {highValue && r.status === "pending" ? t("Recover Now", "রিকভার করুন") : t("Details", "ডিটেইল")}
+          </button>
         </div>
       </td>
     </tr>
-  );
-}
-
-function IconBtn({ children, onClick, title, tone = "violet" }: { children: React.ReactNode; onClick: () => void; title: string; tone?: "violet" | "emerald" | "sky" | "amber" | "rose" }) {
-  const toneClass: Record<string, string> = {
-    violet: "a-action-violet",
-    emerald: "a-action-emerald",
-    sky: "a-action-sky",
-    amber: "a-action-amber",
-    rose: "a-action-rose",
-  };
-  return (
-    <button
-      onClick={onClick} title={title}
-      className={`a-action ${toneClass[tone]}`}
-    >
-      {children}
-    </button>
   );
 }
 
@@ -482,7 +601,7 @@ function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete
               <ArrowRight className="w-4 h-4" /> {t("Mark Contacted", "কন্টাক্ট করা হয়েছে")}
             </button>
             <button onClick={onCreateOrder} disabled={creating}
-               className="a-save-btn h-11 justify-center disabled:opacity-60">
+               className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-violet-600 text-sm font-bold text-white hover:bg-violet-700 disabled:opacity-60">
               {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingBag className="w-4 h-4" />}
               {t("Create Order", "অর্ডার তৈরি")}
             </button>
@@ -503,7 +622,7 @@ function DetailModal({ row, creating, onClose, onUpdate, onCreateOrder, onDelete
                 className="flex-1 resize-none rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-violet-400"
                 placeholder={t("Internal notes…", "ইন্টারনাল নোট...")} />
               <button onClick={() => onUpdate({ admin_note: note })}
-                className="a-save-btn self-start">
+                className="self-start px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-bold hover:bg-violet-700">
                 {t("Save", "সেভ")}
               </button>
             </div>
