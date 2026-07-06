@@ -72,6 +72,7 @@ import { Route as AdminInvoiceDesignRouteImport } from './routes/admin.invoice-d
 import { Route as AdminGoogleAdsRouteImport } from './routes/admin.google-ads'
 import { Route as AdminFbPixelRouteImport } from './routes/admin.fb-pixel'
 import { Route as AdminFbAudiencesRouteImport } from './routes/admin.fb-audiences'
+import { Route as AdminEpsPgwRouteImport } from './routes/admin.eps-pgw'
 import { Route as AdminEmailDashboardRouteImport } from './routes/admin.email-dashboard'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
@@ -91,6 +92,7 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicEpsIpnRouteImport } from './routes/api/public/eps/ipn'
 
 const WalletRoute = WalletRouteImport.update({
   id: '/wallet',
@@ -408,6 +410,11 @@ const AdminFbAudiencesRoute = AdminFbAudiencesRouteImport.update({
   path: '/fb-audiences',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEpsPgwRoute = AdminEpsPgwRouteImport.update({
+  id: '/eps-pgw',
+  path: '/eps-pgw',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminEmailDashboardRoute = AdminEmailDashboardRouteImport.update({
   id: '/email-dashboard',
   path: '/email-dashboard',
@@ -507,6 +514,11 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   path: '/lovable/email/auth/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicEpsIpnRoute = ApiPublicEpsIpnRouteImport.update({
+  id: '/api/public/eps/ipn',
+  path: '/api/public/eps/ipn',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -549,6 +561,7 @@ export interface FileRoutesByFullPath {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
+  '/admin/eps-pgw': typeof AdminEpsPgwRoute
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
@@ -586,6 +599,7 @@ export interface FileRoutesByFullPath {
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -632,6 +646,7 @@ export interface FileRoutesByTo {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
+  '/admin/eps-pgw': typeof AdminEpsPgwRoute
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
@@ -669,6 +684,7 @@ export interface FileRoutesByTo {
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -717,6 +733,7 @@ export interface FileRoutesById {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
+  '/admin/eps-pgw': typeof AdminEpsPgwRoute
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
@@ -754,6 +771,7 @@ export interface FileRoutesById {
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -803,6 +821,7 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/email-dashboard'
+    | '/admin/eps-pgw'
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
     | '/admin/google-ads'
@@ -840,6 +859,7 @@ export interface FileRouteTypes {
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/api/public/eps/ipn'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -886,6 +906,7 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/email-dashboard'
+    | '/admin/eps-pgw'
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
     | '/admin/google-ads'
@@ -923,6 +944,7 @@ export interface FileRouteTypes {
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/api/public/eps/ipn'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -970,6 +992,7 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/email-dashboard'
+    | '/admin/eps-pgw'
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
     | '/admin/google-ads'
@@ -1007,6 +1030,7 @@ export interface FileRouteTypes {
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/api/public/eps/ipn'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -1050,6 +1074,7 @@ export interface RootRouteChildren {
   ApiPublicClientErrorsRoute: typeof ApiPublicClientErrorsRoute
   ApiPublicProductsRoute: typeof ApiPublicProductsRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
+  ApiPublicEpsIpnRoute: typeof ApiPublicEpsIpnRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -1500,6 +1525,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFbAudiencesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/eps-pgw': {
+      id: '/admin/eps-pgw'
+      path: '/eps-pgw'
+      fullPath: '/admin/eps-pgw'
+      preLoaderRoute: typeof AdminEpsPgwRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/email-dashboard': {
       id: '/admin/email-dashboard'
       path: '/email-dashboard'
@@ -1633,6 +1665,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/eps/ipn': {
+      id: '/api/public/eps/ipn'
+      path: '/api/public/eps/ipn'
+      fullPath: '/api/public/eps/ipn'
+      preLoaderRoute: typeof ApiPublicEpsIpnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1648,6 +1687,7 @@ interface AdminRouteChildren {
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminEmailDashboardRoute: typeof AdminEmailDashboardRoute
+  AdminEpsPgwRoute: typeof AdminEpsPgwRoute
   AdminFbAudiencesRoute: typeof AdminFbAudiencesRoute
   AdminFbPixelRoute: typeof AdminFbPixelRoute
   AdminGoogleAdsRoute: typeof AdminGoogleAdsRoute
@@ -1692,6 +1732,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminEmailDashboardRoute: AdminEmailDashboardRoute,
+  AdminEpsPgwRoute: AdminEpsPgwRoute,
   AdminFbAudiencesRoute: AdminFbAudiencesRoute,
   AdminFbPixelRoute: AdminFbPixelRoute,
   AdminGoogleAdsRoute: AdminGoogleAdsRoute,
@@ -1773,6 +1814,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicClientErrorsRoute: ApiPublicClientErrorsRoute,
   ApiPublicProductsRoute: ApiPublicProductsRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
+  ApiPublicEpsIpnRoute: ApiPublicEpsIpnRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
