@@ -81,14 +81,6 @@ function AdminPaymentsPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="min-w-0">
-          <h2 className="flex items-center gap-2 text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-            <CreditCard className="h-5 w-5 text-violet-600" /> Payments
-          </h2>
-          <p className="text-sm text-slate-500 mt-0.5">Payment proof verification & settings management</p>
-        </div>
-      </div>
 
       {/* Pill tabs */}
       <div className="inline-flex p-1 rounded-2xl bg-white border border-slate-200 shadow-sm">
