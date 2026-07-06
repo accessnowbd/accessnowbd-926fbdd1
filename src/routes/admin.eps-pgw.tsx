@@ -31,6 +31,10 @@ type Settings = {
   ipn_url: string;
   auto_verify: boolean;
   notes: string;
+  // Checkout display (customer-facing)
+  display_name: string;
+  brand_color: string;
+  logo_url: string;
 };
 
 const DEFAULT_SETTINGS: Settings = {
@@ -48,6 +52,9 @@ const DEFAULT_SETTINGS: Settings = {
   ipn_url: "",
   auto_verify: false,
   notes: "",
+  display_name: "EPS Payment",
+  brand_color: "#0ea5e9",
+  logo_url: "",
 };
 
 function EpsGatewayPage() {
@@ -82,9 +89,9 @@ function EpsGatewayPage() {
         const origin = window.location.origin;
         return {
           ...prev,
-          success_url: prev.success_url || `${origin}/eps/success`,
-          fail_url:    prev.fail_url    || `${origin}/eps/fail`,
-          cancel_url:  prev.cancel_url  || `${origin}/eps/cancel`,
+          success_url: prev.success_url || `${origin}/api/public/eps/success`,
+          fail_url:    prev.fail_url    || `${origin}/api/public/eps/fail`,
+          cancel_url:  prev.cancel_url  || `${origin}/api/public/eps/cancel`,
           ipn_url:     prev.ipn_url     || `${origin}/api/public/eps/ipn`,
         };
       });
@@ -103,9 +110,10 @@ function EpsGatewayPage() {
 
   const save = async () => {
     setSaving(true);
-    const payload = { kind: "eps_pgw_settings", data: settings, is_active: true, sort_order: 0 };
+    // is_active=false → admin-only (RLS): credentials never public.
+    const payload = { kind: "eps_pgw_settings", data: settings, is_active: false, sort_order: 0 };
     if (recordId) {
-      const { error } = await supabase.from("admin_records").update({ data: settings, is_active: true }).eq("id", recordId);
+      const { error } = await supabase.from("admin_records").update({ data: settings, is_active: false }).eq("id", recordId);
       if (error) { setSaving(false); return toast.error(error.message); }
     } else {
       const { data, error } = await supabase.from("admin_records").insert(payload).select("id").single();
@@ -281,8 +289,44 @@ function EpsGatewayPage() {
             </div>
           </Card>
 
+          {/* Checkout display (customer-facing tile) */}
+          <Card icon={Globe} title="Checkout Display" subtitle="Checkout-এ এই gateway কীভাবে দেখাবে">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <TextField
+                label="Display Name"
+                value={settings.display_name}
+                onChange={(v) => setSettings((s) => ({ ...s, display_name: v }))}
+                placeholder="e.g. Pay Online"
+              />
+              <Field label="Brand Color">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="color"
+                    value={settings.brand_color || "#0ea5e9"}
+                    onChange={(e) => setSettings((s) => ({ ...s, brand_color: e.target.value }))}
+                    className="h-10 w-14 rounded-lg border border-slate-200 bg-white cursor-pointer"
+                  />
+                  <input
+                    value={settings.brand_color}
+                    onChange={(e) => setSettings((s) => ({ ...s, brand_color: e.target.value }))}
+                    className="flex-1 rounded-xl border border-slate-200 px-3 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-violet-400"
+                  />
+                </div>
+              </Field>
+              <div className="sm:col-span-2">
+                <TextField
+                  label="Logo URL (optional)"
+                  value={settings.logo_url}
+                  onChange={(v) => setSettings((s) => ({ ...s, logo_url: v }))}
+                  placeholder="https://…/logo.png"
+                />
+              </div>
+            </div>
+          </Card>
+
           {/* Callback URLs */}
           <Card icon={Link2} title="Callback URLs" subtitle="এই URL গুলো EPS merchant dashboard-এ দিন">
+
             <div className="space-y-3">
               {[
                 { label: "Success URL", key: "success_url", val: settings.success_url },

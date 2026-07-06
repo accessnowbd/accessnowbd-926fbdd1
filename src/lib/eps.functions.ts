@@ -4,16 +4,13 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 /* ============================================================
  * EPS (Easy Payment System — eps.com.bd) gateway server helpers.
  *
- * Credentials + non-secret settings are stored TOGETHER in
- * `admin_records` where `kind = 'eps_pgw_settings'` — exactly like
- * bKash / Nagad manual setup. Admin-only read/write via RLS.
- *
- * Fields in .data:
- *   merchant_id, store_password, api_key, api_secret, api_url
- *   enabled, mode ("sandbox"|"live"), currency,
- *   success_url, fail_url, cancel_url, ipn_url,
- *   auto_verify, notes
+ * Credentials + non-secret settings live in `admin_records` where
+ * `kind = 'eps_pgw_settings'`. That row is stored with
+ * `is_active = false` so RLS only lets admins read it — credentials
+ * NEVER leak to the browser. Checkout uses `getEpsPublicConfig`
+ * below, which returns only display-safe fields.
  * ============================================================ */
+
 
 const SANDBOX_URL = "https://sandbox.eps.com.bd/api";
 const LIVE_URL = "https://api.eps.com.bd/api";
@@ -175,3 +172,45 @@ export const initiateEpsPayment = createServerFn({ method: "POST" })
 
     return { redirect_url: redirect };
   });
+
+/* ------------------------------------------------------------
+ * Public server function for checkout — returns only display-safe
+ * flags (no credentials). Used by the browser to decide whether
+ * to show the EPS payment tile.
+ * ------------------------------------------------------------ */
+
+export type EpsPublicConfig = {
+  enabled: boolean;
+  mode: "sandbox" | "live" | null;
+  brand_color: string;
+  logo_url: string | null;
+  display_name: string;
+};
+
+export const getEpsPublicConfig = createServerFn({ method: "GET" })
+  .handler(async (): Promise<EpsPublicConfig> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data } = await supabaseAdmin
+      .from("admin_records")
+      .select("data")
+      .eq("kind", "eps_pgw_settings")
+      .maybeSingle();
+
+    const cfg = ((data?.data as EpsConfig) ?? {}) as EpsConfig & {
+      brand_color?: string;
+      logo_url?: string;
+      display_name?: string;
+    };
+
+    // Only "enabled" AND fully-credentialled counts as truly on.
+    const credsPresent = !!cfg.merchant_id && !!cfg.store_password && !!cfg.api_key;
+
+    return {
+      enabled: Boolean(cfg.enabled) && credsPresent,
+      mode: cfg.mode ?? null,
+      brand_color: cfg.brand_color || "#0ea5e9",
+      logo_url: cfg.logo_url || null,
+      display_name: cfg.display_name || "EPS Payment",
+    };
+  });
+

@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Check, Copy, Lock, Smartphone, Loader2, X, ChevronRight, Tag, ShieldCheck } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { Check, Copy, Lock, Smartphone, Loader2, X, ChevronRight, Tag, ShieldCheck, Zap } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
@@ -10,6 +12,7 @@ import { usePaymentMethods } from "@/hooks/useShopConfig";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import { trackPurchase } from "@/lib/trackEvent";
 import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
+import { getEpsPublicConfig, initiateEpsPayment } from "@/lib/eps.functions";
 
 
 function CheckoutErrorComponent({ error }: { error: Error }) {
@@ -92,6 +95,14 @@ function CheckoutPage() {
 
   const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
   const { data: dynamicMethods } = usePaymentMethods("checkout");
+  const fetchEpsPublic = useServerFn(getEpsPublicConfig);
+  const initiateEps = useServerFn(initiateEpsPayment);
+  const { data: epsConfig } = useQuery({
+    queryKey: ["eps-public-config"],
+    queryFn: () => fetchEpsPublic(),
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+  });
   const methods: PayMethod[] = useMemo(() => {
     const list = (dynamicMethods ?? []).map((m) => ({
       id: (m.id || m.name || "").toLowerCase().replace(/\s+/g, "-") || m.name,
@@ -103,8 +114,19 @@ function CheckoutPage() {
       brand_color: m.brand_color,
       send_money_label: m.send_money_label,
     }));
-    return list.length > 0 ? list : FALLBACK_METHODS;
-  }, [dynamicMethods]);
+    const base = list.length > 0 ? list : FALLBACK_METHODS;
+    if (epsConfig?.enabled) {
+      base.push({
+        id: "eps",
+        name: epsConfig.display_name || "EPS Payment",
+        number: "",
+        color: "bg-sky-600",
+        brand_color: epsConfig.brand_color || "#0ea5e9",
+        logo_url: epsConfig.logo_url || undefined,
+      });
+    }
+    return base;
+  }, [dynamicMethods, epsConfig]);
   const [method, setMethod] = useState<string>("bkash");
   const [copied, setCopied] = useState(false);
   const [couponInput, setCouponInput] = useState(coupon || "");
@@ -149,6 +171,8 @@ function CheckoutPage() {
   }, [methods, method]);
 
   const selectedMethod = methods.find((m) => m.id === method) ?? methods[0];
+  const isEps = method === "eps";
+
   const update = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
   const blur = (k: string) => setTouched((t) => ({ ...t, [k]: true }));
 
@@ -230,8 +254,12 @@ function CheckoutPage() {
           email: form.email,
           phone: form.phone,
           payment_method: fullyByWallet ? "wallet" : method,
-          transaction_id: fullyByWallet ? `WALLET-${Date.now()}` : form.trxId,
-          payment_screenshot_url: screenshotUrl || null,
+          transaction_id: fullyByWallet
+            ? `WALLET-${Date.now()}`
+            : isEps
+              ? `EPS-PENDING-${Date.now()}`
+              : form.trxId,
+          payment_screenshot_url: isEps ? null : (screenshotUrl || null),
           items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
           total: subAfterCoupon,
         })
@@ -281,6 +309,26 @@ function CheckoutPage() {
         });
       } catch {
         /* ignore */
+      }
+      // EPS gateway: redirect the buyer to the hosted payment page.
+      if (isEps) {
+        try {
+          const { redirect_url } = await initiateEps({
+            data: {
+              orderId: newId,
+              amount: subAfterCoupon,
+              customerName: form.name,
+              customerEmail: form.email,
+              customerPhone: form.phone,
+            },
+          });
+          clear();
+          window.location.href = redirect_url;
+          return;
+        } catch (e) {
+          setErr(e instanceof Error ? e.message : "EPS gateway redirect failed");
+          return;
+        }
       }
       clear();
       navigate({ to: "/orders/$id", params: { id: newId }, search: { new: 1 } });
@@ -566,8 +614,41 @@ function CheckoutPage() {
           </div>
         )}
 
-        {/* Brand instruction card */}
-        {!fullyByWallet && (
+        {/* EPS online gateway card */}
+        {!fullyByWallet && isEps && (
+          <div
+            className="mx-5 mt-5 rounded-3xl border p-5 space-y-3"
+            style={{ borderColor: `${epsConfig?.brand_color || "#0ea5e9"}55`, background: `${epsConfig?.brand_color || "#0ea5e9"}0d` }}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-10 h-10 rounded-xl grid place-items-center text-white shrink-0"
+                style={{ background: epsConfig?.brand_color || "#0ea5e9" }}
+              >
+                {epsConfig?.logo_url ? (
+                  <img src={epsConfig.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                ) : (
+                  <Zap className="w-5 h-5" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <div className="text-[13px] font-bold text-foreground">{epsConfig?.display_name || "EPS Payment"} — অনলাইন গেটওয়ে</div>
+                <div className="text-[11px] text-muted-foreground">
+                  bKash / Nagad / Rocket / কার্ড — এক ক্লিকে নিরাপদ পেমেন্ট
+                  {epsConfig?.mode === "sandbox" && <span className="ml-1 text-amber-600 font-semibold">(Sandbox / Test)</span>}
+                </div>
+              </div>
+            </div>
+            <ul className="text-[12px] text-foreground/85 space-y-1.5 pl-1">
+              <li>✓ "অর্ডার কনফার্ম করুন" চাপলে সরাসরি EPS পেজে যাবেন</li>
+              <li>✓ সেখানে পেমেন্ট শেষ হলে অটো-ভেরিফাই হয়ে অর্ডার প্রসেসিং শুরু হবে</li>
+              <li>✓ কোনো TrxID বা স্ক্রিনশট দিতে হবে না</li>
+            </ul>
+          </div>
+        )}
+
+        {/* Brand instruction card (manual mobile-banking methods) */}
+        {!fullyByWallet && !isEps && (
           <div className="mx-5 mt-5 rounded-3xl border border-border bg-muted p-5 space-y-4">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5 min-w-0">
@@ -625,7 +706,7 @@ function CheckoutPage() {
           </div>
         )}
 
-        {!fullyByWallet && (
+        {!fullyByWallet && !isEps && (
           <>
             {/* Sender number */}
             <div className="px-5 mt-5">
@@ -722,12 +803,16 @@ function CheckoutPage() {
         <div className="px-5 py-5">
           <button
             onClick={handleSubmit}
-            disabled={busy || (!fullyByWallet && (!!errors.trxId || !form.trxId || !!errors.senderNumber || !form.senderNumber))}
+            disabled={busy || (!fullyByWallet && !isEps && (!!errors.trxId || !form.trxId || !!errors.senderNumber || !form.senderNumber))}
             className="w-full h-12 rounded-full text-primary-foreground text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-lg shadow-primary/25"
-            style={{ background: CTA_GRADIENT }}
+            style={{ background: isEps ? (epsConfig?.brand_color || "#0ea5e9") : CTA_GRADIENT }}
           >
-            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
-            {busy ? "অর্ডার তৈরি হচ্ছে…" : `অর্ডার কনফার্ম করুন  ৳${grandTotal.toLocaleString()}`}
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : isEps ? <Zap className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+            {busy
+              ? (isEps ? "গেটওয়ে-তে পাঠানো হচ্ছে…" : "অর্ডার তৈরি হচ্ছে…")
+              : isEps
+                ? `Pay ৳${grandTotal.toLocaleString()} via ${epsConfig?.display_name || "EPS"}`
+                : `অর্ডার কনফার্ম করুন  ৳${grandTotal.toLocaleString()}`}
           </button>
           <p className="text-[11px] text-muted-foreground text-center mt-3 inline-flex items-center gap-1.5 justify-center w-full">
             <ShieldCheck className="w-3.5 h-3.5" /> নিরাপদ পেমেন্ট — আপনার তথ্য সুরক্ষিত
