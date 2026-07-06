@@ -171,6 +171,8 @@ function CheckoutPage() {
   }, [methods, method]);
 
   const selectedMethod = methods.find((m) => m.id === method) ?? methods[0];
+  const isEps = method === "eps";
+
   const update = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
   const blur = (k: string) => setTouched((t) => ({ ...t, [k]: true }));
 
