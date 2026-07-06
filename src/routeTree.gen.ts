@@ -103,6 +103,7 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicTelegramWebhookRouteImport } from './routes/api/public/telegram/webhook'
 import { Route as ApiPublicSslczSuccessRouteImport } from './routes/api/public/sslcz/success'
 import { Route as ApiPublicSslczIpnRouteImport } from './routes/api/public/sslcz/ipn'
 import { Route as ApiPublicSslczFailRouteImport } from './routes/api/public/sslcz/fail'
@@ -590,6 +591,12 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   path: '/lovable/email/auth/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicTelegramWebhookRoute =
+  ApiPublicTelegramWebhookRouteImport.update({
+    id: '/api/public/telegram/webhook',
+    path: '/api/public/telegram/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicSslczSuccessRoute = ApiPublicSslczSuccessRouteImport.update({
   id: '/api/public/sslcz/success',
   path: '/api/public/sslcz/success',
@@ -729,6 +736,7 @@ export interface FileRoutesByFullPath {
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
   '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
+  '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -832,6 +840,7 @@ export interface FileRoutesByTo {
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
   '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
+  '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -937,6 +946,7 @@ export interface FileRoutesById {
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
   '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
+  '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -1043,6 +1053,7 @@ export interface FileRouteTypes {
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
     | '/api/public/sslcz/success'
+    | '/api/public/telegram/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -1146,6 +1157,7 @@ export interface FileRouteTypes {
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
     | '/api/public/sslcz/success'
+    | '/api/public/telegram/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -1250,6 +1262,7 @@ export interface FileRouteTypes {
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
     | '/api/public/sslcz/success'
+    | '/api/public/telegram/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -1307,6 +1320,7 @@ export interface RootRouteChildren {
   ApiPublicSslczFailRoute: typeof ApiPublicSslczFailRoute
   ApiPublicSslczIpnRoute: typeof ApiPublicSslczIpnRoute
   ApiPublicSslczSuccessRoute: typeof ApiPublicSslczSuccessRoute
+  ApiPublicTelegramWebhookRoute: typeof ApiPublicTelegramWebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -1974,6 +1988,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/telegram/webhook': {
+      id: '/api/public/telegram/webhook'
+      path: '/api/public/telegram/webhook'
+      fullPath: '/api/public/telegram/webhook'
+      preLoaderRoute: typeof ApiPublicTelegramWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/sslcz/success': {
       id: '/api/public/sslcz/success'
       path: '/api/public/sslcz/success'
@@ -2197,6 +2218,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicSslczFailRoute: ApiPublicSslczFailRoute,
   ApiPublicSslczIpnRoute: ApiPublicSslczIpnRoute,
   ApiPublicSslczSuccessRoute: ApiPublicSslczSuccessRoute,
+  ApiPublicTelegramWebhookRoute: ApiPublicTelegramWebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
