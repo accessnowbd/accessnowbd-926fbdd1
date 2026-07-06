@@ -46,15 +46,8 @@ export type EpsStatus = {
   environment: "sandbox" | "live" | "unknown";
 };
 
-async function loadConfig(supabase: {
-  from: (t: string) => {
-    select: (c: string) => {
-      eq: (col: string, v: string) => {
-        maybeSingle: () => Promise<{ data: { data: unknown } | null }>;
-      };
-    };
-  };
-}): Promise<EpsConfig> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function loadConfig(supabase: any): Promise<EpsConfig> {
   const { data } = await supabase
     .from("admin_records")
     .select("data")
@@ -63,7 +56,8 @@ async function loadConfig(supabase: {
   return ((data?.data as EpsConfig) ?? {}) as EpsConfig;
 }
 
-async function assertAdmin(context: { supabase: { rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown }> }; userId: string }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function assertAdmin(context: any) {
   const { data: isAdmin } = await context.supabase.rpc("has_role", {
     _user_id: context.userId,
     _role: "admin",
