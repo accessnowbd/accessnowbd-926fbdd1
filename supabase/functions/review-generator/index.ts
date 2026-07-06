@@ -1,6 +1,7 @@
 // Generates realistic customer reviews for products via Lovable AI Gateway.
 // Returns: { reviews: [{ reviewer_name, rating, comment }] }
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { getAiConfig, featureDisabledResponse } from "../_shared/ai-config.ts";
 
 const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
   /^https:\/\/accessnowbd\.lovable\.app$/,
