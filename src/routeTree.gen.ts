@@ -50,6 +50,7 @@ import { Route as AdminTrackingPixelsRouteImport } from './routes/admin.tracking
 import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
+import { Route as AdminSslczPgwRouteImport } from './routes/admin.sslcz-pgw'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
@@ -305,6 +306,11 @@ const AdminTicketsRoute = AdminTicketsRouteImport.update({
 const AdminThemesRoute = AdminThemesRouteImport.update({
   id: '/themes',
   path: '/themes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSslczPgwRoute = AdminSslczPgwRouteImport.update({
+  id: '/sslcz-pgw',
+  path: '/sslcz-pgw',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
@@ -626,6 +632,7 @@ export interface FileRoutesByFullPath {
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -718,6 +725,7 @@ export interface FileRoutesByTo {
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -812,6 +820,7 @@ export interface FileRoutesById {
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -907,6 +916,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/security'
     | '/admin/settings'
+    | '/admin/sslcz-pgw'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -999,6 +1009,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/security'
     | '/admin/settings'
+    | '/admin/sslcz-pgw'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -1092,6 +1103,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/security'
     | '/admin/settings'
+    | '/admin/sslcz-pgw'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -1460,6 +1472,13 @@ declare module '@tanstack/react-router' {
       path: '/themes'
       fullPath: '/admin/themes'
       preLoaderRoute: typeof AdminThemesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/sslcz-pgw': {
+      id: '/admin/sslcz-pgw'
+      path: '/sslcz-pgw'
+      fullPath: '/admin/sslcz-pgw'
+      preLoaderRoute: typeof AdminSslczPgwRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/settings': {
@@ -1850,6 +1869,7 @@ interface AdminRouteChildren {
   AdminReviewsRoute: typeof AdminReviewsRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSslczPgwRoute: typeof AdminSslczPgwRoute
   AdminThemesRoute: typeof AdminThemesRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminTrackingRoute: typeof AdminTrackingRoute
@@ -1895,6 +1915,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReviewsRoute: AdminReviewsRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminSslczPgwRoute: AdminSslczPgwRoute,
   AdminThemesRoute: AdminThemesRoute,
   AdminTicketsRoute: AdminTicketsRoute,
   AdminTrackingRoute: AdminTrackingRoute,

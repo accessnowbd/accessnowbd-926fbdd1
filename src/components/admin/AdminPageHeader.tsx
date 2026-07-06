@@ -22,6 +22,7 @@ const DESCRIPTIONS: Record<string, Desc> = {
   "/admin/payments": { en: "Manage payment methods and transactions", bn: "পেমেন্ট মেথড ও লেনদেন ম্যানেজ করুন" },
   "/admin/bkash-pgw": { en: "bKash payment gateway configuration", bn: "bKash পেমেন্ট গেটওয়ে কনফিগ" },
   "/admin/eps-pgw": { en: "EPS payment gateway configuration", bn: "EPS পেমেন্ট গেটওয়ে কনফিগ" },
+  "/admin/sslcz-pgw": { en: "SSLCommerz payment gateway configuration", bn: "SSLCommerz পেমেন্ট গেটওয়ে কনফিগ" },
   "/admin/bkash-transactions": { en: "All bKash transactions in one place", bn: "সব bKash লেনদেন এক জায়গায়" },
   "/admin/license-manager": { en: "Manage product licenses and keys", bn: "প্রোডাক্ট লাইসেন্স ও কী ম্যানেজ করুন" },
   "/admin/customer-licenses": { en: "Licenses assigned to each customer", bn: "প্রতিটি কাস্টমারের লাইসেন্স দেখুন" },
