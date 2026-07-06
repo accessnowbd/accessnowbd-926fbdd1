@@ -731,7 +731,7 @@ function CheckoutPage() {
           </div>
         )}
 
-        {!fullyByWallet && !isEps && (
+        {!fullyByWallet && !isHostedGateway && (
           <>
             {/* Sender number */}
             <div className="px-5 mt-5">
@@ -828,15 +828,15 @@ function CheckoutPage() {
         <div className="px-5 py-5">
           <button
             onClick={handleSubmit}
-            disabled={busy || (!fullyByWallet && !isEps && (!!errors.trxId || !form.trxId || !!errors.senderNumber || !form.senderNumber))}
+            disabled={busy || (!fullyByWallet && !isHostedGateway && (!!errors.trxId || !form.trxId || !!errors.senderNumber || !form.senderNumber))}
             className="w-full h-12 rounded-full text-primary-foreground text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-lg shadow-primary/25"
-            style={{ background: isEps ? (epsConfig?.brand_color || "#0ea5e9") : CTA_GRADIENT }}
+            style={{ background: isHostedGateway ? (hostedGatewayConfig?.brand_color || "#0ea5e9") : CTA_GRADIENT }}
           >
-            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : isEps ? <Zap className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : isHostedGateway ? <Zap className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
             {busy
-              ? (isEps ? "গেটওয়ে-তে পাঠানো হচ্ছে…" : "অর্ডার তৈরি হচ্ছে…")
-              : isEps
-                ? `Pay ৳${grandTotal.toLocaleString()} via ${epsConfig?.display_name || "EPS"}`
+              ? (isHostedGateway ? "গেটওয়ে-তে পাঠানো হচ্ছে…" : "অর্ডার তৈরি হচ্ছে…")
+              : isHostedGateway
+                ? `Pay ৳${grandTotal.toLocaleString()} via ${hostedGatewayConfig?.display_name || (isSslcz ? "SSLCommerz" : "EPS")}`
                 : `অর্ডার কনফার্ম করুন  ৳${grandTotal.toLocaleString()}`}
           </button>
           <p className="text-[11px] text-muted-foreground text-center mt-3 inline-flex items-center gap-1.5 justify-center w-full">
