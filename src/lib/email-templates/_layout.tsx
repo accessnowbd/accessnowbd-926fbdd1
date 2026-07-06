@@ -125,9 +125,29 @@ export const styles = {
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }
 const container = { maxWidth: '560px', margin: '0 auto', padding: '24px 20px' }
 const header = { padding: '0 0 20px', textAlign: 'center' as const }
+const headerBand = {
+  padding: '22px 20px',
+  marginBottom: '18px',
+  borderRadius: '14px',
+  background: 'linear-gradient(135deg, #f5f8ff 0%, #ecfdf5 50%, #fff8ec 100%)',
+  border: '1px solid #e6ecff',
+  textAlign: 'center' as const,
+}
 const brandLink = {
   textDecoration: 'none',
   display: 'inline-block',
+}
+const brandTable = { margin: '0 auto', borderCollapse: 'collapse' as const }
+const badgeCell = { verticalAlign: 'middle' as const, paddingRight: '12px' }
+const wordCell = { verticalAlign: 'middle' as const, textAlign: 'left' as const }
+const badgeImg = {
+  display: 'block',
+  width: '44px',
+  height: '44px',
+  borderRadius: '999px',
+  border: '2px solid #ffffff',
+  boxShadow: '0 4px 14px rgba(15,23,42,0.18)',
+  backgroundColor: '#ffffff',
 }
 const brandRow = {
   display: 'inline-block',
