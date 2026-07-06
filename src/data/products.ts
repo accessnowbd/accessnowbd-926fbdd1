@@ -1,6 +1,6 @@
-export type Plan = { period: string; price: string; original?: string; popular?: boolean };
+export type Plan = { period: string; price: string; original?: string; popular?: boolean; account_type?: string };
 
-export type AccountType = "none" | "personal" | "shared" | "family" | "student" | "business";
+export type AccountType = "none" | "personal" | "shared" | "family" | "student" | "business" | "custom";
 
 export type ProductMeta = {
   seo_title?: string;

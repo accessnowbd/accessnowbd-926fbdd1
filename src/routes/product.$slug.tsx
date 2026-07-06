@@ -162,15 +162,32 @@ function ProductPage() {
   const navigate = useNavigate();
   const { add } = useCart();
   useShopConfig();
-  const popularIdx = (loaderProduct?.plans ?? product?.plans ?? []).findIndex((p: { popular?: boolean }) => p.popular);
+  const allPlans = (loaderProduct?.plans ?? product?.plans ?? []) as Array<{ popular?: boolean; account_type?: string }>;
+  const availableAccountTypes = (product?.meta?.account_types
+    ?? (product?.meta?.account_type && product.meta.account_type !== "none" ? [product.meta.account_type] : [])
+    ) as string[];
+  const [selectedAccountType, setSelectedAccountType] = useState<string>(() => {
+    if (availableAccountTypes.length === 0) return "";
+    // pick the first account type that has at least one plan (or fallback to first)
+    const withPlan = availableAccountTypes.find((t) => allPlans.some((p) => p.account_type === t));
+    return withPlan ?? availableAccountTypes[0] ?? "";
+  });
+  const filteredPlans = (product?.plans ?? []).filter((p) => {
+    if (!selectedAccountType) return true;
+    // plans without account_type are "All" — shown for every type
+    return !p.account_type || p.account_type === selectedAccountType;
+  });
+  const popularIdx = filteredPlans.findIndex((p: { popular?: boolean }) => p.popular);
   const [selected, setSelected] = useState(() => (popularIdx > 0 ? popularIdx : 0));
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const zoomCfg = useProductZoomConfig();
   const [zoomOn, setZoomOn] = useState(false);
-  const activeIdx = product ? Math.min(selected, Math.max(product.plans.length - 1, 0)) : 0;
-  const plan = product?.plans[activeIdx];
+  // reset selected plan when account type changes
+  useEffect(() => { setSelected(0); }, [selectedAccountType]);
+  const activeIdx = Math.min(selected, Math.max(filteredPlans.length - 1, 0));
+  const plan = filteredPlans[activeIdx];
 
   useEffect(() => {
     if (product?.slug) {
@@ -432,24 +449,38 @@ function ProductPage() {
                 family:   { label: "Family",    icon: "👪", grad: "from-amber-500 to-orange-500" },
                 student:  { label: "Student",   icon: "🎓", grad: "from-emerald-500 to-teal-600" },
                 business: { label: "Business",  icon: "🛍️", grad: "from-fuchsia-500 to-pink-600" },
+                custom:   { label: "Custom",    icon: "⚙️", grad: "from-slate-600 to-slate-800" },
               };
-              const raw = product.meta?.account_types
-                ?? (product.meta?.account_type && product.meta.account_type !== "none" ? [product.meta.account_type] : []);
-              const types = (raw ?? []).filter((t) => t && t !== "none" && ACCOUNT_LABELS[t]);
+              const types = availableAccountTypes.filter((t) => t && t !== "none" && ACCOUNT_LABELS[t]);
               if (types.length === 0) return null;
+              const selectable = types.length > 1;
               return (
                 <div className="mt-4 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/60 p-3">
                   <div className="text-[11px] font-bold text-violet-700 uppercase tracking-widest mb-2 inline-flex items-center gap-1.5">
-                    <span>👤</span> Account Type
+                    <span>👤</span> Account Type {selectable && <span className="text-slate-500 font-semibold normal-case tracking-normal">— একটি সিলেক্ট করুন</span>}
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {types.map((t) => {
                       const m = ACCOUNT_LABELS[t];
-                      return (
-                        <span
+                      const active = selectedAccountType === t || !selectable;
+                      const clickable = selectable;
+                      const base = `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold shadow-sm transition`;
+                      const cls = active
+                        ? `${base} text-white bg-gradient-to-r ${m.grad}`
+                        : `${base} bg-white text-slate-700 border border-slate-200 hover:border-violet-300`;
+                      return clickable ? (
+                        <button
                           key={t}
-                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold text-white shadow-sm bg-gradient-to-r ${m.grad}`}
+                          type="button"
+                          onClick={() => setSelectedAccountType(t)}
+                          aria-pressed={active}
+                          className={cls}
                         >
+                          <span className="text-sm leading-none">{m.icon}</span>
+                          {m.label}
+                        </button>
+                      ) : (
+                        <span key={t} className={cls}>
                           <span className="text-sm leading-none">{m.icon}</span>
                           {m.label}
                         </span>
@@ -493,11 +524,11 @@ function ProductPage() {
           </header>
 
           {/* Plans */}
-          {product.plans.length > 0 && (
+          {filteredPlans.length > 0 && (
             <div className="mt-6 space-y-3">
               <label className="text-xs font-bold text-slate-900 uppercase tracking-widest">মেয়াদ ও মূল্য পরিকল্পনা</label>
               <div role="radiogroup" aria-label="Plan" className="space-y-2">
-                {product.plans.map((p, idx) => {
+                {filteredPlans.map((p, idx) => {
                   const active = activeIdx === idx;
                   const price = parsePrice(p.price);
                   const original = p.original ? parsePrice(p.original) : 0;
