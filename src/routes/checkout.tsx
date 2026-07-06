@@ -254,8 +254,12 @@ function CheckoutPage() {
           email: form.email,
           phone: form.phone,
           payment_method: fullyByWallet ? "wallet" : method,
-          transaction_id: fullyByWallet ? `WALLET-${Date.now()}` : form.trxId,
-          payment_screenshot_url: screenshotUrl || null,
+          transaction_id: fullyByWallet
+            ? `WALLET-${Date.now()}`
+            : isEps
+              ? `EPS-PENDING-${Date.now()}`
+              : form.trxId,
+          payment_screenshot_url: isEps ? null : (screenshotUrl || null),
           items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
           total: subAfterCoupon,
         })
