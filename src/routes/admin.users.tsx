@@ -13,6 +13,7 @@ export const Route = createFileRoute("/admin/users")({
 type Row = {
  id: string;
  display_name: string | null;
+ email: string | null;
  phone: string | null;
  created_at: string;
  is_admin: boolean;
