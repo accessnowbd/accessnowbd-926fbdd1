@@ -45,6 +45,7 @@ import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/blog.how-to-buy-netflix-in-bangladesh'
 import { Route as ApiAiTestRouteImport } from './routes/api/ai-test'
+import { Route as ApiAiCommandRouteImport } from './routes/api/ai-command'
 import { Route as AdminWelcomeBannerRouteImport } from './routes/admin.welcome-banner'
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -86,6 +87,7 @@ import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminBulkUpdateRouteImport } from './routes/admin.bulk-update'
 import { Route as AdminBkashTransactionsRouteImport } from './routes/admin.bkash-transactions'
 import { Route as AdminBackupRouteImport } from './routes/admin.backup'
+import { Route as AdminAiCommandRouteImport } from './routes/admin.ai-command'
 import { Route as AdminAffiliatesRouteImport } from './routes/admin.affiliates'
 import { Route as AdminAbandonedCheckoutRouteImport } from './routes/admin.abandoned-checkout'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
@@ -288,6 +290,11 @@ const BlogHowToBuyNetflixInBangladeshRoute =
 const ApiAiTestRoute = ApiAiTestRouteImport.update({
   id: '/api/ai-test',
   path: '/api/ai-test',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiCommandRoute = ApiAiCommandRouteImport.update({
+  id: '/api/ai-command',
+  path: '/api/ai-command',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminWelcomeBannerRoute = AdminWelcomeBannerRouteImport.update({
@@ -496,6 +503,11 @@ const AdminBackupRoute = AdminBackupRouteImport.update({
   path: '/backup',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAiCommandRoute = AdminAiCommandRouteImport.update({
+  id: '/ai-command',
+  path: '/ai-command',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAffiliatesRoute = AdminAffiliatesRouteImport.update({
   id: '/affiliates',
   path: '/affiliates',
@@ -649,6 +661,7 @@ export interface FileRoutesByFullPath {
   '/admin/$page': typeof AdminPageRoute
   '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
   '/admin/affiliates': typeof AdminAffiliatesRoute
+  '/admin/ai-command': typeof AdminAiCommandRoute
   '/admin/backup': typeof AdminBackupRoute
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
@@ -690,6 +703,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
+  '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -749,6 +763,7 @@ export interface FileRoutesByTo {
   '/admin/$page': typeof AdminPageRoute
   '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
   '/admin/affiliates': typeof AdminAffiliatesRoute
+  '/admin/ai-command': typeof AdminAiCommandRoute
   '/admin/backup': typeof AdminBackupRoute
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
@@ -790,6 +805,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
+  '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -851,6 +867,7 @@ export interface FileRoutesById {
   '/admin/$page': typeof AdminPageRoute
   '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
   '/admin/affiliates': typeof AdminAffiliatesRoute
+  '/admin/ai-command': typeof AdminAiCommandRoute
   '/admin/backup': typeof AdminBackupRoute
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
@@ -892,6 +909,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
+  '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -954,6 +972,7 @@ export interface FileRouteTypes {
     | '/admin/$page'
     | '/admin/abandoned-checkout'
     | '/admin/affiliates'
+    | '/admin/ai-command'
     | '/admin/backup'
     | '/admin/bkash-transactions'
     | '/admin/bulk-update'
@@ -995,6 +1014,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
+    | '/api/ai-command'
     | '/api/ai-test'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
@@ -1054,6 +1074,7 @@ export interface FileRouteTypes {
     | '/admin/$page'
     | '/admin/abandoned-checkout'
     | '/admin/affiliates'
+    | '/admin/ai-command'
     | '/admin/backup'
     | '/admin/bkash-transactions'
     | '/admin/bulk-update'
@@ -1095,6 +1116,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
+    | '/api/ai-command'
     | '/api/ai-test'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
@@ -1155,6 +1177,7 @@ export interface FileRouteTypes {
     | '/admin/$page'
     | '/admin/abandoned-checkout'
     | '/admin/affiliates'
+    | '/admin/ai-command'
     | '/admin/backup'
     | '/admin/bkash-transactions'
     | '/admin/bulk-update'
@@ -1196,6 +1219,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
+    | '/api/ai-command'
     | '/api/ai-test'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
@@ -1254,6 +1278,7 @@ export interface RootRouteChildren {
   WalletRoute: typeof WalletRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  ApiAiCommandRoute: typeof ApiAiCommandRoute
   ApiAiTestRoute: typeof ApiAiTestRoute
   BlogHowToBuyNetflixInBangladeshRoute: typeof BlogHowToBuyNetflixInBangladeshRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
@@ -1529,6 +1554,13 @@ declare module '@tanstack/react-router' {
       path: '/api/ai-test'
       fullPath: '/api/ai-test'
       preLoaderRoute: typeof ApiAiTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-command': {
+      id: '/api/ai-command'
+      path: '/api/ai-command'
+      fullPath: '/api/ai-command'
+      preLoaderRoute: typeof ApiAiCommandRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/welcome-banner': {
@@ -1818,6 +1850,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBackupRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/ai-command': {
+      id: '/admin/ai-command'
+      path: '/ai-command'
+      fullPath: '/admin/ai-command'
+      preLoaderRoute: typeof AdminAiCommandRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/affiliates': {
       id: '/admin/affiliates'
       path: '/affiliates'
@@ -1979,6 +2018,7 @@ interface AdminRouteChildren {
   AdminPageRoute: typeof AdminPageRoute
   AdminAbandonedCheckoutRoute: typeof AdminAbandonedCheckoutRoute
   AdminAffiliatesRoute: typeof AdminAffiliatesRoute
+  AdminAiCommandRoute: typeof AdminAiCommandRoute
   AdminBackupRoute: typeof AdminBackupRoute
   AdminBkashTransactionsRoute: typeof AdminBkashTransactionsRoute
   AdminBulkUpdateRoute: typeof AdminBulkUpdateRoute
@@ -2027,6 +2067,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPageRoute: AdminPageRoute,
   AdminAbandonedCheckoutRoute: AdminAbandonedCheckoutRoute,
   AdminAffiliatesRoute: AdminAffiliatesRoute,
+  AdminAiCommandRoute: AdminAiCommandRoute,
   AdminBackupRoute: AdminBackupRoute,
   AdminBkashTransactionsRoute: AdminBkashTransactionsRoute,
   AdminBulkUpdateRoute: AdminBulkUpdateRoute,
@@ -2118,6 +2159,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  ApiAiCommandRoute: ApiAiCommandRoute,
   ApiAiTestRoute: ApiAiTestRoute,
   BlogHowToBuyNetflixInBangladeshRoute: BlogHowToBuyNetflixInBangladeshRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
