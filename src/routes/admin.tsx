@@ -184,9 +184,10 @@ function AdminLayout() {
     return () => { cancelled = true; };
   }, [user, loading, verifyRole]);
 
-  // Optimistic render: if we have a cached admin flag, skip all blocking
-  // spinners and render the shell immediately. Background verification still
-  // runs and will redirect/deny if the cached flag is stale.
+  // Optimistic render: as soon as we know the user is signed in, render the
+  // admin shell immediately without waiting for the has_role RPC round-trip.
+  // Background verification still runs and flips to the "Access denied" view
+  // if the role check fails.
   if (loading && !cachedAdmin) {
     return <AdminBlankState />;
   }
@@ -195,9 +196,7 @@ function AdminLayout() {
     return <AuthPageEntry initialMode="login" />;
   }
 
-  if (!verified && !cachedAdmin) {
-    return <AdminBlankState />;
-  }
+
 
 
   if (!isAdmin && verified) {
