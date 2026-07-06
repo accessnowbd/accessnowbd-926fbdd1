@@ -25,30 +25,53 @@ export function buildReceiptDoc(order: ReceiptOrder) {
   let y = margin;
 
 
-  // Header bar
-  doc.setFillColor(99, 102, 241); // violet
-  doc.rect(0, 0, pageW, 90, "F");
-  doc.setTextColor(255, 255, 255);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(22);
-  doc.text("AccessNow BD", margin, 42);
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(11);
-  doc.text("Payment Receipt", margin, 64);
+  // Header bar — subtle white with brand wordmark (matches on-site logo)
+  doc.setFillColor(248, 250, 253);
+  doc.rect(0, 0, pageW, 110, "F");
+  // Thin gradient underline via three colored rects
+  const bandY = 100;
+  doc.setFillColor(47, 109, 255); doc.rect(0, bandY, pageW / 3, 3, "F");
+  doc.setFillColor(31, 199, 150); doc.rect(pageW / 3, bandY, pageW / 3, 3, "F");
+  doc.setFillColor(245, 158, 11); doc.rect((pageW * 2) / 3, bandY, pageW / 3, 3, "F");
 
-  doc.setFontSize(10);
+  // Wordmark: Access (blue) · Now (green) · BD (gold)
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(26);
+  let bx = margin;
+  const brandY = 48;
+  doc.setTextColor(29, 78, 216); doc.text("Access", bx, brandY);
+  bx += doc.getTextWidth("Access") + 6;
+  doc.setTextColor(31, 199, 150); doc.text("Now", bx, brandY);
+  bx += doc.getTextWidth("Now") + 6;
+  doc.setTextColor(245, 158, 11); doc.text("BD", bx, brandY);
+
+  // FAST • SECURE • RELIABLE tagline
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(100, 116, 139);
+  doc.text("FAST   •   SECURE   •   RELIABLE", margin, brandY + 18, { charSpace: 2 });
+
+  // Right column — receipt meta
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(15, 27, 61);
+  doc.text("Payment Receipt", pageW - margin, 42, { align: "right" });
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(100, 116, 139);
   doc.text(
     `Date: ${new Date(order.created_at).toLocaleString()}`,
     pageW - margin,
-    42,
+    60,
     { align: "right" },
   );
   doc.text(
     `Receipt #${order.id.slice(0, 8).toUpperCase()}`,
     pageW - margin,
-    64,
+    74,
     { align: "right" },
   );
+
 
   y = 130;
   doc.setTextColor(20, 20, 30);
