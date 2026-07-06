@@ -95,6 +95,7 @@ import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/em
 import { Route as ApiPublicEpsSuccessRouteImport } from './routes/api/public/eps/success'
 import { Route as ApiPublicEpsIpnRouteImport } from './routes/api/public/eps/ipn'
 import { Route as ApiPublicEpsFailRouteImport } from './routes/api/public/eps/fail'
+import { Route as ApiPublicEpsCancelRouteImport } from './routes/api/public/eps/cancel'
 
 const WalletRoute = WalletRouteImport.update({
   id: '/wallet',
@@ -531,6 +532,11 @@ const ApiPublicEpsFailRoute = ApiPublicEpsFailRouteImport.update({
   path: '/api/public/eps/fail',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicEpsCancelRoute = ApiPublicEpsCancelRouteImport.update({
+  id: '/api/public/eps/cancel',
+  path: '/api/public/eps/cancel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -611,6 +617,7 @@ export interface FileRoutesByFullPath {
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/eps/cancel': typeof ApiPublicEpsCancelRoute
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
@@ -698,6 +705,7 @@ export interface FileRoutesByTo {
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/eps/cancel': typeof ApiPublicEpsCancelRoute
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
@@ -787,6 +795,7 @@ export interface FileRoutesById {
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/eps/cancel': typeof ApiPublicEpsCancelRoute
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
@@ -877,6 +886,7 @@ export interface FileRouteTypes {
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/api/public/eps/cancel'
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
@@ -964,6 +974,7 @@ export interface FileRouteTypes {
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/api/public/eps/cancel'
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
@@ -1052,6 +1063,7 @@ export interface FileRouteTypes {
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/api/public/eps/cancel'
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
@@ -1098,6 +1110,7 @@ export interface RootRouteChildren {
   ApiPublicClientErrorsRoute: typeof ApiPublicClientErrorsRoute
   ApiPublicProductsRoute: typeof ApiPublicProductsRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
+  ApiPublicEpsCancelRoute: typeof ApiPublicEpsCancelRoute
   ApiPublicEpsFailRoute: typeof ApiPublicEpsFailRoute
   ApiPublicEpsIpnRoute: typeof ApiPublicEpsIpnRoute
   ApiPublicEpsSuccessRoute: typeof ApiPublicEpsSuccessRoute
@@ -1712,6 +1725,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicEpsFailRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/eps/cancel': {
+      id: '/api/public/eps/cancel'
+      path: '/api/public/eps/cancel'
+      fullPath: '/api/public/eps/cancel'
+      preLoaderRoute: typeof ApiPublicEpsCancelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1854,6 +1874,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicClientErrorsRoute: ApiPublicClientErrorsRoute,
   ApiPublicProductsRoute: ApiPublicProductsRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
+  ApiPublicEpsCancelRoute: ApiPublicEpsCancelRoute,
   ApiPublicEpsFailRoute: ApiPublicEpsFailRoute,
   ApiPublicEpsIpnRoute: ApiPublicEpsIpnRoute,
   ApiPublicEpsSuccessRoute: ApiPublicEpsSuccessRoute,
