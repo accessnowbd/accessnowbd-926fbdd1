@@ -16,6 +16,7 @@ import {
 const SITE = 'AccessNow BD'
 const SITE_URL = 'https://accessnowbd.com'
 const SUPPORT_EMAIL = 'support@accessnowbd.com'
+const LOGO_URL = 'https://accessnowbd.com/__l5e/assets-v1/c8e63989-cdae-46c6-a0e6-0ceb17d6c9f3/accessnowbd-logo.webp'
 
 interface LayoutProps {
   preview: string
