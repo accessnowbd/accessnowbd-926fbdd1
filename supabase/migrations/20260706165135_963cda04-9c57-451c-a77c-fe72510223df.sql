@@ -1,0 +1,3 @@
+ALTER TABLE public.products
+  ADD COLUMN IF NOT EXISTS stock integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS low_stock_threshold integer NOT NULL DEFAULT 5;

@@ -959,6 +959,7 @@ export type Database = {
           image_url: string
           is_active: boolean
           is_digital: boolean
+          low_stock_threshold: number
           meta: Json
           name: string
           og_image: string
@@ -972,6 +973,7 @@ export type Database = {
           slug: string
           sort_order: number
           status: Database["public"]["Enums"]["product_status"]
+          stock: number
           stock_status: string
           tagline: string
           updated_at: string
@@ -995,6 +997,7 @@ export type Database = {
           image_url?: string
           is_active?: boolean
           is_digital?: boolean
+          low_stock_threshold?: number
           meta?: Json
           name: string
           og_image?: string
@@ -1008,6 +1011,7 @@ export type Database = {
           slug: string
           sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
+          stock?: number
           stock_status?: string
           tagline?: string
           updated_at?: string
@@ -1031,6 +1035,7 @@ export type Database = {
           image_url?: string
           is_active?: boolean
           is_digital?: boolean
+          low_stock_threshold?: number
           meta?: Json
           name?: string
           og_image?: string
@@ -1044,6 +1049,7 @@ export type Database = {
           slug?: string
           sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
+          stock?: number
           stock_status?: string
           tagline?: string
           updated_at?: string
