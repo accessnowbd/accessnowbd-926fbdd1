@@ -137,36 +137,63 @@ export function CategoryPage({
   return (
     <div className="min-h-screen">
       {/* Cinematic header band */}
-      <section className="relative glass-strong overflow-hidden">
-        <div className="pointer-events-none absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-primary/35 blur-[140px]" />
-        <div className="pointer-events-none absolute -bottom-24 -right-24 w-[420px] h-[420px] rounded-full bg-[var(--color-aqua)]/35 blur-[140px]" />
-        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 py-10 md:py-12">
-          <div className="inline-block max-w-full">
+      <section className="relative overflow-hidden bg-[#020617]">
+        {/* Aurora blobs */}
+        <div className="pointer-events-none absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full bg-emerald-500/25 blur-[140px]" />
+        <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] h-[460px] rounded-full bg-violet-600/20 blur-[120px]" />
+        <div className="pointer-events-none absolute -bottom-32 -right-32 w-[520px] h-[520px] rounded-full bg-teal-500/25 blur-[140px]" />
+        {/* Subtle top/bottom hairlines */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+        <div className="relative mx-auto max-w-[1440px] px-4 md:px-10 py-16 md:py-24">
+          <div className="flex flex-col items-center text-center">
+            {/* Count badge */}
+            <div
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.15)] backdrop-blur-md"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              </span>
+              {(q.trim() ? items.length : totalCount)}টি প্রোডাক্ট পাওয়া গেছে
+            </div>
+
+            {/* Title */}
             <h1
-              className="text-aurora drop-shadow-[0_2px_18px_rgba(124,92,255,0.35)] break-words [hyphens:auto]"
+              className="mb-4 bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent break-words [hyphens:auto] drop-shadow-[0_2px_24px_rgba(16,185,129,0.25)]"
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(22px, 5vw, 44px)",
+                fontSize: "clamp(30px, 6vw, 64px)",
                 fontWeight: 800,
-                letterSpacing: 0,
-                lineHeight: 1.1,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.05,
               }}
             >
               {title}
             </h1>
+
+            {/* Subtitle */}
+            <p className="mb-10 max-w-2xl text-base md:text-lg leading-relaxed text-slate-300/90">
+              {subtitle}
+            </p>
+
+            {/* Premium search */}
+            <div className="relative w-full max-w-2xl group">
+              <div className="pointer-events-none absolute -inset-1 rounded-2xl bg-gradient-to-r from-emerald-500/20 via-teal-500/10 to-violet-500/20 opacity-40 blur-xl transition-opacity duration-500 group-focus-within:opacity-100" />
+              <div className="relative rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-colors duration-300 focus-within:border-emerald-400/50">
+                <SearchBar
+                  value={q}
+                  onChange={updateSearch}
+                  onSubmit={updateSearch}
+                  placeholder="সার্চ করুন আপনার পছন্দের প্রোডাক্ট..."
+                  size="lg"
+                  className="!bg-transparent"
+                />
+              </div>
+            </div>
           </div>
-          <p className="mt-2 text-foreground/70 max-w-2xl font-medium">
-            {(q.trim() ? items.length : totalCount)}টি প্রোডাক্ট পাওয়া গেছে
-          </p>
-          <p className="mt-1 text-foreground/60 text-sm max-w-2xl">{subtitle}</p>
-          <SearchBar
-            value={q}
-            onChange={updateSearch}
-            onSubmit={updateSearch}
-            placeholder="প্রোডাক্ট সার্চ করুন..."
-            size="lg"
-            className="mt-5 max-w-xl"
-          />
         </div>
       </section>
 
