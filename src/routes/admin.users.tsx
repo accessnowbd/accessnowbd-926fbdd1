@@ -99,28 +99,36 @@ function AdminUsers() {
  <div className="overflow-x-auto">
  <table className="w-full text-sm">
  <thead className="bg-slate-50/80 text-[11px] uppercase tracking-wider text-slate-500">
- <tr>
- <th className="text-left px-4 py-3">User</th>
- <th className="text-left px-4 py-3">Phone</th>
- <th className="text-left px-4 py-3">Joined</th>
- <th className="text-left px-4 py-3">Role</th>
- <th className="text-right px-4 py-3">Action</th>
- </tr>
- </thead>
- <tbody className="divide-y divide-slate-100">
- {filtered.map((r) => (
- <tr key={r.id} className="hover:bg-white/60">
- <td className="px-4 py-3">
- <div className="flex items-center gap-2.5">
- <div className="w-8 h-8 rounded-full bg-slate-100 ring-1 ring-slate-200 grid place-items-center text-xs font-bold text-slate-600">
- {(r.display_name || "U").slice(0, 1).toUpperCase()}
- </div>
- <div>
- <div className="font-semibold text-slate-900">{r.display_name || <span className="text-slate-500">Unnamed</span>}</div>
- <div className="text-[10px] text-slate-500 font-mono">{r.id.slice(0, 8)}…</div>
- </div>
- </div>
- </td>
+  <tr>
+  <th className="text-left px-4 py-3">User</th>
+  <th className="text-left px-4 py-3">Email</th>
+  <th className="text-left px-4 py-3">Phone</th>
+  <th className="text-left px-4 py-3">Joined</th>
+  <th className="text-left px-4 py-3">Role</th>
+  <th className="text-right px-4 py-3">Action</th>
+  </tr>
+  </thead>
+  <tbody className="divide-y divide-slate-100">
+  {filtered.map((r) => (
+  <tr key={r.id} className="hover:bg-white/60">
+  <td className="px-4 py-3">
+  <div className="flex items-center gap-2.5">
+  <div className="w-8 h-8 rounded-full bg-slate-100 ring-1 ring-slate-200 grid place-items-center text-xs font-bold text-slate-600">
+  {(r.display_name || r.email || "U").slice(0, 1).toUpperCase()}
+  </div>
+  <div>
+  <div className="font-semibold text-slate-900">{r.display_name || <span className="text-slate-500">Unnamed</span>}</div>
+  <div className="text-[10px] text-slate-500 font-mono">{r.id.slice(0, 8)}…</div>
+  </div>
+  </div>
+  </td>
+  <td className="px-4 py-3 text-slate-700">
+   {r.email ? (
+    <a href={`mailto:${r.email}`} className="hover:text-indigo-600 hover:underline break-all">{r.email}</a>
+   ) : (
+    <span className="text-slate-400">—</span>
+   )}
+  </td>
  <td className="px-4 py-3 text-slate-700">{r.phone || "—"}</td>
  <td className="px-4 py-3 text-slate-500">{new Date(r.created_at).toLocaleDateString()}</td>
  <td className="px-4 py-3">
