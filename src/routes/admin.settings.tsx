@@ -472,3 +472,209 @@ function KeyList({ keys, onChange, placeholder, hint, link }: {
     </div>
   );
 }
+
+/* =====================================================
+   AI System Panel — live status, model, feature toggles, test call
+   ===================================================== */
+function AiSystemPanel({
+  model,
+  features,
+  onModel,
+  onFeatures,
+}: {
+  model: string;
+  features: Partial<Record<AiFeatureKey, boolean>>;
+  onModel: (m: string) => void;
+  onFeatures: (f: Partial<Record<AiFeatureKey, boolean>>) => void;
+}) {
+  const [status, setStatus] = useState<"idle" | "checking" | "ok" | "fail">("idle");
+  const [testing, setTesting] = useState(false);
+  const [testReply, setTestReply] = useState<string>("");
+  const [testError, setTestError] = useState<string>("");
+  const [ping, setPing] = useState<number | null>(null);
+
+  const checkStatus = useCallback(async () => {
+    setStatus("checking");
+    try {
+      const res = await fetch("/api/ai-test", { method: "GET" });
+      const j = await res.json();
+      setStatus(j.ok ? "ok" : "fail");
+    } catch {
+      setStatus("fail");
+    }
+  }, []);
+
+  useEffect(() => { checkStatus(); }, [checkStatus]);
+
+  const runTest = async () => {
+    setTesting(true);
+    setTestReply("");
+    setTestError("");
+    setPing(null);
+    const started = performance.now();
+    try {
+      const res = await fetch("/api/ai-test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model, prompt: "In one short sentence, say hello from AccessNow BD." }),
+      });
+      const j = await res.json();
+      setPing(Math.round(performance.now() - started));
+      if (!res.ok || !j.ok) {
+        setTestError(j.error || `HTTP ${res.status}`);
+      } else {
+        setTestReply(j.text ?? "");
+      }
+    } catch (e: any) {
+      setTestError(e?.message || "Network error");
+    } finally {
+      setTesting(false);
+    }
+  };
+
+  const toggle = (k: AiFeatureKey) => onFeatures({ ...features, [k]: !(features[k] ?? true) });
+
+  return (
+    <div className="space-y-5">
+      {/* Status row */}
+      <div className="flex items-center gap-3 flex-wrap">
+        <span
+          className="inline-flex items-center gap-2 px-3 h-8 rounded-full text-[12px] font-bold ring-1"
+          style={
+            status === "ok"
+              ? { background: "#ecfdf5", color: "#047857", borderColor: "#a7f3d0" as any }
+              : status === "fail"
+                ? { background: "#fef2f2", color: "#b91c1c", borderColor: "#fecaca" as any }
+                : { background: "#f1f5f9", color: "#334155", borderColor: "#e2e8f0" as any }
+          }
+        >
+          {status === "checking" ? (
+            <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Checking…</>
+          ) : status === "ok" ? (
+            <><Check className="w-3.5 h-3.5" /> Lovable AI Active</>
+          ) : (
+            <><X className="w-3.5 h-3.5" /> Not reachable</>
+          )}
+        </span>
+        <span className="text-[11px]" style={{ color: "var(--admin-muted)" }}>
+          Provider: <b>Lovable AI Gateway</b> — no user key needed. Managed by Cloud.
+        </span>
+        <button
+          type="button"
+          onClick={checkStatus}
+          className="ml-auto inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-[11px] font-semibold ring-1 transition hover:bg-slate-50"
+          style={{ borderColor: "var(--admin-border)", color: "var(--admin-text)" }}
+        >
+          <RefreshCcw className="w-3 h-3" /> Refresh
+        </button>
+      </div>
+
+      {/* Model selector */}
+      <div className="space-y-2">
+        <h4 className="text-sm font-bold flex items-center gap-1.5" style={{ color: "var(--admin-ink)" }}>
+          <Bot className="w-4 h-4" /> Default Model
+        </h4>
+        <select
+          value={model}
+          onChange={(e) => onModel(e.target.value)}
+          className="w-full h-10 rounded-xl border px-3 text-sm bg-white"
+          style={{ borderColor: "var(--admin-border)", color: "var(--admin-ink)" }}
+        >
+          {AI_MODELS.map((m) => (
+            <option key={m.id} value={m.id}>{m.label} — {m.note}</option>
+          ))}
+        </select>
+        <p className="text-[11px]" style={{ color: "var(--admin-muted)" }}>
+          Selected model is used by every AI feature below. Change → Save → effect immediately.
+        </p>
+      </div>
+
+      {/* Test call */}
+      <div
+        className="rounded-2xl p-4 border"
+        style={{ borderColor: "var(--admin-border)", background: "#fdf4ff" }}
+      >
+        <div className="flex items-center gap-2 mb-2">
+          <Zap className="w-4 h-4" style={{ color: "#a21caf" }} />
+          <h4 className="text-sm font-bold" style={{ color: "#701a75" }}>Live Test</h4>
+          {ping !== null && (
+            <span className="ml-auto text-[10px] font-mono" style={{ color: "var(--admin-muted)" }}>
+              {ping} ms
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={runTest}
+            disabled={testing}
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full text-[12px] font-bold text-white shadow-sm hover:opacity-95 disabled:opacity-60"
+            style={{ background: "linear-gradient(135deg,#a21caf,#7c3aed)" }}
+          >
+            {testing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+            {testing ? "Calling AI…" : "Run test"}
+          </button>
+          <span className="text-[11px] font-mono px-2 py-1 rounded-md bg-white/60 ring-1 ring-fuchsia-200 text-fuchsia-800">
+            {model}
+          </span>
+        </div>
+        {testReply && (
+          <div className="mt-3 text-sm p-3 rounded-lg bg-white ring-1 ring-emerald-200 text-slate-800">
+            <div className="text-[10px] font-bold text-emerald-700 mb-1">✓ AI REPLY</div>
+            {testReply}
+          </div>
+        )}
+        {testError && (
+          <div className="mt-3 text-[12px] p-3 rounded-lg bg-white ring-1 ring-rose-200 text-rose-700">
+            <div className="text-[10px] font-bold mb-1">✗ ERROR</div>
+            {testError}
+          </div>
+        )}
+      </div>
+
+      {/* Feature toggles */}
+      <div className="space-y-2">
+        <h4 className="text-sm font-bold flex items-center gap-1.5" style={{ color: "var(--admin-ink)" }}>
+          <ShieldCheck className="w-4 h-4" /> Enabled Features
+        </h4>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {AI_FEATURES.map((f) => {
+            const on = features[f.key] ?? true;
+            return (
+              <button
+                key={f.key}
+                type="button"
+                onClick={() => toggle(f.key)}
+                className="flex items-start gap-3 p-3 rounded-xl border text-left transition hover:bg-slate-50"
+                style={{ borderColor: on ? "#c7d2fe" : "var(--admin-border)", background: on ? "#eef2ff" : "#ffffff" }}
+              >
+                <span
+                  className="mt-0.5 w-8 h-8 rounded-lg grid place-items-center shrink-0"
+                  style={{ background: on ? "#4f46e5" : "#e2e8f0", color: on ? "#ffffff" : "#64748b" }}
+                >
+                  {f.icon}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold" style={{ color: "var(--admin-ink)" }}>{f.label}</span>
+                    <span
+                      className={`ml-auto inline-flex items-center gap-1 px-2 h-5 rounded-full text-[10px] font-bold ${
+                        on ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"
+                      }`}
+                    >
+                      {on ? <><Check className="w-3 h-3" /> ON</> : <><X className="w-3 h-3" /> OFF</>}
+                    </span>
+                  </div>
+                  <p className="text-[11px] mt-0.5" style={{ color: "var(--admin-muted)" }}>{f.desc}</p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+        <p className="text-[11px]" style={{ color: "var(--admin-muted)" }}>
+          Feature OFF হলে সেই AI endpoint 503 error দিবে — কোনো credit consume হবে না।
+        </p>
+      </div>
+    </div>
+  );
+}
