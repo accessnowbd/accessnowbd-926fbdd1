@@ -197,7 +197,7 @@ export function CategoryPage({
         </div>
       </section>
 
-      {!q.trim() && <RecentlyViewedSection compact />}
+      
 
       <section className="mx-auto max-w-[1440px] px-4 md:px-10 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6">
@@ -314,6 +314,8 @@ export function CategoryPage({
           </div>
         </div>
       </section>
+
+      {!q.trim() && <RecentlyViewedSection compact />}
 
       <SiteFooter />
     </div>
