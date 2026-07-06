@@ -5,6 +5,7 @@
 //  - "all"   → everything (tagline, short, description, features, seo)
 //  - "image" → AI-generated product image (returns data URL)
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { getAiConfig, featureDisabledResponse } from "../_shared/ai-config.ts";
 
 const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
   /^https:\/\/accessnowbd\.lovable\.app$/,
@@ -124,11 +125,15 @@ serve(async (req) => {
     const denied = await requireAdmin(req, corsHeaders);
     if (denied) return denied;
 
+    const cfg = await getAiConfig();
+    if (!cfg.features.product_ai) return featureDisabledResponse("product_ai", corsHeaders);
+
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     const geminiKey = Deno.env.get("GEMINI_API_KEY");
 
     const { mode, product, imagePrompt, style } = (await req.json()) as Body;
     if (!product?.name) throw new Error("product.name is required");
+
 
 
     // ===== IMAGE GENERATION =====
@@ -395,7 +400,7 @@ ${JSON.stringify(product, null, 2)}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: cfg.model,
         messages: [
           { role: "system", content: systems[key] },
           { role: "user", content: prompts[key] },

@@ -1,4 +1,5 @@
 // AccessNow BD — AI support chat (streaming via Lovable AI Gateway)
+import { getAiConfig, featureDisabledResponse } from "../_shared/ai-config.ts";
 const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
   /^https:\/\/accessnowbd\.lovable\.app$/,
   /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
@@ -89,6 +90,9 @@ Deno.serve(async (req) => {
       );
     }
 
+    const cfg = await getAiConfig();
+    if (!cfg.features.support_chat) return featureDisabledResponse("support_chat", corsHeaders);
+
     const upstream = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -96,7 +100,7 @@ Deno.serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: cfg.model,
         messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
         stream: true,
       }),
