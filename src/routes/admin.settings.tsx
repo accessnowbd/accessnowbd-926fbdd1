@@ -12,6 +12,8 @@ export const Route = createFileRoute("/admin/settings")({
   component: GeneralSettingsPage,
 });
 
+type AiFeatureKey = "support_chat" | "product_ai" | "review_generator" | "renewal_emails";
+
 type SettingsData = {
   site_name?: string;
   support_email?: string;
@@ -27,7 +29,27 @@ type SettingsData = {
   telegram_chat_id?: string;
   admin_email?: string;
   whatsapp_notify_number?: string;
+  // AI system config (read by edge functions)
+  ai_default_model?: string;
+  ai_features?: Partial<Record<AiFeatureKey, boolean>>;
 };
+
+const AI_MODELS: { id: string; label: string; note: string }[] = [
+  { id: "google/gemini-2.5-flash",       label: "Gemini 2.5 Flash",        note: "Balanced • fast • cheap (default)" },
+  { id: "google/gemini-2.5-flash-lite",  label: "Gemini 2.5 Flash Lite",   note: "Fastest & cheapest" },
+  { id: "google/gemini-2.5-pro",         label: "Gemini 2.5 Pro",          note: "Most capable Gemini" },
+  { id: "google/gemini-3-flash-preview", label: "Gemini 3 Flash (preview)", note: "Next-gen fast" },
+  { id: "openai/gpt-5-nano",             label: "GPT-5 Nano",              note: "Fast & cheap OpenAI" },
+  { id: "openai/gpt-5-mini",             label: "GPT-5 Mini",              note: "Balanced OpenAI" },
+  { id: "openai/gpt-5",                  label: "GPT-5",                   note: "Most capable OpenAI (expensive)" },
+];
+
+const AI_FEATURES: { key: AiFeatureKey; label: string; desc: string; icon: React.ReactNode }[] = [
+  { key: "support_chat",     label: "সাপোর্ট চ্যাটবট",       desc: "সাইটের live support chat উত্তর দিবে",              icon: <MessageSquare className="w-4 h-4" /> },
+  { key: "product_ai",       label: "Product AI",              desc: "প্রোডাক্ট ডিসক্রিপশন/ইমেজ জেনারেটর",           icon: <Wand2 className="w-4 h-4" /> },
+  { key: "review_generator", label: "Review Generator",        desc: "অ্যাডমিন থেকে fake/seed review তৈরি",              icon: <Star className="w-4 h-4" /> },
+  { key: "renewal_emails",   label: "Renewal Email AI",        desc: "রিনিউয়াল রিমাইন্ডার ইমেইলে AI ব্যক্তিগতকরণ",       icon: <Mail className="w-4 h-4" /> },
+];
 
 /* ── Tone system: stronger tints + darker text for readability ── */
 const TONE = {
