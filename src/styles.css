@@ -3294,26 +3294,86 @@ html.theme-white .checkout-page .bg-muted {
   50% { transform: scaleY(1); opacity: 1; }
 }
 
+.admin-loader-stage {
+  background:
+    radial-gradient(60% 50% at 50% 40%, rgba(124, 58, 237, 0.10), transparent 70%),
+    radial-gradient(50% 40% at 50% 60%, rgba(6, 182, 212, 0.08), transparent 70%),
+    #fafafa;
+}
+.admin-loader-halo {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+.admin-loader-glow {
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.45), rgba(6,182,212,0.25) 45%, transparent 70%);
+  filter: blur(18px);
+  animation: adminLoaderPulse 2.4s ease-in-out infinite;
+  z-index: 0;
+}
 .admin-loader-ring {
   position: absolute;
-  inset: -4px;
+  inset: 0;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, #4f46e5, #7c3aed, #06b6d4, #4f46e5);
-  animation: adminLoaderRing 1.2s linear infinite;
-  mask: radial-gradient(circle, transparent 62%, black 63%);
-  -webkit-mask: radial-gradient(circle, transparent 62%, black 63%);
+  background: conic-gradient(from 0deg, #4f46e5, #7c3aed, #06b6d4, #ec4899, #4f46e5);
+  animation: adminLoaderRing 2.4s linear infinite;
+  mask: radial-gradient(circle, transparent 60%, black 61%, black 72%, transparent 73%);
+  -webkit-mask: radial-gradient(circle, transparent 60%, black 61%, black 72%, transparent 73%);
+  filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.55));
+  z-index: 1;
+}
+.admin-loader-orbit {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px dashed rgba(124, 58, 237, 0.35);
+  animation: adminLoaderRing 8s linear infinite;
+  z-index: 1;
+}
+.admin-loader-orbit::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  box-shadow: 0 0 12px rgba(124,58,237,0.9);
+  transform: translateX(-50%);
+}
+.admin-loader-orbit--rev {
+  inset: -14px;
+  border-color: rgba(6, 182, 212, 0.3);
+  animation: adminLoaderRingRev 6s linear infinite;
+}
+.admin-loader-orbit--rev::before {
+  background: linear-gradient(135deg, #06b6d4, #ec4899);
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.9);
 }
 .admin-loader-logo {
   animation: adminLoaderPulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 6px 18px rgba(79, 70, 229, 0.35));
 }
 .admin-loader-bar {
   display: inline-block;
   width: 4px;
   height: 16px;
   border-radius: 9999px;
-  background: linear-gradient(180deg, #4f46e5, #7c3aed);
+  background: linear-gradient(180deg, #4f46e5, #7c3aed, #06b6d4);
   animation: adminLoaderBar 1s ease-in-out infinite;
   transform-origin: center;
+  box-shadow: 0 0 8px rgba(124, 58, 237, 0.5);
+}
+@keyframes adminLoaderRingRev {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
 }
 
 /* ============================================================

@@ -313,20 +313,20 @@ function AdminLayout() {
 
 function AdminBlankState() {
   return (
-    <div className="min-h-screen grid place-items-center bg-[#fafafa]" role="status" aria-label="Loading admin panel">
-      <div className="flex flex-col items-center gap-5">
-        {/* Brand logo with animated gradient ring */}
-        <div className="relative">
+    <div className="min-h-screen grid place-items-center bg-[#fafafa] admin-loader-stage" role="status" aria-label="Loading admin panel">
+      <div className="flex flex-col items-center gap-6">
+        {/* Premium brand logo with layered halo, orbit and ring */}
+        <div className="admin-loader-halo">
+          <span className="admin-loader-glow" />
+          <span className="admin-loader-orbit" />
+          <span className="admin-loader-orbit admin-loader-orbit--rev" />
           <div className="admin-loader-ring" />
-          <BrandLogo size="md" iconOnly />
+          <div className="admin-loader-logo relative z-10">
+            <BrandLogo size="md" iconOnly />
+          </div>
         </div>
 
-        {/* Animated text */}
-        <div className="flex flex-col items-center gap-1">
-          <BrandLogo size="sm" iconOnly={false} tagClassName="text-slate-400" className="!gap-0" />
-          <span className="text-xs text-slate-400 font-medium tracking-wide mt-1">Loading admin panel</span>
-        </div>
-
+        <span className="text-xs text-slate-400 font-medium tracking-[0.2em] uppercase">Loading admin panel</span>
 
         {/* Animated progress bars */}
         <div className="flex items-center gap-1.5">
