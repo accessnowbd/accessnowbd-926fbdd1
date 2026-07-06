@@ -280,8 +280,10 @@ function CheckoutPage() {
             ? `WALLET-${Date.now()}`
             : isEps
               ? `EPS-PENDING-${Date.now()}`
-              : form.trxId,
-          payment_screenshot_url: isEps ? null : (screenshotUrl || null),
+              : isSslcz
+                ? `SSLCZ-PENDING-${Date.now()}`
+                : form.trxId,
+          payment_screenshot_url: isHostedGateway ? null : (screenshotUrl || null),
           items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
           total: subAfterCoupon,
         })
@@ -332,10 +334,11 @@ function CheckoutPage() {
       } catch {
         /* ignore */
       }
-      // EPS gateway: redirect the buyer to the hosted payment page.
-      if (isEps) {
+      // Hosted gateways (EPS / SSLCommerz): redirect the buyer to the hosted payment page.
+      if (isEps || isSslcz) {
         try {
-          const { redirect_url } = await initiateEps({
+          const initFn = isEps ? initiateEps : initiateSslcz;
+          const { redirect_url } = await initFn({
             data: {
               orderId: newId,
               amount: subAfterCoupon,
@@ -348,7 +351,7 @@ function CheckoutPage() {
           window.location.href = redirect_url;
           return;
         } catch (e) {
-          setErr(e instanceof Error ? e.message : "EPS gateway redirect failed");
+          setErr(e instanceof Error ? e.message : "Gateway redirect failed");
           return;
         }
       }
