@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { Download, Share, X, Plus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Share, X, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BrandLogo } from "@/components/BrandLogo";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
+
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
@@ -16,6 +18,8 @@ interface BeforeInstallPromptEvent extends Event {
 
 const DISMISS_KEY = "pwa-install-dismissed-at";
 const DISMISS_DAYS = 7;
+const AUTO_HIDE_MS = 10_000; // Auto-hide after 10 seconds
+
 
 function isStandalone() {
   if (typeof window === "undefined") return false;
@@ -37,6 +41,27 @@ export function InstallAppPrompt() {
   const [visible, setVisible] = useState(false);
   const [iosOpen, setIosOpen] = useState(false);
   const [isIosDevice, setIsIosDevice] = useState(false);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Auto-hide after AUTO_HIDE_MS whenever the prompt becomes visible.
+  // Pause when the iOS instructions dialog opens so users can read it.
+  useEffect(() => {
+    if (!visible || iosOpen) {
+      if (hideTimerRef.current) {
+        clearTimeout(hideTimerRef.current);
+        hideTimerRef.current = null;
+      }
+      return;
+    }
+    hideTimerRef.current = setTimeout(() => setVisible(false), AUTO_HIDE_MS);
+    return () => {
+      if (hideTimerRef.current) {
+        clearTimeout(hideTimerRef.current);
+        hideTimerRef.current = null;
+      }
+    };
+  }, [visible, iosOpen]);
+
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -106,9 +131,10 @@ export function InstallAppPrompt() {
           <X className="h-4 w-4" />
         </button>
         <div className="flex items-start gap-3 pr-6">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <Download className="h-5 w-5" />
+          <div className="shrink-0">
+            <BrandLogo size="sm" iconOnly />
           </div>
+
           <div className="flex-1">
             <p className="text-sm font-semibold text-foreground">
               AccessNow BD অ্যাপ ইনস্টল করুন
