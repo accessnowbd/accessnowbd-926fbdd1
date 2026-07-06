@@ -27,7 +27,7 @@ function AdminUsers() {
  const load = useCallback(async () => {
  setLoading(true);
  const [{ data: profiles, error: e1 }, { data: roles, error: e2 }] = await Promise.all([
- supabase.from("profiles").select("id,display_name,phone,created_at").order("created_at", { ascending: false }),
+ supabase.from("profiles").select("id,display_name,email,phone,created_at").order("created_at", { ascending: false }),
  supabase.from("user_roles").select("user_id,role").eq("role", "admin"),
  ]);
  if (e1) toast.error(e1.message);
