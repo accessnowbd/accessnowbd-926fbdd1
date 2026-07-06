@@ -45,6 +45,7 @@ import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/blog.how-to-buy-netflix-in-bangladesh'
 import { Route as ApiAiTestRouteImport } from './routes/api/ai-test'
+import { Route as ApiAiCommandRouteImport } from './routes/api/ai-command'
 import { Route as AdminWelcomeBannerRouteImport } from './routes/admin.welcome-banner'
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -288,6 +289,11 @@ const BlogHowToBuyNetflixInBangladeshRoute =
 const ApiAiTestRoute = ApiAiTestRouteImport.update({
   id: '/api/ai-test',
   path: '/api/ai-test',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiCommandRoute = ApiAiCommandRouteImport.update({
+  id: '/api/ai-command',
+  path: '/api/ai-command',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminWelcomeBannerRoute = AdminWelcomeBannerRouteImport.update({
@@ -690,6 +696,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
+  '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -790,6 +797,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
+  '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -892,6 +900,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
+  '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -995,6 +1004,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
+    | '/api/ai-command'
     | '/api/ai-test'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
@@ -1095,6 +1105,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
+    | '/api/ai-command'
     | '/api/ai-test'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
@@ -1196,6 +1207,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
+    | '/api/ai-command'
     | '/api/ai-test'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
@@ -1254,6 +1266,7 @@ export interface RootRouteChildren {
   WalletRoute: typeof WalletRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  ApiAiCommandRoute: typeof ApiAiCommandRoute
   ApiAiTestRoute: typeof ApiAiTestRoute
   BlogHowToBuyNetflixInBangladeshRoute: typeof BlogHowToBuyNetflixInBangladeshRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
@@ -1529,6 +1542,13 @@ declare module '@tanstack/react-router' {
       path: '/api/ai-test'
       fullPath: '/api/ai-test'
       preLoaderRoute: typeof ApiAiTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-command': {
+      id: '/api/ai-command'
+      path: '/api/ai-command'
+      fullPath: '/api/ai-command'
+      preLoaderRoute: typeof ApiAiCommandRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/welcome-banner': {
@@ -2118,6 +2138,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  ApiAiCommandRoute: ApiAiCommandRoute,
   ApiAiTestRoute: ApiAiTestRoute,
   BlogHowToBuyNetflixInBangladeshRoute: BlogHowToBuyNetflixInBangladeshRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
