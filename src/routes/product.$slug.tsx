@@ -165,7 +165,7 @@ function ProductPage() {
   const allPlans = (loaderProduct?.plans ?? product?.plans ?? []) as Array<{ popular?: boolean; account_type?: string }>;
   const availableAccountTypes = (product?.meta?.account_types
     ?? (product?.meta?.account_type && product.meta.account_type !== "none" ? [product.meta.account_type] : [])
-    ?? []) as string[];
+    ) as string[];
   const [selectedAccountType, setSelectedAccountType] = useState<string>(() => {
     if (availableAccountTypes.length === 0) return "";
     // pick the first account type that has at least one plan (or fallback to first)
