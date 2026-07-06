@@ -449,24 +449,38 @@ function ProductPage() {
                 family:   { label: "Family",    icon: "👪", grad: "from-amber-500 to-orange-500" },
                 student:  { label: "Student",   icon: "🎓", grad: "from-emerald-500 to-teal-600" },
                 business: { label: "Business",  icon: "🛍️", grad: "from-fuchsia-500 to-pink-600" },
+                custom:   { label: "Custom",    icon: "⚙️", grad: "from-slate-600 to-slate-800" },
               };
-              const raw = product.meta?.account_types
-                ?? (product.meta?.account_type && product.meta.account_type !== "none" ? [product.meta.account_type] : []);
-              const types = (raw ?? []).filter((t) => t && t !== "none" && ACCOUNT_LABELS[t]);
+              const types = availableAccountTypes.filter((t) => t && t !== "none" && ACCOUNT_LABELS[t]);
               if (types.length === 0) return null;
+              const selectable = types.length > 1;
               return (
                 <div className="mt-4 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/60 p-3">
                   <div className="text-[11px] font-bold text-violet-700 uppercase tracking-widest mb-2 inline-flex items-center gap-1.5">
-                    <span>👤</span> Account Type
+                    <span>👤</span> Account Type {selectable && <span className="text-slate-500 font-semibold normal-case tracking-normal">— একটি সিলেক্ট করুন</span>}
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {types.map((t) => {
                       const m = ACCOUNT_LABELS[t];
-                      return (
-                        <span
+                      const active = selectedAccountType === t || !selectable;
+                      const clickable = selectable;
+                      const base = `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold shadow-sm transition`;
+                      const cls = active
+                        ? `${base} text-white bg-gradient-to-r ${m.grad}`
+                        : `${base} bg-white text-slate-700 border border-slate-200 hover:border-violet-300`;
+                      return clickable ? (
+                        <button
                           key={t}
-                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold text-white shadow-sm bg-gradient-to-r ${m.grad}`}
+                          type="button"
+                          onClick={() => setSelectedAccountType(t)}
+                          aria-pressed={active}
+                          className={cls}
                         >
+                          <span className="text-sm leading-none">{m.icon}</span>
+                          {m.label}
+                        </button>
+                      ) : (
+                        <span key={t} className={cls}>
                           <span className="text-sm leading-none">{m.icon}</span>
                           {m.label}
                         </span>
