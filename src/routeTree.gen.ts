@@ -72,6 +72,7 @@ import { Route as AdminLicenseManagerRouteImport } from './routes/admin.license-
 import { Route as AdminInvoiceGeneratorRouteImport } from './routes/admin.invoice-generator'
 import { Route as AdminInvoiceDesignRouteImport } from './routes/admin.invoice-design'
 import { Route as AdminInventoryRouteImport } from './routes/admin.inventory'
+import { Route as AdminHomepageEditorRouteImport } from './routes/admin.homepage-editor'
 import { Route as AdminGoogleAdsRouteImport } from './routes/admin.google-ads'
 import { Route as AdminFbPixelRouteImport } from './routes/admin.fb-pixel'
 import { Route as AdminFbAudiencesRouteImport } from './routes/admin.fb-audiences'
@@ -423,6 +424,11 @@ const AdminInventoryRoute = AdminInventoryRouteImport.update({
   path: '/inventory',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminHomepageEditorRoute = AdminHomepageEditorRouteImport.update({
+  id: '/homepage-editor',
+  path: '/homepage-editor',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminGoogleAdsRoute = AdminGoogleAdsRouteImport.update({
   id: '/google-ads',
   path: '/google-ads',
@@ -649,6 +655,7 @@ export interface FileRoutesByFullPath {
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
+  '/admin/homepage-editor': typeof AdminHomepageEditorRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
@@ -747,6 +754,7 @@ export interface FileRoutesByTo {
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
+  '/admin/homepage-editor': typeof AdminHomepageEditorRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
@@ -847,6 +855,7 @@ export interface FileRoutesById {
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
+  '/admin/homepage-editor': typeof AdminHomepageEditorRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/invoice-design': typeof AdminInvoiceDesignRoute
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
@@ -948,6 +957,7 @@ export interface FileRouteTypes {
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
     | '/admin/google-ads'
+    | '/admin/homepage-editor'
     | '/admin/inventory'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
@@ -1046,6 +1056,7 @@ export interface FileRouteTypes {
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
     | '/admin/google-ads'
+    | '/admin/homepage-editor'
     | '/admin/inventory'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
@@ -1145,6 +1156,7 @@ export interface FileRouteTypes {
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
     | '/admin/google-ads'
+    | '/admin/homepage-editor'
     | '/admin/inventory'
     | '/admin/invoice-design'
     | '/admin/invoice-generator'
@@ -1695,6 +1707,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminInventoryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/homepage-editor': {
+      id: '/admin/homepage-editor'
+      path: '/homepage-editor'
+      fullPath: '/admin/homepage-editor'
+      preLoaderRoute: typeof AdminHomepageEditorRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/google-ads': {
       id: '/admin/google-ads'
       path: '/google-ads'
@@ -1952,6 +1971,7 @@ interface AdminRouteChildren {
   AdminFbAudiencesRoute: typeof AdminFbAudiencesRoute
   AdminFbPixelRoute: typeof AdminFbPixelRoute
   AdminGoogleAdsRoute: typeof AdminGoogleAdsRoute
+  AdminHomepageEditorRoute: typeof AdminHomepageEditorRoute
   AdminInventoryRoute: typeof AdminInventoryRoute
   AdminInvoiceDesignRoute: typeof AdminInvoiceDesignRoute
   AdminInvoiceGeneratorRoute: typeof AdminInvoiceGeneratorRoute
@@ -1999,6 +2019,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFbAudiencesRoute: AdminFbAudiencesRoute,
   AdminFbPixelRoute: AdminFbPixelRoute,
   AdminGoogleAdsRoute: AdminGoogleAdsRoute,
+  AdminHomepageEditorRoute: AdminHomepageEditorRoute,
   AdminInventoryRoute: AdminInventoryRoute,
   AdminInvoiceDesignRoute: AdminInvoiceDesignRoute,
   AdminInvoiceGeneratorRoute: AdminInvoiceGeneratorRoute,
