@@ -829,7 +829,7 @@ function CheckoutPage() {
           <button
             onClick={handleSubmit}
             disabled={busy || (!fullyByWallet && !isHostedGateway && (!!errors.trxId || !form.trxId || !!errors.senderNumber || !form.senderNumber))}
-            className="w-full h-12 rounded-full text-primary-foreground text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-lg shadow-primary/25"
+            className="glass-btn w-full h-12 rounded-full text-primary-foreground text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             style={{ background: isHostedGateway ? (hostedGatewayConfig?.brand_color || "#0ea5e9") : CTA_GRADIENT }}
           >
             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : isHostedGateway ? <Zap className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
