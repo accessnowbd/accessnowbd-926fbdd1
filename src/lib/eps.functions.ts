@@ -4,10 +4,13 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 /* ============================================================
  * EPS (Easy Payment System — eps.com.bd) gateway server helpers.
  *
- * Credentials + non-secret settings are stored TOGETHER in
- * `admin_records` where `kind = 'eps_pgw_settings'` — exactly like
- * bKash / Nagad manual setup. Admin-only read/write via RLS.
- *
+ * Credentials + non-secret settings live in `admin_records` where
+ * `kind = 'eps_pgw_settings'`. That row is stored with
+ * `is_active = false` so RLS only lets admins read it — credentials
+ * NEVER leak to the browser. Checkout uses `getEpsPublicConfig`
+ * below, which returns only display-safe fields.
+ * ============================================================ */
+
  * Fields in .data:
  *   merchant_id, store_password, api_key, api_secret, api_url
  *   enabled, mode ("sandbox"|"live"), currency,
