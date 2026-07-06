@@ -334,6 +334,21 @@ function CheckoutPage() {
       } catch {
         /* ignore */
       }
+      // Fire-and-forget: Telegram admin notification
+      try {
+        const { notifyTelegram } = await import("@/lib/telegram/notify.functions");
+        notifyTelegram({
+          data: {
+            event: "order_created",
+            vars: {
+              order_id: `ANB-${newId.slice(0, 8).toUpperCase()}`,
+              customer: form.name,
+              total: subAfterCoupon,
+              items: items.map((it) => `${it.name || it.slug}×${it.qty}`).join(", "),
+            },
+          },
+        }).catch(() => {});
+      } catch { /* ignore */ }
       // Hosted gateways (EPS / SSLCommerz): redirect the buyer to the hosted payment page.
       if (isEps || isSslcz) {
         try {
