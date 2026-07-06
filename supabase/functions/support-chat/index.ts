@@ -1,4 +1,5 @@
 // AccessNow BD — AI support chat (streaming via Lovable AI Gateway)
+import { getAiConfig, featureDisabledResponse } from "../_shared/ai-config.ts";
 const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
   /^https:\/\/accessnowbd\.lovable\.app$/,
   /^https:\/\/[a-z0-9-]+\.lovable\.app$/,
