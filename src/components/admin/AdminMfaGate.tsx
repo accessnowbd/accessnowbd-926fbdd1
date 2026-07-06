@@ -26,10 +26,24 @@ interface Props {
 }
 
 const MFA_OK_CACHE_KEY = "anbd:mfaOk";
+// Server grants last 12h. Cache MFA-OK in localStorage (not sessionStorage) so
+// reopening the admin panel in a new tab/session is instant — background
+// re-verification still runs and downgrades to challenge if the grant expired.
+const MFA_OK_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 
 function readMfaOkCache(): boolean {
-  if (typeof sessionStorage === "undefined") return false;
-  try { return sessionStorage.getItem(MFA_OK_CACHE_KEY) === "1"; } catch { return false; }
+  if (typeof localStorage === "undefined") return false;
+  try {
+    const raw = localStorage.getItem(MFA_OK_CACHE_KEY);
+    if (!raw) return false;
+    const ts = Number(raw);
+    if (!Number.isFinite(ts) || ts <= 0) return false;
+    if (Date.now() - ts > MFA_OK_CACHE_TTL_MS) {
+      localStorage.removeItem(MFA_OK_CACHE_KEY);
+      return false;
+    }
+    return true;
+  } catch { return false; }
 }
 
 export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
