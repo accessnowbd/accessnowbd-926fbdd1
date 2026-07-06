@@ -68,13 +68,15 @@ function readCachedAdmin(): boolean {
 function AdminLayout() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  // Hydration-safe: start with `false` on both server and first client render,
-  // then hydrate the cached flag in an effect. Reading localStorage during
-  // the initializer caused server/client mismatches (server renders the
-  // blank loader, client renders the shell), breaking hydration.
-  const [cachedAdmin, setCachedAdmin] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [verified, setVerified] = useState(false);
+  // Read cached admin flag synchronously so the shell paints on the first
+  // client render — no blank-loader flash on repeat visits. SSR renders with
+  // `false` (no localStorage on the server); the hydration mismatch on the
+  // gate is harmless because the auth-gated tree only mounts on the client.
+  const [cachedAdmin, setCachedAdmin] = useState<boolean>(() =>
+    typeof window === "undefined" ? false : readCachedAdmin(),
+  );
+  const [isAdmin, setIsAdmin] = useState<boolean>(cachedAdmin);
+  const [verified, setVerified] = useState<boolean>(cachedAdmin);
   const [roleError, setRoleError] = useState<{
     message: string;
     code?: string;
@@ -85,17 +87,17 @@ function AdminLayout() {
   const [checkedAt, setCheckedAt] = useState<string | null>(null);
 
   // Wipe historical splash/admin flags immediately on mount so a stale client
-  // flag can never leave the route on an empty gradient screen. Also hydrate
-  // the cached admin flag here (post-mount) to avoid SSR hydration mismatch.
+  // flag can never leave the route on an empty gradient screen. Also re-sync
+  // the cached admin flag post-mount in case it changed between renders.
   useEffect(() => {
     purgeLegacySplashFlags();
     const cached = readCachedAdmin();
-    if (cached) {
+    if (cached && !cachedAdmin) {
       setCachedAdmin(true);
       setIsAdmin(true);
       setVerified(true);
     }
-  }, []);
+  }, [cachedAdmin]);
 
 
   // Admin panel is always light/white themed regardless of the user-selected
