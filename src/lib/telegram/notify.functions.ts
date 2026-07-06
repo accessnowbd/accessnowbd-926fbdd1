@@ -71,7 +71,7 @@ export const registerTelegramWebhook = createServerFn({ method: "POST" })
       allowed_updates: ["message", "callback_query"],
       drop_pending_updates: true,
     });
-    return { ok: true as const, result: JSON.parse(JSON.stringify(result)) as Record<string, unknown> };
+    return { ok: true as const, result: JSON.stringify(result) };
   });
 
 export const getTelegramWebhookInfo = createServerFn({ method: "GET" })
@@ -80,7 +80,7 @@ export const getTelegramWebhookInfo = createServerFn({ method: "GET" })
       const { tg } = await import("./api.server");
       const info = await tg<any>("getWebhookInfo", {});
       const me = await tg<any>("getMe", {});
-      return { ok: true as const, info: JSON.parse(JSON.stringify(info)) as Record<string, unknown>, me: JSON.parse(JSON.stringify(me)) as Record<string, unknown> };
+      return { ok: true as const, info: JSON.stringify(info), me: JSON.stringify(me) };
     } catch (e: any) {
       return { ok: false, error: e?.message || "unknown" };
     }
