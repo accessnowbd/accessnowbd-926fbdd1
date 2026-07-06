@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   Save, Loader2, Eye, EyeOff, Plus, Send, Mail, MessageCircle,
   Sparkles, Info, ShieldCheck, Database, ExternalLink, RefreshCcw,
-  Settings,
+  Settings, Check, X, Zap, Bot, Star, Wand2, MessageSquare,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
