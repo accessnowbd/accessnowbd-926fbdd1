@@ -170,9 +170,9 @@ async function showCart(chat_id: number) {
   if (cart.length === 0) return sendMessage(chat_id, "🛒 কার্ট খালি। /browse দিন।", { reply_markup: mainMenu() });
 
   const db = await admin();
-  const { data: products } = await db.from("products").select("slug,name,price").in("slug", cart.map((c) => c.slug));
+  const { data: products } = await db.from("products").select("slug,name,plans").in("slug", cart.map((c) => c.slug));
   const priceOf = new Map<string, { name: string; price: number }>();
-  (products as any[] | null)?.forEach((p) => priceOf.set(p.slug, { name: p.name, price: Number(p.price) || 0 }));
+  (products as any[] | null)?.forEach((p) => priceOf.set(p.slug, { name: p.name, price: firstPrice(p.plans) || 0 }));
 
   let total = 0;
   const lines = cart.map((c, i) => {
