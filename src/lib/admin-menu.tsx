@@ -169,6 +169,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/fb-audiences", label: "FB Custom Audiences", labelBn: "FB কাস্টম অডিয়েন্স", icon: ic(UsersRound), grad: "from-blue-500 to-violet-600", badge: "NEW" },
       { to: "/admin/google-ads", label: "Google Ads", labelBn: "গুগল অ্যাডস", icon: ic(Activity), grad: "from-sky-500 to-blue-600" },
       { to: "/admin/other-pixels", label: "Other Pixels", labelBn: "অন্যান্য পিক্সেল", icon: ic(Code2), grad: "from-orange-500 to-rose-500", badge: "NEW" },
+      { to: "/admin/telegram", label: "Telegram Bot", labelBn: "টেলিগ্রাম বট", icon: ic(Bot), grad: "from-sky-500 to-blue-600", badge: "NEW" },
       { to: "/admin/support-channels", label: "Support Channels", labelBn: "সাপোর্ট চ্যানেল", icon: ic(Headphones), grad: "from-emerald-500 to-green-600" },
     ],
   },
