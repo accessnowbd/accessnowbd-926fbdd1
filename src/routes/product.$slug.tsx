@@ -162,15 +162,32 @@ function ProductPage() {
   const navigate = useNavigate();
   const { add } = useCart();
   useShopConfig();
-  const popularIdx = (loaderProduct?.plans ?? product?.plans ?? []).findIndex((p: { popular?: boolean }) => p.popular);
+  const allPlans = (loaderProduct?.plans ?? product?.plans ?? []) as Array<{ popular?: boolean; account_type?: string }>;
+  const availableAccountTypes = (product?.meta?.account_types
+    ?? (product?.meta?.account_type && product.meta.account_type !== "none" ? [product.meta.account_type] : [])
+    ?? []) as string[];
+  const [selectedAccountType, setSelectedAccountType] = useState<string>(() => {
+    if (availableAccountTypes.length === 0) return "";
+    // pick the first account type that has at least one plan (or fallback to first)
+    const withPlan = availableAccountTypes.find((t) => allPlans.some((p) => p.account_type === t));
+    return withPlan ?? availableAccountTypes[0] ?? "";
+  });
+  const filteredPlans = (product?.plans ?? []).filter((p) => {
+    if (!selectedAccountType) return true;
+    // plans without account_type are "All" — shown for every type
+    return !p.account_type || p.account_type === selectedAccountType;
+  });
+  const popularIdx = filteredPlans.findIndex((p: { popular?: boolean }) => p.popular);
   const [selected, setSelected] = useState(() => (popularIdx > 0 ? popularIdx : 0));
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const zoomCfg = useProductZoomConfig();
   const [zoomOn, setZoomOn] = useState(false);
-  const activeIdx = product ? Math.min(selected, Math.max(product.plans.length - 1, 0)) : 0;
-  const plan = product?.plans[activeIdx];
+  // reset selected plan when account type changes
+  useEffect(() => { setSelected(0); }, [selectedAccountType]);
+  const activeIdx = Math.min(selected, Math.max(filteredPlans.length - 1, 0));
+  const plan = filteredPlans[activeIdx];
 
   useEffect(() => {
     if (product?.slug) {
