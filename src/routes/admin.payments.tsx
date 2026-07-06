@@ -307,7 +307,10 @@ function ReviewModal({ row, onClose, onDone }: { row: OrderRow; onClose: () => v
 
   const setStatus = async (payment_status: "verified" | "failed") => {
     setBusy(payment_status === "verified" ? "approve" : "reject");
-    const patch: Record<string, unknown> = { payment_status, admin_note: note.trim() || null };
+    const patch: { payment_status: string; admin_note: string | null; status?: string } = {
+      payment_status,
+      admin_note: note.trim() || null,
+    };
     if (payment_status === "verified") patch.status = "processing";
     const { error } = await supabase.from("orders").update(patch).eq("id", row.id);
     setBusy(null);

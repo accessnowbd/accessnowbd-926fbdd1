@@ -60,6 +60,7 @@ import { Route as AdminQuickSaleRouteImport } from './routes/admin.quick-sale'
 import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminProductZoomRouteImport } from './routes/admin.product-zoom'
+import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
 import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
 import { Route as AdminOtherPixelsRouteImport } from './routes/admin.other-pixels'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
@@ -347,6 +348,11 @@ const AdminProductZoomRoute = AdminProductZoomRouteImport.update({
   path: '/product-zoom',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPaymentLinksRoute = AdminPaymentLinksRouteImport.update({
   id: '/payment-links',
   path: '/payment-links',
@@ -554,6 +560,7 @@ export interface FileRoutesByFullPath {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
+  '/admin/payments': typeof AdminPaymentsRoute
   '/admin/product-zoom': typeof AdminProductZoomRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -636,6 +643,7 @@ export interface FileRoutesByTo {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
+  '/admin/payments': typeof AdminPaymentsRoute
   '/admin/product-zoom': typeof AdminProductZoomRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -720,6 +728,7 @@ export interface FileRoutesById {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
+  '/admin/payments': typeof AdminPaymentsRoute
   '/admin/product-zoom': typeof AdminProductZoomRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
@@ -805,6 +814,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/other-pixels'
     | '/admin/payment-links'
+    | '/admin/payments'
     | '/admin/product-zoom'
     | '/admin/products'
     | '/admin/promotions'
@@ -887,6 +897,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/other-pixels'
     | '/admin/payment-links'
+    | '/admin/payments'
     | '/admin/product-zoom'
     | '/admin/products'
     | '/admin/promotions'
@@ -970,6 +981,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/other-pixels'
     | '/admin/payment-links'
+    | '/admin/payments'
     | '/admin/product-zoom'
     | '/admin/products'
     | '/admin/promotions'
@@ -1404,6 +1416,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductZoomRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/payments': {
+      id: '/admin/payments'
+      path: '/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AdminPaymentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/payment-links': {
       id: '/admin/payment-links'
       path: '/payment-links'
@@ -1640,6 +1659,7 @@ interface AdminRouteChildren {
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminOtherPixelsRoute: typeof AdminOtherPixelsRoute
   AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
+  AdminPaymentsRoute: typeof AdminPaymentsRoute
   AdminProductZoomRoute: typeof AdminProductZoomRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminPromotionsRoute: typeof AdminPromotionsRoute
@@ -1683,6 +1703,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminOrdersRoute: AdminOrdersRoute,
   AdminOtherPixelsRoute: AdminOtherPixelsRoute,
   AdminPaymentLinksRoute: AdminPaymentLinksRoute,
+  AdminPaymentsRoute: AdminPaymentsRoute,
   AdminProductZoomRoute: AdminProductZoomRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminPromotionsRoute: AdminPromotionsRoute,
@@ -1761,13 +1782,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
