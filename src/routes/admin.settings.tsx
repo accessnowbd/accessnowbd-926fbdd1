@@ -184,45 +184,14 @@ function GeneralSettingsPage() {
         </Field>
       </Card>
 
-      {/* AI API */}
-      <Card icon={<Sparkles className="w-4 h-4" />} title="AI API কনফিগারেশন" tone="fuchsia">
-        <p className="text-xs mb-3" style={{ color: "var(--admin-muted)" }}>
-          ChatGPT (OpenAI) ও Google Gemini — দুটোর যেকোনো একটার কী থাকলেই কাজ করবে।
-        </p>
-
-        <div className="space-y-2">
-          <h4 className="text-sm font-bold flex items-center gap-1.5" style={{ color: "var(--admin-ink)" }}>🔮 Google Gemini</h4>
-          <KeyList
-            keys={data.gemini_keys ?? [""]}
-            onChange={(arr) => set("gemini_keys", arr)}
-            placeholder="Gemini API key (AIza...)"
-            hint="একাধিক কী যোগ করতে পারেন। লিমিট শেষ হলে পরের কী ব্যবহৃত হবে।"
-            link={{ label: "Gemini Studio থেকে কী নিন", href: "https://aistudio.google.com/app/apikey" }}
-          />
-        </div>
-
-        <div className="mt-5 space-y-2">
-          <h4 className="text-sm font-bold flex items-center gap-1.5" style={{ color: "var(--admin-ink)" }}>🧠 OpenAI (ChatGPT)</h4>
-          <SecretInput
-            value={data.openai_key ?? ""}
-            onChange={(v) => set("openai_key", v)}
-            placeholder="sk-..."
-          />
-          <a href="https://platform.openai.com/api-keys" target="_blank" rel="noreferrer"
-             className="text-xs inline-flex items-center gap-1 hover:underline"
-             style={{ color: "var(--admin-primary)" }}>
-            OpenAI ড্যাশবোর্ড থেকে কী নিন <ExternalLink className="w-3 h-3" />
-          </a>
-        </div>
-
-        <InfoBox tone="amber">
-          <p className="font-semibold">⚡ টিপস:</p>
-          <ul className="list-disc pl-5 space-y-0.5">
-            <li>প্রথমে Gemini ট্রাই করা হবে — ফ্রি কোটা বেশি।</li>
-            <li>Gemini ফেল হলে OpenAI fallback হিসেবে কাজ করবে।</li>
-            <li>সব কী নিরাপদে এনক্রিপ্টেড আকারে আমাদের ডাটাবেসে থাকে।</li>
-          </ul>
-        </InfoBox>
+      {/* AI System — powered by Lovable AI Gateway */}
+      <Card icon={<Sparkles className="w-4 h-4" />} title="AI System" tone="fuchsia">
+        <AiSystemPanel
+          model={data.ai_default_model ?? "google/gemini-2.5-flash"}
+          features={data.ai_features ?? { support_chat: true, product_ai: true, review_generator: true, renewal_emails: true }}
+          onModel={(v) => set("ai_default_model", v)}
+          onFeatures={(v) => set("ai_features", v)}
+        />
       </Card>
 
       {/* Telegram */}
