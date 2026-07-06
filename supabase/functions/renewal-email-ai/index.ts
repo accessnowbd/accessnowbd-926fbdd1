@@ -1,6 +1,7 @@
 // Generates a personalized renewal reminder email body via Lovable AI Gateway.
 // Returns: { subject: string, body: string }
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { getAiConfig, featureDisabledResponse } from "../_shared/ai-config.ts";
 
 const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
   /^https:\/\/accessnowbd\.lovable\.app$/,
