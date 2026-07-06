@@ -70,6 +70,10 @@ serve(async (req) => {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
 
+    const cfg = await getAiConfig();
+    if (!cfg.features.renewal_emails) return featureDisabledResponse("renewal_emails", cors);
+
+
     const {
       product = "subscription",
       customerName = "",
