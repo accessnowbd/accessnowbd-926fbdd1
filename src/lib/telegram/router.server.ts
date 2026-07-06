@@ -115,7 +115,7 @@ async function showCatalog(chat_id: number, page: number) {
   const mode = store?.config?.browse_mode || "featured";
   const db = await admin();
 
-  let q = db.from("products").select("slug,name,price,image,category,badge,in_stock").order("created_at", { ascending: false });
+  let q = db.from("products").select("slug,name,image_url,category,badge,stock_status,plans").eq("is_active", true).order("sort_order", { ascending: true });
   if (mode === "featured") q = q.not("badge", "is", null);
   q = q.range(page * perPage, page * perPage + perPage - 1);
 
@@ -125,13 +125,16 @@ async function showCatalog(chat_id: number, page: number) {
   }
 
   for (const p of products as any[]) {
-    const caption = `<b>${escapeHtml(p.name)}</b>\n💰 ৳${p.price}\n${p.in_stock === false ? "❌ Out of stock" : "✅ In stock"}`;
+    const price = firstPrice(p.plans);
+    const stockLine = p.stock_status && p.stock_status !== "in_stock" ? `❌ ${p.stock_status}` : "✅ In stock";
+    const priceLine = price ? `💰 ৳${price}` : "";
+    const caption = `<b>${escapeHtml(p.name)}</b>\n${priceLine}\n${stockLine}`.trim();
     const buttons: any[][] = [[
       { text: "➕ Add to cart", callback_data: `add:${p.slug}` },
       { text: "🌐 View", url: (store?.config?.buy_link_fallback || "https://accessnowbd.com/product/{{slug}}").replace("{{slug}}", p.slug) },
     ]];
-    if (p.image) {
-      await sendPhoto(chat_id, p.image, caption, { reply_markup: { inline_keyboard: buttons } });
+    if (p.image_url) {
+      await sendPhoto(chat_id, p.image_url, caption, { reply_markup: { inline_keyboard: buttons } });
     } else {
       await sendMessage(chat_id, caption, { reply_markup: { inline_keyboard: buttons } });
     }
@@ -141,6 +144,13 @@ async function showCatalog(chat_id: number, page: number) {
   if (page > 0) nav.push({ text: "◀️ Prev", callback_data: `page:${page - 1}` });
   if (products.length === perPage) nav.push({ text: "Next ▶️", callback_data: `page:${page + 1}` });
   if (nav.length) await sendMessage(chat_id, `Page ${page + 1}`, { reply_markup: { inline_keyboard: [nav] } });
+}
+
+function firstPrice(plans: any): number | null {
+  if (!Array.isArray(plans) || plans.length === 0) return null;
+  const p = plans[0];
+  const v = typeof p === "object" ? (p?.price ?? p?.amount ?? null) : null;
+  return typeof v === "number" ? v : (v ? Number(v) || null : null);
 }
 
 /* ---------------- Cart ---------------- */
