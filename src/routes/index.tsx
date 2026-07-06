@@ -27,6 +27,8 @@ import { PerfReportSection, ProfiledSection } from "@/components/PerfReportSecti
 import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
 import { RecentlyViewedSection } from "@/components/RecentlyViewedSection";
 import type { Product } from "@/data/products";
+import { DEFAULT_HOMEPAGE_CONFIG, fetchHomepageConfig } from "@/lib/homepage-config";
+import { useHomepageConfig } from "@/hooks/useHomepageConfig";
 
 export const Route = createFileRoute("/")({
   component: Index,
