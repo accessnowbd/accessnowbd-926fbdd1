@@ -65,22 +65,22 @@ export const registerTelegramWebhook = createServerFn({ method: "POST" })
   .inputValidator((data: { url: string }) => data)
   .handler(async ({ data }) => {
     const { tg, webhookSecret } = await import("./api.server");
-    const result = await tg("setWebhook", {
+    const result = await tg<any>("setWebhook", {
       url: data.url,
       secret_token: webhookSecret(),
       allowed_updates: ["message", "callback_query"],
       drop_pending_updates: true,
     });
-    return { ok: true, result };
+    return { ok: true as const, result: JSON.parse(JSON.stringify(result)) as Record<string, unknown> };
   });
 
 export const getTelegramWebhookInfo = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
       const { tg } = await import("./api.server");
-      const info = await tg("getWebhookInfo", {});
-      const me = await tg("getMe", {});
-      return { ok: true, info, me };
+      const info = await tg<any>("getWebhookInfo", {});
+      const me = await tg<any>("getMe", {});
+      return { ok: true as const, info: JSON.parse(JSON.stringify(info)) as Record<string, unknown>, me: JSON.parse(JSON.stringify(me)) as Record<string, unknown> };
     } catch (e: any) {
       return { ok: false, error: e?.message || "unknown" };
     }
