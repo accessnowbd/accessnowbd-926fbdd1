@@ -31,6 +31,10 @@ type Settings = {
   ipn_url: string;
   auto_verify: boolean;
   notes: string;
+  // Checkout display (customer-facing)
+  display_name: string;
+  brand_color: string;
+  logo_url: string;
 };
 
 const DEFAULT_SETTINGS: Settings = {
@@ -48,6 +52,9 @@ const DEFAULT_SETTINGS: Settings = {
   ipn_url: "",
   auto_verify: false,
   notes: "",
+  display_name: "EPS Payment",
+  brand_color: "#0ea5e9",
+  logo_url: "",
 };
 
 function EpsGatewayPage() {
