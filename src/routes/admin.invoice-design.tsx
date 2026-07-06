@@ -7,6 +7,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminLang } from "@/context/AdminLangContext";
 import { toast } from "sonner";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export const Route = createFileRoute("/admin/invoice-design")({
   component: InvoiceDesignPage,
