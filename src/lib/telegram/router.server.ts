@@ -270,7 +270,7 @@ async function showOrders(chat_id: number, user_id?: string | null) {
   const db = await admin();
   let q = db.from("orders").select("id,total,status,created_at").order("created_at", { ascending: false }).limit(5);
   if (user_id) q = q.eq("user_id", user_id);
-  else q = q.contains("metadata" as any, { chat_id } as never);
+  else q = q.ilike("admin_note", `%chat_id=${chat_id}%`);
   const { data } = await q;
   const orders = (data as any[]) || [];
   if (orders.length === 0) return sendMessage(chat_id, "এখনো কোনো অর্ডার নেই।", { reply_markup: mainMenu() });
