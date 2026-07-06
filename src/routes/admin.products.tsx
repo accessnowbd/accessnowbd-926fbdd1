@@ -673,6 +673,7 @@ const ACCOUNT_TYPES: { id: AccountType; label: string; icon: string }[] = [
  { id: "family", label: "Family", icon: "👪" },
  { id: "student", label: "Student", icon: "🎓" },
  { id: "business", label: "Business", icon: "🛍️" },
+ { id: "custom", label: "Custom", icon: "⚙️" },
 ];
 
 const DURATION_CHIPS = [
