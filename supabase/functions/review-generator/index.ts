@@ -66,6 +66,10 @@ serve(async (req) => {
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
 
+    const cfg = await getAiConfig();
+    if (!cfg.features.review_generator) return featureDisabledResponse("review_generator", cors);
+
+
     const { product, count = 5, language = "mixed", ratingBias = "high" } = (await req.json()) as Body;
     if (!product?.name) throw new Error("product.name is required");
 
