@@ -82,9 +82,9 @@ function EpsGatewayPage() {
         const origin = window.location.origin;
         return {
           ...prev,
-          success_url: prev.success_url || `${origin}/eps/success`,
-          fail_url:    prev.fail_url    || `${origin}/eps/fail`,
-          cancel_url:  prev.cancel_url  || `${origin}/eps/cancel`,
+          success_url: prev.success_url || `${origin}/api/public/eps/success`,
+          fail_url:    prev.fail_url    || `${origin}/api/public/eps/fail`,
+          cancel_url:  prev.cancel_url  || `${origin}/api/public/eps/cancel`,
           ipn_url:     prev.ipn_url     || `${origin}/api/public/eps/ipn`,
         };
       });
