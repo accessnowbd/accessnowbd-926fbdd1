@@ -207,13 +207,13 @@ async function placeOrder(chat_id: number, state: any, sub: any) {
     return sendMessage(chat_id, "কার্ট খালি হয়ে গেছে। আবার শুরু করুন।");
   }
   const db = await admin();
-  const { data: products } = await db.from("products").select("slug,name,price,image").in("slug", cart.map((c) => c.slug));
+  const { data: products } = await db.from("products").select("slug,name,image_url,plans").in("slug", cart.map((c) => c.slug));
   const priceOf = new Map<string, any>();
   (products as any[] | null)?.forEach((p) => priceOf.set(p.slug, p));
 
   const items = cart.map((c) => {
     const p = priceOf.get(c.slug) || {};
-    return { slug: c.slug, qty: c.qty, name: p.name || c.slug, price: Number(p.price) || 0, image: p.image || null };
+    return { slug: c.slug, qty: c.qty, name: p.name || c.slug, price: firstPrice(p.plans) || 0, image: p.image_url || null };
   });
   const total = items.reduce((s, i) => s + i.price * i.qty, 0);
 
@@ -222,13 +222,13 @@ async function placeOrder(chat_id: number, state: any, sub: any) {
     .insert({
       user_id: sub?.user_id ?? null,
       full_name: state.name || sub?.first_name || "Telegram user",
-      email: null,
+      email: `tg-${chat_id}@telegram.local`,
       phone: state.phone,
       payment_method: "cod",
       transaction_id: `TG-${Date.now()}`,
       items: items as never,
       total,
-      metadata: { source: "telegram", chat_id, address: state.address } as never,
+      admin_note: `[telegram chat_id=${chat_id}] Address: ${state.address}`,
     } as never)
     .select("id")
     .single();
