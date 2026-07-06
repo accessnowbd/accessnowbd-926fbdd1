@@ -30,21 +30,37 @@ export const EmailLayout = ({ preview, heading, children }: LayoutProps) => (
     <Preview>{preview}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Section style={header}>
+        <Section style={headerBand}>
           <Link href={SITE_URL} style={brandLink}>
-            {/* Gradient wordmark — same brand mark used on-site */}
-            <span style={brandRow as React.CSSProperties}>
-              <span style={{ ...wordBase, color: '#1d4ed8' }}>Access</span>
-              <span style={{ ...wordBase, color: '#1fc796' }}>Now</span>
-              <span style={{ ...wordBase, color: '#f59e0b' }}>BD</span>
-            </span>
-            <span style={tagRow as React.CSSProperties}>
-              <span style={tagWord}>FAST</span>
-              <span style={{ ...tagDot, backgroundColor: '#2f6dff' }} />
-              <span style={tagWord}>SECURE</span>
-              <span style={{ ...tagDot, backgroundColor: '#1fc796' }} />
-              <span style={tagWord}>RELIABLE</span>
-            </span>
+            <table role="presentation" cellPadding={0} cellSpacing={0} border={0} align="center" style={brandTable}>
+              <tbody>
+                <tr>
+                  <td style={badgeCell}>
+                    <Img
+                      src={LOGO_URL}
+                      width="44"
+                      height="44"
+                      alt="AccessNow BD"
+                      style={badgeImg}
+                    />
+                  </td>
+                  <td style={wordCell}>
+                    <div style={brandRow as React.CSSProperties}>
+                      <span style={{ ...wordBase, color: '#1d4ed8' }}>Access</span>
+                      <span style={{ ...wordBase, color: '#1fc796' }}>Now</span>
+                      <span style={{ ...wordBase, color: '#f59e0b' }}>BD</span>
+                    </div>
+                    <div style={tagRow as React.CSSProperties}>
+                      <span style={tagWord}>FAST</span>
+                      <span style={{ ...tagDot, backgroundColor: '#2f6dff' }} />
+                      <span style={tagWord}>SECURE</span>
+                      <span style={{ ...tagDot, backgroundColor: '#1fc796' }} />
+                      <span style={tagWord}>RELIABLE</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </Link>
         </Section>
         <Section style={card}>
