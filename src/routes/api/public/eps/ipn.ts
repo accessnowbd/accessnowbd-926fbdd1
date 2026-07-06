@@ -66,7 +66,7 @@ export const Route = createFileRoute("/api/public/eps/ipn")({
         // Log the raw callback for audit (bkash_transaction-style row).
         await supabaseAdmin.from("admin_records").insert({
           kind: "eps_transaction",
-          data: {
+          data: JSON.parse(JSON.stringify({
             tran_id: tranId,
             val_id: body.val_id ?? null,
             status,
@@ -74,8 +74,8 @@ export const Route = createFileRoute("/api/public/eps/ipn")({
             currency: body.currency || "BDT",
             bank_tran_id: body.bank_tran_id ?? null,
             card_type: body.card_type ?? null,
-            raw: body as unknown as Record<string, unknown>,
-          },
+            raw: body,
+          })),
           is_active: true,
           sort_order: 0,
         });
