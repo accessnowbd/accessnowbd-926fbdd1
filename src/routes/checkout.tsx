@@ -191,6 +191,9 @@ function CheckoutPage() {
 
   const selectedMethod = methods.find((m) => m.id === method) ?? methods[0];
   const isEps = method === "eps";
+  const isSslcz = method === "sslcz";
+  const isHostedGateway = isEps || isSslcz;
+  const hostedGatewayConfig = isEps ? epsConfig : isSslcz ? sslczConfig : null;
 
   const update = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
   const blur = (k: string) => setTouched((t) => ({ ...t, [k]: true }));
