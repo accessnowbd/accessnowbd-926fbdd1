@@ -11,12 +11,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  * below, which returns only display-safe fields.
  * ============================================================ */
 
- * Fields in .data:
- *   merchant_id, store_password, api_key, api_secret, api_url
- *   enabled, mode ("sandbox"|"live"), currency,
- *   success_url, fail_url, cancel_url, ipn_url,
- *   auto_verify, notes
- * ============================================================ */
 
 const SANDBOX_URL = "https://sandbox.eps.com.bd/api";
 const LIVE_URL = "https://api.eps.com.bd/api";
