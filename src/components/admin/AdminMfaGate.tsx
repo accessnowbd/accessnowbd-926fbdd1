@@ -104,7 +104,7 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
       const cfg = settingsRes.settings;
       setSettings(cfg);
       const markOk = () => {
-        try { sessionStorage.setItem(MFA_OK_CACHE_KEY, "1"); } catch { /* ignore */ }
+        try { localStorage.setItem(MFA_OK_CACHE_KEY, String(Date.now())); } catch { /* ignore */ }
         setMode("ok");
       };
       if (!cfg.mfa_enforced) {
@@ -116,7 +116,7 @@ export function AdminMfaGate({ children, onSignOut, userEmail }: Props) {
         return;
       }
       // Cache is stale — clear and continue with challenge flow
-      try { sessionStorage.removeItem(MFA_OK_CACHE_KEY); } catch { /* ignore */ }
+      try { localStorage.removeItem(MFA_OK_CACHE_KEY); } catch { /* ignore */ }
 
 
 
