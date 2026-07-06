@@ -639,33 +639,33 @@ function CheckoutPage() {
           </div>
         )}
 
-        {/* EPS online gateway card */}
-        {!fullyByWallet && isEps && (
+        {/* Hosted online gateway card (EPS / SSLCommerz) */}
+        {!fullyByWallet && isHostedGateway && (
           <div
             className="mx-5 mt-5 rounded-3xl border p-5 space-y-3"
-            style={{ borderColor: `${epsConfig?.brand_color || "#0ea5e9"}55`, background: `${epsConfig?.brand_color || "#0ea5e9"}0d` }}
+            style={{ borderColor: `${hostedGatewayConfig?.brand_color || "#0ea5e9"}55`, background: `${hostedGatewayConfig?.brand_color || "#0ea5e9"}0d` }}
           >
             <div className="flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-xl grid place-items-center text-white shrink-0"
-                style={{ background: epsConfig?.brand_color || "#0ea5e9" }}
+                style={{ background: hostedGatewayConfig?.brand_color || "#0ea5e9" }}
               >
-                {epsConfig?.logo_url ? (
-                  <img src={epsConfig.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                {hostedGatewayConfig?.logo_url ? (
+                  <img src={hostedGatewayConfig.logo_url} alt="" className="max-w-full max-h-full object-contain" />
                 ) : (
                   <Zap className="w-5 h-5" />
                 )}
               </div>
               <div className="min-w-0">
-                <div className="text-[13px] font-bold text-foreground">{epsConfig?.display_name || "EPS Payment"} — অনলাইন গেটওয়ে</div>
+                <div className="text-[13px] font-bold text-foreground">{hostedGatewayConfig?.display_name || (isSslcz ? "SSLCommerz" : "EPS Payment")} — অনলাইন গেটওয়ে</div>
                 <div className="text-[11px] text-muted-foreground">
                   bKash / Nagad / Rocket / কার্ড — এক ক্লিকে নিরাপদ পেমেন্ট
-                  {epsConfig?.mode === "sandbox" && <span className="ml-1 text-amber-600 font-semibold">(Sandbox / Test)</span>}
+                  {hostedGatewayConfig?.mode === "sandbox" && <span className="ml-1 text-amber-600 font-semibold">(Sandbox / Test)</span>}
                 </div>
               </div>
             </div>
             <ul className="text-[12px] text-foreground/85 space-y-1.5 pl-1">
-              <li>✓ "অর্ডার কনফার্ম করুন" চাপলে সরাসরি EPS পেজে যাবেন</li>
+              <li>✓ "অর্ডার কনফার্ম করুন" চাপলে সরাসরি গেটওয়ে পেজে যাবেন</li>
               <li>✓ সেখানে পেমেন্ট শেষ হলে অটো-ভেরিফাই হয়ে অর্ডার প্রসেসিং শুরু হবে</li>
               <li>✓ কোনো TrxID বা স্ক্রিনশট দিতে হবে না</li>
             </ul>
@@ -673,7 +673,7 @@ function CheckoutPage() {
         )}
 
         {/* Brand instruction card (manual mobile-banking methods) */}
-        {!fullyByWallet && !isEps && (
+        {!fullyByWallet && !isHostedGateway && (
           <div className="mx-5 mt-5 rounded-3xl border border-border bg-muted p-5 space-y-4">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5 min-w-0">
