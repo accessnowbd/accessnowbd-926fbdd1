@@ -106,13 +106,6 @@ export function BrandLogo({
               BD
             </span>
           </span>
-          <span className={`mt-1 flex w-full ${s.tagMax} items-center justify-between gap-2`}>
-            <span className={`${s.tag} uppercase tracking-[0.22em] font-bold ${tagClassName}`}>Fast</span>
-            <span className={`${s.dot} rounded-full bg-[#2f6dff] shadow-[0_0_6px_rgba(47,109,255,0.7)]`} />
-            <span className={`${s.tag} uppercase tracking-[0.22em] font-bold ${tagClassName}`}>Secure</span>
-            <span className={`${s.dot} rounded-full bg-[#1fc796] shadow-[0_0_6px_rgba(31,199,150,0.7)]`} />
-            <span className={`${s.tag} uppercase tracking-[0.22em] font-bold ${tagClassName}`}>Reliable</span>
-          </span>
         </span>
       )}
     </span>
