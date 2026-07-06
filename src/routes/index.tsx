@@ -2,16 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
-  Bot,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
   Clock3,
-  GraduationCap,
   Headphones,
-  MonitorSmartphone,
-  Palette,
-  PlayCircle,
   ShieldCheck,
   Sparkles,
   Star,
