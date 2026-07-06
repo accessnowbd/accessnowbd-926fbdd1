@@ -1321,6 +1321,114 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_notifications_log: {
+        Row: {
+          chat_id: number | null
+          created_at: string
+          error: string | null
+          event: string
+          id: string
+          payload: Json
+          status: string
+        }
+        Insert: {
+          chat_id?: number | null
+          created_at?: string
+          error?: string | null
+          event: string
+          id?: string
+          payload?: Json
+          status?: string
+        }
+        Update: {
+          chat_id?: number | null
+          created_at?: string
+          error?: string | null
+          event?: string
+          id?: string
+          payload?: Json
+          status?: string
+        }
+        Relationships: []
+      }
+      telegram_settings: {
+        Row: {
+          config: Json
+          created_at: string
+          enabled: boolean
+          id: string
+          kind: string
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          kind: string
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          kind?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      telegram_subscribers: {
+        Row: {
+          cart: Json
+          chat_id: number
+          created_at: string
+          first_name: string | null
+          id: string
+          is_blocked: boolean
+          language: string | null
+          last_name: string | null
+          last_seen_at: string
+          role: string
+          state: Json
+          updated_at: string
+          user_id: string | null
+          username: string | null
+        }
+        Insert: {
+          cart?: Json
+          chat_id: number
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          is_blocked?: boolean
+          language?: string | null
+          last_name?: string | null
+          last_seen_at?: string
+          role?: string
+          state?: Json
+          updated_at?: string
+          user_id?: string | null
+          username?: string | null
+        }
+        Update: {
+          cart?: Json
+          chat_id?: number
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          is_blocked?: boolean
+          language?: string | null
+          last_name?: string | null
+          last_seen_at?: string
+          role?: string
+          state?: Json
+          updated_at?: string
+          user_id?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
       ticket_messages: {
         Row: {
           body: string

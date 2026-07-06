@@ -53,6 +53,7 @@ import { Route as AdminTrackingPixelsRouteImport } from './routes/admin.tracking
 import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
+import { Route as AdminTelegramRouteImport } from './routes/admin.telegram'
 import { Route as AdminSslczPgwRouteImport } from './routes/admin.sslcz-pgw'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
@@ -103,6 +104,7 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicTelegramWebhookRouteImport } from './routes/api/public/telegram/webhook'
 import { Route as ApiPublicSslczSuccessRouteImport } from './routes/api/public/sslcz/success'
 import { Route as ApiPublicSslczIpnRouteImport } from './routes/api/public/sslcz/ipn'
 import { Route as ApiPublicSslczFailRouteImport } from './routes/api/public/sslcz/fail'
@@ -331,6 +333,11 @@ const AdminTicketsRoute = AdminTicketsRouteImport.update({
 const AdminThemesRoute = AdminThemesRouteImport.update({
   id: '/themes',
   path: '/themes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTelegramRoute = AdminTelegramRouteImport.update({
+  id: '/telegram',
+  path: '/telegram',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminSslczPgwRoute = AdminSslczPgwRouteImport.update({
@@ -590,6 +597,12 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   path: '/lovable/email/auth/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicTelegramWebhookRoute =
+  ApiPublicTelegramWebhookRouteImport.update({
+    id: '/api/public/telegram/webhook',
+    path: '/api/public/telegram/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicSslczSuccessRoute = ApiPublicSslczSuccessRouteImport.update({
   id: '/api/public/sslcz/success',
   path: '/api/public/sslcz/success',
@@ -703,6 +716,7 @@ export interface FileRoutesByFullPath {
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
+  '/admin/telegram': typeof AdminTelegramRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -729,6 +743,7 @@ export interface FileRoutesByFullPath {
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
   '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
+  '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -806,6 +821,7 @@ export interface FileRoutesByTo {
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
+  '/admin/telegram': typeof AdminTelegramRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -832,6 +848,7 @@ export interface FileRoutesByTo {
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
   '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
+  '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -911,6 +928,7 @@ export interface FileRoutesById {
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
+  '/admin/telegram': typeof AdminTelegramRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -937,6 +955,7 @@ export interface FileRoutesById {
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
   '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
+  '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -1017,6 +1036,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/settings'
     | '/admin/sslcz-pgw'
+    | '/admin/telegram'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -1043,6 +1063,7 @@ export interface FileRouteTypes {
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
     | '/api/public/sslcz/success'
+    | '/api/public/telegram/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -1120,6 +1141,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/settings'
     | '/admin/sslcz-pgw'
+    | '/admin/telegram'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -1146,6 +1168,7 @@ export interface FileRouteTypes {
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
     | '/api/public/sslcz/success'
+    | '/api/public/telegram/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -1224,6 +1247,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/settings'
     | '/admin/sslcz-pgw'
+    | '/admin/telegram'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -1250,6 +1274,7 @@ export interface FileRouteTypes {
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
     | '/api/public/sslcz/success'
+    | '/api/public/telegram/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -1307,6 +1332,7 @@ export interface RootRouteChildren {
   ApiPublicSslczFailRoute: typeof ApiPublicSslczFailRoute
   ApiPublicSslczIpnRoute: typeof ApiPublicSslczIpnRoute
   ApiPublicSslczSuccessRoute: typeof ApiPublicSslczSuccessRoute
+  ApiPublicTelegramWebhookRoute: typeof ApiPublicTelegramWebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -1622,6 +1648,13 @@ declare module '@tanstack/react-router' {
       path: '/themes'
       fullPath: '/admin/themes'
       preLoaderRoute: typeof AdminThemesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/telegram': {
+      id: '/admin/telegram'
+      path: '/telegram'
+      fullPath: '/admin/telegram'
+      preLoaderRoute: typeof AdminTelegramRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/sslcz-pgw': {
@@ -1974,6 +2007,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/telegram/webhook': {
+      id: '/api/public/telegram/webhook'
+      path: '/api/public/telegram/webhook'
+      fullPath: '/api/public/telegram/webhook'
+      preLoaderRoute: typeof ApiPublicTelegramWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/sslcz/success': {
       id: '/api/public/sslcz/success'
       path: '/api/public/sslcz/success'
@@ -2073,6 +2113,7 @@ interface AdminRouteChildren {
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminSslczPgwRoute: typeof AdminSslczPgwRoute
+  AdminTelegramRoute: typeof AdminTelegramRoute
   AdminThemesRoute: typeof AdminThemesRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminTrackingRoute: typeof AdminTrackingRoute
@@ -2123,6 +2164,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminSecurityRoute: AdminSecurityRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminSslczPgwRoute: AdminSslczPgwRoute,
+  AdminTelegramRoute: AdminTelegramRoute,
   AdminThemesRoute: AdminThemesRoute,
   AdminTicketsRoute: AdminTicketsRoute,
   AdminTrackingRoute: AdminTrackingRoute,
@@ -2197,6 +2239,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicSslczFailRoute: ApiPublicSslczFailRoute,
   ApiPublicSslczIpnRoute: ApiPublicSslczIpnRoute,
   ApiPublicSslczSuccessRoute: ApiPublicSslczSuccessRoute,
+  ApiPublicTelegramWebhookRoute: ApiPublicTelegramWebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
