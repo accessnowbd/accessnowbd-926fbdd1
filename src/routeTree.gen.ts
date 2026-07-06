@@ -87,6 +87,7 @@ import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminBulkUpdateRouteImport } from './routes/admin.bulk-update'
 import { Route as AdminBkashTransactionsRouteImport } from './routes/admin.bkash-transactions'
 import { Route as AdminBackupRouteImport } from './routes/admin.backup'
+import { Route as AdminAiCommandRouteImport } from './routes/admin.ai-command'
 import { Route as AdminAffiliatesRouteImport } from './routes/admin.affiliates'
 import { Route as AdminAbandonedCheckoutRouteImport } from './routes/admin.abandoned-checkout'
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
@@ -502,6 +503,11 @@ const AdminBackupRoute = AdminBackupRouteImport.update({
   path: '/backup',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAiCommandRoute = AdminAiCommandRouteImport.update({
+  id: '/ai-command',
+  path: '/ai-command',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAffiliatesRoute = AdminAffiliatesRouteImport.update({
   id: '/affiliates',
   path: '/affiliates',
@@ -655,6 +661,7 @@ export interface FileRoutesByFullPath {
   '/admin/$page': typeof AdminPageRoute
   '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
   '/admin/affiliates': typeof AdminAffiliatesRoute
+  '/admin/ai-command': typeof AdminAiCommandRoute
   '/admin/backup': typeof AdminBackupRoute
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
@@ -756,6 +763,7 @@ export interface FileRoutesByTo {
   '/admin/$page': typeof AdminPageRoute
   '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
   '/admin/affiliates': typeof AdminAffiliatesRoute
+  '/admin/ai-command': typeof AdminAiCommandRoute
   '/admin/backup': typeof AdminBackupRoute
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
@@ -859,6 +867,7 @@ export interface FileRoutesById {
   '/admin/$page': typeof AdminPageRoute
   '/admin/abandoned-checkout': typeof AdminAbandonedCheckoutRoute
   '/admin/affiliates': typeof AdminAffiliatesRoute
+  '/admin/ai-command': typeof AdminAiCommandRoute
   '/admin/backup': typeof AdminBackupRoute
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
@@ -963,6 +972,7 @@ export interface FileRouteTypes {
     | '/admin/$page'
     | '/admin/abandoned-checkout'
     | '/admin/affiliates'
+    | '/admin/ai-command'
     | '/admin/backup'
     | '/admin/bkash-transactions'
     | '/admin/bulk-update'
@@ -1064,6 +1074,7 @@ export interface FileRouteTypes {
     | '/admin/$page'
     | '/admin/abandoned-checkout'
     | '/admin/affiliates'
+    | '/admin/ai-command'
     | '/admin/backup'
     | '/admin/bkash-transactions'
     | '/admin/bulk-update'
@@ -1166,6 +1177,7 @@ export interface FileRouteTypes {
     | '/admin/$page'
     | '/admin/abandoned-checkout'
     | '/admin/affiliates'
+    | '/admin/ai-command'
     | '/admin/backup'
     | '/admin/bkash-transactions'
     | '/admin/bulk-update'
@@ -1838,6 +1850,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBackupRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/ai-command': {
+      id: '/admin/ai-command'
+      path: '/ai-command'
+      fullPath: '/admin/ai-command'
+      preLoaderRoute: typeof AdminAiCommandRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/affiliates': {
       id: '/admin/affiliates'
       path: '/affiliates'
@@ -1999,6 +2018,7 @@ interface AdminRouteChildren {
   AdminPageRoute: typeof AdminPageRoute
   AdminAbandonedCheckoutRoute: typeof AdminAbandonedCheckoutRoute
   AdminAffiliatesRoute: typeof AdminAffiliatesRoute
+  AdminAiCommandRoute: typeof AdminAiCommandRoute
   AdminBackupRoute: typeof AdminBackupRoute
   AdminBkashTransactionsRoute: typeof AdminBkashTransactionsRoute
   AdminBulkUpdateRoute: typeof AdminBulkUpdateRoute
@@ -2047,6 +2067,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPageRoute: AdminPageRoute,
   AdminAbandonedCheckoutRoute: AdminAbandonedCheckoutRoute,
   AdminAffiliatesRoute: AdminAffiliatesRoute,
+  AdminAiCommandRoute: AdminAiCommandRoute,
   AdminBackupRoute: AdminBackupRoute,
   AdminBkashTransactionsRoute: AdminBkashTransactionsRoute,
   AdminBulkUpdateRoute: AdminBulkUpdateRoute,
