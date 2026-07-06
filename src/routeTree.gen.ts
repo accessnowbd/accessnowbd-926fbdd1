@@ -72,6 +72,7 @@ import { Route as AdminInvoiceDesignRouteImport } from './routes/admin.invoice-d
 import { Route as AdminGoogleAdsRouteImport } from './routes/admin.google-ads'
 import { Route as AdminFbPixelRouteImport } from './routes/admin.fb-pixel'
 import { Route as AdminFbAudiencesRouteImport } from './routes/admin.fb-audiences'
+import { Route as AdminEpsPgwRouteImport } from './routes/admin.eps-pgw'
 import { Route as AdminEmailDashboardRouteImport } from './routes/admin.email-dashboard'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
 import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.description-preview'
@@ -409,6 +410,11 @@ const AdminFbAudiencesRoute = AdminFbAudiencesRouteImport.update({
   path: '/fb-audiences',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEpsPgwRoute = AdminEpsPgwRouteImport.update({
+  id: '/eps-pgw',
+  path: '/eps-pgw',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminEmailDashboardRoute = AdminEmailDashboardRouteImport.update({
   id: '/email-dashboard',
   path: '/email-dashboard',
@@ -555,6 +561,7 @@ export interface FileRoutesByFullPath {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
+  '/admin/eps-pgw': typeof AdminEpsPgwRoute
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
@@ -639,6 +646,7 @@ export interface FileRoutesByTo {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
+  '/admin/eps-pgw': typeof AdminEpsPgwRoute
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
@@ -725,6 +733,7 @@ export interface FileRoutesById {
   '/admin/description-preview': typeof AdminDescriptionPreviewRoute
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
+  '/admin/eps-pgw': typeof AdminEpsPgwRoute
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
@@ -812,6 +821,7 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/email-dashboard'
+    | '/admin/eps-pgw'
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
     | '/admin/google-ads'
@@ -896,6 +906,7 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/email-dashboard'
+    | '/admin/eps-pgw'
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
     | '/admin/google-ads'
@@ -981,6 +992,7 @@ export interface FileRouteTypes {
     | '/admin/description-preview'
     | '/admin/description-template'
     | '/admin/email-dashboard'
+    | '/admin/eps-pgw'
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
     | '/admin/google-ads'
@@ -1513,6 +1525,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFbAudiencesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/eps-pgw': {
+      id: '/admin/eps-pgw'
+      path: '/eps-pgw'
+      fullPath: '/admin/eps-pgw'
+      preLoaderRoute: typeof AdminEpsPgwRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/email-dashboard': {
       id: '/admin/email-dashboard'
       path: '/email-dashboard'
@@ -1668,6 +1687,7 @@ interface AdminRouteChildren {
   AdminDescriptionPreviewRoute: typeof AdminDescriptionPreviewRoute
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminEmailDashboardRoute: typeof AdminEmailDashboardRoute
+  AdminEpsPgwRoute: typeof AdminEpsPgwRoute
   AdminFbAudiencesRoute: typeof AdminFbAudiencesRoute
   AdminFbPixelRoute: typeof AdminFbPixelRoute
   AdminGoogleAdsRoute: typeof AdminGoogleAdsRoute
@@ -1712,6 +1732,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminDescriptionPreviewRoute: AdminDescriptionPreviewRoute,
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminEmailDashboardRoute: AdminEmailDashboardRoute,
+  AdminEpsPgwRoute: AdminEpsPgwRoute,
   AdminFbAudiencesRoute: AdminFbAudiencesRoute,
   AdminFbPixelRoute: AdminFbPixelRoute,
   AdminGoogleAdsRoute: AdminGoogleAdsRoute,
