@@ -1,76 +1,78 @@
-# Telegram Bot Integration — Plan
+## লক্ষ্য
+`/admin/homepage-editor` — এখান থেকে homepage এর প্রতিটি section (banner, categories, trust badges, product rails, bundles, activity ticker, SEO) সম্পূর্ণ manage করা যাবে। এখন menu-তে entry আছে কিন্তু কোনো route file নেই — click করলে 404 দেখাবে।
 
-## কী বানানো হবে
+## বর্তমান অবস্থা (`src/routes/index.tsx`)
+- ✅ **Hero Banner Slider** — ইতিমধ্যেই DB-backed (`admin_records.kind='banner_slider'`) এবং `/admin/hero-banners` থেকে edit হয়
+- ❌ **Category Pills** — hardcoded `CATEGORY_DECK` array
+- ❌ **Trust Badges** — hardcoded `TRUST_ITEMS`
+- ❌ **Feature Bundles** — hardcoded `FEATURE_BUNDLES`
+- ❌ **Activity Ticker** — hardcoded `ACTIVITY`
+- ❌ **Product Rails** — hardcoded category list
+- ❌ **Featured Products** — কোন-কোনটা featured সেটা set করার UI নেই
+- ❌ **Section on/off** — কোন section homepage-এ দেখাবে সেটা toggle করার উপায় নেই
+- ❌ **SEO** — homepage title/description hardcoded
 
-একটা Telegram bot যেখান থেকে customer সম্পূর্ণ AccessNow BD-র product browse করতে, cart বানাতে আর payment screenshot সহ checkout সম্পন্ন করতে পারবে। একই সাথে নতুন product বা update channel-এ auto post হবে, আর admin panel থেকে পুরো bot control করা যাবে।
+## যা তৈরি হবে
 
----
+### 1) নতুন DB entry: `homepage_config`
+`admin_records` টেবিলে একটি row (`kind='homepage_config'`) যা সব setting একসাথে ধরবে:
+```json
+{
+  "sections": {
+    "hero": { "enabled": true, "order": 1 },
+    "categoryPills": { "enabled": true, "order": 2 },
+    "trustBadges": { "enabled": true, "order": 3 },
+    "featured": { "enabled": true, "order": 4, "productSlugs": [...] },
+    "bundles": { "enabled": true, "order": 5 },
+    "activityTicker": { "enabled": true, "order": 6 },
+    "rails": { "enabled": true, "order": 7, "categories": ["ai-tools", ...] },
+    "recentlyViewed": { "enabled": true, "order": 8 }
+  },
+  "categoryPills": [{ "title": "...", "label": "...", "icon": "PlayCircle", "to": "/streaming", "count": "12+" }],
+  "trustBadges": [{ "icon": "Clock3", "title": "...", "text": "..." }],
+  "bundles": [{ "title": "Creator Stack", "items": [...], "price": "৳499+", "link": "..." }],
+  "activityLines": ["Tahsin K. · ChatGPT Plus...", ...],
+  "seo": { "title": "...", "description": "...", "ogTitle": "...", "ogDescription": "..." }
+}
+```
 
-## ১. Customer flow (Telegram bot-এর ভিতরে)
+Public SELECT policy already covers `admin_records` where `is_active`, তাই homepage এটা read করতে পারবে।
 
-- `/start` → welcome message + main menu (Browse Products, My Cart, My Orders, Support)
-- **Browse**: Category → Product list → Product detail (image + price + description + Add to Cart / Buy Now)
-- **Cart**: items add/remove/quantity, coupon apply, subtotal
-- **Checkout (bot-এর ভিতরে full)**:
-  1. Name, phone, email (saved per Telegram user)
-  2. Payment method select (bKash / Nagad / Rocket — admin_records থেকে number দেখাবে)
-  3. Transaction ID input
-  4. Payment screenshot upload (bot → payment-screenshots bucket)
-  5. Order create হবে `orders` table-এ (source = "telegram"), status = pending
-- **My Orders**: নিজের সব order status সহ দেখা
-- **Support**: WhatsApp link + admin_records-এর contact
+### 2) নতুন route: `src/routes/admin.homepage-editor.tsx`
+Tab-based editor:
 
-## ২. Auto sync — Telegram channel-এ broadcast
+- **Overview tab** — সব section এর enable toggle + drag-to-reorder
+- **Hero Banners tab** — Link out to existing `/admin/hero-banners` (এখনই DB-backed)
+- **Category Pills tab** — Add/edit/remove/reorder pills (title, label, Lucide icon picker, target route, count text)
+- **Trust Badges tab** — Add/edit/remove badges (icon, title, text)
+- **Featured Products tab** — Product picker (multiselect from `products` table); ordered list
+- **Bundles tab** — Add/edit stacks (title, item list, price text, link)
+- **Activity Ticker tab** — Textarea per line, add/remove/reorder
+- **Product Rails tab** — Which categories show as rails, ordering
+- **SEO tab** — Title, description, OG title/description edit
 
-- নতুন product publish হলে → channel-এ post (image + name + price + "Order on bot" button)
-- দাম পরিবর্তন / promotion / stock change → channel-এ update post
-- Database trigger বা server-side hook (product insert/update) → server route → channel-এ post
+Common UX per tab: preview, save button, "Reset to default" per section, success toast, disabled state while saving।
 
-## ৩. Admin panel control (`/admin/telegram`)
+### 3) Homepage refactor (`src/routes/index.tsx`)
+- একটি `useHomepageConfig()` hook — `admin_records` থেকে config fetch + fallback to hardcoded defaults যদি row না থাকে
+- Section render loop: enabled sections কে order অনুযায়ী দেখাবে
+- Category pills, trust items, bundles, activity — সব DB থেকে (fallback defaults সহ যাতে DB blank থাকলেও site ভাঙে না)
+- Featured products slugs list DB-driven; product data existing `useProducts` hook থেকে
+- SEO meta: loader-এ config load করে `head()` এ inject
 
-নতুন page-এ:
+### 4) Icon picker helper
+Lucide-react icons এর curated list (~40টা) থেকে dropdown—user string name save করবে, render-time এ map lookup।
 
-- **Bot settings**: welcome message, channel ID, on/off toggle
-- **Product visibility**: প্রতি product-এ "Show on Telegram" toggle (products table-এ নতুন column `telegram_visible`)
-- **Manual broadcast**: যেকোনো product বা custom text + image channel-এ পাঠানো
-- **Bot users list**: যারা bot ব্যবহার করেছে — Telegram user_id, name, last seen, order count
-- **Order tracking**: Telegram থেকে আসা order আলাদা filter (existing /admin/orders-এ "Source: Telegram" filter add)
-- **Activity log**: কোন user কোন product দেখলো / cart-এ রাখলো (abandoned tracking)
+## Technical Notes
+- `admin_records` schema already RLS-secured (admin write, public read for active)। নতুন migration লাগবে না — শুধু `homepage_config` kind এর row app-side upsert হবে।
+- Homepage index route এর existing `loader` extend করে config parallel-fetch হবে যাতে SSR HTML এ meta ঠিক থাকে
+- Section reordering: config এর `order` field অনুযায়ী sort — drag-drop `@dnd-kit/sortable` ইতিমধ্যেই installed কিনা চেক করে সেটা use করব, নাহলে simple up/down button
+- সব save operation optimistic UI + toast notification
+- `useHomepageConfig` realtime subscription — admin edit করার সাথে সাথে homepage refresh হবে (Hero banner এর মতো pattern)
 
----
+## Files Impact
+- **New**: `src/routes/admin.homepage-editor.tsx`, `src/hooks/useHomepageConfig.ts`, `src/lib/homepage-defaults.ts` (fallback data + Lucide icon map)
+- **Edit**: `src/routes/index.tsx` (config-driven rendering)
+- **No schema migration needed** (uses existing `admin_records`)
 
-## ৪. Technical layout
-
-### Database (migrations)
-- `telegram_users` — telegram_id (PK), chat_id, name, phone, email, last_seen, total_orders
-- `telegram_settings` — singleton row: bot_enabled, channel_id, welcome_message, custom button labels
-- `telegram_broadcasts` — log of sent broadcasts (product_id nullable, message, image_url, sent_at, sent_by)
-- `telegram_carts` — telegram_id → items jsonb + coupon + updated_at (session cart)
-- `products` table-এ নতুন column: `telegram_visible boolean default true`
-- `orders` table-এর `source` column-এ "telegram" value support
-- Trigger: products insert/update → enqueue broadcast (table-based queue, server polls)
-
-### Server routes (public, signature-verified)
-- `POST /api/public/telegram/webhook` — Telegram → bot incoming messages handler (state machine for browse/cart/checkout)
-- Webhook secret: derived from `TELEGRAM_API_KEY` (existing pattern), validated via `X-Telegram-Bot-Api-Secret-Token`
-
-### Server functions (admin only, `requireSupabaseAuth` + `has_role('admin')`)
-- `updateTelegramSettings` — bot config update
-- `broadcastToChannel` — manual message/product post
-- `toggleProductTelegramVisibility` — per-product on/off
-- `listTelegramUsers` — paginated user list
-
-### Lovable Cloud
-- Telegram connector connect (Bot token via BotFather)
-- Storage: existing `payment-screenshots` bucket reused for bot-uploaded screenshots
-- Gateway URL: `https://connector-gateway.lovable.dev/telegram/*`
-
----
-
-## ৫. কী লাগবে আপনার কাছ থেকে
-
-1. **Telegram bot tokenor BotFather setup** — Telegram connector connect করতে হবে (এক click)
-2. **Channel ID** — যে channel-এ auto post হবে (bot-কে আগে channel admin বানাতে হবে)
-3. **BotFather-এ bot privacy disable** করতে হবে যাতে group/inline সব command পায়
-
-Plan approve করলে আগে Telegram connector connect করার জন্য বলব, তারপর migration + bot code + admin page একসাথে build করব।
+Approve করলে ধাপে ধাপে build শুরু করব।
