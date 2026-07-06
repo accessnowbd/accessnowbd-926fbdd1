@@ -13,7 +13,7 @@ import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
 import { AdminMfaGate } from "@/components/admin/AdminMfaGate";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { AdminLangProvider, useAdminLang } from "@/context/AdminLangContext";
-import accessNowLogo from "@/assets/logo-gold-a.webp";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
