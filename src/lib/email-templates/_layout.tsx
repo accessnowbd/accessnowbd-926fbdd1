@@ -29,8 +29,20 @@ export const EmailLayout = ({ preview, heading, children }: LayoutProps) => (
     <Body style={main}>
       <Container style={container}>
         <Section style={header}>
-          <Link href={SITE_URL} style={brand}>
-            {SITE}
+          <Link href={SITE_URL} style={brandLink}>
+            {/* Gradient wordmark — same brand mark used on-site */}
+            <span style={brandRow as React.CSSProperties}>
+              <span style={{ ...wordBase, color: '#1d4ed8' }}>Access</span>
+              <span style={{ ...wordBase, color: '#1fc796' }}>Now</span>
+              <span style={{ ...wordBase, color: '#f59e0b' }}>BD</span>
+            </span>
+            <span style={tagRow as React.CSSProperties}>
+              <span style={tagWord}>FAST</span>
+              <span style={{ ...tagDot, backgroundColor: '#2f6dff' }} />
+              <span style={tagWord}>SECURE</span>
+              <span style={{ ...tagDot, backgroundColor: '#1fc796' }} />
+              <span style={tagWord}>RELIABLE</span>
+            </span>
           </Link>
         </Section>
         <Section style={card}>
@@ -56,6 +68,7 @@ export const EmailLayout = ({ preview, heading, children }: LayoutProps) => (
     </Body>
   </Html>
 )
+
 
 export const styles = {
   text: { fontSize: '14px', color: '#374151', lineHeight: '1.6', margin: '0 0 14px' } as const,
@@ -93,14 +106,47 @@ export const styles = {
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }
 const container = { maxWidth: '560px', margin: '0 auto', padding: '24px 20px' }
-const header = { padding: '0 0 16px' }
-const brand = {
-  fontSize: '18px',
-  fontWeight: 700 as const,
-  color: '#0f1b3d',
+const header = { padding: '0 0 20px', textAlign: 'center' as const }
+const brandLink = {
   textDecoration: 'none',
-  letterSpacing: '0.2px',
+  display: 'inline-block',
 }
+const brandRow = {
+  display: 'inline-block',
+  fontSize: 0,
+  lineHeight: 1,
+}
+const wordBase = {
+  fontSize: '26px',
+  fontWeight: 800 as const,
+  letterSpacing: '-0.01em',
+  fontFamily: 'Arial, Helvetica, sans-serif',
+  display: 'inline-block',
+  padding: '0 3px',
+}
+const tagRow = {
+  display: 'inline-block',
+  marginTop: '6px',
+  padding: '0 4px',
+}
+const tagWord = {
+  display: 'inline-block',
+  fontSize: '9px',
+  fontWeight: 700 as const,
+  letterSpacing: '3px',
+  color: '#64748b',
+  padding: '0 6px',
+  verticalAlign: 'middle',
+  fontFamily: 'Arial, Helvetica, sans-serif',
+}
+const tagDot = {
+  display: 'inline-block',
+  width: '4px',
+  height: '4px',
+  borderRadius: '999px',
+  verticalAlign: 'middle',
+}
+
 const card = {
   backgroundColor: '#ffffff',
   border: '1px solid #e5e7eb',

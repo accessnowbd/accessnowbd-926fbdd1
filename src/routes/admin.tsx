@@ -13,7 +13,7 @@ import { ADMIN_MENU, type AdminMenuItem } from "@/lib/admin-menu";
 import { AdminMfaGate } from "@/components/admin/AdminMfaGate";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { AdminLangProvider, useAdminLang } from "@/context/AdminLangContext";
-import accessNowLogo from "@/assets/logo-gold-a.webp";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
@@ -315,24 +315,18 @@ function AdminBlankState() {
   return (
     <div className="min-h-screen grid place-items-center bg-[#fafafa]" role="status" aria-label="Loading admin panel">
       <div className="flex flex-col items-center gap-5">
-        {/* Logo with animated gradient ring */}
-        <div className="relative w-16 h-16">
+        {/* Brand logo with animated gradient ring */}
+        <div className="relative">
           <div className="admin-loader-ring" />
-          <div className="absolute inset-0 grid place-items-center">
-            <img
-              src={accessNowLogo}
-              alt=""
-              className="w-10 h-10 object-contain admin-loader-logo"
-              draggable={false}
-            />
-          </div>
+          <BrandLogo size="md" iconOnly />
         </div>
 
         {/* Animated text */}
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-sm font-semibold text-slate-700 tracking-wide">AccessNow BD</span>
-          <span className="text-xs text-slate-400 font-medium tracking-wide">Loading admin panel</span>
+        <div className="flex flex-col items-center gap-1">
+          <BrandLogo size="sm" iconOnly={false} tagClassName="text-slate-400" className="!gap-0" />
+          <span className="text-xs text-slate-400 font-medium tracking-wide mt-1">Loading admin panel</span>
         </div>
+
 
         {/* Animated progress bars */}
         <div className="flex items-center gap-1.5">
@@ -406,21 +400,16 @@ function AdminShell({ user, signOut, navigate }: any) {
         ].join(" ")}>
 
           <Link to="/admin" className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "justify-center" : ""}`}>
-            <span className="relative shrink-0 grid place-items-center w-10 h-10 rounded-xl overflow-hidden ring-1 ring-slate-200 bg-white">
-              <img
-                src={accessNowLogo}
-                alt="AccessNow BD"
-                draggable={false}
-                className="relative w-[140%] h-[140%] object-contain translate-y-[2%]"
-              />
-            </span>
-            {!collapsed && (
-              <span className="leading-tight min-w-0">
-                <span className="block text-[15px] font-extrabold tracking-tight text-[var(--admin-ink)]">AccessNow BD</span>
-                <span className="block text-[9.5px] font-bold uppercase tracking-[0.22em] text-[var(--admin-muted)] mt-0.5">Admin Console</span>
+            {collapsed ? (
+              <BrandLogo size="sm" iconOnly />
+            ) : (
+              <span className="flex items-center gap-2.5 min-w-0">
+                <BrandLogo size="sm" tagClassName="text-slate-400" />
+                <span className="hidden xl:block text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--admin-muted)] border-l border-slate-200 pl-2 ml-0.5">Admin</span>
               </span>
             )}
           </Link>
+
           <button
             onClick={() => setMobileOpen(false)}
             className="lg:hidden p-1.5 rounded-lg hover:bg-slate-100 text-slate-600"
