@@ -76,13 +76,13 @@ function AdminUsers() {
  <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Users</h1>
  <p className="text-sm text-slate-500 mt-1">Manage customers and admin permissions.</p>
  </div>
- <SearchBar
- value={q}
- onChange={setQ}
- placeholder="Search name, phone, id…"
- size="md"
- className="w-72 max-w-full"
- />
+  <SearchBar
+  value={q}
+  onChange={setQ}
+  placeholder="Search name, email, phone, id…"
+  size="md"
+  className="w-80 max-w-full"
+  />
  </div>
 
  <AdminStatGrid>
