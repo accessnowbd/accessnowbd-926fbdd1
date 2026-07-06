@@ -103,9 +103,10 @@ function EpsGatewayPage() {
 
   const save = async () => {
     setSaving(true);
-    const payload = { kind: "eps_pgw_settings", data: settings, is_active: true, sort_order: 0 };
+    // is_active=false → admin-only (RLS): credentials never public.
+    const payload = { kind: "eps_pgw_settings", data: settings, is_active: false, sort_order: 0 };
     if (recordId) {
-      const { error } = await supabase.from("admin_records").update({ data: settings, is_active: true }).eq("id", recordId);
+      const { error } = await supabase.from("admin_records").update({ data: settings, is_active: false }).eq("id", recordId);
       if (error) { setSaving(false); return toast.error(error.message); }
     } else {
       const { data, error } = await supabase.from("admin_records").insert(payload).select("id").single();
