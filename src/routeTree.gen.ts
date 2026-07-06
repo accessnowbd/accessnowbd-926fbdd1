@@ -50,6 +50,7 @@ import { Route as AdminTrackingPixelsRouteImport } from './routes/admin.tracking
 import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
+import { Route as AdminSslczPgwRouteImport } from './routes/admin.sslcz-pgw'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
@@ -92,6 +93,10 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicSslczSuccessRouteImport } from './routes/api/public/sslcz/success'
+import { Route as ApiPublicSslczIpnRouteImport } from './routes/api/public/sslcz/ipn'
+import { Route as ApiPublicSslczFailRouteImport } from './routes/api/public/sslcz/fail'
+import { Route as ApiPublicSslczCancelRouteImport } from './routes/api/public/sslcz/cancel'
 import { Route as ApiPublicEpsSuccessRouteImport } from './routes/api/public/eps/success'
 import { Route as ApiPublicEpsIpnRouteImport } from './routes/api/public/eps/ipn'
 import { Route as ApiPublicEpsFailRouteImport } from './routes/api/public/eps/fail'
@@ -301,6 +306,11 @@ const AdminTicketsRoute = AdminTicketsRouteImport.update({
 const AdminThemesRoute = AdminThemesRouteImport.update({
   id: '/themes',
   path: '/themes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSslczPgwRoute = AdminSslczPgwRouteImport.update({
+  id: '/sslcz-pgw',
+  path: '/sslcz-pgw',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
@@ -517,6 +527,26 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   path: '/lovable/email/auth/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicSslczSuccessRoute = ApiPublicSslczSuccessRouteImport.update({
+  id: '/api/public/sslcz/success',
+  path: '/api/public/sslcz/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicSslczIpnRoute = ApiPublicSslczIpnRouteImport.update({
+  id: '/api/public/sslcz/ipn',
+  path: '/api/public/sslcz/ipn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicSslczFailRoute = ApiPublicSslczFailRouteImport.update({
+  id: '/api/public/sslcz/fail',
+  path: '/api/public/sslcz/fail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicSslczCancelRoute = ApiPublicSslczCancelRouteImport.update({
+  id: '/api/public/sslcz/cancel',
+  path: '/api/public/sslcz/cancel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicEpsSuccessRoute = ApiPublicEpsSuccessRouteImport.update({
   id: '/api/public/eps/success',
   path: '/api/public/eps/success',
@@ -602,6 +632,7 @@ export interface FileRoutesByFullPath {
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -621,6 +652,10 @@ export interface FileRoutesByFullPath {
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
+  '/api/public/sslcz/cancel': typeof ApiPublicSslczCancelRoute
+  '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
+  '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
+  '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -690,6 +725,7 @@ export interface FileRoutesByTo {
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -709,6 +745,10 @@ export interface FileRoutesByTo {
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
+  '/api/public/sslcz/cancel': typeof ApiPublicSslczCancelRoute
+  '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
+  '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
+  '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -780,6 +820,7 @@ export interface FileRoutesById {
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -799,6 +840,10 @@ export interface FileRoutesById {
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
+  '/api/public/sslcz/cancel': typeof ApiPublicSslczCancelRoute
+  '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
+  '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
+  '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -871,6 +916,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/security'
     | '/admin/settings'
+    | '/admin/sslcz-pgw'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -890,6 +936,10 @@ export interface FileRouteTypes {
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
+    | '/api/public/sslcz/cancel'
+    | '/api/public/sslcz/fail'
+    | '/api/public/sslcz/ipn'
+    | '/api/public/sslcz/success'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -959,6 +1009,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/security'
     | '/admin/settings'
+    | '/admin/sslcz-pgw'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -978,6 +1029,10 @@ export interface FileRouteTypes {
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
+    | '/api/public/sslcz/cancel'
+    | '/api/public/sslcz/fail'
+    | '/api/public/sslcz/ipn'
+    | '/api/public/sslcz/success'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -1048,6 +1103,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/security'
     | '/admin/settings'
+    | '/admin/sslcz-pgw'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -1067,6 +1123,10 @@ export interface FileRouteTypes {
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
+    | '/api/public/sslcz/cancel'
+    | '/api/public/sslcz/fail'
+    | '/api/public/sslcz/ipn'
+    | '/api/public/sslcz/success'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -1114,6 +1174,10 @@ export interface RootRouteChildren {
   ApiPublicEpsFailRoute: typeof ApiPublicEpsFailRoute
   ApiPublicEpsIpnRoute: typeof ApiPublicEpsIpnRoute
   ApiPublicEpsSuccessRoute: typeof ApiPublicEpsSuccessRoute
+  ApiPublicSslczCancelRoute: typeof ApiPublicSslczCancelRoute
+  ApiPublicSslczFailRoute: typeof ApiPublicSslczFailRoute
+  ApiPublicSslczIpnRoute: typeof ApiPublicSslczIpnRoute
+  ApiPublicSslczSuccessRoute: typeof ApiPublicSslczSuccessRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -1410,6 +1474,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminThemesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/sslcz-pgw': {
+      id: '/admin/sslcz-pgw'
+      path: '/sslcz-pgw'
+      fullPath: '/admin/sslcz-pgw'
+      preLoaderRoute: typeof AdminSslczPgwRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/settings': {
       id: '/admin/settings'
       path: '/settings'
@@ -1704,6 +1775,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/sslcz/success': {
+      id: '/api/public/sslcz/success'
+      path: '/api/public/sslcz/success'
+      fullPath: '/api/public/sslcz/success'
+      preLoaderRoute: typeof ApiPublicSslczSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/sslcz/ipn': {
+      id: '/api/public/sslcz/ipn'
+      path: '/api/public/sslcz/ipn'
+      fullPath: '/api/public/sslcz/ipn'
+      preLoaderRoute: typeof ApiPublicSslczIpnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/sslcz/fail': {
+      id: '/api/public/sslcz/fail'
+      path: '/api/public/sslcz/fail'
+      fullPath: '/api/public/sslcz/fail'
+      preLoaderRoute: typeof ApiPublicSslczFailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/sslcz/cancel': {
+      id: '/api/public/sslcz/cancel'
+      path: '/api/public/sslcz/cancel'
+      fullPath: '/api/public/sslcz/cancel'
+      preLoaderRoute: typeof ApiPublicSslczCancelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/eps/success': {
       id: '/api/public/eps/success'
       path: '/api/public/eps/success'
@@ -1770,6 +1869,7 @@ interface AdminRouteChildren {
   AdminReviewsRoute: typeof AdminReviewsRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSslczPgwRoute: typeof AdminSslczPgwRoute
   AdminThemesRoute: typeof AdminThemesRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminTrackingRoute: typeof AdminTrackingRoute
@@ -1815,6 +1915,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReviewsRoute: AdminReviewsRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminSslczPgwRoute: AdminSslczPgwRoute,
   AdminThemesRoute: AdminThemesRoute,
   AdminTicketsRoute: AdminTicketsRoute,
   AdminTrackingRoute: AdminTrackingRoute,
@@ -1878,6 +1979,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicEpsFailRoute: ApiPublicEpsFailRoute,
   ApiPublicEpsIpnRoute: ApiPublicEpsIpnRoute,
   ApiPublicEpsSuccessRoute: ApiPublicEpsSuccessRoute,
+  ApiPublicSslczCancelRoute: ApiPublicSslczCancelRoute,
+  ApiPublicSslczFailRoute: ApiPublicSslczFailRoute,
+  ApiPublicSslczIpnRoute: ApiPublicSslczIpnRoute,
+  ApiPublicSslczSuccessRoute: ApiPublicSslczSuccessRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,

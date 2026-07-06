@@ -61,6 +61,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/payments", label: "Payments", labelBn: "পেমেন্ট", icon: ic(CreditCard), grad: "from-emerald-500 to-green-600" },
       { to: "/admin/bkash-pgw", label: "bKash PGW", labelBn: "bKash PGW", icon: ic(CreditCard), grad: "from-pink-500 to-rose-500", badge: "NEW" },
       { to: "/admin/eps-pgw", label: "EPS Gateway", labelBn: "EPS গেটওয়ে", icon: ic(CreditCard), grad: "from-indigo-500 to-purple-600", badge: "NEW" },
+      { to: "/admin/sslcz-pgw", label: "SSLCommerz", labelBn: "SSLCommerz", icon: ic(CreditCard), grad: "from-blue-600 to-cyan-500", badge: "NEW" },
       { to: "/admin/bkash-transactions", label: "bKash Transactions", labelBn: "bKash ট্রানজেকশন", icon: ic(Activity), grad: "from-orange-500 to-pink-500", badge: "NEW" },
       { to: "/admin/license-manager", label: "License Manager", labelBn: "লাইসেন্স ম্যানেজার", icon: ic(ShieldCheck), grad: "from-rose-500 to-red-600" },
       { to: "/admin/customer-licenses", label: "Customer Licenses", labelBn: "কাস্টমার লাইসেন্স", icon: ic(ShieldCheck), grad: "from-rose-500 to-pink-600", badge: "NEW" },

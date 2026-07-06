@@ -13,6 +13,7 @@ import { sendTransactionalEmail } from "@/lib/email/send";
 import { trackPurchase } from "@/lib/trackEvent";
 import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
 import { getEpsPublicConfig, initiateEpsPayment } from "@/lib/eps.functions";
+import { getSslczPublicConfig, initiateSslczPayment } from "@/lib/sslcz.functions";
 
 
 function CheckoutErrorComponent({ error }: { error: Error }) {
@@ -97,9 +98,17 @@ function CheckoutPage() {
   const { data: dynamicMethods } = usePaymentMethods("checkout");
   const fetchEpsPublic = useServerFn(getEpsPublicConfig);
   const initiateEps = useServerFn(initiateEpsPayment);
+  const fetchSslczPublic = useServerFn(getSslczPublicConfig);
+  const initiateSslcz = useServerFn(initiateSslczPayment);
   const { data: epsConfig } = useQuery({
     queryKey: ["eps-public-config"],
     queryFn: () => fetchEpsPublic(),
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+  });
+  const { data: sslczConfig } = useQuery({
+    queryKey: ["sslcz-public-config"],
+    queryFn: () => fetchSslczPublic(),
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
   });
@@ -125,8 +134,18 @@ function CheckoutPage() {
         logo_url: epsConfig.logo_url || undefined,
       });
     }
+    if (sslczConfig?.enabled) {
+      base.push({
+        id: "sslcz",
+        name: sslczConfig.display_name || "SSLCommerz",
+        number: "",
+        color: "bg-blue-700",
+        brand_color: sslczConfig.brand_color || "#1e40af",
+        logo_url: sslczConfig.logo_url || undefined,
+      });
+    }
     return base;
-  }, [dynamicMethods, epsConfig]);
+  }, [dynamicMethods, epsConfig, sslczConfig]);
   const [method, setMethod] = useState<string>("bkash");
   const [copied, setCopied] = useState(false);
   const [couponInput, setCouponInput] = useState(coupon || "");
@@ -172,6 +191,9 @@ function CheckoutPage() {
 
   const selectedMethod = methods.find((m) => m.id === method) ?? methods[0];
   const isEps = method === "eps";
+  const isSslcz = method === "sslcz";
+  const isHostedGateway = isEps || isSslcz;
+  const hostedGatewayConfig = isEps ? epsConfig : isSslcz ? sslczConfig : null;
 
   const update = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
   const blur = (k: string) => setTouched((t) => ({ ...t, [k]: true }));
@@ -258,8 +280,10 @@ function CheckoutPage() {
             ? `WALLET-${Date.now()}`
             : isEps
               ? `EPS-PENDING-${Date.now()}`
-              : form.trxId,
-          payment_screenshot_url: isEps ? null : (screenshotUrl || null),
+              : isSslcz
+                ? `SSLCZ-PENDING-${Date.now()}`
+                : form.trxId,
+          payment_screenshot_url: isHostedGateway ? null : (screenshotUrl || null),
           items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
           total: subAfterCoupon,
         })
@@ -310,10 +334,11 @@ function CheckoutPage() {
       } catch {
         /* ignore */
       }
-      // EPS gateway: redirect the buyer to the hosted payment page.
-      if (isEps) {
+      // Hosted gateways (EPS / SSLCommerz): redirect the buyer to the hosted payment page.
+      if (isEps || isSslcz) {
         try {
-          const { redirect_url } = await initiateEps({
+          const initFn = isEps ? initiateEps : initiateSslcz;
+          const { redirect_url } = await initFn({
             data: {
               orderId: newId,
               amount: subAfterCoupon,
@@ -326,7 +351,7 @@ function CheckoutPage() {
           window.location.href = redirect_url;
           return;
         } catch (e) {
-          setErr(e instanceof Error ? e.message : "EPS gateway redirect failed");
+          setErr(e instanceof Error ? e.message : "Gateway redirect failed");
           return;
         }
       }
@@ -614,33 +639,33 @@ function CheckoutPage() {
           </div>
         )}
 
-        {/* EPS online gateway card */}
-        {!fullyByWallet && isEps && (
+        {/* Hosted online gateway card (EPS / SSLCommerz) */}
+        {!fullyByWallet && isHostedGateway && (
           <div
             className="mx-5 mt-5 rounded-3xl border p-5 space-y-3"
-            style={{ borderColor: `${epsConfig?.brand_color || "#0ea5e9"}55`, background: `${epsConfig?.brand_color || "#0ea5e9"}0d` }}
+            style={{ borderColor: `${hostedGatewayConfig?.brand_color || "#0ea5e9"}55`, background: `${hostedGatewayConfig?.brand_color || "#0ea5e9"}0d` }}
           >
             <div className="flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-xl grid place-items-center text-white shrink-0"
-                style={{ background: epsConfig?.brand_color || "#0ea5e9" }}
+                style={{ background: hostedGatewayConfig?.brand_color || "#0ea5e9" }}
               >
-                {epsConfig?.logo_url ? (
-                  <img src={epsConfig.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                {hostedGatewayConfig?.logo_url ? (
+                  <img src={hostedGatewayConfig.logo_url} alt="" className="max-w-full max-h-full object-contain" />
                 ) : (
                   <Zap className="w-5 h-5" />
                 )}
               </div>
               <div className="min-w-0">
-                <div className="text-[13px] font-bold text-foreground">{epsConfig?.display_name || "EPS Payment"} — অনলাইন গেটওয়ে</div>
+                <div className="text-[13px] font-bold text-foreground">{hostedGatewayConfig?.display_name || (isSslcz ? "SSLCommerz" : "EPS Payment")} — অনলাইন গেটওয়ে</div>
                 <div className="text-[11px] text-muted-foreground">
                   bKash / Nagad / Rocket / কার্ড — এক ক্লিকে নিরাপদ পেমেন্ট
-                  {epsConfig?.mode === "sandbox" && <span className="ml-1 text-amber-600 font-semibold">(Sandbox / Test)</span>}
+                  {hostedGatewayConfig?.mode === "sandbox" && <span className="ml-1 text-amber-600 font-semibold">(Sandbox / Test)</span>}
                 </div>
               </div>
             </div>
             <ul className="text-[12px] text-foreground/85 space-y-1.5 pl-1">
-              <li>✓ "অর্ডার কনফার্ম করুন" চাপলে সরাসরি EPS পেজে যাবেন</li>
+              <li>✓ "অর্ডার কনফার্ম করুন" চাপলে সরাসরি গেটওয়ে পেজে যাবেন</li>
               <li>✓ সেখানে পেমেন্ট শেষ হলে অটো-ভেরিফাই হয়ে অর্ডার প্রসেসিং শুরু হবে</li>
               <li>✓ কোনো TrxID বা স্ক্রিনশট দিতে হবে না</li>
             </ul>
@@ -648,7 +673,7 @@ function CheckoutPage() {
         )}
 
         {/* Brand instruction card (manual mobile-banking methods) */}
-        {!fullyByWallet && !isEps && (
+        {!fullyByWallet && !isHostedGateway && (
           <div className="mx-5 mt-5 rounded-3xl border border-border bg-muted p-5 space-y-4">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5 min-w-0">
@@ -706,7 +731,7 @@ function CheckoutPage() {
           </div>
         )}
 
-        {!fullyByWallet && !isEps && (
+        {!fullyByWallet && !isHostedGateway && (
           <>
             {/* Sender number */}
             <div className="px-5 mt-5">
@@ -803,15 +828,15 @@ function CheckoutPage() {
         <div className="px-5 py-5">
           <button
             onClick={handleSubmit}
-            disabled={busy || (!fullyByWallet && !isEps && (!!errors.trxId || !form.trxId || !!errors.senderNumber || !form.senderNumber))}
+            disabled={busy || (!fullyByWallet && !isHostedGateway && (!!errors.trxId || !form.trxId || !!errors.senderNumber || !form.senderNumber))}
             className="w-full h-12 rounded-full text-primary-foreground text-[15px] font-semibold inline-flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-lg shadow-primary/25"
-            style={{ background: isEps ? (epsConfig?.brand_color || "#0ea5e9") : CTA_GRADIENT }}
+            style={{ background: isHostedGateway ? (hostedGatewayConfig?.brand_color || "#0ea5e9") : CTA_GRADIENT }}
           >
-            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : isEps ? <Zap className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+            {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : isHostedGateway ? <Zap className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
             {busy
-              ? (isEps ? "গেটওয়ে-তে পাঠানো হচ্ছে…" : "অর্ডার তৈরি হচ্ছে…")
-              : isEps
-                ? `Pay ৳${grandTotal.toLocaleString()} via ${epsConfig?.display_name || "EPS"}`
+              ? (isHostedGateway ? "গেটওয়ে-তে পাঠানো হচ্ছে…" : "অর্ডার তৈরি হচ্ছে…")
+              : isHostedGateway
+                ? `Pay ৳${grandTotal.toLocaleString()} via ${hostedGatewayConfig?.display_name || (isSslcz ? "SSLCommerz" : "EPS")}`
                 : `অর্ডার কনফার্ম করুন  ৳${grandTotal.toLocaleString()}`}
           </button>
           <p className="text-[11px] text-muted-foreground text-center mt-3 inline-flex items-center gap-1.5 justify-center w-full">
