@@ -524,11 +524,11 @@ function ProductPage() {
           </header>
 
           {/* Plans */}
-          {product.plans.length > 0 && (
+          {filteredPlans.length > 0 && (
             <div className="mt-6 space-y-3">
               <label className="text-xs font-bold text-slate-900 uppercase tracking-widest">মেয়াদ ও মূল্য পরিকল্পনা</label>
               <div role="radiogroup" aria-label="Plan" className="space-y-2">
-                {product.plans.map((p, idx) => {
+                {filteredPlans.map((p, idx) => {
                   const active = activeIdx === idx;
                   const price = parsePrice(p.price);
                   const original = p.original ? parsePrice(p.original) : 0;
