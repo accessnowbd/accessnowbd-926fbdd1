@@ -1240,6 +1240,41 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <button onClick={() => removePlan(i)} className="w-7 h-7 grid place-items-center rounded-lg text-slate-500 hover:text-slate-500 hover:bg-slate-50"><X className="w-4 h-4" /></button>
  )}
  </div>
+ {(() => {
+   const selectedTypes = (meta.account_types ?? (meta.account_type && meta.account_type !== "none" ? [meta.account_type] : [])) as AccountType[];
+   if (selectedTypes.length < 1) return null;
+   const options: { id: string; label: string; icon: string }[] = [
+     { id: "", label: "🟢 সব টাইপে (All)", icon: "" },
+     ...selectedTypes
+       .map((t) => ACCOUNT_TYPES.find((a) => a.id === t))
+       .filter((x): x is { id: AccountType; label: string; icon: string } => !!x)
+       .map((a) => ({ id: a.id, label: `${a.icon} ${a.label}`.trim(), icon: a.icon })),
+   ];
+   const current = p.account_type ?? "";
+   return (
+     <div className="mb-3">
+       <div className="text-xs font-semibold text-slate-600 mb-1.5">👤 কোন অ্যাকাউন্ট টাইপের জন্য?</div>
+       <div className="flex flex-wrap gap-1.5">
+         {options.map((o) => {
+           const active = current === o.id;
+           return (
+             <button
+               key={o.id || "all"}
+               type="button"
+               onClick={() => setPlan(i, { account_type: o.id || undefined })}
+               className={`px-3 h-7 rounded-full text-xs font-semibold border transition ${
+                 active
+                   ? "bg-fuchsia-600 text-white border-fuchsia-600"
+                   : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
+               }`}
+             >{o.label}</button>
+           );
+         })}
+       </div>
+       <p className="text-[11px] text-slate-500 mt-1">Customer এই টাইপ সিলেক্ট করলেই এই প্যাকেজ ও দাম দেখাবে।</p>
+     </div>
+   );
+ })()}
  <div className="text-xs font-semibold text-slate-600 mb-1.5">Duration</div>
  <div className="flex flex-wrap gap-1.5 mb-3">
  {DURATION_CHIPS.map((d) => {
