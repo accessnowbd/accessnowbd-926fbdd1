@@ -2220,10 +2220,10 @@ html.theme-white .product-whatsapp-button::before,
   border-radius: inherit;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0) 100%),
-    linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.0) 62%);
+    linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.04) 55%, rgba(255,255,255,0) 100%),
+    linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.45) 48%, rgba(255,255,255,0) 62%);
   background-size: 100% 100%, 220% 100%;
-  background-position: 0 0, -60% 0;
+  background-position: 0 0, -140% 0;
   background-repeat: no-repeat;
   mix-blend-mode: overlay;
   z-index: 1;
