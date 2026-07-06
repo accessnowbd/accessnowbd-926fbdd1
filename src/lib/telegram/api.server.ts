@@ -1,6 +1,8 @@
 // Telegram Bot API helpers — server only.
 // Uses TELEGRAM_BOT_TOKEN directly (from @BotFather). Store via add_secret.
 
+import { createHash } from "crypto";
+
 const API_ROOT = "https://api.telegram.org";
 
 export function botToken(): string {
@@ -10,9 +12,8 @@ export function botToken(): string {
 }
 
 export function webhookSecret(): string {
-  // Derived deterministic secret so setWebhook + verify match without a separate secret.
   return process.env.TELEGRAM_WEBHOOK_SECRET
-    || require("crypto").createHash("sha256").update(`tg-webhook:${botToken()}`).digest("base64url");
+    || createHash("sha256").update(`tg-webhook:${botToken()}`).digest("base64url");
 }
 
 type Json = Record<string, unknown>;
