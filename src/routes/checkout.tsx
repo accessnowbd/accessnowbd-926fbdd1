@@ -706,7 +706,7 @@ function CheckoutPage() {
           </div>
         )}
 
-        {!fullyByWallet && (
+        {!fullyByWallet && !isEps && (
           <>
             {/* Sender number */}
             <div className="px-5 mt-5">
