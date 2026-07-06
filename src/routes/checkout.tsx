@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Check, Copy, Lock, Smartphone, Loader2, X, ChevronRight, Tag, ShieldCheck } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { Check, Copy, Lock, Smartphone, Loader2, X, ChevronRight, Tag, ShieldCheck, Zap } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
@@ -10,6 +12,7 @@ import { usePaymentMethods } from "@/hooks/useShopConfig";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import { trackPurchase } from "@/lib/trackEvent";
 import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
+import { getEpsPublicConfig, initiateEpsPayment } from "@/lib/eps.functions";
 
 
 function CheckoutErrorComponent({ error }: { error: Error }) {
