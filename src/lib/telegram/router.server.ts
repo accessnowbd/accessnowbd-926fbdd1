@@ -115,8 +115,8 @@ async function showCatalog(chat_id: number, page: number) {
   const mode = store?.config?.browse_mode || "featured";
   const db = await admin();
 
-  let q = db.from("products").select("slug,name,price,image,category,is_featured,in_stock").order("created_at", { ascending: false });
-  if (mode === "featured") q = q.eq("is_featured", true);
+  let q = db.from("products").select("slug,name,price,image,category,badge,in_stock").order("created_at", { ascending: false });
+  if (mode === "featured") q = q.not("badge", "is", null);
   q = q.range(page * perPage, page * perPage + perPage - 1);
 
   const { data: products } = await q;
