@@ -289,8 +289,44 @@ function EpsGatewayPage() {
             </div>
           </Card>
 
+          {/* Checkout display (customer-facing tile) */}
+          <Card icon={Globe} title="Checkout Display" subtitle="Checkout-এ এই gateway কীভাবে দেখাবে">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <TextField
+                label="Display Name"
+                value={settings.display_name}
+                onChange={(v) => setSettings((s) => ({ ...s, display_name: v }))}
+                placeholder="e.g. Pay Online"
+              />
+              <Field label="Brand Color">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="color"
+                    value={settings.brand_color || "#0ea5e9"}
+                    onChange={(e) => setSettings((s) => ({ ...s, brand_color: e.target.value }))}
+                    className="h-10 w-14 rounded-lg border border-slate-200 bg-white cursor-pointer"
+                  />
+                  <input
+                    value={settings.brand_color}
+                    onChange={(e) => setSettings((s) => ({ ...s, brand_color: e.target.value }))}
+                    className="flex-1 rounded-xl border border-slate-200 px-3 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-violet-400"
+                  />
+                </div>
+              </Field>
+              <div className="sm:col-span-2">
+                <TextField
+                  label="Logo URL (optional)"
+                  value={settings.logo_url}
+                  onChange={(v) => setSettings((s) => ({ ...s, logo_url: v }))}
+                  placeholder="https://…/logo.png"
+                />
+              </div>
+            </div>
+          </Card>
+
           {/* Callback URLs */}
           <Card icon={Link2} title="Callback URLs" subtitle="এই URL গুলো EPS merchant dashboard-এ দিন">
+
             <div className="space-y-3">
               {[
                 { label: "Success URL", key: "success_url", val: settings.success_url },
