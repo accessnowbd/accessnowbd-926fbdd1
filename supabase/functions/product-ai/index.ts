@@ -125,11 +125,15 @@ serve(async (req) => {
     const denied = await requireAdmin(req, corsHeaders);
     if (denied) return denied;
 
+    const cfg = await getAiConfig();
+    if (!cfg.features.product_ai) return featureDisabledResponse("product_ai", corsHeaders);
+
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     const geminiKey = Deno.env.get("GEMINI_API_KEY");
 
     const { mode, product, imagePrompt, style } = (await req.json()) as Body;
     if (!product?.name) throw new Error("product.name is required");
+
 
 
     // ===== IMAGE GENERATION =====
