@@ -13,6 +13,7 @@ import { sendTransactionalEmail } from "@/lib/email/send";
 import { trackPurchase } from "@/lib/trackEvent";
 import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
 import { getEpsPublicConfig, initiateEpsPayment } from "@/lib/eps.functions";
+import { getSslczPublicConfig, initiateSslczPayment } from "@/lib/sslcz.functions";
 
 
 function CheckoutErrorComponent({ error }: { error: Error }) {
@@ -97,9 +98,17 @@ function CheckoutPage() {
   const { data: dynamicMethods } = usePaymentMethods("checkout");
   const fetchEpsPublic = useServerFn(getEpsPublicConfig);
   const initiateEps = useServerFn(initiateEpsPayment);
+  const fetchSslczPublic = useServerFn(getSslczPublicConfig);
+  const initiateSslcz = useServerFn(initiateSslczPayment);
   const { data: epsConfig } = useQuery({
     queryKey: ["eps-public-config"],
     queryFn: () => fetchEpsPublic(),
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+  });
+  const { data: sslczConfig } = useQuery({
+    queryKey: ["sslcz-public-config"],
+    queryFn: () => fetchSslczPublic(),
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
   });
@@ -125,8 +134,18 @@ function CheckoutPage() {
         logo_url: epsConfig.logo_url || undefined,
       });
     }
+    if (sslczConfig?.enabled) {
+      base.push({
+        id: "sslcz",
+        name: sslczConfig.display_name || "SSLCommerz",
+        number: "",
+        color: "bg-blue-700",
+        brand_color: sslczConfig.brand_color || "#1e40af",
+        logo_url: sslczConfig.logo_url || undefined,
+      });
+    }
     return base;
-  }, [dynamicMethods, epsConfig]);
+  }, [dynamicMethods, epsConfig, sslczConfig]);
   const [method, setMethod] = useState<string>("bkash");
   const [copied, setCopied] = useState(false);
   const [couponInput, setCouponInput] = useState(coupon || "");
