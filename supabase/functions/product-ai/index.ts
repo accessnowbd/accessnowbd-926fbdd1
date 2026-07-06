@@ -5,6 +5,7 @@
 //  - "all"   → everything (tagline, short, description, features, seo)
 //  - "image" → AI-generated product image (returns data URL)
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { getAiConfig, featureDisabledResponse } from "../_shared/ai-config.ts";
 
 const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
   /^https:\/\/accessnowbd\.lovable\.app$/,
