@@ -56,7 +56,12 @@ function AdminUsers() {
  const filtered = rows.filter((r) => {
  if (!q) return true;
  const s = q.toLowerCase();
- return (r.display_name || "").toLowerCase().includes(s) || (r.phone || "").includes(s) || r.id.includes(s);
+ return (
+  (r.display_name || "").toLowerCase().includes(s) ||
+  (r.email || "").toLowerCase().includes(s) ||
+  (r.phone || "").includes(s) ||
+  r.id.includes(s)
+ );
  });
 
  const adminCount = rows.filter(r => r.is_admin).length;
