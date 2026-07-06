@@ -95,6 +95,14 @@ function CheckoutPage() {
 
   const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
   const { data: dynamicMethods } = usePaymentMethods("checkout");
+  const fetchEpsPublic = useServerFn(getEpsPublicConfig);
+  const initiateEps = useServerFn(initiateEpsPayment);
+  const { data: epsConfig } = useQuery({
+    queryKey: ["eps-public-config"],
+    queryFn: () => fetchEpsPublic(),
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+  });
   const methods: PayMethod[] = useMemo(() => {
     const list = (dynamicMethods ?? []).map((m) => ({
       id: (m.id || m.name || "").toLowerCase().replace(/\s+/g, "-") || m.name,
@@ -106,8 +114,19 @@ function CheckoutPage() {
       brand_color: m.brand_color,
       send_money_label: m.send_money_label,
     }));
-    return list.length > 0 ? list : FALLBACK_METHODS;
-  }, [dynamicMethods]);
+    const base = list.length > 0 ? list : FALLBACK_METHODS;
+    if (epsConfig?.enabled) {
+      base.push({
+        id: "eps",
+        name: epsConfig.display_name || "EPS Payment",
+        number: "",
+        color: "bg-sky-600",
+        brand_color: epsConfig.brand_color || "#0ea5e9",
+        logo_url: epsConfig.logo_url || undefined,
+      });
+    }
+    return base;
+  }, [dynamicMethods, epsConfig]);
   const [method, setMethod] = useState<string>("bkash");
   const [copied, setCopied] = useState(false);
   const [couponInput, setCouponInput] = useState(coupon || "");
