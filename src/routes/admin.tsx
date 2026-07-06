@@ -315,24 +315,18 @@ function AdminBlankState() {
   return (
     <div className="min-h-screen grid place-items-center bg-[#fafafa]" role="status" aria-label="Loading admin panel">
       <div className="flex flex-col items-center gap-5">
-        {/* Logo with animated gradient ring */}
-        <div className="relative w-16 h-16">
+        {/* Brand logo with animated gradient ring */}
+        <div className="relative">
           <div className="admin-loader-ring" />
-          <div className="absolute inset-0 grid place-items-center">
-            <img
-              src={accessNowLogo}
-              alt=""
-              className="w-10 h-10 object-contain admin-loader-logo"
-              draggable={false}
-            />
-          </div>
+          <BrandLogo size="md" iconOnly />
         </div>
 
         {/* Animated text */}
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-sm font-semibold text-slate-700 tracking-wide">AccessNow BD</span>
-          <span className="text-xs text-slate-400 font-medium tracking-wide">Loading admin panel</span>
+        <div className="flex flex-col items-center gap-1">
+          <BrandLogo size="sm" iconOnly={false} tagClassName="text-slate-400" className="!gap-0" />
+          <span className="text-xs text-slate-400 font-medium tracking-wide mt-1">Loading admin panel</span>
         </div>
+
 
         {/* Animated progress bars */}
         <div className="flex items-center gap-1.5">
