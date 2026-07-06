@@ -1369,19 +1369,89 @@ function PointsView() {
 }
 
 /* ===================== REFERRAL ===================== */
+type ReferralConfig = {
+  enabled: boolean;
+  referrer_reward: number;
+  referee_reward: number;
+  commission_percent: number;
+  min_purchase: number;
+  max_uses: number;
+  hero_title: string;
+  hero_subtitle: string;
+  share_message: string;
+  terms: string;
+  highlights: { value: string; label: string }[];
+};
+const REFERRAL_DEFAULTS: ReferralConfig = {
+  enabled: true,
+  referrer_reward: 50,
+  referee_reward: 50,
+  commission_percent: 5,
+  min_purchase: 0,
+  max_uses: 0,
+  hero_title: "বন্ধুকে রেফার করে ক্যাশব্যাক পান",
+  hero_subtitle: "আপনার লিংক শেয়ার করুন",
+  share_message: "আমার রেফারেল লিংক দিয়ে সাইন আপ করুন!",
+  terms: "",
+  highlights: [
+    { value: "৳50", label: "বন্ধু সাইন আপ করলে" },
+    { value: "5%", label: "প্রথম অর্ডারে কমিশন" },
+    { value: "∞", label: "আনলিমিটেড রেফার" },
+  ],
+};
+function renderReferralText(tpl: string, c: ReferralConfig, code: string) {
+  return tpl
+    .replace(/\{\{\s*referee_reward\s*\}\}/g, String(c.referee_reward))
+    .replace(/\{\{\s*referrer_reward\s*\}\}/g, String(c.referrer_reward))
+    .replace(/\{\{\s*code\s*\}\}/g, code);
+}
 function ReferralView({ user }: { user: { id?: string; email?: string } | null }) {
   const code = (user?.id || "").slice(0, 8).toUpperCase();
+  const [cfg, setCfg] = useState<ReferralConfig>(REFERRAL_DEFAULTS);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    let cancel = false;
+    (async () => {
+      const { data } = await supabase
+        .from("admin_records")
+        .select("data,is_active")
+        .eq("kind", "referral_settings")
+        .limit(1);
+      if (cancel) return;
+      const row = data?.[0];
+      if (row) setCfg({ ...REFERRAL_DEFAULTS, ...((row.data as Partial<ReferralConfig>) ?? {}), enabled: row.is_active !== false });
+      setLoading(false);
+    })();
+    return () => { cancel = true; };
+  }, []);
   const link = publicUrl(`/signup?ref=${code}`);
   const [copied, setCopied] = useState(false);
   const copy = () => { navigator.clipboard.writeText(link); setCopied(true); setTimeout(() => setCopied(false), 1500); };
   const share = async () => {
-    const data = { title: "AccessNow BD", text: "আমার রেফারেল লিংক দিয়ে সাইন আপ করুন!", url: link };
+    const msg = renderReferralText(cfg.share_message, cfg, code);
+    const data = { title: "AccessNow BD", text: msg, url: link };
     if ((navigator as any).share) { try { await (navigator as any).share(data); } catch { /* user cancelled */ } }
     else copy();
   };
+
+  if (loading) {
+    return (
+      <div className="grid place-items-center h-40 text-muted-foreground">
+        <Loader2 className="w-5 h-5 animate-spin" />
+      </div>
+    );
+  }
+  if (!cfg.enabled) {
+    return (
+      <div className="space-y-6">
+        <PageHead title="Referral Program" desc="—" />
+        <Card><Empty icon={<Gift className="w-6 h-6" />} msg="Referral program এই মুহূর্তে বন্ধ রয়েছে।" /></Card>
+      </div>
+    );
+  }
   return (
     <div className="space-y-6">
-      <PageHead title="Referral Program" desc="বন্ধুকে রেফার করে ক্যাশব্যাক পান" />
+      <PageHead title={cfg.hero_title} desc={cfg.hero_subtitle} />
       <Card>
         <div className="flex flex-wrap items-center gap-4">
           <div className="w-14 h-14 rounded-2xl grid place-items-center text-primary-foreground" style={{ background: "linear-gradient(135deg,#ec4899,#a855f7)" }}><Gift className="w-6 h-6" /></div>
@@ -1397,16 +1467,33 @@ function ReferralView({ user }: { user: { id?: string; email?: string } | null }
             <Btn variant="ghost" onClick={copy}>{copied ? <><Check className="w-4 h-4" />Copied</> : <><Copy className="w-4 h-4" />Copy</>}</Btn>
             <Btn variant="primary" onClick={share}><Share2 className="w-4 h-4" />Share</Btn>
           </div>
+          {cfg.share_message && (
+            <div className="mt-3 text-xs text-muted-foreground italic">
+              "{renderReferralText(cfg.share_message, cfg, code)}"
+            </div>
+          )}
         </div>
-        <div className="mt-5 grid sm:grid-cols-3 gap-3 text-center">
-          <div className="rounded-xl p-3 bg-background border border-border"><div className="text-2xl font-bold text-foreground">৳50</div><div className="text-[11px] text-muted-foreground">বন্ধু সাইন আপ করলে</div></div>
-          <div className="rounded-xl p-3 bg-background border border-border"><div className="text-2xl font-bold text-foreground">5%</div><div className="text-[11px] text-muted-foreground">প্রথম অর্ডারে কমিশন</div></div>
-          <div className="rounded-xl p-3 bg-background border border-border"><div className="text-2xl font-bold text-foreground">∞</div><div className="text-[11px] text-muted-foreground">আনলিমিটেড রেফার</div></div>
-        </div>
+        {cfg.highlights.length > 0 && (
+          <div className="mt-5 grid sm:grid-cols-3 gap-3 text-center">
+            {cfg.highlights.map((h, i) => (
+              <div key={i} className="rounded-xl p-3 bg-background border border-border">
+                <div className="text-2xl font-bold text-foreground">{h.value || "—"}</div>
+                <div className="text-[11px] text-muted-foreground">{h.label || ""}</div>
+              </div>
+            ))}
+          </div>
+        )}
+        {cfg.terms && (
+          <div className="mt-6 pt-5 border-t border-border">
+            <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Terms & Conditions</div>
+            <pre className="whitespace-pre-wrap text-xs text-foreground/80 leading-relaxed font-sans">{cfg.terms}</pre>
+          </div>
+        )}
       </Card>
     </div>
   );
 }
+
 
 /* ===================== ADDRESSES ===================== */
 type Address = { id: string; label: string; name: string; phone: string; line1: string; city: string; area?: string; is_default?: boolean };
