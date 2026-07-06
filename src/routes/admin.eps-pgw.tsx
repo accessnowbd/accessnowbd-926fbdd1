@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   CreditCard, ShieldCheck, Copy, Check, Loader2, RefreshCw, Save,
-  Circle, ExternalLink, AlertTriangle, Key, Globe, Link2, PlugZap,
-  CheckCircle2, XCircle,
+  ExternalLink, AlertTriangle, Key, Globe, Link2, PlugZap,
+  CheckCircle2, XCircle, Eye, EyeOff,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -15,6 +15,13 @@ export const Route = createFileRoute("/admin/eps-pgw")({
 });
 
 type Settings = {
+  // Credentials (manual, like bKash setup)
+  merchant_id: string;
+  store_password: string;
+  api_key: string;
+  api_secret: string;
+  api_url: string;
+  // Non-secret config
   enabled: boolean;
   mode: "sandbox" | "live";
   currency: string;
@@ -27,6 +34,11 @@ type Settings = {
 };
 
 const DEFAULT_SETTINGS: Settings = {
+  merchant_id: "",
+  store_password: "",
+  api_key: "",
+  api_secret: "",
+  api_url: "",
   enabled: false,
   mode: "sandbox",
   currency: "BDT",
@@ -38,14 +50,6 @@ const DEFAULT_SETTINGS: Settings = {
   notes: "",
 };
 
-const SECRET_INFO: { key: keyof EpsStatus; env: string; label: string; desc: string }[] = [
-  { key: "has_merchant_id",    env: "EPS_MERCHANT_ID",    label: "Merchant / Store ID", desc: "EPS থেকে দেওয়া merchant id / store id" },
-  { key: "has_store_password", env: "EPS_STORE_PASSWORD", label: "Store Password",      desc: "EPS store password (গোপন)" },
-  { key: "has_api_key",        env: "EPS_API_KEY",        label: "API Key",             desc: "EPS API key (X-API-Key হেডারে ব্যবহার হবে)" },
-  { key: "has_api_secret",     env: "EPS_API_SECRET",     label: "API Secret",          desc: "EPS API secret / signing key" },
-  { key: "has_api_url",        env: "EPS_API_URL",        label: "API Base URL (optional)", desc: "খালি রাখলে ডিফল্ট sandbox URL ব্যবহার হবে" },
-];
-
 function EpsGatewayPage() {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [recordId, setRecordId] = useState<string | null>(null);
@@ -55,13 +59,13 @@ function EpsGatewayPage() {
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
+  const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({});
 
   const fetchStatus = useServerFn(getEpsStatus);
   const testConn = useServerFn(testEpsConnection);
 
   const load = useCallback(async () => {
     setLoading(true);
-    // Non-secret settings row
     const { data } = await supabase
       .from("admin_records")
       .select("id, data")
@@ -73,7 +77,6 @@ function EpsGatewayPage() {
       setSettings({ ...DEFAULT_SETTINGS, ...(data.data as Partial<Settings>) });
     }
 
-    // Auto-populate default callback URLs from current origin
     if (typeof window !== "undefined") {
       setSettings((prev) => {
         const origin = window.location.origin;
@@ -87,12 +90,11 @@ function EpsGatewayPage() {
       });
     }
 
-    // Secret presence
     try {
       const s = await fetchStatus();
       setStatus(s);
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed to read secret status");
+      toast.error(e instanceof Error ? e.message : "Failed to read status");
     }
     setLoading(false);
   }, [fetchStatus]);
@@ -112,6 +114,11 @@ function EpsGatewayPage() {
     }
     setSaving(false);
     toast.success("সেটিংস সেভ হয়েছে");
+    // refresh status
+    try {
+      const s = await fetchStatus();
+      setStatus(s);
+    } catch { /* ignore */ }
   };
 
   const runTest = async () => {
@@ -136,6 +143,8 @@ function EpsGatewayPage() {
     }
   };
 
+  const toggleShow = (k: string) => setShowSecrets((p) => ({ ...p, [k]: !p[k] }));
+
   return (
     <div className="space-y-5">
       {/* Status banner */}
@@ -150,18 +159,18 @@ function EpsGatewayPage() {
         <div className="flex-1 min-w-0">
           <div className="font-extrabold text-slate-900">
             {loading ? "স্ট্যাটাস লোড হচ্ছে…" : status?.configured
-              ? "EPS gateway credentials configured"
-              : "EPS gateway ready — credentials বাকি আছে"}
+              ? "EPS gateway সম্পূর্ণ configured — live!"
+              : "EPS gateway ready — credentials বসান"}
           </div>
           <p className="text-sm text-slate-600 mt-0.5">
             {status?.configured
-              ? "আপনার API key + secrets সব সেভ আছে। নিচের ‘Test Connection’ দিয়ে verify করুন।"
-              : "সব endpoint, IPN URL এবং settings আগেই বানানো। API key + secrets দিলে সরাসরি কাজ করবে।"}
+              ? "সব credentials সেভ আছে। ‘Test Connection’ দিয়ে verify করে ‘Enable’ করে দিন।"
+              : "নিচের form-এ EPS থেকে পাওয়া Merchant ID, Store Password, API Key, API Secret বসান এবং Save করুন।"}
           </p>
-          {!!status?.missing_secrets?.length && (
+          {!!status?.missing_fields?.length && (
             <div className="mt-2 flex flex-wrap gap-1.5">
-              {status.missing_secrets.map((s) => (
-                <span key={s} className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-white ring-1 ring-amber-300 text-amber-700">{s}</span>
+              {status.missing_fields.map((s: string) => (
+                <span key={s} className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white ring-1 ring-amber-300 text-amber-700">{s}</span>
               ))}
             </div>
           )}
@@ -174,11 +183,59 @@ function EpsGatewayPage() {
         </button>
       </div>
 
-      {/* Two-column layout */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-5 items-start">
         <div className="space-y-5">
-          {/* Settings card */}
-          <Card icon={CreditCard} title="Gateway Settings" subtitle="Non-secret configuration — যেকোনো সময় বদলাতে পারবেন">
+          {/* Credentials — manual entry */}
+          <Card icon={Key} title="EPS Credentials" subtitle="EPS merchant dashboard থেকে পাওয়া তথ্য এখানে বসান — বসিয়ে Save দিলেই সরাসরি কাজ করবে">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <TextField
+                label="Merchant / Store ID"
+                required
+                value={settings.merchant_id}
+                onChange={(v) => setSettings((s) => ({ ...s, merchant_id: v }))}
+                placeholder="e.g. yourstore123"
+              />
+              <SecretField
+                label="Store Password"
+                required
+                shown={!!showSecrets.store_password}
+                onToggle={() => toggleShow("store_password")}
+                value={settings.store_password}
+                onChange={(v) => setSettings((s) => ({ ...s, store_password: v }))}
+                placeholder="EPS store password"
+              />
+              <SecretField
+                label="API Key"
+                required
+                shown={!!showSecrets.api_key}
+                onToggle={() => toggleShow("api_key")}
+                value={settings.api_key}
+                onChange={(v) => setSettings((s) => ({ ...s, api_key: v }))}
+                placeholder="X-API-Key value"
+              />
+              <SecretField
+                label="API Secret"
+                required
+                shown={!!showSecrets.api_secret}
+                onToggle={() => toggleShow("api_secret")}
+                value={settings.api_secret}
+                onChange={(v) => setSettings((s) => ({ ...s, api_secret: v }))}
+                placeholder="Signing secret"
+              />
+              <div className="sm:col-span-2">
+                <TextField
+                  label="API Base URL (optional)"
+                  value={settings.api_url}
+                  onChange={(v) => setSettings((s) => ({ ...s, api_url: v }))}
+                  placeholder={settings.mode === "live" ? "https://api.eps.com.bd/api" : "https://sandbox.eps.com.bd/api"}
+                />
+                <p className="text-[11px] text-slate-500 mt-1">খালি রাখলে {settings.mode === "live" ? "live" : "sandbox"} ডিফল্ট URL ব্যবহার হবে।</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Gateway config */}
+          <Card icon={CreditCard} title="Gateway Settings">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <ToggleField
                 label="Enable EPS Gateway"
@@ -300,43 +357,28 @@ function EpsGatewayPage() {
           )}
         </div>
 
-        {/* Right column — credentials */}
+        {/* Right column — checklist */}
         <div className="space-y-4 lg:sticky lg:top-4">
           <div className="rounded-2xl border border-slate-200 bg-white p-5">
             <div className="flex items-center gap-2 mb-3">
               <div className="h-7 w-1 rounded bg-gradient-to-b from-violet-500 to-fuchsia-600" />
-              <Key className="h-5 w-5 text-violet-600" />
-              <h3 className="text-lg font-extrabold text-slate-900">Credentials</h3>
+              <ShieldCheck className="h-5 w-5 text-violet-600" />
+              <h3 className="text-lg font-extrabold text-slate-900">Setup Checklist</h3>
             </div>
-            <p className="text-xs text-slate-500 mb-4">
-              সব API key + password secure vault-এ store হবে, database-এ না। প্রতিটা row-তে দেখাচ্ছে কোনটা সেট আছে।
-            </p>
+            <ol className="space-y-3 text-sm">
+              <StepItem done={!!status?.has_merchant_id} n={1} title="Merchant / Store ID বসান" />
+              <StepItem done={!!status?.has_store_password} n={2} title="Store Password বসান" />
+              <StepItem done={!!status?.has_api_key} n={3} title="API Key বসান" />
+              <StepItem done={!!status?.has_api_secret} n={4} title="API Secret বসান" />
+              <StepItem done={settings.mode === "live"} n={5} title="Live mode-এ switch করুন (test শেষে)" />
+              <StepItem done={settings.enabled} n={6} title="Gateway Enable করুন" />
+            </ol>
 
-            <div className="space-y-2.5">
-              {SECRET_INFO.map((s) => {
-                const ok = status ? Boolean(status[s.key]) : false;
-                return (
-                  <div key={s.env} className="flex items-start gap-3 rounded-xl border border-slate-200 p-3">
-                    <span className={`mt-0.5 grid place-items-center h-6 w-6 rounded-full ${ok ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-500"}`}>
-                      {ok ? <Check className="h-3.5 w-3.5" /> : <Circle className="h-3 w-3" />}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-semibold text-slate-800 text-sm">{s.label}</span>
-                        <code className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-mono">{s.env}</code>
-                      </div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">{s.desc}</div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="mt-4 rounded-xl bg-slate-50 border border-slate-200 p-3 text-xs text-slate-600">
-              <div className="flex items-center gap-1.5 font-semibold text-slate-700 mb-1">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> কিভাবে সেট করবেন
+            <div className="mt-4 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-800">
+              <div className="flex items-center gap-1.5 font-semibold mb-1">
+                <ShieldCheck className="h-3.5 w-3.5" /> Security
               </div>
-              চ্যাটে বলুন <em>“EPS credentials সেট করে দাও”</em> — আমি secure form খুলে দিব যেখানে API key + secrets দিলে সাথে সাথে backend-এ সেভ হয়ে যাবে।
+              Credentials আপনার admin-only database record-এ store হয়। শুধু admin role-এর user access পাবে; RLS enable আছে।
             </div>
           </div>
         </div>
@@ -377,6 +419,55 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
+function TextField({ label, value, onChange, placeholder, required }: {
+  label: string; value: string; onChange: (v: string) => void; placeholder?: string; required?: boolean;
+}) {
+  return (
+    <label className="block">
+      <span className="block text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">
+        {label} {required && <span className="text-rose-500">*</span>}
+      </span>
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
+      />
+    </label>
+  );
+}
+
+function SecretField({ label, value, onChange, placeholder, required, shown, onToggle }: {
+  label: string; value: string; onChange: (v: string) => void; placeholder?: string; required?: boolean;
+  shown: boolean; onToggle: () => void;
+}) {
+  return (
+    <label className="block">
+      <span className="block text-[11px] uppercase tracking-wider text-slate-500 font-semibold mb-1">
+        {label} {required && <span className="text-rose-500">*</span>}
+      </span>
+      <div className="relative">
+        <input
+          type={shown ? "text" : "password"}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          autoComplete="off"
+          className="w-full rounded-xl border border-slate-200 px-3 py-2.5 pr-10 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-violet-400"
+        />
+        <button
+          type="button"
+          onClick={onToggle}
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-500 hover:text-slate-800 rounded-md hover:bg-slate-100"
+          aria-label={shown ? "Hide" : "Show"}
+        >
+          {shown ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+        </button>
+      </div>
+    </label>
+  );
+}
+
 function ToggleField({ label, sublabel, checked, onChange }: {
   label: string; sublabel?: string; checked: boolean; onChange: (v: boolean) => void;
 }) {
@@ -390,8 +481,19 @@ function ToggleField({ label, sublabel, checked, onChange }: {
         onClick={() => onChange(!checked)}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition shrink-0 ${checked ? "bg-emerald-500" : "bg-slate-300"}`}
       >
-        <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transform transition ${checked ? "translate-x-6" : "translate-x-1"}`} />
+        <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${checked ? "translate-x-5" : "translate-x-1"}`} />
       </button>
     </div>
+  );
+}
+
+function StepItem({ done, n, title }: { done: boolean; n: number; title: string }) {
+  return (
+    <li className="flex items-start gap-3">
+      <span className={`grid place-items-center h-6 w-6 rounded-full text-[11px] font-bold shrink-0 ${done ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-600"}`}>
+        {done ? <Check className="h-3.5 w-3.5" /> : n}
+      </span>
+      <span className={`text-sm ${done ? "text-slate-500 line-through" : "text-slate-800 font-medium"}`}>{title}</span>
+    </li>
   );
 }
