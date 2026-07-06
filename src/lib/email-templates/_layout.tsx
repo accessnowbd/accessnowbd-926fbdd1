@@ -6,6 +6,7 @@ import {
   Heading,
   Hr,
   Html,
+  Img,
   Link,
   Preview,
   Section,
@@ -15,6 +16,7 @@ import {
 const SITE = 'AccessNow BD'
 const SITE_URL = 'https://accessnowbd.com'
 const SUPPORT_EMAIL = 'support@accessnowbd.com'
+const LOGO_URL = 'https://accessnowbd.com/__l5e/assets-v1/c8e63989-cdae-46c6-a0e6-0ceb17d6c9f3/accessnowbd-logo.webp'
 
 interface LayoutProps {
   preview: string
@@ -28,21 +30,37 @@ export const EmailLayout = ({ preview, heading, children }: LayoutProps) => (
     <Preview>{preview}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Section style={header}>
+        <Section style={headerBand}>
           <Link href={SITE_URL} style={brandLink}>
-            {/* Gradient wordmark — same brand mark used on-site */}
-            <span style={brandRow as React.CSSProperties}>
-              <span style={{ ...wordBase, color: '#1d4ed8' }}>Access</span>
-              <span style={{ ...wordBase, color: '#1fc796' }}>Now</span>
-              <span style={{ ...wordBase, color: '#f59e0b' }}>BD</span>
-            </span>
-            <span style={tagRow as React.CSSProperties}>
-              <span style={tagWord}>FAST</span>
-              <span style={{ ...tagDot, backgroundColor: '#2f6dff' }} />
-              <span style={tagWord}>SECURE</span>
-              <span style={{ ...tagDot, backgroundColor: '#1fc796' }} />
-              <span style={tagWord}>RELIABLE</span>
-            </span>
+            <table role="presentation" cellPadding={0} cellSpacing={0} border={0} align="center" style={brandTable}>
+              <tbody>
+                <tr>
+                  <td style={badgeCell}>
+                    <Img
+                      src={LOGO_URL}
+                      width="44"
+                      height="44"
+                      alt="AccessNow BD"
+                      style={badgeImg}
+                    />
+                  </td>
+                  <td style={wordCell}>
+                    <div style={brandRow as React.CSSProperties}>
+                      <span style={{ ...wordBase, color: '#1d4ed8' }}>Access</span>
+                      <span style={{ ...wordBase, color: '#1fc796' }}>Now</span>
+                      <span style={{ ...wordBase, color: '#f59e0b' }}>BD</span>
+                    </div>
+                    <div style={tagRow as React.CSSProperties}>
+                      <span style={tagWord}>FAST</span>
+                      <span style={{ ...tagDot, backgroundColor: '#2f6dff' }} />
+                      <span style={tagWord}>SECURE</span>
+                      <span style={{ ...tagDot, backgroundColor: '#1fc796' }} />
+                      <span style={tagWord}>RELIABLE</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </Link>
         </Section>
         <Section style={card}>
@@ -107,9 +125,29 @@ export const styles = {
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }
 const container = { maxWidth: '560px', margin: '0 auto', padding: '24px 20px' }
 const header = { padding: '0 0 20px', textAlign: 'center' as const }
+const headerBand = {
+  padding: '22px 20px',
+  marginBottom: '18px',
+  borderRadius: '14px',
+  background: 'linear-gradient(135deg, #f5f8ff 0%, #ecfdf5 50%, #fff8ec 100%)',
+  border: '1px solid #e6ecff',
+  textAlign: 'center' as const,
+}
 const brandLink = {
   textDecoration: 'none',
   display: 'inline-block',
+}
+const brandTable = { margin: '0 auto', borderCollapse: 'collapse' as const }
+const badgeCell = { verticalAlign: 'middle' as const, paddingRight: '12px' }
+const wordCell = { verticalAlign: 'middle' as const, textAlign: 'left' as const }
+const badgeImg = {
+  display: 'block',
+  width: '44px',
+  height: '44px',
+  borderRadius: '999px',
+  border: '2px solid #ffffff',
+  boxShadow: '0 4px 14px rgba(15,23,42,0.18)',
+  backgroundColor: '#ffffff',
 }
 const brandRow = {
   display: 'inline-block',
