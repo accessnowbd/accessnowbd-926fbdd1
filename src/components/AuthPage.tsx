@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/context/AuthContext";
 import { sendTransactionalEmail } from "@/lib/email/send";
-import accessNowLogo from "@/assets/logo-gold-a.webp";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export function AuthPageEntry({ initialMode, openForgot }: { initialMode: "login" | "signup"; openForgot?: boolean }) {
   return <AuthPage initialMode={initialMode} openForgot={openForgot} />;
@@ -186,15 +186,11 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
             <X className="w-5 h-5" strokeWidth={2} />
           </Link>
 
-          {/* Brand logo */}
-          <Link to="/" className="flex items-center justify-center mb-7 group">
-            <img
-              src={accessNowLogo}
-              alt="AccessNow BD — Fast, Secure, Reliable"
-              draggable={false}
-              className="h-14 w-auto object-contain group-hover:scale-105 transition-transform"
-            />
+          {/* Brand logo — canonical gradient wordmark */}
+          <Link to="/" className="flex items-center justify-center mb-7 group" aria-label="AccessNow BD — Fast, Secure, Reliable">
+            <BrandLogo size="lg" tagClassName="text-slate-500" className="group-hover:scale-[1.02] transition-transform" />
           </Link>
+
 
           {/* Heading */}
           <h1 className="text-center font-extrabold text-slate-900 tracking-tight text-[32px] sm:text-[36px] leading-tight">
