@@ -310,6 +310,26 @@ function CheckoutPage() {
       } catch {
         /* ignore */
       }
+      // EPS gateway: redirect the buyer to the hosted payment page.
+      if (isEps) {
+        try {
+          const { redirect_url } = await initiateEps({
+            data: {
+              orderId: newId,
+              amount: subAfterCoupon,
+              customerName: form.name,
+              customerEmail: form.email,
+              customerPhone: form.phone,
+            },
+          });
+          clear();
+          window.location.href = redirect_url;
+          return;
+        } catch (e) {
+          setErr(e instanceof Error ? e.message : "EPS gateway redirect failed");
+          return;
+        }
+      }
       clear();
       navigate({ to: "/orders/$id", params: { id: newId }, search: { new: 1 } });
       return;
