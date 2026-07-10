@@ -9,6 +9,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { getSslczStatus, testSslczConnection, type SslczStatus } from "@/lib/sslcz.functions";
+import { normalizePublicUrl } from "@/lib/public-origin";
+
 
 export const Route = createFileRoute("/admin/sslcz-pgw")({
   component: SslczGatewayPage,
