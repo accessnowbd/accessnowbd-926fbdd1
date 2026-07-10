@@ -621,8 +621,34 @@ async function handleCallback(cb: TgCallback) {
     }
     return sendMessage(chat_id, `📱 <b>${PAYMENT_LABELS[m]}</b> — টাকা পাঠিয়ে transaction ID লিখুন:`);
   }
+  if (data.startsWith("wish:add:")) {
+    const slug = data.slice("wish:add:".length);
+    const res = await toggleWishlist(chat_id, slug);
+    await answerCallbackQuery(cb.id, res === "added" ? "❤️ Wishlist-এ যোগ" : "🗑 Wishlist থেকে সরানো হয়েছে");
+    return;
+  }
+  if (data.startsWith("wish:rm:")) {
+    await toggleWishlist(chat_id, data.slice("wish:rm:".length));
+    await answerCallbackQuery(cb.id, "🗑 Removed");
+    return;
+  }
+  if (data === "profile:toggle_orders") {
+    const sub = await getSubscriber(chat_id);
+    const next = !(sub?.notify_orders === false);
+    await updateSubscriber(chat_id, { notify_orders: !next });
+    await answerCallbackQuery(cb.id, !next ? "🔔 On" : "🔕 Off");
+    return showProfile(chat_id, { ...sub, notify_orders: !next }, cfg);
+  }
+  if (data === "profile:toggle_promos") {
+    const sub = await getSubscriber(chat_id);
+    const next = !(sub?.notify_promos === false);
+    await updateSubscriber(chat_id, { notify_promos: !next });
+    await answerCallbackQuery(cb.id, !next ? "🔔 On" : "🔕 Off");
+    return showProfile(chat_id, { ...sub, notify_promos: !next }, cfg);
+  }
   await answerCallbackQuery(cb.id);
 }
+
 
 function escapeHtml(s: string) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
