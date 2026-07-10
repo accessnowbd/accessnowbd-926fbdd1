@@ -52,28 +52,26 @@ async function broadcast(msg: { text: string; photo?: string; url: string }, eve
 
   const { data: subs } = await (supabaseAdmin as any)
     .from("telegram_subscribers")
-    .select("chat_id, notify_promos, is_blocked, bot_kind")
+    .select("chat_id")
     .eq("bot_kind", "store_bot")
-    .eq("is_blocked", false);
+    .eq("is_blocked", false)
+    .not("notify_promos", "is", false);
 
-  const list = ((subs as any[]) || []).filter((s) => s.notify_promos !== false);
+  const list = ((subs as any[]) || []);
   const reply_markup = event === "product.deleted"
     ? undefined
     : { inline_keyboard: [[{ text: "🛒 View on website", url: msg.url }]] };
 
-  // Send sequentially with tiny gap to avoid Telegram rate limits.
-  for (const s of list) {
-    try {
-      if (msg.photo) {
-        await sendPhotoFor("store_bot", s.chat_id, msg.photo, msg.text, { reply_markup });
-      } else {
-        await sendMessageFor("store_bot", s.chat_id, msg.text, {
-          disable_web_page_preview: false,
-          reply_markup,
-        });
-      }
-    } catch { /* logged inside tgCore */ }
-    await new Promise((r) => setTimeout(r, 40));
+  // Parallel batches of 25 — respects Telegram's ~30 msg/sec limit.
+  const CHUNK = 25;
+  for (let i = 0; i < list.length; i += CHUNK) {
+    const slice = list.slice(i, i + CHUNK);
+    await Promise.allSettled(slice.map((s) =>
+      msg.photo
+        ? sendPhotoFor("store_bot", s.chat_id, msg.photo!, msg.text, { reply_markup })
+        : sendMessageFor("store_bot", s.chat_id, msg.text, { disable_web_page_preview: false, reply_markup })
+    ));
+    if (i + CHUNK < list.length) await new Promise((r) => setTimeout(r, 1000));
   }
 }
 
