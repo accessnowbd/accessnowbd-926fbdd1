@@ -334,9 +334,12 @@ async function placeOrder(chat_id: number, state: any, sub: any, cfg: StoreCfg) 
       transaction_id: state.transaction_id || `TG-${Date.now()}`,
       items: items as never,
       total,
+      source: "telegram_bot",
+      telegram_chat_id: chat_id,
       admin_note: `[telegram store_bot chat_id=${chat_id}] Address: ${state.address} | Payment: ${payMethod}`,
     } as never)
     .select("id").single();
+
 
   if (error || !order) return sendMessage(chat_id, `❌ Order create failed: ${error?.message || "unknown"}`);
   const orderId = (order as any).id as string;
