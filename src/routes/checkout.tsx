@@ -347,7 +347,7 @@ function CheckoutPage() {
           : isEps ? "EPS (pending)"
           : isSslcz ? "SSLCommerz (pending)"
           : form.trxId;
-        const adminUrl = `${window.location.origin}/admin/orders`;
+        const adminUrl = `${getPublicOrigin()}/admin/orders`;
         notifyTelegram({
           data: {
             event: "order_created",
