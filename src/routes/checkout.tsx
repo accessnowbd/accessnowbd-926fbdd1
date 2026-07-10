@@ -14,6 +14,7 @@ import { trackPurchase } from "@/lib/trackEvent";
 import { captureAbandonedCheckout } from "@/lib/abandonedCheckout";
 import { getEpsPublicConfig, initiateEpsPayment } from "@/lib/eps.functions";
 import { getSslczPublicConfig, initiateSslczPayment } from "@/lib/sslcz.functions";
+import { getPublicOrigin } from "@/lib/public-origin";
 
 
 function CheckoutErrorComponent({ error }: { error: Error }) {
@@ -347,7 +348,7 @@ function CheckoutPage() {
           : isEps ? "EPS (pending)"
           : isSslcz ? "SSLCommerz (pending)"
           : form.trxId;
-        const adminUrl = `${window.location.origin}/admin/orders`;
+        const adminUrl = `${getPublicOrigin()}/admin/orders`;
         notifyTelegram({
           data: {
             event: "order_created",

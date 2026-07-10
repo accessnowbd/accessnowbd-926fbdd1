@@ -9,6 +9,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { getEpsStatus, testEpsConnection, type EpsStatus } from "@/lib/eps.functions";
+import { normalizePublicUrl } from "@/lib/public-origin";
+
 
 export const Route = createFileRoute("/admin/eps-pgw")({
   component: EpsGatewayPage,
@@ -85,17 +87,15 @@ function EpsGatewayPage() {
     }
 
     if (typeof window !== "undefined") {
-      setSettings((prev) => {
-        const origin = window.location.origin;
-        return {
-          ...prev,
-          success_url: prev.success_url || `${origin}/api/public/eps/success`,
-          fail_url:    prev.fail_url    || `${origin}/api/public/eps/fail`,
-          cancel_url:  prev.cancel_url  || `${origin}/api/public/eps/cancel`,
-          ipn_url:     prev.ipn_url     || `${origin}/api/public/eps/ipn`,
-        };
-      });
+      setSettings((prev) => ({
+        ...prev,
+        success_url: normalizePublicUrl(prev.success_url, "/api/public/eps/success"),
+        fail_url:    normalizePublicUrl(prev.fail_url,    "/api/public/eps/fail"),
+        cancel_url:  normalizePublicUrl(prev.cancel_url,  "/api/public/eps/cancel"),
+        ipn_url:     normalizePublicUrl(prev.ipn_url,     "/api/public/eps/ipn"),
+      }));
     }
+
 
     try {
       const s = await fetchStatus();

@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { getPublicOrigin } from "@/lib/public-origin";
 import { useServerFn } from "@tanstack/react-start";
 import {
   sendTelegramTest, registerTelegramWebhook, getTelegramWebhookInfo,
@@ -142,7 +143,7 @@ function TelegramAdminPage() {
   const registerWebhook = async () => {
     setRegistering(true);
     try {
-      const url = `${window.location.origin}/api/public/telegram/webhook`;
+      const url = `${getPublicOrigin()}/api/public/telegram/webhook`;
       // Register BOTH bots on the same webhook URL — endpoint dispatches by secret token
       await registerFn({ data: { url, kind: "order_bot" } }).catch(() => null);
       await registerFn({ data: { url, kind: "store_bot" } }).catch(() => null);
