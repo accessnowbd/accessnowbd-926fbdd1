@@ -543,7 +543,7 @@ async function sendHelp(chat_id: number, cfg: StoreCfg) {
   const contact = cfg.contact_link || "https://t.me/accessnowbd";
   const text = [
     "<b>Commands</b>",
-    "/browse — প্রোডাক্ট দেখুন",
+    "/browse — ক্যাটাগরি ও প্রোডাক্ট",
     "/cart — কার্ট দেখুন",
     "/checkout — অর্ডার করুন",
     "/orders — আপনার অর্ডার",
