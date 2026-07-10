@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { getPublicOrigin } from "@/lib/public-origin";
 import { useServerFn } from "@tanstack/react-start";
 import {
   registerTelegramWebhook, getTelegramWebhookInfo, sendTelegramTest,
