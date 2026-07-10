@@ -228,9 +228,11 @@ async function renderProductList(chat_id: number, products: any[], page: number,
     const caption = [`<b>${escapeHtml(p.name)}</b>`, priceLine, stockLine].filter(Boolean).join("\n");
     const linkFallback = (cfg.buy_link_fallback || "https://accessnowbd.com/product/{{slug}}").replace("{{slug}}", p.slug);
     const buttons: any[][] = [[
-      { text: "➕ Add to cart", callback_data: `add:${p.slug}` },
+      { text: "➕ Cart", callback_data: `add:${p.slug}` },
+      { text: "❤️ Wishlist", callback_data: `wish:add:${p.slug}` },
       { text: "🌐 Website", url: linkFallback },
     ]];
+
     if (p.image_url) await sendPhoto(chat_id, p.image_url, caption, { reply_markup: { inline_keyboard: buttons } });
     else await sendMessage(chat_id, caption, { reply_markup: { inline_keyboard: buttons } });
   }
