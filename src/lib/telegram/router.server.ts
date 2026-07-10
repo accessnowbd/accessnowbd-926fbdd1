@@ -375,6 +375,16 @@ async function addToCart(chat_id: number, slug: string) {
   await updateSubscriber(chat_id, { cart });
 }
 
+async function changeQty(chat_id: number, slug: string, delta: number) {
+  const sub = await getSubscriber(chat_id);
+  let cart: CartItem[] = Array.isArray(sub?.cart) ? sub.cart : [];
+  const item = cart.find((c) => c.slug === slug);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter((c) => c.slug !== slug);
+  await updateSubscriber(chat_id, { cart });
+}
+
 async function showCart(chat_id: number, cfg: StoreCfg) {
   const sub = await getSubscriber(chat_id);
   const cart: CartItem[] = Array.isArray(sub?.cart) ? sub.cart : [];
