@@ -396,11 +396,15 @@ async function showOrders(chat_id: number, user_id: string | null | undefined, c
   const currency = cfg.currency || "৳";
   let q = db.from("orders").select("id,total,status,created_at").order("created_at", { ascending: false }).limit(5);
   if (user_id) q = q.eq("user_id", user_id);
-  else q = q.ilike("admin_note", `%chat_id=${chat_id}%`);
+  else q = q.eq("telegram_chat_id", chat_id);
   const { data } = await q;
   const orders = (data as any[]) || [];
   if (orders.length === 0) return sendMessage(chat_id, "এখনো কোনো অর্ডার নেই।", { reply_markup: menu(cfg) });
-  const lines = orders.map((o) => `• <code>ANB-${o.id.slice(0, 8).toUpperCase()}</code> — ${currency}${o.total} — ${o.status || "pending"}`);
+  const statusEmoji = (s: string) =>
+    s === "completed" ? "✅" : s === "confirmed" || s === "processing" ? "🔄"
+    : s === "cancelled" || s === "rejected" ? "❌" : "⏳";
+  const lines = orders.map((o) =>
+    `• <code>ANB-${o.id.slice(0, 8).toUpperCase()}</code> — ${currency}${o.total} — ${statusEmoji(o.status)} ${o.status || "pending"}`);
   return sendMessage(chat_id, `<b>📦 Recent orders</b>\n\n${lines.join("\n")}`, { reply_markup: menu(cfg) });
 }
 
@@ -412,14 +416,166 @@ async function sendHelp(chat_id: number, cfg: StoreCfg) {
     "/cart — কার্ট দেখুন",
     "/checkout — অর্ডার করুন",
     "/orders — আপনার অর্ডার",
+    "/wishlist — Wishlist",
+    "/wallet — Wallet balance",
+    "/refer — Refer friends & earn",
+    "/profile — আপনার profile",
+    "/support — Support ticket",
     "/search &lt;name&gt; — সার্চ",
-    "/id — chat id দেখুন",
     "/help — সাহায্য",
     "",
     `💬 <a href="${escapeHtml(contact)}">সাপোর্ট চ্যাট</a>`,
   ].join("\n");
   return sendMessage(chat_id, text, { reply_markup: menu(cfg) });
 }
+
+/* ---------------- Wishlist ---------------- */
+
+async function toggleWishlist(chat_id: number, slug: string): Promise<"added" | "removed"> {
+  const db = await admin();
+  const { data: existing } = await db.from("telegram_wishlist")
+    .select("id").eq("chat_id", chat_id).eq("product_slug", slug).maybeSingle();
+  if (existing) {
+    await db.from("telegram_wishlist").delete().eq("id", (existing as any).id);
+    return "removed";
+  }
+  await db.from("telegram_wishlist").insert({ chat_id, product_slug: slug } as never);
+  return "added";
+}
+
+async function showWishlist(chat_id: number, cfg: StoreCfg) {
+  const db = await admin();
+  const currency = cfg.currency || "৳";
+  const { data } = await db.from("telegram_wishlist")
+    .select("product_slug, products(slug,name,image_url,plans,stock_status)")
+    .eq("chat_id", chat_id).order("created_at", { ascending: false }).limit(20);
+  const rows = (data as any[]) || [];
+  if (!rows.length) return sendMessage(chat_id, "❤️ Wishlist খালি।", { reply_markup: menu(cfg) });
+  for (const r of rows) {
+    const p = r.products;
+    if (!p) continue;
+    const price = firstPrice(p.plans);
+    const priceLine = price ? `💰 ${currency}${price}` : "";
+    const caption = [`<b>${escapeHtml(p.name)}</b>`, priceLine].filter(Boolean).join("\n");
+    const kb = [[
+      { text: "➕ Add to cart", callback_data: `add:${p.slug}` },
+      { text: "🗑 Remove", callback_data: `wish:rm:${p.slug}` },
+    ]];
+    if (p.image_url) await sendPhoto(chat_id, p.image_url, caption, { reply_markup: { inline_keyboard: kb } });
+    else await sendMessage(chat_id, caption, { reply_markup: { inline_keyboard: kb } });
+  }
+}
+
+/* ---------------- Wallet ---------------- */
+
+async function showWallet(chat_id: number, sub: any, cfg: StoreCfg) {
+  const currency = cfg.currency || "৳";
+  if (!sub?.user_id) {
+    return sendMessage(chat_id, "💰 Wallet ব্যবহার করতে website account link করুন।\n\n/profile → account link", { reply_markup: menu(cfg) });
+  }
+  const db = await admin();
+  const { data: w } = await db.from("wallets").select("balance").eq("user_id", sub.user_id).maybeSingle();
+  const balance = Number((w as any)?.balance || 0);
+  const { data: tx } = await db.from("wallet_transactions")
+    .select("amount, type, reason, created_at").eq("user_id", sub.user_id)
+    .order("created_at", { ascending: false }).limit(5);
+  const lines = ((tx as any[]) || []).map((t) => {
+    const sign = Number(t.amount) >= 0 ? "+" : "";
+    return `${sign}${currency}${t.amount} · ${t.type} — ${t.reason || ""}`;
+  });
+  const text = [
+    `💰 <b>Wallet balance</b>: ${currency}${balance.toLocaleString()}`,
+    "",
+    lines.length ? `<b>Recent</b>\n${lines.join("\n")}` : "কোনো transaction নেই।",
+  ].join("\n");
+  return sendMessage(chat_id, text, {
+    reply_markup: { inline_keyboard: [[
+      { text: "💳 Top-up (website)", url: "https://accessnowbd.com/wallet" },
+    ]] },
+  });
+}
+
+/* ---------------- Referral ---------------- */
+
+async function showReferral(chat_id: number, cfg: StoreCfg) {
+  // Bot username via getMe
+  let botUser = "accessnowbd_bot";
+  try {
+    const { tgFor } = await import("./api.server");
+    const me: any = await tgFor("store_bot", "getMe", {});
+    if (me?.username) botUser = me.username;
+  } catch { /* ignore */ }
+  const link = `https://t.me/${botUser}?start=ref_${chat_id}`;
+  const db = await admin();
+  const { count } = await db.from("telegram_referrals")
+    .select("id", { count: "exact", head: true }).eq("referrer_chat_id", chat_id);
+  const { count: rewarded } = await db.from("telegram_referrals")
+    .select("id", { count: "exact", head: true }).eq("referrer_chat_id", chat_id).eq("rewarded", true);
+  const text = [
+    "🎁 <b>Refer & Earn</b>",
+    "",
+    `আপনার unique link:`,
+    `<code>${link}</code>`,
+    "",
+    `👥 Referrals: <b>${count ?? 0}</b>  ·  ✅ Rewarded: <b>${rewarded ?? 0}</b>`,
+    "",
+    "বন্ধুরা এই link থেকে join করে প্রথম অর্ডার করলে wallet-এ credit পাবেন।",
+  ].join("\n");
+  return sendMessage(chat_id, text, {
+    reply_markup: { inline_keyboard: [[
+      { text: "📤 Share", url: `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent("AccessNow BD-তে join করুন!")}` },
+    ]] },
+  });
+}
+
+/* ---------------- Profile ---------------- */
+
+async function showProfile(chat_id: number, sub: any, cfg: StoreCfg) {
+  const linked = !!sub?.user_id;
+  let email = "-";
+  if (linked) {
+    const db = await admin();
+    const { data: p } = await db.from("profiles").select("email, display_name").eq("id", sub.user_id).maybeSingle();
+    email = (p as any)?.email || "-";
+  }
+  const text = [
+    "👤 <b>Profile</b>",
+    `Name: ${escapeHtml(sub?.first_name || "-")}`,
+    `Chat ID: <code>${chat_id}</code>`,
+    `Website account: ${linked ? "✅ linked (<b>" + escapeHtml(email) + "</b>)" : "❌ not linked"}`,
+    `Order notifications: ${sub?.notify_orders === false ? "❌ off" : "✅ on"}`,
+    `Promo notifications: ${sub?.notify_promos === false ? "❌ off" : "✅ on"}`,
+  ].join("\n");
+  return sendMessage(chat_id, text, {
+    reply_markup: { inline_keyboard: [
+      [{ text: sub?.notify_orders === false ? "🔔 Enable order alerts" : "🔕 Mute order alerts", callback_data: "profile:toggle_orders" }],
+      [{ text: sub?.notify_promos === false ? "🔔 Enable promos" : "🔕 Mute promos", callback_data: "profile:toggle_promos" }],
+      [{ text: "🌐 Website", url: "https://accessnowbd.com/account" }],
+    ] },
+  });
+}
+
+/* ---------------- Support ---------------- */
+
+async function createSupportTicket(chat_id: number, sub: any, body: string, cfg: StoreCfg) {
+  const db = await admin();
+  if (!sub?.user_id) {
+    return sendMessage(chat_id,
+      "🎫 Ticket খুলতে website account link করতে হবে। আপাতত এই সমস্যাটি admin-দের কাছে পাঠানো হবে।\n\n" +
+      "Message: " + escapeHtml(body).slice(0, 400),
+      { reply_markup: menu(cfg) });
+  }
+  const { data, error } = await db.from("support_tickets").insert({
+    user_id: sub.user_id, subject: body.slice(0, 80),
+    message: body.slice(0, 2000), category: "general", priority: "medium", status: "open",
+  } as never).select("id").single();
+  if (error) return sendMessage(chat_id, `❌ ${error.message}`, { reply_markup: menu(cfg) });
+  const ticketId = (data as any).id;
+  return sendMessage(chat_id,
+    `✅ Ticket #${String(ticketId).slice(0, 8).toUpperCase()} খোলা হয়েছে।\nআমরা দ্রুত reply দেবো।`,
+    { reply_markup: menu(cfg) });
+}
+
 
 /* ---------------- Callback queries ---------------- */
 
