@@ -318,14 +318,15 @@ async function handleCallback(cb: TgCallback) {
   const chat_id = cb.message?.chat.id;
   if (!chat_id) return;
   const data = cb.data || "";
-  if (cb.from) await upsertAdminSubscriber(cb.from, chat_id);
 
   const auth = await isAdminChat(chat_id);
   if (!auth.ok) {
-    await ack(cb.id, "🔒 Not signed in");
-    return send(chat_id, "🔒 Sign in first: /login");
+    await ack(cb.id, "🚫 Not authorized");
+    return;
   }
+  if (cb.from) await upsertAdminSubscriber(cb.from, chat_id, auth.user_id || null);
 
+  if (data === "adm:dash") { await ack(cb.id); return showDashboard(chat_id); }
   if (data === "adm:orders") { await ack(cb.id); return listRecentOrders(chat_id); }
   if (data === "adm:topups") { await ack(cb.id); return listPendingTopups(chat_id); }
 
