@@ -62,24 +62,27 @@ export const sendTelegramTest = createServerFn({ method: "POST" })
 
 // Register webhook with Telegram — called from admin panel "Connect" button.
 export const registerTelegramWebhook = createServerFn({ method: "POST" })
-  .inputValidator((data: { url: string }) => data)
+  .inputValidator((data: { url: string; kind?: "order_bot" | "store_bot" }) => data)
   .handler(async ({ data }) => {
-    const { tg, webhookSecret } = await import("./api.server");
-    const result = await tg<any>("setWebhook", {
+    const { tgFor, webhookSecretFor } = await import("./api.server");
+    const kind = data.kind || "order_bot";
+    const result = await tgFor<any>(kind, "setWebhook", {
       url: data.url,
-      secret_token: webhookSecret(),
+      secret_token: webhookSecretFor(kind),
       allowed_updates: ["message", "callback_query"],
       drop_pending_updates: true,
     });
     return { ok: true as const, result: JSON.stringify(result) };
   });
 
-export const getTelegramWebhookInfo = createServerFn({ method: "GET" })
-  .handler(async () => {
+export const getTelegramWebhookInfo = createServerFn({ method: "POST" })
+  .inputValidator((data: { kind?: "order_bot" | "store_bot" }) => data || {})
+  .handler(async ({ data }) => {
     try {
-      const { tg } = await import("./api.server");
-      const info = await tg<any>("getWebhookInfo", {});
-      const me = await tg<any>("getMe", {});
+      const { tgFor } = await import("./api.server");
+      const kind = data?.kind || "order_bot";
+      const info = await tgFor<any>(kind, "getWebhookInfo", {});
+      const me = await tgFor<any>(kind, "getMe", {});
       return { ok: true as const, info: JSON.stringify(info), me: JSON.stringify(me) };
     } catch (e: any) {
       return { ok: false, error: e?.message || "unknown" };
