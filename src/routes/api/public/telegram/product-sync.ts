@@ -65,18 +65,9 @@ async function broadcast(msg: { text: string; photo?: string; url: string }, eve
   for (const s of list) {
     try {
       if (msg.photo) {
-        await sendPhotoFor("store_bot", {
-          chat_id: s.chat_id,
-          photo: msg.photo,
-          caption: msg.text,
-          parse_mode: "HTML",
-          reply_markup,
-        });
+        await sendPhotoFor("store_bot", s.chat_id, msg.photo, msg.text, { reply_markup });
       } else {
-        await sendMessageFor("store_bot", {
-          chat_id: s.chat_id,
-          text: msg.text,
-          parse_mode: "HTML",
+        await sendMessageFor("store_bot", s.chat_id, msg.text, {
           disable_web_page_preview: false,
           reply_markup,
         });
