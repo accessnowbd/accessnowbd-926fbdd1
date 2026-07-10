@@ -334,17 +334,40 @@ function CheckoutPage() {
       } catch {
         /* ignore */
       }
-      // Fire-and-forget: Telegram admin notification
+      // Fire-and-forget: Telegram admin notification (full order details)
       try {
         const { notifyTelegram } = await import("@/lib/telegram/notify.functions");
+        const shortId = `ANB-${newId.slice(0, 8).toUpperCase()}`;
+        const itemLines = items
+          .map((it) => `  • ${it.name || it.slug} × ${it.qty} — ৳${(it.price ?? 0) * it.qty}`)
+          .join("\n");
+        const paymentLabel = fullyByWallet ? "Wallet" : (method || "-");
+        const trxId = fullyByWallet
+          ? `WALLET-${Date.now()}`
+          : isEps ? "EPS (pending)"
+          : isSslcz ? "SSLCommerz (pending)"
+          : form.trxId;
+        const adminUrl = `${window.location.origin}/admin/orders`;
         notifyTelegram({
           data: {
             event: "order_created",
             vars: {
-              order_id: `ANB-${newId.slice(0, 8).toUpperCase()}`,
+              order_id: shortId,
               customer: form.name,
+              phone: form.phone,
+              email: form.email,
+              items: itemLines,
+              items_count: items.reduce((s, it) => s + it.qty, 0),
+              subtotal: total,
+              discount: applied.discount || 0,
+              coupon: applied.valid && applied.code ? applied.code : "-",
+              wallet: walletApplied || 0,
               total: subAfterCoupon,
-              items: items.map((it) => `${it.name || it.slug}×${it.qty}`).join(", "),
+              payment_method: paymentLabel,
+              transaction_id: trxId,
+              sender_number: form.senderNumber || "-",
+              admin_url: adminUrl,
+              time: new Date().toLocaleString("en-GB", { timeZone: "Asia/Dhaka" }),
             },
           },
         }).catch(() => {});
