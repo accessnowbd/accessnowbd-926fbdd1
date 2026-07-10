@@ -53,10 +53,10 @@ export const notifyTelegram = createServerFn({ method: "POST" })
 
 // Test send from admin panel: sends "hello" to the given chat_id.
 export const sendTelegramTest = createServerFn({ method: "POST" })
-  .inputValidator((data: { chat_id: number | string; text?: string }) => data)
+  .inputValidator((data: { chat_id: number | string; text?: string; kind?: "order_bot" | "store_bot" }) => data)
   .handler(async ({ data }) => {
-    const { sendMessage } = await import("./api.server");
-    await sendMessage(data.chat_id, data.text || "✅ Test message from AccessNow BD admin panel");
+    const { sendMessageFor } = await import("./api.server");
+    await sendMessageFor(data.kind || "order_bot", data.chat_id, data.text || "✅ Test message from AccessNow BD admin panel");
     return { ok: true };
   });
 
