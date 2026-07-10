@@ -154,7 +154,8 @@ async function handleMessage(msg: TgMessage) {
     const welcome = cfg.welcome_message || "👋 স্বাগতম!";
     return sendMessage(chat_id, renderTemplate(welcome, {}), { reply_markup: menu(cfg) });
   }
-  if (text.startsWith("/browse") || isMenuText(text, cfg, "browse")) return showCatalog(chat_id, 0, cfg);
+  if (text.startsWith("/browse") || isMenuText(text, cfg, "browse")) return showCategories(chat_id, cfg);
+  if (text.startsWith("/categories")) return showCategories(chat_id, cfg);
   if (text.startsWith("/cart") || isMenuText(text, cfg, "cart")) return showCart(chat_id, cfg);
   if (text.startsWith("/checkout")) return startCheckout(chat_id, cfg);
   if (text.startsWith("/orders") || isMenuText(text, cfg, "orders")) return showOrders(chat_id, sub?.user_id, cfg);
@@ -190,68 +191,169 @@ async function handleMessage(msg: TgMessage) {
 }
 
 
-/* ---------------- Catalog ---------------- */
+/* ---------------- Catalog: categories → products → detail ---------------- */
 
-async function showCatalog(chat_id: number, page: number, cfg: StoreCfg) {
-  const perPage = Math.max(1, Math.min(10, cfg.per_page ?? 5));
+const CAT_EMOJI: Record<string, string> = {
+  "Subscription": "📺",
+  "AI & Education": "🤖",
+  "Microsoft Office": "📊",
+  "Windows": "🪟",
+  "VPN & Security": "🔒",
+  "Software & Productivity": "💼",
+};
+
+function encCat(name: string) {
+  return Buffer.from(name, "utf8").toString("base64").replace(/=+$/, "").replace(/\+/g, "-").replace(/\//g, "_");
+}
+function decCat(enc: string) {
+  const s = enc.replace(/-/g, "+").replace(/_/g, "/");
+  return Buffer.from(s + "===".slice((s.length + 3) % 4), "base64").toString("utf8");
+}
+
+async function showCategories(chat_id: number, cfg: StoreCfg) {
   const db = await admin();
-
-  let q = db.from("products")
-    .select("slug,name,image_url,category,badge,stock_status,plans,tagline")
-    .eq("is_active", true).order("sort_order", { ascending: true });
-  if (cfg.browse_mode === "featured") q = q.not("badge", "is", null);
+  let q = db.from("products").select("category").eq("is_active", true).not("category", "is", null);
   if (cfg.categories_filter && cfg.categories_filter.length) q = q.in("category", cfg.categories_filter);
-  q = q.range(page * perPage, page * perPage + perPage - 1);
-
-  const { data: products } = await q;
-  if (!products || products.length === 0) {
-    return sendMessage(chat_id, "কোনো প্রোডাক্ট পাওয়া যায়নি।", { reply_markup: menu(cfg) });
+  const { data } = await q;
+  const counts = new Map<string, number>();
+  for (const r of (data as any[]) || []) {
+    const c = String(r.category || "").trim();
+    if (!c) continue;
+    counts.set(c, (counts.get(c) || 0) + 1);
   }
-  await renderProductList(chat_id, products as any[], page, perPage, cfg);
+  const cats = Array.from(counts.entries()).sort((a, b) => b[1] - a[1]);
+  if (cats.length === 0) {
+    return sendMessage(chat_id, "কোনো ক্যাটাগরি পাওয়া যায়নি।", { reply_markup: menu(cfg) });
+  }
+  const rows: any[][] = [];
+  for (let i = 0; i < cats.length; i += 2) {
+    const row = cats.slice(i, i + 2).map(([name, n]) => ({
+      text: `${CAT_EMOJI[name] || "📦"} ${name} (${n})`,
+      callback_data: `cat:${encCat(name)}:0`,
+    }));
+    rows.push(row);
+  }
+  rows.push([{ text: "🔥 Featured", callback_data: "featured:0" }, { text: "🔍 Search", callback_data: "help:search" }]);
+  return sendMessage(chat_id, "🛍️ <b>ক্যাটাগরি বেছে নিন</b>\n\nযেকোনো ক্যাটাগরিতে ক্লিক করুন প্রোডাক্ট দেখতে।", {
+    reply_markup: { inline_keyboard: rows },
+  });
+}
+
+async function showCategoryProducts(chat_id: number, category: string, page: number, cfg: StoreCfg) {
+  const perPage = Math.max(1, Math.min(10, cfg.per_page ?? 8));
+  const db = await admin();
+  const { data, count } = await db.from("products")
+    .select("slug,name,plans,stock_status,badge", { count: "exact" })
+    .eq("is_active", true).eq("category", category)
+    .order("sort_order", { ascending: true })
+    .range(page * perPage, page * perPage + perPage - 1);
+  const products = (data as any[]) || [];
+  if (products.length === 0) {
+    return sendMessage(chat_id, "এই ক্যাটাগরিতে কোনো প্রোডাক্ট নেই।", { reply_markup: menu(cfg) });
+  }
+  const currency = cfg.currency || "৳";
+  const total = count || products.length;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const rows: any[][] = products.map((p, i) => {
+    const price = firstPrice(p.plans);
+    const stock = p.stock_status && p.stock_status !== "in_stock" ? " ❌" : "";
+    const badge = p.badge ? " 🔥" : "";
+    const priceTxt = price ? ` — ${currency}${price}` : "";
+    return [{
+      text: `${page * perPage + i + 1}. ${p.name}${priceTxt}${badge}${stock}`,
+      callback_data: `prod:${p.slug}`,
+    }];
+  });
+  const nav: any[] = [];
+  if (page > 0) nav.push({ text: "◀️ Prev", callback_data: `cat:${encCat(category)}:${page - 1}` });
+  nav.push({ text: `📄 ${page + 1}/${totalPages}`, callback_data: "noop" });
+  if (page + 1 < totalPages) nav.push({ text: "Next ▶️", callback_data: `cat:${encCat(category)}:${page + 1}` });
+  rows.push(nav);
+  rows.push([{ text: "🔙 Categories", callback_data: "browse" }]);
+  const header = `${CAT_EMOJI[category] || "📦"} <b>${escapeHtml(category)}</b> — ${total}টি প্রোডাক্ট`;
+  return sendMessage(chat_id, header, { reply_markup: { inline_keyboard: rows } });
+}
+
+async function showFeatured(chat_id: number, page: number, cfg: StoreCfg) {
+  const perPage = Math.max(1, Math.min(10, cfg.per_page ?? 8));
+  const db = await admin();
+  const { data, count } = await db.from("products")
+    .select("slug,name,plans,stock_status,badge,category", { count: "exact" })
+    .eq("is_active", true).not("badge", "is", null)
+    .order("sort_order", { ascending: true })
+    .range(page * perPage, page * perPage + perPage - 1);
+  const products = (data as any[]) || [];
+  if (!products.length) return sendMessage(chat_id, "কোনো featured প্রোডাক্ট নেই।", { reply_markup: menu(cfg) });
+  const currency = cfg.currency || "৳";
+  const total = count || products.length;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const rows: any[][] = products.map((p, i) => {
+    const price = firstPrice(p.plans);
+    const priceTxt = price ? ` — ${currency}${price}` : "";
+    return [{ text: `${page * perPage + i + 1}. ${p.name}${priceTxt} 🔥`, callback_data: `prod:${p.slug}` }];
+  });
+  const nav: any[] = [];
+  if (page > 0) nav.push({ text: "◀️ Prev", callback_data: `featured:${page - 1}` });
+  nav.push({ text: `📄 ${page + 1}/${totalPages}`, callback_data: "noop" });
+  if (page + 1 < totalPages) nav.push({ text: "Next ▶️", callback_data: `featured:${page + 1}` });
+  rows.push(nav);
+  rows.push([{ text: "🔙 Categories", callback_data: "browse" }]);
+  return sendMessage(chat_id, `🔥 <b>Featured Products</b>`, { reply_markup: { inline_keyboard: rows } });
+}
+
+async function showProduct(chat_id: number, slug: string, cfg: StoreCfg) {
+  const db = await admin();
+  const { data } = await db.from("products")
+    .select("slug,name,image_url,category,badge,stock_status,plans,tagline,short_description")
+    .eq("slug", slug).maybeSingle();
+  const p = data as any;
+  if (!p) return sendMessage(chat_id, "❌ প্রোডাক্ট পাওয়া যায়নি।", { reply_markup: menu(cfg) });
+  const currency = cfg.currency || "৳";
+  const price = firstPrice(p.plans);
+  const priceLine = cfg.show_price !== false && price ? `💰 <b>${currency}${price}</b>` : "";
+  const stockLine = cfg.show_stock !== false
+    ? (p.stock_status && p.stock_status !== "in_stock" ? `❌ ${p.stock_status}` : "✅ In stock")
+    : "";
+  const desc = p.short_description || p.tagline || "";
+  const caption = [
+    `<b>${escapeHtml(p.name)}</b>`,
+    p.category ? `📂 ${escapeHtml(p.category)}` : "",
+    priceLine, stockLine, "",
+    desc ? escapeHtml(desc).slice(0, 500) : "",
+  ].filter(Boolean).join("\n");
+  const linkFallback = (cfg.buy_link_fallback || "https://accessnowbd.com/product/{{slug}}").replace("{{slug}}", p.slug);
+  const kb = [
+    [{ text: "🛒 Add to Cart", callback_data: `add:${p.slug}` }, { text: "❤️ Wishlist", callback_data: `wish:add:${p.slug}` }],
+    [{ text: "🌐 Website", url: linkFallback }, { text: "🔙 Back", callback_data: p.category ? `cat:${encCat(p.category)}:0` : "browse" }],
+  ];
+  if (p.image_url) return sendPhoto(chat_id, p.image_url, caption, { reply_markup: { inline_keyboard: kb } });
+  return sendMessage(chat_id, caption, { reply_markup: { inline_keyboard: kb } });
 }
 
 async function searchProducts(chat_id: number, query: string, cfg: StoreCfg) {
   const db = await admin();
   const q = query.replace(/[%_]/g, "").trim();
   let sql = db.from("products")
-    .select("slug,name,image_url,category,badge,stock_status,plans,tagline")
+    .select("slug,name,plans,stock_status,badge")
     .eq("is_active", true)
     .or(`name.ilike.%${q}%,tagline.ilike.%${q}%,category.ilike.%${q}%`)
-    .limit(cfg.per_page ?? 5);
+    .limit(15);
   if (cfg.categories_filter && cfg.categories_filter.length) sql = sql.in("category", cfg.categories_filter);
   const { data } = await sql;
-  if (!data || data.length === 0) {
+  const products = (data as any[]) || [];
+  if (products.length === 0) {
     return sendMessage(chat_id, `🔍 "<b>${escapeHtml(query)}</b>" — কিছু পাওয়া যায়নি।`, { reply_markup: menu(cfg) });
   }
-  await sendMessage(chat_id, `🔍 "<b>${escapeHtml(query)}</b>" — ${data.length}টি প্রোডাক্ট:`);
-  await renderProductList(chat_id, data as any[], 0, cfg.per_page ?? 5, cfg, false);
-}
-
-async function renderProductList(chat_id: number, products: any[], page: number, perPage: number, cfg: StoreCfg, withNav = true) {
   const currency = cfg.currency || "৳";
-  for (const p of products) {
+  const rows: any[][] = products.map((p, i) => {
     const price = firstPrice(p.plans);
-    const priceLine = cfg.show_price !== false && price ? `💰 ${currency}${price}` : "";
-    const stockLine = cfg.show_stock !== false
-      ? (p.stock_status && p.stock_status !== "in_stock" ? `❌ ${p.stock_status}` : "✅ In stock")
-      : "";
-    const caption = [`<b>${escapeHtml(p.name)}</b>`, priceLine, stockLine].filter(Boolean).join("\n");
-    const linkFallback = (cfg.buy_link_fallback || "https://accessnowbd.com/product/{{slug}}").replace("{{slug}}", p.slug);
-    const buttons: any[][] = [[
-      { text: "➕ Cart", callback_data: `add:${p.slug}` },
-      { text: "❤️ Wishlist", callback_data: `wish:add:${p.slug}` },
-      { text: "🌐 Website", url: linkFallback },
-    ]];
-
-    if (p.image_url) await sendPhoto(chat_id, p.image_url, caption, { reply_markup: { inline_keyboard: buttons } });
-    else await sendMessage(chat_id, caption, { reply_markup: { inline_keyboard: buttons } });
-  }
-  if (withNav) {
-    const nav: any[] = [];
-    if (page > 0) nav.push({ text: "◀️ Prev", callback_data: `page:${page - 1}` });
-    if (products.length === perPage) nav.push({ text: "Next ▶️", callback_data: `page:${page + 1}` });
-    if (nav.length) await sendMessage(chat_id, `Page ${page + 1}`, { reply_markup: { inline_keyboard: [nav] } });
-  }
+    const priceTxt = price ? ` — ${currency}${price}` : "";
+    return [{ text: `${i + 1}. ${p.name}${priceTxt}`, callback_data: `prod:${p.slug}` }];
+  });
+  rows.push([{ text: "🔙 Categories", callback_data: "browse" }]);
+  return sendMessage(chat_id, `🔍 "<b>${escapeHtml(query)}</b>" — ${products.length}টি ফলাফল:`, {
+    reply_markup: { inline_keyboard: rows },
+  });
 }
 
 function firstPrice(plans: any): number | null {
@@ -261,6 +363,7 @@ function firstPrice(plans: any): number | null {
   return typeof v === "number" ? v : (v ? Number(v) || null : null);
 }
 
+
 /* ---------------- Cart ---------------- */
 
 async function addToCart(chat_id: number, slug: string) {
@@ -269,6 +372,16 @@ async function addToCart(chat_id: number, slug: string) {
   const existing = cart.find((c) => c.slug === slug);
   if (existing) existing.qty += 1;
   else cart.push({ slug, qty: 1 });
+  await updateSubscriber(chat_id, { cart });
+}
+
+async function changeQty(chat_id: number, slug: string, delta: number) {
+  const sub = await getSubscriber(chat_id);
+  let cart: CartItem[] = Array.isArray(sub?.cart) ? sub.cart : [];
+  const item = cart.find((c) => c.slug === slug);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter((c) => c.slug !== slug);
   await updateSubscriber(chat_id, { cart });
 }
 
@@ -284,22 +397,28 @@ async function showCart(chat_id: number, cfg: StoreCfg) {
   (products as any[] | null)?.forEach((p) => priceOf.set(p.slug, { name: p.name, price: firstPrice(p.plans) || 0 }));
 
   let total = 0;
-  const lines = cart.map((c, i) => {
+  const lines: string[] = [];
+  const kb: any[][] = [];
+  cart.forEach((c, i) => {
     const p = priceOf.get(c.slug);
     const lineTotal = (p?.price || 0) * c.qty;
     total += lineTotal;
-    return `${i + 1}. ${escapeHtml(p?.name || c.slug)} × ${c.qty} — ${currency}${lineTotal}`;
+    lines.push(`${i + 1}. ${escapeHtml(p?.name || c.slug)} × ${c.qty} — ${currency}${lineTotal}`);
+    kb.push([
+      { text: `➖`, callback_data: `qdec:${c.slug}` },
+      { text: `${c.qty}`, callback_data: "noop" },
+      { text: `➕`, callback_data: `qinc:${c.slug}` },
+      { text: `🗑`, callback_data: `qrm:${c.slug}` },
+    ]);
   });
+  kb.push([
+    { text: "✅ Checkout", callback_data: "checkout" },
+    { text: "🗑️ Clear", callback_data: "clear" },
+  ]);
+  kb.push([{ text: "🛍️ Continue Shopping", callback_data: "browse" }]);
 
   const text = `<b>🛒 Your cart</b>\n\n${lines.join("\n")}\n\n<b>Total: ${currency}${total}</b>`;
-  return sendMessage(chat_id, text, {
-    reply_markup: {
-      inline_keyboard: [[
-        { text: "✅ Checkout", callback_data: "checkout" },
-        { text: "🗑️ Clear", callback_data: "clear" },
-      ]],
-    },
-  });
+  return sendMessage(chat_id, text, { reply_markup: { inline_keyboard: kb } });
 }
 
 async function startCheckout(chat_id: number, cfg: StoreCfg) {
@@ -424,7 +543,7 @@ async function sendHelp(chat_id: number, cfg: StoreCfg) {
   const contact = cfg.contact_link || "https://t.me/accessnowbd";
   const text = [
     "<b>Commands</b>",
-    "/browse — প্রোডাক্ট দেখুন",
+    "/browse — ক্যাটাগরি ও প্রোডাক্ট",
     "/cart — কার্ট দেখুন",
     "/checkout — অর্ডার করুন",
     "/orders — আপনার অর্ডার",
@@ -598,14 +717,51 @@ async function handleCallback(cb: TgCallback) {
   if (cb.from) await upsertSubscriber(cb.from, chat_id);
   const { cfg } = await loadCfg();
 
+  if (data === "noop") { await answerCallbackQuery(cb.id); return; }
+  if (data === "browse") {
+    await answerCallbackQuery(cb.id);
+    return showCategories(chat_id, cfg);
+  }
+  if (data === "help:search") {
+    await answerCallbackQuery(cb.id);
+    return sendMessage(chat_id, "🔍 প্রোডাক্টের নাম লিখে পাঠান — সরাসরি সার্চ হবে।");
+  }
+  if (data.startsWith("cat:")) {
+    const rest = data.slice(4);
+    const idx = rest.lastIndexOf(":");
+    const enc = idx >= 0 ? rest.slice(0, idx) : rest;
+    const page = idx >= 0 ? Number(rest.slice(idx + 1)) || 0 : 0;
+    await answerCallbackQuery(cb.id);
+    try { return await showCategoryProducts(chat_id, decCat(enc), page, cfg); }
+    catch { return sendMessage(chat_id, "❌ ক্যাটাগরি লোড করা যায়নি।"); }
+  }
+  if (data.startsWith("featured:")) {
+    await answerCallbackQuery(cb.id);
+    return showFeatured(chat_id, Number(data.slice(9)) || 0, cfg);
+  }
+  if (data.startsWith("prod:")) {
+    await answerCallbackQuery(cb.id);
+    return showProduct(chat_id, data.slice(5), cfg);
+  }
   if (data.startsWith("add:")) {
     await addToCart(chat_id, data.slice(4));
     await answerCallbackQuery(cb.id, "কার্টে যোগ হয়েছে ✅");
     return;
   }
-  if (data.startsWith("page:")) {
-    await answerCallbackQuery(cb.id);
-    return showCatalog(chat_id, Number(data.slice(5)) || 0, cfg);
+  if (data.startsWith("qinc:")) {
+    await changeQty(chat_id, data.slice(5), +1);
+    await answerCallbackQuery(cb.id, "➕");
+    return showCart(chat_id, cfg);
+  }
+  if (data.startsWith("qdec:")) {
+    await changeQty(chat_id, data.slice(5), -1);
+    await answerCallbackQuery(cb.id, "➖");
+    return showCart(chat_id, cfg);
+  }
+  if (data.startsWith("qrm:")) {
+    await changeQty(chat_id, data.slice(4), -999);
+    await answerCallbackQuery(cb.id, "🗑");
+    return showCart(chat_id, cfg);
   }
   if (data === "checkout") {
     await answerCallbackQuery(cb.id);
