@@ -154,7 +154,8 @@ async function handleMessage(msg: TgMessage) {
     const welcome = cfg.welcome_message || "👋 স্বাগতম!";
     return sendMessage(chat_id, renderTemplate(welcome, {}), { reply_markup: menu(cfg) });
   }
-  if (text.startsWith("/browse") || isMenuText(text, cfg, "browse")) return showCatalog(chat_id, 0, cfg);
+  if (text.startsWith("/browse") || isMenuText(text, cfg, "browse")) return showCategories(chat_id, cfg);
+  if (text.startsWith("/categories")) return showCategories(chat_id, cfg);
   if (text.startsWith("/cart") || isMenuText(text, cfg, "cart")) return showCart(chat_id, cfg);
   if (text.startsWith("/checkout")) return startCheckout(chat_id, cfg);
   if (text.startsWith("/orders") || isMenuText(text, cfg, "orders")) return showOrders(chat_id, sub?.user_id, cfg);
