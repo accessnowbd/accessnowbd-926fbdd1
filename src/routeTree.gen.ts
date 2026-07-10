@@ -106,6 +106,7 @@ import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/e
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicTelegramWebhookRouteImport } from './routes/api/public/telegram/webhook'
+import { Route as ApiPublicTelegramProductSyncRouteImport } from './routes/api/public/telegram/product-sync'
 import { Route as ApiPublicTelegramOrderSyncRouteImport } from './routes/api/public/telegram/order-sync'
 import { Route as ApiPublicSslczSuccessRouteImport } from './routes/api/public/sslcz/success'
 import { Route as ApiPublicSslczIpnRouteImport } from './routes/api/public/sslcz/ipn'
@@ -610,6 +611,12 @@ const ApiPublicTelegramWebhookRoute =
     path: '/api/public/telegram/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicTelegramProductSyncRoute =
+  ApiPublicTelegramProductSyncRouteImport.update({
+    id: '/api/public/telegram/product-sync',
+    path: '/api/public/telegram/product-sync',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicTelegramOrderSyncRoute =
   ApiPublicTelegramOrderSyncRouteImport.update({
     id: '/api/public/telegram/order-sync',
@@ -758,6 +765,7 @@ export interface FileRoutesByFullPath {
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
   '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
   '/api/public/telegram/order-sync': typeof ApiPublicTelegramOrderSyncRoute
+  '/api/public/telegram/product-sync': typeof ApiPublicTelegramProductSyncRoute
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -865,6 +873,7 @@ export interface FileRoutesByTo {
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
   '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
   '/api/public/telegram/order-sync': typeof ApiPublicTelegramOrderSyncRoute
+  '/api/public/telegram/product-sync': typeof ApiPublicTelegramProductSyncRoute
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -974,6 +983,7 @@ export interface FileRoutesById {
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
   '/api/public/sslcz/success': typeof ApiPublicSslczSuccessRoute
   '/api/public/telegram/order-sync': typeof ApiPublicTelegramOrderSyncRoute
+  '/api/public/telegram/product-sync': typeof ApiPublicTelegramProductSyncRoute
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -1084,6 +1094,7 @@ export interface FileRouteTypes {
     | '/api/public/sslcz/ipn'
     | '/api/public/sslcz/success'
     | '/api/public/telegram/order-sync'
+    | '/api/public/telegram/product-sync'
     | '/api/public/telegram/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1191,6 +1202,7 @@ export interface FileRouteTypes {
     | '/api/public/sslcz/ipn'
     | '/api/public/sslcz/success'
     | '/api/public/telegram/order-sync'
+    | '/api/public/telegram/product-sync'
     | '/api/public/telegram/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1299,6 +1311,7 @@ export interface FileRouteTypes {
     | '/api/public/sslcz/ipn'
     | '/api/public/sslcz/success'
     | '/api/public/telegram/order-sync'
+    | '/api/public/telegram/product-sync'
     | '/api/public/telegram/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1358,6 +1371,7 @@ export interface RootRouteChildren {
   ApiPublicSslczIpnRoute: typeof ApiPublicSslczIpnRoute
   ApiPublicSslczSuccessRoute: typeof ApiPublicSslczSuccessRoute
   ApiPublicTelegramOrderSyncRoute: typeof ApiPublicTelegramOrderSyncRoute
+  ApiPublicTelegramProductSyncRoute: typeof ApiPublicTelegramProductSyncRoute
   ApiPublicTelegramWebhookRoute: typeof ApiPublicTelegramWebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
@@ -2047,6 +2061,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicTelegramWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/telegram/product-sync': {
+      id: '/api/public/telegram/product-sync'
+      path: '/api/public/telegram/product-sync'
+      fullPath: '/api/public/telegram/product-sync'
+      preLoaderRoute: typeof ApiPublicTelegramProductSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/telegram/order-sync': {
       id: '/api/public/telegram/order-sync'
       path: '/api/public/telegram/order-sync'
@@ -2282,6 +2303,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicSslczIpnRoute: ApiPublicSslczIpnRoute,
   ApiPublicSslczSuccessRoute: ApiPublicSslczSuccessRoute,
   ApiPublicTelegramOrderSyncRoute: ApiPublicTelegramOrderSyncRoute,
+  ApiPublicTelegramProductSyncRoute: ApiPublicTelegramProductSyncRoute,
   ApiPublicTelegramWebhookRoute: ApiPublicTelegramWebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
