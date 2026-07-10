@@ -145,7 +145,7 @@ function StoreBotAdminPage() {
   const registerWebhook = async () => {
     setRegistering(true);
     try {
-      const url = `${window.location.origin}/api/public/telegram/webhook`;
+      const url = `${getPublicOrigin()}/api/public/telegram/webhook`;
       await registerFn({ data: { url, kind: "store_bot" } });
       toast.success("Store bot webhook registered");
       const r: any = await infoFn({ data: { kind: "store_bot" } });
