@@ -1,5 +1,5 @@
 // Telegram Bot API helpers — server only. Supports two bots:
-//   • order_bot  → TELEGRAM_BOT_TOKEN (admin notifications)
+//   • order_bot  → TELEGRAM_BOT_TOKEN (admin notifications / admin bot)
 //   • store_bot  → TELEGRAM_STORE_BOT_TOKEN (customer-facing storefront)
 
 import { createHash } from "crypto";
@@ -24,18 +24,48 @@ export function webhookSecret(): string { return webhookSecretFor("order_bot"); 
 
 type Json = Record<string, unknown>;
 
-export async function tgFor<T = Json>(kind: BotKind, method: string, body: Json): Promise<T> {
+// Low-level fetch with 3 retries + exponential backoff + notification_log entry
+async function tgCore<T>(kind: BotKind, method: string, body: Json): Promise<T> {
   const url = `${API_ROOT}/bot${tokenFor(kind)}/${method}`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  const j: any = await res.json().catch(() => ({}));
-  if (!res.ok || j?.ok === false) {
-    throw new Error(`telegram ${method}: ${j?.description || res.status}`);
+  let lastErr: string | null = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const j: any = await res.json().catch(() => ({}));
+      if (res.ok && j?.ok !== false) return j.result as T;
+      // Rate-limited: honor retry_after
+      const retryAfter = j?.parameters?.retry_after;
+      lastErr = j?.description || `http ${res.status}`;
+      if (res.status === 429 && retryAfter) {
+        await new Promise((r) => setTimeout(r, (retryAfter + 0.2) * 1000));
+        continue;
+      }
+      if (res.status >= 400 && res.status < 500 && res.status !== 429) break; // permanent
+    } catch (e: any) {
+      lastErr = e?.message || String(e);
+    }
+    await new Promise((r) => setTimeout(r, 400 * Math.pow(2, attempt)));
   }
-  return j.result as T;
+  // Log failure and rethrow
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await (supabaseAdmin as any).from("telegram_notifications_log").insert({
+      event: `${kind}.${method}.error`,
+      chat_id: typeof (body as any).chat_id === "number" ? (body as any).chat_id : null,
+      payload: body as never,
+      status: "failed",
+      error: lastErr,
+    });
+  } catch { /* ignore */ }
+  throw new Error(`telegram ${method}: ${lastErr}`);
+}
+
+export async function tgFor<T = Json>(kind: BotKind, method: string, body: Json): Promise<T> {
+  return tgCore<T>(kind, method, body);
 }
 
 export const tg = <T = Json>(method: string, body: Json) => tgFor<T>("order_bot", method, body);
@@ -49,6 +79,9 @@ export const sendPhotoFor = (kind: BotKind, chat_id: number | string, photo: str
 export const answerCallbackQueryFor = (kind: BotKind, callback_query_id: string, text?: string) =>
   tgFor(kind, "answerCallbackQuery", { callback_query_id, text }).catch(() => null);
 
+export const editMessageTextFor = (kind: BotKind, chat_id: number, message_id: number, text: string, extra: Json = {}) =>
+  tgFor(kind, "editMessageText", { chat_id, message_id, text, parse_mode: "HTML", disable_web_page_preview: true, ...extra }).catch(() => null);
+
 // Order-bot short forms (used by notify.functions.ts)
 export const sendMessage = (chat_id: number | string, text: string, extra: Json = {}) =>
   sendMessageFor("order_bot", chat_id, text, extra);
@@ -58,8 +91,17 @@ export const answerCallbackQuery = (callback_query_id: string, text?: string) =>
   answerCallbackQueryFor("order_bot", callback_query_id, text);
 
 export function renderTemplate(tpl: string, vars: Record<string, string | number>): string {
-  // Templates use %0A for newlines (URL-encoded) — decode first.
   return tpl
     .replace(/%0A/g, "\n")
     .replace(/\{\{\s*(\w+)\s*\}\}/g, (_, k) => String(vars[k] ?? ""));
+}
+
+// Log a successful send (opt-in — routers call this)
+export async function logNotification(event: string, chat_id: number | null, payload: Json, status: "sent" | "failed", error?: string) {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await (supabaseAdmin as any).from("telegram_notifications_log").insert({
+      event, chat_id, payload: payload as never, status, error: error ?? null,
+    });
+  } catch { /* ignore */ }
 }

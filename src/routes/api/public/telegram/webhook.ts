@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createHash, timingSafeEqual } from "crypto";
 
-// Public webhook — Telegram POSTs updates for the STORE bot here.
-// Customers press /start on the store bot; the order bot is send-only.
+// Public webhook — Telegram POSTs updates for either bot here.
+// Uses the secret token header to identify which bot the update came from.
 
 function computeSecret(token: string): string {
   return createHash("sha256").update(`tg-webhook:${token}`).digest("base64url");
@@ -21,27 +21,25 @@ export const Route = createFileRoute("/api/public/telegram/webhook")({
         const storeToken = process.env.TELEGRAM_STORE_BOT_TOKEN || "";
         const orderToken = process.env.TELEGRAM_BOT_TOKEN || "";
 
-        if (!storeToken && !orderToken) {
-          return new Response("bot not configured", { status: 503 });
-        }
+        if (!storeToken && !orderToken) return new Response("bot not configured", { status: 503 });
 
-        // Accept either bot's secret (store bot handles messages; order bot ignored)
         const isStore = storeToken && safeEqual(provided, computeSecret(storeToken));
         const isOrder = orderToken && safeEqual(provided, computeSecret(orderToken));
-        if (!isStore && !isOrder) {
-          return new Response("unauthorized", { status: 401 });
-        }
+        if (!isStore && !isOrder) return new Response("unauthorized", { status: 401 });
 
         let update: any = null;
         try { update = await request.json(); } catch { return Response.json({ ok: true }); }
 
-        if (isStore) {
-          try {
+        try {
+          if (isStore) {
             const { handleTelegramUpdate } = await import("@/lib/telegram/router.server");
             await handleTelegramUpdate(update);
-          } catch (e) {
-            console.error("telegram store webhook error", e);
+          } else if (isOrder) {
+            const { handleAdminUpdate } = await import("@/lib/telegram/router.admin");
+            await handleAdminUpdate(update);
           }
+        } catch (e) {
+          console.error("telegram webhook error", e);
         }
         return Response.json({ ok: true });
       },
