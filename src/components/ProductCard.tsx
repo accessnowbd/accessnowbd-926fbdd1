@@ -143,11 +143,11 @@ function ProductCardImpl({ product }: { product: Product }) {
         </div>
 
         {/* Action stack — Buy Now on top, WhatsApp + Cart below */}
-        <div className="mt-auto pt-2 flex flex-col gap-2">
+        <div className="mt-auto pt-2 flex flex-col gap-2.5">
           <span
-            className="product-action-button product-buy-button flex items-center justify-center gap-2 h-11 rounded-full text-[13px] font-bold"
+            className="product-action-button product-buy-button flex items-center justify-center gap-2 h-12 rounded-2xl text-[13px] font-bold tracking-wide"
           >
-            <ShoppingCart className="w-4 h-4" />
+            <ShoppingCart className="w-[18px] h-[18px]" />
             Buy Now
           </span>
 
@@ -164,18 +164,18 @@ function ProductCardImpl({ product }: { product: Product }) {
                 );
               }}
               aria-label="Order via WhatsApp"
-              className="product-action-button product-whatsapp-button flex items-center justify-center gap-1.5 h-10 rounded-full text-[12px] font-bold transition"
+              className="product-action-button product-whatsapp-button flex items-center justify-center gap-1.5 h-11 rounded-2xl text-[13px] font-semibold transition"
             >
-              <MessageCircle className="w-3.5 h-3.5" />
+              <MessageCircle className="w-4 h-4" />
               WhatsApp
             </button>
             <button
               onClick={onAdd}
               disabled={hasOptions}
               aria-label="Add to cart"
-              className="product-action-button product-cart-button flex items-center justify-center gap-1.5 h-10 rounded-full text-[12px] font-bold transition disabled:opacity-100"
+              className="product-action-button product-cart-button flex items-center justify-center gap-1.5 h-11 rounded-2xl text-[13px] font-semibold transition disabled:opacity-100"
             >
-              <ShoppingCart className="w-3.5 h-3.5" />
+              <ShoppingCart className="w-4 h-4" />
               Cart
             </button>
           </div>
