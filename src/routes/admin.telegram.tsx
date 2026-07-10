@@ -143,8 +143,10 @@ function TelegramAdminPage() {
     setRegistering(true);
     try {
       const url = `${window.location.origin}/api/public/telegram/webhook`;
-      await registerFn({ data: { url } });
-      toast.success("Webhook registered");
+      // Register BOTH bots on the same webhook URL — endpoint dispatches by secret token
+      await registerFn({ data: { url, kind: "order_bot" } }).catch(() => null);
+      await registerFn({ data: { url, kind: "store_bot" } }).catch(() => null);
+      toast.success("Webhook registered (order + store bot)");
       const r: any = await infoFn({ data: {} });
       if (r?.ok) setBotInfo({ me: JSON.parse(r.me), info: JSON.parse(r.info) });
     } catch (e: any) { toast.error(e.message || "Failed"); }
