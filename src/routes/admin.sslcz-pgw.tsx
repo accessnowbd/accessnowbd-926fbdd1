@@ -79,7 +79,10 @@ function SslczGatewayPage() {
 
     if (typeof window !== "undefined") {
       setSettings((prev) => {
-        const origin = window.location.origin;
+        // সবসময় production domain ব্যবহার করা হবে — preview/lovable subdomain নয়
+        const host = window.location.hostname;
+        const isProdDomain = host === "accessnowbd.com" || host === "www.accessnowbd.com";
+        const origin = isProdDomain ? window.location.origin : "https://accessnowbd.com";
         return {
           ...prev,
           success_url: prev.success_url || `${origin}/api/public/sslcz/success`,
@@ -89,6 +92,7 @@ function SslczGatewayPage() {
         };
       });
     }
+
 
     try {
       const s = await fetchStatus();
