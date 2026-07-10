@@ -634,7 +634,9 @@ export type Database = {
           payment_screenshot_url: string | null
           payment_status: string
           phone: string
+          source: string
           status: string
+          telegram_chat_id: number | null
           total: number
           transaction_id: string
           updated_at: string
@@ -654,7 +656,9 @@ export type Database = {
           payment_screenshot_url?: string | null
           payment_status?: string
           phone: string
+          source?: string
           status?: string
+          telegram_chat_id?: number | null
           total: number
           transaction_id: string
           updated_at?: string
@@ -674,7 +678,9 @@ export type Database = {
           payment_screenshot_url?: string | null
           payment_status?: string
           phone?: string
+          source?: string
           status?: string
+          telegram_chat_id?: number | null
           total?: number
           transaction_id?: string
           updated_at?: string
@@ -1321,6 +1327,90 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_admin_otp: {
+        Row: {
+          attempts: number
+          chat_id: number
+          code_hash: string
+          consumed_at: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+        }
+        Insert: {
+          attempts?: number
+          chat_id: number
+          code_hash: string
+          consumed_at?: string | null
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+        }
+        Update: {
+          attempts?: number
+          chat_id?: number
+          code_hash?: string
+          consumed_at?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      telegram_broadcasts: {
+        Row: {
+          audience: string
+          audience_ref: string | null
+          buttons: Json
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          error: string | null
+          failed_count: number
+          id: string
+          message: string
+          photo_url: string | null
+          sent_count: number
+          status: string
+          target_count: number
+        }
+        Insert: {
+          audience?: string
+          audience_ref?: string | null
+          buttons?: Json
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          failed_count?: number
+          id?: string
+          message: string
+          photo_url?: string | null
+          sent_count?: number
+          status?: string
+          target_count?: number
+        }
+        Update: {
+          audience?: string
+          audience_ref?: string | null
+          buttons?: Json
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          failed_count?: number
+          id?: string
+          message?: string
+          photo_url?: string | null
+          sent_count?: number
+          status?: string
+          target_count?: number
+        }
+        Relationships: []
+      }
       telegram_notifications_log: {
         Row: {
           chat_id: number | null
@@ -1351,6 +1441,47 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_referrals: {
+        Row: {
+          created_at: string
+          first_order_id: string | null
+          id: string
+          referred_chat_id: number
+          referrer_chat_id: number
+          reward_amount: number | null
+          rewarded: boolean
+          rewarded_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          first_order_id?: string | null
+          id?: string
+          referred_chat_id: number
+          referrer_chat_id: number
+          reward_amount?: number | null
+          rewarded?: boolean
+          rewarded_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          first_order_id?: string | null
+          id?: string
+          referred_chat_id?: number
+          referrer_chat_id?: number
+          reward_amount?: number | null
+          rewarded?: boolean
+          rewarded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_referrals_first_order_id_fkey"
+            columns: ["first_order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       telegram_settings: {
         Row: {
           config: Json
@@ -1380,6 +1511,7 @@ export type Database = {
       }
       telegram_subscribers: {
         Row: {
+          bot_kind: string
           cart: Json
           chat_id: number
           created_at: string
@@ -1389,6 +1521,8 @@ export type Database = {
           language: string | null
           last_name: string | null
           last_seen_at: string
+          notify_orders: boolean
+          notify_promos: boolean
           role: string
           state: Json
           updated_at: string
@@ -1396,6 +1530,7 @@ export type Database = {
           username: string | null
         }
         Insert: {
+          bot_kind?: string
           cart?: Json
           chat_id: number
           created_at?: string
@@ -1405,6 +1540,8 @@ export type Database = {
           language?: string | null
           last_name?: string | null
           last_seen_at?: string
+          notify_orders?: boolean
+          notify_promos?: boolean
           role?: string
           state?: Json
           updated_at?: string
@@ -1412,6 +1549,7 @@ export type Database = {
           username?: string | null
         }
         Update: {
+          bot_kind?: string
           cart?: Json
           chat_id?: number
           created_at?: string
@@ -1421,6 +1559,8 @@ export type Database = {
           language?: string | null
           last_name?: string | null
           last_seen_at?: string
+          notify_orders?: boolean
+          notify_promos?: boolean
           role?: string
           state?: Json
           updated_at?: string
@@ -1428,6 +1568,35 @@ export type Database = {
           username?: string | null
         }
         Relationships: []
+      }
+      telegram_wishlist: {
+        Row: {
+          chat_id: number
+          created_at: string
+          id: string
+          product_slug: string
+        }
+        Insert: {
+          chat_id: number
+          created_at?: string
+          id?: string
+          product_slug: string
+        }
+        Update: {
+          chat_id?: number
+          created_at?: string
+          id?: string
+          product_slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_wishlist_product_slug_fkey"
+            columns: ["product_slug"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["slug"]
+          },
+        ]
       }
       ticket_messages: {
         Row: {
@@ -1950,6 +2119,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      telegram_admin_stats: { Args: never; Returns: Json }
       validate_coupon: {
         Args: { _code: string; _subtotal: number }
         Returns: {
