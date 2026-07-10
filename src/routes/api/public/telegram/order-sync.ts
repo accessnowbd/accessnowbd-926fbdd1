@@ -61,6 +61,12 @@ export const Route = createFileRoute("/api/public/telegram/order-sync")({
             ].join("\n");
             await sendMessageFor("store_bot", telegram_chat_id, text).catch(() => null);
           }
+
+          // Referral reward: on first completed telegram order, credit referrer
+          if (event === "order.status_changed" && status === "completed" && telegram_chat_id) {
+            await tryRewardReferrer(telegram_chat_id, order);
+          }
+
         } catch (e) {
           console.error("order-sync error", e);
         }
