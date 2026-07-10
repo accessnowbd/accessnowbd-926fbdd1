@@ -1,9 +1,8 @@
-// Admin bot — send-and-receive router for TELEGRAM_BOT_TOKEN.
-// Auth via one-time-code linked to a website admin email (user must already have admin role).
-// Commands: /login /logout /dashboard /orders /topups /broadcast /help
-// Callbacks: order approve/reject, topup approve/reject.
+// Admin bot — Order Management bot.
+// Auth model: chat_id allowlist from telegram_settings.order_bot.admin_chat_ids.
+// No email/OTP — just /start on an allowlisted account and you're in.
+// Commands: /start /dashboard /orders /topups /broadcast /help /id
 
-import { createHash, randomInt } from "crypto";
 import { sendMessageFor, answerCallbackQueryFor, editMessageTextFor } from "./api.server";
 
 const KIND = "order_bot" as const;
@@ -23,11 +22,26 @@ async function admin() {
   return supabaseAdmin;
 }
 
-function hashCode(chat_id: number, code: string): string {
-  return createHash("sha256").update(`tg-admin:${chat_id}:${code}`).digest("hex");
+let _cfgCache: { at: number; ids: Set<number>; adminUserId: string | null } | null = null;
+const CFG_TTL_MS = 30_000;
+
+async function loadAdminCfg(): Promise<{ ids: Set<number>; adminUserId: string | null }> {
+  if (_cfgCache && Date.now() - _cfgCache.at < CFG_TTL_MS) {
+    return { ids: _cfgCache.ids, adminUserId: _cfgCache.adminUserId };
+  }
+  const db = await admin();
+  const { data } = await db.from("telegram_settings").select("config").eq("kind", "order_bot").maybeSingle();
+  const cfg = ((data as any)?.config || {}) as any;
+  const raw = Array.isArray(cfg.admin_chat_ids) ? cfg.admin_chat_ids : [];
+  const ids = new Set<number>(raw.map((n: any) => Number(n)).filter((n: number) => Number.isFinite(n)));
+  // Pick a stable admin user_id to attribute broadcasts to.
+  const { data: role } = await db.from("user_roles").select("user_id").eq("role", "admin").order("created_at", { ascending: true }).limit(1).maybeSingle();
+  const adminUserId = (role as any)?.user_id || null;
+  _cfgCache = { at: Date.now(), ids, adminUserId };
+  return { ids, adminUserId };
 }
 
-async function upsertAdminSubscriber(u: TgUser, chat_id: number) {
+async function upsertAdminSubscriber(u: TgUser, chat_id: number, adminUserId: string | null) {
   const db = await admin();
   await db.from("telegram_subscribers").upsert(
     {
@@ -36,6 +50,8 @@ async function upsertAdminSubscriber(u: TgUser, chat_id: number) {
       first_name: u.first_name ?? null,
       last_name: u.last_name ?? null,
       bot_kind: "admin_bot",
+      role: "admin",
+      user_id: adminUserId,
       last_seen_at: new Date().toISOString(),
     } as never,
     { onConflict: "chat_id" },
@@ -48,16 +64,14 @@ async function getSubscriber(chat_id: number): Promise<any> {
   return data;
 }
 
-async function isAdminChat(chat_id: number): Promise<{ ok: boolean; user_id?: string; email?: string }> {
-  const db = await admin();
-  const { data: sub } = await db
-    .from("telegram_subscribers").select("user_id, role").eq("chat_id", chat_id).maybeSingle();
-  const s = sub as any;
-  if (!s?.user_id || s?.role !== "admin") return { ok: false };
-  const { data: hasAdmin } = await db.rpc("has_role" as never, { _user_id: s.user_id, _role: "admin" } as never);
-  if (!hasAdmin) return { ok: false };
-  const { data: profile } = await db.from("profiles").select("email").eq("id", s.user_id).maybeSingle();
-  return { ok: true, user_id: s.user_id, email: (profile as any)?.email };
+async function isAdminChat(chat_id: number): Promise<{ ok: boolean; user_id?: string }> {
+  const { ids, adminUserId } = await loadAdminCfg();
+  if (!ids.has(chat_id)) return { ok: false };
+  return { ok: true, user_id: adminUserId || undefined };
+}
+
+async function setState(chat_id: number, state: any) {
+  await (await admin()).from("telegram_subscribers").update({ state } as never).eq("chat_id", chat_id);
 }
 
 /* ============================== Entry ============================== */
@@ -72,42 +86,46 @@ export async function handleAdminUpdate(update: TgUpdate) {
 async function handleMessage(msg: TgMessage) {
   const chat_id = msg.chat.id;
   const text = (msg.text || "").trim();
-  if (msg.from) await upsertAdminSubscriber(msg.from, chat_id);
+
+  // /id works for anyone so allowlist can be maintained
+  if (text.startsWith("/id")) {
+    return send(chat_id, `Your chat_id: <code>${chat_id}</code>\n\nএই ID admin allowlist-এ যোগ করলে access পাবেন।`);
+  }
+
+  const auth = await isAdminChat(chat_id);
+  if (!auth.ok) {
+    return send(chat_id, `🚫 <b>Access denied</b>\n\nএই bot শুধু authorized admin-দের জন্য।\nYour chat_id: <code>${chat_id}</code>`);
+  }
+
+  // Authorized — ensure subscriber record & admin role
+  if (msg.from) await upsertAdminSubscriber(msg.from, chat_id, auth.user_id || null);
 
   const sub = await getSubscriber(chat_id);
   const state = (sub?.state as any) || {};
 
-  // ---- Login flow ----
-  if (state.step === "await_admin_email") {
-    return handleEmailStep(chat_id, text);
-  }
-  if (state.step === "await_admin_otp") {
-    return handleOtpStep(chat_id, text);
-  }
-
-  if (text.startsWith("/start") || text.startsWith("/login")) {
-    const auth = await isAdminChat(chat_id);
-    if (auth.ok) {
-      return send(chat_id,
-        `✅ Signed in as <b>${auth.email || "admin"}</b>\n\nUse /dashboard, /orders, /topups, /broadcast, /help.`);
-    }
-    await setState(chat_id, { step: "await_admin_email" });
-    return send(chat_id,
-      "🔐 <b>Admin login</b>\n\nআপনার website admin email দিন। একটা 6-digit code পাঠানো হবে।\n\n(Cancel: /cancel)");
+  if (text.startsWith("/start")) {
+    await setState(chat_id, {});
+    return send(chat_id, [
+      "👋 <b>Order Management Bot</b>",
+      "",
+      "Available commands:",
+      "/dashboard — live stats",
+      "/orders — recent orders (approve/reject inline)",
+      "/topups — pending wallet top-ups",
+      "/broadcast — send message to all customers",
+      "/help — help",
+    ].join("\n"), {
+      reply_markup: { inline_keyboard: [[
+        { text: "📊 Dashboard", callback_data: "adm:dash" },
+        { text: "🛒 Orders", callback_data: "adm:orders" },
+        { text: "💳 Top-ups", callback_data: "adm:topups" },
+      ]] },
+    });
   }
   if (text.startsWith("/cancel")) {
     await setState(chat_id, {});
     return send(chat_id, "❌ Cancelled.");
   }
-  if (text.startsWith("/logout")) {
-    await (await admin()).from("telegram_subscribers")
-      .update({ role: "customer", user_id: null, state: {} } as never).eq("chat_id", chat_id);
-    return send(chat_id, "👋 Signed out.");
-  }
-
-  // Everything below requires admin
-  const auth = await isAdminChat(chat_id);
-  if (!auth.ok) return send(chat_id, "🔒 Sign in first: /login");
 
   if (text.startsWith("/dashboard") || text.startsWith("/stats")) return showDashboard(chat_id);
   if (text.startsWith("/orders")) return listRecentOrders(chat_id);
@@ -118,96 +136,15 @@ async function handleMessage(msg: TgMessage) {
   }
   if (state.step === "await_broadcast_message") {
     await setState(chat_id, {});
-    return sendBroadcast(chat_id, text, auth.user_id!);
+    if (!auth.user_id) return send(chat_id, "❌ Admin user account পাওয়া যায়নি।");
+    return sendBroadcast(chat_id, text, auth.user_id);
   }
   if (text.startsWith("/help")) return sendAdminHelp(chat_id);
 
   return send(chat_id, "কমান্ড বুঝিনি। /help দেখুন।");
 }
 
-async function setState(chat_id: number, state: any) {
-  await (await admin()).from("telegram_subscribers").update({ state } as never).eq("chat_id", chat_id);
-}
 
-/* ---------------- Login: email + OTP ---------------- */
-
-async function handleEmailStep(chat_id: number, text: string) {
-  const email = text.toLowerCase().trim();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return send(chat_id, "❌ ভুল email। আবার দিন বা /cancel।");
-  }
-  const db = await admin();
-
-  // Verify admin exists
-  const { data: prof } = await db.from("profiles").select("id").eq("email", email).maybeSingle();
-  const userId = (prof as any)?.id as string | undefined;
-  if (!userId) {
-    return send(chat_id, "❌ এই email-এ কোনো account নেই।");
-  }
-  const { data: hasAdmin } = await db.rpc("has_role" as never, { _user_id: userId, _role: "admin" } as never);
-  if (!hasAdmin) {
-    return send(chat_id, "🚫 এই account admin নয়।");
-  }
-
-  // Generate 6-digit OTP
-  const code = String(randomInt(100000, 1000000));
-  const codeHash = hashCode(chat_id, code);
-  const expires = new Date(Date.now() + 10 * 60 * 1000).toISOString();
-
-  await db.from("telegram_admin_otp").insert({
-    chat_id, email, code_hash: codeHash, expires_at: expires,
-  } as never);
-
-  // Enqueue email via existing email queue
-  try {
-    await db.rpc("enqueue_email" as never, {
-      queue_name: "transactional_emails",
-      payload: {
-        template: "generic",
-        to: email,
-        subject: "Telegram admin login code",
-        title: "Admin login code",
-        body: `<p>Your Telegram admin login code is <b style="font-size:22px">${code}</b>. Expires in 10 minutes.</p><p>If you didn't request this, ignore this email.</p>`,
-      } as never,
-    } as never);
-  } catch (e: any) {
-    console.error("otp email enqueue failed", e);
-  }
-
-  await setState(chat_id, { step: "await_admin_otp", pending_email: email, pending_user_id: userId });
-  return send(chat_id, `📧 <b>${email}</b>-এ 6-digit code পাঠানো হয়েছে। এখানে code লিখুন।`);
-}
-
-async function handleOtpStep(chat_id: number, text: string) {
-  const code = text.replace(/\s+/g, "");
-  if (!/^\d{6}$/.test(code)) {
-    return send(chat_id, "❌ 6-digit code লাগবে।");
-  }
-  const db = await admin();
-  const sub = await getSubscriber(chat_id);
-  const state = (sub?.state as any) || {};
-  const codeHash = hashCode(chat_id, code);
-
-  const { data: rows } = await db
-    .from("telegram_admin_otp").select("*")
-    .eq("chat_id", chat_id).eq("code_hash", codeHash)
-    .is("consumed_at", null).gt("expires_at", new Date().toISOString())
-    .order("created_at", { ascending: false }).limit(1);
-
-  const row = (rows as any[] | null)?.[0];
-  if (!row) return send(chat_id, "❌ ভুল/expired code। আবার দিন বা /cancel।");
-
-  await db.from("telegram_admin_otp").update({ consumed_at: new Date().toISOString() } as never).eq("id", row.id);
-  await db.from("telegram_subscribers").update({
-    user_id: state.pending_user_id,
-    role: "admin",
-    bot_kind: "admin_bot",
-    state: {},
-  } as never).eq("chat_id", chat_id);
-
-  await send(chat_id, `✅ Signed in as <b>${state.pending_email}</b>`);
-  return showDashboard(chat_id);
-}
 
 /* ---------------- Dashboard ---------------- */
 
@@ -381,14 +318,15 @@ async function handleCallback(cb: TgCallback) {
   const chat_id = cb.message?.chat.id;
   if (!chat_id) return;
   const data = cb.data || "";
-  if (cb.from) await upsertAdminSubscriber(cb.from, chat_id);
 
   const auth = await isAdminChat(chat_id);
   if (!auth.ok) {
-    await ack(cb.id, "🔒 Not signed in");
-    return send(chat_id, "🔒 Sign in first: /login");
+    await ack(cb.id, "🚫 Not authorized");
+    return;
   }
+  if (cb.from) await upsertAdminSubscriber(cb.from, chat_id, auth.user_id || null);
 
+  if (data === "adm:dash") { await ack(cb.id); return showDashboard(chat_id); }
   if (data === "adm:orders") { await ack(cb.id); return listRecentOrders(chat_id); }
   if (data === "adm:topups") { await ack(cb.id); return listPendingTopups(chat_id); }
 
