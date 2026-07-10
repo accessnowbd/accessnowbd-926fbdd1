@@ -9,6 +9,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { getEpsStatus, testEpsConnection, type EpsStatus } from "@/lib/eps.functions";
+import { normalizePublicUrl } from "@/lib/public-origin";
+
 
 export const Route = createFileRoute("/admin/eps-pgw")({
   component: EpsGatewayPage,
