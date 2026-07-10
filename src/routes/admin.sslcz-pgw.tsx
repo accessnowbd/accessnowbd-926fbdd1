@@ -79,19 +79,22 @@ function SslczGatewayPage() {
 
     if (typeof window !== "undefined") {
       setSettings((prev) => {
-        // সবসময় production domain ব্যবহার করা হবে — preview/lovable subdomain নয়
+        // সবসময় production domain — preview/lovable subdomain URL override করা হবে
         const host = window.location.hostname;
         const isProdDomain = host === "accessnowbd.com" || host === "www.accessnowbd.com";
         const origin = isProdDomain ? window.location.origin : "https://accessnowbd.com";
+        const fix = (u: string, path: string) =>
+          !u || /lovable\.app|localhost|127\.0\.0\.1/i.test(u) ? `${origin}${path}` : u;
         return {
           ...prev,
-          success_url: prev.success_url || `${origin}/api/public/sslcz/success`,
-          fail_url:    prev.fail_url    || `${origin}/api/public/sslcz/fail`,
-          cancel_url:  prev.cancel_url  || `${origin}/api/public/sslcz/cancel`,
-          ipn_url:     prev.ipn_url     || `${origin}/api/public/sslcz/ipn`,
+          success_url: fix(prev.success_url, "/api/public/sslcz/success"),
+          fail_url:    fix(prev.fail_url,    "/api/public/sslcz/fail"),
+          cancel_url:  fix(prev.cancel_url,  "/api/public/sslcz/cancel"),
+          ipn_url:     fix(prev.ipn_url,     "/api/public/sslcz/ipn"),
         };
       });
     }
+
 
 
     try {
