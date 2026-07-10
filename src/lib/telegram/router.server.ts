@@ -44,10 +44,20 @@ async function admin() {
   return supabaseAdmin;
 }
 
+let _cfgCache: { at: number; enabled: boolean; cfg: StoreCfg } | null = null;
+const CFG_TTL_MS = 30_000;
+
 async function loadCfg(): Promise<{ enabled: boolean; cfg: StoreCfg }> {
+  const now = Date.now();
+  if (_cfgCache && now - _cfgCache.at < CFG_TTL_MS) {
+    return { enabled: _cfgCache.enabled, cfg: _cfgCache.cfg };
+  }
   const db = await admin();
   const { data } = await db.from("telegram_settings").select("enabled, config").eq("kind", "store_bot").maybeSingle();
-  return { enabled: !!(data as any)?.enabled, cfg: ((data as any)?.config || {}) as StoreCfg };
+  const enabled = !!(data as any)?.enabled;
+  const cfg = ((data as any)?.config || {}) as StoreCfg;
+  _cfgCache = { at: now, enabled, cfg };
+  return { enabled, cfg };
 }
 
 async function upsertSubscriber(u: TgUser, chat_id: number) {
