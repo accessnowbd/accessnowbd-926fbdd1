@@ -128,6 +128,19 @@ async function handleMessage(msg: TgMessage) {
 
   // ---- Commands ----
   if (text.startsWith("/start")) {
+    // Referral deep-link: /start ref_<chat_id>
+    const m = text.match(/^\/start\s+ref_(\d+)/i);
+    if (m) {
+      const referrer = Number(m[1]);
+      if (referrer && referrer !== chat_id) {
+        try {
+          const db = await admin();
+          await db.from("telegram_referrals").insert({
+            referrer_chat_id: referrer, referred_chat_id: chat_id,
+          } as never);
+        } catch { /* dup ok */ }
+      }
+    }
     const welcome = cfg.welcome_message || "👋 স্বাগতম!";
     return sendMessage(chat_id, renderTemplate(welcome, {}), { reply_markup: menu(cfg) });
   }
@@ -135,6 +148,22 @@ async function handleMessage(msg: TgMessage) {
   if (text.startsWith("/cart") || isMenuText(text, cfg, "cart")) return showCart(chat_id, cfg);
   if (text.startsWith("/checkout")) return startCheckout(chat_id, cfg);
   if (text.startsWith("/orders") || isMenuText(text, cfg, "orders")) return showOrders(chat_id, sub?.user_id, cfg);
+  if (text.startsWith("/wishlist")) return showWishlist(chat_id, cfg);
+  if (text.startsWith("/wallet")) return showWallet(chat_id, sub, cfg);
+  if (text.startsWith("/refer")) return showReferral(chat_id, cfg);
+  if (text.startsWith("/profile")) return showProfile(chat_id, sub, cfg);
+  if (text.startsWith("/support")) {
+    await updateSubscriber(chat_id, { state: { step: "await_support_msg" } });
+    return sendMessage(chat_id, "🎫 Support ticket খুলবেন। বিষয়/সমস্যা লিখে পাঠান। (/cancel)");
+  }
+  if (state.step === "await_support_msg") {
+    await updateSubscriber(chat_id, { state: {} });
+    return createSupportTicket(chat_id, sub, text, cfg);
+  }
+  if (text === "/cancel") {
+    await updateSubscriber(chat_id, { state: {} });
+    return sendMessage(chat_id, "❌ Cancelled.", { reply_markup: menu(cfg) });
+  }
   if (text.startsWith("/help") || isMenuText(text, cfg, "help")) return sendHelp(chat_id, cfg);
   if (text.startsWith("/id")) return sendMessage(chat_id, `Your chat_id: <code>${chat_id}</code>`);
   if (text.startsWith("/search")) {
@@ -149,6 +178,7 @@ async function handleMessage(msg: TgMessage) {
 
   return sendMessage(chat_id, "কমান্ড বুঝিনি। /help দেখুন।", { reply_markup: menu(cfg) });
 }
+
 
 /* ---------------- Catalog ---------------- */
 
