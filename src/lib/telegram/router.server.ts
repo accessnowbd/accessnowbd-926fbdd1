@@ -701,14 +701,51 @@ async function handleCallback(cb: TgCallback) {
   if (cb.from) await upsertSubscriber(cb.from, chat_id);
   const { cfg } = await loadCfg();
 
+  if (data === "noop") { await answerCallbackQuery(cb.id); return; }
+  if (data === "browse") {
+    await answerCallbackQuery(cb.id);
+    return showCategories(chat_id, cfg);
+  }
+  if (data === "help:search") {
+    await answerCallbackQuery(cb.id);
+    return sendMessage(chat_id, "🔍 প্রোডাক্টের নাম লিখে পাঠান — সরাসরি সার্চ হবে।");
+  }
+  if (data.startsWith("cat:")) {
+    const rest = data.slice(4);
+    const idx = rest.lastIndexOf(":");
+    const enc = idx >= 0 ? rest.slice(0, idx) : rest;
+    const page = idx >= 0 ? Number(rest.slice(idx + 1)) || 0 : 0;
+    await answerCallbackQuery(cb.id);
+    try { return await showCategoryProducts(chat_id, decCat(enc), page, cfg); }
+    catch { return sendMessage(chat_id, "❌ ক্যাটাগরি লোড করা যায়নি।"); }
+  }
+  if (data.startsWith("featured:")) {
+    await answerCallbackQuery(cb.id);
+    return showFeatured(chat_id, Number(data.slice(9)) || 0, cfg);
+  }
+  if (data.startsWith("prod:")) {
+    await answerCallbackQuery(cb.id);
+    return showProduct(chat_id, data.slice(5), cfg);
+  }
   if (data.startsWith("add:")) {
     await addToCart(chat_id, data.slice(4));
     await answerCallbackQuery(cb.id, "কার্টে যোগ হয়েছে ✅");
     return;
   }
-  if (data.startsWith("page:")) {
-    await answerCallbackQuery(cb.id);
-    return showCatalog(chat_id, Number(data.slice(5)) || 0, cfg);
+  if (data.startsWith("qinc:")) {
+    await changeQty(chat_id, data.slice(5), +1);
+    await answerCallbackQuery(cb.id, "➕");
+    return showCart(chat_id, cfg);
+  }
+  if (data.startsWith("qdec:")) {
+    await changeQty(chat_id, data.slice(5), -1);
+    await answerCallbackQuery(cb.id, "➖");
+    return showCart(chat_id, cfg);
+  }
+  if (data.startsWith("qrm:")) {
+    await changeQty(chat_id, data.slice(4), -999);
+    await answerCallbackQuery(cb.id, "🗑");
+    return showCart(chat_id, cfg);
   }
   if (data === "checkout") {
     await answerCallbackQuery(cb.id);
