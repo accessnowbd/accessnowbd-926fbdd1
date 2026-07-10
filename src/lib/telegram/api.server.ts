@@ -24,7 +24,33 @@ export function webhookSecret(): string { return webhookSecretFor("order_bot"); 
 
 type Json = Record<string, unknown>;
 
-// Low-level fetch with 3 retries + exponential backoff + notification_log entry
+// Errors from Telegram that are permanent for a given chat — don't retry, mark blocked.
+const PERMANENT_CHAT_ERRORS = [
+  "bot was blocked by the user",
+  "user is deactivated",
+  "chat not found",
+  "bot was kicked",
+  "chat_write_forbidden",
+  "have no rights to send",
+  "peer_id_invalid",
+];
+
+function isPermanentChatError(desc: string): boolean {
+  const d = (desc || "").toLowerCase();
+  return PERMANENT_CHAT_ERRORS.some((s) => d.includes(s));
+}
+
+async function markChatBlocked(chat_id: number | string | undefined) {
+  if (chat_id === undefined || chat_id === null) return;
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await (supabaseAdmin as any).from("telegram_subscribers")
+      .update({ is_blocked: true } as never)
+      .eq("chat_id", chat_id);
+  } catch { /* ignore */ }
+}
+
+// Low-level fetch with retries + short-circuit on permanent chat errors.
 async function tgCore<T>(kind: BotKind, method: string, body: Json): Promise<T> {
   const url = `${API_ROOT}/bot${tokenFor(kind)}/${method}`;
   let lastErr: string | null = null;
@@ -37,18 +63,23 @@ async function tgCore<T>(kind: BotKind, method: string, body: Json): Promise<T> 
       });
       const j: any = await res.json().catch(() => ({}));
       if (res.ok && j?.ok !== false) return j.result as T;
-      // Rate-limited: honor retry_after
-      const retryAfter = j?.parameters?.retry_after;
       lastErr = j?.description || `http ${res.status}`;
+      // Permanent per-chat error → don't retry, mark blocked.
+      if (isPermanentChatError(lastErr || "")) {
+        await markChatBlocked((body as any).chat_id);
+        break;
+      }
+      // Rate-limited: honor retry_after (capped at 5s to keep webhooks fast).
+      const retryAfter = j?.parameters?.retry_after;
       if (res.status === 429 && retryAfter) {
-        await new Promise((r) => setTimeout(r, (retryAfter + 0.2) * 1000));
+        await new Promise((r) => setTimeout(r, Math.min(retryAfter + 0.2, 5) * 1000));
         continue;
       }
       if (res.status >= 400 && res.status < 500 && res.status !== 429) break; // permanent
     } catch (e: any) {
       lastErr = e?.message || String(e);
     }
-    await new Promise((r) => setTimeout(r, 400 * Math.pow(2, attempt)));
+    await new Promise((r) => setTimeout(r, 200 * Math.pow(2, attempt)));
   }
   // Log failure and rethrow
   try {
