@@ -397,22 +397,28 @@ async function showCart(chat_id: number, cfg: StoreCfg) {
   (products as any[] | null)?.forEach((p) => priceOf.set(p.slug, { name: p.name, price: firstPrice(p.plans) || 0 }));
 
   let total = 0;
-  const lines = cart.map((c, i) => {
+  const lines: string[] = [];
+  const kb: any[][] = [];
+  cart.forEach((c, i) => {
     const p = priceOf.get(c.slug);
     const lineTotal = (p?.price || 0) * c.qty;
     total += lineTotal;
-    return `${i + 1}. ${escapeHtml(p?.name || c.slug)} × ${c.qty} — ${currency}${lineTotal}`;
+    lines.push(`${i + 1}. ${escapeHtml(p?.name || c.slug)} × ${c.qty} — ${currency}${lineTotal}`);
+    kb.push([
+      { text: `➖`, callback_data: `qdec:${c.slug}` },
+      { text: `${c.qty}`, callback_data: "noop" },
+      { text: `➕`, callback_data: `qinc:${c.slug}` },
+      { text: `🗑`, callback_data: `qrm:${c.slug}` },
+    ]);
   });
+  kb.push([
+    { text: "✅ Checkout", callback_data: "checkout" },
+    { text: "🗑️ Clear", callback_data: "clear" },
+  ]);
+  kb.push([{ text: "🛍️ Continue Shopping", callback_data: "browse" }]);
 
   const text = `<b>🛒 Your cart</b>\n\n${lines.join("\n")}\n\n<b>Total: ${currency}${total}</b>`;
-  return sendMessage(chat_id, text, {
-    reply_markup: {
-      inline_keyboard: [[
-        { text: "✅ Checkout", callback_data: "checkout" },
-        { text: "🗑️ Clear", callback_data: "clear" },
-      ]],
-    },
-  });
+  return sendMessage(chat_id, text, { reply_markup: { inline_keyboard: kb } });
 }
 
 async function startCheckout(chat_id: number, cfg: StoreCfg) {
