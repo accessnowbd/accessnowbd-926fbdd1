@@ -87,15 +87,11 @@ async function handleMessage(msg: TgMessage) {
   const chat_id = msg.chat.id;
   const text = (msg.text || "").trim();
 
-  // /id works for anyone so allowlist can be maintained
-  if (text.startsWith("/id")) {
-    return send(chat_id, `Your chat_id: <code>${chat_id}</code>\n\nএই ID admin allowlist-এ যোগ করলে access পাবেন।`);
-  }
-
   const auth = await isAdminChat(chat_id);
   if (!auth.ok) {
-    return send(chat_id, `🚫 <b>Access denied</b>\n\nএই bot শুধু authorized admin-দের জন্য।\nYour chat_id: <code>${chat_id}</code>`);
+    return send(chat_id, "🚫 Access denied.");
   }
+
 
   // Authorized — ensure subscriber record & admin role
   if (msg.from) await upsertAdminSubscriber(msg.from, chat_id, auth.user_id || null);
