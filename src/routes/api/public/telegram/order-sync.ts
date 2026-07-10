@@ -117,3 +117,41 @@ async function notifyAdmins(order: any, short: string, currency: string) {
     sendMessageFor("order_bot", cid, text, { reply_markup: { inline_keyboard: kb } }).catch(() => null),
   ));
 }
+
+async function tryRewardReferrer(referred_chat_id: number, order: any) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const db = supabaseAdmin as any;
+  const { data: ref } = await db.from("telegram_referrals")
+    .select("*").eq("referred_chat_id", referred_chat_id).maybeSingle();
+  if (!ref || ref.rewarded) return;
+
+  // Find referrer's linked website user
+  const { data: refSub } = await db.from("telegram_subscribers")
+    .select("user_id").eq("chat_id", ref.referrer_chat_id).maybeSingle();
+  const referrerUserId = refSub?.user_id;
+  const reward = Math.min(200, Math.round(Number(order.total || 0) * 0.05));
+  if (reward <= 0) return;
+
+  if (referrerUserId) {
+    try {
+      await db.rpc("admin_credit_wallet", {
+        _user_id: referrerUserId, _amount: reward, _type: "referral",
+        _reason: `Referral reward for order ${String(order.id).slice(0, 8)}`,
+        _ref_order: order.id,
+      });
+    } catch (e) {
+      console.error("referral credit failed", e);
+    }
+  }
+  await db.from("telegram_referrals").update({
+    rewarded: true, reward_amount: reward, first_order_id: order.id, rewarded_at: new Date().toISOString(),
+  }).eq("id", ref.id);
+
+  // Notify referrer
+  try {
+    const { sendMessageFor } = await import("@/lib/telegram/api.server");
+    await sendMessageFor("store_bot", ref.referrer_chat_id,
+      `🎉 আপনার referral order complete! Wallet-এ <b>৳${reward}</b> credit হয়েছে${referrerUserId ? "" : " (website account link করলে ব্যবহার করতে পারবেন)"}।`);
+  } catch { /* ignore */ }
+}
+
