@@ -2190,10 +2190,9 @@ html.theme-white .product-action-button *,
 }
 
 /* ============================================================
-   FLOATING GLASS BUTTONS — product action set
-   Translucent gradient tint over frosted backdrop, thin white
-   inner border, layered ambient + colored shadow so each button
-   appears to hover above the surface.
+   DEPTH GRADIENT BUTTONS — product action set
+   Diagonal gradient fill, soft colored shadow beneath, subtle
+   inner white border for lifted depth. Lift on hover.
    ============================================================ */
 html.theme-white .product-buy-button,
 .product-buy-button,
@@ -2203,40 +2202,8 @@ html.theme-white .product-whatsapp-button,
 .product-whatsapp-button {
   position: relative !important;
   isolation: isolate;
-  backdrop-filter: blur(18px) saturate(160%);
-  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, filter .35s ease !important;
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, filter .25s ease !important;
   will-change: transform;
-}
-
-html.theme-white .product-buy-button::before,
-.product-buy-button::before,
-html.theme-white .product-cart-button::before,
-.product-cart-button::before,
-html.theme-white .product-whatsapp-button::before,
-.product-whatsapp-button::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.04) 55%, rgba(255,255,255,0) 100%),
-    linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.45) 48%, rgba(255,255,255,0) 62%);
-  background-size: 100% 100%, 220% 100%;
-  background-position: 0 0, -140% 0;
-  background-repeat: no-repeat;
-  mix-blend-mode: overlay;
-  z-index: 1;
-  transition: background-position 1.1s cubic-bezier(.2,.8,.2,1);
-}
-
-html.theme-white .product-buy-button:hover::before,
-.product-buy-button:hover::before,
-html.theme-white .product-cart-button:hover::before,
-.product-cart-button:hover::before,
-html.theme-white .product-whatsapp-button:hover::before,
-.product-whatsapp-button:hover::before {
-  background-position: 0 0, 160% 0;
 }
 
 html.theme-white .product-buy-button::after,
@@ -2247,11 +2214,11 @@ html.theme-white .product-whatsapp-button::after,
 .product-whatsapp-button::after {
   content: "";
   position: absolute;
-  inset: 1px;
+  inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  border: 1px solid rgba(255,255,255,0.35);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -1px 0 rgba(0,0,0,0.15);
+  border: 1px solid rgba(255,255,255,0.20);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.30);
   z-index: 2;
 }
 
@@ -2272,44 +2239,45 @@ html.theme-white .product-cart-button:hover,
 html.theme-white .product-whatsapp-button:hover,
 .product-whatsapp-button:hover {
   transform: translateY(-2px);
-  filter: brightness(1.06) saturate(1.05);
+  filter: brightness(1.05);
+}
+
+html.theme-white .product-buy-button:active,
+.product-buy-button:active,
+html.theme-white .product-cart-button:active,
+.product-cart-button:active,
+html.theme-white .product-whatsapp-button:active,
+.product-whatsapp-button:active {
+  transform: scale(0.97);
 }
 
 html.theme-white .product-buy-button,
 .product-buy-button {
-  background:
-    linear-gradient(135deg, #7c5cff 0%, #6366f1 45%, #3b82f6 100%) !important;
-  border: 1px solid rgba(255,255,255,0.22) !important;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
   color: #ffffff !important;
   box-shadow:
-    0 18px 40px -16px rgba(99, 102, 241, 0.55),
-    0 8px 20px -10px rgba(59, 130, 246, 0.45),
-    inset 0 1px 0 rgba(255,255,255,0.30) !important;
-}
-
-html.theme-white .product-cart-button,
-.product-cart-button {
-  background:
-    linear-gradient(135deg, #2b2f3a 0%, #1f2330 100%) !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
-  color: #ffffff !important;
-  box-shadow:
-    0 16px 34px -16px rgba(15, 23, 42, 0.55),
-    0 6px 16px -10px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255,255,255,0.14) !important;
+    0 12px 28px -10px rgba(99, 102, 241, 0.55),
+    0 6px 14px -8px rgba(124, 58, 237, 0.45) !important;
 }
 
 html.theme-white .product-whatsapp-button,
 .product-whatsapp-button {
-  background:
-    linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-  border: 1px solid rgba(255,255,255,0.22) !important;
+  background: linear-gradient(135deg, #10b981 0%, #0d9488 100%) !important;
   color: #ffffff !important;
   box-shadow:
-    0 18px 40px -16px rgba(16, 185, 129, 0.55),
-    0 8px 20px -10px rgba(5, 150, 105, 0.45),
-    inset 0 1px 0 rgba(255,255,255,0.28) !important;
+    0 10px 22px -10px rgba(16, 185, 129, 0.55),
+    0 4px 10px -6px rgba(13, 148, 136, 0.4) !important;
 }
+
+html.theme-white .product-cart-button,
+.product-cart-button {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+  color: #ffffff !important;
+  box-shadow:
+    0 10px 22px -10px rgba(15, 23, 42, 0.55),
+    0 4px 10px -6px rgba(0, 0, 0, 0.35) !important;
+}
+
 
 
 /* Reusable floating-glass button utility — apply .glass-btn to any button
