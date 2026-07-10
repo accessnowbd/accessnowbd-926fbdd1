@@ -1,7 +1,13 @@
 // Telegram command router — server-only.
 // Handles /start, /browse, /cart, /orders, /help + inline callback queries.
 
-import { sendMessage, sendPhoto, answerCallbackQuery, renderTemplate } from "./api.server";
+import { sendMessageFor, sendPhotoFor, answerCallbackQueryFor, renderTemplate } from "./api.server";
+
+const sendMessage = (chat_id: number | string, text: string, extra: Record<string, unknown> = {}) =>
+  sendMessageFor("store_bot", chat_id, text, extra);
+const sendPhoto = (chat_id: number | string, photo: string, caption?: string, extra: Record<string, unknown> = {}) =>
+  sendPhotoFor("store_bot", chat_id, photo, caption, extra);
+const answerCallbackQuery = (id: string, text?: string) => answerCallbackQueryFor("store_bot", id, text);
 
 type TgUser = { id: number; username?: string; first_name?: string; last_name?: string };
 type TgMessage = { message_id: number; chat: { id: number }; from?: TgUser; text?: string };
