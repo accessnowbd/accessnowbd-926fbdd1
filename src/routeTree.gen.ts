@@ -53,6 +53,7 @@ import { Route as AdminTrackingPixelsRouteImport } from './routes/admin.tracking
 import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
+import { Route as AdminTelegramStoreRouteImport } from './routes/admin.telegram-store'
 import { Route as AdminTelegramRouteImport } from './routes/admin.telegram'
 import { Route as AdminSslczPgwRouteImport } from './routes/admin.sslcz-pgw'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
@@ -333,6 +334,11 @@ const AdminTicketsRoute = AdminTicketsRouteImport.update({
 const AdminThemesRoute = AdminThemesRouteImport.update({
   id: '/themes',
   path: '/themes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTelegramStoreRoute = AdminTelegramStoreRouteImport.update({
+  id: '/telegram-store',
+  path: '/telegram-store',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminTelegramRoute = AdminTelegramRouteImport.update({
@@ -717,6 +723,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
   '/admin/telegram': typeof AdminTelegramRoute
+  '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -822,6 +829,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
   '/admin/telegram': typeof AdminTelegramRoute
+  '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -929,6 +937,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
   '/admin/telegram': typeof AdminTelegramRoute
+  '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/tracking': typeof AdminTrackingRoute
@@ -1037,6 +1046,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/sslcz-pgw'
     | '/admin/telegram'
+    | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -1142,6 +1152,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/sslcz-pgw'
     | '/admin/telegram'
+    | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -1248,6 +1259,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/sslcz-pgw'
     | '/admin/telegram'
+    | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
     | '/admin/tracking'
@@ -1648,6 +1660,13 @@ declare module '@tanstack/react-router' {
       path: '/themes'
       fullPath: '/admin/themes'
       preLoaderRoute: typeof AdminThemesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/telegram-store': {
+      id: '/admin/telegram-store'
+      path: '/telegram-store'
+      fullPath: '/admin/telegram-store'
+      preLoaderRoute: typeof AdminTelegramStoreRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/telegram': {
@@ -2114,6 +2133,7 @@ interface AdminRouteChildren {
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminSslczPgwRoute: typeof AdminSslczPgwRoute
   AdminTelegramRoute: typeof AdminTelegramRoute
+  AdminTelegramStoreRoute: typeof AdminTelegramStoreRoute
   AdminThemesRoute: typeof AdminThemesRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminTrackingRoute: typeof AdminTrackingRoute
@@ -2165,6 +2185,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminSettingsRoute: AdminSettingsRoute,
   AdminSslczPgwRoute: AdminSslczPgwRoute,
   AdminTelegramRoute: AdminTelegramRoute,
+  AdminTelegramStoreRoute: AdminTelegramStoreRoute,
   AdminThemesRoute: AdminThemesRoute,
   AdminTicketsRoute: AdminTicketsRoute,
   AdminTrackingRoute: AdminTrackingRoute,
