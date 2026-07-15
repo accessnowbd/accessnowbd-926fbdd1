@@ -311,7 +311,7 @@ function ProductPage() {
               <img
                 src={optimizeSupabaseImage(heroImg, { width: 1400, quality: 82 })}
                 alt={product.name}
-                className={`absolute inset-0 h-full w-full object-cover will-change-transform ${
+                className={`absolute inset-0 h-full w-full object-contain will-change-transform ${
                   zoomCfg.enabled && zoomCfg.trigger === "hover" ? "group-hover:scale-[var(--zs)]" : ""
                 } ${zoomCfg.enabled && zoomCfg.trigger === "click" && zoomOn ? "scale-[var(--zs)]" : ""}`}
                 style={{
