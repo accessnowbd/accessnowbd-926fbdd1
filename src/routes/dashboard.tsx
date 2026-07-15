@@ -1037,7 +1037,7 @@ function Downloads({ orders }: { orders: Order[] }) {
       (data || []).forEach((p) => bySlug.set(p.slug, { name: p.name, image_url: p.image_url, meta: p.meta }));
 
       const collected: DownloadLink[] = [];
-      orders.forEach((o) => {
+      paidOrders.forEach((o) => {
         (o.items || []).forEach((it) => {
           const p = bySlug.get(it.slug);
           if (!p) return;
