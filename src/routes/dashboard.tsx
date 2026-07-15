@@ -1023,7 +1023,10 @@ function Downloads({ orders }: { orders: Order[] }) {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const slugs = Array.from(new Set(orders.flatMap((o) => (o.items || []).map((it) => it.slug)).filter(Boolean)));
+      // Only surface downloads for orders that have progressed past pending payment.
+      const paidStatuses = new Set(["processing", "delivered", "completed"]);
+      const paidOrders = orders.filter((o) => paidStatuses.has(o.status));
+      const slugs = Array.from(new Set(paidOrders.flatMap((o) => (o.items || []).map((it) => it.slug)).filter(Boolean)));
       if (slugs.length === 0) { if (!cancelled) setLinks([]); return; }
       const { data } = await supabase
         .from("products")
