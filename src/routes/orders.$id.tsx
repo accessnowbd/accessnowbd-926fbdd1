@@ -10,6 +10,7 @@ import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 import { downloadReceiptPdf } from "@/lib/receipt";
 import { sendInvoiceEmail } from "@/lib/email/invoice";
+import { fetchOrderDownloads, type ProductDownload } from "@/lib/product-downloads";
 import { toast } from "sonner";
 
 const orderSearchSchema = z.object({
