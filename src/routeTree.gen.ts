@@ -39,12 +39,14 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as AiToolsRouteImport } from './routes/ai-tools'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as PaySlugRouteImport } from './routes/pay.$slug'
 import { Route as OrdersIdRouteImport } from './routes/orders.$id'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/blog.how-to-buy-netflix-in-bangladesh'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiAiTestRouteImport } from './routes/api/ai-test'
 import { Route as ApiAiCommandRouteImport } from './routes/api/ai-command'
 import { Route as AdminWelcomePopupRouteImport } from './routes/admin.welcome-popup'
@@ -90,6 +92,7 @@ import { Route as AdminDescriptionPreviewRouteImport } from './routes/admin.desc
 import { Route as AdminCustomerLicensesRouteImport } from './routes/admin.customer-licenses'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminBulkUpdateRouteImport } from './routes/admin.bulk-update'
+import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as AdminBkashTransactionsRouteImport } from './routes/admin.bkash-transactions'
 import { Route as AdminBackupRouteImport } from './routes/admin.backup'
 import { Route as AdminAiCommandRouteImport } from './routes/admin.ai-command'
@@ -114,6 +117,7 @@ import { Route as ApiPublicSslczSuccessRouteImport } from './routes/api/public/s
 import { Route as ApiPublicSslczIpnRouteImport } from './routes/api/public/sslcz/ipn'
 import { Route as ApiPublicSslczFailRouteImport } from './routes/api/public/sslcz/fail'
 import { Route as ApiPublicSslczCancelRouteImport } from './routes/api/public/sslcz/cancel'
+import { Route as ApiPublicHooksAutoBlogRouteImport } from './routes/api/public/hooks/auto-blog'
 import { Route as ApiPublicEpsSuccessRouteImport } from './routes/api/public/eps/success'
 import { Route as ApiPublicEpsIpnRouteImport } from './routes/api/public/eps/ipn'
 import { Route as ApiPublicEpsFailRouteImport } from './routes/api/public/eps/fail'
@@ -269,6 +273,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -300,6 +309,11 @@ const BlogHowToBuyNetflixInBangladeshRoute =
     path: '/blog/how-to-buy-netflix-in-bangladesh',
     getParentRoute: () => rootRouteImport,
   } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAiTestRoute = ApiAiTestRouteImport.update({
   id: '/api/ai-test',
   path: '/api/ai-test',
@@ -526,6 +540,11 @@ const AdminBulkUpdateRoute = AdminBulkUpdateRouteImport.update({
   path: '/bulk-update',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBlogRoute = AdminBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBkashTransactionsRoute = AdminBkashTransactionsRouteImport.update({
   id: '/bkash-transactions',
   path: '/bkash-transactions',
@@ -655,6 +674,11 @@ const ApiPublicSslczCancelRoute = ApiPublicSslczCancelRouteImport.update({
   path: '/api/public/sslcz/cancel',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksAutoBlogRoute = ApiPublicHooksAutoBlogRouteImport.update({
+  id: '/api/public/hooks/auto-blog',
+  path: '/api/public/hooks/auto-blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicEpsSuccessRoute = ApiPublicEpsSuccessRouteImport.update({
   id: '/api/public/eps/success',
   path: '/api/public/eps/success',
@@ -715,6 +739,7 @@ export interface FileRoutesByFullPath {
   '/admin/ai-command': typeof AdminAiCommandRoute
   '/admin/backup': typeof AdminBackupRoute
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customer-licenses': typeof AdminCustomerLicensesRoute
@@ -760,12 +785,14 @@ export interface FileRoutesByFullPath {
   '/admin/welcome-popup': typeof AdminWelcomePopupRoute
   '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/orders/$id': typeof OrdersIdRoute
   '/pay/$slug': typeof PaySlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
@@ -774,6 +801,7 @@ export interface FileRoutesByFullPath {
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
+  '/api/public/hooks/auto-blog': typeof ApiPublicHooksAutoBlogRoute
   '/api/public/sslcz/cancel': typeof ApiPublicSslczCancelRoute
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
@@ -825,6 +853,7 @@ export interface FileRoutesByTo {
   '/admin/ai-command': typeof AdminAiCommandRoute
   '/admin/backup': typeof AdminBackupRoute
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customer-licenses': typeof AdminCustomerLicensesRoute
@@ -870,12 +899,14 @@ export interface FileRoutesByTo {
   '/admin/welcome-popup': typeof AdminWelcomePopupRoute
   '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/orders/$id': typeof OrdersIdRoute
   '/pay/$slug': typeof PaySlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/blog': typeof BlogIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
@@ -884,6 +915,7 @@ export interface FileRoutesByTo {
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
+  '/api/public/hooks/auto-blog': typeof ApiPublicHooksAutoBlogRoute
   '/api/public/sslcz/cancel': typeof ApiPublicSslczCancelRoute
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
@@ -937,6 +969,7 @@ export interface FileRoutesById {
   '/admin/ai-command': typeof AdminAiCommandRoute
   '/admin/backup': typeof AdminBackupRoute
   '/admin/bkash-transactions': typeof AdminBkashTransactionsRoute
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/bulk-update': typeof AdminBulkUpdateRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customer-licenses': typeof AdminCustomerLicensesRoute
@@ -982,12 +1015,14 @@ export interface FileRoutesById {
   '/admin/welcome-popup': typeof AdminWelcomePopupRoute
   '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/orders/$id': typeof OrdersIdRoute
   '/pay/$slug': typeof PaySlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
@@ -996,6 +1031,7 @@ export interface FileRoutesById {
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
+  '/api/public/hooks/auto-blog': typeof ApiPublicHooksAutoBlogRoute
   '/api/public/sslcz/cancel': typeof ApiPublicSslczCancelRoute
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
@@ -1050,6 +1086,7 @@ export interface FileRouteTypes {
     | '/admin/ai-command'
     | '/admin/backup'
     | '/admin/bkash-transactions'
+    | '/admin/blog'
     | '/admin/bulk-update'
     | '/admin/coupons'
     | '/admin/customer-licenses'
@@ -1095,12 +1132,14 @@ export interface FileRouteTypes {
     | '/admin/welcome-popup'
     | '/api/ai-command'
     | '/api/ai-test'
+    | '/blog/$slug'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
     | '/orders/$id'
     | '/pay/$slug'
     | '/product/$slug'
     | '/admin/'
+    | '/blog/'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/client-errors'
     | '/api/public/products'
@@ -1109,6 +1148,7 @@ export interface FileRouteTypes {
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
+    | '/api/public/hooks/auto-blog'
     | '/api/public/sslcz/cancel'
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
@@ -1160,6 +1200,7 @@ export interface FileRouteTypes {
     | '/admin/ai-command'
     | '/admin/backup'
     | '/admin/bkash-transactions'
+    | '/admin/blog'
     | '/admin/bulk-update'
     | '/admin/coupons'
     | '/admin/customer-licenses'
@@ -1205,12 +1246,14 @@ export interface FileRouteTypes {
     | '/admin/welcome-popup'
     | '/api/ai-command'
     | '/api/ai-test'
+    | '/blog/$slug'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
     | '/orders/$id'
     | '/pay/$slug'
     | '/product/$slug'
     | '/admin'
+    | '/blog'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/client-errors'
     | '/api/public/products'
@@ -1219,6 +1262,7 @@ export interface FileRouteTypes {
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
+    | '/api/public/hooks/auto-blog'
     | '/api/public/sslcz/cancel'
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
@@ -1271,6 +1315,7 @@ export interface FileRouteTypes {
     | '/admin/ai-command'
     | '/admin/backup'
     | '/admin/bkash-transactions'
+    | '/admin/blog'
     | '/admin/bulk-update'
     | '/admin/coupons'
     | '/admin/customer-licenses'
@@ -1316,12 +1361,14 @@ export interface FileRouteTypes {
     | '/admin/welcome-popup'
     | '/api/ai-command'
     | '/api/ai-test'
+    | '/blog/$slug'
     | '/blog/how-to-buy-netflix-in-bangladesh'
     | '/email/unsubscribe'
     | '/orders/$id'
     | '/pay/$slug'
     | '/product/$slug'
     | '/admin/'
+    | '/blog/'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/client-errors'
     | '/api/public/products'
@@ -1330,6 +1377,7 @@ export interface FileRouteTypes {
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
+    | '/api/public/hooks/auto-blog'
     | '/api/public/sslcz/cancel'
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
@@ -1379,10 +1427,12 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiAiCommandRoute: typeof ApiAiCommandRoute
   ApiAiTestRoute: typeof ApiAiTestRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   BlogHowToBuyNetflixInBangladeshRoute: typeof BlogHowToBuyNetflixInBangladeshRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   PaySlugRoute: typeof PaySlugRoute
   ProductSlugRoute: typeof ProductSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicClientErrorsRoute: typeof ApiPublicClientErrorsRoute
   ApiPublicProductsRoute: typeof ApiPublicProductsRoute
@@ -1391,6 +1441,7 @@ export interface RootRouteChildren {
   ApiPublicEpsFailRoute: typeof ApiPublicEpsFailRoute
   ApiPublicEpsIpnRoute: typeof ApiPublicEpsIpnRoute
   ApiPublicEpsSuccessRoute: typeof ApiPublicEpsSuccessRoute
+  ApiPublicHooksAutoBlogRoute: typeof ApiPublicHooksAutoBlogRoute
   ApiPublicSslczCancelRoute: typeof ApiPublicSslczCancelRoute
   ApiPublicSslczFailRoute: typeof ApiPublicSslczFailRoute
   ApiPublicSslczIpnRoute: typeof ApiPublicSslczIpnRoute
@@ -1617,6 +1668,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -1657,6 +1715,13 @@ declare module '@tanstack/react-router' {
       path: '/blog/how-to-buy-netflix-in-bangladesh'
       fullPath: '/blog/how-to-buy-netflix-in-bangladesh'
       preLoaderRoute: typeof BlogHowToBuyNetflixInBangladeshRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/ai-test': {
@@ -1974,6 +2039,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBulkUpdateRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/blog': {
+      id: '/admin/blog'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AdminBlogRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/bkash-transactions': {
       id: '/admin/bkash-transactions'
       path: '/bkash-transactions'
@@ -2142,6 +2214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicSslczCancelRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/auto-blog': {
+      id: '/api/public/hooks/auto-blog'
+      path: '/api/public/hooks/auto-blog'
+      fullPath: '/api/public/hooks/auto-blog'
+      preLoaderRoute: typeof ApiPublicHooksAutoBlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/eps/success': {
       id: '/api/public/eps/success'
       path: '/api/public/eps/success'
@@ -2180,6 +2259,7 @@ interface AdminRouteChildren {
   AdminAiCommandRoute: typeof AdminAiCommandRoute
   AdminBackupRoute: typeof AdminBackupRoute
   AdminBkashTransactionsRoute: typeof AdminBkashTransactionsRoute
+  AdminBlogRoute: typeof AdminBlogRoute
   AdminBulkUpdateRoute: typeof AdminBulkUpdateRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminCustomerLicensesRoute: typeof AdminCustomerLicensesRoute
@@ -2233,6 +2313,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAiCommandRoute: AdminAiCommandRoute,
   AdminBackupRoute: AdminBackupRoute,
   AdminBkashTransactionsRoute: AdminBkashTransactionsRoute,
+  AdminBlogRoute: AdminBlogRoute,
   AdminBulkUpdateRoute: AdminBulkUpdateRoute,
   AdminCouponsRoute: AdminCouponsRoute,
   AdminCustomerLicensesRoute: AdminCustomerLicensesRoute,
@@ -2328,10 +2409,12 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiAiCommandRoute: ApiAiCommandRoute,
   ApiAiTestRoute: ApiAiTestRoute,
+  BlogSlugRoute: BlogSlugRoute,
   BlogHowToBuyNetflixInBangladeshRoute: BlogHowToBuyNetflixInBangladeshRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   PaySlugRoute: PaySlugRoute,
   ProductSlugRoute: ProductSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicClientErrorsRoute: ApiPublicClientErrorsRoute,
   ApiPublicProductsRoute: ApiPublicProductsRoute,
@@ -2340,6 +2423,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicEpsFailRoute: ApiPublicEpsFailRoute,
   ApiPublicEpsIpnRoute: ApiPublicEpsIpnRoute,
   ApiPublicEpsSuccessRoute: ApiPublicEpsSuccessRoute,
+  ApiPublicHooksAutoBlogRoute: ApiPublicHooksAutoBlogRoute,
   ApiPublicSslczCancelRoute: ApiPublicSslczCancelRoute,
   ApiPublicSslczFailRoute: ApiPublicSslczFailRoute,
   ApiPublicSslczIpnRoute: ApiPublicSslczIpnRoute,
