@@ -72,12 +72,19 @@ async function callAI(system: string, user: string, apiKey: string) {
   }
   const j = await res.json() as { choices?: { message?: { content?: string } }[] };
   const raw = j.choices?.[0]?.message?.content || "{}";
-  try {
-    return JSON.parse(raw) as { title: string; excerpt: string; body: string };
-  } catch {
-    const m = raw.match(/\{[\s\S]*\}/);
-    return JSON.parse(m ? m[0] : "{}") as { title: string; excerpt: string; body: string };
+  const tryParse = (s: string) => { try { return JSON.parse(s); } catch { return null; } };
+  const clean = raw.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
+  const parsed = tryParse(clean);
+  if (parsed) return parsed as { title: string; excerpt: string; body: string };
+  // Greedy match from first { to last } to survive stray leading/trailing prose.
+  const first = clean.indexOf("{");
+  const last = clean.lastIndexOf("}");
+  if (first >= 0 && last > first) {
+    const g = tryParse(clean.slice(first, last + 1));
+    if (g) return g as { title: string; excerpt: string; body: string };
   }
+  throw new Error("AI returned non-JSON");
+
 }
 
 const PRODUCT_SYSTEM = `You are a senior SEO copywriter for AccessNow BD (accessnowbd.com), a Bangladesh digital-subscription marketplace (Netflix, Spotify, Microsoft, ChatGPT, Canva, etc.). Write engaging bilingual (Bangla-heavy, English mixed) blog posts optimized for Google.
