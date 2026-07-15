@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, BookOpen, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
