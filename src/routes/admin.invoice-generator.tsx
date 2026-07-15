@@ -85,10 +85,12 @@ function InvoiceGeneratorPage() {
   const [discount, setDiscount] = useState(0);
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
+  const [design, setDesign] = useState<InvoiceDesign>(INVOICE_DESIGN_DEFAULTS);
 
   useEffect(() => {
     setMounted(true);
     setInvoiceNo(genInvoiceNo());
+    loadInvoiceDesign().then(setDesign);
     (async () => {
       const { data } = await supabase
         .from("products")
