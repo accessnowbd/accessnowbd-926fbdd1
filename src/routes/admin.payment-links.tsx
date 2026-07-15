@@ -263,7 +263,14 @@ function PaymentLinksPage() {
           onDelete={remove}
         />
       ) : (
-        <SubmissionsTable rows={visibleSubs} />
+        <SubmissionsTable
+          rows={visibleSubs}
+          onApprove={(r) => setSubmissionStatus(r, "verified")}
+          onReject={(r) => setSubmissionStatus(r, "rejected")}
+          onReset={(r) => setSubmissionStatus(r, "pending")}
+          onEdit={setEditingSub}
+          onDelete={removeSubmission}
+        />
       )}
 
       {showForm && (
@@ -273,9 +280,17 @@ function PaymentLinksPage() {
           onSaved={() => { setShowForm(false); load(); }}
         />
       )}
+      {editingSub && (
+        <SubmissionForm
+          record={editingSub}
+          onClose={() => setEditingSub(null)}
+          onSaved={() => { setEditingSub(null); load(); }}
+        />
+      )}
     </div>
   );
 }
+
 
 /* =========================== Links table =========================== */
 
