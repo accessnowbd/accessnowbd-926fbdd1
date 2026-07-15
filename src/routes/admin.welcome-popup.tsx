@@ -54,7 +54,6 @@ type ProductRow = {
   name: string;
   image_url?: string | null;
   category?: string | null;
-  price?: number | null;
   meta?: { selling_price?: number; original_price?: number } | null;
 };
 
