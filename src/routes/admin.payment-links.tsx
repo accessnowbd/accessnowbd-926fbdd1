@@ -78,6 +78,7 @@ function PaymentLinksPage() {
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState<LinkRow | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [editingSub, setEditingSub] = useState<Submission | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
