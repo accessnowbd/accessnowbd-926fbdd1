@@ -58,6 +58,7 @@ import { Route as AdminTelegramRouteImport } from './routes/admin.telegram'
 import { Route as AdminSslczPgwRouteImport } from './routes/admin.sslcz-pgw'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
+import { Route as AdminSearchConsoleRouteImport } from './routes/admin.search-console'
 import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
 import { Route as AdminReviewGeneratorRouteImport } from './routes/admin.review-generator'
 import { Route as AdminRenewalRemindersRouteImport } from './routes/admin.renewal-reminders'
@@ -361,6 +362,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
 const AdminSecurityRoute = AdminSecurityRouteImport.update({
   id: '/security',
   path: '/security',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSearchConsoleRoute = AdminSearchConsoleRouteImport.update({
+  id: '/search-console',
+  path: '/search-console',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminReviewsRoute = AdminReviewsRouteImport.update({
@@ -733,6 +739,7 @@ export interface FileRoutesByFullPath {
   '/admin/renewal-reminders': typeof AdminRenewalRemindersRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/reviews': typeof AdminReviewsRoute
+  '/admin/search-console': typeof AdminSearchConsoleRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
@@ -841,6 +848,7 @@ export interface FileRoutesByTo {
   '/admin/renewal-reminders': typeof AdminRenewalRemindersRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/reviews': typeof AdminReviewsRoute
+  '/admin/search-console': typeof AdminSearchConsoleRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
@@ -951,6 +959,7 @@ export interface FileRoutesById {
   '/admin/renewal-reminders': typeof AdminRenewalRemindersRoute
   '/admin/review-generator': typeof AdminReviewGeneratorRoute
   '/admin/reviews': typeof AdminReviewsRoute
+  '/admin/search-console': typeof AdminSearchConsoleRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sslcz-pgw': typeof AdminSslczPgwRoute
@@ -1062,6 +1071,7 @@ export interface FileRouteTypes {
     | '/admin/renewal-reminders'
     | '/admin/review-generator'
     | '/admin/reviews'
+    | '/admin/search-console'
     | '/admin/security'
     | '/admin/settings'
     | '/admin/sslcz-pgw'
@@ -1170,6 +1180,7 @@ export interface FileRouteTypes {
     | '/admin/renewal-reminders'
     | '/admin/review-generator'
     | '/admin/reviews'
+    | '/admin/search-console'
     | '/admin/security'
     | '/admin/settings'
     | '/admin/sslcz-pgw'
@@ -1279,6 +1290,7 @@ export interface FileRouteTypes {
     | '/admin/renewal-reminders'
     | '/admin/review-generator'
     | '/admin/reviews'
+    | '/admin/search-console'
     | '/admin/security'
     | '/admin/settings'
     | '/admin/sslcz-pgw'
@@ -1723,6 +1735,13 @@ declare module '@tanstack/react-router' {
       path: '/security'
       fullPath: '/admin/security'
       preLoaderRoute: typeof AdminSecurityRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/search-console': {
+      id: '/admin/search-console'
+      path: '/search-console'
+      fullPath: '/admin/search-console'
+      preLoaderRoute: typeof AdminSearchConsoleRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/reviews': {
@@ -2171,6 +2190,7 @@ interface AdminRouteChildren {
   AdminRenewalRemindersRoute: typeof AdminRenewalRemindersRoute
   AdminReviewGeneratorRoute: typeof AdminReviewGeneratorRoute
   AdminReviewsRoute: typeof AdminReviewsRoute
+  AdminSearchConsoleRoute: typeof AdminSearchConsoleRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminSslczPgwRoute: typeof AdminSslczPgwRoute
@@ -2223,6 +2243,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminRenewalRemindersRoute: AdminRenewalRemindersRoute,
   AdminReviewGeneratorRoute: AdminReviewGeneratorRoute,
   AdminReviewsRoute: AdminReviewsRoute,
+  AdminSearchConsoleRoute: AdminSearchConsoleRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminSslczPgwRoute: AdminSslczPgwRoute,

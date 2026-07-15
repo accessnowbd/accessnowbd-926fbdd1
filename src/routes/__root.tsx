@@ -159,7 +159,31 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
+  loader: async () => {
+    try {
+      const { fetchGscConfig } = await import("@/lib/gsc-config");
+      const gsc = await fetchGscConfig();
+      return { gsc };
+    } catch {
+      return { gsc: null as null | { verification_code: string; extra_codes?: string[]; bing_code?: string; yandex_code?: string } };
+    }
+  },
+  head: ({ loaderData }) => {
+    const gsc = loaderData?.gsc;
+    const verificationMetas: Array<{ name: string; content: string }> = [];
+    if (gsc?.verification_code) {
+      verificationMetas.push({ name: "google-site-verification", content: gsc.verification_code });
+    }
+    for (const extra of gsc?.extra_codes ?? []) {
+      if (extra) verificationMetas.push({ name: "google-site-verification", content: extra });
+    }
+    if (gsc?.bing_code) {
+      verificationMetas.push({ name: "msvalidate.01", content: gsc.bing_code });
+    }
+    if (gsc?.yandex_code) {
+      verificationMetas.push({ name: "yandex-verification", content: gsc.yandex_code });
+    }
+    return {
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
@@ -172,6 +196,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "AccessNow BD | Trusted Digital Services in Bangladesh" },
       { name: "description", content: "AccessNow BD provides digital products, premium subscriptions, hosting, software, and IT services with fast support and secure access across Bangladesh." },
       { name: "author", content: "AccessNow BD" },
+      ...verificationMetas,
       // Sitewide Open Graph defaults — page-specific og:title / og:description /
       // og:image / og:url MUST be set on the leaf route. We intentionally do NOT
       // declare og:image here: TanStack head() concatenates root meta into every
@@ -195,7 +220,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "manifest", href: "/manifest.webmanifest?v=2" },
       { rel: "apple-touch-icon", href: "/icons/apple-touch-icon-v2.png", sizes: "180x180" },
     ],
-  }),
+  };
+  },
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
