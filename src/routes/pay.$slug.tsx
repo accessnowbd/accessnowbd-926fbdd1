@@ -36,6 +36,9 @@ type PaymentLinkRow = {
   created_at: string;
 };
 
+type ProductPlan = { label?: string; price?: number; duration?: string; original_price?: number };
+type ProductRow = { slug: string; name: string; image_url?: string | null; plans: ProductPlan[] | null };
+
 const fallbackMethods: PaymentMethod[] = [
   { id: "bkash", name: "bKash", number: "01580607614", color: "bg-primary", brand_color: "#8b5cf6", send_money_label: "Send Money" },
   { id: "nagad", name: "Nagad", number: "01580607614", color: "bg-primary", brand_color: "#8b5cf6", send_money_label: "Send Money" },
@@ -63,6 +66,17 @@ async function fetchPaymentLink(slug: string): Promise<PaymentLinkRow | null> {
   if (error) throw error;
   const rows = ((data ?? []) as unknown) as PaymentLinkRow[];
   return rows.find((row) => row.data?.slug === slug) ?? null;
+}
+
+async function fetchActiveProducts(): Promise<ProductRow[]> {
+  const { data, error } = await supabase
+    .from("products")
+    .select("slug,name,image_url,plans")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true })
+    .order("name", { ascending: true });
+  if (error) throw error;
+  return ((data ?? []) as unknown) as ProductRow[];
 }
 
 function PaymentLinkPage() {
