@@ -65,6 +65,7 @@ const DESCRIPTIONS: Record<string, Desc> = {
   "/admin/promotions": { en: "Promotional offers and campaigns", bn: "প্রমোশনাল অফার ও ক্যাম্পেইন" },
   "/admin/review-generator": { en: "Generate authentic looking reviews", bn: "অথেনটিক লুকিং রিভিউ তৈরি করুন" },
   "/admin/security": { en: "Security settings and admin access", bn: "সিকিউরিটি সেটিংস ও অ্যাডমিন অ্যাক্সেস" },
+  "/admin/fb-pixel": { en: "Manage Meta / Facebook Pixels & Conversions API", bn: "Meta / Facebook Pixel ও Conversions API ম্যানেজ করুন" },
 };
 
 const HIDE_ON = new Set(["/admin", "/admin/analytics"]);
