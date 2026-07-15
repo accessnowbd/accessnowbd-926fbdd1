@@ -420,6 +420,35 @@
   .admin-clarity .a-pill-active { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #ffffff !important; border-color: transparent; box-shadow: 0 8px 20px -8px rgba(124, 58, 237, 0.55); }
   .admin-clarity .a-pill-count { font-size: 0.75rem; opacity: 0.85; }
 
+  /* ─────────────────────────────────────────────────────────────
+     Classic curved admin skin — round every square-ish corner
+     across every /admin/* page for a softer, classic feel.
+     Scoped to `.admin-clarity` so it never leaks to the public site.
+     ───────────────────────────────────────────────────────────── */
+  .admin-clarity .rounded,
+  .admin-clarity .rounded-sm    { border-radius: 0.6rem; }
+  .admin-clarity .rounded-md    { border-radius: 0.85rem; }
+  .admin-clarity .rounded-lg    { border-radius: 1rem; }
+  .admin-clarity .rounded-xl    { border-radius: 1.35rem; }
+  .admin-clarity .rounded-2xl   { border-radius: 1.75rem; }
+  .admin-clarity .rounded-3xl   { border-radius: 2.25rem; }
+  /* Keep icon chips, avatars, and toggles fully circular. */
+  .admin-clarity .rounded-full  { border-radius: 9999px; }
+
+  /* Softer classic shadows on white cards. */
+  .admin-clarity .shadow-sm { box-shadow: 0 4px 14px -8px rgba(15, 23, 42, 0.12); }
+  .admin-clarity .shadow-md { box-shadow: 0 10px 26px -14px rgba(15, 23, 42, 0.18); }
+  .admin-clarity .shadow-lg { box-shadow: 0 18px 40px -20px rgba(15, 23, 42, 0.22); }
+
+  /* Round inputs, selects, textareas and buttons uniformly. */
+  .admin-clarity input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  .admin-clarity select,
+  .admin-clarity textarea { border-radius: 1rem; }
+  .admin-clarity textarea { border-radius: 1.1rem; }
+
+  /* Tables inside admin cards — smooth the outer corners so the card looks classic. */
+  .admin-clarity table { border-radius: 1rem; overflow: hidden; }
+
   .admin-clarity .a-search {
     width: 100%; height: 3rem; padding: 0 1rem 0 2.75rem; border-radius: 9999px;
     background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.9);
