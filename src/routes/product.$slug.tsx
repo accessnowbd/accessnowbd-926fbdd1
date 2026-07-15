@@ -613,14 +613,14 @@ function ProductPage() {
                 href={plan ? waOrderUrl([{ name: product.name, planPeriod: plan.period, qty, price: parsePrice(plan.price) }]) : "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                  className="product-whatsapp-button flex min-w-0 items-center justify-center gap-2 rounded-full px-3 py-3.5 text-sm font-bold transition sm:text-base"
+                  className="product-whatsapp-button flex min-w-0 items-center justify-center gap-2 rounded-full px-3 py-4 text-sm font-bold transition sm:text-base"
               >
                 <MessageCircle className="w-5 h-5" />
                   <span className="min-w-0 truncate">WhatsApp অর্ডার</span>
               </a>
               <button
                 onClick={addToCart}
-                  className="product-cart-button flex min-w-0 items-center justify-center gap-2 rounded-full px-3 py-3.5 text-sm font-bold transition sm:text-base"
+                  className="product-cart-button flex min-w-0 items-center justify-center gap-2 rounded-full px-3 py-4 text-sm font-bold transition sm:text-base"
               >
                 <ShoppingCart className="w-5 h-5" />
                   <span className="min-w-0 truncate">Add to Cart</span>
