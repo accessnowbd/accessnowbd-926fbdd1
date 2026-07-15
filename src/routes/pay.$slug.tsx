@@ -180,11 +180,11 @@ function PaymentLinkPage() {
               <div className="mt-5 space-y-3">
                 <h2 className="text-sm font-extrabold text-foreground">পেমেন্ট মেথড</h2>
                 <div className="grid gap-2">
-                  {methods.map((method) => {
+                  {methods.map((method, index) => {
                     const active = method.id === methodId;
                     return (
                       <button
-                        key={method.id}
+                        key={`${method.id}-${index}`}
                         type="button"
                         onClick={() => setMethodId(method.id)}
                         className={`flex min-h-16 items-center justify-between rounded-xl border p-3 text-left transition ${active ? "border-primary bg-primary/10" : "border-border bg-background hover:border-primary/50"}`}
