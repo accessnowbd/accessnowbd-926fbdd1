@@ -55,7 +55,6 @@ import { Route as AdminWelcomePopupRouteImport } from './routes/admin.welcome-po
 import { Route as AdminWelcomeBannerRouteImport } from './routes/admin.welcome-banner'
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
-import { Route as AdminTrackingPixelsRouteImport } from './routes/admin.tracking-pixels'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminTelegramStoreRouteImport } from './routes/admin.telegram-store'
@@ -75,7 +74,6 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminProductZoomRouteImport } from './routes/admin.product-zoom'
 import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
 import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
-import { Route as AdminOtherPixelsRouteImport } from './routes/admin.other-pixels'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
 import { Route as AdminLiveChatRouteImport } from './routes/admin.live-chat'
@@ -86,8 +84,6 @@ import { Route as AdminInventoryRouteImport } from './routes/admin.inventory'
 import { Route as AdminHomepageEditorRouteImport } from './routes/admin.homepage-editor'
 import { Route as AdminGoogleAdsRouteImport } from './routes/admin.google-ads'
 import { Route as AdminGa4RealtimeRouteImport } from './routes/admin.ga4-realtime'
-import { Route as AdminFbPixelRouteImport } from './routes/admin.fb-pixel'
-import { Route as AdminFbAudiencesRouteImport } from './routes/admin.fb-audiences'
 import { Route as AdminEpsPgwRouteImport } from './routes/admin.eps-pgw'
 import { Route as AdminEmailDashboardRouteImport } from './routes/admin.email-dashboard'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
@@ -104,9 +100,11 @@ import { Route as AdminAbandonedCheckoutRouteImport } from './routes/admin.aband
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as AdminFbPixelIndexRouteImport } from './routes/admin.fb-pixel.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
 import { Route as ApiPublicClientErrorsRouteImport } from './routes/api/public/client-errors'
+import { Route as AdminFbPixelIdRouteImport } from './routes/admin.fb-pixel.$id'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -357,11 +355,6 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminTrackingPixelsRoute = AdminTrackingPixelsRouteImport.update({
-  id: '/tracking-pixels',
-  path: '/tracking-pixels',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminTicketsRoute = AdminTicketsRouteImport.update({
   id: '/tickets',
   path: '/tickets',
@@ -457,11 +450,6 @@ const AdminPaymentLinksRoute = AdminPaymentLinksRouteImport.update({
   path: '/payment-links',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminOtherPixelsRoute = AdminOtherPixelsRouteImport.update({
-  id: '/other-pixels',
-  path: '/other-pixels',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminOrdersRoute = AdminOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -510,16 +498,6 @@ const AdminGoogleAdsRoute = AdminGoogleAdsRouteImport.update({
 const AdminGa4RealtimeRoute = AdminGa4RealtimeRouteImport.update({
   id: '/ga4-realtime',
   path: '/ga4-realtime',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminFbPixelRoute = AdminFbPixelRouteImport.update({
-  id: '/fb-pixel',
-  path: '/fb-pixel',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminFbAudiencesRoute = AdminFbAudiencesRouteImport.update({
-  id: '/fb-audiences',
-  path: '/fb-audiences',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminEpsPgwRoute = AdminEpsPgwRouteImport.update({
@@ -605,6 +583,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AdminFbPixelIndexRoute = AdminFbPixelIndexRouteImport.update({
+  id: '/fb-pixel/',
+  path: '/fb-pixel/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -619,6 +602,11 @@ const ApiPublicClientErrorsRoute = ApiPublicClientErrorsRouteImport.update({
   id: '/api/public/client-errors',
   path: '/api/public/client-errors',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminFbPixelIdRoute = AdminFbPixelIdRouteImport.update({
+  id: '/fb-pixel/$id',
+  path: '/fb-pixel/$id',
+  getParentRoute: () => AdminRoute,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
@@ -765,8 +753,6 @@ export interface FileRoutesByFullPath {
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
   '/admin/eps-pgw': typeof AdminEpsPgwRoute
-  '/admin/fb-audiences': typeof AdminFbAudiencesRoute
-  '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/ga4-realtime': typeof AdminGa4RealtimeRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/homepage-editor': typeof AdminHomepageEditorRoute
@@ -777,7 +763,6 @@ export interface FileRoutesByFullPath {
   '/admin/live-chat': typeof AdminLiveChatRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
-  '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/product-zoom': typeof AdminProductZoomRoute
@@ -797,7 +782,6 @@ export interface FileRoutesByFullPath {
   '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
-  '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
@@ -815,9 +799,11 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/help/': typeof HelpIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/fb-pixel/$id': typeof AdminFbPixelIdRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/admin/fb-pixel/': typeof AdminFbPixelIndexRoute
   '/api/public/eps/cancel': typeof ApiPublicEpsCancelRoute
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
@@ -882,8 +868,6 @@ export interface FileRoutesByTo {
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
   '/admin/eps-pgw': typeof AdminEpsPgwRoute
-  '/admin/fb-audiences': typeof AdminFbAudiencesRoute
-  '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/ga4-realtime': typeof AdminGa4RealtimeRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/homepage-editor': typeof AdminHomepageEditorRoute
@@ -894,7 +878,6 @@ export interface FileRoutesByTo {
   '/admin/live-chat': typeof AdminLiveChatRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
-  '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/product-zoom': typeof AdminProductZoomRoute
@@ -914,7 +897,6 @@ export interface FileRoutesByTo {
   '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
-  '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
@@ -932,9 +914,11 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/help': typeof HelpIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/fb-pixel/$id': typeof AdminFbPixelIdRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/admin/fb-pixel': typeof AdminFbPixelIndexRoute
   '/api/public/eps/cancel': typeof ApiPublicEpsCancelRoute
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
@@ -1001,8 +985,6 @@ export interface FileRoutesById {
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
   '/admin/eps-pgw': typeof AdminEpsPgwRoute
-  '/admin/fb-audiences': typeof AdminFbAudiencesRoute
-  '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/ga4-realtime': typeof AdminGa4RealtimeRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/homepage-editor': typeof AdminHomepageEditorRoute
@@ -1013,7 +995,6 @@ export interface FileRoutesById {
   '/admin/live-chat': typeof AdminLiveChatRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
-  '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/product-zoom': typeof AdminProductZoomRoute
@@ -1033,7 +1014,6 @@ export interface FileRoutesById {
   '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
-  '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
@@ -1051,9 +1031,11 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/help/': typeof HelpIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/fb-pixel/$id': typeof AdminFbPixelIdRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/admin/fb-pixel/': typeof AdminFbPixelIndexRoute
   '/api/public/eps/cancel': typeof ApiPublicEpsCancelRoute
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
@@ -1121,8 +1103,6 @@ export interface FileRouteTypes {
     | '/admin/description-template'
     | '/admin/email-dashboard'
     | '/admin/eps-pgw'
-    | '/admin/fb-audiences'
-    | '/admin/fb-pixel'
     | '/admin/ga4-realtime'
     | '/admin/google-ads'
     | '/admin/homepage-editor'
@@ -1133,7 +1113,6 @@ export interface FileRouteTypes {
     | '/admin/live-chat'
     | '/admin/newsletter'
     | '/admin/orders'
-    | '/admin/other-pixels'
     | '/admin/payment-links'
     | '/admin/payments'
     | '/admin/product-zoom'
@@ -1153,7 +1132,6 @@ export interface FileRouteTypes {
     | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
-    | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
@@ -1171,9 +1149,11 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/help/'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/fb-pixel/$id'
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/admin/fb-pixel/'
     | '/api/public/eps/cancel'
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
@@ -1238,8 +1218,6 @@ export interface FileRouteTypes {
     | '/admin/description-template'
     | '/admin/email-dashboard'
     | '/admin/eps-pgw'
-    | '/admin/fb-audiences'
-    | '/admin/fb-pixel'
     | '/admin/ga4-realtime'
     | '/admin/google-ads'
     | '/admin/homepage-editor'
@@ -1250,7 +1228,6 @@ export interface FileRouteTypes {
     | '/admin/live-chat'
     | '/admin/newsletter'
     | '/admin/orders'
-    | '/admin/other-pixels'
     | '/admin/payment-links'
     | '/admin/payments'
     | '/admin/product-zoom'
@@ -1270,7 +1247,6 @@ export interface FileRouteTypes {
     | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
-    | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
@@ -1288,9 +1264,11 @@ export interface FileRouteTypes {
     | '/blog'
     | '/help'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/fb-pixel/$id'
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/admin/fb-pixel'
     | '/api/public/eps/cancel'
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
@@ -1356,8 +1334,6 @@ export interface FileRouteTypes {
     | '/admin/description-template'
     | '/admin/email-dashboard'
     | '/admin/eps-pgw'
-    | '/admin/fb-audiences'
-    | '/admin/fb-pixel'
     | '/admin/ga4-realtime'
     | '/admin/google-ads'
     | '/admin/homepage-editor'
@@ -1368,7 +1344,6 @@ export interface FileRouteTypes {
     | '/admin/live-chat'
     | '/admin/newsletter'
     | '/admin/orders'
-    | '/admin/other-pixels'
     | '/admin/payment-links'
     | '/admin/payments'
     | '/admin/product-zoom'
@@ -1388,7 +1363,6 @@ export interface FileRouteTypes {
     | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
-    | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
@@ -1406,9 +1380,11 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/help/'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/fb-pixel/$id'
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/admin/fb-pixel/'
     | '/api/public/eps/cancel'
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
@@ -1818,13 +1794,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/tracking-pixels': {
-      id: '/admin/tracking-pixels'
-      path: '/tracking-pixels'
-      fullPath: '/admin/tracking-pixels'
-      preLoaderRoute: typeof AdminTrackingPixelsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/tickets': {
       id: '/admin/tickets'
       path: '/tickets'
@@ -1958,13 +1927,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPaymentLinksRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/other-pixels': {
-      id: '/admin/other-pixels'
-      path: '/other-pixels'
-      fullPath: '/admin/other-pixels'
-      preLoaderRoute: typeof AdminOtherPixelsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/orders': {
       id: '/admin/orders'
       path: '/orders'
@@ -2033,20 +1995,6 @@ declare module '@tanstack/react-router' {
       path: '/ga4-realtime'
       fullPath: '/admin/ga4-realtime'
       preLoaderRoute: typeof AdminGa4RealtimeRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/fb-pixel': {
-      id: '/admin/fb-pixel'
-      path: '/fb-pixel'
-      fullPath: '/admin/fb-pixel'
-      preLoaderRoute: typeof AdminFbPixelRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/fb-audiences': {
-      id: '/admin/fb-audiences'
-      path: '/fb-audiences'
-      fullPath: '/admin/fb-audiences'
-      preLoaderRoute: typeof AdminFbAudiencesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/eps-pgw': {
@@ -2161,6 +2109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/fb-pixel/': {
+      id: '/admin/fb-pixel/'
+      path: '/fb-pixel'
+      fullPath: '/admin/fb-pixel/'
+      preLoaderRoute: typeof AdminFbPixelIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -2181,6 +2136,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/public/client-errors'
       preLoaderRoute: typeof ApiPublicClientErrorsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/fb-pixel/$id': {
+      id: '/admin/fb-pixel/$id'
+      path: '/fb-pixel/$id'
+      fullPath: '/admin/fb-pixel/$id'
+      preLoaderRoute: typeof AdminFbPixelIdRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
@@ -2326,8 +2288,6 @@ interface AdminRouteChildren {
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminEmailDashboardRoute: typeof AdminEmailDashboardRoute
   AdminEpsPgwRoute: typeof AdminEpsPgwRoute
-  AdminFbAudiencesRoute: typeof AdminFbAudiencesRoute
-  AdminFbPixelRoute: typeof AdminFbPixelRoute
   AdminGa4RealtimeRoute: typeof AdminGa4RealtimeRoute
   AdminGoogleAdsRoute: typeof AdminGoogleAdsRoute
   AdminHomepageEditorRoute: typeof AdminHomepageEditorRoute
@@ -2338,7 +2298,6 @@ interface AdminRouteChildren {
   AdminLiveChatRoute: typeof AdminLiveChatRoute
   AdminNewsletterRoute: typeof AdminNewsletterRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
-  AdminOtherPixelsRoute: typeof AdminOtherPixelsRoute
   AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
   AdminPaymentsRoute: typeof AdminPaymentsRoute
   AdminProductZoomRoute: typeof AdminProductZoomRoute
@@ -2358,12 +2317,13 @@ interface AdminRouteChildren {
   AdminTelegramStoreRoute: typeof AdminTelegramStoreRoute
   AdminThemesRoute: typeof AdminThemesRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
-  AdminTrackingPixelsRoute: typeof AdminTrackingPixelsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWalletRoute: typeof AdminWalletRoute
   AdminWelcomeBannerRoute: typeof AdminWelcomeBannerRoute
   AdminWelcomePopupRoute: typeof AdminWelcomePopupRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminFbPixelIdRoute: typeof AdminFbPixelIdRoute
+  AdminFbPixelIndexRoute: typeof AdminFbPixelIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -2381,8 +2341,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminEmailDashboardRoute: AdminEmailDashboardRoute,
   AdminEpsPgwRoute: AdminEpsPgwRoute,
-  AdminFbAudiencesRoute: AdminFbAudiencesRoute,
-  AdminFbPixelRoute: AdminFbPixelRoute,
   AdminGa4RealtimeRoute: AdminGa4RealtimeRoute,
   AdminGoogleAdsRoute: AdminGoogleAdsRoute,
   AdminHomepageEditorRoute: AdminHomepageEditorRoute,
@@ -2393,7 +2351,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminLiveChatRoute: AdminLiveChatRoute,
   AdminNewsletterRoute: AdminNewsletterRoute,
   AdminOrdersRoute: AdminOrdersRoute,
-  AdminOtherPixelsRoute: AdminOtherPixelsRoute,
   AdminPaymentLinksRoute: AdminPaymentLinksRoute,
   AdminPaymentsRoute: AdminPaymentsRoute,
   AdminProductZoomRoute: AdminProductZoomRoute,
@@ -2413,12 +2370,13 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminTelegramStoreRoute: AdminTelegramStoreRoute,
   AdminThemesRoute: AdminThemesRoute,
   AdminTicketsRoute: AdminTicketsRoute,
-  AdminTrackingPixelsRoute: AdminTrackingPixelsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWalletRoute: AdminWalletRoute,
   AdminWelcomeBannerRoute: AdminWelcomeBannerRoute,
   AdminWelcomePopupRoute: AdminWelcomePopupRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminFbPixelIdRoute: AdminFbPixelIdRoute,
+  AdminFbPixelIndexRoute: AdminFbPixelIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
