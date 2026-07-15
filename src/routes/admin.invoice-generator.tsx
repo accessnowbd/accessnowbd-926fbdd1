@@ -143,120 +143,38 @@ function InvoiceGeneratorPage() {
     return true;
   };
 
-  const buildPdf = () => {
-    const doc = new jsPDF({ unit: "pt", format: "a4" });
-    const pageW = doc.internal.pageSize.getWidth();
-    const margin = 40;
-    let y = margin;
-
-    // Header
-    doc.setFillColor(124, 58, 237);
-    doc.rect(0, 0, pageW, 90, "F");
-    doc.setTextColor(255, 255, 255);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.text("AccessNow BD", margin, 42);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.text("Invoice", margin, 64);
-    doc.setFontSize(10);
-    doc.text(`#${invoiceNo}`, pageW - margin, 42, { align: "right" });
-    doc.text(date, pageW - margin, 60, { align: "right" });
-
-    y = 120;
-    doc.setTextColor(30, 41, 59);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text("Bill To", margin, y);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    y += 16;
-    doc.text(name || "—", margin, y); y += 14;
-    if (phone) { doc.text(phone, margin, y); y += 14; }
-    if (email) { doc.text(email, margin, y); y += 14; }
-    if (address) {
-      const lines = doc.splitTextToSize(address, 260);
-      doc.text(lines, margin, y); y += 14 * lines.length;
-    }
-
-    // Items table
-    y = Math.max(y + 10, 220);
-    doc.setFillColor(243, 244, 246);
-    doc.rect(margin, y, pageW - margin * 2, 24, "F");
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
-    doc.text("Item", margin + 8, y + 16);
-    doc.text("Qty", pageW - margin - 200, y + 16);
-    doc.text("Price", pageW - margin - 130, y + 16);
-    doc.text("Total", pageW - margin - 8, y + 16, { align: "right" });
-    y += 30;
-    doc.setFont("helvetica", "normal");
-    for (const it of items) {
-      if (!it.name && !it.price) continue;
-      const line = doc.splitTextToSize(it.name || "—", pageW - margin * 2 - 240);
-      doc.text(line, margin + 8, y);
-      doc.text(String(it.qty), pageW - margin - 200, y);
-      doc.text(fmt(it.price), pageW - margin - 130, y);
-      doc.text(fmt(it.price * it.qty), pageW - margin - 8, y, { align: "right" });
-      y += 16 * line.length + 4;
-    }
-
-    // Totals
-    y += 10;
-    doc.setDrawColor(226, 232, 240);
-    doc.line(margin, y, pageW - margin, y);
-    y += 18;
-    doc.setFont("helvetica", "normal");
-    doc.text("Subtotal", pageW - margin - 130, y);
-    doc.text(fmt(subtotal), pageW - margin - 8, y, { align: "right" });
-    if (discount > 0) {
-      y += 16;
-      doc.text("Discount", pageW - margin - 130, y);
-      doc.text("- " + fmt(discount), pageW - margin - 8, y, { align: "right" });
-    }
-    y += 24;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.text("Total", pageW - margin - 130, y);
-    doc.text(fmt(total), pageW - margin - 8, y, { align: "right" });
-
-    // Payment + Note
-    y += 30;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
-    doc.text("Payment", margin, y);
-    doc.setFont("helvetica", "normal");
+  const buildHtml = () => {
     const pm = PAYMENT_METHODS.find((p) => p.v === payMethod);
-    doc.text(`${pm?.en ?? payMethod}${trxId ? ` · ${trxId}` : ""}`, margin + 60, y);
-    if (note) {
-      y += 18;
-      doc.setFont("helvetica", "bold");
-      doc.text("Note", margin, y);
-      doc.setFont("helvetica", "normal");
-      const lines = doc.splitTextToSize(note, pageW - margin * 2 - 60);
-      doc.text(lines, margin + 60, y);
-    }
-
-    doc.setFontSize(9);
-    doc.setTextColor(100, 116, 139);
-    doc.text("Thank you for your purchase!", pageW / 2, doc.internal.pageSize.getHeight() - 30, { align: "center" });
-
-    return doc;
-  };
-
-  const downloadPdf = () => {
-    if (!ensureValid()) return;
-    const doc = buildPdf();
-    doc.save(`${invoiceNo}.pdf`);
+    return renderInvoiceHtml({
+      design,
+      invoiceNo,
+      date,
+      customer: { name, email, phone, address },
+      payment: {
+        method: (lang === "bn" ? pm?.bn : pm?.en) ?? payMethod,
+        trxId,
+        status: "PAID",
+      },
+      items: items
+        .filter((i) => i.name || i.price)
+        .map((i) => ({ name: i.name || "—", qty: i.qty, price: i.price })),
+      discount,
+      note,
+    });
   };
 
   const previewPrint = () => {
     if (!ensureValid()) return;
-    const doc = buildPdf();
-    const url = doc.output("bloburl");
-    const w = window.open(url, "_blank");
-    if (w) setTimeout(() => { try { w.print(); } catch { /* ignore */ } }, 600);
+    openInvoiceInNewWindow(buildHtml(), false);
   };
+
+  const downloadPdf = () => {
+    if (!ensureValid()) return;
+    // Uses the browser print → Save as PDF dialog so the exported file
+    // looks pixel-identical to the admin invoice-design preview.
+    openInvoiceInNewWindow(buildHtml(), true);
+  };
+
 
   const saveInvoice = async () => {
     if (!ensureValid()) return;
