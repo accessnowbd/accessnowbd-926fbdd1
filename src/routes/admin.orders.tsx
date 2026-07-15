@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { downloadReceiptPdf } from "@/lib/receipt";
 import { sendTransactionalEmail } from "@/lib/email/send";
+import { fetchOrderDownloads } from "@/lib/product-downloads";
 import { useAdminLang } from "@/context/AdminLangContext";
 
 export const Route = createFileRoute("/admin/orders")({
