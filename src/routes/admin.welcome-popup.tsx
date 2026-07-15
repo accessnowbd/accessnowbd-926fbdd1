@@ -70,7 +70,7 @@ function WelcomePopupAdminPage() {
     setLoading(true);
     const [{ data: rows, error }, { data: prodRows }] = await Promise.all([
       supabase.from("admin_records").select("*").eq("kind", "welcome_popup").limit(1),
-      supabase.from("products").select("slug,name,image_url,category,price,meta").eq("is_active", true).order("sort_order").limit(500),
+      supabase.from("products").select("slug,name,image_url,category,meta").eq("is_active", true).order("sort_order").limit(500),
     ]);
     if (error) toast.error(error.message);
     const row = rows?.[0];
@@ -106,7 +106,7 @@ function WelcomePopupAdminPage() {
       toast.info("এই product ইতিমধ্যে added");
       return;
     }
-    const price = p.meta?.selling_price ?? p.price ?? undefined;
+    const price = p.meta?.selling_price ?? undefined;
     set("products", [...data.products, {
       slug: p.slug,
       name: p.name,
