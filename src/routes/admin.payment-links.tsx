@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   Link as LinkIcon, Plus, Sparkles, Copy, ExternalLink, Pause, Play,
   Pencil, Trash2, X, Save, Loader2, Inbox, Search as SearchIcon,
-  CheckCircle2, Clock, User, Phone, Mail, MessageCircle,
+  CheckCircle2, Clock, User, Phone, Mail,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -34,20 +34,29 @@ type LinkRow = {
   created_at: string;
 };
 
+type SubmissionData = {
+  link_slug?: string;
+  link_title?: string;
+  full_name?: string;
+  phone?: string;
+  email?: string;
+  amount?: number;
+  txn_id?: string;
+  sender_number?: string;
+  payment_method?: string;
+  status?: "pending" | "verified" | "rejected";
+  note?: string;
+  product_slug?: string | null;
+  product_name?: string | null;
+  plan_label?: string | null;
+  duration?: string | null;
+  plan_price?: number | null;
+  is_manual?: boolean;
+};
+
 type Submission = {
   id: string;
-  data: {
-    link_slug?: string;
-    link_title?: string;
-    full_name?: string;
-    phone?: string;
-    email?: string;
-    amount?: number;
-    txn_id?: string;
-    payment_method?: string;
-    status?: "pending" | "verified" | "rejected";
-    note?: string;
-  };
+  data: SubmissionData;
   is_active: boolean;
   created_at: string;
 };
@@ -69,6 +78,7 @@ function PaymentLinksPage() {
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState<LinkRow | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [editingSub, setEditingSub] = useState<Submission | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -116,6 +126,26 @@ function PaymentLinksPage() {
     load();
   };
 
+  const setSubmissionStatus = async (row: Submission, status: "verified" | "rejected" | "pending") => {
+    const newData = { ...(row.data ?? {}), status };
+    const { error } = await supabase.from("admin_records").update({ data: newData as never }).eq("id", row.id);
+    if (error) return toast.error(error.message);
+    toast.success(
+      status === "verified" ? t("Approved", "অনুমোদিত")
+      : status === "rejected" ? t("Rejected", "বাতিল")
+      : t("Reset to pending", "পেন্ডিং")
+    );
+    load();
+  };
+
+  const removeSubmission = async (id: string) => {
+    if (!confirm(t("Delete this submission?", "এই সাবমিশন ডিলিট করবেন?"))) return;
+    const { error } = await supabase.from("admin_records").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success(t("Deleted", "মুছে ফেলা হয়েছে"));
+    load();
+  };
+
   const copyLink = (slug: string) => {
     const url = publicUrl(`/pay/${slug}`);
     navigator.clipboard.writeText(url).then(
@@ -123,6 +153,7 @@ function PaymentLinksPage() {
       () => toast.error(t("Copy failed", "কপি ব্যর্থ")),
     );
   };
+
 
   const openLink = (slug: string) => {
     window.open(publicUrl(`/pay/${slug}`), "_blank", "noopener");
@@ -232,7 +263,14 @@ function PaymentLinksPage() {
           onDelete={remove}
         />
       ) : (
-        <SubmissionsTable rows={visibleSubs} />
+        <SubmissionsTable
+          rows={visibleSubs}
+          onApprove={(r) => setSubmissionStatus(r, "verified")}
+          onReject={(r) => setSubmissionStatus(r, "rejected")}
+          onReset={(r) => setSubmissionStatus(r, "pending")}
+          onEdit={setEditingSub}
+          onDelete={removeSubmission}
+        />
       )}
 
       {showForm && (
@@ -242,9 +280,17 @@ function PaymentLinksPage() {
           onSaved={() => { setShowForm(false); load(); }}
         />
       )}
+      {editingSub && (
+        <SubmissionForm
+          record={editingSub}
+          onClose={() => setEditingSub(null)}
+          onSaved={() => { setEditingSub(null); load(); }}
+        />
+      )}
     </div>
   );
 }
+
 
 /* =========================== Links table =========================== */
 
@@ -372,7 +418,16 @@ function ActionBtn({
 
 /* =========================== Submissions table =========================== */
 
-function SubmissionsTable({ rows }: { rows: Submission[] }) {
+function SubmissionsTable({
+  rows, onApprove, onReject, onReset, onEdit, onDelete,
+}: {
+  rows: Submission[];
+  onApprove: (row: Submission) => void;
+  onReject: (row: Submission) => void;
+  onReset: (row: Submission) => void;
+  onEdit: (row: Submission) => void;
+  onDelete: (id: string) => void;
+}) {
   const { t } = useAdminLang();
 
   if (rows.length === 0) {
@@ -396,11 +451,12 @@ function SubmissionsTable({ rows }: { rows: Submission[] }) {
           <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-600 font-bold">
             <tr>
               <th className="text-left px-5 py-3">{t("Customer", "কাস্টমার")}</th>
-              <th className="text-left px-5 py-3">{t("Link", "লিঙ্ক")}</th>
+              <th className="text-left px-5 py-3">{t("Product / Duration", "প্রোডাক্ট / সময়কাল")}</th>
               <th className="text-left px-5 py-3">{t("Amount", "অ্যামাউন্ট")}</th>
               <th className="text-left px-5 py-3">{t("Payment", "পেমেন্ট")}</th>
               <th className="text-left px-5 py-3">{t("Status", "স্ট্যাটাস")}</th>
               <th className="text-left px-5 py-3">{t("Submitted", "সাবমিট")}</th>
+              <th className="text-right px-5 py-3">{t("Actions", "অ্যাকশন")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -418,20 +474,26 @@ function SubmissionsTable({ rows }: { rows: Submission[] }) {
                       <User className="w-3.5 h-3.5 text-slate-400" />
                       {d.full_name ?? "—"}
                     </div>
-                    <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-2">
+                    <div className="text-xs text-slate-500 mt-0.5 flex flex-col gap-0.5">
                       {d.phone && <span className="inline-flex items-center gap-1"><Phone className="w-3 h-3" />{d.phone}</span>}
                       {d.email && <span className="inline-flex items-center gap-1"><Mail className="w-3 h-3" />{d.email}</span>}
+                      {d.link_slug && <code className="font-mono text-[10px] text-slate-400">{d.link_slug}</code>}
                     </div>
                   </td>
                   <td className="px-5 py-4">
-                    <div className="font-medium text-slate-800">{d.link_title ?? "—"}</div>
-                    {d.link_slug && (
-                      <code className="text-[11px] font-mono text-slate-500">{d.link_slug}</code>
-                    )}
+                    <div className="font-medium text-slate-800">
+                      {d.product_name || d.link_title || "—"}
+                      {d.is_manual && <span className="ml-1.5 text-[10px] font-bold text-amber-600">MANUAL</span>}
+                    </div>
+                    <div className="text-xs text-slate-500 mt-0.5">
+                      {d.duration || d.plan_label || "—"}
+                    </div>
+                    {d.note && <div className="text-[11px] text-slate-500 mt-1 italic">"{d.note}"</div>}
                   </td>
                   <td className="px-5 py-4 font-semibold text-slate-800">{fmt(d.amount)}</td>
                   <td className="px-5 py-4 text-slate-700">
                     <div className="capitalize font-medium">{d.payment_method ?? "—"}</div>
+                    {d.sender_number && <div className="text-[11px] text-slate-500">from {d.sender_number}</div>}
                     {d.txn_id && <div className="text-xs text-slate-500 font-mono">{d.txn_id}</div>}
                   </td>
                   <td className="px-5 py-4">
@@ -443,6 +505,30 @@ function SubmissionsTable({ rows }: { rows: Submission[] }) {
                   <td className="px-5 py-4 text-xs text-slate-500">
                     {new Date(r.created_at).toLocaleString()}
                   </td>
+                  <td className="px-5 py-4">
+                    <div className="flex items-center justify-end gap-1.5">
+                      {status !== "verified" ? (
+                        <ActionBtn tone="emerald" title={t("Approve", "অনুমোদন")} onClick={() => onApprove(r)}>
+                          <CheckCircle2 className="w-4 h-4" />
+                        </ActionBtn>
+                      ) : (
+                        <ActionBtn tone="amber" title={t("Reset to pending", "পেন্ডিং")} onClick={() => onReset(r)}>
+                          <Clock className="w-4 h-4" />
+                        </ActionBtn>
+                      )}
+                      {status !== "rejected" && (
+                        <ActionBtn tone="rose" title={t("Reject", "বাতিল")} onClick={() => onReject(r)}>
+                          <X className="w-4 h-4" />
+                        </ActionBtn>
+                      )}
+                      <ActionBtn tone="violet" title={t("Edit", "এডিট")} onClick={() => onEdit(r)}>
+                        <Pencil className="w-4 h-4" />
+                      </ActionBtn>
+                      <ActionBtn tone="rose" title={t("Delete", "ডিলিট")} onClick={() => onDelete(r.id)}>
+                        <Trash2 className="w-4 h-4" />
+                      </ActionBtn>
+                    </div>
+                  </td>
                 </tr>
               );
             })}
@@ -452,6 +538,129 @@ function SubmissionsTable({ rows }: { rows: Submission[] }) {
     </div>
   );
 }
+
+/* =========================== Submission edit modal =========================== */
+
+function SubmissionForm({
+  record, onClose, onSaved,
+}: {
+  record: Submission;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const { t } = useAdminLang();
+  const [data, setData] = useState<SubmissionData>(record.data ?? {});
+  const [saving, setSaving] = useState(false);
+
+  const set = <K extends keyof SubmissionData>(k: K, v: SubmissionData[K]) => setData((d) => ({ ...d, [k]: v }));
+
+  const save = async () => {
+    setSaving(true);
+    const { error } = await supabase.from("admin_records").update({ data: data as never }).eq("id", record.id);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success(t("Updated", "আপডেট হয়েছে"));
+    onSaved();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900/40 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-xl max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+          <h2 className="text-lg font-bold text-slate-900">{t("Edit submission", "সাবমিশন এডিট")}</h2>
+          <button onClick={onClose} className="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="px-6 py-5 space-y-3 overflow-y-auto">
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={t("Full name", "নাম")}>
+              <TextInput value={data.full_name ?? ""} onChange={(v) => set("full_name", v)} />
+            </Field>
+            <Field label={t("Phone", "ফোন")}>
+              <TextInput value={data.phone ?? ""} onChange={(v) => set("phone", v)} />
+            </Field>
+          </div>
+          <Field label={t("Email", "ইমেইল")}>
+            <TextInput value={data.email ?? ""} onChange={(v) => set("email", v)} />
+          </Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={t("Product / Service", "প্রোডাক্ট / সার্ভিস")}>
+              <TextInput value={data.product_name ?? ""} onChange={(v) => set("product_name", v)} />
+            </Field>
+            <Field label={t("Duration", "সময়কাল")}>
+              <TextInput value={data.duration ?? ""} onChange={(v) => set("duration", v)} />
+            </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={t("Amount", "অ্যামাউন্ট")}>
+              <TextInput
+                type="number"
+                value={String(data.amount ?? "")}
+                onChange={(v) => set("amount", Number(v) || 0)}
+              />
+            </Field>
+            <Field label={t("Payment method", "পেমেন্ট মেথড")}>
+              <TextInput value={data.payment_method ?? ""} onChange={(v) => set("payment_method", v)} />
+            </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label={t("Sender number", "প্রেরকের নম্বর")}>
+              <TextInput value={data.sender_number ?? ""} onChange={(v) => set("sender_number", v)} />
+            </Field>
+            <Field label={t("Txn ID", "ট্রানজেকশন")}>
+              <TextInput value={data.txn_id ?? ""} onChange={(v) => set("txn_id", v)} />
+            </Field>
+          </div>
+          <Field label={t("Status", "স্ট্যাটাস")}>
+            <select
+              value={data.status ?? "pending"}
+              onChange={(e) => set("status", e.target.value as SubmissionData["status"])}
+              className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-300"
+            >
+              <option value="pending">pending</option>
+              <option value="verified">verified</option>
+              <option value="rejected">rejected</option>
+            </select>
+          </Field>
+          <Field label={t("Admin note", "অ্যাডমিন নোট")}>
+            <textarea
+              value={data.note ?? ""}
+              onChange={(e) => set("note", e.target.value)}
+              rows={3}
+              className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-300"
+            />
+          </Field>
+        </div>
+        <div className="px-6 py-4 border-t border-slate-200 flex justify-end gap-2">
+          <button onClick={onClose} className="h-10 px-4 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+            {t("Cancel", "বাতিল")}
+          </button>
+          <button
+            onClick={save}
+            disabled={saving}
+            className="h-10 px-5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white text-sm font-bold shadow inline-flex items-center gap-1.5 disabled:opacity-60 transition"
+          >
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {t("Save", "সংরক্ষণ")}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TextInput({ value, onChange, type = "text" }: { value: string; onChange: (v: string) => void; type?: string }) {
+  return (
+    <input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full h-11 px-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-300"
+    />
+  );
+}
+
 
 /* =========================== Form modal =========================== */
 

@@ -36,6 +36,9 @@ type PaymentLinkRow = {
   created_at: string;
 };
 
+type ProductPlan = { label?: string; price?: number; duration?: string; original_price?: number };
+type ProductRow = { slug: string; name: string; image_url?: string | null; plans: ProductPlan[] | null };
+
 const fallbackMethods: PaymentMethod[] = [
   { id: "bkash", name: "bKash", number: "01580607614", color: "bg-primary", brand_color: "#8b5cf6", send_money_label: "Send Money" },
   { id: "nagad", name: "Nagad", number: "01580607614", color: "bg-primary", brand_color: "#8b5cf6", send_money_label: "Send Money" },
@@ -65,6 +68,17 @@ async function fetchPaymentLink(slug: string): Promise<PaymentLinkRow | null> {
   return rows.find((row) => row.data?.slug === slug) ?? null;
 }
 
+async function fetchActiveProducts(): Promise<ProductRow[]> {
+  const { data, error } = await supabase
+    .from("products")
+    .select("slug,name,image_url,plans")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true })
+    .order("name", { ascending: true });
+  if (error) throw error;
+  return ((data ?? []) as unknown) as ProductRow[];
+}
+
 function PaymentLinkPage() {
   const { slug } = Route.useParams();
   const { data: link, isLoading, isError } = useQuery({
@@ -73,6 +87,11 @@ function PaymentLinkPage() {
     staleTime: 60_000,
     retry: 1,
   });
+  const { data: products } = useQuery({
+    queryKey: ["pay-products"],
+    queryFn: fetchActiveProducts,
+    staleTime: 5 * 60_000,
+  });
   const { data: configuredMethods } = usePaymentMethods("checkout");
   const methods = useMemo(() => (configuredMethods?.length ? configuredMethods : fallbackMethods), [configuredMethods]);
   const [methodId, setMethodId] = useState(methods[0]?.id ?? "bkash");
@@ -80,16 +99,40 @@ function PaymentLinkPage() {
   const [customAmount, setCustomAmount] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
+  // Product / plan selection
+  const [pickMode, setPickMode] = useState<"product" | "manual">("product");
+  const [productSlug, setProductSlug] = useState<string>("");
+  const [planIndex, setPlanIndex] = useState<number>(0);
+  const [manualTitle, setManualTitle] = useState("");
+  const [manualDuration, setManualDuration] = useState("");
+
+  const selectedProduct = useMemo(
+    () => (products ?? []).find((p) => p.slug === productSlug) ?? null,
+    [products, productSlug],
+  );
+  const selectedPlan: ProductPlan | null =
+    selectedProduct && Array.isArray(selectedProduct.plans) && selectedProduct.plans.length
+      ? selectedProduct.plans[Math.min(planIndex, selectedProduct.plans.length - 1)]
+      : null;
+
   useEffect(() => {
     if (methods.length && !methods.some((m) => m.id === methodId)) setMethodId(methods[0].id);
   }, [methods, methodId]);
 
   const selectedMethod = methods.find((m) => m.id === methodId) ?? methods[0];
   const savedAmount = Number(link?.data?.amount ?? 0);
-  const amount = savedAmount > 0 ? savedAmount : Number(customAmount || 0);
+  const planAmount = Number(selectedPlan?.price ?? 0);
+  const amount =
+    savedAmount > 0
+      ? savedAmount
+      : pickMode === "product" && planAmount > 0
+        ? planAmount
+        : Number(customAmount || 0);
   const currency = link?.data?.currency || "BDT";
   const expired = Boolean(link?.data?.expires_at && new Date(`${link.data.expires_at}T23:59:59`).getTime() < Date.now());
   const needsManualAmount = !link || savedAmount <= 0;
+  const showManualAmountInput =
+    needsManualAmount && !(pickMode === "product" && planAmount > 0);
   const unavailable = !isLoading && expired;
 
   const submitPayment = useMutation({
@@ -100,6 +143,26 @@ function PaymentLinkPage() {
       if (!isValidPhone(form.phone)) throw new Error("সঠিক বাংলাদেশি মোবাইল নম্বর দিন");
       if (!isValidPhone(form.senderNumber)) throw new Error("যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি দিন");
       if (form.txnId.trim().length < 6) throw new Error("সঠিক Transaction ID দিন");
+      if (pickMode === "product" && !selectedProduct) throw new Error("Product বেছে নিন অথবা Manual দিন");
+      if (pickMode === "manual" && !manualTitle.trim()) throw new Error("আপনি কী নিচ্ছেন তা লিখুন");
+
+      const productInfo =
+        pickMode === "product" && selectedProduct
+          ? {
+              product_slug: selectedProduct.slug,
+              product_name: selectedProduct.name,
+              plan_label: selectedPlan?.label ?? null,
+              duration: selectedPlan?.duration ?? null,
+              plan_price: selectedPlan?.price ?? null,
+            }
+          : {
+              product_slug: null,
+              product_name: manualTitle.trim(),
+              plan_label: null,
+              duration: manualDuration.trim() || null,
+              plan_price: null,
+              is_manual: true,
+            };
 
       const payload = {
         kind: "payment_link_submission",
@@ -108,6 +171,7 @@ function PaymentLinkPage() {
           link_id: link?.id ?? null,
           link_slug: slug,
           link_title: link?.data?.title ?? "Manual Payment Link",
+          ...productInfo,
           full_name: form.fullName.trim(),
           phone: normalizePhone(form.phone),
           email: form.email.trim() || null,
@@ -141,6 +205,7 @@ function PaymentLinkPage() {
           </span>
         </div>
 
+
         <section className="rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-lg sm:p-6">
           {isLoading ? (
             <div className="grid min-h-[420px] place-items-center">
@@ -162,7 +227,7 @@ function PaymentLinkPage() {
                 ) : null}
                 <div className="mt-4 flex items-end justify-between gap-3 border-t border-border pt-4">
                   <span className="text-sm font-semibold text-muted-foreground">Amount</span>
-                  {needsManualAmount ? (
+                  {showManualAmountInput ? (
                     <input
                       type="number"
                       min="1"
@@ -176,6 +241,67 @@ function PaymentLinkPage() {
                   )}
                 </div>
               </div>
+
+              {/* Product / plan picker */}
+              <div className="mt-5 space-y-3">
+                <h2 className="text-sm font-extrabold text-foreground">কী কিনতে চান?</h2>
+                <div className="inline-flex w-full rounded-xl border border-border bg-background p-1">
+                  <button
+                    type="button"
+                    onClick={() => setPickMode("product")}
+                    className={`flex-1 h-9 rounded-lg text-xs font-bold transition ${pickMode === "product" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+                  >
+                    Product থেকে বেছে নিন
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPickMode("manual")}
+                    className={`flex-1 h-9 rounded-lg text-xs font-bold transition ${pickMode === "manual" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+                  >
+                    নিজে লিখুন
+                  </button>
+                </div>
+
+                {pickMode === "product" ? (
+                  <div className="space-y-2">
+                    <label className="block">
+                      <span className="mb-1.5 block text-xs font-bold text-muted-foreground">Product</span>
+                      <select
+                        value={productSlug}
+                        onChange={(e) => { setProductSlug(e.target.value); setPlanIndex(0); }}
+                        className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm font-semibold text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      >
+                        <option value="">— Product বেছে নিন —</option>
+                        {(products ?? []).map((p) => (
+                          <option key={p.slug} value={p.slug}>{p.name}</option>
+                        ))}
+                      </select>
+                    </label>
+                    {selectedProduct && Array.isArray(selectedProduct.plans) && selectedProduct.plans.length > 0 && (
+                      <label className="block">
+                        <span className="mb-1.5 block text-xs font-bold text-muted-foreground">Plan / Duration</span>
+                        <select
+                          value={planIndex}
+                          onChange={(e) => setPlanIndex(Number(e.target.value))}
+                          className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm font-semibold text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        >
+                          {selectedProduct.plans.map((pl, i) => (
+                            <option key={i} value={i}>
+                              {(pl.label || pl.duration || `Plan ${i + 1}`)}{pl.price ? ` — ৳${pl.price}` : ""}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Input label="Service / Product এর নাম" value={manualTitle} onChange={setManualTitle} />
+                    <Input label="কতদিনের জন্য (Duration)" value={manualDuration} onChange={setManualDuration} />
+                  </div>
+                )}
+              </div>
+
 
               <div className="mt-5 space-y-3">
                 <h2 className="text-sm font-extrabold text-foreground">পেমেন্ট মেথড</h2>
