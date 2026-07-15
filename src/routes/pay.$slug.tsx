@@ -77,6 +77,7 @@ function PaymentLinkPage() {
   const methods = useMemo(() => (configuredMethods?.length ? configuredMethods : fallbackMethods), [configuredMethods]);
   const [methodId, setMethodId] = useState(methods[0]?.id ?? "bkash");
   const [form, setForm] = useState({ fullName: "", phone: "", email: "", senderNumber: "", txnId: "", note: "" });
+  const [customAmount, setCustomAmount] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
@@ -84,14 +85,17 @@ function PaymentLinkPage() {
   }, [methods, methodId]);
 
   const selectedMethod = methods.find((m) => m.id === methodId) ?? methods[0];
-  const amount = Number(link?.data?.amount ?? 0);
+  const savedAmount = Number(link?.data?.amount ?? 0);
+  const amount = savedAmount > 0 ? savedAmount : Number(customAmount || 0);
   const currency = link?.data?.currency || "BDT";
   const expired = Boolean(link?.data?.expires_at && new Date(`${link.data.expires_at}T23:59:59`).getTime() < Date.now());
-  const unavailable = !isLoading && (!link || expired || amount <= 0);
+  const needsManualAmount = !link || savedAmount <= 0;
+  const unavailable = !isLoading && expired;
 
   const submitPayment = useMutation({
     mutationFn: async () => {
-      if (!link || !selectedMethod) throw new Error("Payment link unavailable");
+      if (!selectedMethod) throw new Error("Payment method unavailable");
+      if (amount <= 0) throw new Error("পেমেন্ট অ্যামাউন্ট দিন");
       if (!form.fullName.trim()) throw new Error("আপনার নাম দিন");
       if (!isValidPhone(form.phone)) throw new Error("সঠিক বাংলাদেশি মোবাইল নম্বর দিন");
       if (!isValidPhone(form.senderNumber)) throw new Error("যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি দিন");
@@ -102,8 +106,9 @@ function PaymentLinkPage() {
         is_active: false,
         data: {
           link_id: link.id,
+          link_id: link?.id ?? null,
           link_slug: slug,
-          link_title: link.data?.title ?? "Payment Link",
+          link_title: link?.data?.title ?? "Manual Payment Link",
           full_name: form.fullName.trim(),
           phone: normalizePhone(form.phone),
           email: form.email.trim() || null,
@@ -150,11 +155,26 @@ function PaymentLinkPage() {
             <>
               <div className="rounded-xl border border-border bg-background p-4">
                 <p className="text-xs font-bold uppercase text-primary">Payment request</p>
-                <h1 className="mt-1 text-xl font-extrabold leading-tight text-foreground">{link!.data?.title || "AccessNow BD Payment"}</h1>
-                {link!.data?.description && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">{link!.data.description}</p>}
+                <h1 className="mt-1 text-xl font-extrabold leading-tight text-foreground">{link?.data?.title || "AccessNow BD Payment"}</h1>
+                {link?.data?.description ? (
+                  <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">{link.data.description}</p>
+                ) : needsManualAmount ? (
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">পেমেন্ট অ্যামাউন্ট লিখে নিচের তথ্য পূরণ করুন।</p>
+                ) : null}
                 <div className="mt-4 flex items-end justify-between gap-3 border-t border-border pt-4">
                   <span className="text-sm font-semibold text-muted-foreground">Amount</span>
-                  <strong className="text-3xl font-extrabold text-primary">{formatMoney(amount, currency)}</strong>
+                  {needsManualAmount ? (
+                    <input
+                      type="number"
+                      min="1"
+                      value={customAmount}
+                      onChange={(event) => setCustomAmount(event.target.value)}
+                      placeholder="৳0"
+                      className="h-12 w-36 rounded-xl border border-border bg-card px-3 text-right text-xl font-extrabold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    />
+                  ) : (
+                    <strong className="text-3xl font-extrabold text-primary">{formatMoney(amount, currency)}</strong>
+                  )}
                 </div>
               </div>
 
