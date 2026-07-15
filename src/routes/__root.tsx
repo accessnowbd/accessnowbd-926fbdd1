@@ -282,6 +282,7 @@ function RootComponent() {
                 {!isAdmin && <InstallAppPrompt />}
                 {!isAdmin && <TrackingScripts />}
                 {!isAdmin && <AbandonedCheckoutTracker />}
+                {!isAdmin && <Ga4Tracker />}
               </LangProvider>
             </ShopConfigProvider>
           </CartProvider>
