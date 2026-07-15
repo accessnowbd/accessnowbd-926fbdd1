@@ -296,7 +296,7 @@ function ProductPage() {
         {/* Media gallery */}
         <div className="product-detail-media min-w-0 space-y-3 sm:space-y-4 md:col-span-6">
           <div
-            className={`product-detail-hero-img relative aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm group sm:aspect-square sm:rounded-3xl ${zoomCfg.enabled ? "cursor-zoom-in" : ""}`}
+            className={`product-detail-hero-img relative aspect-square overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm group sm:rounded-3xl ${zoomCfg.enabled ? "cursor-zoom-in" : ""}`}
             onMouseMove={(e) => {
               if (!zoomCfg.enabled) return;
               const el = e.currentTarget;
@@ -311,7 +311,7 @@ function ProductPage() {
               <img
                 src={optimizeSupabaseImage(heroImg, { width: 1400, quality: 82 })}
                 alt={product.name}
-                className={`absolute inset-0 h-full w-full object-cover will-change-transform ${
+                className={`absolute inset-0 h-full w-full object-contain will-change-transform ${
                   zoomCfg.enabled && zoomCfg.trigger === "hover" ? "group-hover:scale-[var(--zs)]" : ""
                 } ${zoomCfg.enabled && zoomCfg.trigger === "click" && zoomOn ? "scale-[var(--zs)]" : ""}`}
                 style={{
@@ -333,7 +333,7 @@ function ProductPage() {
                 }}
               />
             ) : (
-              <ProductBanner product={product} ratio="4/3" spheres={6} priority className="overflow-hidden rounded-2xl sm:aspect-square sm:rounded-3xl" />
+              <ProductBanner product={product} ratio="1/1" spheres={6} priority className="overflow-hidden rounded-2xl sm:rounded-3xl" />
             )}
             {product.badge && (
               <span className={`absolute top-4 left-4 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm pointer-events-none`}>
