@@ -226,7 +226,7 @@ export function SupportWidget() {
     <>
       {/* === Floating launcher === */}
       {true && (
-        <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+        <div className="support-widget-launcher fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
           {/* Chooser popup */}
           {chooser && (
             <div className="flex flex-col items-stretch gap-2.5 w-[230px] animate-fade-in">
@@ -270,7 +270,7 @@ export function SupportWidget() {
               setChooser((v) => !v);
             }}
             aria-label={open || chooser ? "Close support" : "Open support"}
-            className="relative group hover:scale-110 active:scale-95 transition-transform duration-300"
+            className="support-widget-button relative group hover:scale-110 active:scale-95 transition-transform duration-300"
           >
             {/* Ripple ping waves (only when idle) */}
             {!open && !chooser && (
@@ -282,7 +282,7 @@ export function SupportWidget() {
 
             {/* Soft ambient glow */}
             <span
-              className="absolute -inset-4 rounded-full opacity-60 blur-2xl group-hover:opacity-100 transition-opacity duration-500 animate-pulse"
+              className="support-widget-glow absolute -inset-4 rounded-full opacity-60 blur-2xl group-hover:opacity-100 transition-opacity duration-500 animate-pulse"
               style={{
                 background: "linear-gradient(135deg, #8b5cf666, #7c3aed66, #a78bfa66)",
               }}
@@ -290,7 +290,7 @@ export function SupportWidget() {
 
             {/* Spinning conic ring */}
             <span
-              className="absolute -inset-[3px] rounded-full opacity-90 animate-[spin_6s_linear_infinite]"
+              className="support-widget-ring absolute -inset-[3px] rounded-full opacity-90 animate-[spin_6s_linear_infinite]"
               style={{
                 background: "conic-gradient(from 0deg, #7c3aedf2, #a78bfaf2, #7c3aedf2, #a78bfaf2, #7c3aedf2)",
                 filter: "blur(2px)",
@@ -299,7 +299,7 @@ export function SupportWidget() {
 
             {/* Main orb */}
             <span
-              className="relative grid place-items-center h-16 w-16 rounded-full text-white shadow-[0_22px_50px_-12px_rgba(124,58,237,0.65)] ring-1 ring-white/20 overflow-hidden"
+              className="support-widget-orb relative grid place-items-center h-16 w-16 rounded-full text-white shadow-[0_22px_50px_-12px_rgba(124,58,237,0.65)] ring-1 ring-white/20 overflow-hidden"
               style={{ background: "linear-gradient(135deg, #7c3aed, #6d28d9, #4c1d95)" }}
             >
               <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/20 blur-[3px]" />

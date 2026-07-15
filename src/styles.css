@@ -2901,6 +2901,32 @@ html.theme-white .home-scroll-optimized .product-card-v2:hover:active,
   .product-page-shell .product-detail-hero-img {
     max-height: min(70vh, 420px);
   }
+
+  .support-widget-launcher {
+    right: max(0.75rem, env(safe-area-inset-right));
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  .support-widget-orb {
+    width: 3.25rem !important;
+    height: 3.25rem !important;
+  }
+
+  .support-widget-orb svg {
+    width: 1.55rem !important;
+    height: 1.55rem !important;
+  }
+
+  .support-widget-glow {
+    inset: -0.65rem !important;
+    filter: blur(16px) !important;
+    opacity: 0.42 !important;
+  }
+
+  .support-widget-ring {
+    inset: -2px !important;
+    filter: blur(1px) !important;
+  }
 }
 
 html:not(.theme-white) .product-page-shell {
