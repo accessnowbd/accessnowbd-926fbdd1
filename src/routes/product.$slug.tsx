@@ -649,17 +649,17 @@ function ProductPage() {
       {/* FAQ */}
         <section className="relative mx-auto max-w-[1200px] px-3 py-8 sm:px-4 md:px-8 md:py-10">
         <h2 className="text-lg font-bold text-foreground mb-4">FAQ</h2>
-        <div className="space-y-2">
+        <div className="space-y-3 sm:space-y-4">
           {faqs.map((f, i) => {
             const open = openFaq === i;
             return (
               <GlassCard key={i} tint="teal" blur="lg" glow="sm" padding="none" rounded="xl">
                 <button
                   onClick={() => setOpenFaq(open ? null : i)}
-                  className="w-full flex items-center justify-between gap-3 px-4 h-11 text-left text-sm font-medium text-foreground"
+                  className="w-full flex items-start justify-between gap-3 px-4 py-3.5 sm:py-4 text-left text-sm font-medium text-foreground"
                 >
-                  <span className="min-w-0 break-words">{f.q}</span>
-                  <span className="text-teal-600 text-lg leading-none">{open ? "−" : "+"}</span>
+                  <span className="min-w-0 break-words leading-snug">{f.q}</span>
+                  <span className="shrink-0 text-teal-600 text-lg leading-none mt-0.5">{open ? "−" : "+"}</span>
                 </button>
                 {open && (
                   <div className="px-4 pb-4 text-sm text-foreground/85 leading-relaxed">
