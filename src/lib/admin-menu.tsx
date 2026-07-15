@@ -4,7 +4,7 @@ import {
   Megaphone, Star, Percent, MessageCircle, Images, Home, PanelBottom,
   ShoppingBag, Users, Wallet, CreditCard, Truck, Boxes, Bell, FileText,
   TicketPercent, Gift, Share2, Megaphone as MegaphoneIcon, Target, Activity, BarChart3, Search,
-  MapPin, LifeBuoy, BookOpen, Headphones,
+  LifeBuoy, BookOpen, Headphones,
   FileEdit, Newspaper, UserCircle2, Download,
   PieChart, UsersRound, ClipboardList, Bot, Settings, ShieldCheck, DatabaseBackup, ShoppingCart, ListChecks, Sparkles,
   Plug, Mail, CalendarDays, Code2,
