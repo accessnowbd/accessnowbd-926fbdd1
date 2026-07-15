@@ -85,6 +85,7 @@ import { Route as AdminInvoiceDesignRouteImport } from './routes/admin.invoice-d
 import { Route as AdminInventoryRouteImport } from './routes/admin.inventory'
 import { Route as AdminHomepageEditorRouteImport } from './routes/admin.homepage-editor'
 import { Route as AdminGoogleAdsRouteImport } from './routes/admin.google-ads'
+import { Route as AdminGa4RealtimeRouteImport } from './routes/admin.ga4-realtime'
 import { Route as AdminFbPixelRouteImport } from './routes/admin.fb-pixel'
 import { Route as AdminFbAudiencesRouteImport } from './routes/admin.fb-audiences'
 import { Route as AdminEpsPgwRouteImport } from './routes/admin.eps-pgw'
@@ -506,6 +507,11 @@ const AdminGoogleAdsRoute = AdminGoogleAdsRouteImport.update({
   path: '/google-ads',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminGa4RealtimeRoute = AdminGa4RealtimeRouteImport.update({
+  id: '/ga4-realtime',
+  path: '/ga4-realtime',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminFbPixelRoute = AdminFbPixelRouteImport.update({
   id: '/fb-pixel',
   path: '/fb-pixel',
@@ -761,6 +767,7 @@ export interface FileRoutesByFullPath {
   '/admin/eps-pgw': typeof AdminEpsPgwRoute
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
+  '/admin/ga4-realtime': typeof AdminGa4RealtimeRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/homepage-editor': typeof AdminHomepageEditorRoute
   '/admin/inventory': typeof AdminInventoryRoute
@@ -877,6 +884,7 @@ export interface FileRoutesByTo {
   '/admin/eps-pgw': typeof AdminEpsPgwRoute
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
+  '/admin/ga4-realtime': typeof AdminGa4RealtimeRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/homepage-editor': typeof AdminHomepageEditorRoute
   '/admin/inventory': typeof AdminInventoryRoute
@@ -995,6 +1003,7 @@ export interface FileRoutesById {
   '/admin/eps-pgw': typeof AdminEpsPgwRoute
   '/admin/fb-audiences': typeof AdminFbAudiencesRoute
   '/admin/fb-pixel': typeof AdminFbPixelRoute
+  '/admin/ga4-realtime': typeof AdminGa4RealtimeRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/homepage-editor': typeof AdminHomepageEditorRoute
   '/admin/inventory': typeof AdminInventoryRoute
@@ -1114,6 +1123,7 @@ export interface FileRouteTypes {
     | '/admin/eps-pgw'
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
+    | '/admin/ga4-realtime'
     | '/admin/google-ads'
     | '/admin/homepage-editor'
     | '/admin/inventory'
@@ -1230,6 +1240,7 @@ export interface FileRouteTypes {
     | '/admin/eps-pgw'
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
+    | '/admin/ga4-realtime'
     | '/admin/google-ads'
     | '/admin/homepage-editor'
     | '/admin/inventory'
@@ -1347,6 +1358,7 @@ export interface FileRouteTypes {
     | '/admin/eps-pgw'
     | '/admin/fb-audiences'
     | '/admin/fb-pixel'
+    | '/admin/ga4-realtime'
     | '/admin/google-ads'
     | '/admin/homepage-editor'
     | '/admin/inventory'
@@ -2016,6 +2028,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGoogleAdsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/ga4-realtime': {
+      id: '/admin/ga4-realtime'
+      path: '/ga4-realtime'
+      fullPath: '/admin/ga4-realtime'
+      preLoaderRoute: typeof AdminGa4RealtimeRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/fb-pixel': {
       id: '/admin/fb-pixel'
       path: '/fb-pixel'
@@ -2309,6 +2328,7 @@ interface AdminRouteChildren {
   AdminEpsPgwRoute: typeof AdminEpsPgwRoute
   AdminFbAudiencesRoute: typeof AdminFbAudiencesRoute
   AdminFbPixelRoute: typeof AdminFbPixelRoute
+  AdminGa4RealtimeRoute: typeof AdminGa4RealtimeRoute
   AdminGoogleAdsRoute: typeof AdminGoogleAdsRoute
   AdminHomepageEditorRoute: typeof AdminHomepageEditorRoute
   AdminInventoryRoute: typeof AdminInventoryRoute
@@ -2363,6 +2383,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminEpsPgwRoute: AdminEpsPgwRoute,
   AdminFbAudiencesRoute: AdminFbAudiencesRoute,
   AdminFbPixelRoute: AdminFbPixelRoute,
+  AdminGa4RealtimeRoute: AdminGa4RealtimeRoute,
   AdminGoogleAdsRoute: AdminGoogleAdsRoute,
   AdminHomepageEditorRoute: AdminHomepageEditorRoute,
   AdminInventoryRoute: AdminInventoryRoute,
