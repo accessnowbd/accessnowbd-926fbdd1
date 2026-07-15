@@ -34,20 +34,29 @@ type LinkRow = {
   created_at: string;
 };
 
+type SubmissionData = {
+  link_slug?: string;
+  link_title?: string;
+  full_name?: string;
+  phone?: string;
+  email?: string;
+  amount?: number;
+  txn_id?: string;
+  sender_number?: string;
+  payment_method?: string;
+  status?: "pending" | "verified" | "rejected";
+  note?: string;
+  product_slug?: string | null;
+  product_name?: string | null;
+  plan_label?: string | null;
+  duration?: string | null;
+  plan_price?: number | null;
+  is_manual?: boolean;
+};
+
 type Submission = {
   id: string;
-  data: {
-    link_slug?: string;
-    link_title?: string;
-    full_name?: string;
-    phone?: string;
-    email?: string;
-    amount?: number;
-    txn_id?: string;
-    payment_method?: string;
-    status?: "pending" | "verified" | "rejected";
-    note?: string;
-  };
+  data: SubmissionData;
   is_active: boolean;
   created_at: string;
 };
