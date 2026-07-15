@@ -48,6 +48,7 @@ type ProductMeta = {
  ai_card_style?: AiCardStyle;
  delivery_type?: DeliveryType;
  download_link?: string;
+ download_note?: string;
  refund_policy?: string;
  what_you_get?: string[];
  faq?: FaqItem[];
