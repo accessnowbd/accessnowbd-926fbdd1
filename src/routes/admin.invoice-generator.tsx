@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   FileText, Receipt, User, CreditCard, Package, Plus, Trash2, Printer,
   Download, Save, RefreshCw, Loader2,
@@ -7,7 +7,13 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminLang } from "@/context/AdminLangContext";
 import { toast } from "sonner";
-import jsPDF from "jspdf";
+import {
+  loadInvoiceDesign,
+  renderInvoiceHtml,
+  openInvoiceInNewWindow,
+  INVOICE_DESIGN_DEFAULTS,
+  type InvoiceDesign,
+} from "@/lib/invoice-html";
 
 export const Route = createFileRoute("/admin/invoice-generator")({
   component: InvoiceGeneratorPage,
