@@ -47,6 +47,7 @@ import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe
 import { Route as BlogHowToBuyNetflixInBangladeshRouteImport } from './routes/blog.how-to-buy-netflix-in-bangladesh'
 import { Route as ApiAiTestRouteImport } from './routes/api/ai-test'
 import { Route as ApiAiCommandRouteImport } from './routes/api/ai-command'
+import { Route as AdminWelcomePopupRouteImport } from './routes/admin.welcome-popup'
 import { Route as AdminWelcomeBannerRouteImport } from './routes/admin.welcome-banner'
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -308,6 +309,11 @@ const ApiAiCommandRoute = ApiAiCommandRouteImport.update({
   id: '/api/ai-command',
   path: '/api/ai-command',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWelcomePopupRoute = AdminWelcomePopupRouteImport.update({
+  id: '/welcome-popup',
+  path: '/welcome-popup',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminWelcomeBannerRoute = AdminWelcomeBannerRouteImport.update({
   id: '/welcome-banner',
@@ -751,6 +757,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
+  '/admin/welcome-popup': typeof AdminWelcomePopupRoute
   '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -860,6 +867,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
+  '/admin/welcome-popup': typeof AdminWelcomePopupRoute
   '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -971,6 +979,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
+  '/admin/welcome-popup': typeof AdminWelcomePopupRoute
   '/api/ai-command': typeof ApiAiCommandRoute
   '/api/ai-test': typeof ApiAiTestRoute
   '/blog/how-to-buy-netflix-in-bangladesh': typeof BlogHowToBuyNetflixInBangladeshRoute
@@ -1083,6 +1092,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
+    | '/admin/welcome-popup'
     | '/api/ai-command'
     | '/api/ai-test'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -1192,6 +1202,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
+    | '/admin/welcome-popup'
     | '/api/ai-command'
     | '/api/ai-test'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -1302,6 +1313,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
+    | '/admin/welcome-popup'
     | '/api/ai-command'
     | '/api/ai-test'
     | '/blog/how-to-buy-netflix-in-bangladesh'
@@ -1660,6 +1672,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/ai-command'
       preLoaderRoute: typeof ApiAiCommandRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/welcome-popup': {
+      id: '/admin/welcome-popup'
+      path: '/welcome-popup'
+      fullPath: '/admin/welcome-popup'
+      preLoaderRoute: typeof AdminWelcomePopupRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/welcome-banner': {
       id: '/admin/welcome-banner'
@@ -2203,6 +2222,7 @@ interface AdminRouteChildren {
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWalletRoute: typeof AdminWalletRoute
   AdminWelcomeBannerRoute: typeof AdminWelcomeBannerRoute
+  AdminWelcomePopupRoute: typeof AdminWelcomePopupRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -2255,6 +2275,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminUsersRoute: AdminUsersRoute,
   AdminWalletRoute: AdminWalletRoute,
   AdminWelcomeBannerRoute: AdminWelcomeBannerRoute,
+  AdminWelcomePopupRoute: AdminWelcomePopupRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
