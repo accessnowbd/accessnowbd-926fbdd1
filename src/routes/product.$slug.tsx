@@ -538,30 +538,30 @@ function ProductPage() {
                     <label
                       key={`${idx}-${p.period}`}
                       className={[
-                        "group relative grid cursor-pointer select-none grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl p-3.5 transition-all sm:p-4",
+                        "group relative grid cursor-pointer select-none grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl px-3.5 transition-all sm:px-4 min-h-[64px]",
                         active
                           ? "bg-indigo-50/50 border-2 border-indigo-600"
                           : "bg-white border border-slate-200 hover:border-slate-300",
                       ].join(" ")}
                     >
                       <input type="radio" name="plan-period" className="sr-only" checked={active} onChange={() => setSelected(idx)} />
-                      <div className="flex min-w-0 items-start">
+                      <div className="flex min-w-0 items-center">
                         <span
                           aria-hidden="true"
                           className={[
-                            "mr-3 mt-0.5 h-5 w-5 shrink-0 rounded-full transition sm:mr-4",
+                            "mr-3 h-5 w-5 shrink-0 rounded-full transition sm:mr-4",
                             active ? "border-4 border-indigo-600 bg-white" : "border border-slate-300",
                           ].join(" ")}
                         />
                         <span className={`min-w-0 break-words text-sm font-semibold leading-snug sm:text-base ${active ? "text-slate-900" : "text-slate-700"}`}>{(p.period?.trim() || (p as { duration?: string; label?: string }).duration?.trim() || (p as { duration?: string; label?: string }).label?.trim() || "Standard Plan")}</span>
                       </div>
-                      <div className="flex shrink-0 flex-col items-end gap-1 text-right sm:flex-row sm:items-center sm:gap-3">
+                      <div className="flex shrink-0 items-center gap-2 text-right">
                         {hasOff && (
-                          <span className="text-slate-400 line-through text-sm">৳{original.toLocaleString()}</span>
+                          <span className="text-slate-400 line-through text-xs sm:text-sm">৳{original.toLocaleString()}</span>
                         )}
                         <span className={active ? "font-bold text-indigo-600" : "font-bold text-slate-900"}>৳{price.toLocaleString()}</span>
                         {hasOff && (
-                          <span className="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">-{off}%</span>
+                          <span className="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{off}%</span>
                         )}
                       </div>
                     </label>
