@@ -4,7 +4,7 @@ import {
   Megaphone, Star, Percent, MessageCircle, Images, Home, PanelBottom,
   ShoppingBag, Users, Wallet, CreditCard, Truck, Boxes, Bell, FileText,
   TicketPercent, Gift, Share2, Megaphone as MegaphoneIcon, Target, Activity, BarChart3, Search,
-  MapPin, LifeBuoy, BookOpen, Headphones,
+  LifeBuoy, BookOpen, Headphones,
   FileEdit, Newspaper, UserCircle2, Download,
   PieChart, UsersRound, ClipboardList, Bot, Settings, ShieldCheck, DatabaseBackup, ShoppingCart, ListChecks, Sparkles,
   Plug, Mail, CalendarDays, Code2,
@@ -65,8 +65,6 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/bkash-transactions", label: "bKash Transactions", labelBn: "bKash ট্রানজেকশন", icon: ic(Activity), grad: "from-orange-500 to-pink-500", badge: "NEW" },
       { to: "/admin/license-manager", label: "License Manager", labelBn: "লাইসেন্স ম্যানেজার", icon: ic(ShieldCheck), grad: "from-rose-500 to-red-600" },
       { to: "/admin/customer-licenses", label: "Customer Licenses", labelBn: "কাস্টমার লাইসেন্স", icon: ic(ShieldCheck), grad: "from-rose-500 to-pink-600", badge: "NEW" },
-      
-      { to: "/admin/tracking", label: "Order Tracking", labelBn: "অর্ডার ট্র্যাকিং", icon: ic(MapPin), grad: "from-emerald-500 to-teal-600" },
       { to: "/admin/wallet", label: "Wallet", labelBn: "ওয়ালেট", icon: ic(Wallet), grad: "from-amber-400 to-orange-500" },
     ],
   },

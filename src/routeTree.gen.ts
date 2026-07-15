@@ -51,7 +51,6 @@ import { Route as AdminWelcomeBannerRouteImport } from './routes/admin.welcome-b
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTrackingPixelsRouteImport } from './routes/admin.tracking-pixels'
-import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminTelegramStoreRouteImport } from './routes/admin.telegram-store'
@@ -328,11 +327,6 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
 const AdminTrackingPixelsRoute = AdminTrackingPixelsRouteImport.update({
   id: '/tracking-pixels',
   path: '/tracking-pixels',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminTrackingRoute = AdminTrackingRouteImport.update({
-  id: '/tracking',
-  path: '/tracking',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminTicketsRoute = AdminTicketsRouteImport.update({
@@ -753,7 +747,6 @@ export interface FileRoutesByFullPath {
   '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
-  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
@@ -863,7 +856,6 @@ export interface FileRoutesByTo {
   '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
-  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
@@ -975,7 +967,6 @@ export interface FileRoutesById {
   '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
-  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
@@ -1088,7 +1079,6 @@ export interface FileRouteTypes {
     | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
-    | '/admin/tracking'
     | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
@@ -1198,7 +1188,6 @@ export interface FileRouteTypes {
     | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
-    | '/admin/tracking'
     | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
@@ -1309,7 +1298,6 @@ export interface FileRouteTypes {
     | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
-    | '/admin/tracking'
     | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
@@ -1699,13 +1687,6 @@ declare module '@tanstack/react-router' {
       path: '/tracking-pixels'
       fullPath: '/admin/tracking-pixels'
       preLoaderRoute: typeof AdminTrackingPixelsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/tracking': {
-      id: '/admin/tracking'
-      path: '/tracking'
-      fullPath: '/admin/tracking'
-      preLoaderRoute: typeof AdminTrackingRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/tickets': {
@@ -2218,7 +2199,6 @@ interface AdminRouteChildren {
   AdminTelegramStoreRoute: typeof AdminTelegramStoreRoute
   AdminThemesRoute: typeof AdminThemesRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
-  AdminTrackingRoute: typeof AdminTrackingRoute
   AdminTrackingPixelsRoute: typeof AdminTrackingPixelsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWalletRoute: typeof AdminWalletRoute
@@ -2271,7 +2251,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminTelegramStoreRoute: AdminTelegramStoreRoute,
   AdminThemesRoute: AdminThemesRoute,
   AdminTicketsRoute: AdminTicketsRoute,
-  AdminTrackingRoute: AdminTrackingRoute,
   AdminTrackingPixelsRoute: AdminTrackingPixelsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWalletRoute: AdminWalletRoute,
