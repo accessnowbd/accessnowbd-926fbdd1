@@ -104,6 +104,7 @@ import { Route as AdminFbPixelIndexRouteImport } from './routes/admin.fb-pixel.i
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
 import { Route as ApiPublicClientErrorsRouteImport } from './routes/api/public/client-errors'
+import { Route as AdminFbPixelIdRouteImport } from './routes/admin.fb-pixel.$id'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -602,6 +603,11 @@ const ApiPublicClientErrorsRoute = ApiPublicClientErrorsRouteImport.update({
   path: '/api/public/client-errors',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminFbPixelIdRoute = AdminFbPixelIdRouteImport.update({
+  id: '/fb-pixel/$id',
+  path: '/fb-pixel/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -793,6 +799,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/help/': typeof HelpIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/fb-pixel/$id': typeof AdminFbPixelIdRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -907,6 +914,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/help': typeof HelpIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/fb-pixel/$id': typeof AdminFbPixelIdRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -1023,6 +1031,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/help/': typeof HelpIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/admin/fb-pixel/$id': typeof AdminFbPixelIdRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -1140,6 +1149,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/help/'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/fb-pixel/$id'
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
@@ -1254,6 +1264,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/help'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/fb-pixel/$id'
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
@@ -1369,6 +1380,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/help/'
     | '/.mcp/invoke-tool/$tool'
+    | '/admin/fb-pixel/$id'
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
@@ -2125,6 +2137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicClientErrorsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/fb-pixel/$id': {
+      id: '/admin/fb-pixel/$id'
+      path: '/fb-pixel/$id'
+      fullPath: '/admin/fb-pixel/$id'
+      preLoaderRoute: typeof AdminFbPixelIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -2303,6 +2322,7 @@ interface AdminRouteChildren {
   AdminWelcomeBannerRoute: typeof AdminWelcomeBannerRoute
   AdminWelcomePopupRoute: typeof AdminWelcomePopupRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminFbPixelIdRoute: typeof AdminFbPixelIdRoute
   AdminFbPixelIndexRoute: typeof AdminFbPixelIndexRoute
 }
 
@@ -2355,6 +2375,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminWelcomeBannerRoute: AdminWelcomeBannerRoute,
   AdminWelcomePopupRoute: AdminWelcomePopupRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminFbPixelIdRoute: AdminFbPixelIdRoute,
   AdminFbPixelIndexRoute: AdminFbPixelIndexRoute,
 }
 
