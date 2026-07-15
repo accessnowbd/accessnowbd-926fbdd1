@@ -13,6 +13,7 @@ import { WelcomePopup } from "@/components/WelcomePopup";
 import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 import { TrackingScripts } from "@/components/TrackingScripts";
 import { AbandonedCheckoutTracker } from "@/components/AbandonedCheckoutTracker";
+import { Ga4Tracker } from "@/components/Ga4Tracker";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
