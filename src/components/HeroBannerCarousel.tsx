@@ -258,12 +258,11 @@ export function HeroBannerCarousel() {
     <section className="px-4 pt-4 pb-4 sm:px-6 lg:px-8">
       <div className="relative mx-auto w-full max-w-[1440px]">
         <div
-          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[32px] border border-white/20 transition-colors duration-500"
+          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[32px] border border-white/20 transition-colors duration-500 md:aspect-[2.72/1]"
           style={{
             background,
-            // Locked aspect-ratio matches the reference (RamaSub) banner shape —
-            // wider and shorter than the previous version for a more compact hero.
-            aspectRatio: "2.72 / 1",
+            // Desktop keeps the locked 2.72:1 shape (see class above).
+            // Mobile lets content define height so the title/subtitle/CTAs don't get clipped.
             boxShadow: `0 30px 80px -30px ${hexAlpha(accent, 0.45)}, 0 8px 32px -8px ${hexAlpha(glow, 0.25)}, inset 0 1px 0 ${hexAlpha("#ffffff", 0.18)}, inset 0 0 0 1px ${hexAlpha("#ffffff", 0.05)}`,
           }}
         >
