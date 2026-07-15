@@ -61,12 +61,53 @@ async function fetchProductEntries(): Promise<SitemapEntry[]> {
   }
 }
 
+async function fetchBlogEntries(): Promise<SitemapEntry[]> {
+  try {
+    const env = typeof process !== "undefined" ? process.env : undefined;
+    const url = env?.SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
+    const key =
+      env?.SUPABASE_PUBLISHABLE_KEY ||
+      env?.SUPABASE_ANON_KEY ||
+      import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+      import.meta.env.VITE_SUPABASE_ANON_KEY;
+    if (!url || !key) return [];
+    const client = createClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    });
+    const { data } = await client
+      .from("admin_records")
+      .select("data, updated_at")
+      .eq("kind", "blog_post")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .limit(500);
+    const out: SitemapEntry[] = [{ path: "/blog", changefreq: "daily", priority: "0.7" }];
+    for (const r of data ?? []) {
+      const d = (r as { data: { slug?: string } }).data;
+      if (d?.slug) {
+        out.push({
+          path: `/blog/${d.slug}`,
+          lastmod: (r as { updated_at?: string | null }).updated_at
+            ? new Date((r as { updated_at: string }).updated_at).toISOString().slice(0, 10)
+            : undefined,
+          changefreq: "monthly",
+          priority: "0.6",
+        });
+      }
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
+
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const productEntries = await fetchProductEntries();
-        const entries = [...STATIC_ENTRIES, ...productEntries];
+        const [productEntries, blogEntries] = await Promise.all([fetchProductEntries(), fetchBlogEntries()]);
+        const entries = [...STATIC_ENTRIES, ...productEntries, ...blogEntries];
+
 
         const urls = entries.map((e) =>
           [
