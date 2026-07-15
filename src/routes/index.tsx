@@ -178,19 +178,11 @@ function Index() {
             ? RAIL_PLACEHOLDER_TITLES.map((title) => (
                 <ProductRail key={title} title={title} items={[]} isLoading />
               ))
-            : byCategory.map((section, idx) => (
-                <ProgressiveSection
-                  key={section.category}
-                  eager={idx < 4}
-                  rootMargin="2000px 0px"
-                  fallback={<ProductRail title={section.category} items={[]} isLoading />}
-                >
-                  <ProfiledSection id={`ProductRail: ${section.category}`}>
-                    <ProductRail title={section.category} items={section.items} />
-                  </ProfiledSection>
-                </ProgressiveSection>
+            : byCategory.map((section) => (
+                <ProfiledSection key={section.category} id={`ProductRail: ${section.category}`}>
+                  <ProductRail title={section.category} items={section.items} />
+                </ProfiledSection>
               ))}
-
         </>
       ),
     });
