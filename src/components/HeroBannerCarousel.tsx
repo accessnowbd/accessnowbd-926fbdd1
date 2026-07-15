@@ -258,7 +258,7 @@ export function HeroBannerCarousel() {
     <section className="px-4 pt-4 pb-4 sm:px-6 lg:px-8">
       <div className="relative mx-auto w-full max-w-[1440px]">
         <div
-          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[32px] border border-white/20 transition-colors duration-500 md:[aspect-ratio:2.72/1]"
+          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[32px] border border-white/20 transition-colors duration-500 md:aspect-[2.72/1]"
           style={{
             background,
             // Desktop keeps the locked 2.72:1 shape (see class above).
