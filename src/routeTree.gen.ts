@@ -55,7 +55,6 @@ import { Route as AdminWelcomePopupRouteImport } from './routes/admin.welcome-po
 import { Route as AdminWelcomeBannerRouteImport } from './routes/admin.welcome-banner'
 import { Route as AdminWalletRouteImport } from './routes/admin.wallet'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
-import { Route as AdminTrackingPixelsRouteImport } from './routes/admin.tracking-pixels'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminThemesRouteImport } from './routes/admin.themes'
 import { Route as AdminTelegramStoreRouteImport } from './routes/admin.telegram-store'
@@ -75,7 +74,6 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminProductZoomRouteImport } from './routes/admin.product-zoom'
 import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
 import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
-import { Route as AdminOtherPixelsRouteImport } from './routes/admin.other-pixels'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
 import { Route as AdminLiveChatRouteImport } from './routes/admin.live-chat'
@@ -86,8 +84,6 @@ import { Route as AdminInventoryRouteImport } from './routes/admin.inventory'
 import { Route as AdminHomepageEditorRouteImport } from './routes/admin.homepage-editor'
 import { Route as AdminGoogleAdsRouteImport } from './routes/admin.google-ads'
 import { Route as AdminGa4RealtimeRouteImport } from './routes/admin.ga4-realtime'
-import { Route as AdminFbPixelRouteImport } from './routes/admin.fb-pixel'
-import { Route as AdminFbAudiencesRouteImport } from './routes/admin.fb-audiences'
 import { Route as AdminEpsPgwRouteImport } from './routes/admin.eps-pgw'
 import { Route as AdminEmailDashboardRouteImport } from './routes/admin.email-dashboard'
 import { Route as AdminDescriptionTemplateRouteImport } from './routes/admin.description-template'
@@ -357,11 +353,6 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminTrackingPixelsRoute = AdminTrackingPixelsRouteImport.update({
-  id: '/tracking-pixels',
-  path: '/tracking-pixels',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminTicketsRoute = AdminTicketsRouteImport.update({
   id: '/tickets',
   path: '/tickets',
@@ -457,11 +448,6 @@ const AdminPaymentLinksRoute = AdminPaymentLinksRouteImport.update({
   path: '/payment-links',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminOtherPixelsRoute = AdminOtherPixelsRouteImport.update({
-  id: '/other-pixels',
-  path: '/other-pixels',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminOrdersRoute = AdminOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -510,16 +496,6 @@ const AdminGoogleAdsRoute = AdminGoogleAdsRouteImport.update({
 const AdminGa4RealtimeRoute = AdminGa4RealtimeRouteImport.update({
   id: '/ga4-realtime',
   path: '/ga4-realtime',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminFbPixelRoute = AdminFbPixelRouteImport.update({
-  id: '/fb-pixel',
-  path: '/fb-pixel',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminFbAudiencesRoute = AdminFbAudiencesRouteImport.update({
-  id: '/fb-audiences',
-  path: '/fb-audiences',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminEpsPgwRoute = AdminEpsPgwRouteImport.update({
@@ -765,8 +741,6 @@ export interface FileRoutesByFullPath {
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
   '/admin/eps-pgw': typeof AdminEpsPgwRoute
-  '/admin/fb-audiences': typeof AdminFbAudiencesRoute
-  '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/ga4-realtime': typeof AdminGa4RealtimeRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/homepage-editor': typeof AdminHomepageEditorRoute
@@ -777,7 +751,6 @@ export interface FileRoutesByFullPath {
   '/admin/live-chat': typeof AdminLiveChatRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
-  '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/product-zoom': typeof AdminProductZoomRoute
@@ -797,7 +770,6 @@ export interface FileRoutesByFullPath {
   '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
-  '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
@@ -882,8 +854,6 @@ export interface FileRoutesByTo {
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
   '/admin/eps-pgw': typeof AdminEpsPgwRoute
-  '/admin/fb-audiences': typeof AdminFbAudiencesRoute
-  '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/ga4-realtime': typeof AdminGa4RealtimeRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/homepage-editor': typeof AdminHomepageEditorRoute
@@ -894,7 +864,6 @@ export interface FileRoutesByTo {
   '/admin/live-chat': typeof AdminLiveChatRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
-  '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/product-zoom': typeof AdminProductZoomRoute
@@ -914,7 +883,6 @@ export interface FileRoutesByTo {
   '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
-  '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
@@ -1001,8 +969,6 @@ export interface FileRoutesById {
   '/admin/description-template': typeof AdminDescriptionTemplateRoute
   '/admin/email-dashboard': typeof AdminEmailDashboardRoute
   '/admin/eps-pgw': typeof AdminEpsPgwRoute
-  '/admin/fb-audiences': typeof AdminFbAudiencesRoute
-  '/admin/fb-pixel': typeof AdminFbPixelRoute
   '/admin/ga4-realtime': typeof AdminGa4RealtimeRoute
   '/admin/google-ads': typeof AdminGoogleAdsRoute
   '/admin/homepage-editor': typeof AdminHomepageEditorRoute
@@ -1013,7 +979,6 @@ export interface FileRoutesById {
   '/admin/live-chat': typeof AdminLiveChatRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
-  '/admin/other-pixels': typeof AdminOtherPixelsRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/product-zoom': typeof AdminProductZoomRoute
@@ -1033,7 +998,6 @@ export interface FileRoutesById {
   '/admin/telegram-store': typeof AdminTelegramStoreRoute
   '/admin/themes': typeof AdminThemesRoute
   '/admin/tickets': typeof AdminTicketsRoute
-  '/admin/tracking-pixels': typeof AdminTrackingPixelsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/wallet': typeof AdminWalletRoute
   '/admin/welcome-banner': typeof AdminWelcomeBannerRoute
@@ -1121,8 +1085,6 @@ export interface FileRouteTypes {
     | '/admin/description-template'
     | '/admin/email-dashboard'
     | '/admin/eps-pgw'
-    | '/admin/fb-audiences'
-    | '/admin/fb-pixel'
     | '/admin/ga4-realtime'
     | '/admin/google-ads'
     | '/admin/homepage-editor'
@@ -1133,7 +1095,6 @@ export interface FileRouteTypes {
     | '/admin/live-chat'
     | '/admin/newsletter'
     | '/admin/orders'
-    | '/admin/other-pixels'
     | '/admin/payment-links'
     | '/admin/payments'
     | '/admin/product-zoom'
@@ -1153,7 +1114,6 @@ export interface FileRouteTypes {
     | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
-    | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
@@ -1238,8 +1198,6 @@ export interface FileRouteTypes {
     | '/admin/description-template'
     | '/admin/email-dashboard'
     | '/admin/eps-pgw'
-    | '/admin/fb-audiences'
-    | '/admin/fb-pixel'
     | '/admin/ga4-realtime'
     | '/admin/google-ads'
     | '/admin/homepage-editor'
@@ -1250,7 +1208,6 @@ export interface FileRouteTypes {
     | '/admin/live-chat'
     | '/admin/newsletter'
     | '/admin/orders'
-    | '/admin/other-pixels'
     | '/admin/payment-links'
     | '/admin/payments'
     | '/admin/product-zoom'
@@ -1270,7 +1227,6 @@ export interface FileRouteTypes {
     | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
-    | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
@@ -1356,8 +1312,6 @@ export interface FileRouteTypes {
     | '/admin/description-template'
     | '/admin/email-dashboard'
     | '/admin/eps-pgw'
-    | '/admin/fb-audiences'
-    | '/admin/fb-pixel'
     | '/admin/ga4-realtime'
     | '/admin/google-ads'
     | '/admin/homepage-editor'
@@ -1368,7 +1322,6 @@ export interface FileRouteTypes {
     | '/admin/live-chat'
     | '/admin/newsletter'
     | '/admin/orders'
-    | '/admin/other-pixels'
     | '/admin/payment-links'
     | '/admin/payments'
     | '/admin/product-zoom'
@@ -1388,7 +1341,6 @@ export interface FileRouteTypes {
     | '/admin/telegram-store'
     | '/admin/themes'
     | '/admin/tickets'
-    | '/admin/tracking-pixels'
     | '/admin/users'
     | '/admin/wallet'
     | '/admin/welcome-banner'
@@ -1818,13 +1770,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/tracking-pixels': {
-      id: '/admin/tracking-pixels'
-      path: '/tracking-pixels'
-      fullPath: '/admin/tracking-pixels'
-      preLoaderRoute: typeof AdminTrackingPixelsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/tickets': {
       id: '/admin/tickets'
       path: '/tickets'
@@ -1958,13 +1903,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPaymentLinksRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/other-pixels': {
-      id: '/admin/other-pixels'
-      path: '/other-pixels'
-      fullPath: '/admin/other-pixels'
-      preLoaderRoute: typeof AdminOtherPixelsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/orders': {
       id: '/admin/orders'
       path: '/orders'
@@ -2033,20 +1971,6 @@ declare module '@tanstack/react-router' {
       path: '/ga4-realtime'
       fullPath: '/admin/ga4-realtime'
       preLoaderRoute: typeof AdminGa4RealtimeRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/fb-pixel': {
-      id: '/admin/fb-pixel'
-      path: '/fb-pixel'
-      fullPath: '/admin/fb-pixel'
-      preLoaderRoute: typeof AdminFbPixelRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/fb-audiences': {
-      id: '/admin/fb-audiences'
-      path: '/fb-audiences'
-      fullPath: '/admin/fb-audiences'
-      preLoaderRoute: typeof AdminFbAudiencesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/eps-pgw': {
@@ -2326,8 +2250,6 @@ interface AdminRouteChildren {
   AdminDescriptionTemplateRoute: typeof AdminDescriptionTemplateRoute
   AdminEmailDashboardRoute: typeof AdminEmailDashboardRoute
   AdminEpsPgwRoute: typeof AdminEpsPgwRoute
-  AdminFbAudiencesRoute: typeof AdminFbAudiencesRoute
-  AdminFbPixelRoute: typeof AdminFbPixelRoute
   AdminGa4RealtimeRoute: typeof AdminGa4RealtimeRoute
   AdminGoogleAdsRoute: typeof AdminGoogleAdsRoute
   AdminHomepageEditorRoute: typeof AdminHomepageEditorRoute
@@ -2338,7 +2260,6 @@ interface AdminRouteChildren {
   AdminLiveChatRoute: typeof AdminLiveChatRoute
   AdminNewsletterRoute: typeof AdminNewsletterRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
-  AdminOtherPixelsRoute: typeof AdminOtherPixelsRoute
   AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
   AdminPaymentsRoute: typeof AdminPaymentsRoute
   AdminProductZoomRoute: typeof AdminProductZoomRoute
@@ -2358,7 +2279,6 @@ interface AdminRouteChildren {
   AdminTelegramStoreRoute: typeof AdminTelegramStoreRoute
   AdminThemesRoute: typeof AdminThemesRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
-  AdminTrackingPixelsRoute: typeof AdminTrackingPixelsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWalletRoute: typeof AdminWalletRoute
   AdminWelcomeBannerRoute: typeof AdminWelcomeBannerRoute
@@ -2381,8 +2301,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminDescriptionTemplateRoute: AdminDescriptionTemplateRoute,
   AdminEmailDashboardRoute: AdminEmailDashboardRoute,
   AdminEpsPgwRoute: AdminEpsPgwRoute,
-  AdminFbAudiencesRoute: AdminFbAudiencesRoute,
-  AdminFbPixelRoute: AdminFbPixelRoute,
   AdminGa4RealtimeRoute: AdminGa4RealtimeRoute,
   AdminGoogleAdsRoute: AdminGoogleAdsRoute,
   AdminHomepageEditorRoute: AdminHomepageEditorRoute,
@@ -2393,7 +2311,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminLiveChatRoute: AdminLiveChatRoute,
   AdminNewsletterRoute: AdminNewsletterRoute,
   AdminOrdersRoute: AdminOrdersRoute,
-  AdminOtherPixelsRoute: AdminOtherPixelsRoute,
   AdminPaymentLinksRoute: AdminPaymentLinksRoute,
   AdminPaymentsRoute: AdminPaymentsRoute,
   AdminProductZoomRoute: AdminProductZoomRoute,
@@ -2413,7 +2330,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminTelegramStoreRoute: AdminTelegramStoreRoute,
   AdminThemesRoute: AdminThemesRoute,
   AdminTicketsRoute: AdminTicketsRoute,
-  AdminTrackingPixelsRoute: AdminTrackingPixelsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWalletRoute: AdminWalletRoute,
   AdminWelcomeBannerRoute: AdminWelcomeBannerRoute,
