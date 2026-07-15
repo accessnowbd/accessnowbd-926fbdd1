@@ -443,31 +443,31 @@ function ProductPage() {
             )}
 
             {(() => {
-              const ACCOUNT_LABELS: Record<string, { label: string; icon: string; grad: string }> = {
-                personal: { label: "Personal",  icon: "👤", grad: "from-violet-500 to-indigo-500" },
-                shared:   { label: "Shared",    icon: "👥", grad: "from-sky-500 to-blue-600" },
-                family:   { label: "Family",    icon: "👪", grad: "from-amber-500 to-orange-500" },
-                student:  { label: "Student",   icon: "🎓", grad: "from-emerald-500 to-teal-600" },
-                business: { label: "Business",  icon: "🛍️", grad: "from-fuchsia-500 to-pink-600" },
-                custom:   { label: "Custom",    icon: "⚙️", grad: "from-slate-600 to-slate-800" },
+              const ACCOUNT_LABELS: Record<string, { label: string; icon: string }> = {
+                personal: { label: "Personal",  icon: "👤" },
+                shared:   { label: "Shared",    icon: "👥" },
+                family:   { label: "Family",    icon: "👪" },
+                student:  { label: "Student",   icon: "🎓" },
+                business: { label: "Business",  icon: "🛍️" },
+                custom:   { label: "Custom",    icon: "⚙️" },
               };
               const types = availableAccountTypes.filter((t) => t && t !== "none" && ACCOUNT_LABELS[t]);
               if (types.length === 0) return null;
               const selectable = types.length > 1;
               return (
-                <div className="mt-4 overflow-hidden rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/60 p-3">
-                  <div className="mb-2 inline-flex flex-wrap items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-violet-700">
-                    <span>👤</span> Account Type {selectable && <span className="text-slate-500 font-semibold normal-case tracking-normal">— একটি সিলেক্ট করুন</span>}
+                <div className="mt-4">
+                  <div className="mb-2 text-[13px] font-bold text-slate-900">
+                    আকাউন্ট টাইপ
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {types.map((t) => {
                       const m = ACCOUNT_LABELS[t];
                       const active = selectedAccountType === t || !selectable;
                       const clickable = selectable;
-                      const base = `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-bold shadow-sm transition`;
+                      const base = `inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-[14px] font-semibold transition`;
                       const cls = active
-                        ? `${base} text-white bg-gradient-to-r ${m.grad}`
-                        : `${base} bg-white text-slate-700 border border-slate-200 hover:border-violet-300`;
+                        ? `${base} bg-violet-50 text-violet-700 border-2 border-violet-600`
+                        : `${base} bg-white text-slate-700 border border-slate-300 hover:border-violet-400`;
                       return clickable ? (
                         <button
                           key={t}
@@ -476,12 +476,12 @@ function ProductPage() {
                           aria-pressed={active}
                           className={cls}
                         >
-                          <span className="text-sm leading-none">{m.icon}</span>
+                          <span className="text-base leading-none">{m.icon}</span>
                           {m.label}
                         </button>
                       ) : (
                         <span key={t} className={cls}>
-                          <span className="text-sm leading-none">{m.icon}</span>
+                          <span className="text-base leading-none">{m.icon}</span>
                           {m.label}
                         </span>
                       );
@@ -493,18 +493,18 @@ function ProductPage() {
 
 
             {product.features && product.features.length > 0 && (
-                <ul className="mt-3 space-y-1.5">
+                <ul className="mt-4 space-y-2">
                 {product.features.map((f, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-                    <Check className="w-4 h-4 mt-0.5 text-emerald-600 shrink-0" />
+                  <li key={i} className="flex items-start gap-2.5 text-[14px] text-slate-700 leading-relaxed">
+                    <Check className="w-4 h-4 mt-1 text-emerald-600 shrink-0" strokeWidth={3} />
                     <span className="min-w-0 break-words">{f}</span>
                   </li>
                 ))}
               </ul>
             )}
 
-            <div className="mt-4 flex items-center gap-3 flex-wrap">
-              <span className="break-words text-[22px] font-bold text-slate-900 sm:text-2xl md:text-3xl">৳{plan ? parsePrice(plan.price).toLocaleString() : 0}.00 <span className="text-base font-semibold text-slate-500">BDT</span></span>
+            <div className="mt-5 flex items-center gap-3 flex-wrap">
+              <span className="break-words text-[26px] font-bold text-slate-900 sm:text-2xl md:text-3xl">৳{plan ? parsePrice(plan.price).toLocaleString() : 0}.00 <span className="text-base font-semibold text-slate-500">BDT</span></span>
               {hasDiscount && (
                 <span className="text-base md:text-lg text-slate-400 line-through font-medium">৳{parsePrice(plan!.original!).toLocaleString()}</span>
               )}
@@ -514,7 +514,7 @@ function ProductPage() {
             </div>
 
             <div className="mt-3 flex items-center gap-2">
-              <div className="flex text-amber-400">
+              <div className="flex text-violet-600">
                 {[1,2,3,4,5].map((i) => (
                   <Star key={i} className="w-4 h-4 fill-current" />
                 ))}
