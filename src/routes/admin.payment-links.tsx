@@ -125,6 +125,26 @@ function PaymentLinksPage() {
     load();
   };
 
+  const setSubmissionStatus = async (row: Submission, status: "verified" | "rejected" | "pending") => {
+    const newData = { ...(row.data ?? {}), status };
+    const { error } = await supabase.from("admin_records").update({ data: newData as never }).eq("id", row.id);
+    if (error) return toast.error(error.message);
+    toast.success(
+      status === "verified" ? t("Approved", "অনুমোদিত")
+      : status === "rejected" ? t("Rejected", "বাতিল")
+      : t("Reset to pending", "পেন্ডিং")
+    );
+    load();
+  };
+
+  const removeSubmission = async (id: string) => {
+    if (!confirm(t("Delete this submission?", "এই সাবমিশন ডিলিট করবেন?"))) return;
+    const { error } = await supabase.from("admin_records").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success(t("Deleted", "মুছে ফেলা হয়েছে"));
+    load();
+  };
+
   const copyLink = (slug: string) => {
     const url = publicUrl(`/pay/${slug}`);
     navigator.clipboard.writeText(url).then(
@@ -132,6 +152,7 @@ function PaymentLinksPage() {
       () => toast.error(t("Copy failed", "কপি ব্যর্থ")),
     );
   };
+
 
   const openLink = (slug: string) => {
     window.open(publicUrl(`/pay/${slug}`), "_blank", "noopener");
