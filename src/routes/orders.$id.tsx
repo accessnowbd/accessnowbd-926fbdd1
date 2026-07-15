@@ -80,6 +80,19 @@ function OrderDetailPage() {
   // Auto-download receipt the first time a freshly placed order loads.
   const [autoDownloaded, setAutoDownloaded] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [productDownloads, setProductDownloads] = useState<ProductDownload[]>([]);
+
+  useEffect(() => {
+    if (!order) return;
+    const paid = ["processing", "delivered", "completed"].includes(order.status);
+    if (!paid) { setProductDownloads([]); return; }
+    let cancelled = false;
+    fetchOrderDownloads(order.items.map((it) => ({ slug: it.slug, name: it.name })))
+      .then((r) => { if (!cancelled) setProductDownloads(r); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [order]);
+
 
   const handleDownload = async () => {
     if (!order || downloading) return;
