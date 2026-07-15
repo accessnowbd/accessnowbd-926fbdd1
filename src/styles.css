@@ -2868,6 +2868,65 @@ html.theme-white .home-scroll-optimized .product-card-v2:hover:active,
    -------------------------------------------------------------------------- */
 .product-page-shell {
   background: oklch(0.984 0.003 247.86); /* slate-50 */
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.product-page-shell :where(.product-detail-media, .product-detail-info, .product-detail-card) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.product-page-shell .product-prose-mobile :where(p, li, h1, h2, h3, h4, h5, h6, strong, span, a) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.product-page-shell .product-prose-mobile :where(table, pre) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  .product-page-shell .product-detail-media,
+  .product-page-shell .product-detail-info,
+  .product-page-shell .product-detail-card {
+    width: 100%;
+    max-width: calc(100vw - 1.5rem);
+    margin-inline: auto;
+  }
+
+  .product-page-shell .product-detail-hero-img {
+    max-height: min(70vh, 420px);
+  }
+
+  .support-widget-launcher {
+    right: max(0.75rem, env(safe-area-inset-right));
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  .support-widget-orb {
+    width: 3.25rem !important;
+    height: 3.25rem !important;
+  }
+
+  .support-widget-orb svg {
+    width: 1.55rem !important;
+    height: 1.55rem !important;
+  }
+
+  .support-widget-glow {
+    inset: -0.65rem !important;
+    filter: blur(16px) !important;
+    opacity: 0.42 !important;
+  }
+
+  .support-widget-ring {
+    inset: -2px !important;
+    filter: blur(1px) !important;
+  }
 }
 
 html:not(.theme-white) .product-page-shell {
