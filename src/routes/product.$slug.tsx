@@ -279,24 +279,24 @@ function ProductPage() {
     <div key={product.slug} className="product-page-shell relative min-h-screen bg-slate-50 text-slate-900 animate-[product-in_460ms_cubic-bezier(0.22,1,0.36,1)_both]">
       <style>{`@keyframes product-in {0%{opacity:0;transform:translateY(14px);filter:blur(4px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}`}</style>
 
-      <div className="relative mx-auto max-w-6xl px-4 md:px-8 pt-6 md:pt-10">
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm font-medium text-slate-500">
-          <Link to="/" className="hover:text-slate-900 inline-flex items-center gap-1 transition-colors">
-            <ArrowLeft className="w-3.5 h-3.5" /> Back
+      <div className="relative mx-auto max-w-6xl px-3 sm:px-4 md:px-8 pt-5 md:pt-10">
+        <nav aria-label="Breadcrumb" className="grid grid-cols-[auto_auto_minmax(0,1fr)] items-center gap-2 overflow-hidden whitespace-nowrap text-sm font-medium text-slate-500 sm:flex sm:flex-nowrap">
+          <Link to="/" className="hover:text-slate-900 inline-flex shrink-0 items-center gap-1 transition-colors">
+            <ArrowLeft className="w-3.5 h-3.5 shrink-0" /> Back
           </Link>
-          <span className="text-slate-300">/</span>
-          <span className="hover:text-slate-900 transition-colors">{product.category}</span>
-          <span className="text-slate-300">/</span>
-          <span className="text-slate-900 truncate">{product.name}</span>
+          <span className="shrink-0 text-slate-300">/</span>
+          <span className="min-w-0 truncate hover:text-slate-900 transition-colors">{product.category}</span>
+          <span className="hidden shrink-0 text-slate-300 sm:inline">/</span>
+          <span className="hidden min-w-0 truncate text-slate-900 sm:inline">{product.name}</span>
         </nav>
       </div>
 
       {/* Hero */}
-      <section className="relative mx-auto max-w-6xl px-4 md:px-8 py-8 md:py-12 grid md:grid-cols-12 gap-8 md:gap-12 items-start">
+      <section className="relative mx-auto grid max-w-6xl items-start gap-5 px-3 py-5 sm:gap-6 sm:px-4 sm:py-7 md:grid-cols-12 md:gap-12 md:px-8 md:py-12">
         {/* Media gallery */}
-        <div className="md:col-span-6 space-y-4">
+        <div className="product-detail-media min-w-0 space-y-3 sm:space-y-4 md:col-span-6">
           <div
-            className={`relative aspect-square overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200 group ${zoomCfg.enabled ? "cursor-zoom-in" : ""}`}
+            className={`product-detail-hero-img relative aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm group sm:aspect-square sm:rounded-3xl ${zoomCfg.enabled ? "cursor-zoom-in" : ""}`}
             onMouseMove={(e) => {
               if (!zoomCfg.enabled) return;
               const el = e.currentTarget;
@@ -311,7 +311,7 @@ function ProductPage() {
               <img
                 src={optimizeSupabaseImage(heroImg, { width: 1400, quality: 82 })}
                 alt={product.name}
-                className={`absolute inset-0 w-full h-full object-cover will-change-transform ${
+                className={`absolute inset-0 h-full w-full object-cover will-change-transform ${
                   zoomCfg.enabled && zoomCfg.trigger === "hover" ? "group-hover:scale-[var(--zs)]" : ""
                 } ${zoomCfg.enabled && zoomCfg.trigger === "click" && zoomOn ? "scale-[var(--zs)]" : ""}`}
                 style={{
@@ -333,7 +333,7 @@ function ProductPage() {
                 }}
               />
             ) : (
-              <ProductBanner product={product} ratio="1/1" spheres={6} priority className="rounded-3xl overflow-hidden" />
+              <ProductBanner product={product} ratio="4/3" spheres={6} priority className="overflow-hidden rounded-2xl sm:aspect-square sm:rounded-3xl" />
             )}
             {product.badge && (
               <span className={`absolute top-4 left-4 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm pointer-events-none`}>
@@ -343,7 +343,7 @@ function ProductPage() {
           </div>
 
           {allImages.length > 1 && (
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-4 gap-2 sm:gap-3">
               {allImages.slice(0, 8).map((u, i) => {
                 const active = (activeImg ?? allImages[0]) === u;
                 return (
@@ -351,7 +351,7 @@ function ProductPage() {
                     key={`${u}-${i}`}
                     type="button"
                     onClick={() => setActiveImg(u)}
-                    className={`relative aspect-square rounded-xl overflow-hidden border-2 transition shadow-sm ${active ? "border-slate-900" : "border-slate-200 opacity-70 hover:opacity-100"}`}
+                    className={`relative aspect-square overflow-hidden rounded-lg border-2 shadow-sm transition sm:rounded-xl ${active ? "border-slate-900" : "border-slate-200 opacity-70 hover:opacity-100"}`}
                     aria-label={`Image ${i + 1}`}
                   >
                     <img
@@ -371,8 +371,8 @@ function ProductPage() {
           )}
 
           {videoEmbed && (
-            <div className="rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-sm p-2">
-              <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black">
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-sm sm:rounded-3xl">
+              <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black sm:rounded-2xl">
                 {/\.(mp4|webm|ogg)(\?|$)/i.test(videoEmbed) ? (
                   <video src={videoEmbed} controls playsInline className="absolute inset-0 w-full h-full object-cover" />
                 ) : (
@@ -430,9 +430,9 @@ function ProductPage() {
 
 
         {/* Info card */}
-        <div className="md:col-span-6 bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200">
+        <div className="product-detail-info min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 sm:rounded-3xl md:col-span-6 md:p-10">
           <header>
-            <h1 className="font-bold text-slate-900 tracking-tight leading-tight text-2xl md:text-3xl lg:text-4xl">
+            <h1 className="break-words text-xl font-bold leading-tight tracking-tight text-slate-900 sm:text-2xl md:text-3xl lg:text-4xl">
               {product.name}
             </h1>
 
@@ -455,8 +455,8 @@ function ProductPage() {
               if (types.length === 0) return null;
               const selectable = types.length > 1;
               return (
-                <div className="mt-4 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/60 p-3">
-                  <div className="text-[11px] font-bold text-violet-700 uppercase tracking-widest mb-2 inline-flex items-center gap-1.5">
+                <div className="mt-4 overflow-hidden rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 via-white to-fuchsia-50/60 p-3">
+                  <div className="mb-2 inline-flex flex-wrap items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-violet-700">
                     <span>👤</span> Account Type {selectable && <span className="text-slate-500 font-semibold normal-case tracking-normal">— একটি সিলেক্ট করুন</span>}
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -493,18 +493,18 @@ function ProductPage() {
 
 
             {product.features && product.features.length > 0 && (
-              <ul className="mt-3 space-y-1.5">
+                <ul className="mt-3 space-y-1.5">
                 {product.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
                     <Check className="w-4 h-4 mt-0.5 text-emerald-600 shrink-0" />
-                    <span>{f}</span>
+                    <span className="min-w-0 break-words">{f}</span>
                   </li>
                 ))}
               </ul>
             )}
 
             <div className="mt-4 flex items-center gap-3 flex-wrap">
-              <span className="font-bold text-slate-900 text-2xl md:text-3xl">৳{plan ? parsePrice(plan.price).toLocaleString() : 0}.00 <span className="text-base font-semibold text-slate-500">BDT</span></span>
+              <span className="break-words text-[22px] font-bold text-slate-900 sm:text-2xl md:text-3xl">৳{plan ? parsePrice(plan.price).toLocaleString() : 0}.00 <span className="text-base font-semibold text-slate-500">BDT</span></span>
               {hasDiscount && (
                 <span className="text-base md:text-lg text-slate-400 line-through font-medium">৳{parsePrice(plan!.original!).toLocaleString()}</span>
               )}
@@ -538,24 +538,24 @@ function ProductPage() {
                     <label
                       key={`${idx}-${p.period}`}
                       className={[
-                        "group relative flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all select-none",
+                        "group relative grid cursor-pointer select-none grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl p-3.5 transition-all sm:p-4",
                         active
                           ? "bg-indigo-50/50 border-2 border-indigo-600"
                           : "bg-white border border-slate-200 hover:border-slate-300",
                       ].join(" ")}
                     >
                       <input type="radio" name="plan-period" className="sr-only" checked={active} onChange={() => setSelected(idx)} />
-                      <div className="flex items-center">
+                      <div className="flex min-w-0 items-start">
                         <span
                           aria-hidden="true"
                           className={[
-                            "w-5 h-5 rounded-full mr-4 shrink-0 transition",
+                            "mr-3 mt-0.5 h-5 w-5 shrink-0 rounded-full transition sm:mr-4",
                             active ? "border-4 border-indigo-600 bg-white" : "border border-slate-300",
                           ].join(" ")}
                         />
-                        <span className={`font-semibold ${active ? "text-slate-900" : "text-slate-700"}`}>{(p.period?.trim() || (p as { duration?: string; label?: string }).duration?.trim() || (p as { duration?: string; label?: string }).label?.trim() || "Standard Plan")}</span>
+                        <span className={`min-w-0 break-words text-sm font-semibold leading-snug sm:text-base ${active ? "text-slate-900" : "text-slate-700"}`}>{(p.period?.trim() || (p as { duration?: string; label?: string }).duration?.trim() || (p as { duration?: string; label?: string }).label?.trim() || "Standard Plan")}</span>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex shrink-0 flex-col items-end gap-1 text-right sm:flex-row sm:items-center sm:gap-3">
                         {hasOff && (
                           <span className="text-slate-400 line-through text-sm">৳{original.toLocaleString()}</span>
                         )}
@@ -600,30 +600,30 @@ function ProductPage() {
           </div>
 
           {/* Actions */}
-          <div className="pt-6 space-y-3">
+            <div className="space-y-3 pt-6">
             <button
               onClick={buyNow}
-              className="product-buy-button w-full font-bold py-4 rounded-full transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                className="product-buy-button flex w-full items-center justify-center gap-2 rounded-full py-4 font-bold transition-all active:scale-[0.98]"
             >
               <CreditCard className="w-5 h-5" />
               <span>Buy Now</span>
             </button>
-            <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <a
                 href={plan ? waOrderUrl([{ name: product.name, planPeriod: plan.period, qty, price: parsePrice(plan.price) }]) : "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="product-whatsapp-button flex items-center justify-center gap-2 font-bold py-3.5 rounded-full transition"
+                  className="product-whatsapp-button flex min-w-0 items-center justify-center gap-2 rounded-full px-3 py-3.5 text-sm font-bold transition sm:text-base"
               >
                 <MessageCircle className="w-5 h-5" />
-                <span>WhatsApp অর্ডার</span>
+                  <span className="min-w-0 truncate">WhatsApp অর্ডার</span>
               </a>
               <button
                 onClick={addToCart}
-                className="product-cart-button flex items-center justify-center gap-2 font-bold py-3.5 rounded-full transition"
+                  className="product-cart-button flex min-w-0 items-center justify-center gap-2 rounded-full px-3 py-3.5 text-sm font-bold transition sm:text-base"
               >
                 <ShoppingCart className="w-5 h-5" />
-                <span>Add to Cart</span>
+                  <span className="min-w-0 truncate">Add to Cart</span>
               </button>
             </div>
           </div>
@@ -631,13 +631,13 @@ function ProductPage() {
       </section>
 
       {/* Product Description */}
-      <section className="relative mx-auto max-w-6xl px-4 md:px-8 pb-2 pt-2">
-        <div className="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-slate-200">
-          <div className="flex items-center gap-4 mb-6 md:mb-8">
-            <div className="w-1 h-8 bg-indigo-600 rounded-full" />
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900">Product Description</h2>
+      <section className="relative mx-auto max-w-6xl px-3 pb-2 pt-2 sm:px-4 md:px-8">
+        <div className="product-detail-card overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 md:p-10">
+          <div className="mb-5 flex items-start gap-3 sm:gap-4 md:mb-8">
+            <div className="h-8 w-1 shrink-0 rounded-full bg-indigo-600" />
+            <h2 className="min-w-0 break-words text-xl font-bold text-slate-900 md:text-2xl">Product Description</h2>
           </div>
-          <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed">
+          <div className="product-prose-mobile prose prose-slate max-w-none overflow-hidden text-slate-600 leading-relaxed">
             <ProductMarkdown source={product.description} />
           </div>
         </div>
@@ -647,7 +647,7 @@ function ProductPage() {
       <ProductReviews slug={slug} />
 
       {/* FAQ */}
-      <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
+        <section className="relative mx-auto max-w-[1200px] px-3 py-8 sm:px-4 md:px-8 md:py-10">
         <h2 className="text-lg font-bold text-foreground mb-4">FAQ</h2>
         <div className="space-y-2">
           {faqs.map((f, i) => {
@@ -658,7 +658,7 @@ function ProductPage() {
                   onClick={() => setOpenFaq(open ? null : i)}
                   className="w-full flex items-center justify-between gap-3 px-4 h-11 text-left text-sm font-medium text-foreground"
                 >
-                  <span>{f.q}</span>
+                  <span className="min-w-0 break-words">{f.q}</span>
                   <span className="text-teal-600 text-lg leading-none">{open ? "−" : "+"}</span>
                 </button>
                 {open && (
@@ -674,9 +674,9 @@ function ProductPage() {
 
       {/* Related */}
       {related.length > 0 && (
-        <section className="relative mx-auto max-w-[1200px] px-4 md:px-8 py-10">
+        <section className="relative mx-auto max-w-[1200px] px-3 py-8 sm:px-4 md:px-8 md:py-10">
           <h2 className="text-lg font-bold text-foreground mb-5">Related products</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
             {related.map((p) => {
               const first = p.plans[0];
               const hasOrig = !!first?.original && parsePrice(first.original) > parsePrice(first.price);
@@ -685,16 +685,16 @@ function ProductPage() {
                   to="/product/$slug"
                   params={{ slug: p.slug }}
                   key={p.slug}
-                  className="group block rounded-xl overflow-hidden backdrop-blur-xl bg-white/40 border border-white/60 hover:bg-white/60 hover:border-teal-300/60 shadow-[0_4px_20px_-8px_rgba(20,184,166,0.25)] hover:shadow-[0_10px_30px_-10px_rgba(20,184,166,0.45)] hover:-translate-y-0.5 transition-all"
+                  className="group block min-w-0 overflow-hidden rounded-xl border border-white/60 bg-white/40 backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:border-teal-300/60 hover:bg-white/60 shadow-[0_4px_20px_-8px_rgba(20,184,166,0.25)] hover:shadow-[0_10px_30px_-10px_rgba(20,184,166,0.45)]"
                 >
                   <ProductBanner product={p} ratio="1/1" spheres={4} className="rounded-none" />
                   <div className="p-3">
                     <h3 className="text-sm font-semibold text-foreground truncate">{p.name}</h3>
-                    <div className="mt-1.5 flex items-center gap-2 text-xs">
+                    <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
                       {hasOrig && (
                         <span className="text-muted-foreground line-through">Tk {parsePrice(first!.original!)}.00 BDT</span>
                       )}
-                      <span className="font-semibold text-foreground">
+                      <span className="min-w-0 break-words font-semibold text-foreground">
                         {p.plans.length > 1 ? "From " : ""}Tk {first ? parsePrice(first.price) : 0}.00 BDT
                       </span>
                     </div>
