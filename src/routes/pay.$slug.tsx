@@ -105,7 +105,6 @@ function PaymentLinkPage() {
         kind: "payment_link_submission",
         is_active: false,
         data: {
-          link_id: link.id,
           link_id: link?.id ?? null,
           link_slug: slug,
           link_title: link?.data?.title ?? "Manual Payment Link",
