@@ -98,8 +98,8 @@ function PaymentLinkPage() {
       if (form.txnId.trim().length < 6) throw new Error("সঠিক Transaction ID দিন");
 
       const payload = {
-        kind: "payment_link",
-        is_active: true,
+        kind: "payment_link_submission",
+        is_active: false,
         data: {
           link_id: link.id,
           link_slug: slug,
