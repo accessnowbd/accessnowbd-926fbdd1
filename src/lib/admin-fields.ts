@@ -449,9 +449,10 @@ const FEATURES: Record<string, AdminFeatureConfig> = {
     kind: "help_article",
     mode: "list",
     fields: [
-      { name: "title", label: "Title", type: "text", required: true, primary: true },
-      { name: "category", label: "Category", type: "text" },
-      { name: "body", label: "Article body", type: "textarea" },
+      { name: "title", label: "Article title", type: "text", required: true, primary: true },
+      { name: "slug", label: "URL slug", type: "text", autoFrom: "title", autoTransform: "slug", hint: "Auto-generated from title. Used in /help/<slug>." },
+      { name: "category", label: "Category", type: "text", hint: "e.g. orders, payment, warranty, technical, subscription, account" },
+      { name: "body", label: "Article body", type: "textarea", required: true },
     ],
   },
   "support-channels": {
