@@ -150,8 +150,8 @@ function PaymentLinkPage() {
             <>
               <div className="rounded-xl border border-border bg-background p-4">
                 <p className="text-xs font-bold uppercase text-primary">Payment request</p>
-                <h1 className="mt-1 text-xl font-extrabold leading-tight text-foreground">{link.data?.title || "AccessNow BD Payment"}</h1>
-                {link.data?.description && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">{link.data.description}</p>}
+                <h1 className="mt-1 text-xl font-extrabold leading-tight text-foreground">{link!.data?.title || "AccessNow BD Payment"}</h1>
+                {link!.data?.description && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">{link!.data.description}</p>}
                 <div className="mt-4 flex items-end justify-between gap-3 border-t border-border pt-4">
                   <span className="text-sm font-semibold text-muted-foreground">Amount</span>
                   <strong className="text-3xl font-extrabold text-primary">{formatMoney(amount, currency)}</strong>
