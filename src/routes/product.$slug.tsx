@@ -333,7 +333,7 @@ function ProductPage() {
                 }}
               />
             ) : (
-              <ProductBanner product={product} ratio="4/3" spheres={6} priority className="overflow-hidden rounded-2xl sm:aspect-square sm:rounded-3xl" />
+              <ProductBanner product={product} ratio="1/1" spheres={6} priority className="overflow-hidden rounded-2xl sm:rounded-3xl" />
             )}
             {product.badge && (
               <span className={`absolute top-4 left-4 z-20 ${badgeColorFor(product.badge)} px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm pointer-events-none`}>
