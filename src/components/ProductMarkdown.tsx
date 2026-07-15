@@ -32,10 +32,10 @@ export function ProductMarkdown({ source }: { source?: string | null }) {
         ),
         li: ({ children }) => <li className="leading-relaxed">{children}</li>,
         p: ({ children }) => (
-          <p className="my-2 leading-relaxed text-foreground/90">{children}</p>
+          <p className="my-2 leading-relaxed text-slate-700">{children}</p>
         ),
         strong: ({ children }) => (
-          <strong className="font-semibold text-foreground">{children}</strong>
+          <strong className="font-semibold text-slate-900">{children}</strong>
         ),
         a: ({ children, href }) => (
           <a href={href} className="text-primary underline underline-offset-2 hover:opacity-80">
