@@ -87,6 +87,11 @@ function PaymentLinkPage() {
     staleTime: 60_000,
     retry: 1,
   });
+  const { data: products } = useQuery({
+    queryKey: ["pay-products"],
+    queryFn: fetchActiveProducts,
+    staleTime: 5 * 60_000,
+  });
   const { data: configuredMethods } = usePaymentMethods("checkout");
   const methods = useMemo(() => (configuredMethods?.length ? configuredMethods : fallbackMethods), [configuredMethods]);
   const [methodId, setMethodId] = useState(methods[0]?.id ?? "bkash");
@@ -94,16 +99,40 @@ function PaymentLinkPage() {
   const [customAmount, setCustomAmount] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
+  // Product / plan selection
+  const [pickMode, setPickMode] = useState<"product" | "manual">("product");
+  const [productSlug, setProductSlug] = useState<string>("");
+  const [planIndex, setPlanIndex] = useState<number>(0);
+  const [manualTitle, setManualTitle] = useState("");
+  const [manualDuration, setManualDuration] = useState("");
+
+  const selectedProduct = useMemo(
+    () => (products ?? []).find((p) => p.slug === productSlug) ?? null,
+    [products, productSlug],
+  );
+  const selectedPlan: ProductPlan | null =
+    selectedProduct && Array.isArray(selectedProduct.plans) && selectedProduct.plans.length
+      ? selectedProduct.plans[Math.min(planIndex, selectedProduct.plans.length - 1)]
+      : null;
+
   useEffect(() => {
     if (methods.length && !methods.some((m) => m.id === methodId)) setMethodId(methods[0].id);
   }, [methods, methodId]);
 
   const selectedMethod = methods.find((m) => m.id === methodId) ?? methods[0];
   const savedAmount = Number(link?.data?.amount ?? 0);
-  const amount = savedAmount > 0 ? savedAmount : Number(customAmount || 0);
+  const planAmount = Number(selectedPlan?.price ?? 0);
+  const amount =
+    savedAmount > 0
+      ? savedAmount
+      : pickMode === "product" && planAmount > 0
+        ? planAmount
+        : Number(customAmount || 0);
   const currency = link?.data?.currency || "BDT";
   const expired = Boolean(link?.data?.expires_at && new Date(`${link.data.expires_at}T23:59:59`).getTime() < Date.now());
   const needsManualAmount = !link || savedAmount <= 0;
+  const showManualAmountInput =
+    needsManualAmount && !(pickMode === "product" && planAmount > 0);
   const unavailable = !isLoading && expired;
 
   const submitPayment = useMutation({
@@ -114,6 +143,26 @@ function PaymentLinkPage() {
       if (!isValidPhone(form.phone)) throw new Error("সঠিক বাংলাদেশি মোবাইল নম্বর দিন");
       if (!isValidPhone(form.senderNumber)) throw new Error("যে নম্বর থেকে টাকা পাঠিয়েছেন সেটি দিন");
       if (form.txnId.trim().length < 6) throw new Error("সঠিক Transaction ID দিন");
+      if (pickMode === "product" && !selectedProduct) throw new Error("Product বেছে নিন অথবা Manual দিন");
+      if (pickMode === "manual" && !manualTitle.trim()) throw new Error("আপনি কী নিচ্ছেন তা লিখুন");
+
+      const productInfo =
+        pickMode === "product" && selectedProduct
+          ? {
+              product_slug: selectedProduct.slug,
+              product_name: selectedProduct.name,
+              plan_label: selectedPlan?.label ?? null,
+              duration: selectedPlan?.duration ?? null,
+              plan_price: selectedPlan?.price ?? null,
+            }
+          : {
+              product_slug: null,
+              product_name: manualTitle.trim(),
+              plan_label: null,
+              duration: manualDuration.trim() || null,
+              plan_price: null,
+              is_manual: true,
+            };
 
       const payload = {
         kind: "payment_link_submission",
@@ -122,6 +171,7 @@ function PaymentLinkPage() {
           link_id: link?.id ?? null,
           link_slug: slug,
           link_title: link?.data?.title ?? "Manual Payment Link",
+          ...productInfo,
           full_name: form.fullName.trim(),
           phone: normalizePhone(form.phone),
           email: form.email.trim() || null,
@@ -154,6 +204,7 @@ function PaymentLinkPage() {
             <ShieldCheck className="h-3.5 w-3.5 text-primary" /> Secure payment
           </span>
         </div>
+
 
         <section className="rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-lg sm:p-6">
           {isLoading ? (
