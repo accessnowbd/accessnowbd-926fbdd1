@@ -181,7 +181,8 @@ function Index() {
             : byCategory.map((section, idx) => (
                 <ProgressiveSection
                   key={section.category}
-                  eager={idx < 2}
+                  eager={idx < 4}
+                  rootMargin="2000px 0px"
                   fallback={<ProductRail title={section.category} items={[]} isLoading />}
                 >
                   <ProfiledSection id={`ProductRail: ${section.category}`}>
@@ -189,6 +190,7 @@ function Index() {
                   </ProfiledSection>
                 </ProgressiveSection>
               ))}
+
         </>
       ),
     });
