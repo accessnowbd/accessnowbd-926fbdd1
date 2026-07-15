@@ -100,6 +100,7 @@ import { Route as AdminAbandonedCheckoutRouteImport } from './routes/admin.aband
 import { Route as AdminPageRouteImport } from './routes/admin.$page'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as AdminFbPixelIndexRouteImport } from './routes/admin.fb-pixel.index'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicProductsRouteImport } from './routes/api/public/products'
 import { Route as ApiPublicClientErrorsRouteImport } from './routes/api/public/client-errors'
@@ -581,6 +582,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AdminFbPixelIndexRoute = AdminFbPixelIndexRouteImport.update({
+  id: '/fb-pixel/',
+  path: '/fb-pixel/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -790,6 +796,7 @@ export interface FileRoutesByFullPath {
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/admin/fb-pixel/': typeof AdminFbPixelIndexRoute
   '/api/public/eps/cancel': typeof ApiPublicEpsCancelRoute
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
@@ -903,6 +910,7 @@ export interface FileRoutesByTo {
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/admin/fb-pixel': typeof AdminFbPixelIndexRoute
   '/api/public/eps/cancel': typeof ApiPublicEpsCancelRoute
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
@@ -1018,6 +1026,7 @@ export interface FileRoutesById {
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
   '/api/public/products': typeof ApiPublicProductsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/admin/fb-pixel/': typeof AdminFbPixelIndexRoute
   '/api/public/eps/cancel': typeof ApiPublicEpsCancelRoute
   '/api/public/eps/fail': typeof ApiPublicEpsFailRoute
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
@@ -1134,6 +1143,7 @@ export interface FileRouteTypes {
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/admin/fb-pixel/'
     | '/api/public/eps/cancel'
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
@@ -1247,6 +1257,7 @@ export interface FileRouteTypes {
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/admin/fb-pixel'
     | '/api/public/eps/cancel'
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
@@ -1361,6 +1372,7 @@ export interface FileRouteTypes {
     | '/api/public/client-errors'
     | '/api/public/products'
     | '/lovable/email/suppression'
+    | '/admin/fb-pixel/'
     | '/api/public/eps/cancel'
     | '/api/public/eps/fail'
     | '/api/public/eps/ipn'
@@ -2085,6 +2097,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/fb-pixel/': {
+      id: '/admin/fb-pixel/'
+      path: '/fb-pixel'
+      fullPath: '/admin/fb-pixel/'
+      preLoaderRoute: typeof AdminFbPixelIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -2284,6 +2303,7 @@ interface AdminRouteChildren {
   AdminWelcomeBannerRoute: typeof AdminWelcomeBannerRoute
   AdminWelcomePopupRoute: typeof AdminWelcomePopupRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminFbPixelIndexRoute: typeof AdminFbPixelIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -2335,6 +2355,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminWelcomeBannerRoute: AdminWelcomeBannerRoute,
   AdminWelcomePopupRoute: AdminWelcomePopupRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminFbPixelIndexRoute: AdminFbPixelIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
