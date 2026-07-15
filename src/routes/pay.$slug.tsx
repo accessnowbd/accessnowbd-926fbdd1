@@ -227,7 +227,7 @@ function PaymentLinkPage() {
                 ) : null}
                 <div className="mt-4 flex items-end justify-between gap-3 border-t border-border pt-4">
                   <span className="text-sm font-semibold text-muted-foreground">Amount</span>
-                  {needsManualAmount ? (
+                  {showManualAmountInput ? (
                     <input
                       type="number"
                       min="1"
@@ -241,6 +241,67 @@ function PaymentLinkPage() {
                   )}
                 </div>
               </div>
+
+              {/* Product / plan picker */}
+              <div className="mt-5 space-y-3">
+                <h2 className="text-sm font-extrabold text-foreground">কী কিনতে চান?</h2>
+                <div className="inline-flex w-full rounded-xl border border-border bg-background p-1">
+                  <button
+                    type="button"
+                    onClick={() => setPickMode("product")}
+                    className={`flex-1 h-9 rounded-lg text-xs font-bold transition ${pickMode === "product" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+                  >
+                    Product থেকে বেছে নিন
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPickMode("manual")}
+                    className={`flex-1 h-9 rounded-lg text-xs font-bold transition ${pickMode === "manual" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+                  >
+                    নিজে লিখুন
+                  </button>
+                </div>
+
+                {pickMode === "product" ? (
+                  <div className="space-y-2">
+                    <label className="block">
+                      <span className="mb-1.5 block text-xs font-bold text-muted-foreground">Product</span>
+                      <select
+                        value={productSlug}
+                        onChange={(e) => { setProductSlug(e.target.value); setPlanIndex(0); }}
+                        className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm font-semibold text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      >
+                        <option value="">— Product বেছে নিন —</option>
+                        {(products ?? []).map((p) => (
+                          <option key={p.slug} value={p.slug}>{p.name}</option>
+                        ))}
+                      </select>
+                    </label>
+                    {selectedProduct && Array.isArray(selectedProduct.plans) && selectedProduct.plans.length > 0 && (
+                      <label className="block">
+                        <span className="mb-1.5 block text-xs font-bold text-muted-foreground">Plan / Duration</span>
+                        <select
+                          value={planIndex}
+                          onChange={(e) => setPlanIndex(Number(e.target.value))}
+                          className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm font-semibold text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        >
+                          {selectedProduct.plans.map((pl, i) => (
+                            <option key={i} value={i}>
+                              {(pl.label || pl.duration || `Plan ${i + 1}`)}{pl.price ? ` — ৳${pl.price}` : ""}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Input label="Service / Product এর নাম" value={manualTitle} onChange={setManualTitle} />
+                    <Input label="কতদিনের জন্য (Duration)" value={manualDuration} onChange={setManualDuration} />
+                  </div>
+                )}
+              </div>
+
 
               <div className="mt-5 space-y-3">
                 <h2 className="text-sm font-extrabold text-foreground">পেমেন্ট মেথড</h2>
