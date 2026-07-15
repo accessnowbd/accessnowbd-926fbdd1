@@ -296,7 +296,7 @@ function ProductPage() {
         {/* Media gallery */}
         <div className="product-detail-media min-w-0 space-y-3 sm:space-y-4 md:col-span-6">
           <div
-            className={`product-detail-hero-img relative aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm group sm:aspect-square sm:rounded-3xl ${zoomCfg.enabled ? "cursor-zoom-in" : ""}`}
+            className={`product-detail-hero-img relative aspect-square overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm group sm:rounded-3xl ${zoomCfg.enabled ? "cursor-zoom-in" : ""}`}
             onMouseMove={(e) => {
               if (!zoomCfg.enabled) return;
               const el = e.currentTarget;
