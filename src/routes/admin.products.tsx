@@ -48,6 +48,7 @@ type ProductMeta = {
  ai_card_style?: AiCardStyle;
  delivery_type?: DeliveryType;
  download_link?: string;
+ download_note?: string;
  refund_policy?: string;
  what_you_get?: string[];
  faq?: FaqItem[];
@@ -1511,8 +1512,14 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  </div>
 
  <div>
- <Label>Download Link</Label>
- <input value={meta.download_link ?? ""} onChange={(e) => setMeta("download_link", e.target.value)} placeholder="https://..." className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
+ <Label>Download Link (product ফাইল / অ্যাপ URL)</Label>
+ <input value={meta.download_link ?? ""} onChange={(e) => setMeta("download_link", e.target.value)} placeholder="https://... (order complete হলে customer এর email + dashboard এ auto চলে যাবে)" className="w-full h-11 px-3.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200" />
+ <p className="text-[11px] text-slate-500 mt-1">খালি রাখলে এই product এর জন্য কোনো download link দেখাবে না।</p>
+ </div>
+
+ <div>
+ <Label>Download Instructions / Note (optional)</Label>
+ <textarea value={meta.download_note ?? ""} onChange={(e) => setMeta("download_note", e.target.value)} placeholder="e.g. Windows 10/11 এ install করুন। Activate করতে email এ পাঠানো key ব্যবহার করুন।" rows={2} className="w-full px-3.5 py-2.5 rounded-xl border border-white/60 bg-white/60 backdrop-blur text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200 resize-none" />
  </div>
 
  <div>

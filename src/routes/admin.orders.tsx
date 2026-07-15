@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { downloadReceiptPdf } from "@/lib/receipt";
 import { sendTransactionalEmail } from "@/lib/email/send";
+import { fetchOrderDownloads } from "@/lib/product-downloads";
 import { useAdminLang } from "@/context/AdminLangContext";
 
 export const Route = createFileRoute("/admin/orders")({
@@ -131,6 +132,8 @@ function AdminOrders() {
       if (status === "completed" || status === "delivered") {
         const creds = target.delivered_credentials;
         const firstItem = target.items?.[0];
+        // Auto-attach download links from each product's meta.download_link/note
+        const dl = await fetchOrderDownloads((target.items || []).map((it) => ({ slug: it.slug || "", name: it.name })));
         sendTransactionalEmail({
           templateName: "subscription-activated",
           recipientEmail: target.email,
@@ -141,6 +144,7 @@ function AdminOrders() {
             startsOn: creds?.startsOn, expiresOn: creds?.expiresOn,
             loginEmail: creds?.loginEmail, loginPassword: creds?.loginPassword,
             manageUrl: "https://accessnowbd.com/orders",
+            downloadLinks: dl.map((d) => ({ productName: d.productName, label: d.label, url: d.url, note: d.note })),
           },
         }).catch(() => {});
       } else {

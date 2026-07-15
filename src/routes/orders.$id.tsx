@@ -10,6 +10,7 @@ import { CartIcon } from "@/components/CartIcon";
 import { AccountIcon } from "@/components/AccountIcon";
 import { downloadReceiptPdf } from "@/lib/receipt";
 import { sendInvoiceEmail } from "@/lib/email/invoice";
+import { fetchOrderDownloads, type ProductDownload } from "@/lib/product-downloads";
 import { toast } from "sonner";
 
 const orderSearchSchema = z.object({
@@ -79,6 +80,19 @@ function OrderDetailPage() {
   // Auto-download receipt the first time a freshly placed order loads.
   const [autoDownloaded, setAutoDownloaded] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [productDownloads, setProductDownloads] = useState<ProductDownload[]>([]);
+
+  useEffect(() => {
+    if (!order) return;
+    const paid = ["processing", "delivered", "completed"].includes(order.status);
+    if (!paid) { setProductDownloads([]); return; }
+    let cancelled = false;
+    fetchOrderDownloads(order.items.map((it) => ({ slug: it.slug, name: it.name })))
+      .then((r) => { if (!cancelled) setProductDownloads(r); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [order]);
+
 
   const handleDownload = async () => {
     if (!order || downloading) return;
@@ -314,7 +328,34 @@ function OrderDetailPage() {
                 </span>
               </div>
             </div>
+
+            {productDownloads.length > 0 && (
+              <div className="mt-5 rounded-2xl p-5 bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg">
+                <div className="flex items-center gap-2 mb-3">
+                  <Download className="w-5 h-5" />
+                  <h2 className="text-sm font-extrabold uppercase tracking-wider">Download Links ({productDownloads.length})</h2>
+                </div>
+                <p className="text-xs opacity-90 mb-3">আপনার order-এর সাথে আসা download link — এখনই clicked করে ডাউনলোড করুন।</p>
+                <div className="space-y-2.5">
+                  {productDownloads.map((d, i) => (
+                    <div key={i} className="rounded-xl bg-white/15 backdrop-blur p-3 flex items-center gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-bold truncate">{d.productName}</div>
+                        {d.note && <div className="text-[11px] opacity-90 mt-0.5 line-clamp-2">{d.note}</div>}
+                      </div>
+                      <a href={d.url} target="_blank" rel="noopener noreferrer"
+                        className="shrink-0 inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-white text-emerald-700 text-xs font-bold hover:bg-emerald-50 transition">
+                        <Download className="w-3.5 h-3.5" /> Download
+                      </a>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[11px] opacity-80 mt-3">💡 সব download link এক জায়গায় দেখতে dashboard এর "ডাউনলোড লিংক" section এ যান।</p>
+              </div>
+            )}
           </div>
+
+
 
           {/* Sidebar — payment + customer */}
           <div className="space-y-5">
