@@ -80,28 +80,19 @@ async function notifyAdmins(order: any, short: string, currency: string) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { sendMessageFor } = await import("@/lib/telegram/api.server");
 
-  // Primary source of truth: telegram_settings.order_bot.admin_chat_ids
-  const adminChats: number[] = [];
-  const { data: settings } = await (supabaseAdmin as any)
-    .from("telegram_settings").select("config").eq("kind", "order_bot").maybeSingle();
-  const cfg: any = (settings as any)?.config || {};
-  if (Array.isArray(cfg.admin_chat_ids)) {
-    for (const id of cfg.admin_chat_ids) {
-      const n = Number(id);
-      if (Number.isFinite(n) && !adminChats.includes(n)) adminChats.push(n);
-    }
-  }
+  const { data: admins } = await (supabaseAdmin as any)
+    .from("telegram_subscribers").select("chat_id")
+    .eq("bot_kind", "admin_bot").eq("role", "admin").eq("is_blocked", false);
+  const adminChats: number[] = ((admins as any[]) || []).map((a) => a.chat_id).filter(Boolean);
 
-  // Fallback: legacy subscribers with admin role
+  // Also fall back to legacy order-bot subscribers if no admin_bot users linked yet
   if (adminChats.length === 0) {
-    const { data: admins } = await (supabaseAdmin as any)
+    const { data: legacy } = await (supabaseAdmin as any)
       .from("telegram_subscribers").select("chat_id")
-      .in("bot_kind", ["admin_bot", "order_bot"])
-      .eq("role", "admin").eq("is_blocked", false);
-    ((admins as any[]) || []).forEach((r) => r.chat_id && adminChats.push(Number(r.chat_id)));
+      .eq("bot_kind", "order_bot").eq("is_blocked", false);
+    ((legacy as any[]) || []).forEach((r) => r.chat_id && adminChats.push(r.chat_id));
   }
   if (adminChats.length === 0) return;
-
 
   const src = order.source === "telegram_bot" ? "📲 Telegram" : order.source === "admin" ? "🛠 Admin" : "🌐 Web";
   const itemLines = Array.isArray(order.items)
