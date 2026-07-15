@@ -11,7 +11,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 export function ProgressiveSection({
   children,
   fallback,
-  rootMargin = "600px 0px",
+  rootMargin = "1600px 0px",
   eager = false,
 }: {
   children: ReactNode;
@@ -21,6 +21,7 @@ export function ProgressiveSection({
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(eager);
+
 
   useEffect(() => {
     if (visible) return;

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 export function LazyMount({
   children,
   placeholder,
-  rootMargin = "600px 0px",
+  rootMargin = "1600px 0px",
   minHeight = 360,
 }: {
   children: ReactNode;
@@ -15,6 +15,7 @@ export function LazyMount({
   rootMargin?: string;
   minHeight?: number;
 }) {
+
   const ref = useRef<HTMLDivElement | null>(null);
   const [shown, setShown] = useState(false);
 
