@@ -95,7 +95,20 @@ function CheckoutPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
-  const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
+  const CHECKOUT_STATE_KEY = "accessnow_checkout_state_v1";
+  type PersistedCheckout = {
+    form?: { name: string; email: string; phone: string; senderNumber: string; trxId: string; notes: string };
+    method?: string;
+    useWallet?: boolean;
+    screenshotUrl?: string;
+    couponInput?: string;
+  };
+  const readPersisted = (): PersistedCheckout => {
+    if (typeof window === "undefined") return {};
+    try { return JSON.parse(window.sessionStorage.getItem(CHECKOUT_STATE_KEY) || "{}"); } catch { return {}; }
+  };
+  const persisted = readPersisted();
+  const [form, setForm] = useState(persisted.form ?? { name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
   const { data: dynamicMethods } = usePaymentMethods("checkout");
   const fetchEpsPublic = useServerFn(getEpsPublicConfig);
   const initiateEps = useServerFn(initiateEpsPayment);
