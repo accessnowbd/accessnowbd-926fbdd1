@@ -167,7 +167,18 @@ function CheckoutPage() {
   const [uploading, setUploading] = useState(false);
 
   const [walletBalance, setWalletBalance] = useState<number>(0);
-  const [useWallet, setUseWallet] = useState(false);
+  const [useWallet, setUseWallet] = useState(persisted.useWallet ?? false);
+
+  // Persist checkout state so returning from login preserves everything.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.sessionStorage.setItem(
+        CHECKOUT_STATE_KEY,
+        JSON.stringify({ form, method, useWallet, screenshotUrl, couponInput }),
+      );
+    } catch { /* ignore */ }
+  }, [form, method, useWallet, screenshotUrl, couponInput]);
 
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
