@@ -286,8 +286,13 @@ function CheckoutPage() {
 
   const handleSubmit = async () => {
     if (!user) {
-      rememberReturnTo();
-      navigate({ to: "/login" });
+      // Preserve the exact checkout URL (step + coupon) so post-login lands back here.
+      const returnUrl =
+        typeof window !== "undefined"
+          ? window.location.pathname + window.location.search + window.location.hash
+          : "/checkout";
+      rememberReturnTo(returnUrl);
+      navigate({ to: "/login", search: { redirect: returnUrl } as never });
       return;
     }
     setErr(null);
