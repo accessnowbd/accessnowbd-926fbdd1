@@ -424,6 +424,7 @@ function CheckoutPage() {
           return;
         }
       }
+      try { window.sessionStorage.removeItem(CHECKOUT_STATE_KEY); } catch { /* ignore */ }
       clear();
       navigate({ to: "/orders/$id", params: { id: newId }, search: { new: 1 } });
       return;
