@@ -95,7 +95,20 @@ function CheckoutPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
-  const [form, setForm] = useState({ name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
+  const CHECKOUT_STATE_KEY = "accessnow_checkout_state_v1";
+  type PersistedCheckout = {
+    form?: { name: string; email: string; phone: string; senderNumber: string; trxId: string; notes: string };
+    method?: string;
+    useWallet?: boolean;
+    screenshotUrl?: string;
+    couponInput?: string;
+  };
+  const readPersisted = (): PersistedCheckout => {
+    if (typeof window === "undefined") return {};
+    try { return JSON.parse(window.sessionStorage.getItem(CHECKOUT_STATE_KEY) || "{}"); } catch { return {}; }
+  };
+  const persisted = readPersisted();
+  const [form, setForm] = useState(persisted.form ?? { name: "", email: "", phone: "", senderNumber: "", trxId: "", notes: "" });
   const { data: dynamicMethods } = usePaymentMethods("checkout");
   const fetchEpsPublic = useServerFn(getEpsPublicConfig);
   const initiateEps = useServerFn(initiateEpsPayment);
@@ -147,14 +160,25 @@ function CheckoutPage() {
     }
     return base;
   }, [dynamicMethods, epsConfig, sslczConfig]);
-  const [method, setMethod] = useState<string>("bkash");
+  const [method, setMethod] = useState<string>(persisted.method ?? "bkash");
   const [copied, setCopied] = useState(false);
-  const [couponInput, setCouponInput] = useState(coupon || "");
-  const [screenshotUrl, setScreenshotUrl] = useState<string>("");
+  const [couponInput, setCouponInput] = useState(persisted.couponInput ?? (coupon || ""));
+  const [screenshotUrl, setScreenshotUrl] = useState<string>(persisted.screenshotUrl ?? "");
   const [uploading, setUploading] = useState(false);
 
   const [walletBalance, setWalletBalance] = useState<number>(0);
-  const [useWallet, setUseWallet] = useState(false);
+  const [useWallet, setUseWallet] = useState(persisted.useWallet ?? false);
+
+  // Persist checkout state so returning from login preserves everything.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.sessionStorage.setItem(
+        CHECKOUT_STATE_KEY,
+        JSON.stringify({ form, method, useWallet, screenshotUrl, couponInput }),
+      );
+    } catch { /* ignore */ }
+  }, [form, method, useWallet, screenshotUrl, couponInput]);
 
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -262,8 +286,13 @@ function CheckoutPage() {
 
   const handleSubmit = async () => {
     if (!user) {
-      rememberReturnTo();
-      navigate({ to: "/login" });
+      // Preserve the exact checkout URL (step + coupon) so post-login lands back here.
+      const returnUrl =
+        typeof window !== "undefined"
+          ? window.location.pathname + window.location.search + window.location.hash
+          : "/checkout";
+      rememberReturnTo(returnUrl);
+      navigate({ to: "/login", search: { redirect: returnUrl } as never });
       return;
     }
     setErr(null);
@@ -386,6 +415,7 @@ function CheckoutPage() {
               customerPhone: form.phone,
             },
           });
+          try { window.sessionStorage.removeItem(CHECKOUT_STATE_KEY); } catch { /* ignore */ }
           clear();
           window.location.href = redirect_url;
           return;
@@ -394,6 +424,7 @@ function CheckoutPage() {
           return;
         }
       }
+      try { window.sessionStorage.removeItem(CHECKOUT_STATE_KEY); } catch { /* ignore */ }
       clear();
       navigate({ to: "/orders/$id", params: { id: newId }, search: { new: 1 } });
       return;
