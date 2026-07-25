@@ -160,10 +160,10 @@ function CheckoutPage() {
     }
     return base;
   }, [dynamicMethods, epsConfig, sslczConfig]);
-  const [method, setMethod] = useState<string>("bkash");
+  const [method, setMethod] = useState<string>(persisted.method ?? "bkash");
   const [copied, setCopied] = useState(false);
-  const [couponInput, setCouponInput] = useState(coupon || "");
-  const [screenshotUrl, setScreenshotUrl] = useState<string>("");
+  const [couponInput, setCouponInput] = useState(persisted.couponInput ?? (coupon || ""));
+  const [screenshotUrl, setScreenshotUrl] = useState<string>(persisted.screenshotUrl ?? "");
   const [uploading, setUploading] = useState(false);
 
   const [walletBalance, setWalletBalance] = useState<number>(0);
