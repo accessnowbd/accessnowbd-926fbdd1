@@ -415,6 +415,7 @@ function CheckoutPage() {
               customerPhone: form.phone,
             },
           });
+          try { window.sessionStorage.removeItem(CHECKOUT_STATE_KEY); } catch { /* ignore */ }
           clear();
           window.location.href = redirect_url;
           return;
