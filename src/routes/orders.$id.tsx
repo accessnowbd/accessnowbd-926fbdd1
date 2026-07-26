@@ -218,7 +218,21 @@ function OrderDetailPage() {
       </header>
 
       <div className="mx-auto max-w-[1100px] px-4 md:px-10 py-8">
-        {isNew ? (
+        {!user ? (
+          <div className="mb-4 rounded-2xl border border-border bg-card px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-muted-foreground">
+              You ordered as a guest. Sign in with <span className="font-semibold text-foreground">{order.email}</span> to
+              keep this order in your history.
+            </p>
+            <Link
+              to="/login"
+              onClick={() => rememberReturnTo()}
+              className="h-9 leading-9 px-4 rounded-full bg-aurora text-white text-xs font-semibold"
+            >
+              Sign in to save
+            </Link>
+          </div>
+        ) : isNew ? (
           <Link to="/orders" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
             <ArrowLeft className="w-3.5 h-3.5" /> View all orders
           </Link>
@@ -227,6 +241,7 @@ function OrderDetailPage() {
             <ArrowLeft className="w-3.5 h-3.5" /> Back to my orders
           </Link>
         )}
+
 
         {isNew && (
           <div className="mb-5 rounded-3xl p-6 md:p-7 bg-aurora text-primary-foreground glow-aqua relative overflow-hidden">
