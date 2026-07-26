@@ -22,7 +22,6 @@ import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
-import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as OrderCancellationRouteImport } from './routes/order-cancellation'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LoginRouteImport } from './routes/login'
@@ -39,6 +38,7 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as AiToolsRouteImport } from './routes/ai-tools'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -189,11 +189,6 @@ const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   path: '/privacy-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OrdersRoute = OrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const OrderCancellationRoute = OrderCancellationRouteImport.update({
   id: '/order-cancellation',
   path: '/order-cancellation',
@@ -274,6 +269,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrdersIndexRoute = OrdersIndexRouteImport.update({
+  id: '/orders/',
+  path: '/orders/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HelpIndexRoute = HelpIndexRouteImport.update({
   id: '/help/',
   path: '/help/',
@@ -300,9 +300,9 @@ const PaySlugRoute = PaySlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersIdRoute = OrdersIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => OrdersRoute,
+  id: '/orders/$id',
+  path: '/orders/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const HelpSlugRoute = HelpSlugRouteImport.update({
   id: '/help/$slug',
@@ -723,7 +723,6 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/order-cancellation': typeof OrderCancellationRoute
-  '/orders': typeof OrdersRouteWithChildren
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
@@ -798,6 +797,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/help/': typeof HelpIndexRoute
+  '/orders/': typeof OrdersIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/fb-pixel/$id': typeof AdminFbPixelIdRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
@@ -838,7 +838,6 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/order-cancellation': typeof OrderCancellationRoute
-  '/orders': typeof OrdersRouteWithChildren
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
@@ -913,6 +912,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/help': typeof HelpIndexRoute
+  '/orders': typeof OrdersIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/fb-pixel/$id': typeof AdminFbPixelIdRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
@@ -955,7 +955,6 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/mcp': typeof McpRoute
   '/order-cancellation': typeof OrderCancellationRoute
-  '/orders': typeof OrdersRouteWithChildren
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
@@ -1030,6 +1029,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/help/': typeof HelpIndexRoute
+  '/orders/': typeof OrdersIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/fb-pixel/$id': typeof AdminFbPixelIdRoute
   '/api/public/client-errors': typeof ApiPublicClientErrorsRoute
@@ -1073,7 +1073,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/mcp'
     | '/order-cancellation'
-    | '/orders'
     | '/privacy-policy'
     | '/products'
     | '/profile'
@@ -1148,6 +1147,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/help/'
+    | '/orders/'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/fb-pixel/$id'
     | '/api/public/client-errors'
@@ -1188,7 +1188,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/mcp'
     | '/order-cancellation'
-    | '/orders'
     | '/privacy-policy'
     | '/products'
     | '/profile'
@@ -1263,6 +1262,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/help'
+    | '/orders'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/fb-pixel/$id'
     | '/api/public/client-errors'
@@ -1304,7 +1304,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/mcp'
     | '/order-cancellation'
-    | '/orders'
     | '/privacy-policy'
     | '/products'
     | '/profile'
@@ -1379,6 +1378,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/help/'
+    | '/orders/'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/fb-pixel/$id'
     | '/api/public/client-errors'
@@ -1421,7 +1421,6 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   McpRoute: typeof McpRoute
   OrderCancellationRoute: typeof OrderCancellationRoute
-  OrdersRoute: typeof OrdersRouteWithChildren
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ProductsRoute: typeof ProductsRoute
   ProfileRoute: typeof ProfileRoute
@@ -1443,10 +1442,12 @@ export interface RootRouteChildren {
   BlogHowToBuyNetflixInBangladeshRoute: typeof BlogHowToBuyNetflixInBangladeshRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   HelpSlugRoute: typeof HelpSlugRoute
+  OrdersIdRoute: typeof OrdersIdRoute
   PaySlugRoute: typeof PaySlugRoute
   ProductSlugRoute: typeof ProductSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   HelpIndexRoute: typeof HelpIndexRoute
+  OrdersIndexRoute: typeof OrdersIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicClientErrorsRoute: typeof ApiPublicClientErrorsRoute
   ApiPublicProductsRoute: typeof ApiPublicProductsRoute
@@ -1563,13 +1564,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/orders': {
-      id: '/orders'
-      path: '/orders'
-      fullPath: '/orders'
-      preLoaderRoute: typeof OrdersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/order-cancellation': {
       id: '/order-cancellation'
       path: '/order-cancellation'
@@ -1682,6 +1676,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/orders/': {
+      id: '/orders/'
+      path: '/orders'
+      fullPath: '/orders/'
+      preLoaderRoute: typeof OrdersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/help/': {
       id: '/help/'
       path: '/help'
@@ -1719,10 +1720,10 @@ declare module '@tanstack/react-router' {
     }
     '/orders/$id': {
       id: '/orders/$id'
-      path: '/$id'
+      path: '/orders/$id'
       fullPath: '/orders/$id'
       preLoaderRoute: typeof OrdersIdRouteImport
-      parentRoute: typeof OrdersRoute
+      parentRoute: typeof rootRouteImport
     }
     '/help/$slug': {
       id: '/help/$slug'
@@ -2381,17 +2382,6 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
-interface OrdersRouteChildren {
-  OrdersIdRoute: typeof OrdersIdRoute
-}
-
-const OrdersRouteChildren: OrdersRouteChildren = {
-  OrdersIdRoute: OrdersIdRoute,
-}
-
-const OrdersRouteWithChildren =
-  OrdersRoute._addFileChildren(OrdersRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
@@ -2409,7 +2399,6 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   McpRoute: McpRoute,
   OrderCancellationRoute: OrderCancellationRoute,
-  OrdersRoute: OrdersRouteWithChildren,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   ProductsRoute: ProductsRoute,
   ProfileRoute: ProfileRoute,
@@ -2432,10 +2421,12 @@ const rootRouteChildren: RootRouteChildren = {
   BlogHowToBuyNetflixInBangladeshRoute: BlogHowToBuyNetflixInBangladeshRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   HelpSlugRoute: HelpSlugRoute,
+  OrdersIdRoute: OrdersIdRoute,
   PaySlugRoute: PaySlugRoute,
   ProductSlugRoute: ProductSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   HelpIndexRoute: HelpIndexRoute,
+  OrdersIndexRoute: OrdersIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicClientErrorsRoute: ApiPublicClientErrorsRoute,
   ApiPublicProductsRoute: ApiPublicProductsRoute,
