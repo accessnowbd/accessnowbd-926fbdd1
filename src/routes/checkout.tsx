@@ -415,7 +415,9 @@ function CheckoutPage() {
             },
           });
           try { window.sessionStorage.removeItem(CHECKOUT_STATE_KEY); } catch { /* ignore */ }
+          if (guestToken) rememberGuestOrder(newId, guestToken);
           clear();
+
           window.location.href = redirect_url;
           return;
         } catch (e) {
