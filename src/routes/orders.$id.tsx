@@ -50,34 +50,62 @@ const statusSteps = ["pending", "processing", "delivered"];
 
 function OrderDetailPage() {
   const { id } = Route.useParams();
-  const { new: isNew } = Route.useSearch();
+  const { new: isNew, t: tokenParam } = Route.useSearch();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [copied, setCopied] = useState(false);
+  const fetchGuestOrder = useServerFn(getGuestOrder);
+
+  // Guest token: from the URL, or remembered locally after guest checkout.
+  const guestToken = tokenParam || loadGuestOrders().find((o) => o.id === id)?.token || null;
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      rememberReturnTo();
-      navigate({ to: "/login" });
+    if (authLoading) return;
+
+    // Signed-in shopper: attach a guest order to the account, then read it normally.
+    if (user) {
+      const load = async () => {
+        if (guestToken) {
+          await supabase.rpc("claim_guest_order" as never, { _token: guestToken } as never);
+          forgetGuestOrder(id);
+        }
+        const { data } = await supabase
+          .from("orders")
+          .select("*")
+          .eq("id", id)
+          .eq("user_id", user.id)
+          .maybeSingle();
+        if (!data) setNotFound(true);
+        else setOrder(data as unknown as Order);
+        setLoading(false);
+      };
+      void load();
       return;
     }
-    if (user) {
-      supabase
-        .from("orders")
-        .select("*")
-        .eq("id", id)
-        .eq("user_id", user.id)
-        .maybeSingle()
-        .then(({ data }) => {
+
+    // Guest: read the order with the private token issued at checkout.
+    if (guestToken) {
+      fetchGuestOrder({ data: { orderId: id, token: guestToken } })
+        .then((data) => {
           if (!data) setNotFound(true);
           else setOrder(data as unknown as Order);
           setLoading(false);
+        })
+        .catch(() => {
+          setNotFound(true);
+          setLoading(false);
         });
+      return;
     }
-  }, [id, user, authLoading, navigate]);
+
+    rememberReturnTo();
+    navigate({ to: "/login" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, user, authLoading, navigate, guestToken]);
+
 
   // Auto-download receipt the first time a freshly placed order loads.
   const [autoDownloaded, setAutoDownloaded] = useState(false);
