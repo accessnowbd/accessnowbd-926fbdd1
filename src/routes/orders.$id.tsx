@@ -65,6 +65,7 @@ function OrderDetailPage() {
 
   // Guest token: from the URL, or remembered locally after guest checkout.
   const guestToken = tokenParam || loadGuestOrders().find((o) => o.id === id)?.token || null;
+  if (typeof window !== "undefined") console.log("DBG", { tokenParam, guestToken, user: !!user, authLoading });
 
   useEffect(() => {
     if (authLoading) return;
