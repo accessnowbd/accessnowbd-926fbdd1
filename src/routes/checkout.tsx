@@ -424,9 +424,15 @@ function CheckoutPage() {
         }
       }
       try { window.sessionStorage.removeItem(CHECKOUT_STATE_KEY); } catch { /* ignore */ }
+      if (guestToken) rememberGuestOrder(newId, guestToken);
       clear();
-      navigate({ to: "/orders/$id", params: { id: newId }, search: { new: 1 } });
+      navigate({
+        to: "/orders/$id",
+        params: { id: newId },
+        search: guestToken ? { new: 1, t: guestToken } : { new: 1 },
+      });
       return;
+
 
     } catch (e: unknown) {
       setErr(e instanceof Error ? e.message : "Failed to place order");
