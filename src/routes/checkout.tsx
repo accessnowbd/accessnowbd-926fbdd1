@@ -525,11 +525,16 @@ function CheckoutPage() {
                 আপনার তথ্য দিন
               </h2>
             </div>
-            {user && (
+            {user ? (
               <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-primary/10 text-primary inline-flex items-center gap-1">
                 লগইন আছে <Check className="w-3 h-3" />
               </span>
+            ) : (
+              <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-muted text-muted-foreground">
+                গেস্ট চেকআউট — লগইন লাগবে না
+              </span>
             )}
+
           </div>
 
           {/* Fields */}
