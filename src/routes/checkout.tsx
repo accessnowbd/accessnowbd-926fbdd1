@@ -452,10 +452,9 @@ function CheckoutPage() {
       </GuardLayout>
     );
   }
+  // Guest checkout is fully supported: anyone can complete an order without an
+  // account. Login is only needed to view order history (/orders, /dashboard).
 
-  // Guests are allowed to fill the form so we can capture abandoned checkouts
-  // and prefill returning users. Final order submission still requires login
-  // (handleSubmit redirects to /login when !user).
 
 
   if (items.length === 0) {
