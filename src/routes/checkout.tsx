@@ -289,37 +289,45 @@ function CheckoutPage() {
     setBusy(true);
     // Guest checkout: no login required. A private guest token lets the buyer
     // open the confirmation page, and lets them claim the order after signing in.
-    const guestToken = user
-      ? null
-      : (typeof crypto !== "undefined" && "randomUUID" in crypto
-          ? crypto.randomUUID()
-          : `${Date.now()}-${Math.random()}`);
+    const newUuid = () =>
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : ([1e7] as unknown as string).toString();
+    const guestToken = user ? null : newUuid();
+    // Guests cannot read back the inserted row (no anon read access), so the id
+    // is generated up-front for them.
+    const guestOrderId = user ? null : newUuid();
     try {
-      const { data, error } = await supabase
-        .from("orders")
-        .insert({
-          user_id: user?.id ?? null,
-          guest_token: guestToken,
+      const payload = {
+        id: guestOrderId ?? undefined,
+        user_id: user?.id ?? null,
+        guest_token: guestToken,
+        full_name: form.name,
+        email: form.email,
+        phone: form.phone,
+        payment_method: fullyByWallet ? "wallet" : method,
+        transaction_id: fullyByWallet
+          ? `WALLET-${Date.now()}`
+          : isEps
+            ? `EPS-PENDING-${Date.now()}`
+            : isSslcz
+              ? `SSLCZ-PENDING-${Date.now()}`
+              : form.trxId,
+        payment_screenshot_url: isHostedGateway ? null : (screenshotUrl || null),
+        items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
+        total: subAfterCoupon,
+      };
+      let newId: string;
+      if (user) {
+        const { data, error } = await supabase.from("orders").insert(payload).select("id").single();
+        if (error) throw error;
+        newId = data.id as string;
+      } else {
+        const { error } = await supabase.from("orders").insert(payload);
+        if (error) throw error;
+        newId = guestOrderId as string;
+      }
 
-          full_name: form.name,
-          email: form.email,
-          phone: form.phone,
-          payment_method: fullyByWallet ? "wallet" : method,
-          transaction_id: fullyByWallet
-            ? `WALLET-${Date.now()}`
-            : isEps
-              ? `EPS-PENDING-${Date.now()}`
-              : isSslcz
-                ? `SSLCZ-PENDING-${Date.now()}`
-                : form.trxId,
-          payment_screenshot_url: isHostedGateway ? null : (screenshotUrl || null),
-          items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
-          total: subAfterCoupon,
-        })
-        .select("id")
-        .single();
-      if (error) throw error;
-      const newId = data.id as string;
       if (walletApplied > 0) {
         const { error: wErr } = await supabase.rpc("spend_wallet" as any, {
           _amount: walletApplied,
