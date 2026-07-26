@@ -285,23 +285,22 @@ function CheckoutPage() {
   };
 
   const handleSubmit = async () => {
-    if (!user) {
-      // Preserve the exact checkout URL (step + coupon) so post-login lands back here.
-      const returnUrl =
-        typeof window !== "undefined"
-          ? window.location.pathname + window.location.search + window.location.hash
-          : "/checkout";
-      rememberReturnTo(returnUrl);
-      navigate({ to: "/login", search: { redirect: returnUrl } as never });
-      return;
-    }
     setErr(null);
     setBusy(true);
+    // Guest checkout: no login required. A private guest token lets the buyer
+    // open the confirmation page, and lets them claim the order after signing in.
+    const guestToken = user
+      ? null
+      : (typeof crypto !== "undefined" && "randomUUID" in crypto
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random()}`);
     try {
       const { data, error } = await supabase
         .from("orders")
         .insert({
-          user_id: user.id,
+          user_id: user?.id ?? null,
+          guest_token: guestToken,
+
           full_name: form.name,
           email: form.email,
           phone: form.phone,
