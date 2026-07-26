@@ -15,6 +15,7 @@ import { toast } from "sonner";
 
 const orderSearchSchema = z.object({
   new: fallback(z.union([z.literal(0), z.literal(1)]), 0).default(0),
+  t: fallback(z.string().optional(), undefined).optional(),
 });
 
 export const Route = createFileRoute("/orders/$id")({
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/orders/$id")({
   validateSearch: zodValidator(orderSearchSchema),
   head: () => ({ meta: [{ title: "Order Details — AccessNow BD" }] }),
 });
+
 
 type OrderItem = { slug: string; planPeriod: string; qty: number; name?: string; emoji?: string; gradient?: string; price?: number };
 type Order = {
