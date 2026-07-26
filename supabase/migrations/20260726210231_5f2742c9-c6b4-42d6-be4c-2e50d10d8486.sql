@@ -1,0 +1,1 @@
+DELETE FROM public.orders WHERE email IN ('guest-test@example.com','guest-test2@example.com','g3@example.com');

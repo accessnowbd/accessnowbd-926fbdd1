@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { rememberReturnTo } from "@/lib/auth-return-to";
+import { rememberGuestOrder } from "@/lib/guest-orders";
 import { supabase } from "@/integrations/supabase/client";
 import { useAppliedCoupon, redeemCoupon } from "@/lib/coupons";
 import { usePaymentMethods } from "@/hooks/useShopConfig";
@@ -285,42 +285,49 @@ function CheckoutPage() {
   };
 
   const handleSubmit = async () => {
-    if (!user) {
-      // Preserve the exact checkout URL (step + coupon) so post-login lands back here.
-      const returnUrl =
-        typeof window !== "undefined"
-          ? window.location.pathname + window.location.search + window.location.hash
-          : "/checkout";
-      rememberReturnTo(returnUrl);
-      navigate({ to: "/login", search: { redirect: returnUrl } as never });
-      return;
-    }
     setErr(null);
     setBusy(true);
+    // Guest checkout: no login required. A private guest token lets the buyer
+    // open the confirmation page, and lets them claim the order after signing in.
+    const newUuid = () =>
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : ([1e7] as unknown as string).toString();
+    const guestToken = user ? null : newUuid();
+    // Guests cannot read back the inserted row (no anon read access), so the id
+    // is generated up-front for them.
+    const guestOrderId = user ? null : newUuid();
     try {
-      const { data, error } = await supabase
-        .from("orders")
-        .insert({
-          user_id: user.id,
-          full_name: form.name,
-          email: form.email,
-          phone: form.phone,
-          payment_method: fullyByWallet ? "wallet" : method,
-          transaction_id: fullyByWallet
-            ? `WALLET-${Date.now()}`
-            : isEps
-              ? `EPS-PENDING-${Date.now()}`
-              : isSslcz
-                ? `SSLCZ-PENDING-${Date.now()}`
-                : form.trxId,
-          payment_screenshot_url: isHostedGateway ? null : (screenshotUrl || null),
-          items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
-          total: subAfterCoupon,
-        })
-        .select("id")
-        .single();
-      if (error) throw error;
-      const newId = data.id as string;
+      const payload = {
+        id: guestOrderId ?? undefined,
+        user_id: user?.id ?? null,
+        guest_token: guestToken,
+        full_name: form.name,
+        email: form.email,
+        phone: form.phone,
+        payment_method: fullyByWallet ? "wallet" : method,
+        transaction_id: fullyByWallet
+          ? `WALLET-${Date.now()}`
+          : isEps
+            ? `EPS-PENDING-${Date.now()}`
+            : isSslcz
+              ? `SSLCZ-PENDING-${Date.now()}`
+              : form.trxId,
+        payment_screenshot_url: isHostedGateway ? null : (screenshotUrl || null),
+        items: items.map((it) => ({ slug: it.slug, planPeriod: it.planPeriod, qty: it.qty, name: it.name, emoji: it.emoji, gradient: it.gradient, price: it.price })),
+        total: subAfterCoupon,
+      };
+      let newId: string;
+      if (user) {
+        const { data, error } = await supabase.from("orders").insert(payload).select("id").single();
+        if (error) throw error;
+        newId = data.id as string;
+      } else {
+        const { error } = await supabase.from("orders").insert(payload);
+        if (error) throw error;
+        newId = guestOrderId as string;
+      }
+
       if (walletApplied > 0) {
         const { error: wErr } = await supabase.rpc("spend_wallet" as any, {
           _amount: walletApplied,
@@ -416,7 +423,9 @@ function CheckoutPage() {
             },
           });
           try { window.sessionStorage.removeItem(CHECKOUT_STATE_KEY); } catch { /* ignore */ }
+          if (guestToken) rememberGuestOrder(newId, guestToken);
           clear();
+
           window.location.href = redirect_url;
           return;
         } catch (e) {
@@ -425,9 +434,15 @@ function CheckoutPage() {
         }
       }
       try { window.sessionStorage.removeItem(CHECKOUT_STATE_KEY); } catch { /* ignore */ }
+      if (guestToken) rememberGuestOrder(newId, guestToken);
       clear();
-      navigate({ to: "/orders/$id", params: { id: newId }, search: { new: 1 } });
+      navigate({
+        to: "/orders/$id",
+        params: { id: newId },
+        search: guestToken ? { new: 1, t: guestToken } : { new: 1 },
+      });
       return;
+
 
     } catch (e: unknown) {
       setErr(e instanceof Error ? e.message : "Failed to place order");
@@ -445,10 +460,9 @@ function CheckoutPage() {
       </GuardLayout>
     );
   }
+  // Guest checkout is fully supported: anyone can complete an order without an
+  // account. Login is only needed to view order history (/orders, /dashboard).
 
-  // Guests are allowed to fill the form so we can capture abandoned checkouts
-  // and prefill returning users. Final order submission still requires login
-  // (handleSubmit redirects to /login when !user).
 
 
   if (items.length === 0) {
@@ -518,11 +532,16 @@ function CheckoutPage() {
                 আপনার তথ্য দিন
               </h2>
             </div>
-            {user && (
+            {user ? (
               <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-primary/10 text-primary inline-flex items-center gap-1">
                 লগইন আছে <Check className="w-3 h-3" />
               </span>
+            ) : (
+              <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-muted text-muted-foreground">
+                গেস্ট চেকআউট — লগইন লাগবে না
+              </span>
             )}
+
           </div>
 
           {/* Fields */}

@@ -1,0 +1,1 @@
+DELETE FROM public.orders WHERE email = 'guest-pw@example.com';

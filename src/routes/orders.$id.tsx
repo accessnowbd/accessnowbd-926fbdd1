@@ -1,5 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { getGuestOrder } from "@/lib/guest-orders.functions";
+import { loadGuestOrders, forgetGuestOrder } from "@/lib/guest-orders";
+
 import { z } from "zod";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { ArrowLeft, Loader2, Copy, Check, Crown, Download, PartyPopper, Mail } from "lucide-react";
@@ -15,6 +19,7 @@ import { toast } from "sonner";
 
 const orderSearchSchema = z.object({
   new: fallback(z.union([z.literal(0), z.literal(1)]), 0).default(0),
+  t: fallback(z.string().optional(), undefined).optional(),
 });
 
 export const Route = createFileRoute("/orders/$id")({
@@ -22,6 +27,7 @@ export const Route = createFileRoute("/orders/$id")({
   validateSearch: zodValidator(orderSearchSchema),
   head: () => ({ meta: [{ title: "Order Details — AccessNow BD" }] }),
 });
+
 
 type OrderItem = { slug: string; planPeriod: string; qty: number; name?: string; emoji?: string; gradient?: string; price?: number };
 type Order = {
@@ -48,34 +54,62 @@ const statusSteps = ["pending", "processing", "delivered"];
 
 function OrderDetailPage() {
   const { id } = Route.useParams();
-  const { new: isNew } = Route.useSearch();
+  const { new: isNew, t: tokenParam } = Route.useSearch();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [copied, setCopied] = useState(false);
+  const fetchGuestOrder = useServerFn(getGuestOrder);
+
+  // Guest token: from the URL, or remembered locally after guest checkout.
+  const guestToken = tokenParam || loadGuestOrders().find((o) => o.id === id)?.token || null;
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      rememberReturnTo();
-      navigate({ to: "/login" });
+    if (authLoading) return;
+
+    // Signed-in shopper: attach a guest order to the account, then read it normally.
+    if (user) {
+      const load = async () => {
+        if (guestToken) {
+          await supabase.rpc("claim_guest_order" as never, { _token: guestToken } as never);
+          forgetGuestOrder(id);
+        }
+        const { data } = await supabase
+          .from("orders")
+          .select("*")
+          .eq("id", id)
+          .eq("user_id", user.id)
+          .maybeSingle();
+        if (!data) setNotFound(true);
+        else setOrder(data as unknown as Order);
+        setLoading(false);
+      };
+      void load();
       return;
     }
-    if (user) {
-      supabase
-        .from("orders")
-        .select("*")
-        .eq("id", id)
-        .eq("user_id", user.id)
-        .maybeSingle()
-        .then(({ data }) => {
+
+    // Guest: read the order with the private token issued at checkout.
+    if (guestToken) {
+      fetchGuestOrder({ data: { orderId: id, token: guestToken } })
+        .then((data) => {
           if (!data) setNotFound(true);
           else setOrder(data as unknown as Order);
           setLoading(false);
+        })
+        .catch(() => {
+          setNotFound(true);
+          setLoading(false);
         });
+      return;
     }
-  }, [id, user, authLoading, navigate]);
+
+    rememberReturnTo();
+    navigate({ to: "/login" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, user, authLoading, navigate, guestToken]);
+
 
   // Auto-download receipt the first time a freshly placed order loads.
   const [autoDownloaded, setAutoDownloaded] = useState(false);
@@ -184,7 +218,21 @@ function OrderDetailPage() {
       </header>
 
       <div className="mx-auto max-w-[1100px] px-4 md:px-10 py-8">
-        {isNew ? (
+        {!user ? (
+          <div className="mb-4 rounded-2xl border border-border bg-card px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-muted-foreground">
+              You ordered as a guest. Sign in with <span className="font-semibold text-foreground">{order.email}</span> to
+              keep this order in your history.
+            </p>
+            <Link
+              to="/login"
+              onClick={() => rememberReturnTo()}
+              className="h-9 leading-9 px-4 rounded-full bg-aurora text-white text-xs font-semibold"
+            >
+              Sign in to save
+            </Link>
+          </div>
+        ) : isNew ? (
           <Link to="/orders" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1 mb-4">
             <ArrowLeft className="w-3.5 h-3.5" /> View all orders
           </Link>
@@ -193,6 +241,7 @@ function OrderDetailPage() {
             <ArrowLeft className="w-3.5 h-3.5" /> Back to my orders
           </Link>
         )}
+
 
         {isNew && (
           <div className="mb-5 rounded-3xl p-6 md:p-7 bg-aurora text-primary-foreground glow-aqua relative overflow-hidden">

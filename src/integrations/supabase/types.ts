@@ -628,6 +628,7 @@ export type Database = {
           delivered_credentials: Json | null
           email: string
           full_name: string
+          guest_token: string | null
           id: string
           items: Json
           payment_method: string
@@ -640,7 +641,7 @@ export type Database = {
           total: number
           transaction_id: string
           updated_at: string
-          user_id: string
+          user_id: string | null
           whatsapp_sent: boolean
         }
         Insert: {
@@ -650,6 +651,7 @@ export type Database = {
           delivered_credentials?: Json | null
           email: string
           full_name: string
+          guest_token?: string | null
           id?: string
           items: Json
           payment_method: string
@@ -662,7 +664,7 @@ export type Database = {
           total: number
           transaction_id: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
           whatsapp_sent?: boolean
         }
         Update: {
@@ -672,6 +674,7 @@ export type Database = {
           delivered_credentials?: Json | null
           email?: string
           full_name?: string
+          guest_token?: string | null
           id?: string
           items?: Json
           payment_method?: string
@@ -684,7 +687,7 @@ export type Database = {
           total?: number
           transaction_id?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
           whatsapp_sent?: boolean
         }
         Relationships: []
@@ -2090,6 +2093,7 @@ export type Database = {
         }
         Returns: string
       }
+      claim_guest_order: { Args: { _token: string }; Returns: string }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
