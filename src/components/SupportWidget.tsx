@@ -295,47 +295,25 @@ export function SupportWidget() {
             {/* Ripple ping waves (only when idle) */}
             {!open && !chooser && (
               <>
-                <span className="absolute inset-0 rounded-full animate-ping" style={{ backgroundColor: "#8b5cf666" }} />
-                <span className="absolute inset-0 rounded-full animate-ping [animation-delay:0.6s]" style={{ backgroundColor: "#a78bfa4d" }} />
+                <span className="absolute inset-0 rounded-full bg-primary/35 animate-ping" />
+                <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping [animation-delay:0.6s]" />
               </>
             )}
 
             {/* Soft ambient glow */}
-            <span
-              className="support-widget-glow absolute -inset-4 rounded-full opacity-60 blur-2xl group-hover:opacity-100 transition-opacity duration-500 animate-pulse"
-              style={{
-                background: "linear-gradient(135deg, #8b5cf666, #7c3aed66, #a78bfa66)",
-              }}
-            />
-
-            {/* Spinning conic ring */}
-            <span
-              className="support-widget-ring absolute -inset-[3px] rounded-full opacity-90 animate-[spin_6s_linear_infinite]"
-              style={{
-                background: "conic-gradient(from 0deg, #7c3aedf2, #a78bfaf2, #7c3aedf2, #a78bfaf2, #7c3aedf2)",
-                filter: "blur(2px)",
-              }}
-            />
+            <span className="support-widget-glow absolute -inset-4 rounded-full bg-primary/40 opacity-60 blur-2xl group-hover:opacity-90 transition-opacity duration-500" />
 
             {/* Main orb */}
-            <span
-              className="support-widget-orb relative grid place-items-center h-16 w-16 rounded-full text-white shadow-[0_22px_50px_-12px_rgba(124,58,237,0.65)] ring-1 ring-white/20 overflow-hidden"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #6d28d9, #4c1d95)" }}
-            >
-              <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/20 blur-[3px]" />
-              <span className="absolute -bottom-4 inset-x-3 h-6 rounded-full blur-xl" style={{ backgroundColor: "#a78bfa66" }} />
-
+            <span className="support-widget-orb relative grid place-items-center h-16 w-16 rounded-full bg-gradient-to-br from-primary to-primary-dark text-primary-foreground shadow-[0_22px_50px_-14px_color-mix(in_oklab,var(--primary)_55%,transparent)] ring-1 ring-primary-foreground/25 overflow-hidden">
+              <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-primary-foreground/20 blur-[3px]" />
 
               {(chooser || open) ? (
-                <X className="h-7 w-7 relative drop-shadow-[0_2px_10px_rgba(167,139,250,0.6)]" strokeWidth={2.6} style={{ color: "#ffffff" }} />
+                <X className="h-7 w-7 relative" strokeWidth={2.6} />
               ) : (
-                <MessageCircleMore
-                  className="h-8 w-8 relative drop-shadow-[0_2px_10px_rgba(167,139,250,0.6)]"
-                  strokeWidth={2.4}
-                  style={{ color: "#ffffff" }}
-                />
+                <MessageCircleMore className="h-8 w-8 relative" strokeWidth={2.4} />
               )}
             </span>
+
           </button>
 
 
@@ -629,34 +607,8 @@ export function SupportWidget() {
                     </div>
                   </div>
 
-                  {/* Human agent handoff */}
-                  <a
-                    href={WHATSAPP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center gap-3 rounded-2xl border border-[#E3C48B]/25 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/50 p-3 transition"
-                  >
-                    <span className="relative shrink-0">
-                      <img
-                        src={supportAgent}
-                        alt={`${AGENT_NAME} — ${AGENT_ROLE}`}
-                        width={816}
-                        height={816}
-                        loading="lazy"
-                        className="h-10 w-10 rounded-full object-cover ring-1 ring-[#E3C48B]/45"
-                      />
-                      <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0E1530]" />
-                    </span>
-                    <div className="flex-1 leading-tight">
-                      <div className="text-[12.5px] font-extrabold text-white">
-                        মানুষের সাথে কথা বলুন
-                      </div>
-                      <div className="text-[10.5px] text-white/55 mt-0.5">
-                        {AGENT_NAME} · {AGENT_ROLE}
-                      </div>
-                    </div>
-                    <ChevronRight className="h-4 w-4 text-white/40 group-hover:text-[#E3C48B] transition" />
-                  </a>
+
+
 
                   <div className="flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/[0.08] px-3 py-2">
                     <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
@@ -738,14 +690,6 @@ export function SupportWidget() {
                 <div className="flex items-center gap-1.5 text-[10px] text-white/65">
                   Powered by AI · বাংলায় সাপোর্টেড
                 </div>
-                <a
-                  href={WHATSAPP_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[10px] font-bold text-emerald-300 hover:text-emerald-200 transition"
-                >
-                  মানুষের সাথে কথা বলুন →
-                </a>
               </div>
             </form>
           </div>
