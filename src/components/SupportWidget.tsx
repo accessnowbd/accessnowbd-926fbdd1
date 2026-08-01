@@ -529,24 +529,24 @@ export function SupportWidget() {
                 return (
                   <div
                     key={i}
-                    className="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden"
+                    className="rounded-2xl border border-white/[0.08] bg-[#101833] overflow-hidden"
                   >
                     <button
                       onClick={() => setOpenFaq(isOpen ? null : i)}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 text-left hover:bg-white/[0.04] transition"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 text-left hover:bg-[#141D3D] transition"
                     >
-                      <span className="grid place-items-center h-7 w-7 rounded-lg bg-gradient-to-br from-violet-500/30 to-primary/30 border border-white/10 text-white text-[11px] font-extrabold shrink-0">
+                      <span className="grid place-items-center h-7 w-7 rounded-lg bg-[#E3C48B]/12 border border-[#E3C48B]/25 text-[#E3C48B] text-[11px] font-extrabold shrink-0">
                         {i + 1}
                       </span>
                       <span className="flex-1 text-[12.5px] font-bold text-white">{f.q}</span>
                       <ChevronRight
-                        className={`h-4 w-4 text-white/70 transition-transform ${
-                          isOpen ? "rotate-90 text-white" : ""
+                        className={`h-4 w-4 text-white/45 transition-transform ${
+                          isOpen ? "rotate-90 text-[#E3C48B]" : ""
                         }`}
                       />
                     </button>
                     {isOpen && (
-                      <div className="px-3.5 pb-3.5 pl-[3.25rem] text-[12px] text-white/75 leading-relaxed animate-fade-in">
+                      <div className="px-3.5 pb-3.5 pl-[3.25rem] text-[12px] text-white/70 leading-relaxed animate-fade-in">
                         {f.a}
                       </div>
                     )}
@@ -556,12 +556,12 @@ export function SupportWidget() {
 
               <button
                 onClick={() => setTab("ai")}
-                className="mt-3 w-full flex items-center justify-center gap-2 rounded-2xl border border-violet-400/30 bg-gradient-to-r from-violet-500/15 to-primary/15 hover:from-violet-500/25 hover:to-primary/25 px-3 py-3 text-[12.5px] font-extrabold text-white transition"
+                className="mt-3 w-full flex items-center justify-center gap-2 rounded-2xl border border-[#E3C48B]/30 bg-[#E3C48B]/10 hover:bg-[#E3C48B]/16 px-3 py-3 text-[12.5px] font-extrabold text-[#E3C48B] transition"
               >
-                
                 আপনার প্রশ্ন খুঁজে পাননি? AI-কে জিজ্ঞাসা করুন
                 <ChevronRight className="h-4 w-4" />
               </button>
+
             </div>
 
             <BottomTabs tab={tab} setTab={setTab} />
