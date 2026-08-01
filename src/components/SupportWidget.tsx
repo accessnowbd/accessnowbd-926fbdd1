@@ -510,14 +510,15 @@ export function SupportWidget() {
       {open && tab === "faq" && (
         <div className={PANEL + " h-[min(620px,calc(100vh-1.5rem))]"}>
           <div className={SHELL + " h-full flex flex-col"}>
-            <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-amber-500/25 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-primary/30 blur-3xl" />
+            <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-indigo-600/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-[#E3C48B]/10 blur-3xl" />
 
             <PanelHeader
               title="হেল্প সেন্টার"
               subtitle="জনপ্রিয় প্রশ্নের উত্তর"
               icon={<HelpCircle className="h-5 w-5" />}
-              gradient="from-amber-400 to-orange-500"
+              gradient="from-[#3B2470] to-[#241A56]"
+
               onBack={() => setTab("home")}
               onClose={() => setOpen(false)}
             />
