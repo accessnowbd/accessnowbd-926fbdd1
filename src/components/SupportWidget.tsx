@@ -220,7 +220,8 @@ export function SupportWidget() {
   const PANEL =
     "fixed bottom-24 right-5 z-50 w-[min(400px,calc(100vw-1.5rem))] origin-bottom-right";
   const SHELL =
-    "relative rounded-[28px] overflow-hidden border border-white/[0.12] bg-[#070922]/95 backdrop-blur-2xl shadow-[0_50px_120px_-20px_rgba(0,0,0,0.9)]";
+    "relative rounded-[28px] overflow-hidden border border-white/[0.14] bg-[#0a0c22] shadow-[0_50px_120px_-20px_rgba(0,0,0,0.9)]";
+
 
   return (
     <>
@@ -554,92 +555,89 @@ export function SupportWidget() {
             {/* Messages */}
             <div
               ref={scrollRef}
-              className="relative flex-1 overflow-y-auto px-3 py-4 space-y-3"
+              className="relative flex-1 overflow-y-auto px-4 py-5 space-y-5 bg-[#0a0c22]"
             >
               {messages.length === 0 && (
-                <div className="space-y-4">
-                  <div className="flex items-start gap-2">
-                    <span className="grid place-items-center h-8 w-8 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white ring-2 ring-white/10">
-                      <Bot className="h-4 w-4" />
-                    </span>
-                    <div className="rounded-2xl rounded-tl-sm bg-white/[0.06] border border-white/10 px-3.5 py-2.5 text-[13px] text-white/90 max-w-[85%] leading-relaxed">
+                <div className="space-y-5">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="grid place-items-center h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white">
+                        <Bot className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-violet-300">
+                        AI সহকারী
+                      </span>
+                    </div>
+                    <p className="text-[13.5px] leading-relaxed text-white pl-9">
                       আসসালামু আলাইকুম! 👋
                       <br />
-                      আমি AccessNow-এর AI সহকারী। প্রোডাক্ট, পেমেন্ট, ডেলিভারি — যেকোনো বিষয়ে জিজ্ঞাসা করুন।
-                    </div>
+                      <span className="text-white/70">
+                        আমি AccessNow-এর AI সহকারী। প্রোডাক্ট, পেমেন্ট, ডেলিভারি — যেকোনো বিষয়ে জিজ্ঞাসা করুন।
+                      </span>
+                    </p>
                   </div>
 
-                  <div className="pl-10 space-y-2">
-                    <div className="text-[10.5px] font-bold uppercase tracking-wider text-white/70">
+                  <div className="space-y-2.5">
+                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-white/45">
                       জনপ্রিয় প্রশ্ন
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="grid gap-2">
                       {QUICK_PROMPTS.map((q) => (
                         <button
                           key={q}
                           onClick={() => send(q)}
-                          className="text-[11.5px] px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/15 text-white/85 hover:bg-white/[0.08] hover:border-primary/50 hover:text-white transition"
+                          className="group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl bg-[#141735] border border-white/10 text-white/85 hover:bg-[#1b1f45] hover:border-violet-400/50 hover:text-white transition"
                         >
-                          {q}
+                          <span>{q}</span>
+                          <ChevronRight className="h-3.5 w-3.5 text-white/35 group-hover:text-violet-300 group-hover:translate-x-0.5 transition" />
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="pl-10">
-                    <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/[0.06] px-3 py-2 flex items-center gap-2">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
-                      <span className="text-[11px] text-emerald-100/80">
-                        100% সিকিউর — আপনার মেসেজ এনক্রিপ্টেড
-                      </span>
-                    </div>
+                  <div className="flex items-center gap-2 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-3 py-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
+                    <span className="text-[11px] text-emerald-100/90">
+                      100% সিকিউর — আপনার মেসেজ এনক্রিপ্টেড
+                    </span>
                   </div>
                 </div>
               )}
 
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={`flex items-end gap-2 ${m.role === "user" ? "flex-row-reverse" : ""}`}
-                >
-                  <span
-                    className={`grid place-items-center h-8 w-8 shrink-0 rounded-full ring-2 ring-white/10 ${
-                      m.role === "user"
-                        ? "bg-white/10 text-white"
-                        : "bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white"
-                    }`}
-                  >
-                    {m.role === "user" ? (
-                      <User2 className="h-4 w-4" />
-                    ) : (
-                      <Bot className="h-4 w-4" />
-                    )}
-                  </span>
-                  <div
-                    className={`max-w-[78%] px-3.5 py-2.5 text-[13px] whitespace-pre-wrap leading-relaxed ${
-                      m.role === "user"
-                        ? "rounded-2xl rounded-br-sm bg-gradient-to-br from-violet-500 to-primary text-white shadow-[0_10px_25px_-10px_rgba(124,58,237,0.6)]"
-                        : "rounded-2xl rounded-bl-sm bg-white/[0.06] border border-white/10 text-white/95"
-                    }`}
-                  >
-                    {m.content || (loading ? "…" : "")}
+              {messages.map((m, i) =>
+                m.role === "user" ? (
+                  <div key={i} className="flex justify-end">
+                    <div className="max-w-[80%] rounded-2xl rounded-br-md bg-violet-600 px-3.5 py-2.5 text-[13px] leading-relaxed text-white whitespace-pre-wrap shadow-[0_10px_25px_-12px_rgba(124,58,237,0.9)]">
+                      {m.content}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ) : (
+                  <div key={i} className="space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="grid place-items-center h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white">
+                        <Bot className="h-3 w-3" />
+                      </span>
+                      <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-white/45">
+                        AI
+                      </span>
+                    </div>
+                    <div className="pl-8 text-[13.5px] leading-relaxed text-white whitespace-pre-wrap">
+                      {m.content || (loading ? "…" : "")}
+                    </div>
+                  </div>
+                ),
+              )}
 
               {loading && messages[messages.length - 1]?.role === "user" && (
-                <div className="flex items-end gap-2">
-                  <span className="grid place-items-center h-8 w-8 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white ring-2 ring-white/10">
-                    <Bot className="h-4 w-4" />
-                  </span>
-                  <div className="rounded-2xl rounded-bl-sm bg-white/[0.06] border border-white/10 px-3.5 py-3 flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-white/70 animate-bounce [animation-delay:-0.3s]" />
-                    <span className="h-1.5 w-1.5 rounded-full bg-white/70 animate-bounce [animation-delay:-0.15s]" />
-                    <span className="h-1.5 w-1.5 rounded-full bg-white/70 animate-bounce" />
-                  </div>
+                <div className="flex items-center gap-2 pl-8">
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce [animation-delay:-0.3s]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce [animation-delay:-0.15s]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce" />
+                  <span className="text-[11px] text-white/50 ml-1">ভাবছি…</span>
                 </div>
               )}
             </div>
+
 
             {/* Input */}
             <form
@@ -647,20 +645,20 @@ export function SupportWidget() {
                 e.preventDefault();
                 send(input);
               }}
-              className="relative border-t border-white/10 bg-white/[0.02] p-3"
+              className="relative border-t border-white/10 bg-[#0d102b] p-3"
             >
-              <div className="flex items-center gap-2 rounded-2xl border border-white/12 bg-white/[0.04] focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/25 transition pl-4 pr-1.5 py-1.5">
+              <div className="flex items-center gap-2 rounded-2xl border border-white/12 bg-[#171b3d] focus-within:border-violet-400/70 focus-within:ring-2 focus-within:ring-violet-500/25 transition pl-4 pr-1.5 py-1.5">
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="আপনার মেসেজ লিখুন…"
-                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-white placeholder:text-white/65"
+                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-white placeholder:text-white/45"
                   disabled={loading}
                 />
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="grid place-items-center h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 via-primary to-aqua text-white disabled:opacity-40 hover:scale-105 transition shrink-0 shadow-[0_8px_20px_-6px_rgba(124,58,237,0.7)]"
+                  className="grid place-items-center h-9 w-9 rounded-xl bg-violet-600 hover:bg-violet-500 text-white disabled:opacity-40 transition shrink-0 shadow-[0_8px_20px_-6px_rgba(124,58,237,0.8)]"
                   aria-label="Send"
                 >
                   {loading ? (
@@ -670,6 +668,7 @@ export function SupportWidget() {
                   )}
                 </button>
               </div>
+
               <div className="mt-2 flex items-center justify-between px-1">
                 <div className="flex items-center gap-1.5 text-[10px] text-white/65">
                   Powered by AI · বাংলায় সাপোর্টেড
