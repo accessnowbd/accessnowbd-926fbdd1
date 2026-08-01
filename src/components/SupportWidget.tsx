@@ -230,7 +230,8 @@ export function SupportWidget() {
   const PANEL =
     "fixed bottom-24 right-5 z-50 w-[min(400px,calc(100vw-1.5rem))] origin-bottom-right";
   const SHELL =
-    "relative rounded-[28px] overflow-hidden border border-white/[0.14] bg-[#0a0c22] shadow-[0_50px_120px_-20px_rgba(0,0,0,0.9)]";
+    "relative rounded-[28px] overflow-hidden border border-white/[0.10] bg-[#080D1C] shadow-[0_50px_120px_-20px_rgba(0,0,0,0.95)] ring-1 ring-[#E3C48B]/10";
+
 
 
   return (
