@@ -671,17 +671,17 @@ export function SupportWidget() {
               {messages.map((m, i) =>
                 m.role === "user" ? (
                   <div key={i} className="flex justify-end">
-                    <div className="max-w-[80%] rounded-2xl rounded-br-md bg-violet-600 px-3.5 py-2.5 text-[13px] leading-relaxed text-white whitespace-pre-wrap shadow-[0_10px_25px_-12px_rgba(124,58,237,0.9)]">
+                    <div className="max-w-[80%] rounded-2xl rounded-br-md bg-gradient-to-br from-indigo-500 to-violet-700 px-3.5 py-2.5 text-[13px] leading-relaxed text-white whitespace-pre-wrap shadow-[0_12px_28px_-14px_rgba(79,70,229,0.9)]">
                       {m.content}
                     </div>
                   </div>
                 ) : (
                   <div key={i} className="space-y-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="grid place-items-center h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white">
+                      <span className="grid place-items-center h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-indigo-500 to-violet-700 text-white">
                         <Bot className="h-3 w-3" />
                       </span>
-                      <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-white/45">
+                      <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-[#E3C48B]/80">
                         AI
                       </span>
                     </div>
@@ -694,9 +694,9 @@ export function SupportWidget() {
 
               {loading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex items-center gap-2 pl-8">
-                  <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce [animation-delay:-0.3s]" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce [animation-delay:-0.15s]" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#E3C48B] animate-bounce [animation-delay:-0.3s]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#E3C48B] animate-bounce [animation-delay:-0.15s]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#E3C48B] animate-bounce" />
                   <span className="text-[11px] text-white/50 ml-1">ভাবছি…</span>
                 </div>
               )}
@@ -709,20 +709,20 @@ export function SupportWidget() {
                 e.preventDefault();
                 send(input);
               }}
-              className="relative border-t border-white/10 bg-[#0d102b] p-3"
+              className="relative border-t border-white/10 bg-[#0B1122] p-3"
             >
-              <div className="flex items-center gap-2 rounded-2xl border border-white/12 bg-[#171b3d] focus-within:border-violet-400/70 focus-within:ring-2 focus-within:ring-violet-500/25 transition pl-4 pr-1.5 py-1.5">
+              <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-[#101833] focus-within:border-[#E3C48B]/55 focus-within:ring-2 focus-within:ring-[#E3C48B]/15 transition pl-4 pr-1.5 py-1.5">
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="আপনার মেসেজ লিখুন…"
-                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-white placeholder:text-white/45"
+                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-white placeholder:text-white/40"
                   disabled={loading}
                 />
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="grid place-items-center h-9 w-9 rounded-xl bg-violet-600 hover:bg-violet-500 text-white disabled:opacity-40 transition shrink-0 shadow-[0_8px_20px_-6px_rgba(124,58,237,0.8)]"
+                  className="grid place-items-center h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-700 hover:from-indigo-400 hover:to-violet-600 text-white disabled:opacity-40 transition shrink-0 shadow-[0_8px_20px_-6px_rgba(79,70,229,0.85)]"
                   aria-label="Send"
                 >
                   {loading ? (
@@ -732,6 +732,7 @@ export function SupportWidget() {
                   )}
                 </button>
               </div>
+
 
               <div className="mt-2 flex items-center justify-between px-1">
                 <div className="flex items-center gap-1.5 text-[10px] text-white/65">
