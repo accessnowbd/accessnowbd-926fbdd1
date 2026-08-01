@@ -81,6 +81,9 @@ function BackupPage() {
   const [progress, setProgress] = useState<{ pct: number; text: string } | null>(null);
   const [history, setHistory] = useState<HistoryRow[]>([]);
   const [mode, setMode] = useState<"safe" | "merge" | "replace">("safe");
+  const [zipPlan, setZipPlan] = useState<ZipPlan | null>(null);
+  const [confirmZip, setConfirmZip] = useState(false);
+
 
   const tablesRef = useRef<HTMLInputElement>(null);
   const fullRef = useRef<HTMLInputElement>(null);
