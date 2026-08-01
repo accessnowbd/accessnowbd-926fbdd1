@@ -741,7 +741,7 @@ function PanelHeader({
   showOnlineDot?: boolean;
 }) {
   return (
-    <div className="relative px-4 pt-4 pb-3.5 border-b border-white/10 flex items-center gap-2.5">
+    <div className="relative px-4 pt-4 pb-3.5 border-b border-white/10 bg-[linear-gradient(135deg,#0F1633,#1C1848)] flex items-center gap-2.5">
       <button
         onClick={onBack}
         className="grid place-items-center h-8 w-8 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition shrink-0"
@@ -751,16 +751,17 @@ function PanelHeader({
       </button>
       <div className="relative shrink-0">
         <div
-          className={`grid place-items-center h-10 w-10 rounded-2xl bg-gradient-to-br ${gradient} text-white shadow-lg ring-1 ring-white/15`}
+          className={`grid place-items-center h-10 w-10 rounded-2xl bg-gradient-to-br ${gradient} text-white shadow-lg ring-1 ring-[#E3C48B]/25`}
         >
           {icon}
         </div>
         {showOnlineDot && (
-          <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#070922]">
+          <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0F1633]">
             <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
           </span>
         )}
       </div>
+
       <div className="flex-1 leading-tight min-w-0">
         <div className="text-[14.5px] font-extrabold text-white truncate">{title}</div>
         <div className="flex items-center gap-1.5 mt-0.5">
