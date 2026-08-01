@@ -555,92 +555,89 @@ export function SupportWidget() {
             {/* Messages */}
             <div
               ref={scrollRef}
-              className="relative flex-1 overflow-y-auto px-3 py-4 space-y-3"
+              className="relative flex-1 overflow-y-auto px-4 py-5 space-y-5 bg-[#0a0c22]"
             >
               {messages.length === 0 && (
-                <div className="space-y-4">
-                  <div className="flex items-start gap-2">
-                    <span className="grid place-items-center h-8 w-8 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white ring-2 ring-white/10">
-                      <Bot className="h-4 w-4" />
-                    </span>
-                    <div className="rounded-2xl rounded-tl-sm bg-white/[0.06] border border-white/10 px-3.5 py-2.5 text-[13px] text-white/90 max-w-[85%] leading-relaxed">
+                <div className="space-y-5">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="grid place-items-center h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white">
+                        <Bot className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-violet-300">
+                        AI সহকারী
+                      </span>
+                    </div>
+                    <p className="text-[13.5px] leading-relaxed text-white pl-9">
                       আসসালামু আলাইকুম! 👋
                       <br />
-                      আমি AccessNow-এর AI সহকারী। প্রোডাক্ট, পেমেন্ট, ডেলিভারি — যেকোনো বিষয়ে জিজ্ঞাসা করুন।
-                    </div>
+                      <span className="text-white/70">
+                        আমি AccessNow-এর AI সহকারী। প্রোডাক্ট, পেমেন্ট, ডেলিভারি — যেকোনো বিষয়ে জিজ্ঞাসা করুন।
+                      </span>
+                    </p>
                   </div>
 
-                  <div className="pl-10 space-y-2">
-                    <div className="text-[10.5px] font-bold uppercase tracking-wider text-white/70">
+                  <div className="space-y-2.5">
+                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-white/45">
                       জনপ্রিয় প্রশ্ন
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="grid gap-2">
                       {QUICK_PROMPTS.map((q) => (
                         <button
                           key={q}
                           onClick={() => send(q)}
-                          className="text-[11.5px] px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/15 text-white/85 hover:bg-white/[0.08] hover:border-primary/50 hover:text-white transition"
+                          className="group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl bg-[#141735] border border-white/10 text-white/85 hover:bg-[#1b1f45] hover:border-violet-400/50 hover:text-white transition"
                         >
-                          {q}
+                          <span>{q}</span>
+                          <ChevronRight className="h-3.5 w-3.5 text-white/35 group-hover:text-violet-300 group-hover:translate-x-0.5 transition" />
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="pl-10">
-                    <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/[0.06] px-3 py-2 flex items-center gap-2">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
-                      <span className="text-[11px] text-emerald-100/80">
-                        100% সিকিউর — আপনার মেসেজ এনক্রিপ্টেড
-                      </span>
-                    </div>
+                  <div className="flex items-center gap-2 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-3 py-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
+                    <span className="text-[11px] text-emerald-100/90">
+                      100% সিকিউর — আপনার মেসেজ এনক্রিপ্টেড
+                    </span>
                   </div>
                 </div>
               )}
 
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={`flex items-end gap-2 ${m.role === "user" ? "flex-row-reverse" : ""}`}
-                >
-                  <span
-                    className={`grid place-items-center h-8 w-8 shrink-0 rounded-full ring-2 ring-white/10 ${
-                      m.role === "user"
-                        ? "bg-white/10 text-white"
-                        : "bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white"
-                    }`}
-                  >
-                    {m.role === "user" ? (
-                      <User2 className="h-4 w-4" />
-                    ) : (
-                      <Bot className="h-4 w-4" />
-                    )}
-                  </span>
-                  <div
-                    className={`max-w-[78%] px-3.5 py-2.5 text-[13px] whitespace-pre-wrap leading-relaxed ${
-                      m.role === "user"
-                        ? "rounded-2xl rounded-br-sm bg-gradient-to-br from-violet-500 to-primary text-white shadow-[0_10px_25px_-10px_rgba(124,58,237,0.6)]"
-                        : "rounded-2xl rounded-bl-sm bg-white/[0.06] border border-white/10 text-white/95"
-                    }`}
-                  >
-                    {m.content || (loading ? "…" : "")}
+              {messages.map((m, i) =>
+                m.role === "user" ? (
+                  <div key={i} className="flex justify-end">
+                    <div className="max-w-[80%] rounded-2xl rounded-br-md bg-violet-600 px-3.5 py-2.5 text-[13px] leading-relaxed text-white whitespace-pre-wrap shadow-[0_10px_25px_-12px_rgba(124,58,237,0.9)]">
+                      {m.content}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ) : (
+                  <div key={i} className="space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="grid place-items-center h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white">
+                        <Bot className="h-3 w-3" />
+                      </span>
+                      <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-white/45">
+                        AI
+                      </span>
+                    </div>
+                    <div className="pl-8 text-[13.5px] leading-relaxed text-white whitespace-pre-wrap">
+                      {m.content || (loading ? "…" : "")}
+                    </div>
+                  </div>
+                ),
+              )}
 
               {loading && messages[messages.length - 1]?.role === "user" && (
-                <div className="flex items-end gap-2">
-                  <span className="grid place-items-center h-8 w-8 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white ring-2 ring-white/10">
-                    <Bot className="h-4 w-4" />
-                  </span>
-                  <div className="rounded-2xl rounded-bl-sm bg-white/[0.06] border border-white/10 px-3.5 py-3 flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-white/70 animate-bounce [animation-delay:-0.3s]" />
-                    <span className="h-1.5 w-1.5 rounded-full bg-white/70 animate-bounce [animation-delay:-0.15s]" />
-                    <span className="h-1.5 w-1.5 rounded-full bg-white/70 animate-bounce" />
-                  </div>
+                <div className="flex items-center gap-2 pl-8">
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce [animation-delay:-0.3s]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce [animation-delay:-0.15s]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-300 animate-bounce" />
+                  <span className="text-[11px] text-white/50 ml-1">ভাবছি…</span>
                 </div>
               )}
             </div>
+
 
             {/* Input */}
             <form
