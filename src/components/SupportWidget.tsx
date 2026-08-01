@@ -241,17 +241,17 @@ export function SupportWidget() {
         <div className="support-widget-launcher fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
           {/* Chooser popup */}
           {chooser && (
-            <div className="flex flex-col items-stretch gap-2.5 w-[230px] animate-fade-in">
+            <div className="flex flex-col items-stretch gap-2.5 w-[248px] animate-fade-in">
               <button
                 onClick={() => { setChooser(false); setOpen(true); setTab("ai"); }}
-                className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0b0f29]/95 backdrop-blur-xl px-3.5 py-3 text-left shadow-[0_20px_50px_-15px_rgba(0,0,0,0.7)] hover:border-violet-400/50 transition"
+                className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0B1224] px-3.5 py-3 text-left shadow-[0_20px_50px_-15px_rgba(0,0,0,0.8)] hover:border-[#E3C48B]/45 transition"
               >
-                <span className="grid place-items-center h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-purple-600 text-white shadow-[0_10px_24px_-6px_rgba(168,85,247,0.7)] shrink-0">
+                <span className="grid place-items-center h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-700 text-white shadow-[0_10px_24px_-8px_rgba(99,102,241,0.8)] shrink-0">
                   <Bot className="h-5 w-5" />
                 </span>
                 <div className="leading-tight">
                   <div className="text-[13px] font-extrabold text-white">AI Support</div>
-                  <div className="text-[11px] text-white/70 mt-0.5">তাৎক্ষণিক উত্তর পান</div>
+                  <div className="text-[11px] text-white/60 mt-0.5">তাৎক্ষণিক উত্তর পান</div>
                 </div>
               </button>
 
@@ -260,20 +260,28 @@ export function SupportWidget() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setChooser(false)}
-                className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0b0f29]/95 backdrop-blur-xl px-3.5 py-3 text-left shadow-[0_20px_50px_-15px_rgba(0,0,0,0.7)] hover:border-emerald-400/50 transition"
+                className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0B1224] px-3.5 py-3 text-left shadow-[0_20px_50px_-15px_rgba(0,0,0,0.8)] hover:border-[#E3C48B]/45 transition"
               >
-                <span className="relative grid place-items-center h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-white shadow-[0_10px_24px_-6px_rgba(16,185,129,0.7)] shrink-0">
-                  <MessageCircle className="h-5 w-5" />
-                  <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-300 ring-2 ring-[#0b0f29] animate-pulse" />
+                <span className="relative shrink-0">
+                  <img
+                    src={supportAgent}
+                    alt={`${AGENT_NAME} — ${AGENT_ROLE}`}
+                    width={816}
+                    height={816}
+                    loading="lazy"
+                    className="h-10 w-10 rounded-xl object-cover ring-1 ring-[#E3C48B]/40"
+                  />
+                  <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0B1224]" />
                 </span>
                 <div className="leading-tight">
-                  <div className="text-[13px] font-extrabold text-white">WhatsApp</div>
-                  <div className="text-[11px] text-white/70 mt-0.5">সরাসরি কথা বলুন</div>
+                  <div className="text-[13px] font-extrabold text-white">মানুষের সাপোর্ট</div>
+                  <div className="text-[11px] text-white/60 mt-0.5">{AGENT_NAME} · এখন অনলাইন</div>
                 </div>
               </a>
 
-              <div className="text-center text-[11px] text-white/70 mt-1">কোনটি পছন্দ করবেন?</div>
+              <div className="text-center text-[11px] text-white/50 mt-1">কোনটি পছন্দ করবেন?</div>
             </div>
+
           )}
 
           <button
