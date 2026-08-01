@@ -53,6 +53,14 @@ type HistoryRow = {
   data: { created_at?: string; total_rows?: number; files?: number; kind_label?: string };
 };
 
+type ZipFileRef = { bucket: string; path: string; entry: import("jszip").JSZipObject };
+type ZipPlan = {
+  name: string;
+  tables: Record<string, unknown[]>;
+  files: ZipFileRef[];
+  totalRows: number;
+};
+
 async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T, i: number) => Promise<R>) {
   const out: R[] = new Array(items.length) as R[];
   let cursor = 0;
