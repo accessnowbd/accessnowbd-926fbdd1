@@ -19,9 +19,19 @@ import {
   ArrowLeft,
   CheckCircle2,
 } from "lucide-react";
+import supportAgent from "@/assets/support-agent.jpg";
 
 const ADMIN_PHONE = "+8801580607614";
 const ADMIN_TEL = "tel:+8801580607614";
+const AGENT_NAME = "রাফিদ হাসান";
+const AGENT_ROLE = "সাপোর্ট স্পেশালিস্ট";
+
+/* Premium palette — ink navy surfaces + single indigo/violet accent + champagne gold */
+const INK = "bg-[#080D1C]";
+const CARD = "bg-[#101833] hover:bg-[#16204233]";
+const CARD_SOLID = "bg-[#101833]";
+const GOLD = "text-[#E3C48B]";
+
 
 type Msg = { role: "user" | "assistant"; content: string };
 type Tab = "home" | "ai" | "faq";
