@@ -794,7 +794,7 @@ function BottomTabs({
     { id: "faq", label: "হেল্প", icon: <HelpCircle className="h-4 w-4" /> },
   ];
   return (
-    <div className="relative border-t border-white/10 bg-white/[0.02] grid grid-cols-3">
+    <div className="relative border-t border-white/10 bg-[#0B1122] grid grid-cols-3">
       {items.map((it) => {
         const active = tab === it.id;
         return (
@@ -802,12 +802,13 @@ function BottomTabs({
             key={it.id}
             onClick={() => setTab(it.id)}
             className={`relative flex flex-col items-center justify-center gap-1 py-2.5 text-[10.5px] font-bold transition ${
-              active ? "text-white" : "text-white/70 hover:text-white/80"
+              active ? "text-[#E3C48B]" : "text-white/55 hover:text-white/80"
             }`}
           >
             {active && (
-              <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-gradient-to-r from-violet-500 to-aqua" />
+              <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[#E3C48B]" />
             )}
+
             {it.icon}
             <span>{it.label}</span>
           </button>
