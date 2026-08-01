@@ -346,30 +346,36 @@ export function SupportWidget() {
       {open && tab === "home" && (
         <div className={PANEL}>
           <div className={SHELL}>
-            {/* Gradient hero header */}
+            {/* Premium hero header */}
             <div className="relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-violet-600 via-primary to-aqua" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_60%)]" />
-              <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
+              <div className="absolute inset-0 bg-[linear-gradient(135deg,#0F1633_0%,#241A56_55%,#3B2470_100%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(227,196,139,0.18),transparent_60%)]" />
+              <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#E3C48B]/50 to-transparent" />
 
               <div className="relative px-5 pt-5 pb-6">
                 <div className="flex items-start justify-between">
-                  {/* Avatar stack */}
-                  <div className="flex -space-x-2">
-                    <span className="grid place-items-center h-10 w-10 rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-600 text-white ring-2 ring-white/30 shadow-lg">
-                      <Bot className="h-5 w-5" />
+                  {/* Human agent + team */}
+                  <div className="flex items-center gap-3">
+                    <span className="relative shrink-0">
+                      <img
+                        src={supportAgent}
+                        alt={`${AGENT_NAME} — ${AGENT_ROLE}`}
+                        width={816}
+                        height={816}
+                        loading="lazy"
+                        className="h-12 w-12 rounded-full object-cover ring-2 ring-[#E3C48B]/60 shadow-[0_10px_26px_-10px_rgba(0,0,0,0.9)]"
+                      />
+                      <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-[#161B3A]" />
                     </span>
-                    <span className="grid place-items-center h-10 w-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white ring-2 ring-white/30 shadow-lg">
-                      <Headphones className="h-5 w-5" />
-                    </span>
-                    <span className="grid place-items-center h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white ring-2 ring-white/30 shadow-lg">
-                      <ShieldCheck className="h-5 w-5" />
-                    </span>
+                    <div className="leading-tight">
+                      <div className="text-[13px] font-extrabold text-white">{AGENT_NAME}</div>
+                      <div className={`text-[10.5px] font-semibold ${GOLD}`}>{AGENT_ROLE}</div>
+                    </div>
                   </div>
                   <button
                     onClick={() => setOpen(false)}
                     aria-label="Close"
-                    className="grid place-items-center h-8 w-8 rounded-full text-white/85 hover:text-white hover:bg-white/15 transition"
+                    className="grid place-items-center h-8 w-8 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -380,12 +386,12 @@ export function SupportWidget() {
                   <br />
                   কীভাবে সাহায্য করব?
                 </h2>
-                <div className="mt-2.5 flex items-center gap-2 text-[11.5px] font-semibold text-white/90">
-                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-300/40 backdrop-blur-sm">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
+                <div className="mt-2.5 flex items-center gap-2 text-[11.5px] font-semibold">
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-200">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <span>24/7 অনলাইন</span>
                   </span>
-                  <span className="inline-flex items-center gap-1 text-white/80">
+                  <span className="inline-flex items-center gap-1 text-white/60">
                     <Clock className="h-3 w-3" />
                     ~2 মিনিটে রিপ্লাই
                   </span>
@@ -394,95 +400,103 @@ export function SupportWidget() {
             </div>
 
             {/* Body */}
-            <div className="relative p-3 space-y-3 -mt-3">
+            <div className="relative p-3 space-y-3">
               {/* Start a conversation card */}
               <button
                 onClick={() => setTab("ai")}
-                className="group relative w-full text-left rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] hover:from-white/[0.09] hover:to-white/[0.03] hover:border-violet-400/40 transition-all duration-300 p-3.5 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.5)]"
+                className="group relative w-full text-left rounded-2xl border border-white/10 bg-[#101833] hover:border-[#E3C48B]/40 hover:bg-[#141D3D] transition-all duration-300 p-3.5 shadow-[0_14px_34px_-20px_rgba(0,0,0,0.9)]"
               >
                 <div className="flex items-center gap-3">
-                  <span className="relative grid place-items-center h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-purple-600 text-white shadow-[0_12px_28px_-8px_rgba(168,85,247,0.7)] shrink-0">
+                  <span className="relative grid place-items-center h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-700 text-white shadow-[0_12px_28px_-10px_rgba(99,102,241,0.9)] shrink-0">
                     <MessageCircleMore className="h-5 w-5" />
                   </span>
                   <div className="flex-1 leading-tight">
                     <div className="flex items-center gap-1.5">
                       <span className="text-[14px] font-extrabold text-white">নতুন কথোপকথন শুরু করুন</span>
-                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-violet-500/25 text-violet-200 border border-violet-300/30">
+                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#E3C48B]/15 text-[#E3C48B] border border-[#E3C48B]/30">
                         AI
                       </span>
                     </div>
-                    <span className="block text-[11.5px] text-white/70 mt-0.5">
+                    <span className="block text-[11.5px] text-white/60 mt-0.5">
                       তাৎক্ষণিক উত্তর — বাংলায়, 24/7
                     </span>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-white/70 group-hover:text-white group-hover:translate-x-1 transition" />
+                  <ChevronRight className="h-4 w-4 text-white/45 group-hover:text-[#E3C48B] group-hover:translate-x-1 transition" />
                 </div>
               </button>
 
-              {/* Quick channels row */}
+              {/* Talk to a human */}
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group w-full flex items-center gap-3 rounded-2xl border border-white/10 bg-[#101833] hover:bg-[#141D3D] hover:border-[#E3C48B]/40 p-3.5 transition-all text-left"
+              >
+                <span className="relative shrink-0">
+                  <img
+                    src={supportAgent}
+                    alt={`${AGENT_NAME} — ${AGENT_ROLE}`}
+                    width={816}
+                    height={816}
+                    loading="lazy"
+                    className="h-12 w-12 rounded-2xl object-cover ring-1 ring-[#E3C48B]/40"
+                  />
+                  <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-[#101833]" />
+                </span>
+                <div className="flex-1 leading-tight">
+                  <div className="text-[13.5px] font-extrabold text-white">মানুষের সাথে কথা বলুন</div>
+                  <div className="text-[11px] text-white/60 mt-0.5">
+                    {AGENT_NAME} · WhatsApp-এ সরাসরি
+                  </div>
+                </div>
+                <ChevronRight className="h-4 w-4 text-white/45 group-hover:text-[#E3C48B] group-hover:translate-x-0.5 transition" />
+              </a>
+
+              {/* Call + Help center */}
               <div className="grid grid-cols-2 gap-2">
                 <a
-                  href={WHATSAPP_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-emerald-400/50 p-3 transition-all"
-                >
-                  <span className="relative grid place-items-center h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-white shadow-[0_8px_20px_-6px_rgba(16,185,129,0.7)]">
-                    <MessageCircle className="h-4.5 w-4.5" />
-                    <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-300 ring-2 ring-[#070922] animate-pulse" />
-                  </span>
-                  <div className="mt-2 text-[12.5px] font-extrabold text-white">WhatsApp</div>
-                  <div className="text-[10.5px] text-white/70 mt-0.5">সরাসরি চ্যাট</div>
-                </a>
-
-                <a
                   href={ADMIN_TEL}
-                  className="group rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-aqua/50 p-3 transition-all"
+                  className="group rounded-2xl border border-white/10 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/35 p-3 transition-all"
                 >
-                  <span className="grid place-items-center h-9 w-9 rounded-xl bg-gradient-to-br from-sky-500 via-cyan-500 to-aqua text-white shadow-[0_8px_20px_-6px_rgba(34,211,238,0.7)]">
-                    <Phone className="h-4.5 w-4.5" />
+                  <span className="grid place-items-center h-9 w-9 rounded-xl bg-white/[0.06] border border-white/10 text-[#E3C48B]">
+                    <Phone className="h-4 w-4" />
                   </span>
                   <div className="mt-2 text-[12.5px] font-extrabold text-white">কল করুন</div>
-                  <div className="text-[10.5px] text-white/70 mt-0.5 font-mono">
+                  <div className="text-[10.5px] text-white/55 mt-0.5 font-mono">
                     {ADMIN_PHONE}
                   </div>
                 </a>
-              </div>
 
-              {/* Help / FAQ */}
-              <button
-                onClick={() => setTab("faq")}
-                className="group w-full flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-amber-400/40 p-3 transition-all text-left"
-              >
-                <span className="grid place-items-center h-10 w-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-[0_8px_20px_-6px_rgba(251,146,60,0.6)] shrink-0">
-                  <HelpCircle className="h-5 w-5" />
-                </span>
-                <div className="flex-1 leading-tight">
-                  <div className="text-[13px] font-extrabold text-white">হেল্প সেন্টার</div>
-                  <div className="text-[11px] text-white/70 mt-0.5">
-                    জনপ্রিয় প্রশ্ন ও তাৎক্ষণিক উত্তর
-                  </div>
-                </div>
-                <ChevronRight className="h-4 w-4 text-white/65 group-hover:text-white/80 group-hover:translate-x-0.5 transition" />
-              </button>
+                <button
+                  onClick={() => setTab("faq")}
+                  className="group text-left rounded-2xl border border-white/10 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/35 p-3 transition-all"
+                >
+                  <span className="grid place-items-center h-9 w-9 rounded-xl bg-white/[0.06] border border-white/10 text-[#E3C48B]">
+                    <HelpCircle className="h-4 w-4" />
+                  </span>
+                  <div className="mt-2 text-[12.5px] font-extrabold text-white">হেল্প সেন্টার</div>
+                  <div className="text-[10.5px] text-white/55 mt-0.5">জনপ্রিয় প্রশ্ন</div>
+                </button>
+              </div>
 
               {/* Trust strip */}
               <div className="grid grid-cols-3 gap-2 pt-1">
-                <div className="rounded-xl border border-white/8 bg-white/[0.02] px-2 py-2 text-center">
-                  <Zap className="h-3.5 w-3.5 text-amber-300 mx-auto" />
-                  <div className="text-[10px] text-white/70 mt-1">দ্রুত রেসপন্স</div>
+                <div className="rounded-xl border border-white/[0.07] bg-[#0C1226] px-2 py-2 text-center">
+                  <Zap className="h-3.5 w-3.5 text-[#E3C48B] mx-auto" />
+                  <div className="text-[10px] text-white/55 mt-1">দ্রুত রেসপন্স</div>
                   <div className="text-[11px] font-extrabold text-white">~2 মিনিট</div>
                 </div>
-                <div className="rounded-xl border border-white/8 bg-white/[0.02] px-2 py-2 text-center">
-                  <Star className="h-3.5 w-3.5 text-amber-300 mx-auto fill-amber-300" />
-                  <div className="text-[10px] text-white/70 mt-1">রেটিং</div>
+                <div className="rounded-xl border border-white/[0.07] bg-[#0C1226] px-2 py-2 text-center">
+                  <Star className="h-3.5 w-3.5 text-[#E3C48B] mx-auto fill-[#E3C48B]" />
+                  <div className="text-[10px] text-white/55 mt-1">রেটিং</div>
                   <div className="text-[11px] font-extrabold text-white">4.9 / 5</div>
                 </div>
-                <div className="rounded-xl border border-white/8 bg-white/[0.02] px-2 py-2 text-center">
+                <div className="rounded-xl border border-white/[0.07] bg-[#0C1226] px-2 py-2 text-center">
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-300 mx-auto" />
-                  <div className="text-[10px] text-white/70 mt-1">ভেরিফাইড</div>
+                  <div className="text-[10px] text-white/55 mt-1">ভেরিফাইড</div>
                   <div className="text-[11px] font-extrabold text-white">5000+</div>
                 </div>
+
               </div>
             </div>
 
