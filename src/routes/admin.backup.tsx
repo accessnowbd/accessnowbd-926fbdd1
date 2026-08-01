@@ -253,52 +253,78 @@ function BackupPage() {
     finally { setBusy(null); setTimeout(() => setProgress(null), 1200); }
   };
 
-  /** Complete ZIP: database.json + storage/<bucket>/<path> uploaded back in parallel. */
+  /** Step 1 — detect: read the ZIP, build a summary, wait for confirmation. */
   const onZipFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; e.target.value = "";
     if (!file) return;
-    setBusy("restore"); setProgress({ pct: 4, text: "ZIP খোলা হচ্ছে…" });
+    setBusy("restore"); setProgress({ pct: 10, text: "ZIP স্ক্যান হচ্ছে…" });
     try {
       const JSZip = (await import("jszip")).default;
       const zip = await JSZip.loadAsync(file);
+
       const dbEntry = zip.file("database.json");
-      let tables: Record<string, unknown[]> = {};
+      const tables: Record<string, unknown[]> = {};
       if (dbEntry) {
         const parsed = JSON.parse(await dbEntry.async("string"));
-        tables = parsed.tables ?? {};
-      } else {
-        for (const k of TABLE_KEYS) {
-          const f = zip.file(`tables/${k}.json`);
-          if (f) tables[k] = JSON.parse(await f.async("string"));
+        for (const [k, rows] of Object.entries((parsed.tables ?? {}) as Record<string, unknown[]>)) {
+          if (Array.isArray(rows)) tables[k] = rows;
         }
       }
-      setProgress({ pct: 20, text: "ডেটাবেস রিস্টোর হচ্ছে…" });
-      const added = Object.keys(tables).length ? await applyRestore({ tables }, "ZIP ডেটাবেস রিস্টোর") : 0;
+      for (const k of TABLE_KEYS) {
+        if (tables[k]) continue;
+        const f = zip.file(`tables/${k}.json`);
+        if (f) {
+          const rows = JSON.parse(await f.async("string"));
+          if (Array.isArray(rows)) tables[k] = rows;
+        }
+      }
 
-      const storageEntries: { bucket: string; path: string; entry: import("jszip").JSZipObject }[] = [];
+      const files: { bucket: string; path: string; entry: import("jszip").JSZipObject }[] = [];
       zip.folder("storage")?.forEach((relPath, entry) => {
         if (entry.dir) return;
         const [bucket, ...rest] = relPath.split("/");
         if (!bucket || !rest.length) return;
-        storageEntries.push({ bucket, path: rest.join("/"), entry });
+        files.push({ bucket, path: rest.join("/"), entry });
       });
 
+      if (!Object.keys(tables).length && !files.length)
+        throw new Error("ZIP-এ কোনো database.json / tables / storage ফাইল পাওয়া যায়নি");
+
+      const totalRows = Object.values(tables).reduce((a, b) => a + b.length, 0);
+      setZipPlan({ name: file.name, tables, files, totalRows });
+      setConfirmZip(false);
+      setProgress({ pct: 100, text: "ZIP ডিটেক্ট সম্পন্ন" });
+      toast.success(`ZIP ডিটেক্ট হয়েছে — ${BN(totalRows)} সারি, ${BN(files.length)} ফাইল`);
+    } catch (err) { toast.error(err instanceof Error ? err.message : "ZIP পড়া যায়নি"); }
+    finally { setBusy(null); setTimeout(() => setProgress(null), 1200); }
+  };
+
+  /** Step 2 — restore everything detected in the ZIP (database + all storage files). */
+  const runZipRestore = async () => {
+    if (!zipPlan || !confirmZip) return;
+    const { tables, files } = zipPlan;
+    setBusy("restore"); setProgress({ pct: 6, text: "ডেটাবেস রিস্টোর হচ্ছে…" });
+    try {
+      const added = Object.keys(tables).length ? await applyRestore({ tables }, "ZIP ডেটাবেস রিস্টোর") : 0;
+
       let done = 0; let failed = 0;
-      await mapLimit(storageEntries, 4, async (it) => {
+      await mapLimit(files, 4, async (it) => {
         try {
           const b64 = await it.entry.async("base64");
           const res = await runUploadFile({ data: { bucket: it.bucket, path: it.path, base64: b64 } });
           if (!res.ok) failed++;
         } catch { failed++; }
         done++;
-        setProgress({ pct: 25 + Math.round((done / Math.max(storageEntries.length, 1)) * 73), text: `ফাইল আপলোড ${BN(done)}/${BN(storageEntries.length)}` });
+        setProgress({ pct: 25 + Math.round((done / Math.max(files.length, 1)) * 73), text: `ফাইল আপলোড ${BN(done)}/${BN(files.length)}` });
       });
       setProgress({ pct: 100, text: "সম্পন্ন" });
-      await recordHistory("Complete ZIP Restore", added, storageEntries.length - failed);
-      toast.success(`ZIP রিস্টোর সম্পন্ন — ${BN(added)} সারি, ${BN(storageEntries.length - failed)} ফাইল${failed ? ` (${BN(failed)} ব্যর্থ)` : ""}`);
+      await recordHistory("Complete ZIP Restore", added, files.length - failed);
+      toast.success(`ZIP রিস্টোর সম্পন্ন — ${BN(added)} সারি, ${BN(files.length - failed)} ফাইল${failed ? ` (${BN(failed)} ব্যর্থ)` : ""}`);
+      setZipPlan(null); setConfirmZip(false);
     } catch (err) { toast.error(err instanceof Error ? err.message : "ZIP restore failed"); }
     finally { setBusy(null); setTimeout(() => setProgress(null), 1500); }
   };
+
 
   const deleteHistory = async (id: string) => {
     if (!confirm("ইতিহাস থেকে এই এন্ট্রি মুছবেন?")) return;
