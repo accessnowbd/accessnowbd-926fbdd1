@@ -573,14 +573,14 @@ export function SupportWidget() {
       {open && tab === "ai" && (
         <div className={PANEL + " h-[min(640px,calc(100vh-1.5rem))]"}>
           <div className={SHELL + " h-full flex flex-col"}>
-            <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-primary/40 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-aqua/30 blur-3xl" />
+            <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-indigo-600/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-[#E3C48B]/10 blur-3xl" />
 
             <PanelHeader
               title="AI Assistant"
-              subtitle={loading ? "Typing…" : "Online · তাৎক্ষণিক রেসপন্স"}
+              subtitle={loading ? "লিখছে…" : "অনলাইন · তাৎক্ষণিক রেসপন্স"}
               icon={<Bot className="h-5 w-5" />}
-              gradient="from-violet-500 via-fuchsia-500 to-purple-600"
+              gradient="from-indigo-500 to-violet-700"
               onBack={() => setTab("home")}
               onClose={() => setOpen(false)}
               showOnlineDot
@@ -589,30 +589,30 @@ export function SupportWidget() {
             {/* Messages */}
             <div
               ref={scrollRef}
-              className="relative flex-1 overflow-y-auto px-4 py-5 space-y-5 bg-[#0a0c22]"
+              className="relative flex-1 overflow-y-auto px-4 py-5 space-y-5 bg-[#080D1C]"
             >
               {messages.length === 0 && (
                 <div className="space-y-5">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="grid place-items-center h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white">
+                      <span className="grid place-items-center h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-indigo-500 to-violet-700 text-white">
                         <Bot className="h-3.5 w-3.5" />
                       </span>
-                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-violet-300">
+                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#E3C48B]">
                         AI সহকারী
                       </span>
                     </div>
                     <p className="text-[13.5px] leading-relaxed text-white pl-9">
                       আসসালামু আলাইকুম! 👋
                       <br />
-                      <span className="text-white/70">
+                      <span className="text-white/65">
                         আমি AccessNow-এর AI সহকারী। প্রোডাক্ট, পেমেন্ট, ডেলিভারি — যেকোনো বিষয়ে জিজ্ঞাসা করুন।
                       </span>
                     </p>
                   </div>
 
                   <div className="space-y-2.5">
-                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-white/45">
+                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-white/40">
                       জনপ্রিয় প্রশ্ন
                     </div>
                     <div className="grid gap-2">
@@ -620,16 +620,45 @@ export function SupportWidget() {
                         <button
                           key={q}
                           onClick={() => send(q)}
-                          className="group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl bg-[#141735] border border-white/10 text-white/85 hover:bg-[#1b1f45] hover:border-violet-400/50 hover:text-white transition"
+                          className="group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl bg-[#101833] border border-white/[0.08] text-white/85 hover:bg-[#141D3D] hover:border-[#E3C48B]/40 hover:text-white transition"
                         >
                           <span>{q}</span>
-                          <ChevronRight className="h-3.5 w-3.5 text-white/35 group-hover:text-violet-300 group-hover:translate-x-0.5 transition" />
+                          <ChevronRight className="h-3.5 w-3.5 text-white/30 group-hover:text-[#E3C48B] group-hover:translate-x-0.5 transition" />
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-3 py-2">
+                  {/* Human agent handoff */}
+                  <a
+                    href={WHATSAPP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-3 rounded-2xl border border-[#E3C48B]/25 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/50 p-3 transition"
+                  >
+                    <span className="relative shrink-0">
+                      <img
+                        src={supportAgent}
+                        alt={`${AGENT_NAME} — ${AGENT_ROLE}`}
+                        width={816}
+                        height={816}
+                        loading="lazy"
+                        className="h-10 w-10 rounded-full object-cover ring-1 ring-[#E3C48B]/45"
+                      />
+                      <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0E1530]" />
+                    </span>
+                    <div className="flex-1 leading-tight">
+                      <div className="text-[12.5px] font-extrabold text-white">
+                        মানুষের সাথে কথা বলুন
+                      </div>
+                      <div className="text-[10.5px] text-white/55 mt-0.5">
+                        {AGENT_NAME} · {AGENT_ROLE}
+                      </div>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-white/40 group-hover:text-[#E3C48B] transition" />
+                  </a>
+
+                  <div className="flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/[0.08] px-3 py-2">
                     <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
                     <span className="text-[11px] text-emerald-100/90">
                       100% সিকিউর — আপনার মেসেজ এনক্রিপ্টেড
@@ -637,6 +666,7 @@ export function SupportWidget() {
                   </div>
                 </div>
               )}
+
 
               {messages.map((m, i) =>
                 m.role === "user" ? (
