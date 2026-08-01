@@ -645,20 +645,20 @@ export function SupportWidget() {
                 e.preventDefault();
                 send(input);
               }}
-              className="relative border-t border-white/10 bg-white/[0.02] p-3"
+              className="relative border-t border-white/10 bg-[#0d102b] p-3"
             >
-              <div className="flex items-center gap-2 rounded-2xl border border-white/12 bg-white/[0.04] focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/25 transition pl-4 pr-1.5 py-1.5">
+              <div className="flex items-center gap-2 rounded-2xl border border-white/12 bg-[#171b3d] focus-within:border-violet-400/70 focus-within:ring-2 focus-within:ring-violet-500/25 transition pl-4 pr-1.5 py-1.5">
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="আপনার মেসেজ লিখুন…"
-                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-white placeholder:text-white/65"
+                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-white placeholder:text-white/45"
                   disabled={loading}
                 />
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="grid place-items-center h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 via-primary to-aqua text-white disabled:opacity-40 hover:scale-105 transition shrink-0 shadow-[0_8px_20px_-6px_rgba(124,58,237,0.7)]"
+                  className="grid place-items-center h-9 w-9 rounded-xl bg-violet-600 hover:bg-violet-500 text-white disabled:opacity-40 transition shrink-0 shadow-[0_8px_20px_-6px_rgba(124,58,237,0.8)]"
                   aria-label="Send"
                 >
                   {loading ? (
@@ -668,6 +668,7 @@ export function SupportWidget() {
                   )}
                 </button>
               </div>
+
               <div className="mt-2 flex items-center justify-between px-1">
                 <div className="flex items-center gap-1.5 text-[10px] text-white/65">
                   Powered by AI · বাংলায় সাপোর্টেড
