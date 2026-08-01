@@ -498,6 +498,66 @@ function BackupPage() {
             wide disabled={busy !== null} onClick={() => zipRef.current?.click()}
           />
 
+          {/* Detected ZIP summary → confirm → full restore */}
+          {zipPlan && (
+            <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+              <div className="px-5 py-3 border-b border-slate-100 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Archive className="w-4 h-4 text-violet-600 shrink-0" />
+                  <h3 className="font-bold text-slate-900 text-sm truncate">ZIP সারসংক্ষেপ</h3>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-xs font-semibold text-slate-600">{BN(zipPlan.totalRows)} rows</span>
+                  <span className="text-[11px] font-bold px-2 py-1 rounded-full bg-violet-100 text-violet-700">
+                    {BN(zipPlan.files.length)} files
+                  </span>
+                </div>
+              </div>
+
+              <div className="max-h-64 overflow-y-auto divide-y divide-slate-100">
+                {Object.entries(zipPlan.tables)
+                  .sort((a, b) => b[1].length - a[1].length)
+                  .map(([k, rows]) => (
+                    <div key={k} className="px-5 py-2.5 flex items-center justify-between gap-3 hover:bg-slate-50">
+                      <span className="text-sm text-slate-700 font-mono truncate">{label(k)}</span>
+                      <span className="text-sm font-bold text-slate-900 shrink-0">{BN(rows.length)} rows</span>
+                    </div>
+                  ))}
+              </div>
+
+              <label className="mx-4 my-3 flex items-center gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 cursor-pointer">
+                <input
+                  type="checkbox" checked={confirmZip}
+                  onChange={(e) => setConfirmZip(e.target.checked)}
+                  className="w-4 h-4 accent-violet-600"
+                />
+                <span className="text-sm font-semibold text-slate-800">
+                  সব database + storage restore করব — আমি নিশ্চিত
+                </span>
+              </label>
+
+              <div className="px-5 py-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                <button
+                  onClick={runZipRestore}
+                  disabled={!confirmZip || busy !== null}
+                  className="h-10 px-5 rounded-full inline-flex items-center gap-2 text-sm font-bold transition disabled:opacity-40 disabled:cursor-not-allowed bg-violet-600 hover:bg-violet-700 text-white shadow-sm"
+                >
+                  {busy === "restore" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Archive className="w-4 h-4" />}
+                  ZIP Full Restore
+                </button>
+                <button
+                  onClick={() => { setZipPlan(null); setConfirmZip(false); }}
+                  disabled={busy !== null}
+                  className="w-10 h-10 rounded-full border border-slate-200 bg-white text-slate-500 hover:text-rose-600 hover:border-rose-200 grid place-items-center transition"
+                  aria-label="ZIP বাতিল করুন"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+
           <input ref={tablesRef} type="file" multiple accept="application/json,.json" className="hidden" onChange={onTableFiles} />
           <input ref={fullRef} type="file" accept="application/json,.json" className="hidden" onChange={onFullFile} />
           <input ref={zipRef} type="file" accept=".zip,application/zip" className="hidden" onChange={onZipFile} />
