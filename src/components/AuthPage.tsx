@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Loader2, Eye, EyeOff, X, CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,6 +8,8 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/context/AuthContext";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import { BrandLogo } from "@/components/BrandLogo";
+import { BotVerification } from "@/components/BotVerification";
+import { verifyHuman } from "@/lib/bot-guard.functions";
 
 export function AuthPageEntry({ initialMode, openForgot }: { initialMode: "login" | "signup"; openForgot?: boolean }) {
   return <AuthPage initialMode={initialMode} openForgot={openForgot} />;
