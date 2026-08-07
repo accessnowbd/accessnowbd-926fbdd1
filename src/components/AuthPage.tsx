@@ -261,8 +261,17 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
           </div>
 
           <form onSubmit={submit} className="space-y-4">
+            {/* Honeypot — hidden from humans, bots fill it in */}
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute opacity-0 pointer-events-none h-0 w-0 -z-10"
+            />
             {!isLogin && (
-              <>
+              <></amp-placeholder>
                 <Field
                   label="Full Name"
                   name="name"
