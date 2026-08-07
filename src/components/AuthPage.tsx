@@ -271,7 +271,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
               className="absolute opacity-0 pointer-events-none h-0 w-0 -z-10"
             />
             {!isLogin && (
-              <></amp-placeholder>
+              <>
                 <Field
                   label="Full Name"
                   name="name"
