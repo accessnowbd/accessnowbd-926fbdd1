@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Loader2, Eye, EyeOff, X, CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,6 +8,8 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/context/AuthContext";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import { BrandLogo } from "@/components/BrandLogo";
+import { BotVerification } from "@/components/BotVerification";
+import { verifyHuman } from "@/lib/bot-guard.functions";
 
 export function AuthPageEntry({ initialMode, openForgot }: { initialMode: "login" | "signup"; openForgot?: boolean }) {
   return <AuthPage initialMode={initialMode} openForgot={openForgot} />;
@@ -39,6 +42,15 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
   const [forgotMsg, setForgotMsg] = useState<string | null>(null);
   const [forgotErr, setForgotErr] = useState<string | null>(null);
   const [forgotBusy, setForgotBusy] = useState(false);
+
+  // ---- Bot protection (honeypot + timing + optional Turnstile CAPTCHA) ----
+  const checkHuman = useServerFn(verifyHuman);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const onCaptchaToken = useCallback((t: string | null) => setCaptchaToken(t), []);
+  const formOpenedAt = useRef<number>(Date.now());
+  useEffect(() => {
+    formOpenedAt.current = Date.now();
+  }, [mode]);
 
   // Where to return after login. Priority:
   // 1. ?redirect=<path> search param (set by route guards / header links)
@@ -136,6 +148,18 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
         if (!agree) throw new Error("Please agree to the Terms & Privacy Policy");
         const parsed = signupSchema.safeParse(values);
         if (!parsed.success) throw new Error(parsed.error.issues[0].message);
+
+        // Bot / abuse verification before creating the account
+        const guard = await checkHuman({
+          data: {
+            token: captchaToken ?? undefined,
+            honeypot: String(fd.get("website") || ""),
+            elapsedMs: Date.now() - formOpenedAt.current,
+            action: "signup",
+          },
+        });
+        if (!guard.ok) throw new Error(guard.reason);
+
         const { data: signUpData, error } = await supabase.auth.signUp({
           email: parsed.data.email,
           password: parsed.data.password,
@@ -237,6 +261,15 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
           </div>
 
           <form onSubmit={submit} className="space-y-4">
+            {/* Honeypot — hidden from humans, bots fill it in */}
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute opacity-0 pointer-events-none h-0 w-0 -z-10"
+            />
             {!isLogin && (
               <>
                 <Field
@@ -328,6 +361,8 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                 </button>
               </div>
             ) : (
+              <>
+              <BotVerification onToken={onCaptchaToken} />
               <label className="flex items-start gap-2 text-[13px] text-slate-600 cursor-pointer select-none">
                 <span
                   onClick={(e) => {
@@ -350,6 +385,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                   <span className="font-bold text-slate-900">Privacy Policy</span>
                 </span>
               </label>
+              </>
             )}
 
             {err && (

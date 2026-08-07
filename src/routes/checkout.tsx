@@ -88,7 +88,7 @@ function CheckoutPage() {
 
   const { step, coupon } = Route.useSearch();
   const setStep = (n: 1 | 2) =>
-    navigate({ to: "/checkout", search: { step: String(n), coupon }, replace: false });
+    navigate({ to: "/checkout", search: { step: n, coupon }, replace: false });
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -238,7 +238,7 @@ function CheckoutPage() {
   useEffect(() => {
     if (step === 2 && !step1Valid) {
       setTouched((t) => ({ ...t, name: true, email: true, phone: true }));
-      navigate({ to: "/checkout", search: { step: "1", coupon }, replace: true });
+      navigate({ to: "/checkout", search: { step: 1, coupon }, replace: true });
     }
   }, [step, step1Valid, navigate, coupon]);
 
@@ -496,7 +496,7 @@ function CheckoutPage() {
   if (step === 1) {
     const applyCouponNow = () => {
       const code = couponInput.trim().toUpperCase();
-      navigate({ to: "/checkout", search: { step: "1", coupon: code }, replace: true });
+      navigate({ to: "/checkout", search: { step: 1, coupon: code }, replace: true });
     };
     return (
       <div className="checkout-page min-h-screen bg-background text-foreground grid place-items-center px-4 py-8 md:py-12">

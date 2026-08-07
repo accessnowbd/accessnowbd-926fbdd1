@@ -268,7 +268,7 @@ function ProductPage() {
       });
     }
     addToCart();
-    navigate({ to: "/checkout" });
+    navigate({ to: "/checkout", search: { step: 1, coupon: "" } });
   };
 
   const hasDiscount = !!plan?.original && parsePrice(plan.original) > parsePrice(plan.price);
