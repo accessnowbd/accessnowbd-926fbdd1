@@ -361,6 +361,8 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                 </button>
               </div>
             ) : (
+              <>
+              <BotVerification onToken={onCaptchaToken} />
               <label className="flex items-start gap-2 text-[13px] text-slate-600 cursor-pointer select-none">
                 <span
                   onClick={(e) => {
