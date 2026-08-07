@@ -667,18 +667,19 @@ function SeoTab({ config, setConfig }: { config: HomepageConfig; setConfig: (c: 
 function ShortcutsTab() {
   const { t } = useAdminLang();
   const items = [
-    { to: "/admin/hero-banners", label: t("Hero Banners", "হিরো ব্যানার"), hint: t("Edit rotating hero slides", "স্লাইডিং ব্যানার এডিট করুন") },
-    { to: "/admin/categories", label: t("Categories", "ক্যাটাগরি"), hint: t("Manage product categories", "ক্যাটাগরি ব্যবস্থাপনা") },
-    { to: "/admin/products", label: t("Products", "প্রোডাক্ট"), hint: t("Create & edit products shown on rails", "প্রোডাক্ট এডিট") },
-    { to: "/admin/welcome-popup", label: t("Welcome Popup", "ওয়েলকাম পপআপ"), hint: t("Homepage first-visit modal", "প্রথম ভিজিটের পপআপ") },
-    { to: "/admin/site-settings", label: t("Site Settings", "সাইট সেটিংস"), hint: t("Branding, contact, footer", "ব্র্যান্ডিং, কন্টাক্ট") },
+    { page: "hero-banners", label: t("Hero Banners", "হিরো ব্যানার"), hint: t("Edit rotating hero slides", "স্লাইডিং ব্যানার এডিট করুন") },
+    { page: "categories", label: t("Categories", "ক্যাটাগরি"), hint: t("Manage product categories", "ক্যাটাগরি ব্যবস্থাপনা") },
+    { page: "products", label: t("Products", "প্রোডাক্ট"), hint: t("Create & edit products shown on rails", "প্রোডাক্ট এডিট") },
+    { page: "welcome-popup", label: t("Welcome Popup", "ওয়েলকাম পপআপ"), hint: t("Homepage first-visit modal", "প্রথম ভিজিটের পপআপ") },
+    { page: "site-settings", label: t("Site Settings", "সাইট সেটিংস"), hint: t("Branding, contact, footer", "ব্র্যান্ডিং, কন্টাক্ট") },
   ] as const;
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
       {items.map((it) => (
         <Link
-          key={it.to}
-          to={it.to}
+          key={it.page}
+          to="/admin/$page"
+          params={{ page: it.page }}
           className="group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-amber-300 transition"
         >
           <div className="flex items-start justify-between gap-3">
