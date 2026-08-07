@@ -43,6 +43,15 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
   const [forgotErr, setForgotErr] = useState<string | null>(null);
   const [forgotBusy, setForgotBusy] = useState(false);
 
+  // ---- Bot protection (honeypot + timing + optional Turnstile CAPTCHA) ----
+  const checkHuman = useServerFn(verifyHuman);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const onCaptchaToken = useCallback((t: string | null) => setCaptchaToken(t), []);
+  const formOpenedAt = useRef<number>(Date.now());
+  useEffect(() => {
+    formOpenedAt.current = Date.now();
+  }, [mode]);
+
   // Where to return after login. Priority:
   // 1. ?redirect=<path> search param (set by route guards / header links)
   // 2. sessionStorage "auth:returnTo" (set by callers right before navigating)
