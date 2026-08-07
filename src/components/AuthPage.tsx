@@ -148,6 +148,18 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
         if (!agree) throw new Error("Please agree to the Terms & Privacy Policy");
         const parsed = signupSchema.safeParse(values);
         if (!parsed.success) throw new Error(parsed.error.issues[0].message);
+
+        // Bot / abuse verification before creating the account
+        const guard = await checkHuman({
+          data: {
+            token: captchaToken ?? undefined,
+            honeypot: String(fd.get("website") || ""),
+            elapsedMs: Date.now() - formOpenedAt.current,
+            action: "signup",
+          },
+        });
+        if (!guard.ok) throw new Error(guard.reason);
+
         const { data: signUpData, error } = await supabase.auth.signUp({
           email: parsed.data.email,
           password: parsed.data.password,
