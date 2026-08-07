@@ -385,6 +385,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
                   <span className="font-bold text-slate-900">Privacy Policy</span>
                 </span>
               </label>
+              </>
             )}
 
             {err && (
