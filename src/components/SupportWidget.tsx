@@ -554,19 +554,21 @@ export function SupportWidget() {
       {/* === AI CHAT TAB === */}
       {open && tab === "ai" && (
         <div className={PANEL + " h-[min(640px,calc(100vh-1.5rem))]"}>
-          <div className={SHELL + " h-full flex flex-col"}>
-            <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-indigo-600/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-[#E3C48B]/10 blur-3xl" />
+          <div className={SHELL + " h-full flex flex-col bg-white"}>
+            <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-violet-300/15 blur-3xl" />
 
             <PanelHeader
               title="AI Assistant"
               subtitle={loading ? "লিখছে…" : "অনলাইন · তাৎক্ষণিক রেসপন্স"}
               icon={<Bot className="h-5 w-5" />}
-              gradient="from-indigo-500 to-violet-700"
+              gradient="from-violet-500 to-violet-700"
               onBack={() => setTab("home")}
               onClose={() => setOpen(false)}
               showOnlineDot
+              light
             />
+
 
             {/* Messages */}
             <div
