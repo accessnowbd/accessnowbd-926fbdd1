@@ -554,7 +554,7 @@ export function SupportWidget() {
       {/* === AI CHAT TAB === */}
       {open && tab === "ai" && (
         <div className={PANEL + " h-[min(640px,calc(100vh-1.5rem))]"}>
-          <div className={SHELL + " h-full flex flex-col bg-white"}>
+          <div className="relative rounded-[28px] overflow-hidden border border-gray-200 bg-white shadow-[0_50px_120px_-20px_rgba(0,0,0,0.15)] ring-1 ring-black/5 h-full flex flex-col">
             <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-violet-300/15 blur-3xl" />
 
