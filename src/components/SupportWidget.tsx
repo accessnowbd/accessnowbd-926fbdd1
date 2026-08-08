@@ -26,11 +26,12 @@ const ADMIN_TEL = "tel:+8801580607614";
 const AGENT_NAME = "রাফিদ হাসান";
 const AGENT_ROLE = "সাপোর্ট স্পেশালিস্ট";
 
-/* Clean white palette — AI support surfaces use white cards with dark ink text */
+/* Premium palette — ink navy surfaces + single indigo/violet accent + champagne gold */
 const INK = "bg-[#080D1C]";
-const CARD = "bg-white hover:bg-white/95";
-const CARD_SOLID = "bg-white";
-const GOLD = "text-[#7C3AED]";
+const CARD = "bg-[#101833] hover:bg-[#16204233]";
+const CARD_SOLID = "bg-[#101833]";
+const GOLD = "text-[#E3C48B]";
+
 
 
 
