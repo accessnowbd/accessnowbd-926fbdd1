@@ -573,30 +573,30 @@ export function SupportWidget() {
             {/* Messages */}
             <div
               ref={scrollRef}
-              className="relative flex-1 overflow-y-auto px-4 py-5 space-y-5 bg-[#080D1C]"
+              className="relative flex-1 overflow-y-auto px-4 py-5 space-y-5 bg-gray-50/80"
             >
               {messages.length === 0 && (
                 <div className="space-y-5">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="grid place-items-center h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-indigo-500 to-violet-700 text-white">
+                      <span className="grid place-items-center h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-violet-700 text-white">
                         <Bot className="h-3.5 w-3.5" />
                       </span>
-                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#E3C48B]">
+                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-violet-600">
                         AI সহকারী
                       </span>
                     </div>
-                    <p className="text-[13.5px] leading-relaxed text-white pl-9">
+                    <p className="text-[13.5px] leading-relaxed text-gray-900 pl-9">
                       আসসালামু আলাইকুম! 👋
                       <br />
-                      <span className="text-white/65">
+                      <span className="text-gray-500">
                         আমি AccessNow-এর AI সহকারী। প্রোডাক্ট, পেমেন্ট, ডেলিভারি — যেকোনো বিষয়ে জিজ্ঞাসা করুন।
                       </span>
                     </p>
                   </div>
 
                   <div className="space-y-2.5">
-                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-white/40">
+                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-gray-400">
                       জনপ্রিয় প্রশ্ন
                     </div>
                     <div className="grid gap-2">
@@ -604,10 +604,10 @@ export function SupportWidget() {
                         <button
                           key={q}
                           onClick={() => send(q)}
-                          className="group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl bg-[#101833] border border-white/[0.08] text-white/85 hover:bg-[#141D3D] hover:border-[#E3C48B]/40 hover:text-white transition"
+                          className="group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-violet-300 hover:text-gray-900 transition"
                         >
                           <span>{q}</span>
-                          <ChevronRight className="h-3.5 w-3.5 text-white/30 group-hover:text-[#E3C48B] group-hover:translate-x-0.5 transition" />
+                          <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:text-violet-500 group-hover:translate-x-0.5 transition" />
                         </button>
                       ))}
                     </div>
@@ -616,14 +616,15 @@ export function SupportWidget() {
 
 
 
-                  <div className="flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/[0.08] px-3 py-2">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
-                    <span className="text-[11px] text-emerald-100/90">
+                  <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                    <span className="text-[11px] text-emerald-700">
                       100% সিকিউর — আপনার মেসেজ এনক্রিপ্টেড
                     </span>
                   </div>
                 </div>
               )}
+
 
 
               {messages.map((m, i) =>
