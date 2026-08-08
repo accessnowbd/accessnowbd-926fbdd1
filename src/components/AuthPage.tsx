@@ -362,7 +362,7 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
               </div>
             ) : (
               <>
-              <BotVerification onToken={onCaptchaToken} />
+
               <label className="flex items-start gap-2 text-[13px] text-slate-600 cursor-pointer select-none">
                 <span
                   onClick={(e) => {
@@ -387,6 +387,10 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
               </label>
               </>
             )}
+
+            {/* Human verification — required for both sign in and sign up */}
+            <BotVerification key={mode} onToken={onCaptchaToken} />
+
 
             {err && (
               <div className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-[13px] font-semibold text-rose-700">
