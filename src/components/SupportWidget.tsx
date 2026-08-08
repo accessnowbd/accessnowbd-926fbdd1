@@ -713,6 +713,7 @@ function PanelHeader({
   onBack,
   onClose,
   showOnlineDot,
+  light,
 }: {
   title: string;
   subtitle: string;
@@ -721,43 +722,45 @@ function PanelHeader({
   onBack: () => void;
   onClose: () => void;
   showOnlineDot?: boolean;
+  light?: boolean;
 }) {
   return (
-    <div className="relative px-4 pt-4 pb-3.5 border-b border-white/10 bg-[linear-gradient(135deg,#0F1633,#1C1848)] flex items-center gap-2.5">
+    <div className={`relative px-4 pt-4 pb-3.5 border-b flex items-center gap-2.5 ${light ? "border-gray-200 bg-white" : "border-white/10 bg-[linear-gradient(135deg,#0F1633,#1C1848)]"}`}>
       <button
         onClick={onBack}
-        className="grid place-items-center h-8 w-8 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition shrink-0"
+        className={`grid place-items-center h-8 w-8 rounded-full transition shrink-0 ${light ? "text-gray-500 hover:text-gray-900 hover:bg-gray-100" : "text-white/70 hover:text-white hover:bg-white/10"}`}
         aria-label="Back"
       >
         <ArrowLeft className="h-4 w-4" />
       </button>
       <div className="relative shrink-0">
         <div
-          className={`grid place-items-center h-10 w-10 rounded-2xl bg-gradient-to-br ${gradient} text-white shadow-lg ring-1 ring-[#E3C48B]/25`}
+          className={`grid place-items-center h-10 w-10 rounded-2xl bg-gradient-to-br ${gradient} text-white shadow-lg ring-1 ${light ? "ring-violet-200" : "ring-[#E3C48B]/25"}`}
         >
           {icon}
         </div>
         {showOnlineDot && (
-          <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0F1633]">
+          <span className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ${light ? "ring-white" : "ring-[#0F1633]"}`}>
             <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
           </span>
         )}
       </div>
 
       <div className="flex-1 leading-tight min-w-0">
-        <div className="text-[14.5px] font-extrabold text-white truncate">{title}</div>
+        <div className={`text-[14.5px] font-extrabold truncate ${light ? "text-gray-900" : "text-white"}`}>{title}</div>
         <div className="flex items-center gap-1.5 mt-0.5">
           {showOnlineDot && (
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
           )}
-          <span className="text-[11px] font-semibold text-white/70 truncate">{subtitle}</span>
+          <span className={`text-[11px] font-semibold truncate ${light ? "text-gray-500" : "text-white/70"}`}>{subtitle}</span>
         </div>
       </div>
       <button
         onClick={onClose}
-        className="grid place-items-center h-8 w-8 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition shrink-0"
+        className={`grid place-items-center h-8 w-8 rounded-full transition shrink-0 ${light ? "text-gray-500 hover:text-gray-900 hover:bg-gray-100" : "text-white/70 hover:text-white hover:bg-white/10"}`}
         aria-label="Close"
       >
+
         <X className="h-4 w-4" />
       </button>
     </div>
