@@ -298,17 +298,17 @@ export function SupportWidget() {
             {/* Ripple ping waves (only when idle) */}
             {!open && !chooser && (
               <>
-                <span className="absolute inset-0 rounded-full bg-primary/35 animate-ping" />
-                <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping [animation-delay:0.6s]" />
+                <span className="absolute inset-0 rounded-full bg-white/60 animate-ping" />
+                <span className="absolute inset-0 rounded-full bg-white/40 animate-ping [animation-delay:0.6s]" />
               </>
             )}
 
             {/* Soft ambient glow */}
-            <span className="support-widget-glow absolute -inset-4 rounded-full bg-primary/40 opacity-60 blur-2xl group-hover:opacity-90 transition-opacity duration-500" />
+            <span className="support-widget-glow absolute -inset-4 rounded-full bg-white/30 opacity-60 blur-2xl group-hover:opacity-90 transition-opacity duration-500" />
 
             {/* Main orb */}
-            <span className="support-widget-orb relative grid place-items-center h-16 w-16 rounded-full bg-gradient-to-br from-primary to-primary-dark text-primary-foreground shadow-[0_22px_50px_-14px_color-mix(in_oklab,var(--primary)_55%,transparent)] ring-1 ring-primary-foreground/25 overflow-hidden">
-              <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-primary-foreground/20 blur-[3px]" />
+            <span className="support-widget-orb relative grid place-items-center h-16 w-16 rounded-full bg-white text-violet-600 shadow-[0_22px_50px_-14px_rgba(0,0,0,0.25)] ring-1 ring-black/5 overflow-hidden">
+              <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/50 blur-[3px]" />
 
               {(chooser || open) ? (
                 <X className="h-7 w-7 relative" strokeWidth={2.6} />
@@ -318,6 +318,7 @@ export function SupportWidget() {
             </span>
 
           </button>
+
 
 
         </div>
