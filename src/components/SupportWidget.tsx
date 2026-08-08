@@ -33,6 +33,8 @@ const CARD_SOLID = "bg-[#101833]";
 const GOLD = "text-[#E3C48B]";
 
 
+
+
 type Msg = { role: "user" | "assistant"; content: string };
 type Tab = "home" | "ai" | "faq";
 
@@ -244,16 +246,17 @@ export function SupportWidget() {
             <div className="flex flex-col items-stretch gap-2.5 w-[248px] animate-fade-in">
               <button
                 onClick={() => { setChooser(false); setOpen(true); setTab("ai"); }}
-                className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0B1224] px-3.5 py-3 text-left shadow-[0_20px_50px_-15px_rgba(0,0,0,0.8)] hover:border-[#E3C48B]/45 transition"
+                className="group relative flex items-center gap-3 rounded-2xl border border-gray-200/80 bg-white px-3.5 py-3 text-left shadow-[0_20px_50px_-15px_rgba(0,0,0,0.15)] hover:border-violet-300 transition"
               >
-                <span className="grid place-items-center h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-700 text-white shadow-[0_10px_24px_-8px_rgba(99,102,241,0.8)] shrink-0">
+                <span className="grid place-items-center h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 to-violet-700 text-white shadow-[0_10px_24px_-8px_rgba(139,92,246,0.6)] shrink-0">
                   <Bot className="h-5 w-5" />
                 </span>
                 <div className="leading-tight">
-                  <div className="text-[13px] font-extrabold text-white">AI Support</div>
-                  <div className="text-[11px] text-white/60 mt-0.5">তাৎক্ষণিক উত্তর পান</div>
+                  <div className="text-[13px] font-extrabold text-gray-900">AI Support</div>
+                  <div className="text-[11px] text-gray-500 mt-0.5">তাৎক্ষণিক উত্তর পান</div>
                 </div>
               </button>
+
 
               <a
                 href={WHATSAPP_URL}
@@ -295,17 +298,17 @@ export function SupportWidget() {
             {/* Ripple ping waves (only when idle) */}
             {!open && !chooser && (
               <>
-                <span className="absolute inset-0 rounded-full bg-primary/35 animate-ping" />
-                <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping [animation-delay:0.6s]" />
+                <span className="absolute inset-0 rounded-full bg-white/60 animate-ping" />
+                <span className="absolute inset-0 rounded-full bg-white/40 animate-ping [animation-delay:0.6s]" />
               </>
             )}
 
             {/* Soft ambient glow */}
-            <span className="support-widget-glow absolute -inset-4 rounded-full bg-primary/40 opacity-60 blur-2xl group-hover:opacity-90 transition-opacity duration-500" />
+            <span className="support-widget-glow absolute -inset-4 rounded-full bg-white/30 opacity-60 blur-2xl group-hover:opacity-90 transition-opacity duration-500" />
 
             {/* Main orb */}
-            <span className="support-widget-orb relative grid place-items-center h-16 w-16 rounded-full bg-gradient-to-br from-primary to-primary-dark text-primary-foreground shadow-[0_22px_50px_-14px_color-mix(in_oklab,var(--primary)_55%,transparent)] ring-1 ring-primary-foreground/25 overflow-hidden">
-              <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-primary-foreground/20 blur-[3px]" />
+            <span className="support-widget-orb relative grid place-items-center h-16 w-16 rounded-full bg-white text-violet-600 shadow-[0_22px_50px_-14px_rgba(0,0,0,0.25)] ring-1 ring-black/5 overflow-hidden">
+              <span className="absolute inset-x-2 top-1.5 h-4 rounded-full bg-white/50 blur-[3px]" />
 
               {(chooser || open) ? (
                 <X className="h-7 w-7 relative" strokeWidth={2.6} />
@@ -315,6 +318,7 @@ export function SupportWidget() {
             </span>
 
           </button>
+
 
 
         </div>
@@ -550,47 +554,51 @@ export function SupportWidget() {
       {/* === AI CHAT TAB === */}
       {open && tab === "ai" && (
         <div className={PANEL + " h-[min(640px,calc(100vh-1.5rem))]"}>
-          <div className={SHELL + " h-full flex flex-col"}>
-            <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-indigo-600/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-[#E3C48B]/10 blur-3xl" />
+          <div className="relative rounded-[28px] overflow-hidden border border-gray-200 bg-white shadow-[0_50px_120px_-20px_rgba(0,0,0,0.15)] ring-1 ring-black/5 h-full flex flex-col">
+            <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-violet-300/15 blur-3xl" />
 
             <PanelHeader
               title="AI Assistant"
               subtitle={loading ? "লিখছে…" : "অনলাইন · তাৎক্ষণিক রেসপন্স"}
               icon={<Bot className="h-5 w-5" />}
-              gradient="from-indigo-500 to-violet-700"
+              gradient="from-violet-500 to-violet-700"
               onBack={() => setTab("home")}
               onClose={() => setOpen(false)}
               showOnlineDot
+              light
             />
+
+
+
 
             {/* Messages */}
             <div
               ref={scrollRef}
-              className="relative flex-1 overflow-y-auto px-4 py-5 space-y-5 bg-[#080D1C]"
+              className="relative flex-1 overflow-y-auto px-4 py-5 space-y-5 bg-gray-50/80"
             >
               {messages.length === 0 && (
                 <div className="space-y-5">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="grid place-items-center h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-indigo-500 to-violet-700 text-white">
+                      <span className="grid place-items-center h-7 w-7 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-violet-700 text-white">
                         <Bot className="h-3.5 w-3.5" />
                       </span>
-                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#E3C48B]">
+                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-violet-600">
                         AI সহকারী
                       </span>
                     </div>
-                    <p className="text-[13.5px] leading-relaxed text-white pl-9">
+                    <p className="text-[13.5px] leading-relaxed text-gray-900 pl-9">
                       আসসালামু আলাইকুম! 👋
                       <br />
-                      <span className="text-white/65">
+                      <span className="text-gray-500">
                         আমি AccessNow-এর AI সহকারী। প্রোডাক্ট, পেমেন্ট, ডেলিভারি — যেকোনো বিষয়ে জিজ্ঞাসা করুন।
                       </span>
                     </p>
                   </div>
 
                   <div className="space-y-2.5">
-                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-white/40">
+                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-gray-400">
                       জনপ্রিয় প্রশ্ন
                     </div>
                     <div className="grid gap-2">
@@ -598,10 +606,10 @@ export function SupportWidget() {
                         <button
                           key={q}
                           onClick={() => send(q)}
-                          className="group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl bg-[#101833] border border-white/[0.08] text-white/85 hover:bg-[#141D3D] hover:border-[#E3C48B]/40 hover:text-white transition"
+                          className="group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-violet-300 hover:text-gray-900 transition"
                         >
                           <span>{q}</span>
-                          <ChevronRight className="h-3.5 w-3.5 text-white/30 group-hover:text-[#E3C48B] group-hover:translate-x-0.5 transition" />
+                          <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:text-violet-500 group-hover:translate-x-0.5 transition" />
                         </button>
                       ))}
                     </div>
@@ -610,9 +618,9 @@ export function SupportWidget() {
 
 
 
-                  <div className="flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/[0.08] px-3 py-2">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
-                    <span className="text-[11px] text-emerald-100/90">
+                  <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                    <span className="text-[11px] text-emerald-700">
                       100% সিকিউর — আপনার মেসেজ এনক্রিপ্টেড
                     </span>
                   </div>
@@ -620,24 +628,25 @@ export function SupportWidget() {
               )}
 
 
+
               {messages.map((m, i) =>
                 m.role === "user" ? (
                   <div key={i} className="flex justify-end">
-                    <div className="max-w-[80%] rounded-2xl rounded-br-md bg-gradient-to-br from-indigo-500 to-violet-700 px-3.5 py-2.5 text-[13px] leading-relaxed text-white whitespace-pre-wrap shadow-[0_12px_28px_-14px_rgba(79,70,229,0.9)]">
+                    <div className="max-w-[80%] rounded-2xl rounded-br-md bg-white border border-gray-200 px-3.5 py-2.5 text-[13px] leading-relaxed text-gray-900 whitespace-pre-wrap shadow-[0_12px_28px_-14px_rgba(0,0,0,0.08)]">
                       {m.content}
                     </div>
                   </div>
                 ) : (
                   <div key={i} className="space-y-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="grid place-items-center h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-indigo-500 to-violet-700 text-white">
+                      <span className="grid place-items-center h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-violet-500 to-violet-700 text-white">
                         <Bot className="h-3 w-3" />
                       </span>
-                      <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-[#E3C48B]/80">
+                      <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-violet-600/80">
                         AI
                       </span>
                     </div>
-                    <div className="pl-8 text-[13.5px] leading-relaxed text-white whitespace-pre-wrap">
+                    <div className="pl-8 text-[13.5px] leading-relaxed text-gray-800 whitespace-pre-wrap">
                       {m.content || (loading ? "…" : "")}
                     </div>
                   </div>
@@ -646,14 +655,13 @@ export function SupportWidget() {
 
               {loading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex items-center gap-2 pl-8">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#E3C48B] animate-bounce [animation-delay:-0.3s]" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#E3C48B] animate-bounce [animation-delay:-0.15s]" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#E3C48B] animate-bounce" />
-                  <span className="text-[11px] text-white/50 ml-1">ভাবছি…</span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-bounce [animation-delay:-0.3s]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-bounce [animation-delay:-0.15s]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-500 animate-bounce" />
+                  <span className="text-[11px] text-gray-400 ml-1">ভাবছি…</span>
                 </div>
               )}
             </div>
-
 
             {/* Input */}
             <form
@@ -661,20 +669,20 @@ export function SupportWidget() {
                 e.preventDefault();
                 send(input);
               }}
-              className="relative border-t border-white/10 bg-[#0B1122] p-3"
+              className="relative border-t border-gray-200 bg-white p-3"
             >
-              <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-[#101833] focus-within:border-[#E3C48B]/55 focus-within:ring-2 focus-within:ring-[#E3C48B]/15 transition pl-4 pr-1.5 py-1.5">
+              <div className="flex items-center gap-2 rounded-2xl border border-gray-200 bg-gray-50/80 focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-100 transition pl-4 pr-1.5 py-1.5">
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="আপনার মেসেজ লিখুন…"
-                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-white placeholder:text-white/40"
+                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-gray-900 placeholder:text-gray-400"
                   disabled={loading}
                 />
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="grid place-items-center h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-700 hover:from-indigo-400 hover:to-violet-600 text-white disabled:opacity-40 transition shrink-0 shadow-[0_8px_20px_-6px_rgba(79,70,229,0.85)]"
+                  className="grid place-items-center h-9 w-9 rounded-xl bg-violet-600 hover:bg-violet-500 text-white disabled:opacity-40 transition shrink-0 shadow-[0_8px_20px_-6px_rgba(139,92,246,0.5)]"
                   aria-label="Send"
                 >
                   {loading ? (
@@ -685,12 +693,12 @@ export function SupportWidget() {
                 </button>
               </div>
 
-
               <div className="mt-2 flex items-center justify-between px-1">
-                <div className="flex items-center gap-1.5 text-[10px] text-white/65">
+                <div className="flex items-center gap-1.5 text-[10px] text-gray-500">
                   Powered by AI · বাংলায় সাপোর্টেড
                 </div>
               </div>
+
             </form>
           </div>
         </div>
@@ -707,6 +715,7 @@ function PanelHeader({
   onBack,
   onClose,
   showOnlineDot,
+  light,
 }: {
   title: string;
   subtitle: string;
@@ -715,43 +724,45 @@ function PanelHeader({
   onBack: () => void;
   onClose: () => void;
   showOnlineDot?: boolean;
+  light?: boolean;
 }) {
   return (
-    <div className="relative px-4 pt-4 pb-3.5 border-b border-white/10 bg-[linear-gradient(135deg,#0F1633,#1C1848)] flex items-center gap-2.5">
+    <div className={`relative px-4 pt-4 pb-3.5 border-b flex items-center gap-2.5 ${light ? "border-gray-200 bg-white" : "border-white/10 bg-[linear-gradient(135deg,#0F1633,#1C1848)]"}`}>
       <button
         onClick={onBack}
-        className="grid place-items-center h-8 w-8 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition shrink-0"
+        className={`grid place-items-center h-8 w-8 rounded-full transition shrink-0 ${light ? "text-gray-500 hover:text-gray-900 hover:bg-gray-100" : "text-white/70 hover:text-white hover:bg-white/10"}`}
         aria-label="Back"
       >
         <ArrowLeft className="h-4 w-4" />
       </button>
       <div className="relative shrink-0">
         <div
-          className={`grid place-items-center h-10 w-10 rounded-2xl bg-gradient-to-br ${gradient} text-white shadow-lg ring-1 ring-[#E3C48B]/25`}
+          className={`grid place-items-center h-10 w-10 rounded-2xl bg-gradient-to-br ${gradient} text-white shadow-lg ring-1 ${light ? "ring-violet-200" : "ring-[#E3C48B]/25"}`}
         >
           {icon}
         </div>
         {showOnlineDot && (
-          <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#0F1633]">
+          <span className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ${light ? "ring-white" : "ring-[#0F1633]"}`}>
             <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-70" />
           </span>
         )}
       </div>
 
       <div className="flex-1 leading-tight min-w-0">
-        <div className="text-[14.5px] font-extrabold text-white truncate">{title}</div>
+        <div className={`text-[14.5px] font-extrabold truncate ${light ? "text-gray-900" : "text-white"}`}>{title}</div>
         <div className="flex items-center gap-1.5 mt-0.5">
           {showOnlineDot && (
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
           )}
-          <span className="text-[11px] font-semibold text-white/70 truncate">{subtitle}</span>
+          <span className={`text-[11px] font-semibold truncate ${light ? "text-gray-500" : "text-white/70"}`}>{subtitle}</span>
         </div>
       </div>
       <button
         onClick={onClose}
-        className="grid place-items-center h-8 w-8 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition shrink-0"
+        className={`grid place-items-center h-8 w-8 rounded-full transition shrink-0 ${light ? "text-gray-500 hover:text-gray-900 hover:bg-gray-100" : "text-white/70 hover:text-white hover:bg-white/10"}`}
         aria-label="Close"
       >
+
         <X className="h-4 w-4" />
       </button>
     </div>
