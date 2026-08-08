@@ -246,16 +246,17 @@ export function SupportWidget() {
             <div className="flex flex-col items-stretch gap-2.5 w-[248px] animate-fade-in">
               <button
                 onClick={() => { setChooser(false); setOpen(true); setTab("ai"); }}
-                className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0B1224] px-3.5 py-3 text-left shadow-[0_20px_50px_-15px_rgba(0,0,0,0.8)] hover:border-[#E3C48B]/45 transition"
+                className="group relative flex items-center gap-3 rounded-2xl border border-gray-200/80 bg-white px-3.5 py-3 text-left shadow-[0_20px_50px_-15px_rgba(0,0,0,0.15)] hover:border-violet-300 transition"
               >
-                <span className="grid place-items-center h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-700 text-white shadow-[0_10px_24px_-8px_rgba(99,102,241,0.8)] shrink-0">
+                <span className="grid place-items-center h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 to-violet-700 text-white shadow-[0_10px_24px_-8px_rgba(139,92,246,0.6)] shrink-0">
                   <Bot className="h-5 w-5" />
                 </span>
                 <div className="leading-tight">
-                  <div className="text-[13px] font-extrabold text-white">AI Support</div>
-                  <div className="text-[11px] text-white/60 mt-0.5">তাৎক্ষণিক উত্তর পান</div>
+                  <div className="text-[13px] font-extrabold text-gray-900">AI Support</div>
+                  <div className="text-[11px] text-gray-500 mt-0.5">তাৎক্ষণিক উত্তর পান</div>
                 </div>
               </button>
+
 
               <a
                 href={WHATSAPP_URL}
