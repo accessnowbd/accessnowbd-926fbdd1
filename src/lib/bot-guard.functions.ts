@@ -73,9 +73,12 @@ export const verifyHuman = createServerFn({ method: "POST" })
     if (data.honeypot && data.honeypot.trim() !== "") {
       return { ok: false as const, reason: "স্বয়ংক্রিয় সাবমিশন শনাক্ত হয়েছে।" };
     }
-    if (data.elapsedMs < MIN_FILL_MS) {
+    // Sign-in can legitimately be instant (password manager autofill), so the
+    // minimum-fill-time heuristic only applies to account creation.
+    if (data.action !== "login" && data.elapsedMs < MIN_FILL_MS) {
       return { ok: false as const, reason: "ফর্মটি খুব দ্রুত সাবমিট হয়েছে। আবার চেষ্টা করুন।" };
     }
+
 
     const secret = process.env["TURNSTILE_SECRET_KEY"];
     const siteKey = process.env["TURNSTILE_SITE_KEY"];
