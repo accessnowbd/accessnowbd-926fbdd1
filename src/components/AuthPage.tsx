@@ -184,8 +184,18 @@ function AuthPage({ initialMode = "login", openForgot = false }: { initialMode?:
       } else {
         const parsed = loginSchema.safeParse({ email: values.email, password: values.password });
         if (!parsed.success) throw new Error(parsed.error.issues[0].message);
+        const guard = await checkHuman({
+          data: {
+            token: captchaToken ?? undefined,
+            honeypot: String(fd.get("website") || ""),
+            elapsedMs: Date.now() - formOpenedAt.current,
+            action: "login",
+          },
+        });
+        if (!guard.ok) throw new Error(guard.reason);
         const { error } = await supabase.auth.signInWithPassword(parsed.data);
         if (error) throw error;
+
       }
     } catch (e: unknown) {
       setErr(e instanceof Error ? e.message : "Something went wrong");
