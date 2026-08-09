@@ -348,9 +348,9 @@ export function SupportWidget() {
           <div className={`${SHELL} ${isDarkMode ? "bg-[#080D1C]" : "bg-white border-gray-200"}`}>
             {/* Premium hero header */}
             <div className="relative overflow-hidden">
-              <div className="absolute inset-0 bg-[linear-gradient(135deg,#0F1633_0%,#241A56_55%,#3B2470_100%)]" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(227,196,139,0.18),transparent_60%)]" />
-              <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#E3C48B]/50 to-transparent" />
+              <div className={`absolute inset-0 ${isDarkMode ? "bg-[linear-gradient(135deg,#0F1633_0%,#241A56_55%,#3B2470_100%)]" : "bg-gradient-to-br from-violet-600 to-indigo-700"}`} />
+              <div className={`absolute inset-0 ${isDarkMode ? "bg-[radial-gradient(circle_at_25%_15%,rgba(227,196,139,0.18),transparent_60%)]" : "bg-[radial-gradient(circle_at_25%_15%,rgba(255,255,255,0.2),transparent_60%)]"}`} />
+              <div className={`absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-${isDarkMode ? "[#E3C48B]/50" : "white/30"} to-transparent`} />
 
               <div className="relative px-5 pt-5 pb-6">
                 <div className="flex items-start justify-between">
