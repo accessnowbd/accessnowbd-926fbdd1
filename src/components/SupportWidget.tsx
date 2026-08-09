@@ -121,7 +121,25 @@ export function SupportWidget() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Sync with system or user theme
+    const checkTheme = () => {
+      const isDark = document.documentElement.classList.contains("dark");
+      setIsDarkMode(isDark);
+    };
+
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -327,12 +345,12 @@ export function SupportWidget() {
       {/* === HOME TAB === */}
       {open && tab === "home" && (
         <div className={PANEL}>
-          <div className={SHELL}>
+          <div className={`${SHELL} ${isDarkMode ? "bg-[#080D1C]" : "bg-white border-gray-200"}`}>
             {/* Premium hero header */}
             <div className="relative overflow-hidden">
-              <div className="absolute inset-0 bg-[linear-gradient(135deg,#0F1633_0%,#241A56_55%,#3B2470_100%)]" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(227,196,139,0.18),transparent_60%)]" />
-              <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#E3C48B]/50 to-transparent" />
+              <div className={`absolute inset-0 ${isDarkMode ? "bg-[linear-gradient(135deg,#0F1633_0%,#241A56_55%,#3B2470_100%)]" : "bg-gradient-to-br from-violet-600 to-indigo-700"}`} />
+              <div className={`absolute inset-0 ${isDarkMode ? "bg-[radial-gradient(circle_at_25%_15%,rgba(227,196,139,0.18),transparent_60%)]" : "bg-[radial-gradient(circle_at_25%_15%,rgba(255,255,255,0.2),transparent_60%)]"}`} />
+              <div className={`absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-${isDarkMode ? "[#E3C48B]/50" : "white/30"} to-transparent`} />
 
               <div className="relative px-5 pt-5 pb-6">
                 <div className="flex items-start justify-between">
@@ -386,7 +404,11 @@ export function SupportWidget() {
               {/* Start a conversation card */}
               <button
                 onClick={() => setTab("ai")}
-                className="group relative w-full text-left rounded-2xl border border-white/10 bg-[#101833] hover:border-[#E3C48B]/40 hover:bg-[#141D3D] transition-all duration-300 p-3.5 shadow-[0_14px_34px_-20px_rgba(0,0,0,0.9)]"
+                className={`group relative w-full text-left rounded-2xl border transition-all duration-300 p-3.5 shadow-lg ${
+                  isDarkMode
+                    ? "border-white/10 bg-[#101833] hover:border-[#E3C48B]/40 hover:bg-[#141D3D] shadow-[0_14px_34px_-20px_rgba(0,0,0,0.9)]"
+                    : "border-gray-200 bg-white hover:border-violet-300 hover:bg-gray-50"
+                }`}
               >
                 <div className="flex items-center gap-3">
                   <span className="relative grid place-items-center h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-700 text-white shadow-[0_12px_28px_-10px_rgba(99,102,241,0.9)] shrink-0">
@@ -394,16 +416,24 @@ export function SupportWidget() {
                   </span>
                   <div className="flex-1 leading-tight">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[14px] font-extrabold text-white">নতুন কথোপকথন শুরু করুন</span>
-                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#E3C48B]/15 text-[#E3C48B] border border-[#E3C48B]/30">
+                      <span className={`text-[14px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
+                        নতুন কথোপকথন শুরু করুন
+                      </span>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${
+                        isDarkMode
+                          ? "bg-[#E3C48B]/15 text-[#E3C48B] border-[#E3C48B]/30"
+                          : "bg-violet-100 text-violet-600 border-violet-200"
+                      }`}>
                         AI
                       </span>
                     </div>
-                    <span className="block text-[11.5px] text-white/60 mt-0.5">
+                    <span className={`block text-[11.5px] mt-0.5 ${isDarkMode ? "text-white/60" : "text-gray-500"}`}>
                       তাৎক্ষণিক উত্তর — বাংলায়, 24/7
                     </span>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-white/45 group-hover:text-[#E3C48B] group-hover:translate-x-1 transition" />
+                  <ChevronRight className={`h-4 w-4 transition ${
+                    isDarkMode ? "text-white/45 group-hover:text-[#E3C48B]" : "text-gray-400 group-hover:text-violet-600"
+                  } group-hover:translate-x-1`} />
                 </div>
               </button>
 
@@ -412,7 +442,11 @@ export function SupportWidget() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group w-full flex items-center gap-3 rounded-2xl border border-white/10 bg-[#101833] hover:bg-[#141D3D] hover:border-[#E3C48B]/40 p-3.5 transition-all text-left"
+                className={`group w-full flex items-center gap-3 rounded-2xl border p-3.5 transition-all text-left ${
+                  isDarkMode
+                    ? "border-white/10 bg-[#101833] hover:bg-[#141D3D] hover:border-[#E3C48B]/40"
+                    : "border-gray-200 bg-white hover:bg-gray-50 hover:border-violet-300"
+                }`}
               >
                 <span className="relative shrink-0">
                   <img
@@ -426,64 +460,87 @@ export function SupportWidget() {
                   <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-[#101833]" />
                 </span>
                 <div className="flex-1 leading-tight">
-                  <div className="text-[13.5px] font-extrabold text-white">মানুষের সাথে কথা বলুন</div>
-                  <div className="text-[11px] text-white/60 mt-0.5">
+                  <div className={`text-[13.5px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>মানুষের সাথে কথা বলুন</div>
+                  <div className={`text-[11px] mt-0.5 ${isDarkMode ? "text-white/60" : "text-gray-500"}`}>
                     {AGENT_NAME} · WhatsApp-এ সরাসরি
                   </div>
                 </div>
-                <ChevronRight className="h-4 w-4 text-white/45 group-hover:text-[#E3C48B] group-hover:translate-x-0.5 transition" />
+                <ChevronRight className={`h-4 w-4 transition ${
+                  isDarkMode ? "text-white/45 group-hover:text-[#E3C48B]" : "text-gray-400 group-hover:text-violet-600"
+                } group-hover:translate-x-0.5`} />
               </a>
 
               {/* Call + Help center */}
               <div className="grid grid-cols-2 gap-2">
                 <a
                   href={ADMIN_TEL}
-                  className="group rounded-2xl border border-white/10 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/35 p-3 transition-all"
+                  className={`group rounded-2xl border p-3 transition-all ${
+                    isDarkMode
+                      ? "border-white/10 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/35"
+                      : "border-gray-200 bg-white hover:bg-gray-50 hover:border-violet-300"
+                  }`}
                 >
-                  <span className="grid place-items-center h-9 w-9 rounded-xl bg-white/[0.06] border border-white/10 text-[#E3C48B]">
+                  <span className={`grid place-items-center h-9 w-9 rounded-xl border ${
+                    isDarkMode
+                      ? "bg-white/[0.06] border-white/10 text-[#E3C48B]"
+                      : "bg-violet-50 border-violet-100 text-violet-600"
+                  }`}>
                     <Phone className="h-4 w-4" />
                   </span>
-                  <div className="mt-2 text-[12.5px] font-extrabold text-white">কল করুন</div>
-                  <div className="text-[10.5px] text-white/55 mt-0.5 font-mono">
+                  <div className={`mt-2 text-[12.5px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>কল করুন</div>
+                  <div className={`text-[10.5px] mt-0.5 font-mono ${isDarkMode ? "text-white/55" : "text-gray-500"}`}>
                     {ADMIN_PHONE}
                   </div>
                 </a>
 
                 <button
                   onClick={() => setTab("faq")}
-                  className="group text-left rounded-2xl border border-white/10 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/35 p-3 transition-all"
+                  className={`group text-left rounded-2xl border p-3 transition-all ${
+                    isDarkMode
+                      ? "border-white/10 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/35"
+                      : "border-gray-200 bg-white hover:bg-gray-50 hover:border-violet-300"
+                  }`}
                 >
-                  <span className="grid place-items-center h-9 w-9 rounded-xl bg-white/[0.06] border border-white/10 text-[#E3C48B]">
+                  <span className={`grid place-items-center h-9 w-9 rounded-xl border ${
+                    isDarkMode
+                      ? "bg-white/[0.06] border-white/10 text-[#E3C48B]"
+                      : "bg-violet-50 border-violet-100 text-violet-600"
+                  }`}>
                     <HelpCircle className="h-4 w-4" />
                   </span>
-                  <div className="mt-2 text-[12.5px] font-extrabold text-white">হেল্প সেন্টার</div>
-                  <div className="text-[10.5px] text-white/55 mt-0.5">জনপ্রিয় প্রশ্ন</div>
+                  <div className={`mt-2 text-[12.5px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>হেল্প সেন্টার</div>
+                  <div className={`text-[10.5px] mt-0.5 ${isDarkMode ? "text-white/55" : "text-gray-500"}`}>জনপ্রিয় প্রশ্ন</div>
                 </button>
               </div>
 
               {/* Trust strip */}
               <div className="grid grid-cols-3 gap-2 pt-1">
-                <div className="rounded-xl border border-white/[0.07] bg-[#0C1226] px-2 py-2 text-center">
-                  <Zap className="h-3.5 w-3.5 text-[#E3C48B] mx-auto" />
-                  <div className="text-[10px] text-white/55 mt-1">দ্রুত রেসপন্স</div>
-                  <div className="text-[11px] font-extrabold text-white">~2 মিনিট</div>
+                <div className={`rounded-xl border px-2 py-2 text-center ${
+                  isDarkMode ? "border-white/[0.07] bg-[#0C1226]" : "border-gray-100 bg-gray-50/50"
+                }`}>
+                  <Zap className={`h-3.5 w-3.5 mx-auto ${isDarkMode ? "text-[#E3C48B]" : "text-violet-600"}`} />
+                  <div className={`text-[10px] mt-1 ${isDarkMode ? "text-white/55" : "text-gray-500"}`}>দ্রুত রেসপন্স</div>
+                  <div className={`text-[11px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>~2 মিনিট</div>
                 </div>
-                <div className="rounded-xl border border-white/[0.07] bg-[#0C1226] px-2 py-2 text-center">
-                  <Star className="h-3.5 w-3.5 text-[#E3C48B] mx-auto fill-[#E3C48B]" />
-                  <div className="text-[10px] text-white/55 mt-1">রেটিং</div>
-                  <div className="text-[11px] font-extrabold text-white">4.9 / 5</div>
+                <div className={`rounded-xl border px-2 py-2 text-center ${
+                  isDarkMode ? "border-white/[0.07] bg-[#0C1226]" : "border-gray-100 bg-gray-50/50"
+                }`}>
+                  <Star className={`h-3.5 w-3.5 mx-auto fill-current ${isDarkMode ? "text-[#E3C48B]" : "text-violet-600"}`} />
+                  <div className={`text-[10px] mt-1 ${isDarkMode ? "text-white/55" : "text-gray-500"}`}>রেটিং</div>
+                  <div className={`text-[11px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>4.9 / 5</div>
                 </div>
-                <div className="rounded-xl border border-white/[0.07] bg-[#0C1226] px-2 py-2 text-center">
-                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-300 mx-auto" />
-                  <div className="text-[10px] text-white/55 mt-1">ভেরিফাইড</div>
-                  <div className="text-[11px] font-extrabold text-white">5000+</div>
+                <div className={`rounded-xl border px-2 py-2 text-center ${
+                  isDarkMode ? "border-white/[0.07] bg-[#0C1226]" : "border-gray-100 bg-gray-50/50"
+                }`}>
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-500 mx-auto" />
+                  <div className={`text-[10px] mt-1 ${isDarkMode ? "text-white/55" : "text-gray-500"}`}>ভেরিফাইড</div>
+                  <div className={`text-[11px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>5000+</div>
                 </div>
-
               </div>
             </div>
 
             {/* Bottom tab bar */}
-            <BottomTabs tab={tab} setTab={setTab} />
+            <BottomTabs tab={tab} setTab={setTab} isDarkMode={isDarkMode} />
           </div>
         </div>
       )}
@@ -491,7 +548,7 @@ export function SupportWidget() {
       {/* === FAQ TAB === */}
       {open && tab === "faq" && (
         <div className={PANEL + " h-[min(620px,calc(100vh-1.5rem))]"}>
-          <div className={SHELL + " h-full flex flex-col"}>
+          <div className={`${SHELL} ${isDarkMode ? "bg-[#080D1C]" : "bg-white border-gray-200"} h-full flex flex-col`}>
             <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-indigo-600/20 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-[#E3C48B]/10 blur-3xl" />
 
@@ -503,6 +560,7 @@ export function SupportWidget() {
 
               onBack={() => setTab("home")}
               onClose={() => setOpen(false)}
+              light={!isDarkMode}
             />
 
             <div className="relative flex-1 overflow-y-auto p-3 space-y-2">
@@ -511,24 +569,34 @@ export function SupportWidget() {
                 return (
                   <div
                     key={i}
-                    className="rounded-2xl border border-white/[0.08] bg-[#101833] overflow-hidden"
+                    className={`rounded-2xl border overflow-hidden ${
+                      isDarkMode ? "border-white/[0.08] bg-[#101833]" : "border-gray-100 bg-gray-50/30"
+                    }`}
                   >
                     <button
                       onClick={() => setOpenFaq(isOpen ? null : i)}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 text-left hover:bg-[#141D3D] transition"
+                      className={`w-full flex items-center gap-3 px-3.5 py-3 text-left transition ${
+                        isDarkMode ? "hover:bg-[#141D3D]" : "hover:bg-violet-50/50"
+                      }`}
                     >
-                      <span className="grid place-items-center h-7 w-7 rounded-lg bg-[#E3C48B]/12 border border-[#E3C48B]/25 text-[#E3C48B] text-[11px] font-extrabold shrink-0">
+                      <span className={`grid place-items-center h-7 w-7 rounded-lg border text-[11px] font-extrabold shrink-0 ${
+                        isDarkMode
+                          ? "bg-[#E3C48B]/12 border-[#E3C48B]/25 text-[#E3C48B]"
+                          : "bg-violet-100 border-violet-200 text-violet-600"
+                      }`}>
                         {i + 1}
                       </span>
-                      <span className="flex-1 text-[12.5px] font-bold text-white">{f.q}</span>
+                      <span className={`flex-1 text-[12.5px] font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>{f.q}</span>
                       <ChevronRight
-                        className={`h-4 w-4 text-white/45 transition-transform ${
-                          isOpen ? "rotate-90 text-[#E3C48B]" : ""
-                        }`}
+                        className={`h-4 w-4 transition-transform ${
+                          isDarkMode ? "text-white/45" : "text-gray-400"
+                        } ${isOpen ? "rotate-90 text-violet-500" : ""}`}
                       />
                     </button>
                     {isOpen && (
-                      <div className="px-3.5 pb-3.5 pl-[3.25rem] text-[12px] text-white/70 leading-relaxed animate-fade-in">
+                      <div className={`px-3.5 pb-3.5 pl-[3.25rem] text-[12px] leading-relaxed animate-fade-in ${
+                        isDarkMode ? "text-white/70" : "text-gray-600"
+                      }`}>
                         {f.a}
                       </div>
                     )}
@@ -538,7 +606,11 @@ export function SupportWidget() {
 
               <button
                 onClick={() => setTab("ai")}
-                className="mt-3 w-full flex items-center justify-center gap-2 rounded-2xl border border-[#E3C48B]/30 bg-[#E3C48B]/10 hover:bg-[#E3C48B]/16 px-3 py-3 text-[12.5px] font-extrabold text-[#E3C48B] transition"
+                className={`mt-3 w-full flex items-center justify-center gap-2 rounded-2xl border px-3 py-3 text-[12.5px] font-extrabold transition ${
+                  isDarkMode
+                    ? "border-[#E3C48B]/30 bg-[#E3C48B]/10 hover:bg-[#E3C48B]/16 text-[#E3C48B]"
+                    : "border-violet-200 bg-violet-50 hover:bg-violet-100 text-violet-600"
+                }`}
               >
                 আপনার প্রশ্ন খুঁজে পাননি? AI-কে জিজ্ঞাসা করুন
                 <ChevronRight className="h-4 w-4" />
@@ -546,7 +618,7 @@ export function SupportWidget() {
 
             </div>
 
-            <BottomTabs tab={tab} setTab={setTab} />
+            <BottomTabs tab={tab} setTab={setTab} isDarkMode={isDarkMode} />
           </div>
         </div>
       )}
@@ -554,9 +626,11 @@ export function SupportWidget() {
       {/* === AI CHAT TAB === */}
       {open && tab === "ai" && (
         <div className={PANEL + " h-[min(640px,calc(100vh-1.5rem))]"}>
-          <div className="relative rounded-[28px] overflow-hidden border border-gray-200 bg-white shadow-[0_50px_120px_-20px_rgba(0,0,0,0.15)] ring-1 ring-black/5 h-full flex flex-col">
-            <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-violet-300/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-violet-300/15 blur-3xl" />
+          <div className={`relative rounded-[28px] overflow-hidden border shadow-[0_50px_120px_-20px_rgba(0,0,0,0.15)] ring-1 ring-black/5 h-full flex flex-col ${
+            isDarkMode ? "bg-[#080D1C] border-white/10" : "bg-white border-gray-200"
+          }`}>
+            <div className={`pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full blur-3xl ${isDarkMode ? "bg-indigo-600/10" : "bg-violet-300/20"}`} />
+            <div className={`pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full blur-3xl ${isDarkMode ? "bg-indigo-600/10" : "bg-violet-300/15"}`} />
 
             <PanelHeader
               title="AI Assistant"
@@ -566,7 +640,7 @@ export function SupportWidget() {
               onBack={() => setTab("home")}
               onClose={() => setOpen(false)}
               showOnlineDot
-              light
+              light={!isDarkMode}
             />
 
 
@@ -575,7 +649,7 @@ export function SupportWidget() {
             {/* Messages */}
             <div
               ref={scrollRef}
-              className="relative flex-1 overflow-y-auto px-4 py-5 space-y-5 bg-gray-50/80"
+              className={`relative flex-1 overflow-y-auto px-4 py-5 space-y-5 ${isDarkMode ? "bg-[#0B1224]" : "bg-gray-50/80"}`}
             >
               {messages.length === 0 && (
                 <div className="space-y-5">
@@ -588,17 +662,17 @@ export function SupportWidget() {
                         AI সহকারী
                       </span>
                     </div>
-                    <p className="text-[13.5px] leading-relaxed text-gray-900 pl-9">
+                    <p className={`text-[13.5px] leading-relaxed pl-9 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
                       আসসালামু আলাইকুম! 👋
                       <br />
-                      <span className="text-gray-500">
+                      <span className={isDarkMode ? "text-white/60" : "text-gray-500"}>
                         আমি AccessNow-এর AI সহকারী। প্রোডাক্ট, পেমেন্ট, ডেলিভারি — যেকোনো বিষয়ে জিজ্ঞাসা করুন।
                       </span>
                     </p>
                   </div>
 
                   <div className="space-y-2.5">
-                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-gray-400">
+                    <div className={`text-[10.5px] font-bold uppercase tracking-[0.14em] ${isDarkMode ? "text-white/40" : "text-gray-400"}`}>
                       জনপ্রিয় প্রশ্ন
                     </div>
                     <div className="grid gap-2">
@@ -606,10 +680,14 @@ export function SupportWidget() {
                         <button
                           key={q}
                           onClick={() => send(q)}
-                          className="group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-violet-300 hover:text-gray-900 transition"
+                          className={`group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl border transition ${
+                            isDarkMode
+                              ? "bg-[#101833] border-white/10 text-white hover:bg-[#141D3D] hover:border-[#E3C48B]/40"
+                              : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-violet-300 hover:text-gray-900"
+                          }`}
                         >
                           <span>{q}</span>
-                          <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:text-violet-500 group-hover:translate-x-0.5 transition" />
+                          <ChevronRight className={`h-3.5 w-3.5 transition group-hover:translate-x-0.5 ${isDarkMode ? "text-white/40 group-hover:text-[#E3C48B]" : "text-gray-400 group-hover:text-violet-500"}`} />
                         </button>
                       ))}
                     </div>
@@ -632,7 +710,11 @@ export function SupportWidget() {
               {messages.map((m, i) =>
                 m.role === "user" ? (
                   <div key={i} className="flex justify-end">
-                    <div className="max-w-[80%] rounded-2xl rounded-br-md bg-white border border-gray-200 px-3.5 py-2.5 text-[13px] leading-relaxed text-gray-900 whitespace-pre-wrap shadow-[0_12px_28px_-14px_rgba(0,0,0,0.08)]">
+                    <div className={`max-w-[80%] rounded-2xl rounded-br-md border px-3.5 py-2.5 text-[13px] leading-relaxed whitespace-pre-wrap shadow-lg ${
+                      isDarkMode
+                        ? "bg-[#101833] border-[#E3C48B]/30 text-white"
+                        : "bg-white border-gray-200 text-gray-900"
+                    }`}>
                       {m.content}
                     </div>
                   </div>
@@ -646,7 +728,7 @@ export function SupportWidget() {
                         AI
                       </span>
                     </div>
-                    <div className="pl-8 text-[13.5px] leading-relaxed text-gray-800 whitespace-pre-wrap">
+                    <div className={`pl-8 text-[13.5px] leading-relaxed whitespace-pre-wrap ${isDarkMode ? "text-white/90" : "text-gray-800"}`}>
                       {m.content || (loading ? "…" : "")}
                     </div>
                   </div>
@@ -669,20 +751,32 @@ export function SupportWidget() {
                 e.preventDefault();
                 send(input);
               }}
-              className="relative border-t border-gray-200 bg-white p-3"
+              className={`relative border-t p-3 transition-colors ${
+                isDarkMode ? "border-white/10 bg-[#080D1C]" : "border-gray-200 bg-white"
+              }`}
             >
-              <div className="flex items-center gap-2 rounded-2xl border border-gray-200 bg-gray-50/80 focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-100 transition pl-4 pr-1.5 py-1.5">
+              <div className={`flex items-center gap-2 rounded-2xl border transition pl-4 pr-1.5 py-1.5 ${
+                isDarkMode
+                  ? "border-white/10 bg-white/5 focus-within:border-[#E3C48B]/50 focus-within:ring-1 focus-within:ring-[#E3C48B]/20"
+                  : "border-gray-200 bg-gray-50/80 focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-100"
+              }`}>
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="আপনার মেসেজ লিখুন…"
-                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-gray-900 placeholder:text-gray-400"
+                  className={`flex-1 h-9 bg-transparent outline-none text-[13px] ${
+                    isDarkMode ? "text-white placeholder:text-white/30" : "text-gray-900 placeholder:text-gray-400"
+                  }`}
                   disabled={loading}
                 />
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="grid place-items-center h-9 w-9 rounded-xl bg-violet-600 hover:bg-violet-500 text-white disabled:opacity-40 transition shrink-0 shadow-[0_8px_20px_-6px_rgba(139,92,246,0.5)]"
+                  className={`grid place-items-center h-9 w-9 rounded-xl transition shrink-0 shadow-lg ${
+                    isDarkMode
+                      ? "bg-[#E3C48B] hover:bg-[#E3C48B]/90 text-[#080D1C]"
+                      : "bg-violet-600 hover:bg-violet-500 text-white"
+                  }`}
                   aria-label="Send"
                 >
                   {loading ? (
@@ -694,7 +788,7 @@ export function SupportWidget() {
               </div>
 
               <div className="mt-2 flex items-center justify-between px-1">
-                <div className="flex items-center gap-1.5 text-[10px] text-gray-500">
+                <div className={`flex items-center gap-1.5 text-[10px] ${isDarkMode ? "text-white/30" : "text-gray-500"}`}>
                   Powered by AI · বাংলায় সাপোর্টেড
                 </div>
               </div>
@@ -772,9 +866,11 @@ function PanelHeader({
 function BottomTabs({
   tab,
   setTab,
+  isDarkMode,
 }: {
   tab: Tab;
   setTab: (t: Tab) => void;
+  isDarkMode: boolean;
 }) {
   const items: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "home", label: "হোম", icon: <Headphones className="h-4 w-4" /> },
@@ -782,7 +878,9 @@ function BottomTabs({
     { id: "faq", label: "হেল্প", icon: <HelpCircle className="h-4 w-4" /> },
   ];
   return (
-    <div className="relative border-t border-white/10 bg-[#0B1122] grid grid-cols-3">
+    <div className={`relative border-t grid grid-cols-3 transition-colors ${
+      isDarkMode ? "border-white/10 bg-[#0B1122]" : "border-gray-200 bg-white"
+    }`}>
       {items.map((it) => {
         const active = tab === it.id;
         return (
@@ -790,11 +888,15 @@ function BottomTabs({
             key={it.id}
             onClick={() => setTab(it.id)}
             className={`relative flex flex-col items-center justify-center gap-1 py-2.5 text-[10.5px] font-bold transition ${
-              active ? "text-[#E3C48B]" : "text-white/55 hover:text-white/80"
+              active
+                ? (isDarkMode ? "text-[#E3C48B]" : "text-violet-600")
+                : (isDarkMode ? "text-white/55 hover:text-white/80" : "text-gray-400 hover:text-gray-900")
             }`}
           >
             {active && (
-              <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[#E3C48B]" />
+              <span className={`absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full ${
+                isDarkMode ? "bg-[#E3C48B]" : "bg-violet-600"
+              }`} />
             )}
 
             {it.icon}
