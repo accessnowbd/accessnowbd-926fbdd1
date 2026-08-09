@@ -772,7 +772,11 @@ export function SupportWidget() {
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="grid place-items-center h-9 w-9 rounded-xl bg-violet-600 hover:bg-violet-500 text-white disabled:opacity-40 transition shrink-0 shadow-[0_8px_20px_-6px_rgba(139,92,246,0.5)]"
+                  className={`grid place-items-center h-9 w-9 rounded-xl transition shrink-0 shadow-lg ${
+                    isDarkMode
+                      ? "bg-[#E3C48B] hover:bg-[#E3C48B]/90 text-[#080D1C]"
+                      : "bg-violet-600 hover:bg-violet-500 text-white"
+                  }`}
                   aria-label="Send"
                 >
                   {loading ? (
