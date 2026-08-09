@@ -649,7 +649,7 @@ export function SupportWidget() {
             {/* Messages */}
             <div
               ref={scrollRef}
-              className="relative flex-1 overflow-y-auto px-4 py-5 space-y-5 bg-gray-50/80"
+              className={`relative flex-1 overflow-y-auto px-4 py-5 space-y-5 ${isDarkMode ? "bg-[#0B1224]" : "bg-gray-50/80"}`}
             >
               {messages.length === 0 && (
                 <div className="space-y-5">
