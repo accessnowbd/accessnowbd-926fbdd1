@@ -560,6 +560,7 @@ export function SupportWidget() {
 
               onBack={() => setTab("home")}
               onClose={() => setOpen(false)}
+              light={!isDarkMode}
             />
 
             <div className="relative flex-1 overflow-y-auto p-3 space-y-2">
