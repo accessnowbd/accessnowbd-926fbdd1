@@ -662,10 +662,10 @@ export function SupportWidget() {
                         AI সহকারী
                       </span>
                     </div>
-                    <p className="text-[13.5px] leading-relaxed text-gray-900 pl-9">
+                    <p className={`text-[13.5px] leading-relaxed pl-9 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
                       আসসালামু আলাইকুম! 👋
                       <br />
-                      <span className="text-gray-500">
+                      <span className={isDarkMode ? "text-white/60" : "text-gray-500"}>
                         আমি AccessNow-এর AI সহকারী। প্রোডাক্ট, পেমেন্ট, ডেলিভারি — যেকোনো বিষয়ে জিজ্ঞাসা করুন।
                       </span>
                     </p>
