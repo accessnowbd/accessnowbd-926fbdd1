@@ -728,7 +728,7 @@ export function SupportWidget() {
                         AI
                       </span>
                     </div>
-                    <div className="pl-8 text-[13.5px] leading-relaxed text-gray-800 whitespace-pre-wrap">
+                    <div className={`pl-8 text-[13.5px] leading-relaxed whitespace-pre-wrap ${isDarkMode ? "text-white/90" : "text-gray-800"}`}>
                       {m.content || (loading ? "…" : "")}
                     </div>
                   </div>
