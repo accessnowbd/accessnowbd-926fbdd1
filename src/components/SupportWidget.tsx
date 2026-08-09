@@ -878,7 +878,9 @@ function BottomTabs({
     { id: "faq", label: "হেল্প", icon: <HelpCircle className="h-4 w-4" /> },
   ];
   return (
-    <div className="relative border-t border-white/10 bg-[#0B1122] grid grid-cols-3">
+    <div className={`relative border-t grid grid-cols-3 transition-colors ${
+      isDarkMode ? "border-white/10 bg-[#0B1122]" : "border-gray-200 bg-white"
+    }`}>
       {items.map((it) => {
         const active = tab === it.id;
         return (
