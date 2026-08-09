@@ -710,7 +710,11 @@ export function SupportWidget() {
               {messages.map((m, i) =>
                 m.role === "user" ? (
                   <div key={i} className="flex justify-end">
-                    <div className="max-w-[80%] rounded-2xl rounded-br-md bg-white border border-gray-200 px-3.5 py-2.5 text-[13px] leading-relaxed text-gray-900 whitespace-pre-wrap shadow-[0_12px_28px_-14px_rgba(0,0,0,0.08)]">
+                    <div className={`max-w-[80%] rounded-2xl rounded-br-md border px-3.5 py-2.5 text-[13px] leading-relaxed whitespace-pre-wrap shadow-lg ${
+                      isDarkMode
+                        ? "bg-[#101833] border-[#E3C48B]/30 text-white"
+                        : "bg-white border-gray-200 text-gray-900"
+                    }`}>
                       {m.content}
                     </div>
                   </div>
