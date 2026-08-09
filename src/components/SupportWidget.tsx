@@ -540,7 +540,7 @@ export function SupportWidget() {
             </div>
 
             {/* Bottom tab bar */}
-            <BottomTabs tab={tab} setTab={setTab} />
+            <BottomTabs tab={tab} setTab={setTab} isDarkMode={isDarkMode} />
           </div>
         </div>
       )}
