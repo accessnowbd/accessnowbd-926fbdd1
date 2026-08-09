@@ -866,9 +866,11 @@ function PanelHeader({
 function BottomTabs({
   tab,
   setTab,
+  isDarkMode,
 }: {
   tab: Tab;
   setTab: (t: Tab) => void;
+  isDarkMode: boolean;
 }) {
   const items: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "home", label: "হোম", icon: <Headphones className="h-4 w-4" /> },
