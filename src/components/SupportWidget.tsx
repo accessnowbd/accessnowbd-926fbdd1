@@ -345,7 +345,7 @@ export function SupportWidget() {
       {/* === HOME TAB === */}
       {open && tab === "home" && (
         <div className={PANEL}>
-          <div className={SHELL}>
+          <div className={`${SHELL} ${isDarkMode ? "bg-[#080D1C]" : "bg-white border-gray-200"}`}>
             {/* Premium hero header */}
             <div className="relative overflow-hidden">
               <div className="absolute inset-0 bg-[linear-gradient(135deg,#0F1633_0%,#241A56_55%,#3B2470_100%)]" />
