@@ -569,24 +569,34 @@ export function SupportWidget() {
                 return (
                   <div
                     key={i}
-                    className="rounded-2xl border border-white/[0.08] bg-[#101833] overflow-hidden"
+                    className={`rounded-2xl border overflow-hidden ${
+                      isDarkMode ? "border-white/[0.08] bg-[#101833]" : "border-gray-100 bg-gray-50/30"
+                    }`}
                   >
                     <button
                       onClick={() => setOpenFaq(isOpen ? null : i)}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 text-left hover:bg-[#141D3D] transition"
+                      className={`w-full flex items-center gap-3 px-3.5 py-3 text-left transition ${
+                        isDarkMode ? "hover:bg-[#141D3D]" : "hover:bg-violet-50/50"
+                      }`}
                     >
-                      <span className="grid place-items-center h-7 w-7 rounded-lg bg-[#E3C48B]/12 border border-[#E3C48B]/25 text-[#E3C48B] text-[11px] font-extrabold shrink-0">
+                      <span className={`grid place-items-center h-7 w-7 rounded-lg border text-[11px] font-extrabold shrink-0 ${
+                        isDarkMode
+                          ? "bg-[#E3C48B]/12 border-[#E3C48B]/25 text-[#E3C48B]"
+                          : "bg-violet-100 border-violet-200 text-violet-600"
+                      }`}>
                         {i + 1}
                       </span>
-                      <span className="flex-1 text-[12.5px] font-bold text-white">{f.q}</span>
+                      <span className={`flex-1 text-[12.5px] font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>{f.q}</span>
                       <ChevronRight
-                        className={`h-4 w-4 text-white/45 transition-transform ${
-                          isOpen ? "rotate-90 text-[#E3C48B]" : ""
-                        }`}
+                        className={`h-4 w-4 transition-transform ${
+                          isDarkMode ? "text-white/45" : "text-gray-400"
+                        } ${isOpen ? "rotate-90 text-violet-500" : ""}`}
                       />
                     </button>
                     {isOpen && (
-                      <div className="px-3.5 pb-3.5 pl-[3.25rem] text-[12px] text-white/70 leading-relaxed animate-fade-in">
+                      <div className={`px-3.5 pb-3.5 pl-[3.25rem] text-[12px] leading-relaxed animate-fade-in ${
+                        isDarkMode ? "text-white/70" : "text-gray-600"
+                      }`}>
                         {f.a}
                       </div>
                     )}
