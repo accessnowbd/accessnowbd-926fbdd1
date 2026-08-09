@@ -640,7 +640,7 @@ export function SupportWidget() {
               onBack={() => setTab("home")}
               onClose={() => setOpen(false)}
               showOnlineDot
-              light
+              light={!isDarkMode}
             />
 
 
