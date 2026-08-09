@@ -751,14 +751,22 @@ export function SupportWidget() {
                 e.preventDefault();
                 send(input);
               }}
-              className="relative border-t border-gray-200 bg-white p-3"
+              className={`relative border-t p-3 transition-colors ${
+                isDarkMode ? "border-white/10 bg-[#080D1C]" : "border-gray-200 bg-white"
+              }`}
             >
-              <div className="flex items-center gap-2 rounded-2xl border border-gray-200 bg-gray-50/80 focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-100 transition pl-4 pr-1.5 py-1.5">
+              <div className={`flex items-center gap-2 rounded-2xl border transition pl-4 pr-1.5 py-1.5 ${
+                isDarkMode
+                  ? "border-white/10 bg-white/5 focus-within:border-[#E3C48B]/50 focus-within:ring-1 focus-within:ring-[#E3C48B]/20"
+                  : "border-gray-200 bg-gray-50/80 focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-100"
+              }`}>
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="আপনার মেসেজ লিখুন…"
-                  className="flex-1 h-9 bg-transparent outline-none text-[13px] text-gray-900 placeholder:text-gray-400"
+                  className={`flex-1 h-9 bg-transparent outline-none text-[13px] ${
+                    isDarkMode ? "text-white placeholder:text-white/30" : "text-gray-900 placeholder:text-gray-400"
+                  }`}
                   disabled={loading}
                 />
                 <button
