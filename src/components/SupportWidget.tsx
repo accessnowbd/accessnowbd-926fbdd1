@@ -888,11 +888,15 @@ function BottomTabs({
             key={it.id}
             onClick={() => setTab(it.id)}
             className={`relative flex flex-col items-center justify-center gap-1 py-2.5 text-[10.5px] font-bold transition ${
-              active ? "text-[#E3C48B]" : "text-white/55 hover:text-white/80"
+              active
+                ? (isDarkMode ? "text-[#E3C48B]" : "text-violet-600")
+                : (isDarkMode ? "text-white/55 hover:text-white/80" : "text-gray-400 hover:text-gray-900")
             }`}
           >
             {active && (
-              <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-[#E3C48B]" />
+              <span className={`absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full ${
+                isDarkMode ? "bg-[#E3C48B]" : "bg-violet-600"
+              }`} />
             )}
 
             {it.icon}
