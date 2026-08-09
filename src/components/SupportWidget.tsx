@@ -672,7 +672,7 @@ export function SupportWidget() {
                   </div>
 
                   <div className="space-y-2.5">
-                    <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-gray-400">
+                    <div className={`text-[10.5px] font-bold uppercase tracking-[0.14em] ${isDarkMode ? "text-white/40" : "text-gray-400"}`}>
                       জনপ্রিয় প্রশ্ন
                     </div>
                     <div className="grid gap-2">
@@ -680,10 +680,14 @@ export function SupportWidget() {
                         <button
                           key={q}
                           onClick={() => send(q)}
-                          className="group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-violet-300 hover:text-gray-900 transition"
+                          className={`group flex items-center justify-between gap-2 text-left text-[12.5px] px-3.5 py-2.5 rounded-xl border transition ${
+                            isDarkMode
+                              ? "bg-[#101833] border-white/10 text-white hover:bg-[#141D3D] hover:border-[#E3C48B]/40"
+                              : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-violet-300 hover:text-gray-900"
+                          }`}
                         >
                           <span>{q}</span>
-                          <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:text-violet-500 group-hover:translate-x-0.5 transition" />
+                          <ChevronRight className={`h-3.5 w-3.5 transition group-hover:translate-x-0.5 ${isDarkMode ? "text-white/40 group-hover:text-[#E3C48B]" : "text-gray-400 group-hover:text-violet-500"}`} />
                         </button>
                       ))}
                     </div>
