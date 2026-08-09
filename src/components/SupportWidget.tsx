@@ -548,7 +548,7 @@ export function SupportWidget() {
       {/* === FAQ TAB === */}
       {open && tab === "faq" && (
         <div className={PANEL + " h-[min(620px,calc(100vh-1.5rem))]"}>
-          <div className={SHELL + " h-full flex flex-col"}>
+          <div className={`${SHELL} ${isDarkMode ? "bg-[#080D1C]" : "bg-white border-gray-200"} h-full flex flex-col`}>
             <div className="pointer-events-none absolute -top-24 -left-20 h-56 w-56 rounded-full bg-indigo-600/20 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-24 -right-20 h-56 w-56 rounded-full bg-[#E3C48B]/10 blur-3xl" />
 
