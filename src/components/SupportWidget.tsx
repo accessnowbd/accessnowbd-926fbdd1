@@ -515,22 +515,27 @@ export function SupportWidget() {
 
               {/* Trust strip */}
               <div className="grid grid-cols-3 gap-2 pt-1">
-                <div className="rounded-xl border border-white/[0.07] bg-[#0C1226] px-2 py-2 text-center">
-                  <Zap className="h-3.5 w-3.5 text-[#E3C48B] mx-auto" />
-                  <div className="text-[10px] text-white/55 mt-1">দ্রুত রেসপন্স</div>
-                  <div className="text-[11px] font-extrabold text-white">~2 মিনিট</div>
+                <div className={`rounded-xl border px-2 py-2 text-center ${
+                  isDarkMode ? "border-white/[0.07] bg-[#0C1226]" : "border-gray-100 bg-gray-50/50"
+                }`}>
+                  <Zap className={`h-3.5 w-3.5 mx-auto ${isDarkMode ? "text-[#E3C48B]" : "text-violet-600"}`} />
+                  <div className={`text-[10px] mt-1 ${isDarkMode ? "text-white/55" : "text-gray-500"}`}>দ্রুত রেসপন্স</div>
+                  <div className={`text-[11px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>~2 মিনিট</div>
                 </div>
-                <div className="rounded-xl border border-white/[0.07] bg-[#0C1226] px-2 py-2 text-center">
-                  <Star className="h-3.5 w-3.5 text-[#E3C48B] mx-auto fill-[#E3C48B]" />
-                  <div className="text-[10px] text-white/55 mt-1">রেটিং</div>
-                  <div className="text-[11px] font-extrabold text-white">4.9 / 5</div>
+                <div className={`rounded-xl border px-2 py-2 text-center ${
+                  isDarkMode ? "border-white/[0.07] bg-[#0C1226]" : "border-gray-100 bg-gray-50/50"
+                }`}>
+                  <Star className={`h-3.5 w-3.5 mx-auto fill-current ${isDarkMode ? "text-[#E3C48B]" : "text-violet-600"}`} />
+                  <div className={`text-[10px] mt-1 ${isDarkMode ? "text-white/55" : "text-gray-500"}`}>রেটিং</div>
+                  <div className={`text-[11px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>4.9 / 5</div>
                 </div>
-                <div className="rounded-xl border border-white/[0.07] bg-[#0C1226] px-2 py-2 text-center">
-                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-300 mx-auto" />
-                  <div className="text-[10px] text-white/55 mt-1">ভেরিফাইড</div>
-                  <div className="text-[11px] font-extrabold text-white">5000+</div>
+                <div className={`rounded-xl border px-2 py-2 text-center ${
+                  isDarkMode ? "border-white/[0.07] bg-[#0C1226]" : "border-gray-100 bg-gray-50/50"
+                }`}>
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-500 mx-auto" />
+                  <div className={`text-[10px] mt-1 ${isDarkMode ? "text-white/55" : "text-gray-500"}`}>ভেরিফাইড</div>
+                  <div className={`text-[11px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>5000+</div>
                 </div>
-
               </div>
             </div>
 
