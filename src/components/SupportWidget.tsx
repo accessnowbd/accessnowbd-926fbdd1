@@ -404,7 +404,11 @@ export function SupportWidget() {
               {/* Start a conversation card */}
               <button
                 onClick={() => setTab("ai")}
-                className="group relative w-full text-left rounded-2xl border border-white/10 bg-[#101833] hover:border-[#E3C48B]/40 hover:bg-[#141D3D] transition-all duration-300 p-3.5 shadow-[0_14px_34px_-20px_rgba(0,0,0,0.9)]"
+                className={`group relative w-full text-left rounded-2xl border transition-all duration-300 p-3.5 shadow-lg ${
+                  isDarkMode
+                    ? "border-white/10 bg-[#101833] hover:border-[#E3C48B]/40 hover:bg-[#141D3D] shadow-[0_14px_34px_-20px_rgba(0,0,0,0.9)]"
+                    : "border-gray-200 bg-white hover:border-violet-300 hover:bg-gray-50"
+                }`}
               >
                 <div className="flex items-center gap-3">
                   <span className="relative grid place-items-center h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-700 text-white shadow-[0_12px_28px_-10px_rgba(99,102,241,0.9)] shrink-0">
@@ -412,16 +416,24 @@ export function SupportWidget() {
                   </span>
                   <div className="flex-1 leading-tight">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[14px] font-extrabold text-white">নতুন কথোপকথন শুরু করুন</span>
-                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#E3C48B]/15 text-[#E3C48B] border border-[#E3C48B]/30">
+                      <span className={`text-[14px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
+                        নতুন কথোপকথন শুরু করুন
+                      </span>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${
+                        isDarkMode
+                          ? "bg-[#E3C48B]/15 text-[#E3C48B] border-[#E3C48B]/30"
+                          : "bg-violet-100 text-violet-600 border-violet-200"
+                      }`}>
                         AI
                       </span>
                     </div>
-                    <span className="block text-[11.5px] text-white/60 mt-0.5">
+                    <span className={`block text-[11.5px] mt-0.5 ${isDarkMode ? "text-white/60" : "text-gray-500"}`}>
                       তাৎক্ষণিক উত্তর — বাংলায়, 24/7
                     </span>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-white/45 group-hover:text-[#E3C48B] group-hover:translate-x-1 transition" />
+                  <ChevronRight className={`h-4 w-4 transition ${
+                    isDarkMode ? "text-white/45 group-hover:text-[#E3C48B]" : "text-gray-400 group-hover:text-violet-600"
+                  } group-hover:translate-x-1`} />
                 </div>
               </button>
 
@@ -430,7 +442,11 @@ export function SupportWidget() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group w-full flex items-center gap-3 rounded-2xl border border-white/10 bg-[#101833] hover:bg-[#141D3D] hover:border-[#E3C48B]/40 p-3.5 transition-all text-left"
+                className={`group w-full flex items-center gap-3 rounded-2xl border p-3.5 transition-all text-left ${
+                  isDarkMode
+                    ? "border-white/10 bg-[#101833] hover:bg-[#141D3D] hover:border-[#E3C48B]/40"
+                    : "border-gray-200 bg-white hover:bg-gray-50 hover:border-violet-300"
+                }`}
               >
                 <span className="relative shrink-0">
                   <img
