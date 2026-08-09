@@ -606,7 +606,11 @@ export function SupportWidget() {
 
               <button
                 onClick={() => setTab("ai")}
-                className="mt-3 w-full flex items-center justify-center gap-2 rounded-2xl border border-[#E3C48B]/30 bg-[#E3C48B]/10 hover:bg-[#E3C48B]/16 px-3 py-3 text-[12.5px] font-extrabold text-[#E3C48B] transition"
+                className={`mt-3 w-full flex items-center justify-center gap-2 rounded-2xl border px-3 py-3 text-[12.5px] font-extrabold transition ${
+                  isDarkMode
+                    ? "border-[#E3C48B]/30 bg-[#E3C48B]/10 hover:bg-[#E3C48B]/16 text-[#E3C48B]"
+                    : "border-violet-200 bg-violet-50 hover:bg-violet-100 text-violet-600"
+                }`}
               >
                 আপনার প্রশ্ন খুঁজে পাননি? AI-কে জিজ্ঞাসা করুন
                 <ChevronRight className="h-4 w-4" />
@@ -614,7 +618,7 @@ export function SupportWidget() {
 
             </div>
 
-            <BottomTabs tab={tab} setTab={setTab} />
+            <BottomTabs tab={tab} setTab={setTab} isDarkMode={isDarkMode} />
           </div>
         </div>
       )}
