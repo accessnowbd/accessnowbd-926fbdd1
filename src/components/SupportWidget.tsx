@@ -460,38 +460,56 @@ export function SupportWidget() {
                   <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-[#101833]" />
                 </span>
                 <div className="flex-1 leading-tight">
-                  <div className="text-[13.5px] font-extrabold text-white">মানুষের সাথে কথা বলুন</div>
-                  <div className="text-[11px] text-white/60 mt-0.5">
+                  <div className={`text-[13.5px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>মানুষের সাথে কথা বলুন</div>
+                  <div className={`text-[11px] mt-0.5 ${isDarkMode ? "text-white/60" : "text-gray-500"}`}>
                     {AGENT_NAME} · WhatsApp-এ সরাসরি
                   </div>
                 </div>
-                <ChevronRight className="h-4 w-4 text-white/45 group-hover:text-[#E3C48B] group-hover:translate-x-0.5 transition" />
+                <ChevronRight className={`h-4 w-4 transition ${
+                  isDarkMode ? "text-white/45 group-hover:text-[#E3C48B]" : "text-gray-400 group-hover:text-violet-600"
+                } group-hover:translate-x-0.5`} />
               </a>
 
               {/* Call + Help center */}
               <div className="grid grid-cols-2 gap-2">
                 <a
                   href={ADMIN_TEL}
-                  className="group rounded-2xl border border-white/10 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/35 p-3 transition-all"
+                  className={`group rounded-2xl border p-3 transition-all ${
+                    isDarkMode
+                      ? "border-white/10 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/35"
+                      : "border-gray-200 bg-white hover:bg-gray-50 hover:border-violet-300"
+                  }`}
                 >
-                  <span className="grid place-items-center h-9 w-9 rounded-xl bg-white/[0.06] border border-white/10 text-[#E3C48B]">
+                  <span className={`grid place-items-center h-9 w-9 rounded-xl border ${
+                    isDarkMode
+                      ? "bg-white/[0.06] border-white/10 text-[#E3C48B]"
+                      : "bg-violet-50 border-violet-100 text-violet-600"
+                  }`}>
                     <Phone className="h-4 w-4" />
                   </span>
-                  <div className="mt-2 text-[12.5px] font-extrabold text-white">কল করুন</div>
-                  <div className="text-[10.5px] text-white/55 mt-0.5 font-mono">
+                  <div className={`mt-2 text-[12.5px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>কল করুন</div>
+                  <div className={`text-[10.5px] mt-0.5 font-mono ${isDarkMode ? "text-white/55" : "text-gray-500"}`}>
                     {ADMIN_PHONE}
                   </div>
                 </a>
 
                 <button
                   onClick={() => setTab("faq")}
-                  className="group text-left rounded-2xl border border-white/10 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/35 p-3 transition-all"
+                  className={`group text-left rounded-2xl border p-3 transition-all ${
+                    isDarkMode
+                      ? "border-white/10 bg-[#0E1530] hover:bg-[#141D3D] hover:border-[#E3C48B]/35"
+                      : "border-gray-200 bg-white hover:bg-gray-50 hover:border-violet-300"
+                  }`}
                 >
-                  <span className="grid place-items-center h-9 w-9 rounded-xl bg-white/[0.06] border border-white/10 text-[#E3C48B]">
+                  <span className={`grid place-items-center h-9 w-9 rounded-xl border ${
+                    isDarkMode
+                      ? "bg-white/[0.06] border-white/10 text-[#E3C48B]"
+                      : "bg-violet-50 border-violet-100 text-violet-600"
+                  }`}>
                     <HelpCircle className="h-4 w-4" />
                   </span>
-                  <div className="mt-2 text-[12.5px] font-extrabold text-white">হেল্প সেন্টার</div>
-                  <div className="text-[10.5px] text-white/55 mt-0.5">জনপ্রিয় প্রশ্ন</div>
+                  <div className={`mt-2 text-[12.5px] font-extrabold ${isDarkMode ? "text-white" : "text-gray-900"}`}>হেল্প সেন্টার</div>
+                  <div className={`text-[10.5px] mt-0.5 ${isDarkMode ? "text-white/55" : "text-gray-500"}`}>জনপ্রিয় প্রশ্ন</div>
                 </button>
               </div>
 
