@@ -632,22 +632,36 @@ function CheckoutPage() {
   ];
 
   const handleScreenshot = async (file: File) => {
-    if (!user) return;
     if (file.size > 5 * 1024 * 1024) { setErr("ফাইল সর্বোচ্চ ৫MB হতে হবে"); return; }
     setUploading(true);
     setErr(null);
     try {
       const ext = file.name.split(".").pop() || "jpg";
-      const path = `${user.id}/${Date.now()}.${ext}`;
-      const { error: upErr } = await supabase.storage.from("payment-screenshots").upload(path, file, { upsert: false });
-      if (upErr) throw upErr;
-      setScreenshotUrl(path);
+      if (user) {
+        const path = `${user.id}/${Date.now()}.${ext}`;
+        const { error: upErr } = await supabase.storage.from("payment-screenshots").upload(path, file, { upsert: false });
+        if (upErr) throw upErr;
+        setScreenshotUrl(path);
+      } else {
+        const buf = await file.arrayBuffer();
+        let binary = "";
+        const view = new Uint8Array(buf);
+        for (let i = 0; i < view.length; i += 8192) {
+          binary += String.fromCharCode(...view.subarray(i, i + 8192));
+        }
+        const { uploadGuestScreenshot } = await import("@/lib/payment-screenshot.functions");
+        const res = await uploadGuestScreenshot({
+          data: { ext, contentType: file.type || "image/jpeg", dataBase64: btoa(binary) },
+        });
+        setScreenshotUrl(res.path);
+      }
     } catch (e) {
       setErr(e instanceof Error ? e.message : "আপলোড ব্যর্থ হয়েছে");
     } finally {
       setUploading(false);
     }
   };
+
 
   return (
     <div className="checkout-page min-h-screen bg-background text-foreground grid place-items-center px-4 py-8 md:py-12">
