@@ -15,6 +15,13 @@
       "when": 1789487441040,
       "tag": "0001_restrict_license_key_note_column",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789487484582,
+      "tag": "0002_tmp_colpriv_probe",
+      "breakpoints": true
     }
   ]
 }

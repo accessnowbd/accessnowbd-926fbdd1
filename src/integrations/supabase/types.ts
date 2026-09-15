@@ -1666,6 +1666,24 @@ export type Database = {
           },
         ]
       }
+      tmp_colpriv_probe: {
+        Row: {
+          id: number
+          secret_col: string | null
+          visible_col: string | null
+        }
+        Insert: {
+          id: number
+          secret_col?: string | null
+          visible_col?: string | null
+        }
+        Update: {
+          id?: number
+          secret_col?: string | null
+          visible_col?: string | null
+        }
+        Relationships: []
+      }
       tracking_events_log: {
         Row: {
           created_at: string
