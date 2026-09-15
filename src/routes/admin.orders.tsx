@@ -14,6 +14,7 @@ import { downloadReceiptPdf } from "@/lib/receipt";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import { fetchOrderDownloads } from "@/lib/product-downloads";
 import { useAdminLang } from "@/context/AdminLangContext";
+import { ORDER_SELECT, fetchAdminOrderNotes } from "@/lib/order-columns";
 
 export const Route = createFileRoute("/admin/orders")({
   component: AdminOrders,
@@ -107,12 +108,15 @@ function AdminOrders() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("orders")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const [{ data, error }, notes] = await Promise.all([
+      supabase
+        .from("orders")
+        .select(ORDER_SELECT)
+        .order("created_at", { ascending: false }),
+      fetchAdminOrderNotes(supabase as never),
+    ]);
     if (error) toast.error(error.message);
-    setOrders((data ?? []) as unknown as Order[]);
+    setOrders(((data ?? []) as unknown as Order[]).map((o) => ({ ...o, admin_note: notes[o.id] ?? null })));
     setLoading(false);
   }, []);
 
