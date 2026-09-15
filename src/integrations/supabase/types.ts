@@ -2072,6 +2072,13 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      admin_order_notes: {
+        Args: never
+        Returns: {
+          admin_note: string
+          order_id: string
+        }[]
+      }
       approve_wallet_topup: {
         Args: { _admin_note?: string; _topup_id: string }
         Returns: {

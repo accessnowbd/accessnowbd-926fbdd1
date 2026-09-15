@@ -29,6 +29,13 @@
       "when": 1789487508353,
       "tag": "0003_tmp_colpriv_probe_revoke",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789487552212,
+      "tag": "0004_restrict_orders_admin_note_column",
+      "breakpoints": true
     }
   ]
 }
