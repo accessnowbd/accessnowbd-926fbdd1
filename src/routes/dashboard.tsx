@@ -1128,7 +1128,6 @@ function Licenses() {
           id: r.id,
           product: r.products?.name || r.product_slug,
           key: r.license_key,
-          note: r.note || "",
           assigned_at: r.assigned_at,
           status: r.status,
         })),
