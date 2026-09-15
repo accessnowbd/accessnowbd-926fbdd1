@@ -22,6 +22,13 @@
       "when": 1789487484582,
       "tag": "0002_tmp_colpriv_probe",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789487508353,
+      "tag": "0003_tmp_colpriv_probe_revoke",
+      "breakpoints": true
     }
   ]
 }
