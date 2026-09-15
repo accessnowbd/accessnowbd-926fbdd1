@@ -4,6 +4,7 @@ import { ArrowLeft, Package, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { rememberReturnTo } from "@/lib/auth-return-to";
+import { ORDER_SELECT } from "@/lib/order-columns";
 
 
 export const Route = createFileRoute("/orders/")({
@@ -47,7 +48,7 @@ function OrdersPage() {
     if (user) {
       supabase
         .from("orders")
-        .select("*")
+        .select(ORDER_SELECT)
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .then(({ data }) => {

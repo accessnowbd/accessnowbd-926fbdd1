@@ -1666,6 +1666,24 @@ export type Database = {
           },
         ]
       }
+      tmp_colpriv_probe: {
+        Row: {
+          id: number
+          secret_col: string | null
+          visible_col: string | null
+        }
+        Insert: {
+          id: number
+          secret_col?: string | null
+          visible_col?: string | null
+        }
+        Update: {
+          id?: number
+          secret_col?: string | null
+          visible_col?: string | null
+        }
+        Relationships: []
+      }
       tracking_events_log: {
         Row: {
           created_at: string
@@ -2053,6 +2071,13 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      admin_order_notes: {
+        Args: never
+        Returns: {
+          admin_note: string
+          order_id: string
+        }[]
       }
       approve_wallet_topup: {
         Args: { _admin_note?: string; _topup_id: string }

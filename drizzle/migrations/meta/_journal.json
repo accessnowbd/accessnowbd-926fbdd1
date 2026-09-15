@@ -8,6 +8,34 @@
       "when": 1789485051785,
       "tag": "0000_fix_tracking_pixels_public_view_anon_access",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789487441040,
+      "tag": "0001_restrict_license_key_note_column",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789487484582,
+      "tag": "0002_tmp_colpriv_probe",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789487508353,
+      "tag": "0003_tmp_colpriv_probe_revoke",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789487552212,
+      "tag": "0004_restrict_orders_admin_note_column",
+      "breakpoints": true
     }
   ]
 }

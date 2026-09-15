@@ -8,6 +8,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { fileToWebp } from "@/lib/image-to-webp";
+import { fetchAdminOrderNotes } from "@/lib/order-columns";
 
 export const Route = createFileRoute("/admin/payments")({
   component: AdminPaymentsPage,
@@ -120,13 +121,16 @@ function PaymentProofTab() {
 
   const load = useCallback(async (silent = false) => {
     if (silent) setRefreshing(true); else setLoading(true);
-    const { data, error } = await supabase
-      .from("orders")
-      .select("id, created_at, full_name, email, phone, payment_method, transaction_id, payment_screenshot_url, payment_status, status, total, admin_note")
-      .order("created_at", { ascending: false })
-      .limit(500);
+    const [{ data, error }, notes] = await Promise.all([
+      supabase
+        .from("orders")
+        .select("id, created_at, full_name, email, phone, payment_method, transaction_id, payment_screenshot_url, payment_status, status, total")
+        .order("created_at", { ascending: false })
+        .limit(500),
+      fetchAdminOrderNotes(supabase as never),
+    ]);
     if (error) toast.error(error.message);
-    setRows(((data ?? []) as unknown) as OrderRow[]);
+    setRows((((data ?? []) as unknown) as OrderRow[]).map((r) => ({ ...r, admin_note: notes[r.id] ?? null })));
     setLoading(false);
     setRefreshing(false);
   }, []);

@@ -16,6 +16,7 @@ import { downloadReceiptPdf } from "@/lib/receipt";
 import { sendInvoiceEmail } from "@/lib/email/invoice";
 import { fetchOrderDownloads, type ProductDownload } from "@/lib/product-downloads";
 import { toast } from "sonner";
+import { ORDER_SELECT } from "@/lib/order-columns";
 
 const orderSearchSchema = z.object({
   new: fallback(z.union([z.literal(0), z.literal(1)]), 0).default(0),
@@ -78,7 +79,7 @@ function OrderDetailPage() {
         }
         const { data } = await supabase
           .from("orders")
-          .select("*")
+          .select(ORDER_SELECT)
           .eq("id", id)
           .eq("user_id", user.id)
           .maybeSingle();
