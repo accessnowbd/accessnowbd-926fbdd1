@@ -17,6 +17,7 @@ import { rememberReturnTo } from "@/lib/auth-return-to";
 import { publicUrl } from "@/lib/site-url";
 import { WalletInline } from "@/routes/wallet";
 import { WelcomeBanner } from "@/components/WelcomeBanner";
+import { ORDER_SELECT } from "@/lib/order-columns";
 
 // English label -> Bangla translation for sidebar nav, group titles, page heads & common buttons.
 const BN: Record<string, string> = {
@@ -188,7 +189,7 @@ function DashboardPage() {
     };
 
     const tOrders = performance.now();
-    const ordersP = supabase.from("orders").select("*").eq("user_id", user.id).order("created_at", { ascending: false })
+    const ordersP = supabase.from("orders").select(ORDER_SELECT).eq("user_id", user.id).order("created_at", { ascending: false })
       .then((r) => { mark("orders fetch", tOrders); return r; });
 
     const tProfile = performance.now();
@@ -1108,7 +1109,7 @@ function Downloads({ orders }: { orders: Order[] }) {
 
 function Licenses() {
   const { user } = useAuth();
-  const [keys, setKeys] = useState<Array<{ id: string; product: string; key: string; note: string; assigned_at: string | null; status: string }>>([]);
+  const [keys, setKeys] = useState<Array<{ id: string; product: string; key: string; assigned_at: string | null; status: string }>>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -1118,7 +1119,7 @@ function Licenses() {
     const load = async () => {
       const { data } = await supabase
         .from("product_license_keys")
-        .select("id, license_key, note, assigned_at, status, product_slug, products:product_slug(name)")
+        .select("id, license_key, assigned_at, status, product_slug, products:product_slug(name)")
         .eq("assigned_user_id", user.id)
         .order("assigned_at", { ascending: false, nullsFirst: false });
       if (cancelled) return;
@@ -1162,7 +1163,7 @@ function Licenses() {
           <Empty icon={<KeyRound className="w-6 h-6" />} msg="এখনো কোন লাইসেন্স কী assign করা হয়নি। অর্ডার confirm হওয়ার পরে admin panel থেকে assign করা হলে এখানে real-time দেখাবে।" />
         ) : (
           <div className="space-y-2">
-            {keys.map((k) => <CopyRow key={k.id} label={k.product + (k.note ? ` — ${k.note}` : "")} value={k.key} />)}
+            {keys.map((k) => <CopyRow key={k.id} label={k.product} value={k.key} />)}
           </div>
         )}
       </Card>

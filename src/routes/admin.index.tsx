@@ -61,7 +61,7 @@ function AdminDashboard() {
     (async () => {
       const [pAll, oAll, uAll, recentOrders, recentProducts] = await Promise.all([
         supabase.from("products").select("*", { count: "exact", head: true }),
-        supabase.from("orders").select("*", { count: "exact", head: true }),
+        supabase.from("orders").select("id", { count: "exact", head: true }),
         supabase.from("profiles").select("*", { count: "exact", head: true }),
         supabase.from("orders").select("id,created_at,status,total,full_name,email,payment_method,items").order("created_at", { ascending: false }).limit(200),
         supabase.from("products").select("slug,name,emoji,image_url,category,is_active,created_at").order("created_at", { ascending: false }).limit(60),

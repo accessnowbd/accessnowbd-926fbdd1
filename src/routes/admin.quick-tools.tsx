@@ -8,6 +8,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { useShopConfig } from "@/hooks/useShopConfig";
 import { AdminGlassCard } from "@/components/admin/AdminStatCard";
 import { ProductPicker } from "@/components/admin/ProductPicker";
+import { ORDER_SELECT } from "@/lib/order-columns";
 
 export const Route = createFileRoute("/admin/quick-tools")({
   component: QuickToolsPage,
@@ -105,7 +106,7 @@ function InvoiceFromOrders() {
     setLoading(true);
     const { data, error } = await supabase
       .from("orders")
-      .select("*")
+      .select(ORDER_SELECT)
       .order("created_at", { ascending: false })
       .limit(100);
     if (error) toast.error(error.message);
@@ -446,7 +447,7 @@ function BulkDeliverySender() {
       setLoading(true);
       const { data, error } = await supabase
         .from("orders")
-        .select("*")
+        .select(ORDER_SELECT)
         .in("status", ["completed", "processing"])
         .order("created_at", { ascending: false })
         .limit(100);
