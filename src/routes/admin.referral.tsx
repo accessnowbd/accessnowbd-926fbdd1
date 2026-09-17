@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { adminFetch } from "@/lib/admin-fetch";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Gift, Save, Loader2, Sparkles, Wand2, Plus, Trash2,
@@ -115,7 +116,7 @@ function ReferralAdminPage() {
   ) => {
     setAiBusy(kind);
     try {
-      const res = await fetch("/api/ai-command", {
+      const res = await adminFetch("/api/ai-command", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ system, input, temperature: 0.8, maxTokens: 900 }),

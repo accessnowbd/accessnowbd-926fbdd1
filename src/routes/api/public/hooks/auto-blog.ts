@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 // Auto-Blog generator. Called by pg_cron daily.
-// Auth: Supabase anon key in `apikey` header (public hooks bypass edge auth; verify here).
+// Auth: private AUTO_BLOG_CRON_SECRET in the `x-cron-secret` header (constant-time compare).
 // Actions each run:
 //   1. Pick up to MAX_PER_RUN active products that don't yet have a blog post → generate + insert.
 //   2. Ensure current calendar month has >= MONTHLY_SITE_POSTS general site blogs → generate missing.
@@ -99,10 +99,22 @@ export const Route = createFileRoute("/api/public/hooks/auto-blog")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        // ---- Auth ----
-        const anonKey = process.env.SUPABASE_PUBLISHABLE_KEY;
-        const provided = request.headers.get("apikey") || request.headers.get("Apikey");
-        if (!anonKey || !provided || provided !== anonKey) {
+        // ---- Auth: private cron secret only (never the public anon key) ----
+        const cronSecret = process.env.AUTO_BLOG_CRON_SECRET;
+        const provided =
+          request.headers.get("x-cron-secret") ||
+          request.headers.get("X-Cron-Secret") ||
+          "";
+        const enc = new TextEncoder();
+        const a = enc.encode(provided);
+        const b = enc.encode(cronSecret ?? "");
+        let same = cronSecret ? a.length === b.length : false;
+        if (same) {
+          let diff = 0;
+          for (let i = 0; i < a.length; i++) diff |= a[i]! ^ b[i]!;
+          same = diff === 0;
+        }
+        if (!same) {
           return Response.json({ ok: false, error: "Unauthorized" }, { status: 401 });
         }
         const aiKey = process.env.LOVABLE_API_KEY;
@@ -245,7 +257,7 @@ Write a comprehensive blog post about this product for Bangladeshi buyers. End w
         }
       },
 
-      GET: async () => Response.json({ ok: true, hint: "POST with apikey header to run auto-blog." }),
+      GET: async () => Response.json({ ok: true, hint: "POST with x-cron-secret header to run auto-blog." }),
     },
   },
 });

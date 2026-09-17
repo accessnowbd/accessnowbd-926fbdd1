@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { adminFetch } from "@/lib/admin-fetch";
 import { useCallback, useEffect, useState } from "react";
 import {
   Save, Loader2, Eye, EyeOff, Plus, Send, Mail, MessageCircle,
@@ -496,7 +497,7 @@ function AiSystemPanel({
   const checkStatus = useCallback(async () => {
     setStatus("checking");
     try {
-      const res = await fetch("/api/ai-test", { method: "GET" });
+      const res = await adminFetch("/api/ai-test", { method: "GET" });
       const j = await res.json();
       setStatus(j.ok ? "ok" : "fail");
     } catch {
@@ -513,7 +514,7 @@ function AiSystemPanel({
     setPing(null);
     const started = performance.now();
     try {
-      const res = await fetch("/api/ai-test", {
+      const res = await adminFetch("/api/ai-test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ model, prompt: "In one short sentence, say hello from AccessNow BD." }),

@@ -111,9 +111,20 @@ export const testSslczConnection = createServerFn({ method: "POST" })
 
 export const initiateSslczPayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { orderId: string; amount: number; customerName?: string; customerEmail?: string; customerPhone?: string; customerAddress?: string }) => input)
+  .inputValidator((input: { orderId: string; customerName?: string; customerEmail?: string; customerPhone?: string; customerAddress?: string }) => input)
   .handler(async ({ data, context }) => {
     const cfg = await loadConfig(context.supabase);
+
+    // Authoritative amount: read the order's stored total server-side.
+    const { data: order, error: orderErr } = await context.supabase
+      .from("orders")
+      .select("id,total,payment_status")
+      .eq("id", data.orderId)
+      .maybeSingle();
+    if (orderErr || !order) throw new Error("Order not found.");
+    if (order.payment_status === "verified") throw new Error("This order is already paid.");
+    const amount = Number(order.total);
+    if (!Number.isFinite(amount) || amount <= 0) throw new Error("Invalid order total.");
 
     if (!cfg.store_id || !cfg.store_password) {
       throw new Error("SSLCommerz gateway এখনো configured নয় — Admin → SSLCommerz Gateway এ credentials বসান।");
@@ -125,7 +136,7 @@ export const initiateSslczPayment = createServerFn({ method: "POST" })
     const form = new URLSearchParams();
     form.set("store_id", cfg.store_id);
     form.set("store_passwd", cfg.store_password);
-    form.set("total_amount", String(data.amount));
+    form.set("total_amount", String(amount));
     form.set("currency", cfg.currency || "BDT");
     form.set("tran_id", data.orderId);
     form.set("success_url", cfg.success_url || "");

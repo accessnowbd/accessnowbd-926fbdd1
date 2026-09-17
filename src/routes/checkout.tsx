@@ -416,7 +416,6 @@ function CheckoutPage() {
           const { redirect_url } = await initFn({
             data: {
               orderId: newId,
-              amount: subAfterCoupon,
               customerName: form.name,
               customerEmail: form.email,
               customerPhone: form.phone,
