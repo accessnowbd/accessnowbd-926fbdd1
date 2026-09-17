@@ -697,7 +697,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  const [customFields, setCustomFields] = useState<CustomField[]>(product.meta?.custom_fields ?? []);
  const [gallery, setGallery] = useState<string[]>(product.meta?.gallery ?? []);
  const [ai, setAi] = useState<AiBusy>("");
- const [imagePrompt, setImagePrompt] = useState("");
+ 
   const [autoSlug, setAutoSlug] = useState(isNew);
   const [slugUnlocked, setSlugUnlocked] = useState(isNew);
  const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
