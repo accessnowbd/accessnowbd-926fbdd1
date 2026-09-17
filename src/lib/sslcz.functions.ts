@@ -136,7 +136,7 @@ export const initiateSslczPayment = createServerFn({ method: "POST" })
     const form = new URLSearchParams();
     form.set("store_id", cfg.store_id);
     form.set("store_passwd", cfg.store_password);
-    form.set("total_amount", String(data.amount));
+    form.set("total_amount", String(amount));
     form.set("currency", cfg.currency || "BDT");
     form.set("tran_id", data.orderId);
     form.set("success_url", cfg.success_url || "");
