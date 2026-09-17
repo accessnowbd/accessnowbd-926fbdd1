@@ -126,9 +126,21 @@ export const testEpsConnection = createServerFn({ method: "POST" })
 
 export const initiateEpsPayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { orderId: string; amount: number; customerName?: string; customerEmail?: string; customerPhone?: string }) => input)
+  .inputValidator((input: { orderId: string; customerName?: string; customerEmail?: string; customerPhone?: string }) => input)
   .handler(async ({ data, context }) => {
     const cfg = await loadConfig(context.supabase);
+
+    // Authoritative amount: read the order's stored total server-side.
+    // The browser never decides how much is charged.
+    const { data: order, error: orderErr } = await context.supabase
+      .from("orders")
+      .select("id,total,payment_status")
+      .eq("id", data.orderId)
+      .maybeSingle();
+    if (orderErr || !order) throw new Error("Order not found.");
+    if (order.payment_status === "verified") throw new Error("This order is already paid.");
+    const amount = Number(order.total);
+    if (!Number.isFinite(amount) || amount <= 0) throw new Error("Invalid order total.");
 
     if (!cfg.merchant_id || !cfg.store_password || !cfg.api_key) {
       throw new Error("EPS gateway is not configured yet — add credentials in Admin → EPS Gateway.");
