@@ -152,7 +152,7 @@ export const initiateEpsPayment = createServerFn({ method: "POST" })
     const payload = {
       store_id: cfg.merchant_id,
       store_passwd: cfg.store_password,
-      total_amount: data.amount,
+      total_amount: amount,
       currency: cfg.currency || "BDT",
       tran_id: data.orderId,
       success_url: cfg.success_url,
