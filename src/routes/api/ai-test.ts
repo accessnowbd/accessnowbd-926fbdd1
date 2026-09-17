@@ -31,13 +31,18 @@ async function checkStatus(apiKey: string) {
 export const Route = createFileRoute("/api/ai-test")({
   server: {
     handlers: {
-      GET: async () => {
+      GET: async ({ request }) => {
+        const authGet = await requireApiAdmin(request);
+        if ("error" in authGet) return authGet.error;
         const key = process.env.LOVABLE_API_KEY;
         if (!key) return Response.json({ ok: false, error: "LOVABLE_API_KEY missing" }, { status: 200 });
         const s = await checkStatus(key);
         return Response.json(s);
       },
       POST: async ({ request }) => {
+        const auth = await requireApiAdmin(request);
+        if ("error" in auth) return auth.error;
+
         const key = process.env.LOVABLE_API_KEY;
         if (!key) return Response.json({ ok: false, error: "LOVABLE_API_KEY missing" }, { status: 500 });
 

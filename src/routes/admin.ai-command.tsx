@@ -234,7 +234,7 @@ function AdminAICommandCenter() {
     setError(null);
     setOutput(null);
     try {
-      const res = await fetch("/api/ai-command", {
+      const res = await adminFetch("/api/ai-command", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
