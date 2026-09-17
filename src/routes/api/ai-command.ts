@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { requireApiAdmin } from "@/lib/api-auth.server";
 
 // Executes a saved AI command from the AI Command Center.
 // Body: { system: string, input: string, model?: string, temperature?: number, maxTokens?: number }
@@ -9,6 +10,10 @@ export const Route = createFileRoute("/api/ai-command")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        // Admin-only: this route spends the workspace AI budget.
+        const auth = await requireApiAdmin(request);
+        if ("error" in auth) return auth.error;
+
         const key = process.env.LOVABLE_API_KEY;
         if (!key) {
           return Response.json({ ok: false, error: "LOVABLE_API_KEY missing" }, { status: 500 });
