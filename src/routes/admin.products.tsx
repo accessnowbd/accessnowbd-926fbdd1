@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import {
  Plus, Pencil, Trash2, ArrowUp, ArrowDown, Loader2, Save, X, Eye, EyeOff,
  Sparkles, FileText, Database, Download, Upload, Search, Copy, Package,
- CheckCircle2, AlertCircle, Clock, Filter, Wand2, ImageIcon, Zap, RefreshCw,
+ CheckCircle2, AlertCircle, Clock, Filter, ImageIcon, Zap, RefreshCw,
  Tag, Settings, Search as SearchIcon, ListChecks, HelpCircle, Star,
  Truck, Shield, Layers, Hash, Link2, ChevronDown,
 } from "lucide-react";
@@ -697,7 +697,7 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  const [customFields, setCustomFields] = useState<CustomField[]>(product.meta?.custom_fields ?? []);
  const [gallery, setGallery] = useState<string[]>(product.meta?.gallery ?? []);
  const [ai, setAi] = useState<AiBusy>("");
- const [imagePrompt, setImagePrompt] = useState("");
+ 
   const [autoSlug, setAutoSlug] = useState(isNew);
   const [slugUnlocked, setSlugUnlocked] = useState(isNew);
  const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
@@ -822,27 +822,6 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  finally { setAi(""); }
  };
 
-  const generateImage = async (style: AiCardStyle = "premium-pastel") => {
-    if (!form.name.trim()) { toast.error("আগে Product Title লিখুন"); return; }
-    setAi("image-gen");
-    try {
-      const { data, error } = await supabase.functions.invoke("product-ai", {
-        body: { mode: "image", product: { name: form.name, category: form.category }, imagePrompt, style },
-      });
-      if (error) throw error;
-      const d = data as { image?: string; error?: string };
-      if (d?.error) throw new Error(d.error);
-      if (!d.image) throw new Error("No image returned");
-      const blob = await (await fetch(d.image)).blob();
-      const file = new File([blob], `${slugify(form.name) || "product"}-ai-${Date.now()}.png`, { type: blob.type || "image/png" });
-      set("image_url", await uploadOne(file));
-      toast.success("AI ইমেজ তৈরি হয়েছে 🎨");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Image generation failed");
-    } finally {
-      setAi("");
-    }
-  };
 
  /* ---------- save ---------- */
  const save = async () => {
@@ -1425,48 +1404,6 @@ function ProductEditor({ product, isNew, onClose, onSaved }: { product: Product;
  <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => { onPickFile(e.target.files?.[0]); e.target.value = ""; }} />
  </div>
 
- {/* AI Card Generator */}
- <div className="border border-slate-200 rounded-2xl p-4 bg-white">
- <div className="flex items-center gap-3 mb-3">
- <div className="w-10 h-10 rounded-full grid place-items-center text-white shrink-0" style={{ background: "linear-gradient(135deg,#94a3b8,#94a3b8)" }}>
- <Wand2 className="w-5 h-5" />
- </div>
- <div className="flex-1 min-w-0">
- <div className="flex items-center gap-1.5">
- <span className="font-bold text-slate-900">AI Card Generator</span>
- <span className="text-[9px] font-bold tracking-wider text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded-full">PREMIUM</span>
- </div>
- <div className="text-xs text-slate-500">AccessNow BD ব্র্যান্ডিংসহ প্রিমিয়াম প্রোডাক্ট কার্ড তৈরি করুন</div>
- </div>
- </div>
-
-          <div className="px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600">
-            💡 দুই ধরনের প্রিমিয়াম গ্লাস-কার্ড ডিজাইন — AccessNow BD ব্র্যান্ডিং, ওয়েবসাইট ও ফোন নম্বর সহ
-          </div>
-
-          <input value={imagePrompt} onChange={(e) => setImagePrompt(e.target.value)} placeholder="Optional: describe the look..." className="mt-3 w-full h-10 px-3 rounded-xl border border-slate-200 text-xs outline-none focus:border-slate-400" />
-
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            {([
-              { id: "premium-pastel", label: "Pastel Glass", emoji: "🌸", bg: "linear-gradient(135deg,#a78bfa 0%,#ec4899 50%,#f97316 100%)", shadow: "rgba(168,85,247,0.45)" },
-              { id: "premium-dark", label: "Dark Luxe", emoji: "🌌", bg: "linear-gradient(135deg,#0f172a 0%,#4c1d95 60%,#9333ea 100%)", shadow: "rgba(30,41,59,0.7)" },
-              { id: "soft-aurora", label: "Soft Aurora", emoji: "🌅", bg: "linear-gradient(135deg,#10b981 0%,#06b6d4 50%,#8b5cf6 100%)", shadow: "rgba(16,185,129,0.45)" },
-              { id: "dark-neon", label: "Neon Edge", emoji: "⚡", bg: "linear-gradient(135deg,#0ea5e9 0%,#6366f1 50%,#ec4899 100%)", shadow: "rgba(99,102,241,0.5)" },
-            ] as { id: AiCardStyle; label: string; emoji: string; bg: string; shadow: string }[]).map((s) => (
-              <button
-                key={s.id}
-                onClick={() => generateImage(s.id)}
-                disabled={aiBusy}
-                className="group relative inline-flex items-center justify-center gap-2 h-12 rounded-xl text-white text-sm font-extrabold shadow-lg disabled:opacity-50 transition active:scale-[0.98] hover:brightness-110"
-                style={{ background: s.bg, boxShadow: `0 10px 30px -10px ${s.shadow}`, textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}
-              >
-                {ai === "image-gen" ? <Loader2 className="w-4 h-4 animate-spin" /> : <span className="text-base leading-none">{s.emoji}</span>}
-                <span className="drop-shadow-sm">{s.label}</span>
-              </button>
-            ))}
-          </div>
-          <div className="mt-2 text-[10px] text-slate-400 text-center">✨ Powered by Nano Banana 2 · 1:1 square HD</div>
- </div>
 
  {/* Gallery */}
  <div>
