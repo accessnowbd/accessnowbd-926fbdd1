@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { requireApiAdmin } from "@/lib/api-auth.server";
 
 // Small AI system test endpoint — used by /admin/settings AI panel.
 // GET  → status check (is Lovable AI Gateway reachable + key present)
