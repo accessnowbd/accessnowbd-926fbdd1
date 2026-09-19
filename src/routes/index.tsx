@@ -20,6 +20,7 @@ import { ProgressiveSection } from "@/components/ProgressiveSection";
 import { PerfReportSection, ProfiledSection } from "@/components/PerfReportSection";
 
 import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
+import { LiveProductTicker } from "@/components/LiveTicker";
 import { RecentlyViewedSection } from "@/components/RecentlyViewedSection";
 import type { Product } from "@/data/products";
 import { DEFAULT_HOMEPAGE_CONFIG, fetchHomepageConfig } from "@/lib/homepage-config";
@@ -201,7 +202,11 @@ function Index() {
     rendered.push({ id: "reviews", node: <CustomerReviews /> });
   }
 
-  rendered.sort((a, b) => orderOf(a.id) - orderOf(b.id));
+  rendered.push({ id: "liveTicker", node: <LiveProductTicker /> });
+
+  // liveTicker sits directly under the hero banner.
+  const sortKey = (id: string) => (id === "liveTicker" ? orderOf("hero") + 0.5 : orderOf(id));
+  rendered.sort((a, b) => sortKey(a.id) - sortKey(b.id));
 
   return (
     <div className="home-scroll-optimized min-h-screen">

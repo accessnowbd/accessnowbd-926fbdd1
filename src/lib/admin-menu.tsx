@@ -112,6 +112,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
       { to: "/admin/banner-slider", label: "Banner Slider", labelBn: "ব্যানার স্লাইডার", icon: ic(ImageIcon), grad: "from-fuchsia-500 to-pink-500" },
       { to: "/admin/footer-editor", label: "Footer Editor", labelBn: "ফুটার এডিটর", icon: ic(PanelBottom), grad: "from-slate-600 to-indigo-700" },
       { to: "/admin/announcement-bar", label: "Announcement Bar", labelBn: "ঘোষণা বার", icon: ic(Megaphone), grad: "from-orange-500 to-rose-500" },
+      { to: "/admin/live-ticker", label: "Live Ticker & Promo Bar", labelBn: "লাইভ টিকার ও প্রোমো বার", icon: ic(Megaphone), grad: "from-violet-500 to-indigo-600", badge: "NEW" },
       { to: "/admin/welcome-popup", label: "Welcome Popup", labelBn: "ওয়েলকাম পপআপ", icon: ic(PartyPopper), grad: "from-pink-500 to-rose-500" },
       { to: "/admin/welcome-banner", label: "Welcome Banner", labelBn: "ওয়েলকাম ব্যানার", icon: ic(PartyPopper), grad: "from-violet-500 to-pink-500" },
       { to: "/admin/product-zoom", label: "Product Image Zoom", labelBn: "প্রোডাক্ট ইমেজ জুম", icon: ic(Sparkles), grad: "from-cyan-500 to-blue-500" },
