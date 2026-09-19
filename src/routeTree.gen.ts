@@ -76,6 +76,7 @@ import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
 import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
+import { Route as AdminLiveTickerRouteImport } from './routes/admin.live-ticker'
 import { Route as AdminLiveChatRouteImport } from './routes/admin.live-chat'
 import { Route as AdminLicenseManagerRouteImport } from './routes/admin.license-manager'
 import { Route as AdminInvoiceGeneratorRouteImport } from './routes/admin.invoice-generator'
@@ -460,6 +461,11 @@ const AdminNewsletterRoute = AdminNewsletterRouteImport.update({
   path: '/newsletter',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLiveTickerRoute = AdminLiveTickerRouteImport.update({
+  id: '/live-ticker',
+  path: '/live-ticker',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLiveChatRoute = AdminLiveChatRouteImport.update({
   id: '/live-chat',
   path: '/live-chat',
@@ -760,6 +766,7 @@ export interface FileRoutesByFullPath {
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
   '/admin/live-chat': typeof AdminLiveChatRoute
+  '/admin/live-ticker': typeof AdminLiveTickerRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -875,6 +882,7 @@ export interface FileRoutesByTo {
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
   '/admin/live-chat': typeof AdminLiveChatRoute
+  '/admin/live-ticker': typeof AdminLiveTickerRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -992,6 +1000,7 @@ export interface FileRoutesById {
   '/admin/invoice-generator': typeof AdminInvoiceGeneratorRoute
   '/admin/license-manager': typeof AdminLicenseManagerRoute
   '/admin/live-chat': typeof AdminLiveChatRoute
+  '/admin/live-ticker': typeof AdminLiveTickerRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -1110,6 +1119,7 @@ export interface FileRouteTypes {
     | '/admin/invoice-generator'
     | '/admin/license-manager'
     | '/admin/live-chat'
+    | '/admin/live-ticker'
     | '/admin/newsletter'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -1225,6 +1235,7 @@ export interface FileRouteTypes {
     | '/admin/invoice-generator'
     | '/admin/license-manager'
     | '/admin/live-chat'
+    | '/admin/live-ticker'
     | '/admin/newsletter'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -1341,6 +1352,7 @@ export interface FileRouteTypes {
     | '/admin/invoice-generator'
     | '/admin/license-manager'
     | '/admin/live-chat'
+    | '/admin/live-ticker'
     | '/admin/newsletter'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -1942,6 +1954,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNewsletterRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/live-ticker': {
+      id: '/admin/live-ticker'
+      path: '/live-ticker'
+      fullPath: '/admin/live-ticker'
+      preLoaderRoute: typeof AdminLiveTickerRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/live-chat': {
       id: '/admin/live-chat'
       path: '/live-chat'
@@ -2297,6 +2316,7 @@ interface AdminRouteChildren {
   AdminInvoiceGeneratorRoute: typeof AdminInvoiceGeneratorRoute
   AdminLicenseManagerRoute: typeof AdminLicenseManagerRoute
   AdminLiveChatRoute: typeof AdminLiveChatRoute
+  AdminLiveTickerRoute: typeof AdminLiveTickerRoute
   AdminNewsletterRoute: typeof AdminNewsletterRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
@@ -2350,6 +2370,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminInvoiceGeneratorRoute: AdminInvoiceGeneratorRoute,
   AdminLicenseManagerRoute: AdminLicenseManagerRoute,
   AdminLiveChatRoute: AdminLiveChatRoute,
+  AdminLiveTickerRoute: AdminLiveTickerRoute,
   AdminNewsletterRoute: AdminNewsletterRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminPaymentLinksRoute: AdminPaymentLinksRoute,

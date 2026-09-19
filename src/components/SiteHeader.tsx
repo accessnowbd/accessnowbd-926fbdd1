@@ -36,6 +36,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import { GlobalSearch, useGlobalSearch } from "@/components/GlobalSearch";
 import { SearchTrigger } from "@/components/SearchBar";
+import { PromoMarquee } from "@/components/LiveTicker";
 
 const NAV: Array<{
   label: string;
@@ -86,6 +87,11 @@ export function TopUtilityBar() {
             <Sparkles className="w-3 h-3 text-violet-300" strokeWidth={2.5} />
             Instant Delivery
           </span>
+        </div>
+
+        {/* MIDDLE — admin-controlled promotional messages */}
+        <div className="hidden sm:flex flex-1 min-w-0 px-2">
+          <PromoMarquee />
         </div>
 
         {/* RIGHT — socials, phone, status */}
