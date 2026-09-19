@@ -47,8 +47,8 @@ const KIND = "live_ticker";
 
 function normalise(raw: unknown): LiveTickerConfig {
   const src = (raw ?? {}) as Partial<LiveTickerConfig>;
-  const promo = src.promo ?? {};
-  const live = src.live ?? {};
+  const promo: Partial<LiveTickerConfig["promo"]> = src.promo ?? {};
+  const live: Partial<LiveTickerConfig["live"]> = src.live ?? {};
   return {
     promo: {
       enabled: promo.enabled !== false,
