@@ -20,6 +20,7 @@ import { ProgressiveSection } from "@/components/ProgressiveSection";
 import { PerfReportSection, ProfiledSection } from "@/components/PerfReportSection";
 
 import { HeroBannerCarousel } from "@/components/HeroBannerCarousel";
+import { LiveProductTicker } from "@/components/LiveTicker";
 import { RecentlyViewedSection } from "@/components/RecentlyViewedSection";
 import type { Product } from "@/data/products";
 import { DEFAULT_HOMEPAGE_CONFIG, fetchHomepageConfig } from "@/lib/homepage-config";
