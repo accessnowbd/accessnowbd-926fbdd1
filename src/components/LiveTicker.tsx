@@ -91,7 +91,7 @@ export function LiveProductTicker() {
 
   return (
     <section className="mx-auto max-w-[1440px] px-3 sm:px-5 md:px-10 mt-4 md:mt-6">
-      <div className="relative flex items-center gap-3 rounded-full bg-card/80 backdrop-blur-xl ring-1 ring-border shadow-sm py-2 pl-2 pr-3 overflow-hidden">
+      <div className="relative flex items-center gap-3 rounded-full bg-card text-card-foreground backdrop-blur-xl ring-1 ring-border shadow-sm py-2 pl-2 pr-3 overflow-hidden">
         <span className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-primary text-primary-foreground text-[11px] font-extrabold px-3 py-1.5">
           <Zap className="w-3 h-3" strokeWidth={3} />
           {config.live.label}
