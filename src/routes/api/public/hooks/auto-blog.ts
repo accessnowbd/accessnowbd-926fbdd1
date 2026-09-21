@@ -99,7 +99,7 @@ export const Route = createFileRoute("/api/public/hooks/auto-blog")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        // ---- Auth: private cron secret only (never the public anon key) ----
+        // ---- Auth: private cron secret (scheduled job) OR signed-in admin ----
         const cronSecret = process.env.AUTO_BLOG_CRON_SECRET;
         const provided =
           request.headers.get("x-cron-secret") ||
@@ -108,14 +108,17 @@ export const Route = createFileRoute("/api/public/hooks/auto-blog")({
         const enc = new TextEncoder();
         const a = enc.encode(provided);
         const b = enc.encode(cronSecret ?? "");
-        let same = cronSecret ? a.length === b.length : false;
+        let same = Boolean(cronSecret) && provided.length > 0 && a.length === b.length;
         if (same) {
           let diff = 0;
           for (let i = 0; i < a.length; i++) diff |= a[i]! ^ b[i]!;
           same = diff === 0;
         }
         if (!same) {
-          return Response.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+          // Fall back to an authenticated admin caller (the "Run now" button).
+          const { requireApiAdmin } = await import("@/lib/api-auth.server");
+          const gate = await requireApiAdmin(request);
+          if ("error" in gate) return gate.error;
         }
         const aiKey = process.env.LOVABLE_API_KEY;
         if (!aiKey) return Response.json({ ok: false, error: "AI key missing" }, { status: 500 });

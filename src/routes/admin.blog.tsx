@@ -4,6 +4,7 @@ import {
   Newspaper, Loader2, Sparkles, RefreshCw, ExternalLink, CheckCircle2, AlertCircle, Trash2, Eye, EyeOff,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { adminFetch } from "@/lib/admin-fetch";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/blog")({
@@ -50,11 +51,10 @@ function AdminBlog() {
     setRunning(true);
     setLastRun(null);
     try {
-      // Use anon key that our public hook expects
-      const anonKey = (import.meta as { env: Record<string, string | undefined> }).env.VITE_SUPABASE_PUBLISHABLE_KEY || "";
-      const res = await fetch("/api/public/hooks/auto-blog", {
+      // Authenticated admin call (the cron secret is server-only).
+      const res = await adminFetch("/api/public/hooks/auto-blog", {
         method: "POST",
-        headers: { "Content-Type": "application/json", apikey: anonKey },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ trigger: "admin" }),
       });
       const j = await res.json();
