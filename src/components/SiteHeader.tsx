@@ -60,7 +60,7 @@ export function TopUtilityBar() {
         }}
       >
         {/* LEFT — trust chips */}
-        <div className="flex items-center" style={{ gap: "clamp(6px, 0.7vw, 14px)" }}>
+        <div className="hidden sm:flex items-center" style={{ gap: "clamp(6px, 0.7vw, 14px)" }}>
           <span
             className="inline-flex items-center gap-1.5 font-bold tracking-tight rounded-full border border-white/10"
             style={{
@@ -90,12 +90,12 @@ export function TopUtilityBar() {
         </div>
 
         {/* MIDDLE — admin-controlled promotional messages */}
-        <div className="hidden sm:flex flex-1 min-w-0 px-2">
+        <div className="flex flex-1 min-w-0 px-1 sm:px-2">
           <PromoMarquee />
         </div>
 
         {/* RIGHT — socials, phone, status */}
-        <div className="flex items-center" style={{ gap: "clamp(6px, 0.8vw, 16px)" }}>
+        <div className="hidden sm:flex items-center" style={{ gap: "clamp(6px, 0.8vw, 16px)" }}>
           {/* Social icon placeholders removed — no real accounts wired yet */}
 
           <a
