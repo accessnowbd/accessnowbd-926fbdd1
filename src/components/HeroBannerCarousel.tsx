@@ -255,10 +255,10 @@ export function HeroBannerCarousel() {
     setActive((i) => (i + dir + banners.length) % banners.length);
 
   return (
-    <section className="px-4 pt-4 pb-4 sm:px-6 lg:px-8">
+    <section className="px-3 pb-3 pt-3 sm:px-6 sm:pb-4 sm:pt-4 lg:px-8">
       <div className="relative mx-auto w-full max-w-[1440px]">
         <div
-          className="force-dark-canvas group/banner banner-fast relative overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[32px] border border-white/20 transition-colors duration-500 md:aspect-[2.72/1]"
+          className="force-dark-canvas group/banner banner-fast relative aspect-[16/9] overflow-hidden rounded-2xl border border-white/20 transition-colors duration-500 sm:rounded-[28px] md:aspect-[2.72/1] md:rounded-[32px]"
           style={{
             background,
             // Desktop keeps the locked 2.72:1 shape (see class above).
@@ -537,80 +537,65 @@ export function HeroBannerCarousel() {
             </div>
           </div>
 
-          {/* Mobile: full content, no glass card around image */}
-          <div className="relative flex flex-col gap-5 px-5 py-8 md:hidden">
-            {/* Category */}
-            {current.data.category && (
-              <div
-                className="inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5"
+          {/* Mobile: compact 16:9 split layout */}
+          <div className="relative grid h-full grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] items-center gap-1 px-5 pb-7 pt-5 md:hidden">
+            <div className="min-w-0 self-center">
+              {current.data.category && (
+                <div
+                  className="mb-2 inline-flex max-w-full items-center gap-1.5 rounded-full border px-2 py-1"
+                  style={{
+                    borderColor: hexAlpha(accent, 0.4),
+                    background: `linear-gradient(135deg, ${hexAlpha(accent, 0.2)}, ${hexAlpha("#ffffff", 0.06)})`,
+                    boxShadow: `0 0 18px -6px ${hexAlpha(accent, 0.5)}`,
+                  }}
+                >
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: accent, boxShadow: `0 0 8px ${accent}` }} />
+                  <span className="truncate text-[8px] font-extrabold uppercase text-white/90">
+                    {current.data.category}
+                  </span>
+                </div>
+              )}
+
+              <h1
+                className="line-clamp-3 text-[20px] font-extrabold text-white"
                 style={{
-                  borderColor: hexAlpha(accent, 0.4),
-                  background: `linear-gradient(135deg, ${hexAlpha(accent, 0.18)}, ${hexAlpha("#ffffff", 0.05)})`,
-                  boxShadow: `0 0 24px -6px ${hexAlpha(accent, 0.45)}`,
+                  fontFamily: "Outfit, var(--font-display)",
+                  lineHeight: 1.02,
+                  letterSpacing: "0",
+                  textShadow: `0 1px 2px ${hexAlpha("#000", 0.18)}, 0 0 28px ${hexAlpha(glow, 0.18)}`,
                 }}
               >
-                <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent, boxShadow: `0 0 10px ${accent}` }} />
-                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/90">
-                  {current.data.category}
-                </span>
-              </div>
-            )}
+                {current.data.title}
+              </h1>
 
-            {/* Title */}
-            <h1
-              className="font-extrabold tracking-tight text-white text-3xl"
-              style={{
-                fontFamily: "var(--font-display)",
-                lineHeight: 1.04,
-                letterSpacing: "-0.02em",
-                textShadow: `0 1px 2px ${hexAlpha("#000", 0.18)}, 0 0 40px ${hexAlpha(glow, 0.18)}`,
-              }}
-            >
-              {current.data.title}
-            </h1>
+              {current.data.subtitle && (
+                <p className="mt-2 line-clamp-2 text-[10px] font-medium leading-[1.35] text-white/80">
+                  {current.data.subtitle}
+                </p>
+              )}
 
-            {/* Subtitle */}
-            {current.data.subtitle && (
-              <p className="max-w-xl text-white/85 leading-relaxed text-sm">
-                {current.data.subtitle}
-              </p>
-            )}
-
-            {/* Buttons */}
-            <div className="flex flex-wrap gap-3">
               {current.data.cta && (
                 <Link
                   to={(current.data.link || "/products") as string}
-                  className="group inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-extrabold text-white transition-all active:scale-[0.98]"
+                  className="group mt-3 inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-[10px] font-extrabold text-white transition-transform active:scale-[0.98]"
                   style={{
                     background: `linear-gradient(135deg, ${accent}, ${mix(accent, glow, 0.4)})`,
-                    boxShadow: `0 18px 40px -12px ${hexAlpha(accent, 0.75)}, inset 0 1px 0 ${hexAlpha("#fff", 0.3)}`,
+                    boxShadow: `0 12px 28px -12px ${hexAlpha(accent, 0.8)}, inset 0 1px 0 ${hexAlpha("#fff", 0.3)}`,
                   }}
                 >
-                  <ShoppingCart className="h-4 w-4" />
+                  <ShoppingCart className="h-3.5 w-3.5" />
                   {current.data.cta}
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Link>
-              )}
-              {current.data.secondary_cta && (
-                <Link
-                  to={(current.data.secondary_link || "/products") as string}
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-white/15 hover:border-white/40"
-                >
-                  {current.data.secondary_cta}
+                  <ArrowUpRight className="h-3.5 w-3.5" />
                 </Link>
               )}
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 border-t border-white/10 pt-4">
-              <Stat label="DELIVERY" value={current.data.delivery_text || "Instant"} />
-              <Stat label="SUPPORT" value={current.data.support_text || "24/7"} />
-              <Stat label="RATING" value={current.data.rating_text || "4.9 ★"} />
-            </div>
-
-            {/* Product image — no glass card, just the image */}
-            <div className="relative mt-2 flex items-center justify-center">
+            <div className="relative flex h-full min-w-0 items-center justify-center">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-1 rounded-full blur-xl"
+                style={{ background: hexAlpha(glow, 0.25) }}
+              />
               {resolvedImage ? (
                 <img
                   src={resolvedImage}
@@ -618,7 +603,7 @@ export function HeroBannerCarousel() {
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
-                  className="mx-auto max-h-[260px] w-auto max-w-full object-contain drop-shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+                  className="relative z-[1] max-h-[155px] w-auto max-w-full object-contain drop-shadow-[0_12px_26px_rgba(0,0,0,0.4)]"
                   onError={(e) => {
                     const img = e.currentTarget;
                     if (rawResolvedImage && img.src !== rawResolvedImage) {
@@ -628,7 +613,7 @@ export function HeroBannerCarousel() {
                 />
               ) : (
                 <div
-                  className="flex aspect-square w-32 items-center justify-center rounded-3xl text-4xl font-black text-white"
+                  className="relative z-[1] flex aspect-square w-24 items-center justify-center rounded-2xl text-4xl font-black text-white"
                   style={{
                     background: `linear-gradient(135deg, ${accent}, ${mix(accent, glow, 0.5)})`,
                   }}
@@ -641,7 +626,7 @@ export function HeroBannerCarousel() {
 
           {/* Pagination dots */}
           {banners.length > 1 && (
-            <div className="absolute bottom-5 left-6 z-10 flex items-center gap-1.5 md:left-12">
+            <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 md:bottom-5 md:left-12 md:translate-x-0">
               {banners.map((_, i) => (
                 <button
                   key={i}
@@ -661,7 +646,7 @@ export function HeroBannerCarousel() {
 
           {/* Arrows */}
           {banners.length > 1 && (
-            <div className="absolute bottom-4 right-4 z-10 flex items-center gap-2 md:right-8">
+            <div className="absolute bottom-4 right-4 z-10 hidden items-center gap-2 md:right-8 md:flex">
               <button
                 type="button" onClick={() => go(-1)} aria-label="Previous"
                 className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/15"
