@@ -129,6 +129,7 @@ export const ADMIN_MENU: AdminMenuGroup[] = [
     titleBn: "মার্কেটিং",
     icon: ic(MegaphoneIcon),
     items: [
+      { to: "/admin/lucky-wheel", label: "Digital Welcome Perks", labelBn: "ডিজিটাল ওয়েলকাম ভাউচার", icon: ic(Sparkles), grad: "from-purple-500 to-indigo-600", badge: "NEW" },
       { to: "/admin/coupons", label: "Coupons", labelBn: "কুপন", icon: ic(TicketPercent), grad: "from-rose-500 to-pink-500" },
       { to: "/admin/biggest-discount", label: "Biggest Discount", labelBn: "সর্বোচ্চ ডিসকাউন্ট", icon: ic(Percent), grad: "from-rose-500 to-red-600" },
       { to: "/admin/marketing", label: "Marketing Campaigns", labelBn: "মার্কেটিং ক্যাম্পেইন", icon: ic(MegaphoneIcon), grad: "from-orange-500 to-rose-500" },

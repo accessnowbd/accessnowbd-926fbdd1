@@ -18,22 +18,43 @@ export async function validateCoupon(
 ): Promise<AppliedCoupon> {
   if (!code || !code.trim()) return EMPTY;
   const normalized = code.trim().toUpperCase();
-  const { data, error } = await supabase.rpc(
-    "validate_coupon" as never,
-    { _code: normalized, _subtotal: subtotal } as never,
-  );
-  if (error || !data) {
+
+  try {
+    const { data, error } = await supabase.rpc(
+      "validate_coupon" as never,
+      { _code: normalized, _subtotal: subtotal } as never,
+    );
+
+    if (!error && data) {
+      const row = Array.isArray(data) ? (data[0] as Record<string, unknown> | undefined) : (data as Record<string, unknown>);
+      if (row && row.valid !== undefined) {
+        return {
+          code: String(row.code ?? normalized),
+          valid: Boolean(row.valid),
+          discount: Number(row.discount ?? 0),
+          label: String(row.label ?? ""),
+          reason: (row.reason as string | null) ?? undefined,
+        };
+      }
+    }
+  } catch {
+    // Proceed to server fallback
+  }
+
+  // Resilient fallback using server function
+  try {
+    const { validateCouponServer } = await import("./lucky-coupon.functions");
+    const result = await validateCouponServer({ data: { code: normalized, subtotal } });
+    return {
+      code: result.code,
+      valid: result.valid,
+      discount: result.discount,
+      label: result.label,
+      reason: result.reason,
+    };
+  } catch {
     return { code: normalized, valid: false, discount: 0, label: "", reason: "Invalid code" };
   }
-  const row = Array.isArray(data) ? (data[0] as Record<string, unknown> | undefined) : (data as Record<string, unknown>);
-  if (!row) return { code: normalized, valid: false, discount: 0, label: "", reason: "Invalid code" };
-  return {
-    code: String(row.code ?? normalized),
-    valid: Boolean(row.valid),
-    discount: Number(row.discount ?? 0),
-    label: String(row.label ?? ""),
-    reason: (row.reason as string | null) ?? undefined,
-  };
 }
 
 /** Hook: debounced server-side coupon validation. */

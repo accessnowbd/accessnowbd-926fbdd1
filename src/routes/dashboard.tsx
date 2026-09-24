@@ -8,8 +8,9 @@ import {
   FileText, Mail, Phone, MapPin, Hash, Copy, Check, Shield,
   Heart, Users, Globe, MapPinned, Smartphone, ChevronRight, Gift,
   Lock, AtSign, BadgeCheck, Bookmark, CreditCard, Star, Edit3, Wrench,
-  Trash2, Share2, Eye, EyeOff, Send, Home,
+  Trash2, Share2, Eye, EyeOff, Send, Home, TicketPercent, Clock,
 } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { useLang } from "@/context/LangContext";
@@ -18,6 +19,7 @@ import { publicUrl } from "@/lib/site-url";
 import { WalletInline } from "@/routes/wallet";
 import { WelcomeBanner } from "@/components/WelcomeBanner";
 import { ORDER_SELECT } from "@/lib/order-columns";
+import { getStoredWonCoupon, WonCouponRecord } from "@/lib/lucky-wheel";
 
 // English label -> Bangla translation for sidebar nav, group titles, page heads & common buttons.
 const BN: Record<string, string> = {
@@ -39,6 +41,7 @@ const BN: Record<string, string> = {
   "Wallet": "ওয়ালেট",
   "Points": "পয়েন্ট",
   "Referral": "রেফারেল",
+  "My Coupons": "আমার কুপন",
   "Language": "ভাষা",
   "Install App": "অ্যাপ ইন্সটল",
   "Menu": "মেনু",
@@ -85,7 +88,7 @@ type Order = {
 type SectionId =
   | "profile" | "edit-profile" | "addresses" | "security"
   | "orders" | "licenses" | "downloads" | "subscriptions" | "wishlist" | "notifications"
-  | "wallet" | "points" | "referral"
+  | "coupons" | "wallet" | "points" | "referral"
   | "language" | "install-app"
   | "active-services" | "expired" | "open-ticket" | "my-tickets";
 
@@ -127,6 +130,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "REWARDS",
     items: [
+      { id: "coupons", label: "My Coupons", icon: TicketPercent },
       { id: "wallet", label: "Wallet", icon: Wallet },
       { id: "points", label: "Points", icon: Star },
       { id: "referral", label: "Referral", icon: Share2Icon },
@@ -265,7 +269,7 @@ function DashboardPage() {
         <WelcomeCard greetingName={greetingName} email={user?.email ?? ""} stats={stats4} avatarUrl={profile?.avatar_url ?? null} />
 
         {/* WELCOME GIFT BANNER */}
-        <GiftBanner onClaim={() => navigate({ to: "/wallet" })} />
+        <GiftBanner onClaim={() => setSection("coupons")} />
 
         {/* LAYOUT: sidebar + main */}
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
@@ -457,6 +461,12 @@ function StatPill({ icon: Icon, tint, label, value }: { icon: React.ComponentTyp
 }
 
 function GiftBanner({ onClaim }: { onClaim: () => void }) {
+  const [won, setWon] = useState<WonCouponRecord | null>(null);
+
+  useEffect(() => {
+    setWon(getStoredWonCoupon());
+  }, []);
+
   return (
     <div className="relative overflow-hidden rounded-3xl p-4 md:p-5 bg-card border border-border shadow-sm">
       <div className="absolute inset-0 opacity-30 pointer-events-none" style={{ background: "linear-gradient(90deg, rgba(236,72,153,0.18), rgba(251,191,36,0.18), rgba(139,92,246,0.18))" }} />
@@ -465,16 +475,22 @@ function GiftBanner({ onClaim }: { onClaim: () => void }) {
           <Gift className="w-5 h-5" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-[10px] font-bold tracking-[0.18em] text-pink-500 dark:text-pink-300">WELCOME GIFT</div>
-          <div className="text-sm md:text-[15px] font-bold text-foreground mt-0.5">🎁 আপনার বিশেষ ছাড় দাবি করুন</div>
-          <div className="text-[11px] text-muted-foreground mt-0.5">Lucky Spin ঘুরিয়ে ৳১০০–১৫০ পর্যন্ত ছাড় পেতে পারেন</div>
+          <div className="text-[10px] font-bold tracking-[0.18em] text-pink-500 dark:text-pink-300">
+            {won ? "YOUR ACTIVE COUPON" : "WELCOME GIFT"}
+          </div>
+          <div className="text-sm md:text-[15px] font-bold text-foreground mt-0.5">
+            {won ? `🎉 আপনার লাকি কুপন: ${won.code} (${won.label} ডিসকাউন্ট)` : "🎁 আপনার বিশেষ ছাড় দাবি করুন"}
+          </div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">
+            {won ? "চেকআউটে কুপন কোডটি ব্যবহার করে বিশেষ ছাড় উপভোগ করুন" : "Lucky Spin ঘুরিয়ে সর্বোচ্চ ৩০% পর্যন্ত ছাড় পেতে পারেন"}
+          </div>
         </div>
         <button
           onClick={onClaim}
           className="shrink-0 inline-flex items-center gap-1.5 h-10 px-5 rounded-full text-primary-foreground text-sm font-bold shadow-lg shadow-primary/25 hover:opacity-95 transition"
           style={{ background: "linear-gradient(90deg,#ec4899,#a855f7)" }}
         >
-          Claim Now <ChevronRight className="w-4 h-4" />
+          {won ? "কুপন দেখুন" : "Claim Now"} <ChevronRight className="w-4 h-4" />
         </button>
       </div>
     </div>
@@ -486,6 +502,260 @@ function UserMenuItem({ icon, label, onClick, danger }: { icon: React.ReactNode;
     <button onClick={onClick} className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition ${danger ? "text-rose-500 hover:bg-rose-500/10" : "text-foreground hover:bg-accent"}`}>
       {icon} {label}
     </button>
+  );
+}
+
+/* ===================== CUSTOMER COUPONS ===================== */
+function CustomerCouponsView({ onNavigate }: { onNavigate: (s: SectionId) => void }) {
+  const { user } = useAuth();
+  const [coupons, setCoupons] = useState<Array<{
+    code: string;
+    label: string;
+    discount_value: number;
+    discount_type: "percent" | "flat";
+    min_order_amount: number;
+    max_discount: number;
+    expires_at: string;
+    tier?: string;
+    is_used?: boolean;
+  }>>([]);
+  const [loading, setLoading] = useState(true);
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    // Load local stored coupon first
+    const local = getStoredWonCoupon();
+    if (local) {
+      setCoupons([
+        {
+          code: local.code,
+          label: local.label,
+          discount_value: local.discount_value,
+          discount_type: local.discount_type,
+          min_order_amount: local.min_order_amount || 0,
+          max_discount: 500,
+          expires_at: local.expires_at,
+          tier: local.discount_value >= 30 ? "jackpot" : local.discount_value >= 16 ? "rare" : "normal",
+          is_used: local.is_used,
+        },
+      ]);
+    }
+
+    (async () => {
+      try {
+        const { getMyLuckyCoupons } = await import("@/lib/lucky-coupon.functions");
+        const { getOrCreateVisitorId } = await import("@/lib/lucky-visitor");
+        const visitorId = getOrCreateVisitorId();
+        const serverCoupons = await getMyLuckyCoupons({
+          data: {
+            visitorId,
+            userId: user?.id ?? undefined,
+          },
+        });
+
+        if (cancelled) return;
+
+        if (serverCoupons && serverCoupons.length > 0) {
+          const mapped = serverCoupons.map((c) => ({
+            code: c.coupon_code,
+            label: c.label,
+            discount_value: c.discount_value,
+            discount_type: c.discount_type,
+            min_order_amount: c.min_order_amount,
+            max_discount: c.max_discount,
+            expires_at: c.expires_at,
+            tier: c.tier,
+            is_used: c.is_used,
+          }));
+          setCoupons(mapped);
+        }
+      } catch (err) {
+        console.warn("[CustomerCouponsView] Failed to load server coupons:", err);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
+
+  const copyCode = (code: string) => {
+    try {
+      navigator.clipboard.writeText(code);
+      setCopiedCode(code);
+      toast.success(`কুপন কোড "${code}" কপি করা হয়েছে!`);
+      setTimeout(() => setCopiedCode(null), 2500);
+    } catch {
+      toast.info(`কুপন কোড: ${code}`);
+    }
+  };
+
+  const getCouponStatus = (c: { expires_at: string; is_used?: boolean }) => {
+    if (c.is_used) return { label: "Used", color: "bg-slate-500/20 text-slate-300 border-slate-500/30" };
+    if (new Date(c.expires_at).getTime() < Date.now()) {
+      return { label: "Expired", color: "bg-rose-500/20 text-rose-300 border-rose-500/30" };
+    }
+    return { label: "Available", color: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30" };
+  };
+
+  return (
+    <div className="space-y-6">
+      <PageHead
+        title="My Coupons"
+        desc="আপনার জন্য উপলব্ধ ডিসকাউন্ট কুপন ও লাকি অফার"
+      />
+
+      {coupons.length > 0 ? (
+        <div className="space-y-5">
+          {coupons.map((coupon, idx) => {
+            const status = getCouponStatus(coupon);
+            const isJackpot = coupon.tier === "jackpot" || coupon.discount_value >= 30;
+            const isRare = coupon.tier === "rare" || (coupon.discount_value >= 16 && coupon.discount_value < 30);
+            const isCopied = copiedCode === coupon.code;
+            const isAvailable = status.label === "Available";
+
+            return (
+              <div
+                key={coupon.code || idx}
+                className={`relative overflow-hidden rounded-3xl p-6 md:p-8 border shadow-xl transition ${
+                  isJackpot
+                    ? "bg-gradient-to-br from-amber-950/90 via-slate-900 to-yellow-950/80 text-white border-amber-500/50 shadow-amber-500/10"
+                    : isRare
+                    ? "bg-gradient-to-br from-purple-950/90 via-slate-900 to-pink-950/80 text-white border-pink-500/40 shadow-pink-500/10"
+                    : "bg-gradient-to-br from-indigo-900/90 via-slate-900 to-purple-950 text-white border-indigo-500/40"
+                }`}
+              >
+                {/* Ambient glow */}
+                <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-purple-500/20 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-pink-500/20 blur-3xl" />
+
+                <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {isJackpot ? (
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/20 px-3.5 py-1 text-xs font-black text-amber-300 border border-amber-400/40">
+                          <Trophy className="h-3.5 w-3.5 text-yellow-300" />
+                          <span>🏆 JACKPOT REWARD</span>
+                        </div>
+                      ) : isRare ? (
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-pink-400/20 px-3.5 py-1 text-xs font-black text-pink-300 border border-pink-400/40">
+                          <Sparkles className="h-3.5 w-3.5 text-pink-300" />
+                          <span>🎉 RARE DISCOUNT REWARD</span>
+                        </div>
+                      ) : (
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-indigo-400/20 px-3.5 py-1 text-xs font-bold text-indigo-300 border border-indigo-400/30">
+                          <Gift className="h-3.5 w-3.5 text-indigo-300" />
+                          <span>LUCKY COUPON REWARD</span>
+                        </div>
+                      )}
+
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${status.color}`}>
+                        {status.label === "Available" ? "সক্রিয় (Available)" : status.label === "Used" ? "ব্যবহৃত (Used)" : "মেয়াদোত্তীর্ণ (Expired)"}
+                      </span>
+                    </div>
+
+                    <h2 className="text-2xl md:text-3xl font-black tracking-tight text-white">
+                      {isJackpot ? (
+                        "🎉 Congratulations! You unlocked the Jackpot 30% OFF!"
+                      ) : isRare ? (
+                        "🎉 Congratulations! You unlocked a rare discount!"
+                      ) : (
+                        `${coupon.label} স্পেশাল ডিসকাউন্ট`
+                      )}
+                    </h2>
+
+                    <p className="text-xs md:text-sm text-slate-300 max-w-md leading-relaxed">
+                      {isAvailable
+                        ? "লাকি অফারে প্রাপ্ত এই কুপন কোডটি কপি করে চেকআউটের সময় প্রয়োগ করুন।"
+                        : status.label === "Used"
+                        ? "এই কুপন কোডটি ইতিমধ্যে একটি অর্ডারে সফলভাবে ব্যবহার করা হয়েছে।"
+                        : "এই কুপনটির ব্যবহারের নির্ধারিত সময়সীমা পার হয়ে গেছে।"}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col sm:items-start md:items-end gap-2.5">
+                    <div className="flex items-center gap-3 bg-black/60 border-2 border-dashed border-amber-400/70 rounded-2xl px-5 py-3 shadow-inner">
+                      <span className="font-mono text-xl md:text-2xl font-black text-amber-300 tracking-widest select-all">
+                        {coupon.code}
+                      </span>
+                      {isAvailable && (
+                        <button
+                          onClick={() => copyCode(coupon.code)}
+                          className="flex items-center gap-1.5 rounded-xl bg-amber-400 px-3.5 py-1.5 text-xs font-bold text-slate-950 hover:bg-amber-300 transition active:scale-95 shadow-sm"
+                        >
+                          {isCopied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                          <span>{isCopied ? "কপি হয়েছে" : "কপি"}</span>
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="h-3.5 w-3.5 text-amber-300" />
+                        <span>
+                          মেয়াদ: {coupon.expires_at ? new Date(coupon.expires_at).toLocaleDateString("bn-BD", { day: "numeric", month: "short", year: "numeric" }) : "২৪ ঘণ্টার মধ্যে"}
+                        </span>
+                      </div>
+                      {coupon.min_order_amount > 0 && (
+                        <span>• ন্যূনতম অর্ডার: ৳{coupon.min_order_amount}</span>
+                      )}
+                      {coupon.max_discount > 0 && (
+                        <span>• সর্বোচ্চ ছাড়: ৳{coupon.max_discount}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {isAvailable && (
+                  <div className="relative mt-6 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+                    <span className="text-xs text-slate-400">
+                      * চেকআউটের সময় এই কুপন কোডটি ব্যবহার করলে নির্ধারিত ডিসকাউন্ট অটোমেটিক সমন্বয় হবে।
+                    </span>
+                    <button
+                      onClick={() => {
+                        copyCode(coupon.code);
+                        navigate({ to: "/products" });
+                      }}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-xs font-bold text-white shadow-lg shadow-emerald-500/25 hover:brightness-110 active:scale-95 transition"
+                    >
+                      <span>কেনাকাটা করুন ও কুপন ব্যবহার করুন</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <Card className="text-center py-12 space-y-4">
+          <div className="mx-auto w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-muted text-indigo-600 grid place-items-center shadow-inner">
+            <TicketPercent className="w-8 h-8" />
+          </div>
+          <div className="space-y-1.5">
+            <h3 className="font-bold text-lg text-foreground">আপাতত কোনো সক্রিয় ডিজিটাল ভাউচার নেই</h3>
+            <p className="text-xs md:text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+              হোমপেজে ভিজিট করে আপনার ডিজিটাল সাবস্ক্রিপশন ওয়েলকাম ভাউচার আনলক করুন এবং ৫% থেকে সর্বোচ্চ ৩০% পর্যন্ত নিশ্চিত ডিসকাউন্ট পান!
+            </p>
+          </div>
+          <div className="pt-2">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-white shadow-md hover:opacity-95 transition"
+              style={{ background: "linear-gradient(135deg,#8b5cf6,#6366f1)" }}
+            >
+              <Zap className="w-4 h-4 text-yellow-300" />
+              <span>হোমপেজে যান ও ভাউচার আনলক করুন</span>
+            </Link>
+          </div>
+        </Card>
+      )}
+    </div>
   );
 }
 
@@ -512,6 +782,7 @@ function SectionRenderer({
     case "subscriptions": return <ServiceList kind="active" orders={orders} />;
     case "wishlist": return <WishlistView />;
     case "notifications": return <NotificationsView />;
+    case "coupons": return <CustomerCouponsView onNavigate={onNavigate} />;
     case "wallet": return <WalletRedirect />;
     case "points": return <PointsView />;
     case "referral": return <ReferralView user={user} />;

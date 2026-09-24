@@ -61,6 +61,7 @@ const DESCRIPTIONS: Record<string, Desc> = {
   "/admin/whatsapp-button": { en: "Floating WhatsApp button settings", bn: "ফ্লোটিং WhatsApp বাটন সেটিংস" },
   "/admin/support-widget": { en: "Support chat widget settings", bn: "সাপোর্ট চ্যাট উইজেট সেটিংস" },
 
+  "/admin/lucky-wheel": { en: "Configure digital welcome voucher popup and subscription perks", bn: "ডিজিটাল সফটওয়্যার ওয়েলকাম ভাউচার ও ডিসকাউন্ট পার্ক কনফিগার করুন" },
   "/admin/coupons": { en: "Create and manage discount coupons", bn: "ডিসকাউন্ট কুপন তৈরি ও ম্যানেজ করুন" },
   "/admin/promotions": { en: "Promotional offers and campaigns", bn: "প্রমোশনাল অফার ও ক্যাম্পেইন" },
   "/admin/review-generator": { en: "Generate authentic looking reviews", bn: "অথেনটিক লুকিং রিভিউ তৈরি করুন" },

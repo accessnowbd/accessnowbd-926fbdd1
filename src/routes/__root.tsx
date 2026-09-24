@@ -10,6 +10,7 @@ import { LangProvider } from "@/context/LangContext";
 import { SupportWidget } from "@/components/SupportWidget";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WelcomePopup } from "@/components/WelcomePopup";
+import { LuckyWheelModal } from "@/components/LuckyWheelModal";
 import { InstallAppPrompt } from "@/components/InstallAppPrompt";
 import { TrackingScripts } from "@/components/TrackingScripts";
 import { AbandonedCheckoutTracker } from "@/components/AbandonedCheckoutTracker";
@@ -279,6 +280,7 @@ function RootComponent() {
                 </main>
                 {!isAdmin && <SupportWidget />}
                 {!isAdmin && <WelcomePopup />}
+                {!isAdmin && <LuckyWheelModal />}
                 {!isAdmin && <InstallAppPrompt />}
                 {!isAdmin && <TrackingScripts />}
                 {!isAdmin && <AbandonedCheckoutTracker />}

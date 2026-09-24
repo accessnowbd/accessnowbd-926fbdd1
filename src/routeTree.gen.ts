@@ -76,6 +76,7 @@ import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
 import { Route as AdminPaymentLinksRouteImport } from './routes/admin.payment-links'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
+import { Route as AdminLuckyWheelRouteImport } from './routes/admin.lucky-wheel'
 import { Route as AdminLiveTickerRouteImport } from './routes/admin.live-ticker'
 import { Route as AdminLiveChatRouteImport } from './routes/admin.live-chat'
 import { Route as AdminLicenseManagerRouteImport } from './routes/admin.license-manager'
@@ -119,6 +120,10 @@ import { Route as ApiPublicSslczSuccessRouteImport } from './routes/api/public/s
 import { Route as ApiPublicSslczIpnRouteImport } from './routes/api/public/sslcz/ipn'
 import { Route as ApiPublicSslczFailRouteImport } from './routes/api/public/sslcz/fail'
 import { Route as ApiPublicSslczCancelRouteImport } from './routes/api/public/sslcz/cancel'
+import { Route as ApiPublicLuckyCouponValidateRouteImport } from './routes/api/public/lucky-coupon/validate'
+import { Route as ApiPublicLuckyCouponMyCouponsRouteImport } from './routes/api/public/lucky-coupon/my-coupons'
+import { Route as ApiPublicLuckyCouponClaimRouteImport } from './routes/api/public/lucky-coupon/claim'
+import { Route as ApiPublicLuckyCouponCampaignRouteImport } from './routes/api/public/lucky-coupon/campaign'
 import { Route as ApiPublicHooksAutoBlogRouteImport } from './routes/api/public/hooks/auto-blog'
 import { Route as ApiPublicEpsSuccessRouteImport } from './routes/api/public/eps/success'
 import { Route as ApiPublicEpsIpnRouteImport } from './routes/api/public/eps/ipn'
@@ -461,6 +466,11 @@ const AdminNewsletterRoute = AdminNewsletterRouteImport.update({
   path: '/newsletter',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLuckyWheelRoute = AdminLuckyWheelRouteImport.update({
+  id: '/lucky-wheel',
+  path: '/lucky-wheel',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLiveTickerRoute = AdminLiveTickerRouteImport.update({
   id: '/live-ticker',
   path: '/live-ticker',
@@ -686,6 +696,30 @@ const ApiPublicSslczCancelRoute = ApiPublicSslczCancelRouteImport.update({
   path: '/api/public/sslcz/cancel',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLuckyCouponValidateRoute =
+  ApiPublicLuckyCouponValidateRouteImport.update({
+    id: '/api/public/lucky-coupon/validate',
+    path: '/api/public/lucky-coupon/validate',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicLuckyCouponMyCouponsRoute =
+  ApiPublicLuckyCouponMyCouponsRouteImport.update({
+    id: '/api/public/lucky-coupon/my-coupons',
+    path: '/api/public/lucky-coupon/my-coupons',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicLuckyCouponClaimRoute =
+  ApiPublicLuckyCouponClaimRouteImport.update({
+    id: '/api/public/lucky-coupon/claim',
+    path: '/api/public/lucky-coupon/claim',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicLuckyCouponCampaignRoute =
+  ApiPublicLuckyCouponCampaignRouteImport.update({
+    id: '/api/public/lucky-coupon/campaign',
+    path: '/api/public/lucky-coupon/campaign',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksAutoBlogRoute = ApiPublicHooksAutoBlogRouteImport.update({
   id: '/api/public/hooks/auto-blog',
   path: '/api/public/hooks/auto-blog',
@@ -767,6 +801,7 @@ export interface FileRoutesByFullPath {
   '/admin/license-manager': typeof AdminLicenseManagerRoute
   '/admin/live-chat': typeof AdminLiveChatRoute
   '/admin/live-ticker': typeof AdminLiveTickerRoute
+  '/admin/lucky-wheel': typeof AdminLuckyWheelRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -816,6 +851,10 @@ export interface FileRoutesByFullPath {
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
   '/api/public/hooks/auto-blog': typeof ApiPublicHooksAutoBlogRoute
+  '/api/public/lucky-coupon/campaign': typeof ApiPublicLuckyCouponCampaignRoute
+  '/api/public/lucky-coupon/claim': typeof ApiPublicLuckyCouponClaimRoute
+  '/api/public/lucky-coupon/my-coupons': typeof ApiPublicLuckyCouponMyCouponsRoute
+  '/api/public/lucky-coupon/validate': typeof ApiPublicLuckyCouponValidateRoute
   '/api/public/sslcz/cancel': typeof ApiPublicSslczCancelRoute
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
@@ -883,6 +922,7 @@ export interface FileRoutesByTo {
   '/admin/license-manager': typeof AdminLicenseManagerRoute
   '/admin/live-chat': typeof AdminLiveChatRoute
   '/admin/live-ticker': typeof AdminLiveTickerRoute
+  '/admin/lucky-wheel': typeof AdminLuckyWheelRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -932,6 +972,10 @@ export interface FileRoutesByTo {
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
   '/api/public/hooks/auto-blog': typeof ApiPublicHooksAutoBlogRoute
+  '/api/public/lucky-coupon/campaign': typeof ApiPublicLuckyCouponCampaignRoute
+  '/api/public/lucky-coupon/claim': typeof ApiPublicLuckyCouponClaimRoute
+  '/api/public/lucky-coupon/my-coupons': typeof ApiPublicLuckyCouponMyCouponsRoute
+  '/api/public/lucky-coupon/validate': typeof ApiPublicLuckyCouponValidateRoute
   '/api/public/sslcz/cancel': typeof ApiPublicSslczCancelRoute
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
@@ -1001,6 +1045,7 @@ export interface FileRoutesById {
   '/admin/license-manager': typeof AdminLicenseManagerRoute
   '/admin/live-chat': typeof AdminLiveChatRoute
   '/admin/live-ticker': typeof AdminLiveTickerRoute
+  '/admin/lucky-wheel': typeof AdminLuckyWheelRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payment-links': typeof AdminPaymentLinksRoute
@@ -1050,6 +1095,10 @@ export interface FileRoutesById {
   '/api/public/eps/ipn': typeof ApiPublicEpsIpnRoute
   '/api/public/eps/success': typeof ApiPublicEpsSuccessRoute
   '/api/public/hooks/auto-blog': typeof ApiPublicHooksAutoBlogRoute
+  '/api/public/lucky-coupon/campaign': typeof ApiPublicLuckyCouponCampaignRoute
+  '/api/public/lucky-coupon/claim': typeof ApiPublicLuckyCouponClaimRoute
+  '/api/public/lucky-coupon/my-coupons': typeof ApiPublicLuckyCouponMyCouponsRoute
+  '/api/public/lucky-coupon/validate': typeof ApiPublicLuckyCouponValidateRoute
   '/api/public/sslcz/cancel': typeof ApiPublicSslczCancelRoute
   '/api/public/sslcz/fail': typeof ApiPublicSslczFailRoute
   '/api/public/sslcz/ipn': typeof ApiPublicSslczIpnRoute
@@ -1120,6 +1169,7 @@ export interface FileRouteTypes {
     | '/admin/license-manager'
     | '/admin/live-chat'
     | '/admin/live-ticker'
+    | '/admin/lucky-wheel'
     | '/admin/newsletter'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -1169,6 +1219,10 @@ export interface FileRouteTypes {
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
     | '/api/public/hooks/auto-blog'
+    | '/api/public/lucky-coupon/campaign'
+    | '/api/public/lucky-coupon/claim'
+    | '/api/public/lucky-coupon/my-coupons'
+    | '/api/public/lucky-coupon/validate'
     | '/api/public/sslcz/cancel'
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
@@ -1236,6 +1290,7 @@ export interface FileRouteTypes {
     | '/admin/license-manager'
     | '/admin/live-chat'
     | '/admin/live-ticker'
+    | '/admin/lucky-wheel'
     | '/admin/newsletter'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -1285,6 +1340,10 @@ export interface FileRouteTypes {
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
     | '/api/public/hooks/auto-blog'
+    | '/api/public/lucky-coupon/campaign'
+    | '/api/public/lucky-coupon/claim'
+    | '/api/public/lucky-coupon/my-coupons'
+    | '/api/public/lucky-coupon/validate'
     | '/api/public/sslcz/cancel'
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
@@ -1353,6 +1412,7 @@ export interface FileRouteTypes {
     | '/admin/license-manager'
     | '/admin/live-chat'
     | '/admin/live-ticker'
+    | '/admin/lucky-wheel'
     | '/admin/newsletter'
     | '/admin/orders'
     | '/admin/payment-links'
@@ -1402,6 +1462,10 @@ export interface FileRouteTypes {
     | '/api/public/eps/ipn'
     | '/api/public/eps/success'
     | '/api/public/hooks/auto-blog'
+    | '/api/public/lucky-coupon/campaign'
+    | '/api/public/lucky-coupon/claim'
+    | '/api/public/lucky-coupon/my-coupons'
+    | '/api/public/lucky-coupon/validate'
     | '/api/public/sslcz/cancel'
     | '/api/public/sslcz/fail'
     | '/api/public/sslcz/ipn'
@@ -1469,6 +1533,10 @@ export interface RootRouteChildren {
   ApiPublicEpsIpnRoute: typeof ApiPublicEpsIpnRoute
   ApiPublicEpsSuccessRoute: typeof ApiPublicEpsSuccessRoute
   ApiPublicHooksAutoBlogRoute: typeof ApiPublicHooksAutoBlogRoute
+  ApiPublicLuckyCouponCampaignRoute: typeof ApiPublicLuckyCouponCampaignRoute
+  ApiPublicLuckyCouponClaimRoute: typeof ApiPublicLuckyCouponClaimRoute
+  ApiPublicLuckyCouponMyCouponsRoute: typeof ApiPublicLuckyCouponMyCouponsRoute
+  ApiPublicLuckyCouponValidateRoute: typeof ApiPublicLuckyCouponValidateRoute
   ApiPublicSslczCancelRoute: typeof ApiPublicSslczCancelRoute
   ApiPublicSslczFailRoute: typeof ApiPublicSslczFailRoute
   ApiPublicSslczIpnRoute: typeof ApiPublicSslczIpnRoute
@@ -1954,6 +2022,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNewsletterRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/lucky-wheel': {
+      id: '/admin/lucky-wheel'
+      path: '/lucky-wheel'
+      fullPath: '/admin/lucky-wheel'
+      preLoaderRoute: typeof AdminLuckyWheelRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/live-ticker': {
       id: '/admin/live-ticker'
       path: '/live-ticker'
@@ -2255,6 +2330,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicSslczCancelRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/lucky-coupon/validate': {
+      id: '/api/public/lucky-coupon/validate'
+      path: '/api/public/lucky-coupon/validate'
+      fullPath: '/api/public/lucky-coupon/validate'
+      preLoaderRoute: typeof ApiPublicLuckyCouponValidateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/lucky-coupon/my-coupons': {
+      id: '/api/public/lucky-coupon/my-coupons'
+      path: '/api/public/lucky-coupon/my-coupons'
+      fullPath: '/api/public/lucky-coupon/my-coupons'
+      preLoaderRoute: typeof ApiPublicLuckyCouponMyCouponsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/lucky-coupon/claim': {
+      id: '/api/public/lucky-coupon/claim'
+      path: '/api/public/lucky-coupon/claim'
+      fullPath: '/api/public/lucky-coupon/claim'
+      preLoaderRoute: typeof ApiPublicLuckyCouponClaimRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/lucky-coupon/campaign': {
+      id: '/api/public/lucky-coupon/campaign'
+      path: '/api/public/lucky-coupon/campaign'
+      fullPath: '/api/public/lucky-coupon/campaign'
+      preLoaderRoute: typeof ApiPublicLuckyCouponCampaignRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/auto-blog': {
       id: '/api/public/hooks/auto-blog'
       path: '/api/public/hooks/auto-blog'
@@ -2317,6 +2420,7 @@ interface AdminRouteChildren {
   AdminLicenseManagerRoute: typeof AdminLicenseManagerRoute
   AdminLiveChatRoute: typeof AdminLiveChatRoute
   AdminLiveTickerRoute: typeof AdminLiveTickerRoute
+  AdminLuckyWheelRoute: typeof AdminLuckyWheelRoute
   AdminNewsletterRoute: typeof AdminNewsletterRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminPaymentLinksRoute: typeof AdminPaymentLinksRoute
@@ -2371,6 +2475,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminLicenseManagerRoute: AdminLicenseManagerRoute,
   AdminLiveChatRoute: AdminLiveChatRoute,
   AdminLiveTickerRoute: AdminLiveTickerRoute,
+  AdminLuckyWheelRoute: AdminLuckyWheelRoute,
   AdminNewsletterRoute: AdminNewsletterRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminPaymentLinksRoute: AdminPaymentLinksRoute,
@@ -2457,6 +2562,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicEpsIpnRoute: ApiPublicEpsIpnRoute,
   ApiPublicEpsSuccessRoute: ApiPublicEpsSuccessRoute,
   ApiPublicHooksAutoBlogRoute: ApiPublicHooksAutoBlogRoute,
+  ApiPublicLuckyCouponCampaignRoute: ApiPublicLuckyCouponCampaignRoute,
+  ApiPublicLuckyCouponClaimRoute: ApiPublicLuckyCouponClaimRoute,
+  ApiPublicLuckyCouponMyCouponsRoute: ApiPublicLuckyCouponMyCouponsRoute,
+  ApiPublicLuckyCouponValidateRoute: ApiPublicLuckyCouponValidateRoute,
   ApiPublicSslczCancelRoute: ApiPublicSslczCancelRoute,
   ApiPublicSslczFailRoute: ApiPublicSslczFailRoute,
   ApiPublicSslczIpnRoute: ApiPublicSslczIpnRoute,
