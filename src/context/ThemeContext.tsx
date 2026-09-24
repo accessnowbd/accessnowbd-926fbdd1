@@ -60,7 +60,7 @@ function applyTheme(id: ThemeId) {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const { availability, defaultTheme } = useThemeAvailability();
-  const [theme, setThemeState] = useState<ThemeId>("white");
+  const [theme, setThemeState] = useState<ThemeId>("aurora");
   const userPickedRef = useRef(false);
 
   // Initial mount: load stored theme if user picked one; else use admin default.
@@ -77,7 +77,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       initial = stored;
       userPickedRef.current = true;
     } else {
-      initial = initialAvail[initialDefault] ? initialDefault : "white";
+      initial = initialAvail[initialDefault] ? initialDefault : "aurora";
     }
     applyTheme(initial);
     setThemeState(initial);
