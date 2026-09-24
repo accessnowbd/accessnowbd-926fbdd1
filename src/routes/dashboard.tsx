@@ -9,6 +9,7 @@ import {
   Heart, Users, Globe, MapPinned, Smartphone, ChevronRight, Gift,
   Lock, AtSign, BadgeCheck, Bookmark, CreditCard, Star, Edit3, Wrench,
   Trash2, Share2, Eye, EyeOff, Send, Home, TicketPercent, Clock,
+  Trophy, Zap,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";

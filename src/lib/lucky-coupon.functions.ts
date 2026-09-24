@@ -151,7 +151,7 @@ async function findExistingClaim(
  * Check if current visitor or customer is eligible to spin the Lucky Wheel.
  */
 export const checkLuckyEligibility = createServerFn({ method: "POST" })
-  .validator((data) =>
+  .inputValidator((data) =>
     z
       .object({
         visitorId: z.string().min(1).max(128),
@@ -211,7 +211,7 @@ export const checkLuckyEligibility = createServerFn({ method: "POST" })
  * and database insertion.
  */
 export const claimLuckyCoupon = createServerFn({ method: "POST" })
-  .validator((data) =>
+  .inputValidator((data) =>
     z
       .object({
         visitorId: z.string().min(1).max(128),
@@ -373,7 +373,7 @@ export const claimLuckyCoupon = createServerFn({ method: "POST" })
  * Fetch all lucky coupons won by this customer or visitor.
  */
 export const getMyLuckyCoupons = createServerFn({ method: "POST" })
-  .validator((data) =>
+  .inputValidator((data) =>
     z
       .object({
         visitorId: z.string().min(1).max(128),
@@ -423,7 +423,7 @@ export const getMyLuckyCoupons = createServerFn({ method: "POST" })
  * Correctly validates regular and lucky coupons even if database RPC encounters Postgres column ambiguity.
  */
 export const validateCouponServer = createServerFn({ method: "POST" })
-  .validator((data) =>
+  .inputValidator((data) =>
     z
       .object({
         code: z.string().min(1).max(50),
@@ -558,7 +558,7 @@ export const getLuckyAdminData = createServerFn({ method: "GET" }).handler(async
  * Admin: Update full Lucky Coupon configuration.
  */
 export const updateLuckyAdminData = createServerFn({ method: "POST" })
-  .validator((data) =>
+  .inputValidator((data) =>
     z
       .object({
         config: z.any(),
