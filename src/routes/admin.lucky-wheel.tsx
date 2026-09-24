@@ -23,6 +23,7 @@ import {
   Copy,
   Activity,
   Sliders,
+  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
 import { AdminStatCard, AdminStatGrid, AdminGlassCard } from "@/components/admin/AdminStatCard";
