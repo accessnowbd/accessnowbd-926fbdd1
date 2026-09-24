@@ -7,7 +7,7 @@ export type ThemeAvailability = Record<ThemeId, boolean>;
 const DEFAULTS: ThemeAvailability = { aurora: true, white: true };
 const STORAGE_KEY = "anbd-theme-availability";
 const DEFAULT_THEME_KEY = "anbd-theme-default";
-const FALLBACK_DEFAULT: ThemeId = "white";
+const FALLBACK_DEFAULT: ThemeId = "aurora";
 
 function readCache(): ThemeAvailability {
   if (typeof localStorage === "undefined") return DEFAULTS;
