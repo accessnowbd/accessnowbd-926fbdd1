@@ -33,6 +33,9 @@ export interface AdminStatCardProps {
   tone?: AdminStatTone;
   series?: number[];
   loading?: boolean;
+  icon?: unknown;
+  color?: string;
+  description?: string;
 }
 
 let __id = 0;
