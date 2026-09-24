@@ -3673,7 +3673,7 @@ html.theme-white .checkout-page .bg-muted {
 html.theme-white [data-slot="card"],
 html.theme-white .ui-card,
 html.theme-white .glass-card,
-html.theme-white [class*="rounded-2xl"][class*="border"]:not(button):not(a[class*="rounded-full"]):not([class*="bg-gradient"]):not(.product-action-button),
+html.theme-white [class*="rounded-2xl"][class*="border"]:not(button):not(a[class*="rounded-full"]):not([class*="bg-gradient"]):not(.product-action-button):not(.force-dark-canvas),
 html.theme-white [class*="rounded-3xl"][class*="border"]:not(button):not([class*="bg-gradient"]),
 html.theme-white .trust-card,
 html.theme-white .category-card,
