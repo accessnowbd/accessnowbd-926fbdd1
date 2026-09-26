@@ -36,6 +36,7 @@ export type CampaignRules = {
   default_max_discount: number; // Default max discount cap in BDT
   max_campaign_coupons: number;
   delay_seconds: number; // Popup trigger delay
+  launcher_hide_seconds: number; // Won-coupon launcher visibility, capped at 10 seconds
 };
 
 export type LuckyWheelUIConfig = {
@@ -123,6 +124,7 @@ export type LuckyEligibilityResult = {
     enabled: boolean;
     popup_enabled: boolean;
     delay_seconds: number;
+    launcher_hide_seconds: number;
     title: string;
     subtitle: string;
     button_text: string;

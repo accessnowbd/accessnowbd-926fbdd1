@@ -198,6 +198,7 @@ export const checkLuckyEligibility = createServerFn({ method: "POST" })
         enabled: config.master_switches.system_enabled,
         popup_enabled: config.master_switches.popup_enabled,
         delay_seconds: config.campaign.delay_seconds || 3,
+        launcher_hide_seconds: Math.min(10, Math.max(1, config.campaign.launcher_hide_seconds || 10)),
         title: config.ui.title,
         subtitle: config.ui.subtitle,
         button_text: config.ui.button_text,

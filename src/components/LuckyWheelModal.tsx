@@ -129,6 +129,9 @@ export const LuckyWheelModal: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [showFloatingLauncher, setShowFloatingLauncher] = useState(true);
   const [uiConfig, setUiConfig] = useState(DEFAULT_LUCKY_COUPON_CONFIG.ui);
+  const [launcherHideSeconds, setLauncherHideSeconds] = useState(
+    DEFAULT_LUCKY_COUPON_CONFIG.campaign.launcher_hide_seconds,
+  );
 
   const hasTriggeredRef = useRef(false);
 
@@ -161,6 +164,7 @@ export const LuckyWheelModal: React.FC = () => {
         }
 
         if (res.config) {
+          setLauncherHideSeconds(res.config.launcher_hide_seconds);
           setUiConfig((prev) => ({
             ...prev,
             title: res.config?.title || prev.title,
@@ -211,6 +215,15 @@ export const LuckyWheelModal: React.FC = () => {
       cancelled = true;
     };
   }, [user?.id]);
+
+  useEffect(() => {
+    if (!wonCoupon || !showFloatingLauncher || isOpen) return;
+    const timeout = window.setTimeout(
+      () => setShowFloatingLauncher(false),
+      Math.min(10, Math.max(1, launcherHideSeconds)) * 1000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [wonCoupon, showFloatingLauncher, isOpen, launcherHideSeconds]);
 
   // Handle ESC key press
   useEffect(() => {
@@ -338,17 +351,17 @@ export const LuckyWheelModal: React.FC = () => {
       {showFloatingLauncher && !isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-20 left-4 z-50 group flex items-center gap-2.5 rounded-full bg-[#0F172A]/90 hover:bg-[#1E1B4B] px-4 py-2.5 text-white shadow-xl shadow-purple-950/40 transition-all hover:scale-105 active:scale-95 border border-purple-500/40 backdrop-blur-md"
-          title="ডিজিタル ওয়েলকাম ভাউচার"
+          className="lucky-launcher fixed bottom-20 left-4 z-50 group grid max-w-[calc(100vw-2rem)] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 rounded-full px-3 py-2.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          title="ডিজিটাল ওয়েলকাম ভাউচার"
           aria-label="Open Digital Welcome Voucher"
         >
-          <div className="relative flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 text-white shadow-sm">
-            <Zap className="h-3.5 w-3.5 text-yellow-300 animate-pulse" />
+          <div className="lucky-launcher-icon relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full">
+            <Zap className="h-3.5 w-3.5 animate-pulse" />
           </div>
-          <span className="font-semibold text-xs md:text-sm tracking-wide">
+          <span className="min-w-0 truncate font-bold text-xs md:text-sm">
             {wonCoupon ? `🎉 ভাউচার: ${wonCoupon.code}` : "🎁 ডিজিটাল ওয়েলকাম অফার"}
           </span>
-          <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+          <span className="lucky-live-dot flex h-2 w-2 shrink-0 rounded-full animate-pulse" />
         </button>
       )}
 
@@ -358,33 +371,21 @@ export const LuckyWheelModal: React.FC = () => {
           role="dialog"
           aria-modal="true"
           aria-labelledby="perk-modal-title"
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-3 md:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
+          className="lucky-modal-backdrop fixed inset-0 z-[9999] flex items-center justify-center p-3 md:p-4 backdrop-blur-md animate-in fade-in duration-300"
           onClick={handleClose}
         >
           <div
-            className="relative w-full max-w-lg overflow-hidden rounded-3xl bg-gradient-to-b from-[#0F172A] via-[#0B0F19] to-[#05070E] text-white shadow-2xl border border-indigo-500/30 p-6 md:p-8"
+            className="lucky-modal relative w-full max-w-lg max-h-[calc(100dvh-1.5rem)] overflow-y-auto rounded-3xl p-5 text-card-foreground md:p-8"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Ambient Tech Glow Background */}
-            <div className="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full bg-purple-600/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-cyan-600/15 blur-3xl" />
-
-            {/* Subtle Tech Grid Texture overlay */}
-            <div
-              className="pointer-events-none absolute inset-0 opacity-[0.03]"
-              style={{
-                backgroundImage:
-                  "radial-gradient(#ffffff 1px, transparent 1px), radial-gradient(#ffffff 1px, transparent 1px)",
-                backgroundSize: "20px 20px",
-                backgroundPosition: "0 0, 10px 10px",
-              }}
-            />
+            <div className="lucky-modal-glow pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full blur-3xl" />
 
             {/* Close Button */}
             <button
               onClick={handleClose}
               disabled={isUnlocking}
-              className="absolute top-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-slate-400 transition-colors hover:bg-white/15 hover:text-white disabled:opacity-30"
+              className="absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background/80 text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-30"
               title="বন্ধ করুন (Esc)"
               aria-label="Close dialog"
             >
@@ -532,26 +533,24 @@ export const LuckyWheelModal: React.FC = () => {
 
                 <h2
                   id="perk-modal-title"
-                  className="text-xl md:text-2xl font-black text-white tracking-tight mb-1.5"
+                  className="text-xl md:text-2xl font-black text-card-foreground mb-1.5"
                 >
                   {uiConfig.title}
                 </h2>
-                <p className="text-xs md:text-sm text-slate-300 max-w-md mb-5 leading-relaxed">
+                <p className="text-xs md:text-sm text-muted-foreground max-w-md mb-5 leading-relaxed">
                   {uiConfig.subtitle}
                 </p>
 
                 {/* Futuristic Cyber Card Visual Box */}
-                <div className="w-full max-w-sm rounded-2xl bg-gradient-to-br from-[#1E1B4B]/70 via-[#0F172A]/90 to-[#020617] border border-purple-500/40 p-5 mb-5 relative shadow-xl overflow-hidden group">
-                  <div className="pointer-events-none absolute -top-12 -right-12 h-28 w-28 rounded-full bg-indigo-500/20 blur-xl" />
-                  <div className="pointer-events-none absolute -bottom-12 -left-12 h-28 w-28 rounded-full bg-pink-500/20 blur-xl" />
+                <div className="lucky-pass-card w-full max-w-sm rounded-2xl border border-border p-5 mb-5 relative overflow-hidden group">
 
                   {/* Top card info */}
-                  <div className="flex items-center justify-between text-[11px] text-slate-400 mb-4 pb-2 border-b border-white/10">
-                    <div className="flex items-center gap-1.5 text-indigo-300 font-bold">
-                      <Layers className="h-3.5 w-3.5 text-indigo-400" />
+                  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 text-[11px] text-muted-foreground mb-4 pb-2 border-b border-border">
+                    <div className="flex min-w-0 items-center gap-1.5 text-primary font-bold">
+                      <Layers className="h-3.5 w-3.5 shrink-0" />
                       <span>ACCESSNOW SOFTWARE PASS</span>
                     </div>
-                    <span className="flex items-center gap-1 text-amber-300 text-[10px] font-bold bg-amber-400/10 px-2 py-0.5 rounded-full">
+                    <span className="flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
                       <Sparkles className="h-2.5 w-2.5" />
                       ৫% - ৩০% নিশ্চিত ছাড়
                     </span>
@@ -560,11 +559,11 @@ export const LuckyWheelModal: React.FC = () => {
                   {/* Center Card Content */}
                   <div className="py-2 flex flex-col items-center">
                     <div className="relative mb-3">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-500/30">
+                      <div className="lucky-key-icon flex h-14 w-14 items-center justify-center rounded-2xl text-primary-foreground shadow-lg">
                         {isUnlocking ? (
-                          <Cpu className="h-7 w-7 text-cyan-300 animate-spin" />
+                          <Cpu className="h-7 w-7 animate-spin" />
                         ) : (
-                          <KeyRound className="h-7 w-7 text-yellow-300" />
+                          <KeyRound className="h-7 w-7" />
                         )}
                       </div>
                       <span className="absolute -top-1 -right-1 flex h-3 w-3">
@@ -573,7 +572,7 @@ export const LuckyWheelModal: React.FC = () => {
                       </span>
                     </div>
 
-                    <span className="text-base font-bold text-white tracking-wide">
+                    <span className="text-base font-bold text-card-foreground">
                       {isUnlocking ? "ডিজিটাল ভাউচার ডিক্রিপ্ট হচ্ছে..." : "ওয়েলকাম সফটওয়্যার ভাউচার"}
                     </span>
 
@@ -593,16 +592,16 @@ export const LuckyWheelModal: React.FC = () => {
                     ) : (
                       /* Supported categories pill list */
                       <div className="flex flex-wrap justify-center gap-1.5 mt-3">
-                        <span className="text-[10px] font-semibold bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg text-slate-300">
+                        <span className="lucky-category text-[10px] font-semibold px-2.5 py-1 rounded-lg">
                           ⚡ AI (ChatGPT, Claude)
                         </span>
-                        <span className="text-[10px] font-semibold bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg text-slate-300">
+                        <span className="lucky-category text-[10px] font-semibold px-2.5 py-1 rounded-lg">
                           🎨 Canva & Adobe
                         </span>
-                        <span className="text-[10px] font-semibold bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg text-slate-300">
+                        <span className="lucky-category text-[10px] font-semibold px-2.5 py-1 rounded-lg">
                           🎬 Streaming
                         </span>
-                        <span className="text-[10px] font-semibold bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg text-slate-300">
+                        <span className="lucky-category text-[10px] font-semibold px-2.5 py-1 rounded-lg">
                           🛡️ VPN & Security
                         </span>
                       </div>
@@ -615,15 +614,15 @@ export const LuckyWheelModal: React.FC = () => {
                   <button
                     onClick={handleUnlockDiscount}
                     disabled={isUnlocking}
-                    className="w-full relative group overflow-hidden rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 p-0.5 shadow-xl shadow-purple-600/25 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60"
+                    className="lucky-unlock-button w-full relative group overflow-hidden rounded-2xl p-0.5 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60"
                   >
-                    <div className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 px-6 py-3.5 font-bold text-sm md:text-base text-white tracking-wide transition">
+                    <div className="flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3.5 font-bold text-sm md:text-base text-primary-foreground transition">
                       <Zap className={`h-4 w-4 ${isUnlocking ? "animate-spin" : "animate-pulse text-yellow-300"}`} />
                       <span>{isUnlocking ? "ভাউচার জেনারেট হচ্ছে..." : uiConfig.button_text}</span>
                     </div>
                   </button>
 
-                  <p className="mt-2.5 text-[11px] text-slate-400">
+                  <p className="mt-2.5 text-[11px] text-muted-foreground">
                     🔒 প্রতিটি কাস্টমারের জন্য ১ বার ব্যবহারযোগ্য ইউনিক সার্ভার ভাউচার
                   </p>
                 </div>
