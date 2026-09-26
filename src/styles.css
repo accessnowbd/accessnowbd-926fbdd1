@@ -3840,3 +3840,66 @@ html.theme-white [role="dialog"] .order-payment-active-failed,
   color: #be123c !important;
 }
 
+/* Lucky voucher — premium semantic surfaces that remain legible in both themes. */
+.lucky-modal-backdrop {
+  background: color-mix(in oklab, var(--foreground) 68%, transparent);
+}
+
+.lucky-modal {
+  background:
+    linear-gradient(145deg, color-mix(in oklab, var(--primary) 8%, transparent), transparent 42%),
+    var(--card);
+  border: 1px solid color-mix(in oklab, var(--primary) 35%, var(--border));
+  box-shadow: 0 30px 80px -24px color-mix(in oklab, var(--foreground) 45%, transparent);
+}
+
+.lucky-modal-glow {
+  background: color-mix(in oklab, var(--primary) 24%, transparent);
+}
+
+.lucky-pass-card {
+  background: linear-gradient(145deg, color-mix(in oklab, var(--primary) 11%, var(--card)), var(--card));
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 12%, transparent);
+}
+
+.lucky-key-icon,
+.lucky-launcher-icon {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.lucky-category {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.lucky-unlock-button {
+  background: var(--primary);
+  box-shadow: 0 18px 38px -18px color-mix(in oklab, var(--primary) 75%, transparent);
+}
+
+.lucky-launcher {
+  background: color-mix(in oklab, var(--card) 92%, transparent);
+  border: 1px solid color-mix(in oklab, var(--primary) 35%, var(--border));
+  color: var(--card-foreground);
+  box-shadow: 0 16px 38px -20px color-mix(in oklab, var(--foreground) 55%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.lucky-launcher:hover {
+  border-color: color-mix(in oklab, var(--primary) 65%, var(--border));
+}
+
+.lucky-live-dot {
+  background: var(--primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lucky-launcher,
+  .lucky-launcher * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+

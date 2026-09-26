@@ -43,6 +43,7 @@ export const DEFAULT_LUCKY_COUPON_CONFIG: LuckyCouponFullConfig = {
     default_max_discount: 500, // Maximum discount cap 500 BDT
     max_campaign_coupons: 50000,
     delay_seconds: 3,
+    launcher_hide_seconds: 10,
   },
   ui: {
     title: "ডিজিটাল সফটওয়্যার ও সাবস্ক্রিপশনে বিশেষ ছাড়!",

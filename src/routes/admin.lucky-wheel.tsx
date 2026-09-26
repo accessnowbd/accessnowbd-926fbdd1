@@ -818,6 +818,20 @@ function AdminLuckyWheelPage() {
             </div>
 
             <div>
+              <label className="text-xs font-semibold text-foreground block mb-1">কুপন বার দেখানোর সময় (সেকেন্ড)</label>
+              <input
+                type="number"
+                min="1"
+                max="10"
+                value={config.campaign.launcher_hide_seconds}
+                onChange={(e) => updateCampaign("launcher_hide_seconds", Math.min(10, Math.max(1, Number(e.target.value) || 1)))}
+                className="w-full text-xs font-medium rounded-xl border border-border bg-background px-3 py-2 text-foreground"
+                placeholder="10"
+              />
+              <span className="text-[10px] text-muted-foreground mt-0.5 block">কুপন পাওয়ার পর ছোট বারটি সর্বোচ্চ ১০ সেকেন্ড থাকবে।</span>
+            </div>
+
+            <div>
               <label className="text-xs font-semibold text-foreground block mb-1">সর্বোচ্চ ক্যাম্পেইন কুপন সীমা</label>
               <input
                 type="number"
